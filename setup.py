@@ -3,7 +3,7 @@ from pybind11.setup_helpers import Pybind11Extension
 import codecs
 import os
 
-VERSION = '0.0.1'
+VERSION = '1.0.0'
 DESCRIPTION = 'Python library that generalizes the original 2-dimensional CLUE algorithm developed at CERN'
 
 ext_modules = [
@@ -17,10 +17,10 @@ setup(
     name="CLUEstering",
     version=VERSION,
     author="Simone Balducci",
-    author_email="<simone.balducci00@gmail.com>",
+    author_email="simone.balducci00@gmail.com",
     description=DESCRIPTION,
     packages=find_packages(),
-    install_requires=[],
+    install_requires=['pybind11','pandas','numpy','random','time','sklearn','matplotlib'],
 	 ext_modules=ext_modules,
     keywords=['Python', 'Clustering', 'Binding'],
     classifiers=[

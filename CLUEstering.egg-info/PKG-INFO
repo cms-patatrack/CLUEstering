@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
 Name: CLUEstering
-Version: 0.0.1
+Version: 1.0.0
 Summary: Python library that generalizes the original 2-dimensional CLUE algorithm developed at CERN
 Author: Simone Balducci
-Author-email: <simone.balducci00@gmail.com>
+Author-email: simone.balducci00@gmail.com
 Keywords: Python,Clustering,Binding
 Classifier: Development Status :: Production
 Classifier: Intended Audience :: Developers
