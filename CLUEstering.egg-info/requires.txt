@@ -1,7 +1,0 @@
-pybind11
-pandas
-numpy
-random
-time
-sklearn
-matplotlib

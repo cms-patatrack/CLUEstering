@@ -7,5 +7,4 @@ CLUEstering/binding.cc
 CLUEstering.egg-info/PKG-INFO
 CLUEstering.egg-info/SOURCES.txt
 CLUEstering.egg-info/dependency_links.txt
-CLUEstering.egg-info/requires.txt
 CLUEstering.egg-info/top_level.txt
