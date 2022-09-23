@@ -1,46 +1,40 @@
-from setuptools import setup, find_packages
-from pybind11.setup_helpers import Pybind11Extension
-import codecs
-import os
+import sys
 
-from distutils import sysconfig
-from Cython.Distutils import build_ext
+from pybind11 import get_cmake_dir
+# Available at setup time due to pyproject.toml
+from pybind11.setup_helpers import Pybind11Extension, build_ext
+from setuptools import setup
 
-VERSION = '1.0.5'
-DESCRIPTION = 'Python library that generalizes the original 2-dimensional CLUE algorithm developed at CERN'
+__version__ = "1.0.0"
 
-class NoSuffixBuilder(build_ext):
-    def get_ext_filename(self, ext_name):
-        filename = super().get_ext_filename(ext_name)
-        suffix = sysconfig.get_config_var('EXT_SUFFIX')
-        ext = os.path.splitext(filename)[1]
-        return filename.replace(suffix, "") + ext
+# The main interface is through Pybind11Extension.
+# * You can add cxx_std=11/14/17, and then build_ext can be removed.
+# * You can set include_pybind11=false to add the include directory yourself,
+#   say from a submodule.
+#
+# Note:
+#   Sort input source files if you glob sources to ensure bit-for-bit
+#   reproducible builds (https://github.com/pybind/python_example/pull/53)
 
 ext_modules = [
-	Pybind11Extension("clusteringAlgo",
-		["CLUEstering/binding.cc"]
-	),
+    Pybind11Extension("CLUEsteringCPP",
+        ["src/binding.cc"],
+        # Example: passing in the version to the compiled code
+        define_macros = [('VERSION_INFO', __version__)],
+        ),
 ]
 
-# Setting up
 setup(
-    name="CLUEstering",
-    version=VERSION,
+    name="CLUEsteringCPP",
+    version=__version__,
     author="Simone Balducci",
-    author_email="<simone.balducci00@gmail.com>",
-    description=DESCRIPTION,
-    packages=find_packages(),
-    install_requires=[],
-	 ext_modules=ext_modules,
-    keywords=['Python', 'Clustering', 'Binding'],
-
-    cmdclass={"build_ext": NoSuffixBuilder},
-
-    classifiers=[
-        "Intended Audience :: Developers",
-        "Programming Language :: Python :: 3",
-        "Operating System :: Unix",
-        "Operating System :: MacOS :: MacOS X",
-        "Operating System :: Microsoft :: Windows",
-    ]
+    author_email="simone.balducci00@gmail.com",
+    description="",
+    long_description="",
+    ext_modules=ext_modules,
+    # Currently, build_ext only provides an optional "highest supported C++
+    # level" feature, but in the future it may provide more features.
+    cmdclass={"build_ext": build_ext},
+    zip_safe=False,
+    python_requires=">=3.6",
 )
