@@ -23,7 +23,4 @@ setup(
     author_email="simone.balducci00@gmail.com",
     description="",
     long_description="",
-    cmdclass={"build_ext": build_ext},
-    zip_safe=False,
-    python_requires=">=3.6",
 )
