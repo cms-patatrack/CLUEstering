@@ -3,7 +3,7 @@ from pybind11.setup_helpers import Pybind11Extension
 import codecs
 import os
 
-__version__ = "1.1.15"
+__version__ = "1.1.17"
 long_description = ''
 
 ext_modules = [
