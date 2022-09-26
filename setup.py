@@ -3,11 +3,12 @@ from pybind11.setup_helpers import Pybind11Extension
 import codecs
 import os
 
-__version__ = "1.1.3"
+__version__ = "1.1.14"
 
 ext_modules = [
-	Pybind11Extension("CLUEsteringCPP",
-		["CLUEstering/binding.cc"]
+	Pybind11Extension(
+		"CLUEsteringCPP",
+		['CLUEstering/binding.cc'],
 	),
 ]
 
