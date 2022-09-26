@@ -1,7 +1,3 @@
-#ifndef CLUEAlgo_h
-#define CLUEAlgo_h
-
-// C/C++ headers
 #include <string>
 #include <vector>
 #include <iostream>
@@ -11,9 +7,114 @@
 #include <chrono>
 #include <cmath>
 #include <algorithm>
+#include <stdint.h>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h> 
 
-#include "tiles.h"
-#include "point.h"
+template <uint8_t Ndim>
+struct Points {
+  std::vector<std::vector<float>> coordinates_;
+  std::vector<float> weight;
+  
+  std::vector<float> rho;
+  std::vector<float> delta;
+  std::vector<int> nearestHigher;
+  std::vector<int> clusterIndex;
+  std::vector<std::vector<int>> followers;
+  std::vector<int> isSeed;
+  int n;
+
+  void clear() {
+    for(int i = 0; i != Ndim; ++i) {
+      coordinates_[i].clear();
+    }
+    weight.clear();
+
+    rho.clear();
+    delta.clear();
+    nearestHigher.clear();
+    clusterIndex.clear();
+    followers.clear();
+    isSeed.clear();
+
+    n = 0;
+  }
+};
+
+template<uint8_t Ndim>
+class tiles{
+private:
+    std::vector<std::vector<int>> tiles_;
+public:
+    tiles() {}
+    void resizeTiles() { tiles_.resize(nTiles); }
+
+    int nTiles;
+    std::array<float,Ndim> tilesSize;
+    std::array<std::vector<float>,Ndim> minMax;
+
+    int getBin(float coord_, int dim_) const {
+      int coord_Bin = (coord_ - minMax[dim_][0])/tilesSize[dim_];
+      coord_Bin = std::min(coord_Bin,(int)(std::pow(nTiles,1.0/Ndim)-1));
+      coord_Bin = std::max(coord_Bin,0);
+      return coord_Bin;
+    }
+
+    int getGlobalBin(std::vector<float> coords) const {
+      int globalBin = getBin(coords[0],0);
+      int nTilesPerDim = std::pow(nTiles,1.0/Ndim);
+      for(int i = 1; i != Ndim; ++i) {
+        globalBin += nTilesPerDim*getBin(coords[i],i);
+      }
+      return globalBin;
+    }
+
+    int getGlobalBinByBin(std::vector<int> Bins) const {
+      int globalBin = Bins[0];
+      int nTilesPerDim = std::pow(nTiles,1.0/Ndim);
+      for(int i = 1; i != Ndim; ++i) {
+        globalBin += nTilesPerDim*Bins[i];
+      }
+      return globalBin;
+    }
+
+    void fill(std::vector<float> coords, int i) {
+	  tiles_[getGlobalBin(coords)].push_back(i);
+    }
+
+    void fill(std::vector<std::vector<float>> const& coordinates) {
+	  auto cellsSize = coordinates[0].size();
+      for(int i = 0; i < cellsSize; ++i) {
+        std::vector<float> bin_coords;
+        for(int j = 0; j != Ndim; ++j) {
+          bin_coords.push_back(coordinates[j][i]);
+        } 
+        tiles_[getGlobalBin(bin_coords)].push_back(i);
+	  }
+    }
+
+    std::array<int,2*Ndim> searchBox(std::array<std::vector<float>,Ndim> minMax_){   // {{minX,maxX},{minY,maxY},{minZ,maxZ},...}
+      std::array<int, 2*Ndim> minMaxBins;
+      int j = 0;
+      for(int i = 0; i != Ndim; ++i) {
+        minMaxBins[j] = getBin(minMax_[i][0],i);
+        minMaxBins[j+1] = getBin(minMax_[i][1],i);
+        j += 2;
+      }
+
+      return minMaxBins;
+    }
+
+    void clear() {
+      for(auto& t: tiles_) {
+        t.clear();
+      }
+    }
+
+    std::vector<int>& operator[](int globalBinId) {
+      return tiles_[globalBinId];
+    }
+};
 
 template <uint8_t Ndim>
 class ClusteringAlgo{
@@ -321,4 +422,123 @@ private:
   }
 };
 
-#endif
+std::vector<std::vector<int>> run1(float dc, float rhoc, float outlier, int pPBin, 
+		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+	ClusteringAlgo<1> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+
+std::vector<std::vector<int>> run2(float dc, float rhoc, float outlier, int pPBin, 
+		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+	ClusteringAlgo<2> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+			
+std::vector<std::vector<int>> run3(float dc, float rhoc, float outlier, int pPBin, 
+		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+	ClusteringAlgo<3> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+
+std::vector<std::vector<int>> run4(float dc, float rhoc, float outlier, int pPBin, 
+		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+	ClusteringAlgo<4> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+
+std::vector<std::vector<int>> run5(float dc, float rhoc, float outlier, int pPBin, 
+		std::vector<std::vector<float>> const& coordinates,	std::vector<float> const& weight) {
+	ClusteringAlgo<5> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+
+std::vector<std::vector<int>> run6(float dc, float rhoc, float outlier, int pPBin, 
+		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+	ClusteringAlgo<6> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+
+std::vector<std::vector<int>> run7(float dc, float rhoc, float outlier, int pPBin, 
+		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+	ClusteringAlgo<7> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+
+std::vector<std::vector<int>> run8(float dc, float rhoc, float outlier, int pPBin, 
+		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+	ClusteringAlgo<8> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+
+std::vector<std::vector<int>> run9(float dc, float rhoc, float outlier, int pPBin,  
+		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+	ClusteringAlgo<9> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+
+std::vector<std::vector<int>> run10(float dc, float rhoc, float outlier, int pPBin, 
+		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+	ClusteringAlgo<10> algo(dc,rhoc,outlier,pPBin);
+	algo.setPoints(coordinates[0].size(), coordinates, weight);
+
+	return algo.makeClusters();
+}
+
+std::vector<std::vector<int>> mainRun(float dc, float rhoc, float outlier, int pPBin, 
+            std::vector<std::vector<float>> const& coords, std::vector<float> const& weight, int Ndim) {
+    // Running the clustering algorithm //
+   	if (Ndim == 1) {
+		return run1(dc,rhoc,outlier,pPBin,coords,weight);
+		} 
+   	if (Ndim == 2) {
+		return run2(dc,rhoc,outlier,pPBin,coords,weight);
+		} 
+   	if (Ndim == 3) {
+		return run3(dc,rhoc,outlier,pPBin,coords,weight);
+		} 
+   	if (Ndim == 4) {
+		return run4(dc,rhoc,outlier,pPBin,coords,weight);
+		} 
+   	if (Ndim == 5) {
+		return run5(dc,rhoc,outlier,pPBin,coords,weight);
+		}
+   	if (Ndim == 6) {
+		return run6(dc,rhoc,outlier,pPBin,coords,weight);
+		} 
+   	if (Ndim == 7) {
+		return run7(dc,rhoc,outlier,pPBin,coords,weight);
+		} 
+   	if (Ndim == 8) {
+		return run8(dc,rhoc,outlier,pPBin,coords,weight);
+		} 
+   	if (Ndim == 9) {
+		return run9(dc,rhoc,outlier,pPBin,coords,weight);
+		} 
+   	if (Ndim == 10) {
+		return run10(dc,rhoc,outlier,pPBin,coords,weight);
+		} 
+}
+
+PYBIND11_MODULE(CLUEsteringCPP, m) {
+    m.doc() = "Binding for CLUE";
+
+	m.def("mainRun", &mainRun, "mainRun");
+}

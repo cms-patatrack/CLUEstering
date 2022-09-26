@@ -1,40 +1,34 @@
-import sys
+from setuptools import setup, find_packages
+from pybind11.setup_helpers import Pybind11Extension
+import codecs
+import os
 
-from pybind11 import get_cmake_dir
-# Available at setup time due to pyproject.toml
-from pybind11.setup_helpers import Pybind11Extension, build_ext
-from setuptools import setup
-
-__version__ = "1.0.0"
-
-# The main interface is through Pybind11Extension.
-# * You can add cxx_std=11/14/17, and then build_ext can be removed.
-# * You can set include_pybind11=false to add the include directory yourself,
-#   say from a submodule.
-#
-# Note:
-#   Sort input source files if you glob sources to ensure bit-for-bit
-#   reproducible builds (https://github.com/pybind/python_example/pull/53)
+__version__ = "1.1.17"
+long_description = ''
 
 ext_modules = [
-    Pybind11Extension("CLUEsteringCPP",
-        ["src/binding.cc"],
-        # Example: passing in the version to the compiled code
-        define_macros = [('VERSION_INFO', __version__)],
-        ),
+	Pybind11Extension(
+		"CLUEsteringCPP",
+		['CLUEstering/binding.cc'],
+	),
 ]
 
 setup(
-    name="CLUEsteringCPP",
+    name="CLUEstering",
     version=__version__,
     author="Simone Balducci",
     author_email="simone.balducci00@gmail.com",
-    description="",
-    long_description="",
-    ext_modules=ext_modules,
-    # Currently, build_ext only provides an optional "highest supported C++
-    # level" feature, but in the future it may provide more features.
-    cmdclass={"build_ext": build_ext},
-    zip_safe=False,
-    python_requires=">=3.6",
+    description="A library that generalizes the original 2-dimensional CLUE algorithm made at CERN.",
+	 long_description=long_description,
+	 packages=find_packages(),
+	 install_requires=['sklearn','numpy','matplotlib','pandas','pybind11'],
+	 ext_modules=ext_modules,
+	 keywords=['Python','Clustering','Binding'],
+	 classifiers=[
+		'Intended Audience :: Developers',
+		'Programming Language :: Python :: 3',
+		'Operating System :: Unix',
+		'Operating System :: MacOS :: MacOS X',
+		'Operating System :: Microsoft :: Windows',
+	 ]
 )
