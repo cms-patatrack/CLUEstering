@@ -11,6 +11,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h> 
 
+///////////////////////
+//////  Point.h  //////
+///////////////////////
 template <uint8_t Ndim>
 struct Points {
   std::vector<std::vector<float>> coordinates_;
@@ -41,6 +44,10 @@ struct Points {
   }
 };
 
+
+///////////////////////
+//////  Tiles.h  //////
+///////////////////////
 template<uint8_t Ndim>
 class tiles{
 private:
@@ -116,6 +123,10 @@ public:
     }
 };
 
+
+////////////////////////////
+//////  clustering.h  //////
+////////////////////////////
 template <uint8_t Ndim>
 class ClusteringAlgo{
 public:
@@ -422,6 +433,10 @@ private:
   }
 };
 
+
+/////////////////////
+//////  Run.h  //////
+/////////////////////
 std::vector<std::vector<int>> run1(float dc, float rhoc, float outlier, int pPBin, 
 		std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
 	ClusteringAlgo<1> algo(dc,rhoc,outlier,pPBin);
@@ -537,6 +552,10 @@ std::vector<std::vector<int>> mainRun(float dc, float rhoc, float outlier, int p
 		} 
 }
 
+
+//////////////////////////////
+//////  Binding module  //////
+//////////////////////////////
 PYBIND11_MODULE(CLUEsteringCPP, m) {
     m.doc() = "Binding for CLUE";
 
