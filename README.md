@@ -33,3 +33,4 @@ clust.readData(c.makeBlobs(1000,2))
 clust.runCLUE()
 clust.clusterPlotter()
 ```
+![Plot][blobwithnoise.png]
