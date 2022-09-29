@@ -13,7 +13,7 @@ CLUE takes 4 parameters in input:
 This library generalizes the original algorithm, making it N-dimensional.
 
 <p align="center">
-    <img src="./plot2d.png" width="300" height="300"> <img src="./plot3d.png" width="300" height="300">
+    <img src="./images/plot2d.png" width="300" height="300"> <img src="./images/plot3d.png" width="300" height="300">
 </p>
 
 The C++ code is binded using PyBind11, and the module is created locally during the installation of the library.
@@ -39,5 +39,5 @@ clust.runCLUE()
 clust.clusterPlotter()
 ```
 <p align="center">
-    <img src="./blobwithnoise.png" width="400" height="400"> 
+    <img src="./images/blobwithnoise.png" width="400" height="400"> 
 </p>
