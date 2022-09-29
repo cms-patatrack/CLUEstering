@@ -11,6 +11,11 @@ CLUE takes 4 parameters in input:
 * pointsPerBin, which is the average number of points that are to be found inside a bin. This value allows to control the size of the bins.
 
 This library generalizes the original algorithm, making it N-dimensional.
+
+<p align="center">
+    <img src="./plot2d.png" width="300" height="300"> <img src="./plot3d.png" width="300" height="300">
+</p>
+
 The C++ code is binded using PyBind11, and the module is created locally during the installation of the library.
 
 In this library is defined the clusterer class. The constructor takes the four parameters, dc_, rhoc, outlierDeltaFactor and pPBin. Passing pPBin is optional since by default it is initialized to 10.
@@ -33,4 +38,6 @@ clust.readData(c.makeBlobs(1000,2))
 clust.runCLUE()
 clust.clusterPlotter()
 ```
-![Plot][blobwithnoise.png]
+<p align="center">
+    <img src="./blobwithnoise.png" width="400" height="400"> 
+</p>
