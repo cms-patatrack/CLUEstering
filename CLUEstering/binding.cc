@@ -224,7 +224,7 @@ public:
 	return {points_.clusterIndex,points_.isSeed};
   }
 
-  template <int N_>
+  template <uint8_t N_>
   void for_recursion(std::vector<int> &base_vector,  std::vector<int> &dim_min, std::vector<int> &dim_max, tiles<Ndim>& lt_, int point_id) {
     if constexpr (N_ == 0) {
       int binId = lt_.getGlobalBinByBin(base_vector);
@@ -251,7 +251,7 @@ public:
 	 }
   }
 
-  template <int N_>
+  template <uint8_t N_>
   void for_recursion_DistanceToHigher(std::vector<int> &base_vector,  std::vector<int> &dim_min, std::vector<int> &dim_max, 
     tiles<Ndim>& lt_, float rho_i, float& delta_i, int& nearestHigher_i, int point_id) {
       if constexpr (N_ == 0) {
