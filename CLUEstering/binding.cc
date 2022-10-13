@@ -16,32 +16,32 @@
 ///////////////////////
 template <uint8_t Ndim>
 struct Points {
-  std::vector<std::vector<float>> coordinates_;
-  std::vector<float> weight;
+	std::vector<std::vector<float>> coordinates_;
+	std::vector<float> weight;
   
-  std::vector<float> rho;
-  std::vector<float> delta;
-  std::vector<int> nearestHigher;
-  std::vector<int> clusterIndex;
-  std::vector<std::vector<int>> followers;
-  std::vector<int> isSeed;
-  int n;
+	std::vector<float> rho;
+	std::vector<float> delta;
+	std::vector<int> nearestHigher;
+	std::vector<int> clusterIndex;
+	std::vector<std::vector<int>> followers;
+	std::vector<int> isSeed;
+	int n;
 
-  void clear() {
-    for(int i = 0; i != Ndim; ++i) {
-      coordinates_[i].clear();
-    }
-    weight.clear();
+	void clear() {
+		for(int i = 0; i != Ndim; ++i) {
+			coordinates_[i].clear();
+		}
+		weight.clear();
 
-    rho.clear();
-    delta.clear();
-    nearestHigher.clear();
-    clusterIndex.clear();
-    followers.clear();
-    isSeed.clear();
+		rho.clear();
+		delta.clear();
+		nearestHigher.clear();
+		clusterIndex.clear();
+		followers.clear();
+		isSeed.clear();
 
-    n = 0;
-  }
+		n = 0;
+	}
 };
 
 
@@ -51,76 +51,76 @@ struct Points {
 template<uint8_t Ndim>
 class tiles{
 private:
-    std::vector<std::vector<int>> tiles_;
+	std::vector<std::vector<int>> tiles_;
 public:
-    tiles() {}
-    void resizeTiles() { tiles_.resize(nTiles); }
+	tiles() {}
+	void resizeTiles() { tiles_.resize(nTiles); }
 
-    int nTiles;
-    std::array<float,Ndim> tilesSize;
-    std::array<std::vector<float>,Ndim> minMax;
+	int nTiles;
+	std::array<float,Ndim> tilesSize;
+	std::array<std::vector<float>,Ndim> minMax;
 
-    int getBin(float coord_, int dim_) const {
-      int coord_Bin = (coord_ - minMax[dim_][0])/tilesSize[dim_];
-      coord_Bin = std::min(coord_Bin,(int)(std::pow(nTiles,1.0/Ndim)-1));
-      coord_Bin = std::max(coord_Bin,0);
-      return coord_Bin;
-    }
+	int getBin(float coord_, int dim_) const {
+		int coord_Bin = (coord_ - minMax[dim_][0])/tilesSize[dim_];
+		coord_Bin = std::min(coord_Bin,(int)(std::pow(nTiles,1.0/Ndim)-1));
+		coord_Bin = std::max(coord_Bin,0);
+		return coord_Bin;
+	}
 
-    int getGlobalBin(std::vector<float> coords) const {
-      int globalBin = getBin(coords[0],0);
-      int nTilesPerDim = std::pow(nTiles,1.0/Ndim);
+	int getGlobalBin(std::vector<float> coords) const {
+		int globalBin = getBin(coords[0],0);
+		int nTilesPerDim = std::pow(nTiles,1.0/Ndim);
       for(int i = 1; i != Ndim; ++i) {
-        globalBin += nTilesPerDim*getBin(coords[i],i);
+			globalBin += nTilesPerDim*getBin(coords[i],i);
       }
       return globalBin;
     }
 
-    int getGlobalBinByBin(std::vector<int> Bins) const {
-      int globalBin = Bins[0];
+	int getGlobalBinByBin(std::vector<int> Bins) const {
+		int globalBin = Bins[0];
       int nTilesPerDim = std::pow(nTiles,1.0/Ndim);
       for(int i = 1; i != Ndim; ++i) {
-        globalBin += nTilesPerDim*Bins[i];
+			globalBin += nTilesPerDim*Bins[i];
       }
       return globalBin;
     }
 
-    void fill(std::vector<float> coords, int i) {
+	void fill(std::vector<float> coords, int i) {
 	  tiles_[getGlobalBin(coords)].push_back(i);
     }
 
-    void fill(std::vector<std::vector<float>> const& coordinates) {
-	  auto cellsSize = coordinates[0].size();
+	void fill(std::vector<std::vector<float>> const& coordinates) {
+		auto cellsSize = coordinates[0].size();
       for(int i = 0; i < cellsSize; ++i) {
-        std::vector<float> bin_coords;
-        for(int j = 0; j != Ndim; ++j) {
-          bin_coords.push_back(coordinates[j][i]);
-        } 
-        tiles_[getGlobalBin(bin_coords)].push_back(i);
-	  }
-    }
+			std::vector<float> bin_coords;
+			for(int j = 0; j != Ndim; ++j) {
+				bin_coords.push_back(coordinates[j][i]);
+			} 
+			tiles_[getGlobalBin(bin_coords)].push_back(i);
+		}
+	}
 
-    std::array<int,2*Ndim> searchBox(std::array<std::vector<float>,Ndim> minMax_){   // {{minX,maxX},{minY,maxY},{minZ,maxZ},...}
-      std::array<int, 2*Ndim> minMaxBins;
+	std::array<int,2*Ndim> searchBox(std::array<std::vector<float>,Ndim> minMax_){   // {{minX,maxX},{minY,maxY},{minZ,maxZ},...}
+		std::array<int, 2*Ndim> minMaxBins;
       int j = 0;
       for(int i = 0; i != Ndim; ++i) {
-        minMaxBins[j] = getBin(minMax_[i][0],i);
-        minMaxBins[j+1] = getBin(minMax_[i][1],i);
-        j += 2;
+			minMaxBins[j] = getBin(minMax_[i][0],i);
+			minMaxBins[j+1] = getBin(minMax_[i][1],i);
+			j += 2;
       }
 
-      return minMaxBins;
-    }
+		return minMaxBins;
+	}
 
-    void clear() {
-      for(auto& t: tiles_) {
-        t.clear();
-      }
-    }
+	void clear() {
+		for(auto& t: tiles_) {
+			t.clear();
+		}
+	}
 
-    std::vector<int>& operator[](int globalBinId) {
-      return tiles_[globalBinId];
-    }
+	std::vector<int>& operator[](int globalBinId) {
+		return tiles_[globalBinId];
+	}
 };
 
 
@@ -130,126 +130,134 @@ public:
 template <uint8_t Ndim>
 class ClusteringAlgo{
 public:
-  ClusteringAlgo(float dc, float rhoc, float outlierDeltaFactor, int pPBin) {
-    dc_ = dc; 
-    rhoc_ = rhoc;
-    outlierDeltaFactor_ = outlierDeltaFactor;
-    pointsPerTile_ = pPBin;
-  }
-  ~ClusteringAlgo(){} 
+	ClusteringAlgo(float dc, float rhoc, float outlierDeltaFactor, int pPBin) {
+		dc_ = dc; 
+		rhoc_ = rhoc;
+		outlierDeltaFactor_ = outlierDeltaFactor;
+		pointsPerTile_ = pPBin;
+	}
+	~ClusteringAlgo(){} 
     
-  // public variables
-  float dc_;  // cut-off distance in the calculation of local density
-  float rhoc_;  // minimum density to promote a point as a seed or the maximum density to demote a point as an outlier
-  float outlierDeltaFactor_;
-  int pointsPerTile_; // average number of points found in a tile
+	// public variables
+	float dc_;  // cut-off distance in the calculation of local density
+	float rhoc_;  // minimum density to promote a point as a seed or the maximum density to demote a point as an outlier
+	float outlierDeltaFactor_;
+	int pointsPerTile_; // average number of points found in a tile
     
-  Points<Ndim> points_;
+	Points<Ndim> points_;
   
-  bool setPoints(int n, std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
-	//points_.clear();
-    // input variables
-    for(int i = 0; i < n; ++i) {
-		for(int j = 0; j != Ndim; ++j) {
-			points_.coordinates_.push_back({});
-            points_.coordinates_[j].push_back(coordinates[j][i]);
-        }
-	    points_.weight.push_back(weight[i]);
-    }
+	bool setPoints(int n, std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight) {
+		//points_.clear();
+		// input variables
+		for(int i = 0; i < n; ++i) {
+			for(int j = 0; j != Ndim; ++j) {
+				points_.coordinates_.push_back({});
+				points_.coordinates_[j].push_back(coordinates[j][i]);
+			}
+			points_.weight.push_back(weight[i]);
+		}
 
-    points_.n = points_.coordinates_[0].size();
-    if(points_.n == 0)
-      return 1;
+		points_.n = points_.coordinates_[0].size();
+		if(points_.n == 0)
+			return 1;
 
-    // result variables
-    points_.rho.resize(points_.n,0);
-    points_.delta.resize(points_.n,std::numeric_limits<float>::max());
-    points_.nearestHigher.resize(points_.n,-1);
-    points_.followers.resize(points_.n);
-    points_.clusterIndex.resize(points_.n,-1);
-    points_.isSeed.resize(points_.n,0);
-    return 0;
-  }
+		// result variables
+		points_.rho.resize(points_.n,0);
+		points_.delta.resize(points_.n,std::numeric_limits<float>::max());
+		points_.nearestHigher.resize(points_.n,-1);
+		points_.followers.resize(points_.n);
+		points_.clusterIndex.resize(points_.n,-1);
+		points_.isSeed.resize(points_.n,0);
+		return 0;
+	}
 
-  void clearPoints(){ points_.clear(); }
+	void clearPoints(){ points_.clear(); }
 
-  int calculateNTiles(int pointPerBin) {
-    return points_.n/pointPerBin;
-  }
+	int calculateNTiles(int pointPerBin) {
+		int ntiles = points_.n/pointPerBin;
+		try{
+			if(ntiles == 0) {
+				throw 100;
+			}
+		}
+		catch(...) {
+			std::cout << "pointPerBin is set too high for you number of points. You must lower it in the clusterer constructor.\n";
+		}
+		return ntiles; 
+	}
 
-  std::array<float,Ndim> calculateTileSize(int NTiles, tiles<Ndim>& tiles_) {
-    std::array<float,Ndim> tileSizes;
-    int NperDim = std::pow(NTiles,1.0/Ndim);
+	std::array<float,Ndim> calculateTileSize(int NTiles, tiles<Ndim>& tiles_) {
+		std::array<float,Ndim> tileSizes;
+		int NperDim = std::pow(NTiles,1.0/Ndim);
 
-    for(int i = 0; i != Ndim; ++i) {
-      float tileSize;
-      float dimMax = *std::max_element(points_.coordinates_[i].begin(),points_.coordinates_[i].end());
-      float dimMin = *std::min_element(points_.coordinates_[i].begin(),points_.coordinates_[i].end());
-      tiles_.minMax[i] = {dimMin,dimMax};
-      tileSize = (dimMax-dimMin)/NperDim;
+		for(int i = 0; i != Ndim; ++i) {
+			float tileSize;
+			float dimMax = *std::max_element(points_.coordinates_[i].begin(),points_.coordinates_[i].end());
+			float dimMin = *std::min_element(points_.coordinates_[i].begin(),points_.coordinates_[i].end());
+			tiles_.minMax[i] = {dimMin,dimMax};
+			tileSize = (dimMax-dimMin)/NperDim;
       
-      tileSizes[i] = tileSize;
-    }
+			tileSizes[i] = tileSize;
+		}
+		return tileSizes;
+	}
 
-    return tileSizes;
-  }
+	std::vector<std::vector<int>> makeClusters() {
+		tiles<Ndim> Tiles;
+		Tiles.nTiles = calculateNTiles(pointsPerTile_);
+		Tiles.resizeTiles();
+		Tiles.tilesSize = calculateTileSize(Tiles.nTiles, Tiles);
 
-  std::vector<std::vector<int>> makeClusters() {
-	tiles<Ndim> Tiles;
-    Tiles.nTiles = calculateNTiles(pointsPerTile_);
-    Tiles.resizeTiles();
-  	Tiles.tilesSize = calculateTileSize(Tiles.nTiles, Tiles);
-
-    // start clustering
-    auto start = std::chrono::high_resolution_clock::now();
-    prepareDataStructures(Tiles);
-    auto finish = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = finish - start;
-    std::cout << "--- prepareDataStructures:     " << elapsed.count() *1000 << " ms\n";
+		// start clustering
+		auto start = std::chrono::high_resolution_clock::now();
+		prepareDataStructures(Tiles);
+		auto finish = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = finish - start;
+		std::cout << "--- prepareDataStructures:     " << elapsed.count() *1000 << " ms\n";
     
-    start = std::chrono::high_resolution_clock::now();
-    calculateLocalDensity(Tiles);
-    finish = std::chrono::high_resolution_clock::now();
-    elapsed = finish - start;
-    std::cout << "--- calculateLocalDensity:     " << elapsed.count() *1000 << " ms\n";
+		start = std::chrono::high_resolution_clock::now();
+		calculateLocalDensity(Tiles);
+		finish = std::chrono::high_resolution_clock::now();
+		elapsed = finish - start;
+		std::cout << "--- calculateLocalDensity:     " << elapsed.count() *1000 << " ms\n";
 
-    start = std::chrono::high_resolution_clock::now();
-    calculateDistanceToHigher(Tiles);
-    finish = std::chrono::high_resolution_clock::now();
-    elapsed = finish - start;
-    std::cout << "--- calculateDistanceToHigher: " << elapsed.count() *1000 << " ms\n";
+		start = std::chrono::high_resolution_clock::now();
+		calculateDistanceToHigher(Tiles);
+		finish = std::chrono::high_resolution_clock::now();
+		elapsed = finish - start;
+		std::cout << "--- calculateDistanceToHigher: " << elapsed.count() *1000 << " ms\n";
 
-    findAndAssignClusters();
+		findAndAssignClusters();
 
-	return {points_.clusterIndex,points_.isSeed};
-  }
+		return {points_.clusterIndex,points_.isSeed};
+	}
 
-  template <uint8_t N_>
-  void for_recursion(std::vector<int> &base_vector,  std::vector<int> &dim_min, std::vector<int> &dim_max, tiles<Ndim>& lt_, int point_id) {
-    if constexpr (N_ == 0) {
-      int binId = lt_.getGlobalBinByBin(base_vector);
-      // get the size of this bin
-      int binSize = lt_[binId].size();
+	template <uint8_t N_>
+	void for_recursion(std::vector<int> &base_vector,  std::vector<int> &dim_min, std::vector<int> &dim_max, tiles<Ndim>& lt_, int point_id) {
+		if constexpr (N_ == 0) {
+			int binId = lt_.getGlobalBinByBin(base_vector);
+			// get the size of this bin
+			int binSize = lt_[binId].size();
       
-      // iterate inside this bin
-      for (int binIter = 0; binIter < binSize; ++binIter) {
-        int j = lt_[binId][binIter];
-        // query N_{dc_}(i)
-        float dist_ij = distance(point_id, j);
+			// iterate inside this bin
+			for (int binIter = 0; binIter < binSize; ++binIter) {
+				int j = lt_[binId][binIter];
+			  // query N_{dc_}(i)
+			  float dist_ij = distance(point_id, j);
 
-        if(dist_ij <= dc_) {
-          // sum weights within N_{dc_}(i)
-          points_.rho[point_id] += (point_id == j ? 1.f : 0.5f) * points_.weight[j];
-        }
-      } // end of interate inside this bin
-      return;
-    } else {
-		 for(int i = dim_min[dim_min.size() - N_]; i <= dim_max[dim_max.size() - N_]; ++i) {
-			  base_vector[base_vector.size() - N_] = i;
-			  for_recursion<N_-1>(base_vector, dim_min, dim_max, lt_, point_id);
+			  if(dist_ij <= dc_) {
+				 // sum weights within N_{dc_}(i)
+				 points_.rho[point_id] += (point_id == j ? 1.f : 0.5f) * points_.weight[j];
+			  }
+			} // end of interate inside this bin
+			return;
+		 } else {
+			 for(int i = dim_min[dim_min.size() - N_]; i <= dim_max[dim_max.size() - N_]; ++i) {
+				  base_vector[base_vector.size() - N_] = i;
+				  for_recursion<N_-1>(base_vector, dim_min, dim_max, lt_, point_id);
+			 }
 		 }
-	 }
-  }
+	  }
 
   template <uint8_t N_>
   void for_recursion_DistanceToHigher(std::vector<int> &base_vector,  std::vector<int> &dim_min, std::vector<int> &dim_max, 
@@ -366,33 +374,33 @@ private:
     } // end of loop over points
   }
 
-  void findAndAssignClusters() {
-     auto start = std::chrono::high_resolution_clock::now();
+	void findAndAssignClusters() {
+		auto start = std::chrono::high_resolution_clock::now();
 
-    int nClusters = 0;
+		int nClusters = 0;
 
-    // find cluster seeds and outlier
-    std::vector<int> localStack;  // this vector will contain the indexes of all the seeds
-    // loop over all points
-    for(int i = 0; i < points_.n; ++i) {
-      // initialize clusterIndex
-      points_.clusterIndex[i] = -1;
+		// find cluster seeds and outlier
+		std::vector<int> localStack;  // this vector will contain the indexes of all the seeds
+		// loop over all points
+		for(int i = 0; i < points_.n; ++i) {
+			// initialize clusterIndex
+			points_.clusterIndex[i] = -1;
 
-      float deltai = points_.delta[i];
-      float rhoi = points_.rho[i];
+			float deltai = points_.delta[i];
+			float rhoi = points_.rho[i];
 
-      // determine seed or outlier 
-      bool isSeed = (deltai > dc_) && (rhoi >= rhoc_);
-      bool isOutlier = (deltai > outlierDeltaFactor_ * dc_) && (rhoi < rhoc_);
-      if (isSeed) {
-	      // set isSeed as 1
-	      points_.isSeed[i] = 1;
-	      // set cluster id
-	      points_.clusterIndex[i] = nClusters;
-	      // increment number of clusters
-	      ++nClusters;
-	      // add seed into local stack
-	      localStack.push_back(i);
+			// determine seed or outlier 
+			bool isSeed = (deltai > dc_) && (rhoi >= rhoc_);
+			bool isOutlier = (deltai > outlierDeltaFactor_ * dc_) && (rhoi < rhoc_);
+			if (isSeed) {
+				// set isSeed as 1
+				points_.isSeed[i] = 1;
+				// set cluster id
+				points_.clusterIndex[i] = nClusters;
+				// increment number of clusters
+				++nClusters;
+				// add seed into local stack
+				localStack.push_back(i);
       } else if (!isOutlier) {
 	      // register as follower at its nearest higher
 	      points_.followers[points_.nearestHigher[i]].push_back(i);
@@ -423,14 +431,14 @@ private:
     std::cout << "--- assignClusters:            " << elapsed.count() *1000 << " ms\n";
   }
 
-  inline float distance(int i, int j) const {
-    float qSum = 0;   // quadratic sum
-    for(int k = 0; k != Ndim; ++k) {
-      qSum += std::pow(points_.coordinates_[k][i] - points_.coordinates_[k][j],2);
-    }
+	inline float distance(int i, int j) const {
+		float qSum = 0;   // quadratic sum
+		for(int k = 0; k != Ndim; ++k) {
+			qSum += std::pow(points_.coordinates_[k][i] - points_.coordinates_[k][j],2);
+		}
     
-    return std::sqrt(qSum);
-  }
+		return std::sqrt(qSum);
+	}
 };
 
 
@@ -520,36 +528,36 @@ std::vector<std::vector<int>> run10(float dc, float rhoc, float outlier, int pPB
 std::vector<std::vector<int>> mainRun(float dc, float rhoc, float outlier, int pPBin, 
             std::vector<std::vector<float>> const& coords, std::vector<float> const& weight, int Ndim) {
     // Running the clustering algorithm //
-   	if (Ndim == 1) {
+	if (Ndim == 1) {
 		return run1(dc,rhoc,outlier,pPBin,coords,weight);
-		} 
-   	if (Ndim == 2) {
+	} 
+	if (Ndim == 2) {
 		return run2(dc,rhoc,outlier,pPBin,coords,weight);
-		} 
-   	if (Ndim == 3) {
+	} 
+	if (Ndim == 3) {
 		return run3(dc,rhoc,outlier,pPBin,coords,weight);
-		} 
-   	if (Ndim == 4) {
+	} 
+	if (Ndim == 4) {
 		return run4(dc,rhoc,outlier,pPBin,coords,weight);
-		} 
-   	if (Ndim == 5) {
+	} 
+	if (Ndim == 5) {
 		return run5(dc,rhoc,outlier,pPBin,coords,weight);
-		}
-   	if (Ndim == 6) {
+	}
+	if (Ndim == 6) {
 		return run6(dc,rhoc,outlier,pPBin,coords,weight);
-		} 
-   	if (Ndim == 7) {
+	} 
+	if (Ndim == 7) {
 		return run7(dc,rhoc,outlier,pPBin,coords,weight);
-		} 
-   	if (Ndim == 8) {
+	} 
+	if (Ndim == 8) {
 		return run8(dc,rhoc,outlier,pPBin,coords,weight);
-		} 
-   	if (Ndim == 9) {
+	} 
+	if (Ndim == 9) {
 		return run9(dc,rhoc,outlier,pPBin,coords,weight);
-		} 
-   	if (Ndim == 10) {
+	} 
+	if (Ndim == 10) {
 		return run10(dc,rhoc,outlier,pPBin,coords,weight);
-		} 
+	} 
 }
 
 
