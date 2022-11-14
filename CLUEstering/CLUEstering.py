@@ -25,9 +25,12 @@ def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5):
 	sigma (float): The standard deviation of the gaussian distribution of the z values.
 	"""
 
+	centers = []
 	if Ndim == 2:
 		data = {'x0': [], 'x1': [], 'weight': []}
-		blob_data, blob_labels = make_blobs(n_samples=nSamples)
+		for i in range(nBlobs):
+			centers.append([sign()*15*rnd.random(),sign()*15*rnd.random()])
+		blob_data, blob_labels = make_blobs(n_samples=nSamples,centers=np.array(centers))
 		for i in range(nSamples):
 			data['x0'] += [blob_data[i][0]]
 			data['x1'] += [blob_data[i][1]]
@@ -37,9 +40,8 @@ def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5):
 	if Ndim == 3:
 		data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
 		z = np.random.normal(mean,sigma,100)
-		centers = []
 		for i in range(nBlobs):
-			centers.append([sign()*15*rnd.random(),sign()*15*rnd.random()])
+			centers.append([sign()*15*rnd.random(),sign()*15*rnd.random()]) # the centers are 2D because we create them for each layer
 		for value in z: # for every z value, a layer is generated.
 			blob_data, blob_labels = make_blobs(n_samples=nSamples,centers=np.array(centers))
 			for i in range(nSamples):
@@ -85,11 +87,11 @@ class clusterer:
 			try:
 				if len(inputData) < 2:
 					raise ValueError('Error: Inadequate data. The data must contain at least one coordinate and the energy.')
-				self.coords = [coord for coord in self.inputData[:-1]]
-				self.weight = self.inputData[-1] 
-				if len(self.inputData[:-1]) > 10:
+				self.coords = [coord for coord in inputData[:-1]]
+				self.weight = inputData[-1] 
+				if len(inputData[:-1]) > 10:
 					raise ValueError('Error: The maximum number of dimensions supported is 10')
-				self.Ndim = len(self.inputData[:-1])
+				self.Ndim = len(inputData[:-1])
 				self.Npoints = len(self.weight)
 			except ValueError as ve:
 				print(ve)
@@ -100,11 +102,11 @@ class clusterer:
 			try:
 				if len(inputData) < 2:
 					raise ValueError('Error: Inadequate data. The data must contain at least one coordinate and the energy.')
-				self.coords = [coord for coord in self.inputData[:-1]]
-				self.weight = self.inputData[-1]
-				if len(self.inputData[:-1]) > 10:
+				self.coords = [coord for coord in inputData[:-1]]
+				self.weight = inputData[-1]
+				if len(inputData[:-1]) > 10:
 					raise ValueError('Error: The maximum number of dimensions supported is 10')
-				self.Ndim = len(self.inputData[:-1])
+				self.Ndim = len(inputData[:-1])
 				self.Npoints = len(self.weight)
 			except ValueError as ve:
 				print(ve)
