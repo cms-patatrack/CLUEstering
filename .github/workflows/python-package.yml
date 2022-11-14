@@ -31,8 +31,6 @@ jobs:
         python -m pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         python -m pip install pandas
-    -name: Install locally CLUEstering from repo
-      run: | 
         git clone https://github.com/SimonB00/CLUEstering.git
         pip install .
     - name: Lint with flake8
