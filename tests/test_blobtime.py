@@ -15,4 +15,4 @@ def test_time(blobs):
     finish = time.time_ns()
 
     elapsed_time = (finish - start)/(10**9)
-    assert elapsed_time < 1.0641621732029838
+    assert elapsed_time < 1.5
