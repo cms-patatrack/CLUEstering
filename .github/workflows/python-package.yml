@@ -33,7 +33,6 @@ jobs:
         python -m pip install pandas
         python -m pip install scikit-learn 
         pip install .
-        pip list
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
