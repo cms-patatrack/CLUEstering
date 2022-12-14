@@ -5,8 +5,8 @@ pip install CLUEstering
 python3 -m pytest
 mv ./file.csv ./file1.csv
 
-# Now install the local version of CLUEstering and test it as well
-python3 -m uninstall CLUEstering
+# Uninstall CLUE and install the local version of CLUEstering and test it as well
+python3 -m pip uninstall CLUEstering
 pip install .
 python3 -m pytest
 mv ./file.csv ./file2.csv
