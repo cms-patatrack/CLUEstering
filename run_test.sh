@@ -16,3 +16,4 @@ if [[ $(diff file1.csv file2.csv) -eq '' ]]
 then 
 	echo "assert(True)" >> test_passed.py
 fi
+python3 -m pytest
