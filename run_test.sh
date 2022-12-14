@@ -1,7 +1,7 @@
 #
 
 # Install latest version of CLUEstering and test it
-pip install CLUEstering==LATEST
+pip install CLUEstering
 python3 -m pytest
 mv ./file.csv ./file1.csv
 
