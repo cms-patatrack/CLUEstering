@@ -4,7 +4,7 @@ from pathlib import Path
 import codecs
 import os
 
-__version__ = "1.2.1"
+__version__ = "1.2.0"
 this_directory = Path(__file__).parent
 long_description = (this_directory/'README.md').read_text() 
 
