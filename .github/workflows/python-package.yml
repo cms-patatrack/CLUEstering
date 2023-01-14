@@ -31,7 +31,6 @@ jobs:
         python -m pip install flake8 pytest
         python -m pip install pandas
         python -m pip install scikit-learn 
-        pip install CLUEstering
         # pip install .
     - name: Lint with flake8
       run: |
