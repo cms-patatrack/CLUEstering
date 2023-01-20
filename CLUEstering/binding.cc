@@ -529,34 +529,34 @@ std::vector<std::vector<int>> mainRun(float dc, float rhoc, float outlier, int p
             std::vector<std::vector<float>> const& coords, std::vector<float> const& weight, int Ndim) {
     // Running the clustering algorithm //
 	switch(Ndim) {
-		case(1):
+		[[unlikely]] case(1):
 			return run1(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
-		case(2):
+		[[likely]] case(2):
 			return run2(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
-		case(3):
+		[[likely]] case(3):
 			return run3(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
-		case(4):
+		[[unlikely]] case(4):
 			return run4(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
-		case(5):
+		[[unlikely]] case(5):
 			return run5(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
-		case(6):
+		[[unlikely]] case(6):
 			return run6(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
-		case(7):
+		[[unlikely]] case(7):
 			return run7(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
-		case(8):
+		[[unlikely]] case(8):
 			return run8(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
-		case(9):
+		[[unlikely]] case(9):
 			return run9(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
-		case(10):
+		[[unlikely]] case(10):
 			return run10(dc,rhoc,outlier,pPBin,coords,weight);
 			break;
 	}
