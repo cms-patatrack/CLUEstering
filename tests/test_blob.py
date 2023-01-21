@@ -11,4 +11,3 @@ def test_correct_number_of_blobs(blobs):
     c.readData(blobs)
     c.runCLUE()
     c.toCSV('./','file.csv')
-    # assert c.NClusters == 4
