@@ -12,6 +12,7 @@ ext_modules = [
 	Pybind11Extension(
 		"CLUEsteringCPP",
 		['CLUEstering/binding.cc'],
+        include_dirs = ['CLUEstering/include/']
 	),
 ]
 
