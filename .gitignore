@@ -1,3 +1,4 @@
 *__pycache__
 *CLUEstering.egg-info
-*dist
+dist/
+build/
