@@ -3,9 +3,9 @@ name: Python package
 # The workflow gets triggered by pushes and pull requests
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "testing*" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "testing*" ]
 
 jobs:
   build:
