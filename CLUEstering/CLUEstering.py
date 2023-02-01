@@ -5,6 +5,7 @@ import time
 import matplotlib.pyplot as plt
 import CLUEsteringCPP as Algo 
 from sklearn.datasets import make_blobs
+from math import sqrt
 
 def sign():
     sign = rnd.random()
