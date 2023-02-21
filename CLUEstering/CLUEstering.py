@@ -5,6 +5,7 @@ import time
 import matplotlib.pyplot as plt
 import CLUEsteringCPP as Algo 
 from sklearn.datasets import make_blobs
+from math import sqrt
 
 def sign():
     sign = rnd.random()
@@ -150,6 +151,30 @@ class clusterer:
                 exit()
 
         print('Finished reading points')
+    
+    #def parameterTuning(self, dimensions, separation, expNClusters):
+    #    """
+    #    Function that takes the expected number of clusters and modifies the input parameters until that number is met
+    #    """
+#
+    #    self.dc = max(dimensions)
+    #    self.outlier = 
+    #    self.rhoc = 
+#
+    #    while 
+         
+    def parameterTuning(self, dimensions, expNClusters):
+        goodCombinations = []
+
+        for i in range(1000):
+            self.dc = np.random.uniform(0., min(dimensions))
+            self.rhoc = np.random.uniform(0., 100.)
+            self.outlier = np.random.uniform(1., max(dimensions)/self.dc)
+            self.runCLUE()
+            if self.NClusters == expNClusters or self.NClusters == expNClusters + 1: # you must also consider noise
+                goodCombinations.append([self.dc, self.rhoc, self.outlier])
+        self.goodCombinations = goodCombinations
+
     def runCLUE(self):
         """
         Executes the CLUE clustering algorithm.
@@ -212,12 +237,12 @@ class clusterer:
             dfs = df["isSeed"]
 
             df_out = df[df.clusterIds == -1] # Outliers
-            plt.scatter(df_out.x0, df_out.x1, s=5, marker='x', color='0.4')
+            plt.scatter(df_out.x0, df_out.x1, s=10, marker='x', color='0.4')
             for i in range(0,M+1):
                 dfi = df[df.clusterIds == i] # ith cluster
-                plt.scatter(dfi.x0, dfi.x1, s=5, marker='.')
+                plt.scatter(dfi.x0, dfi.x1, s=10, marker='.')
             df_seed = df[df.isSeed == 1] # Only Seeds
-            plt.scatter(df_seed.x0, df_seed.x1, s=20, color='r', marker='*')
+            plt.scatter(df_seed.x0, df_seed.x1, s=25, color='r', marker='*')
             plt.show()
         if self.Ndim == 3:
             data = {'x0':self.coords[0], 'x1':self.coords[1], 'x2':self.coords[2], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
