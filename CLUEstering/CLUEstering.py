@@ -13,7 +13,7 @@ def sign():
         return 1
     else:
         return -1
-
+        
 def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5):
     """
     Returns a test dataframe containing randomly generated 2-dimensional or 3-dimensional blobs. 
@@ -89,12 +89,12 @@ class clusterer:
             try:
                 if len(inputData) < 2:
                     raise ValueError('Error: Inadequate data. The data must contain at least one coordinate and the energy.')
-                self.coords = [coord for coord in inputData[:-1]]
-                self.weight = inputData[-1] 
+                self.coords = inputData[:-1]
+                self.weight = inputData[-1]
                 if len(inputData[:-1]) > 10:
                     raise ValueError('Error: The maximum number of dimensions supported is 10')
-                self.Ndim = len(inputData[:-1])
-                self.Npoints = len(self.weight)
+                self.Ndim = self.coords.size
+                self.Npoints = self.weight.size
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -104,12 +104,12 @@ class clusterer:
             try:
                 if len(inputData) < 2:
                     raise ValueError('Error: Inadequate data. The data must contain at least one coordinate and the energy.')
-                self.coords = [coord for coord in inputData[:-1]]
-                self.weight = inputData[-1]
+                self.coords = np.array(inputData[:-1])
+                self.weight = np.array(inputData[-1])
                 if len(inputData[:-1]) > 10:
                     raise ValueError('Error: The maximum number of dimensions supported is 10')
-                self.Ndim = len(inputData[:-1])
-                self.Npoints = len(self.weight)
+                self.Ndim = self.coords.size
+                self.Npoints = self.weight.size
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -141,40 +141,17 @@ class clusterer:
                 if len(coordinate_columns) > 10:    
                     raise ValueError('Error: The maximum number of dimensions supported is 10')
                 self.Ndim = len(coordinate_columns)
-                self.coords = []
-                for col in coordinate_columns:
-                    self.coords.append(list(df[col]))
-                self.weight = list(df['weight'])
-                self.Npoints = len(self.weight)
+                self.Npoints = len(df.index)
+                self.coords = np.zeros(shape=(self.Ndim, self.Npoints))
+                for dim in range(self.Ndim):
+                    self.coords[dim] = np.array(df.iloc[:,dim])
+                self.weight = df['weight']
             except ValueError as ve:
                 print(ve)
                 exit()
 
         print('Finished reading points')
     
-    #def parameterTuning(self, dimensions, separation, expNClusters):
-    #    """
-    #    Function that takes the expected number of clusters and modifies the input parameters until that number is met
-    #    """
-#
-    #    self.dc = max(dimensions)
-    #    self.outlier = 
-    #    self.rhoc = 
-#
-    #    while 
-         
-    def parameterTuning(self, dimensions, expNClusters):
-        goodCombinations = []
-
-        for i in range(1000):
-            self.dc = np.random.uniform(0., min(dimensions))
-            self.rhoc = np.random.uniform(0., 100.)
-            self.outlier = np.random.uniform(1., max(dimensions)/self.dc)
-            self.runCLUE()
-            if self.NClusters == expNClusters or self.NClusters == expNClusters + 1: # you must also consider noise
-                goodCombinations.append([self.dc, self.rhoc, self.outlier])
-        self.goodCombinations = goodCombinations
-
     def runCLUE(self):
         """
         Executes the CLUE clustering algorithm.
@@ -205,8 +182,8 @@ class clusterer:
         self.outputDF = pd.DataFrame(data) 
 
         self.elapsed_time = (finish - start)/(10**6)
-        print('CLUE run in ' + str(self.elapsed_time) + ' ms')
-        print('Number of clusters found: ', self.NClusters)
+        # print('CLUE run in ' + str(self.elapsed_time) + ' ms')
+        # print('Number of clusters found: ', self.NClusters)
     def inputPlotter(self):
         """
         Plots the the points in input.
@@ -243,6 +220,8 @@ class clusterer:
                 plt.scatter(dfi.x0, dfi.x1, s=10, marker='.')
             df_seed = df[df.isSeed == 1] # Only Seeds
             plt.scatter(df_seed.x0, df_seed.x1, s=25, color='r', marker='*')
+            plt.xlabel('x', fontsize=18)
+            plt.ylabel('y', fontsize=18)
             plt.show()
         if self.Ndim == 3:
             data = {'x0':self.coords[0], 'x1':self.coords[1], 'x2':self.coords[2], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
@@ -262,6 +241,9 @@ class clusterer:
 
             df_seed = df[df.isSeed == 1] # Only Seeds
             ax.scatter(df_seed.x0, df_seed.x1, df_seed.x2, s=20, color = 'r', marker = '*')
+            ax.set_xlabel('x', fontsize=14)
+            ax.set_ylabel('y', fontsize=14)
+            ax.set_zlabel('z', fontsize=14)
 
             plt.show()
     def toCSV(self,outputFolder,fileName):
