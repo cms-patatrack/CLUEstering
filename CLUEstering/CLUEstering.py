@@ -19,57 +19,70 @@ def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5, x_max=15, y_max=15):
     Returns a test dataframe containing randomly generated 2-dimensional or 3-dimensional blobs. 
 
     Parameters:
-    nSamples (int): The number
+    nSamples (int): The number of points in the dataset.
     Ndim (int): The number of dimensions.
     nBlobs (int): The number of blobs that should be produced. By default it is set to 4.
     mean (float): The mean of the gaussian distribution of the z values.
     sigma (float): The standard deviation of the gaussian distribution of the z values.
-    x_max (flaot): Limit of the space where the blobs are created in the x direction.
-    y_max (flaot): Limit of the space where the blobs are created in the y direction.
+    x_max (float): Limit of the space where the blobs are created in the x direction.
+    y_max (float): Limit of the space where the blobs are created in the y direction.
     """
 
-    sqrtSamples = sqrt(nSamples)
-    centers = []
-    if Ndim == 2:
-        data = {'x0': [], 'x1': [], 'weight': []}
-        for i in range(nBlobs):
-            centers.append([sign()*x_max*rnd.random(),sign()*y_max*rnd.random()])
-        blob_data, blob_labels = make_blobs(n_samples=nSamples,centers=np.array(centers))
-        for i in range(nSamples):
-            data['x0'] += [blob_data[i][0]]
-            data['x1'] += [blob_data[i][1]]
-            data['weight'] += [1]
+    try:
+        if x_max < 0. or y_max < 0.:
+            raise ValueError('Error: wrong parameter value\nx_max and y_max must be positive')
+        if nBlobs < 0:
+            raise ValueError('Error: wrong parameter value\nThe number of blobs must be positive')
+        if mean < 0. or sigma < 0.:
+            raise ValueError('Error: wrong parameter value\nThe mean and sigma of the blobs cannot be negative')
 
-        return pd.DataFrame(data)
-    if Ndim == 3:
-        data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
-        z = np.random.normal(mean,sigma,sqrtSamples)
-        for i in range(nBlobs):
-            centers.append([sign()*x_max*rnd.random(),sign()*x_max*rnd.random()]) # the centers are 2D because we create them for each layer
-        for value in z: # for every z value, a layer is generated.
-            blob_data, blob_labels = make_blobs(n_samples=sqrtSamples,centers=np.array(centers))
+        sqrtSamples = sqrt(nSamples)
+        centers = []
+        if Ndim == 2:
+            data = {'x0': [], 'x1': [], 'weight': []}
+            for i in range(nBlobs):
+                centers.append([sign()*x_max*rnd.random(),sign()*y_max*rnd.random()])
+            blob_data, blob_labels = make_blobs(n_samples=nSamples,centers=np.array(centers))
             for i in range(nSamples):
                 data['x0'] += [blob_data[i][0]]
                 data['x1'] += [blob_data[i][1]]
-                data['x2'] += [value]
                 data['weight'] += [1]
 
-        return pd.DataFrame(data)
+            return pd.DataFrame(data)
+        elif Ndim == 3:
+            data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
+            z = np.random.normal(mean,sigma,sqrtSamples)
+            for i in range(nBlobs):
+                centers.append([sign()*x_max*rnd.random(),sign()*x_max*rnd.random()]) # the centers are 2D because we create them for each layer
+            for value in z: # for every z value, a layer is generated.
+                blob_data, blob_labels = make_blobs(n_samples=sqrtSamples,centers=np.array(centers))
+                for i in range(nSamples):
+                    data['x0'] += [blob_data[i][0]]
+                    data['x1'] += [blob_data[i][1]]
+                    data['x2'] += [value]
+                    data['weight'] += [1]
+
+            return pd.DataFrame(data)
+        else:
+            raise ValueError('Error: wrong number of dimensions\nBlobs can only be generated in 2 or 3 dimensions')
+    except ValueError as ve:
+        print(ve)
+        exit()
 
 class clusterer:
     def __init__(self, dc, rhoc, outlier, pPBin=10): 
         try:
             if float(dc) != dc:
-                raise ValueError('The dc parameter must be a float')
+                raise ValueError('Error: wrong parameter type\nThe dc parameter must be a float')
             self.dc = dc
             if float(rhoc) != rhoc:
-                raise ValueError('The rhoc parameter must be a float')
+                raise ValueError('Error: wrong parameter type\nThe rhoc parameter must be a float')
             self.rhoc = rhoc
             if float(outlier) != outlier:
-                raise ValueError('The outlier parameter must be a float')
+                raise ValueError('Error: wrong parameter type\nThe outlier parameter must be a float')
             self.outlier = outlier
             if type(pPBin) != int:
-                raise ValueError('The pPBin parameter must be a int')
+                raise ValueError('Error: wrong parameter type\nThe pPBin parameter must be a int')
             self.pPBin = pPBin
         except ValueError as ve:
             print(ve)
@@ -86,17 +99,15 @@ class clusterer:
         inputData (list or numpy array): The list or numpy array should contain a list of lists for the coordinates and a list for the weight.
         """
 
-        print('Start reading points')
-        
         # numpy array
         if type(inputData) == np.array:
             try:
                 if len(inputData) < 2:
-                    raise ValueError('Error: Inadequate data. The data must contain at least one coordinate and the energy.')
+                    raise ValueError('Error: inadequate data\nThe data must contain at least one coordinate and the energy.')
                 self.coords = inputData[:-1]
                 self.weight = inputData[-1]
                 if len(inputData[:-1]) > 10:
-                    raise ValueError('Error: The maximum number of dimensions supported is 10')
+                    raise ValueError('Error: inadequate data\nThe maximum number of dimensions supported is 10')
                 self.Ndim = len(self.coords)
                 self.Npoints = self.weight.size
             except ValueError as ve:
@@ -107,11 +118,11 @@ class clusterer:
         if type(inputData) == list:
             try:
                 if len(inputData) < 2:
-                    raise ValueError('Error: Inadequate data. The data must contain at least one coordinate and the energy.')
+                    raise ValueError('Error: inadequate data\nThe data must contain at least one coordinate and the energy.')
                 self.coords = np.array(inputData[:-1])
                 self.weight = np.array(inputData[-1])
                 if len(inputData[:-1]) > 10:
-                    raise ValueError('Error: The maximum number of dimensions supported is 10')
+                    raise ValueError('Error: inadequate data\nThe maximum number of dimensions supported is 10')
                 self.Ndim = len(self.coords)
                 self.Npoints = self.weight.size
             except ValueError as ve:
@@ -119,11 +130,11 @@ class clusterer:
                 exit()
 
         # path to .csv file or pandas dataframe
-        if type(inputData) == str or type(inputData) == pd.DataFrame:
+        if type(inputData) == str or type(inputData) == pd.DataFrame or type(inputData) == dict:
             if type(inputData) == str:
                 try:
                     if inputData[-3:] != 'csv':
-                        raise ValueError('Error: The file is not a csv file.')
+                        raise ValueError('Error: wrong type of file\nThe file is not a csv file.')
                     df = pd.read_csv(inputData)
                 except ValueError as ve:
                     print(ve)
@@ -131,19 +142,30 @@ class clusterer:
             if type(inputData) == pd.DataFrame:
                 try:
                     if len(inputData.columns) < 2:
-                        raise ValueError('Error: Inadequate data. The data must contain at least one coordinate and the energy.')
+                        raise ValueError('Error: inadequate data\nThe data must contain at least one coordinate and the energy.')
                     df = inputData
+                except ValueError as ve:
+                    print(ve)
+                    exit()
+            if type(inputData) == dict:
+                try:
+                    if len(inputData.keys()) < 2:
+                        raise ValueError('Error: inadequate data\nThe data must contain at least one coordinate and the energy.')
+                    if not 'weight' in inputData.keys():
+                        raise ValueError('Error: inadequate data\nThe input data must contain values for the weights.')
+
+                    inputData = pd.DataFrame(inputData)
                 except ValueError as ve:
                     print(ve)
                     exit()
 
             try:
                 if not 'weight' in df.columns:
-                    raise ValueError('Error: The input dataframe must contain a weight column.')
+                    raise ValueError('Error: inadequate data\nThe input dataframe must contain a weight column.')
                     
                 coordinate_columns = [col for col in df.columns if col[0] == 'x']
                 if len(coordinate_columns) > 10:    
-                    raise ValueError('Error: The maximum number of dimensions supported is 10')
+                    raise ValueError('Error: inadequate data\nThe maximum number of dimensions supported is 10')
                 self.Ndim = len(coordinate_columns)
                 self.Npoints = len(df.index)
                 self.coords = np.zeros(shape=(self.Ndim, self.Npoints))
@@ -154,9 +176,7 @@ class clusterer:
                 print(ve)
                 exit()
 
-        print('Finished reading points')
-
-    def chooseKernel(self, choice, parameters, function = lambda : 0):
+    def chooseKernel(self, choice, parameters=[], function = lambda : 0):
         """
         Changes the kernel used in the calculation of local density. The default kernel is a flat kernel with parameter 0.5
 
@@ -167,18 +187,36 @@ class clusterer:
         and the custom doesn't require any, so an empty list should be passed.
         function (function object): Function that should be used as kernel when the custom kernel is chosen.
         """
-        if choice == "flat":
-            self.kernel = Algo.flatKernel(parameters[0])
-        elif choice == "exp":
-            self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
-        elif choice == "gaus":
-            self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
-        elif choice == "custom":
-            self.kernel = Algo.customKernel(function)
+
+        try:
+            if choice == "flat":
+                if len(parameters) != 1:
+                    raise ValueError('Error: wrong number of parameters\nThe flat kernel requires 1 parameter')
+                self.kernel = Algo.flatKernel(parameters[0])
+            elif choice == "exp":
+                if len(parameters) != 2:
+                    raise ValueError('Error: wrong number of parameters\nThe exponential kernel requires 2 parameters')
+                self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
+            elif choice == "gaus":
+                if len(parameters) != 3:
+                    raise ValueError('Error: wrong number of parameters\nThe gaussian kernel requires 3 parameters')
+                self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
+            elif choice == "custom":
+                if len(parameters) != 0:
+                    raise ValueError('Error: wrong number of parameters\nCustom kernels requires 0 parameters')
+                self.kernel = Algo.customKernel(function)
+            else: 
+                raise ValueError('Error: invalid kernel\nThe allowed choices for the kernels are: flat, exp, gaus and custom')
+        except ValueError as ve:
+            print(ve)
+            exit()
     
-    def runCLUE(self):
+    def runCLUE(self, verbose=False):
         """
         Executes the CLUE clustering algorithm.
+
+        Parameters:
+        verbose (bool): The verbose option prints the execution time of runCLUE and the number of clusters found
 
         Output:
         self.clusterIds (list): Contains the clusterId corresponding to every point.
@@ -199,15 +237,16 @@ class clusterer:
         for i in range(self.Npoints):
             clusterPoints[self.clusterIds[i]].append(i)
 
-        self.clusterPoints = np.array(clusterPoints)
+        self.clusterPoints = clusterPoints
         self.pointsPerCluster = np.array([len(clust) for clust in clusterPoints])
 
         data = {'clusterIds': self.clusterIds, 'isSeed': self.isSeed}
         self.outputDF = pd.DataFrame(data) 
 
         self.elapsed_time = (finish - start)/(10**6)
-        print('CLUE run in ' + str(self.elapsed_time) + ' ms')
-        print('Number of clusters found: ', self.NClusters)
+        if verbose:
+            print('CLUE run in ' + str(self.elapsed_time) + ' ms')
+            print('Number of clusters found: ', self.NClusters)
 
     def inputPlotter(self, plot_title='', label_size=16, pt_size=1, pt_colour='b'):
         """
