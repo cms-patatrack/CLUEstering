@@ -74,6 +74,7 @@ class clusterer:
         except ValueError as ve:
             print(ve)
             exit()
+        self.kernel = Algo.flatKernel(0.5)
             
     def readData(self, inputData):
         """
@@ -154,6 +155,26 @@ class clusterer:
                 exit()
 
         print('Finished reading points')
+
+    def chooseKernel(self, choice, parameters, function = lambda : 0):
+        """
+        Changes the kernel used in the calculation of local density. The default kernel is a flat kernel with parameter 0.5
+
+        Parameters:
+        choice (string): The type of kernel that you want to choose (flat, exp, gaus or custom).
+        parameters (list or np.array): List of the parameters needed by the kernels. The flat kernel requires one, 
+        the exponential requires two (amplutude and mean), the gaussian requires three (amplitude, mean and standard deviation)
+        and the custom doesn't require any, so an empty list should be passed.
+        function (function object): Function that should be used as kernel when the custom kernel is chosen.
+        """
+        if choice == "flat":
+            self.kernel = Algo.flatKernel(parameters[0])
+        elif choice == "exp":
+            self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
+        elif choice == "gaus":
+            self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
+        elif choice == "custom":
+            self.kernel = Algo.customKernel(function)
     
     def runCLUE(self):
         """
@@ -168,7 +189,7 @@ class clusterer:
         """
 
         start = time.time_ns()
-        clusterIdIsSeed = Algo.mainRun(self.dc,self.rhoc,self.outlier,self.pPBin,self.coords,self.weight,self.Ndim)
+        clusterIdIsSeed = Algo.mainRun(self.dc,self.rhoc,self.outlier,self.pPBin,self.kernel,self.coords,self.weight,self.Ndim)
         finish = time.time_ns()
         self.clusterIds = np.array(clusterIdIsSeed[0])
         self.isSeed = np.array(clusterIdIsSeed[1])

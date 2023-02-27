@@ -24,7 +24,7 @@ public:
 	std::array<std::vector<float>,Ndim> minMax;
 
 	int getBin(float coord_, int dim_) const {
-		int coord_Bin { (coord_ - minMax[dim_][0])/tilesSize[dim_] };
+		int coord_Bin { static_cast<int>((coord_ - minMax[dim_][0])/tilesSize[dim_]) };
 		coord_Bin = std::min(coord_Bin,static_cast<int>(std::pow(nTiles,1.0/Ndim)-1));
 		coord_Bin = std::max(coord_Bin,0);
 		return coord_Bin;
