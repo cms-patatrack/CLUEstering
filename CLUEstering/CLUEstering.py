@@ -13,6 +13,23 @@ def sign():
         return 1
     else:
         return -1
+
+def normalizePeriodic(data: list, domain: tuple):
+    """
+    Normalizes periodc coordinates defined in a finite domain, like angle variables.
+
+    Parameters:
+    data (list): Data containing the values of the coordinate that should be normalized
+    domain (tuple): Tuple containing the extremes of the domain on which the periodic variable is defined.
+    """
+    
+    normalized_data = []
+    for value in data:
+        dist_upperbound = abs(domain[1] - value)
+        dist_lowerbound = abs(value - domain[0])
+        normalized_data.append(min([dist_lowerbound, dist_upperbound]))
+
+    return normalized_data
         
 def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5, x_max=15, y_max=15):
     """
@@ -89,7 +106,7 @@ class clusterer:
             exit()
         self.kernel = Algo.flatKernel(0.5)
             
-    def readData(self, inputData):
+    def readData(self, inputData, **kwargs):
         """
         Reads the data in input and fills the class members containing the coordinates of the points, the energy weight, the number of dimensions and the number of points.
 
@@ -97,6 +114,7 @@ class clusterer:
         inputData (pandas dataframe): The dataframe should contain one column for every coordinate, each one called 'x*', and one column for the weight.
         inputData (string): The string should contain the full path to a csv file containing the data.
         inputData (list or numpy array): The list or numpy array should contain a list of lists for the coordinates and a list for the weight.
+        kwargs (tuples): Tuples corresponding to the domain of any periodic variables. The keyword should be the keyword of the corrispoding variable.  
         """
 
         # numpy array
@@ -110,6 +128,9 @@ class clusterer:
                     raise ValueError('Error: inadequate data\nThe maximum number of dimensions supported is 10')
                 self.Ndim = len(self.coords)
                 self.Npoints = self.weight.size
+
+                for kwarg in kwargs:
+                    self.coords[kwarg[1]] = normalizePeriodic(self.coords[kwarg[1]], kwargs[kwarg])
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -125,6 +146,9 @@ class clusterer:
                     raise ValueError('Error: inadequate data\nThe maximum number of dimensions supported is 10')
                 self.Ndim = len(self.coords)
                 self.Npoints = self.weight.size
+
+                for kwarg in kwargs:
+                    self.coords[kwarg[1]] = normalizePeriodic(self.coords[kwarg[1]], kwargs[kwarg])
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -172,6 +196,9 @@ class clusterer:
                 for dim in range(self.Ndim):
                     self.coords[dim] = np.array(df.iloc[:,dim])
                 self.weight = df['weight']
+
+                for kwarg in kwargs:
+                    self.coords[int(kwarg[1])] = normalizePeriodic(self.coords[int(kwarg[1])], kwargs[kwarg])
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -350,3 +377,11 @@ class clusterer:
 
         df = pd.DataFrame(data)
         df.to_csv(outPath,index=False)
+
+if __name__ == "__main__":
+    from math import pi
+    c = clusterer(10,50,2.1)
+    c.readData('../polar_coordinates.csv', x2=(-pi, pi))
+    c.inputPlotter()
+    c.runCLUE()
+    c.clusterPlotter()
