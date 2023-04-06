@@ -160,6 +160,7 @@ class clusterer:
                     if inputData[-3:] != 'csv':
                         raise ValueError('Error: wrong type of file\nThe file is not a csv file.')
                     df = pd.read_csv(inputData)
+
                 except ValueError as ve:
                     print(ve)
                     exit()
@@ -196,7 +197,11 @@ class clusterer:
                 for dim in range(self.Ndim):
                     self.coords[dim] = np.array(df.iloc[:,dim])
                 self.weight = df['weight']
+                
+                # Save the original coordinates before any normalizations
+                self.original_coords = np.copy(self.coords)
 
+                # Normalize the coordinates that are periodic and defined on a finite range
                 for kwarg in kwargs:
                     self.coords[int(kwarg[1])] = normalizePeriodic(self.coords[int(kwarg[1])], kwargs[kwarg])
             except ValueError as ve:
@@ -275,7 +280,7 @@ class clusterer:
             print('CLUE run in ' + str(self.elapsed_time) + ' ms')
             print('Number of clusters found: ', self.NClusters)
 
-    def inputPlotter(self, plot_title='', label_size=16, pt_size=1, pt_colour='b'):
+    def inputPlotter(self, plot_title='', label_size=16, pt_size=1, pt_colour='b', **kwargs):
         """
         Plots the the points in input.
 
@@ -284,7 +289,12 @@ class clusterer:
         label_size (int): Fontsize of the axis labels
         pt_size (int): Size of the points in the plot
         pt_colour (string): Colour of the points in the plot
+        kwargs (function objects): Functions for converting the used coordinates to cartesian coordinates. The keyword of the arguments are the coordinates names (x0, x1, ...)
         """
+
+        # Convert the used coordinates to cartesian coordiantes
+        for kwarg in kwargs:
+            self.coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
 
         if self.Ndim == 2:
             plt.scatter(self.coords[0],self.coords[1], s=pt_size, color=pt_colour)
@@ -302,7 +312,7 @@ class clusterer:
             ax.set_zlabel('z', fontsize=label_size)
             plt.show()
 
-    def clusterPlotter(self, plot_title='', label_size=16, outl_size=10, pt_size=10, seed_size=25):
+    def clusterPlotter(self, plot_title='', label_size=16, outl_size=10, pt_size=10, seed_size=25, **kwargs):
         """
         Plots the clusters with a different colour for every cluster. 
 
@@ -314,8 +324,13 @@ class clusterer:
         outl_size (int): Size of the outliers in the plot
         pt_size (int): Size of the points in the plot
         seed_size (int): Size of the seeds in the plot
+        kwargs (function objects): Functions for converting the used coordinates to cartesian coordinates. The keyword of the arguments are the coordinates names (x0, x1, ...)
         """
         
+        # Convert the used coordinates to cartesian coordiantes
+        for kwarg in kwargs:
+            self.coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
+
         if self.Ndim == 2:
             data = {'x0':self.coords[0], 'x1':self.coords[1], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
             df = pd.DataFrame(data)
@@ -359,7 +374,7 @@ class clusterer:
             ax.set_zlabel('z', fontsize=label_size)
             plt.show()
 
-    def toCSV(self,outputFolder,fileName):
+    def toCSV(self, outputFolder, fileName):
         """
         Creates a file containing the coordinates of all the points, their clusterIds and isSeed.   
 
@@ -377,11 +392,3 @@ class clusterer:
 
         df = pd.DataFrame(data)
         df.to_csv(outPath,index=False)
-
-if __name__ == "__main__":
-    from math import pi
-    c = clusterer(10,50,2.1)
-    c.readData('../polar_coordinates.csv', x2=(-pi, pi))
-    c.inputPlotter()
-    c.runCLUE()
-    c.clusterPlotter()
