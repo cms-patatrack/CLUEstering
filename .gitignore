@@ -2,3 +2,5 @@
 *CLUEstering.egg-info
 dist/
 build/
+*.so
+*.out

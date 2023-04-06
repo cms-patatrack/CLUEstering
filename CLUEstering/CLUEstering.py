@@ -208,6 +208,18 @@ class clusterer:
                 print(ve)
                 exit()
 
+    def changeCoordinates(self, **kwargs):
+        """
+        Change the coordinate system
+
+        Parameters:
+        kwargs (function objects): The functions for the change of coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...)
+        """
+
+        # Change the coordinate system
+        for kwarg in kwargs:
+            self.coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
+
     def chooseKernel(self, choice, parameters=[], function = lambda : 0):
         """
         Changes the kernel used in the calculation of local density. The default kernel is a flat kernel with parameter 0.5
@@ -289,15 +301,15 @@ class clusterer:
         label_size (int): Fontsize of the axis labels
         pt_size (int): Size of the points in the plot
         pt_colour (string): Colour of the points in the plot
-        kwargs (function objects): Functions for converting the used coordinates to cartesian coordinates. The keyword of the arguments are the coordinates names (x0, x1, ...)
+        kwargs (function objects): Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...)
         """
 
         # Convert the used coordinates to cartesian coordiantes
         for kwarg in kwargs:
-            self.coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
+            self.original_coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
 
         if self.Ndim == 2:
-            plt.scatter(self.coords[0],self.coords[1], s=pt_size, color=pt_colour)
+            plt.scatter(self.original_coords[0],self.original_coords[1], s=pt_size, color=pt_colour)
             plt.title(plot_title)
             plt.xlabel('x', fontsize=label_size)
             plt.ylabel('y', fontsize=label_size)
@@ -305,7 +317,7 @@ class clusterer:
         if self.Ndim >= 3:
             fig = plt.figure()
             ax = fig.add_subplot(projection='3d')
-            ax.scatter(self.coords[0],self.coords[1],self.coords[2], s=pt_size, color=pt_colour)
+            ax.scatter(self.original_coords[0],self.original_coords[1],self.original_coords[2], s=pt_size, color=pt_colour)
             ax.set_title(plot_title)
             ax.set_xlabel('x', fontsize=label_size)
             ax.set_ylabel('y', fontsize=label_size)
@@ -324,15 +336,15 @@ class clusterer:
         outl_size (int): Size of the outliers in the plot
         pt_size (int): Size of the points in the plot
         seed_size (int): Size of the seeds in the plot
-        kwargs (function objects): Functions for converting the used coordinates to cartesian coordinates. The keyword of the arguments are the coordinates names (x0, x1, ...)
+        kwargs (function objects): Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...)
         """
         
         # Convert the used coordinates to cartesian coordiantes
         for kwarg in kwargs:
-            self.coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
+            self.original_coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
 
         if self.Ndim == 2:
-            data = {'x0':self.coords[0], 'x1':self.coords[1], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
+            data = {'x0':self.original_coords[0], 'x1':self.original_coords[1], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
             df = pd.DataFrame(data)
 
             df_clindex = df["clusterIds"]
@@ -351,7 +363,7 @@ class clusterer:
             plt.ylabel('y', fontsize=label_size)
             plt.show()
         if self.Ndim == 3:
-            data = {'x0':self.coords[0], 'x1':self.coords[1], 'x2':self.coords[2], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
+            data = {'x0':self.original_coords[0], 'x1':self.original_coords[1], 'x2':self.original_coords[2], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
             df = pd.DataFrame(data)
 
             df_clindex = df["clusterIds"]
