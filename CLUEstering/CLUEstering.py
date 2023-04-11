@@ -14,23 +14,6 @@ def sign():
     else:
         return -1
 
-def normalizePeriodic(data: list, domain: tuple):
-    """
-    Normalizes periodc coordinates defined in a finite domain, like angle variables.
-
-    Parameters:
-    data (list): Data containing the values of the coordinate that should be normalized
-    domain (tuple): Tuple containing the extremes of the domain on which the periodic variable is defined.
-    """
-    
-    normalized_data = []
-    for value in data:
-        dist_upperbound = abs(domain[1] - value)
-        dist_lowerbound = abs(value - domain[0])
-        normalized_data.append(min([dist_lowerbound, dist_upperbound]))
-
-    return normalized_data
-        
 def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5, x_max=15, y_max=15):
     """
     Returns a test dataframe containing randomly generated 2-dimensional or 3-dimensional blobs. 
@@ -129,8 +112,9 @@ class clusterer:
                 self.Ndim = len(self.coords)
                 self.Npoints = self.weight.size
 
+                self.domain_ranges = [(0,0) for i in range(self.Ndim)]
                 for kwarg in kwargs:
-                    self.coords[kwarg[1]] = normalizePeriodic(self.coords[kwarg[1]], kwargs[kwarg])
+                    self.domain_ranges[kwarg[1]] = kwargs[kwarg]
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -147,8 +131,9 @@ class clusterer:
                 self.Ndim = len(self.coords)
                 self.Npoints = self.weight.size
 
+                self.domain_ranges = [[] for i in range(self.Ndim)]
                 for kwarg in kwargs:
-                    self.coords[kwarg[1]] = normalizePeriodic(self.coords[kwarg[1]], kwargs[kwarg])
+                    self.domain_ranges[kwarg[1]] = kwargs[kwarg]
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -199,11 +184,23 @@ class clusterer:
                 self.weight = df['weight']
                 
                 # Save the original coordinates before any normalizations
-                self.original_coords = np.copy(self.coords)
+                self.original_coords = np.copy(self.coords) 
 
-                # Normalize the coordinates that are periodic and defined on a finite range
+                # Calculate mean and standard deviations in all the coordinates
+                means = np.zeros(shape=(self.Ndim, 1))
+                covariance_matrix = np.cov(self.coords)
+                for dim in range(self.Ndim):
+                    means[dim] = np.mean(self.coords[dim])
+                
+                # Normalize all the coordinates as x'_j = (x_j - mu_j) / sigma_j
+                for dim in range(self.Ndim):
+                    self.coords[dim] = (self.coords[dim] - means[dim]) / sqrt(covariance_matrix[dim][dim])
+
+                # 
+                empty_domain = Algo.domain_t()
+                self.domain_ranges = [empty_domain for i in range(self.Ndim)]
                 for kwarg in kwargs:
-                    self.coords[int(kwarg[1])] = normalizePeriodic(self.coords[int(kwarg[1])], kwargs[kwarg])
+                    self.domain_ranges[int(kwarg[1])] = Algo.domain_t(kwargs[kwarg][0], kwargs[kwarg][1])
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -271,7 +268,7 @@ class clusterer:
         """
 
         start = time.time_ns()
-        clusterIdIsSeed = Algo.mainRun(self.dc,self.rhoc,self.outlier,self.pPBin,self.kernel,self.coords,self.weight,self.Ndim)
+        clusterIdIsSeed = Algo.mainRun(self.dc,self.rhoc,self.outlier,self.pPBin,self.domain_ranges,self.kernel,self.coords,self.weight,self.Ndim)
         finish = time.time_ns()
         self.clusterIds = np.array(clusterIdIsSeed[0])
         self.isSeed = np.array(clusterIdIsSeed[1])
@@ -305,11 +302,12 @@ class clusterer:
         """
 
         # Convert the used coordinates to cartesian coordiantes
+        cartesian_coords = [[] for i in range(self.Ndim)]
         for kwarg in kwargs:
-            self.original_coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
+            cartesian_coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
 
         if self.Ndim == 2:
-            plt.scatter(self.original_coords[0],self.original_coords[1], s=pt_size, color=pt_colour)
+            plt.scatter(cartesian_coords[0], cartesian_coords[1], s=pt_size, color=pt_colour)
             plt.title(plot_title)
             plt.xlabel('x', fontsize=label_size)
             plt.ylabel('y', fontsize=label_size)
@@ -317,7 +315,7 @@ class clusterer:
         if self.Ndim >= 3:
             fig = plt.figure()
             ax = fig.add_subplot(projection='3d')
-            ax.scatter(self.original_coords[0],self.original_coords[1],self.original_coords[2], s=pt_size, color=pt_colour)
+            ax.scatter(cartesian_coords[0], cartesian_coords[1],self.original_coords[2], s=pt_size, color=pt_colour)
             ax.set_title(plot_title)
             ax.set_xlabel('x', fontsize=label_size)
             ax.set_ylabel('y', fontsize=label_size)
@@ -340,11 +338,12 @@ class clusterer:
         """
         
         # Convert the used coordinates to cartesian coordiantes
+        cartesian_coords = [[] for i in range(self.Ndim)]
         for kwarg in kwargs:
-            self.original_coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
+            cartesian_coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
 
         if self.Ndim == 2:
-            data = {'x0':self.original_coords[0], 'x1':self.original_coords[1], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
+            data = {'x0':cartesian_coords[0], 'x1':cartesian_coords[1], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
             df = pd.DataFrame(data)
 
             df_clindex = df["clusterIds"]
@@ -363,7 +362,7 @@ class clusterer:
             plt.ylabel('y', fontsize=label_size)
             plt.show()
         if self.Ndim == 3:
-            data = {'x0':self.original_coords[0], 'x1':self.original_coords[1], 'x2':self.original_coords[2], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
+            data = {'x0':cartesian_coords[0], 'x1':cartesian_coords[1], 'x2':self.original_coords[2], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
             df = pd.DataFrame(data)
 
             df_clindex = df["clusterIds"]
@@ -404,3 +403,31 @@ class clusterer:
 
         df = pd.DataFrame(data)
         df.to_csv(outPath,index=False)
+
+if __name__ == "__main__":
+    from math import pi
+    from sklearn.datasets import make_circles
+
+    
+    data, labels = make_circles(n_samples=1000, factor=0.4)
+
+    df = {'x0': [], 'x1': [], 'weight': []}
+    for i in range(1000):
+        df['x0'] += [data[i][0]]
+        df['x1'] += [data[i][1]]
+        df['weight'] += [1]
+    df = pd.DataFrame(df)
+
+    new_data = {}
+    new_data['x0'] = np.sqrt(df['x0']**2 + df['x1']**2)
+    new_data['x1'] = np.arctan2(df['x1'], df['x0'])
+    new_data['weight'] = [1 for i in range(len(new_data['x0']))]
+    new_df = pd.DataFrame(new_data)
+
+    c = clusterer(1,5,1.5)
+    c.readData(new_df, x1=(-pi, pi))
+    c.inputPlotter(x0=lambda x: x[0]*np.cos(x[1]),
+                     x1=lambda x: x[0]*np.sin(x[1]))
+    c.runCLUE()
+    c.clusterPlotter(x0=lambda x: x[0]*np.cos(x[1]),
+                     x1=lambda x: x[0]*np.sin(x[1]))

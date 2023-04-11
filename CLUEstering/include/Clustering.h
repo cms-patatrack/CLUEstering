@@ -11,10 +11,17 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "Kernels.h"
 #include "Point.h"
 #include "Tiles.h"
+#include "deltaPhi.h"
+
+struct domain_t {
+  float min = -std::numeric_limits<float>::max();
+  float max = std::numeric_limits<float>::max();
+};
 
 ////////////////////////////
 //////  Clustering.h  //////
@@ -22,11 +29,12 @@
 template <uint8_t Ndim>
 class ClusteringAlgo {
 public:
-  ClusteringAlgo(float dc, float rhoc, float outlierDeltaFactor, int pPBin) {
+  ClusteringAlgo(float dc, float rhoc, float outlierDeltaFactor, int pPBin, std::vector<domain_t> domains) {
     dc_ = dc;
     rhoc_ = rhoc;
     outlierDeltaFactor_ = outlierDeltaFactor;
     pointsPerTile_ = pPBin;
+    domains_ = std::move(domains);
   }
 
   // public variables
@@ -34,6 +42,9 @@ public:
   float rhoc_;  // minimum density to promote a point as a seed or the maximum density to demote a point as an outlier
   float outlierDeltaFactor_;
   int pointsPerTile_;  // average number of points found in a tile
+
+  // Array containing the domain extremes of every coordinate
+  std::vector<domain_t> domains_;
 
   Points<Ndim> points_;
 
@@ -94,25 +105,9 @@ public:
     Tiles.resizeTiles();
     Tiles.tilesSize = calculateTileSize(Tiles.nTiles, Tiles);
 
-    // start clustering
-    //auto start { std::chrono::high_resolution_clock::now() };
     prepareDataStructures(Tiles);
-    //auto finish { std::chrono::high_resolution_clock::now() };
-    //std::chrono::duration<double> elapsed { finish - start };
-    //std::cout << "--- prepareDataStructures:     " << elapsed.count() *1000 << " ms\n";
-
-    //start = std::chrono::high_resolution_clock::now();
     calculateLocalDensity(Tiles, ker);
-    //finish = std::chrono::high_resolution_clock::now();
-    //elapsed = finish - start;
-    //std::cout << "--- calculateLocalDensity:     " << elapsed.count() *1000 << " ms\n";
-
-    //start = std::chrono::high_resolution_clock::now();
     calculateDistanceToHigher(Tiles);
-    //finish = std::chrono::high_resolution_clock::now();
-    //elapsed = finish - start;
-    //std::cout << "--- calculateDistanceToHigher: " << elapsed.count() *1000 << " ms\n";
-
     findAndAssignClusters();
 
     return {points_.clusterIndex, points_.isSeed};
@@ -224,9 +219,9 @@ private:
       std::vector<int> dimMax(Ndim);
       for (int j{}; j != (int)(search_box.size()); ++j) {
         if (j % 2 == 0) {
-          dimMin[j/2] = search_box[j];
+          dimMin[j / 2] = search_box[j];
         } else {
-          dimMax[j/2] = search_box[j];
+          dimMax[j / 2] = search_box[j];
         }
       }
 
@@ -258,9 +253,9 @@ private:
       std::vector<int> dimMax(Ndim);
       for (int j{}; j != (int)(search_box.size()); ++j) {
         if (j % 2 == 0) {
-          dimMin[j/2] = search_box[j];
+          dimMin[j / 2] = search_box[j];
         } else {
-          dimMax[j/2] = search_box[j];
+          dimMax[j / 2] = search_box[j];
         }
       }
 
@@ -272,8 +267,6 @@ private:
   }
 
   void findAndAssignClusters() {
-    //auto start { std::chrono::high_resolution_clock::now() };
-
     int nClusters{};
 
     // find cluster seeds and outlier
@@ -304,11 +297,6 @@ private:
       }
     }
 
-    //auto finish { std::chrono::high_resolution_clock::now() };
-    //std::chrono::duration<double> elapsed { finish - start };
-    //std::cout << "--- findSeedAndFollowers:      " << elapsed.count() *1000 << " ms\n";
-
-    //start = std::chrono::high_resolution_clock::now();
     // expend clusters from seeds
     while (!localStack.empty()) {
       int i{localStack.back()};
@@ -323,15 +311,14 @@ private:
         localStack.push_back(j);
       }
     }
-    //finish = std::chrono::high_resolution_clock::now();
-    //elapsed = finish - start;
-    //std::cout << "--- assignClusters:            " << elapsed.count() *1000 << " ms\n";
   }
 
   inline float distance(int i, int j) const {
     float qSum{};  // quadratic sum
     for (int k{}; k != Ndim; ++k) {
-      qSum += std::pow(points_.coordinates_[k][i] - points_.coordinates_[k][j], 2);
+      float delta_xk{
+          deltaPhi(points_.coordinates_[k][i], points_.coordinates_[k][j], domains_[k].min, domains_[k].max)};
+      qSum += std::pow(delta_xk, 2);
     }
 
     return std::sqrt(qSum);
