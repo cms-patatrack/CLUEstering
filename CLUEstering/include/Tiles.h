@@ -6,6 +6,7 @@
 #include <functional>
 #include <cmath>
 #include <algorithm>
+#include <numeric>
 #include <stdint.h>
 
 ///////////////////////
@@ -31,7 +32,7 @@ public:
     return coord_Bin;
   }
 
-  int getGlobalBin(std::vector<float> coords) const {
+  int getGlobalBin(std::vector<float> const& coords) const {
     int globalBin{getBin(coords[0], 0)};
     int nTilesPerDim{static_cast<int>(std::pow(nTiles, 1.0 / Ndim))};
     for (int i{1}; i != Ndim; ++i) {
@@ -40,7 +41,7 @@ public:
     return globalBin;
   }
 
-  int getGlobalBinByBin(std::vector<int> Bins) const {
+  int getGlobalBinByBin(std::array<int, Ndim> const& Bins) const {
     int globalBin{Bins[0]};
     int nTilesPerDim{static_cast<int>(std::pow(nTiles, 1.0 / Ndim))};
     for (int i{1}; i != Ndim; ++i) {
@@ -49,7 +50,7 @@ public:
     return globalBin;
   }
 
-  void fill(std::vector<float> coords, int i) { tiles_[getGlobalBin(coords)].push_back(i); }
+  void fill(std::vector<float> const& coords, int i) { tiles_[getGlobalBin(coords)].push_back(i); }
 
   void fill(std::vector<std::vector<float>> const& coordinates) {
     auto cellsSize = coordinates[0].size();
@@ -62,17 +63,34 @@ public:
     }
   }
 
-  std::array<int, 2 * Ndim> searchBox(
-      std::array<std::vector<float>, Ndim> minMax_) {  // {{minX,maxX},{minY,maxY},{minZ,maxZ},...}
-    std::array<int, 2 * Ndim> minMaxBins;
-    int j{};
-    for (int i{}; i != Ndim; ++i) {
-      minMaxBins[j] = getBin(minMax_[i][0], i);
-      minMaxBins[j + 1] = getBin(minMax_[i][1], i);
-      j += 2;
+  template <int N_>
+  void searchBox(std::array<std::vector<int>, Ndim> const& xjBins,
+                 std::array<int, Ndim>& comb,
+                 std::vector<int>& sBox) {
+    if constexpr (N_ == Ndim) {
+      sBox.push_back(getGlobalBinByBin(comb));
+    } else {
+      for (int x : xjBins[N_]) {
+        comb[N_] = x;
+        searchBox<N_ + 1>(xjBins, comb, sBox);
+      }
     }
+  }
 
-    return minMaxBins;
+  void searchBox(std::array<std::vector<int>, Ndim> const& xjBins, std::vector<int>& sBox) {
+    for (int x : xjBins[0]) {
+      std::array<int, Ndim> comb{x};
+      searchBox<1>(xjBins, comb, sBox);
+    }
+  }
+
+  std::vector<int> getBinsFromRange(float x_min, float x_max, int dim_) {
+    int minBin{getBin(x_min, dim_)};
+    int maxBin{getBin(x_max, dim_)};
+
+    std::vector<int> listOfBins(maxBin - minBin + 1);
+    std::iota(listOfBins.begin(), listOfBins.end(), minBin);
+    return listOfBins;
   }
 
   void clear() {
