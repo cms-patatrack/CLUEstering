@@ -183,12 +183,12 @@ private:
         xjBins[j] = tiles.getBinsFromRange(points_.coordinates_[j][i] - dm, points_.coordinates_[j][i] + dm, j);
 
         // Overflow
-        if (points_.coordinates_[j][i] + dc_ > domains_[j].max) {
-          std::vector<int> overflowBins = std::move(tiles.getBinsFromRange(domains_[j].min, domains_[j].min + dc_, j));
+        if (points_.coordinates_[j][i] + dm > domains_[j].max) {
+          std::vector<int> overflowBins = std::move(tiles.getBinsFromRange(domains_[j].min, domains_[j].min + dm, j));
           xjBins[j].insert(xjBins[j].end(), overflowBins.begin(), overflowBins.end());
           // Underflow
-        } else if (points_.coordinates_[j][i] - dc_ < domains_[j].min) {
-          std::vector<int> underflowBins = std::move(tiles.getBinsFromRange(domains_[j].max - dc_, domains_[j].max, j));
+        } else if (points_.coordinates_[j][i] - dm < domains_[j].min) {
+          std::vector<int> underflowBins = std::move(tiles.getBinsFromRange(domains_[j].max - dm, domains_[j].max, j));
           xjBins[j].insert(xjBins[j].end(), underflowBins.begin(), underflowBins.end());
         }
       }

@@ -14,6 +14,13 @@ def sign():
     else:
         return -1
 
+def normalizeData(data, mean, std):
+    data -= mean
+    if std != 0:
+        data /= std
+
+    return data
+
 def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5, x_max=15, y_max=15):
     """
     Returns a test dataframe containing randomly generated 2-dimensional or 3-dimensional blobs. 
@@ -41,8 +48,8 @@ def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5, x_max=15, y_max=15):
         if Ndim == 2:
             data = {'x0': [], 'x1': [], 'weight': []}
             for i in range(nBlobs):
-                centers.append([sign()*x_max*rnd.random(),sign()*y_max*rnd.random()])
-            blob_data, blob_labels = make_blobs(n_samples=nSamples,centers=np.array(centers))
+                centers.append([sign()*x_max*rnd.random(), sign()*y_max*rnd.random()])
+            blob_data, blob_labels = make_blobs(n_samples=nSamples, centers=np.array(centers))
             for i in range(nSamples):
                 data['x0'] += [blob_data[i][0]]
                 data['x1'] += [blob_data[i][1]]
@@ -53,9 +60,9 @@ def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5, x_max=15, y_max=15):
             data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
             z = np.random.normal(mean,sigma,sqrtSamples)
             for i in range(nBlobs):
-                centers.append([sign()*x_max*rnd.random(),sign()*x_max*rnd.random()]) # the centers are 2D because we create them for each layer
+                centers.append([sign()*x_max*rnd.random(), sign()*x_max*rnd.random()]) # the centers are 2D because we create them for each layer
             for value in z: # for every z value, a layer is generated.
-                blob_data, blob_labels = make_blobs(n_samples=sqrtSamples,centers=np.array(centers))
+                blob_data, blob_labels = make_blobs(n_samples=sqrtSamples, centers=np.array(centers))
                 for i in range(nSamples):
                     data['x0'] += [blob_data[i][0]]
                     data['x1'] += [blob_data[i][1]]
@@ -112,9 +119,26 @@ class clusterer:
                 self.Ndim = len(self.coords)
                 self.Npoints = self.weight.size
 
-                self.domain_ranges = [(0,0) for i in range(self.Ndim)]
+                # Save the original coordinates before any normalization
+                self.original_coords = np.copy(self.coords) 
+
+                # Calculate mean and standard deviations in all the coordinates
+                means = np.zeros(shape=(self.Ndim, 1))
+                st_deviations = np.zeros(shape=(self.Ndim, 1))
+                for dim in range(self.Ndim):
+                    means[dim] = np.mean(self.coords[dim])
+                    st_deviations[dim] = np.std(self.coords[dim])
+                
+                # Normalize all the coordinates as x'_j = (x_j - mu_j) / sigma_j
+                for dim in range(self.Ndim):
+                    self.coords[dim] = normalizeData(self.coords[dim], means[dim], st_deviations[dim])
+
+                # Construct the domains of all the coordinates
+                empty_domain = Algo.domain_t()
+                self.domain_ranges = [empty_domain for i in range(self.Ndim)]
                 for kwarg in kwargs:
-                    self.domain_ranges[kwarg[1]] = kwargs[kwarg]
+                    self.domain_ranges[int(kwarg[1])] = Algo.domain_t(normalizeData(kwargs[kwarg][0], means[int(kwarg[1])], st_deviations[int(kwarg[1])]), 
+                                                                      normalizeData(kwargs[kwarg][1], means[int(kwarg[1])], st_deviations[int(kwarg[1])]))
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -131,9 +155,26 @@ class clusterer:
                 self.Ndim = len(self.coords)
                 self.Npoints = self.weight.size
 
-                self.domain_ranges = [[] for i in range(self.Ndim)]
+                # Save the original coordinates before any normalization
+                self.original_coords = np.copy(self.coords) 
+
+                # Calculate mean and standard deviations in all the coordinates
+                means = np.zeros(shape=(self.Ndim, 1))
+                st_deviations = np.zeros(shape=(self.Ndim, 1))
+                for dim in range(self.Ndim):
+                    means[dim] = np.mean(self.coords[dim])
+                    st_deviations[dim] = np.std(self.coords[dim])
+                
+                # Normalize all the coordinates as x'_j = (x_j - mu_j) / sigma_j
+                for dim in range(self.Ndim):
+                    self.coords[dim] = normalizeData(self.coords[dim], means[dim], st_deviations[dim])
+
+                # Construct the domains of all the coordinates
+                empty_domain = Algo.domain_t()
+                self.domain_ranges = [empty_domain for i in range(self.Ndim)]
                 for kwarg in kwargs:
-                    self.domain_ranges[kwarg[1]] = kwargs[kwarg]
+                    self.domain_ranges[int(kwarg[1])] = Algo.domain_t(normalizeData(kwargs[kwarg][0], means[int(kwarg[1])], st_deviations[int(kwarg[1])]), 
+                                                                      normalizeData(kwargs[kwarg][1], means[int(kwarg[1])], st_deviations[int(kwarg[1])]))
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -183,24 +224,26 @@ class clusterer:
                     self.coords[dim] = np.array(df.iloc[:,dim])
                 self.weight = df['weight']
                 
-                # Save the original coordinates before any normalizations
+                # Save the original coordinates before any normalization
                 self.original_coords = np.copy(self.coords) 
 
                 # Calculate mean and standard deviations in all the coordinates
                 means = np.zeros(shape=(self.Ndim, 1))
-                covariance_matrix = np.cov(self.coords)
+                st_deviations = np.zeros(shape=(self.Ndim, 1))
                 for dim in range(self.Ndim):
                     means[dim] = np.mean(self.coords[dim])
+                    st_deviations[dim] = np.std(self.coords[dim])
                 
                 # Normalize all the coordinates as x'_j = (x_j - mu_j) / sigma_j
                 for dim in range(self.Ndim):
-                    self.coords[dim] = (self.coords[dim] - means[dim]) / sqrt(covariance_matrix[dim][dim])
+                    self.coords[dim] = normalizeData(self.coords[dim], means[dim], st_deviations[dim])
 
-                # 
+                # Construct the domains of all the coordinates
                 empty_domain = Algo.domain_t()
                 self.domain_ranges = [empty_domain for i in range(self.Ndim)]
                 for kwarg in kwargs:
-                    self.domain_ranges[int(kwarg[1])] = Algo.domain_t(kwargs[kwarg][0], kwargs[kwarg][1])
+                    self.domain_ranges[int(kwarg[1])] = Algo.domain_t(normalizeData(kwargs[kwarg][0], means[int(kwarg[1])], st_deviations[int(kwarg[1])]), 
+                                                                      normalizeData(kwargs[kwarg][1], means[int(kwarg[1])], st_deviations[int(kwarg[1])]))
             except ValueError as ve:
                 print(ve)
                 exit()
@@ -217,7 +260,7 @@ class clusterer:
         for kwarg in kwargs:
             self.coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
 
-    def chooseKernel(self, choice, parameters=[], function = lambda : 0):
+    def chooseKernel(self, choice, parameters=[], function = lambda: 0):
         """
         Changes the kernel used in the calculation of local density. The default kernel is a flat kernel with parameter 0.5
 
@@ -302,7 +345,7 @@ class clusterer:
         """
 
         # Convert the used coordinates to cartesian coordiantes
-        cartesian_coords = [[] for i in range(self.Ndim)]
+        cartesian_coords = np.copy(self.original_coords)
         for kwarg in kwargs:
             cartesian_coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
 
@@ -315,7 +358,7 @@ class clusterer:
         if self.Ndim >= 3:
             fig = plt.figure()
             ax = fig.add_subplot(projection='3d')
-            ax.scatter(cartesian_coords[0], cartesian_coords[1],self.original_coords[2], s=pt_size, color=pt_colour)
+            ax.scatter(cartesian_coords[0], cartesian_coords[1], cartesian_coords[2], s=pt_size, color=pt_colour)
             ax.set_title(plot_title)
             ax.set_xlabel('x', fontsize=label_size)
             ax.set_ylabel('y', fontsize=label_size)
@@ -338,12 +381,12 @@ class clusterer:
         """
         
         # Convert the used coordinates to cartesian coordiantes
-        cartesian_coords = [[] for i in range(self.Ndim)]
+        cartesian_coords = np.copy(self.original_coords)
         for kwarg in kwargs:
             cartesian_coords[int(kwarg[1])] = kwargs[kwarg](self.original_coords)
 
         if self.Ndim == 2:
-            data = {'x0':cartesian_coords[0], 'x1':cartesian_coords[1], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
+            data = {'x0': cartesian_coords[0], 'x1': cartesian_coords[1], 'clusterIds': self.clusterIds, 'isSeed': self.isSeed}
             df = pd.DataFrame(data)
 
             df_clindex = df["clusterIds"]
@@ -362,7 +405,7 @@ class clusterer:
             plt.ylabel('y', fontsize=label_size)
             plt.show()
         if self.Ndim == 3:
-            data = {'x0':cartesian_coords[0], 'x1':cartesian_coords[1], 'x2':self.original_coords[2], 'clusterIds':self.clusterIds, 'isSeed':self.isSeed}
+            data = {'x0': cartesian_coords[0], 'x1': cartesian_coords[1], 'x2': cartesian_coords[2], 'clusterIds': self.clusterIds, 'isSeed': self.isSeed}
             df = pd.DataFrame(data)
 
             df_clindex = df["clusterIds"]
@@ -408,9 +451,24 @@ if __name__ == "__main__":
     from math import pi
     from sklearn.datasets import make_circles
 
-    
-    data, labels = make_circles(n_samples=1000, factor=0.4)
+    # Test 2-dimensional blobs
+    a = clusterer(0.3, 5, 1.2)
+    a.readData(makeBlobs(1000, 2))
+    a.runCLUE()
+    a.clusterPlotter()
 
+    # Test points with angles distributed at opposite extremes of the domain
+    # This test assures that the code works for data with periodic coordinates 
+    b = clusterer(0.2, 1, 1.5)
+    b.readData('../opposite_angles.csv', x1=(-pi, pi))
+    b.inputPlotter()
+    b.runCLUE()
+    b.clusterPlotter(x0=lambda x: x[0]*np.cos(x[1]),
+                     x1=lambda x: x[0]*np.sin(x[1]))
+    b.clusterPlotter()
+    
+    # Create circles dataset
+    data, labels = make_circles(n_samples=1000, factor=0.4)
     df = {'x0': [], 'x1': [], 'weight': []}
     for i in range(1000):
         df['x0'] += [data[i][0]]
@@ -418,16 +476,18 @@ if __name__ == "__main__":
         df['weight'] += [1]
     df = pd.DataFrame(df)
 
+    # Convert it to polar coordinates
     new_data = {}
     new_data['x0'] = np.sqrt(df['x0']**2 + df['x1']**2)
     new_data['x1'] = np.arctan2(df['x1'], df['x0'])
     new_data['weight'] = [1 for i in range(len(new_data['x0']))]
     new_df = pd.DataFrame(new_data)
 
-    c = clusterer(1,5,1.5)
+    # Test circles dataset
+    c = clusterer(1, 5, 5)
     c.readData(new_df, x1=(-pi, pi))
     c.inputPlotter(x0=lambda x: x[0]*np.cos(x[1]),
-                     x1=lambda x: x[0]*np.sin(x[1]))
+                   x1=lambda x: x[0]*np.sin(x[1]))
     c.runCLUE()
     c.clusterPlotter(x0=lambda x: x[0]*np.cos(x[1]),
                      x1=lambda x: x[0]*np.sin(x[1]))
