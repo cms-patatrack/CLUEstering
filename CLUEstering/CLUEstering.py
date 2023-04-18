@@ -43,7 +43,6 @@ def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5, x_max=15, y_max=15):
         if mean < 0. or sigma < 0.:
             raise ValueError('Error: wrong parameter value\nThe mean and sigma of the blobs cannot be negative')
 
-        sqrtSamples = sqrt(nSamples)
         centers = []
         if Ndim == 2:
             data = {'x0': [], 'x1': [], 'weight': []}
@@ -58,12 +57,13 @@ def makeBlobs(nSamples, Ndim, nBlobs=4, mean=0, sigma=0.5, x_max=15, y_max=15):
             return pd.DataFrame(data)
         elif Ndim == 3:
             data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
+            sqrtSamples = int(sqrt(nSamples))
             z = np.random.normal(mean,sigma,sqrtSamples)
             for i in range(nBlobs):
                 centers.append([sign()*x_max*rnd.random(), sign()*x_max*rnd.random()]) # the centers are 2D because we create them for each layer
             for value in z: # for every z value, a layer is generated.
                 blob_data, blob_labels = make_blobs(n_samples=sqrtSamples, centers=np.array(centers))
-                for i in range(nSamples):
+                for i in range(sqrtSamples):
                     data['x0'] += [blob_data[i][0]]
                     data['x1'] += [blob_data[i][1]]
                     data['x2'] += [value]
@@ -332,15 +332,22 @@ class clusterer:
             print('CLUE run in ' + str(self.elapsed_time) + ' ms')
             print('Number of clusters found: ', self.NClusters)
 
-    def inputPlotter(self, plot_title='', label_size=16, pt_size=1, pt_colour='b', **kwargs):
+    def inputPlotter(self, plot_title='', title_size=16, x_label='x', y_label='y', z_label='z', label_size=16, pt_size=1, pt_colour='b', grid=True, grid_style='--', grid_size=0.2, x_ticks=[], y_ticks=[], z_ticks=[], **kwargs):
         """
         Plots the the points in input.
 
         Parameters:
         plot_title (string): Title of the plot
+        title_size (float): Size of the plot title
+        x_label (string): Label on x-axis
+        y_label (string): Label on y-axis
+        z_label (string): Label on z-axis
         label_size (int): Fontsize of the axis labels
         pt_size (int): Size of the points in the plot
         pt_colour (string): Colour of the points in the plot
+        grid (bool): If true displays grids in the plot
+        grid_style (string): Style of the grid
+        grid_size (float): Linewidth of the plot grid
         kwargs (function objects): Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...)
         """
 
@@ -351,32 +358,71 @@ class clusterer:
 
         if self.Ndim == 2:
             plt.scatter(cartesian_coords[0], cartesian_coords[1], s=pt_size, color=pt_colour)
-            plt.title(plot_title)
-            plt.xlabel('x', fontsize=label_size)
-            plt.ylabel('y', fontsize=label_size)
+
+            # Customization of the plot title
+            plt.title(plot_title, fontsize=title_size)
+
+            # Customization of axis labels
+            plt.xlabel(x_label, fontsize=label_size)
+            plt.ylabel(y_label, fontsize=label_size)
+
+            # Customization of the grid
+            if grid:
+                plt.grid(linestyle=grid_style, linewidth=grid_size)
+
+            # Customization of axis ticks
+            if x_ticks != []:
+                plt.xticks(x_ticks)
+            if y_ticks != []:
+                plt.yticks(y_ticks)
+
             plt.show()
         if self.Ndim >= 3:
             fig = plt.figure()
             ax = fig.add_subplot(projection='3d')
             ax.scatter(cartesian_coords[0], cartesian_coords[1], cartesian_coords[2], s=pt_size, color=pt_colour)
-            ax.set_title(plot_title)
-            ax.set_xlabel('x', fontsize=label_size)
-            ax.set_ylabel('y', fontsize=label_size)
-            ax.set_zlabel('z', fontsize=label_size)
+
+            # Customization of the plot title
+            ax.set_title(plot_title, fontsize=title_size)
+
+            # Customization of axis labels
+            ax.set_xlabel(x_label, fontsize=label_size)
+            ax.set_ylabel(y_label, fontsize=label_size)
+            ax.set_zlabel(z_label, fontsize=label_size)
+
+            # Customization of the grid
+            if grid:
+                plt.grid(linestyle=grid_style, linewidth=grid_size)
+
+            # Customization of axis ticks
+            if x_ticks != []:
+                ax.set_xticks(x_ticks)
+            if y_ticks != []:
+                ax.set_yticks(y_ticks)
+            if z_ticks != []:
+                ax.set_zticks(z_ticks)
+
             plt.show()
 
-    def clusterPlotter(self, plot_title='', label_size=16, outl_size=10, pt_size=10, seed_size=25, **kwargs):
+    def clusterPlotter(self, plot_title='', title_size=16, x_label='x', y_label='y', z_label='z', label_size=16, outl_size=10, pt_size=10, seed_size=25, grid=True, grid_style='--', grid_size=0.2, x_ticks=[], y_ticks=[], z_ticks=[], **kwargs):
         """
         Plots the clusters with a different colour for every cluster. 
 
-        The points assigned to a cluster are prints as points, the seeds as stars and the outliers as little grey crosses. 
+        The points assigned to a cluster are printed as points, the seeds as stars and the outliers as little grey crosses. 
 
         Parameters:
         plot_title (string): Title of the plot
+        title_size (float): Size of the plot title
+        x_label (string): Label on x-axis
+        y_label (string): Label on y-axis
+        z_label (string): Label on z-axis
         label_size (int): Fontsize of the axis labels
         outl_size (int): Size of the outliers in the plot
         pt_size (int): Size of the points in the plot
         seed_size (int): Size of the seeds in the plot
+        grid (bool): If true displays grids in the plot
+        grid_style (string): Style of the grid
+        grid_size (float): Linewidth of the plot grid
         kwargs (function objects): Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...)
         """
         
@@ -400,9 +446,24 @@ class clusterer:
                 plt.scatter(dfi.x0, dfi.x1, s=pt_size, marker='.')
             df_seed = df[df.isSeed == 1] # Only Seeds
             plt.scatter(df_seed.x0, df_seed.x1, s=seed_size, color='r', marker='*')
-            plt.title(plot_title)
-            plt.xlabel('x', fontsize=label_size)
-            plt.ylabel('y', fontsize=label_size)
+
+            # Customization of the plot title
+            plt.title(plot_title, fontsize=title_size)
+
+            # Customization of axis labels
+            plt.xlabel(x_label, fontsize=label_size)
+            plt.ylabel(y_label, fontsize=label_size)
+
+            # Customization of the grid
+            if grid:
+                plt.grid(linestyle=grid_style, linewidth=grid_size)
+
+            # Customization of axis ticks
+            if x_ticks != []:
+                plt.xticks(x_ticks)
+            if y_ticks != []:
+                plt.yticks(y_ticks)
+
             plt.show()
         if self.Ndim == 3:
             data = {'x0': cartesian_coords[0], 'x1': cartesian_coords[1], 'x2': cartesian_coords[2], 'clusterIds': self.clusterIds, 'isSeed': self.isSeed}
@@ -422,10 +483,27 @@ class clusterer:
 
             df_seed = df[df.isSeed == 1] # Only Seeds
             ax.scatter(df_seed.x0, df_seed.x1, df_seed.x2, s=seed_size, color = 'r', marker = '*')
-            ax.set_title(plot_title)
-            ax.set_xlabel('x', fontsize=label_size)
-            ax.set_ylabel('y', fontsize=label_size)
-            ax.set_zlabel('z', fontsize=label_size)
+
+            # Customization of the plot title
+            ax.set_title(plot_title, fontsize=title_size)
+
+            # Customization of axis labels
+            ax.set_xlabel(x_label, fontsize=label_size)
+            ax.set_ylabel(y_label, fontsize=label_size)
+            ax.set_zlabel(z_label, fontsize=label_size)
+
+            # Customization of the grid
+            if grid:
+                plt.grid(linestyle=grid_style, linewidth=grid_size)
+
+            # Customization of axis ticks
+            if x_ticks != []:
+                ax.set_xticks(x_ticks)
+            if y_ticks != []:
+                ax.set_yticks(y_ticks)
+            if z_ticks != []:
+                ax.set_zticks(z_ticks)
+
             plt.show()
 
     def toCSV(self, outputFolder, fileName):
