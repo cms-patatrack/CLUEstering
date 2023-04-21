@@ -9,9 +9,9 @@ def blobs():
 
 def test_time(blobs):
     c = clue.clusterer(1,5,1.6)
-    c.readData(blobs)
+    c.read_data(blobs)
     start = time.time_ns()
-    c.runCLUE()
+    c.run_clue()
     finish = time.time_ns()
 
     elapsed_time = (finish - start)/(10**9)

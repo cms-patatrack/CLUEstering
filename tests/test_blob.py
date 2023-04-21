@@ -8,6 +8,6 @@ def blobs():
 
 def test_correct_number_of_blobs(blobs):
     c = clue.clusterer(1,5,1.6)
-    c.readData(blobs)
-    c.runCLUE()
-    c.toCSV('./','file.csv')
+    c.read_data(blobs)
+    c.run_clue()
+    c.to_csv('./','file.csv')
