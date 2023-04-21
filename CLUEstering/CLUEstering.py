@@ -9,6 +9,7 @@ from math import pi
 import sys
 import time
 import types
+from typing import Union
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -154,7 +155,7 @@ class clustering_data:
         self.n_dim = 0
         self.n_points = 0
 
-@dataclass(init=False)
+@dataclass(init=False, eq=False)
 class cluster_properties:
     """
     Container of the data resulting from the clusterization of the input data.
@@ -191,6 +192,17 @@ class cluster_properties:
         self.cluster_points = []
         self.points_per_cluster = []
         self.output_df = pd.DataFrame(None)
+
+    def __eq__(self, other):
+        if self.n_clusters != other.n_clusters:
+            return False
+        if self.cluster_ids.all() != other.cluster_ids.all():
+            return False
+        if self.is_seed.all() != other.is_seed.all():
+            return False
+
+        return True
+
 
 class clusterer:
     """
@@ -258,7 +270,7 @@ class clusterer:
         self.elapsed_time = 0.
 
     def read_data(self,
-                  input_data: pd.DataFrame|str|dict|list|np.ndarray,
+                  input_data: Union[pd.DataFrame,str,dict,list,np.ndarray],
                   **kwargs: tuple) -> None:
         """
         Reads the data in input and fills the class members containing the coordinates
@@ -322,44 +334,45 @@ class clusterer:
                 sys.exit()
 
         # path to .csv file or pandas dataframe
-        if isinstance(input_data, (str)):
+        if isinstance(input_data, (str, dict, pd.DataFrame)):
+            if isinstance(input_data, (str)):
+                try:
+                    if input_data[-3:] != 'csv':
+                        raise ValueError('Error: wrong type of file\nThe file is not a csv file.')
+                    input_data = pd.read_csv(input_data)
+
+                except ValueError as ve_:
+                    print(ve_)
+                    sys.exit()
+            if isinstance(input_data, (dict, pd.DataFrame)):
+                df_ = pd.DataFrame(input_data, copy=False)
+
             try:
-                if input_data[-3:] != 'csv':
-                    raise ValueError('Error: wrong type of file\nThe file is not a csv file.')
-                input_data = pd.read_csv(input_data)
+                if 'weight' not in df_.columns:
+                    raise ValueError('''Error: inadequate data\nThe input dataframe must
+                                        contain a weight column.''')
+
+                coordinate_columns = [col for col in df_.columns if col[0] == 'x']
+                if len(df_.columns) < 2:
+                    raise ValueError('''Error: inadequate data\nThe data must contain
+                                        at least one coordinate and the energy.''')
+                if len(coordinate_columns) > 10:
+                    raise ValueError('''Error: inadequate data\nThe maximum number of
+                                        dimensions supported is 10.''')
+                self.clust_data.n_dim = len(coordinate_columns)
+                self.clust_data.n_points = len(df_.index)
+                self.clust_data.coords = np.zeros(shape=(self.clust_data.n_dim,
+                                                         self.clust_data.n_points))
+                for dim in range(self.clust_data.n_dim):
+                    self.clust_data.coords[dim] = np.array(df_.iloc[:,dim])
+                self.clust_data.weight = df_['weight']
+
+                # Save the original coordinates before any normalization
+                self.clust_data.original_coords = np.copy(self.clust_data.coords)
 
             except ValueError as ve_:
                 print(ve_)
                 sys.exit()
-        if isinstance(input_data, (dict, pd.DataFrame)):
-            df_ = pd.DataFrame(input_data, copy=False)
-
-        try:
-            if 'weight' not in df_.columns:
-                raise ValueError('''Error: inadequate data\nThe input dataframe must
-                                    contain a weight column.''')
-
-            coordinate_columns = [col for col in df_.columns if col[0] == 'x']
-            if len(df_.columns) < 2:
-                raise ValueError('''Error: inadequate data\nThe data must contain
-                                    at least one coordinate and the energy.''')
-            if len(coordinate_columns) > 10:
-                raise ValueError('''Error: inadequate data\nThe maximum number of
-                                    dimensions supported is 10.''')
-            self.clust_data.n_dim = len(coordinate_columns)
-            self.clust_data.n_points = len(df_.index)
-            self.clust_data.coords = np.zeros(shape=(self.clust_data.n_dim,
-                                                     self.clust_data.n_points))
-            for dim in range(self.clust_data.n_dim):
-                self.clust_data.coords[dim] = np.array(df_.iloc[:,dim])
-            self.clust_data.weight = df_['weight']
-
-            # Save the original coordinates before any normalization
-            self.clust_data.original_coords = np.copy(self.clust_data.coords)
-
-        except ValueError as ve_:
-            print(ve_)
-            sys.exit()
 
         # Calculate mean and standard deviations in all the coordinates
         means = np.zeros(shape=(self.clust_data.n_dim, 1))
@@ -412,7 +425,7 @@ class clusterer:
 
     def choose_kernel(self,
                       choice: str,
-                      parameters: list|None = None,
+                      parameters: Union[list,None] = None,
                       function: types.FunctionType = lambda: 0) -> None:
         """
         Changes the kernel used in the calculation of local density. The default kernel
