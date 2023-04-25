@@ -4,7 +4,7 @@ import CLUEstering as clue
 
 @pytest.fixture
 def blobs():
-    return pd.read_csv("blob.csv")
+    return pd.read_csv("./test_datasets/blob.csv")
 
 def test_correct_number_of_blobs(blobs):
     c = clue.clusterer(1,5,1.6)

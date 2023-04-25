@@ -826,7 +826,7 @@ if __name__ == "__main__":
     # Test points with angles distributed at opposite extremes of the domain
     # This test assures that the code works for data with periodic coordinates
     b = clusterer(0.2, 1, 1.5)
-    b.read_data('../opposite_angles.csv', x1=(-pi, pi))
+    b.read_data('../tests/test_datasets/opposite_angles.csv', x1=(-pi, pi))
     b.input_plotter()
     b.run_clue()
     b.cluster_plotter(x0=lambda x: x[0]*np.cos(x[1]),

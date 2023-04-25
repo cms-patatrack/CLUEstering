@@ -3,9 +3,9 @@ name: Python package
 # The workflow gets triggered by pushes and pull requests
 on:
   push:
-    branches: [ "main", "testing*" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "testing*" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -30,6 +30,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
         python -m pip install scikit-learn 
+        python -m pip install pandas
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -38,4 +39,4 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test and compare the latest version with the local one using Pytest
       run: |
-        ./run_test.sh 
+        ./tests/run_test.sh 
