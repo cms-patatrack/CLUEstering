@@ -78,8 +78,8 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
         if n_blobs < 0:
             raise ValueError('Error: wrong parameter value\nThe number of blobs must be positive.')
         if mean < 0. or sigma < 0.:
-            raise ValueError('''Error: wrong parameter value\nThe mean and sigma of the blobs
-                              cannot be negative.''')
+            raise ValueError("Error: wrong parameter value\nThe mean and sigma of the blobs"
+                             + " cannot be negative.")
 
         centers = []
         if n_dim == 2:
@@ -112,8 +112,8 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
             return pd.DataFrame(data)
 
         # If it gets to the bottom we raise the exception
-        raise ValueError('''Error: wrong number of dimensions\nBlobs can only be generated
-                          in 2 or 3 dimensions.''')
+        raise ValueError("Error: wrong number of dimensions\nBlobs can only be generated"
+                         + " in 2 or 3 dimensions.")
     except ValueError as ve_:
         print(ve_)
         sys.exit()
@@ -248,11 +248,11 @@ class clusterer:
                 raise ValueError('Error: wrong parameter type\nThe rhoc parameter must be a float.')
             self.rhoc = rhoc_
             if float(outlier_) != outlier_:
-                raise ValueError('''Error: wrong parameter type\n
-                                  The outlier parameter must be a float.''')
+                raise ValueError("Error: wrong parameter type\n"
+                                 + "The outlier parameter must be a float.")
             self.outlier = outlier_
             if not isinstance(ppbin, (int)):
-                raise ValueError('Error: wrong parameter type\nThe ppbin parameter must be a int.')
+                raise ValueError("Error: wrong parameter type\nThe ppbin parameter must be a int.")
             self.ppbin = ppbin
         except ValueError as ve_:
             print(ve_)
@@ -316,13 +316,13 @@ class clusterer:
         if isinstance(input_data, (list, np.ndarray)):
             try:
                 if len(input_data) < 2:
-                    raise ValueError('''Error: inadequate data\nThe data must contain
-                                        at least one coordinate and the energy.''')
+                    raise ValueError("Error: inadequate data\nThe data must contain"
+                                     + " at least one coordinate and the energy.")
                 self.clust_data.coords = np.asarray(input_data[:-1])
                 self.clust_data.weight = np.asarray(input_data[-1])
                 if len(input_data[:-1]) > 10:
-                    raise ValueError('''Error: inadequate data\nThe maximum number of
-                                        dimensions supported is 10.''')
+                    raise ValueError("Error: inadequate data\nThe maximum number of"
+                                     + " dimensions supported is 10.")
                 self.clust_data.n_dim = len(self.clust_data.coords)
                 self.clust_data.n_points = self.clust_data.weight.size
 
@@ -349,16 +349,16 @@ class clusterer:
 
             try:
                 if 'weight' not in df_.columns:
-                    raise ValueError('''Error: inadequate data\nThe input dataframe must
-                                        contain a weight column.''')
+                    raise ValueError("Error: inadequate data\nThe input dataframe must"
+                                     + " contain a weight column.")
 
                 coordinate_columns = [col for col in df_.columns if col[0] == 'x']
                 if len(df_.columns) < 2:
-                    raise ValueError('''Error: inadequate data\nThe data must contain
-                                        at least one coordinate and the energy.''')
+                    raise ValueError("Error: inadequate data\nThe data must contain"
+                                     + " at least one coordinate and the energy.")
                 if len(coordinate_columns) > 10:
-                    raise ValueError('''Error: inadequate data\nThe maximum number of
-                                        dimensions supported is 10.''')
+                    raise ValueError("Error: inadequate data\nThe maximum number of"
+                                     + " dimensions supported is 10.")
                 self.clust_data.n_dim = len(coordinate_columns)
                 self.clust_data.n_points = len(df_.index)
                 self.clust_data.coords = np.zeros(shape=(self.clust_data.n_dim,
@@ -455,27 +455,27 @@ class clusterer:
         try:
             if choice == "flat":
                 if len(parameters) != 1:
-                    raise ValueError('''Error: wrong number of parameters\nThe flat kernel
-                                      requires 1 parameter.''')
+                    raise ValueError("Error: wrong number of parameters\nThe flat kernel"
+                                     + " requires 1 parameter.")
                 self.kernel = Algo.flatKernel(parameters[0])
             elif choice == "exp":
                 if len(parameters) != 2:
-                    raise ValueError('''Error: wrong number of parameters\nThe exponential
-                                      kernel requires 2 parameters.''')
+                    raise ValueError("Error: wrong number of parameters\nThe exponential"
+                                     + " kernel requires 2 parameters.")
                 self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
             elif choice == "gaus":
                 if len(parameters) != 3:
-                    raise ValueError('''Error: wrong number of parameters\nThe gaussian
-                                      kernel requires 3 parameters.''')
+                    raise ValueError("Error: wrong number of parameters\nThe gaussian" +
+                                     " kernel requires 3 parameters.")
                 self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
             elif choice == "custom":
                 if len(parameters) != 0:
-                    raise ValueError('''Error: wrong number of parameters\nCustom kernels
-                                      requires 0 parameters.''')
+                    raise ValueError("Error: wrong number of parameters\nCustom kernels"
+                                     + " requires 0 parameters.")
                 self.kernel = Algo.customKernel(function)
             else:
-                raise ValueError('''Error: invalid kernel\nThe allowed choices for the
-                                  kernels are: flat, exp, gaus and custom.''')
+                raise ValueError("Error: invalid kernel\nThe allowed choices for the"
+                                 + " kernels are: flat, exp, gaus and custom.")
         except ValueError as ve_:
             print(ve_)
             sys.exit()
