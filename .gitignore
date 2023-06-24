@@ -1,6 +1,16 @@
+# Pycache folders
 *__pycache__
+
+# Folders generate during the build
 *CLUEstering.egg-info
 dist/
 build/
+
+# Shared library files
 *.so
+
+# Executables
 *.out
+
+# Misc.
+*.pdf
