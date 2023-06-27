@@ -11,7 +11,7 @@ template <uint8_t Ndim>
 struct Points {
   Points() = default;
 
-  std::vector<float> coordinates_;
+  std::vector<std::vector<float>> coordinates_;
   std::vector<float> weight;
 
   std::vector<float> rho;
@@ -20,7 +20,6 @@ struct Points {
   std::vector<int> clusterIndex;
   std::vector<std::vector<int>> followers;
   std::vector<int> isSeed;
-  int n;
 
   void clear() {
     for (int i{}; i != Ndim; ++i) {
@@ -34,8 +33,6 @@ struct Points {
     clusterIndex.clear();
     followers.clear();
     isSeed.clear();
-
-    n = 0;
   }
 };
 
