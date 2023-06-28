@@ -1,18 +1,22 @@
 #ifndef Points_Alpaka_h
 #define Points_Alpaka_h
 
+#include <cstdint>
 #include <memory>
 
 #include "../../AlpakaCore/alpakaConfig.h"
 #include "../../AlpakaCore/alpakaMemory.h"
+#include "AlpakaVecArray.h"
 #include "../Points.h"
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
+
+  template <uint8_t Ndim>
   class PointsAlpaka {
   public:
     PointsAlpaka() = delete;
     explicit PointsAlpaka(Queue stream, int n_points)
-        : coords{cms::alpakatools::make_device_buffer<float[]>(stream, n_points * n_points)},
+        : coords{cms::alpakatools::make_device_buffer<VecArray<float, Ndim>>(stream, n_points)},
           weights{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
           rho{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
           delta{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
@@ -35,7 +39,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     PointsAlpaka(const PointsAlpaka&) = delete;
     PointsAlpaka& operator=(const PointsAlpaka&) = delete;
 
-    cms::alpakatools::device_buffer<Device, float[]> coords;
+    cms::alpakatools::device_buffer<Device, VecArray<float, Ndim>> coords;
     cms::alpakatools::device_buffer<Device, float[]> weights;
     cms::alpakatools::device_buffer<Device, float[]> rho;
     cms::alpakatools::device_buffer<Device, float[]> delta;
@@ -45,7 +49,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     class PointsAlpakaView {
     public:
-      float* coords;
+      VecArray<float, Ndim>* coords;
       float* weights;
       float* rho;
       float* delta;
