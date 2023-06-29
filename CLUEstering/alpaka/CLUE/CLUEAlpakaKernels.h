@@ -184,31 +184,83 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
   };
 
-  // struct KernelFindClusters {
-  //   template <typename TAcc, uint8_t Ndim>
-  //   ALPAKA_FN_ACC void operator()(const TAcc& acc, Queue queue_, PoitsAlpaka<Ndim> points, int n_points) const {
-  //     int n_clusters{};
-  //     uint32_t j{};
-  //     auto local_stack = cms::alpakatools::make_device_buffer<Device, uint32_t[]>(queue_, n_points);
-  //     cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
-  //       poits->cluster_index[i] = -1;
-  //       float delta_i{points->delta[i]};
-  //       float rho_i{points->rho[i]};
+  struct KernelFindClusters {
+    template <typename TAcc, typename TContainer, uint8_t Ndim>
+    ALPAKA_FN_ACC void operator()(TAcc const& acc, 
+                                  TContainer* followers, 
+                                  TContainer* seeds, 
+                                  PoitsAlpaka<Ndim>* points, 
+                                  uint32_t const& n_points, 
+                                  float outlier_delta_factor, 
+                                  float d_c, 
+                                  float rho_c) const {
+      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
+        // initialize cluster_index
+        points->cluster_index[i] = -1;
 
-  //       // determine seed or outlier
-  //       bool is_seed{(deltai > dc_) && (rhoi >= rhoc_)};
-  //       bool is_outlier{(deltai > outlierDeltaFactor_ * dc_) && (rhoi < rhoc_)};
+        float delta_i{points->delta[i]};
+        float rho_i{points->rho[i]};
 
-  //       if (is_seed) {
-  //         points->is_seed[i] = 1;
-  //         points->cluster_index[i] = n_clusters;
-  //         ++n_clusters;
-  //         local_stack[j] = i;
-  //         ++j;
-  //       } else if (!is_outlier) {
-  //         points->followers[points->nearest_higher[i]] = i;
-  //       }
-  //     });
-  //   }
-  // };
+        // determine seed or outlier
+        bool is_seed{(delta_i > d_c) && (rho_i >= rho_c)};
+        bool is_outlier{(delta_i > outlier_delta_factor * d_c) && (rho_i < rho_c)};
+        
+        // seeds and followers seems to be buffer of VecArray 
+        if (is_seed) {
+          points->is_seed[i] = 1;
+          seeds[0] = i; 
+        } else if (!is_outlier) {
+          followers[points->nearest_higher[i]][i] = i;
+        }
+
+        points->is_seed[i] = 0;
+      });
+    }
+  };
+
+  struct KernelAssignClusters {
+    template <typename TAcc, typename TContainer, uint8_t Ndim>
+    ALPAKA_FN_ACC void operator()(const TAcc &acc,
+                                  TContainer *seeds,
+                                  TContainer *followers,
+                                  PointsAlpaka<Ndim> *points
+                                  uint32_t local_stack_size_per_seed) const {
+      const auto &seeds_0 {seeds[0]};
+      const auto n_seeds {seeds_0.size()};
+      cms::alpakatools::for_each_element_in_grid(acc, n_seeds, [&](uint32_t idx_cls) {
+        int local_stack[local_stack_size_per_seed] {-1};
+        int local_stack_size {};
+
+        int idx_this_seed {seeds_0[idx_cls]};
+        points->cluster_index[idx_this_seed] = idx_cls;
+        // push_back idThisSeed to localStack
+        // assert((localStackSize < localStackSizePerSeed));
+        local_stack[local_stack_size] = idx_this_seed;
+        ++local_stack_size;
+        // process all elements in localStack
+        while (local_stack_size > 0) {
+          // get last element of localStack
+          // assert((localStackSize - 1 < localStackSizePerSeed));
+          int idx_end_of_local_stack {local_stack[local_stack_size - 1]};
+          int temp_cluster_index {points->cluster_index[idx_end_of_local_stack]};
+          // pop_back last element of localStack
+          // assert((localStackSize - 1 < localStackSizePerSeed));
+          local_stack[local_stack_size - 1] = -1;
+          --local_stack_size;
+          const auto &followers_ies {followers[idx_end_of_local_stack]};
+          const auto followers_size {followers[idxEndOfLocalStack].size()};
+          // loop over followers of last element of localStack
+          for (int j {}; j != followers_size; ++j) {
+            // pass id to follower
+            int follower {followers_ies[j]};
+            points->cluster_index[follower] = temp_cluster_index;
+            // push_back follower to localStack
+            // assert((localStackSize < localStackSizePerSeed));
+            local_stack[local_stack_size] = follower;
+            ++local_stack_size;
+          }
+        }
+      });
+    }
+  };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE

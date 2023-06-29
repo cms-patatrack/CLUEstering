@@ -7,12 +7,16 @@
 #include <functional>
 #include <iostream>
 #include <vector>
+#include "alpaka/PointsAlpaka.h"
+#include "alpaka/AlpakaVecArray.h"
+
+using cms::alpakatools::VecArray;
 
 template <uint8_t Ndim>
 struct Points {
   Points() = default;
 
-  std::vector<std::array<float, Ndim>> coordinates_;
+  std::vector<VecArray<float, Ndim>> coords;
   std::vector<float> weight;
   std::vector<float> rho;
   std::vector<float> delta;

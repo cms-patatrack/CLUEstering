@@ -18,8 +18,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   public:
     PointsAlpaka() = delete;
     explicit PointsAlpaka(Queue stream, int n_points)
-        : coords{cms::alpakatools::make_device_buffer<VecArray<float, Ndim>>(stream, n_points)},
-          weights{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
+        : coords{cms::alpakatools::make_device_buffer<VecArray<float, Ndim>[]>(stream, n_points)},
+          weight{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
           rho{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
           delta{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
           nearest_higher{cms::alpakatools::make_device_buffer<int[]>(stream, n_points)},
@@ -28,7 +28,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
           view_dev{cms::alpakatools::make_device_buffer<PointsAlpakaView>(stream)} {
       auto view_host = cms::alpakatools::make_host_buffer<PointsAlpakaView>(stream);
       view_host->coords = coords.data();
-      view_host->weights = weights.data();
+      view_host->weight = weight.data();
       view_host->rho = rho.data();
       view_host->delta = delta.data();
       view_host->nearest_higher = nearest_higher.data();
@@ -47,8 +47,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 	// Destructor
 	~PointsAlpaka() = default;
 
-    cms::alpakatools::device_buffer<Device, VecArray<float, Ndim>> coords;
-    cms::alpakatools::device_buffer<Device, float[]> weights;
+    cms::alpakatools::device_buffer<Device, VecArray<float, Ndim>[]> coords;
+    cms::alpakatools::device_buffer<Device, float[]> weight;
     cms::alpakatools::device_buffer<Device, float[]> rho;
     cms::alpakatools::device_buffer<Device, float[]> delta;
     cms::alpakatools::device_buffer<Device, int[]> nearest_higher;
@@ -57,17 +57,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     class PointsAlpakaView {
     public:
-	  // Copy constructor/assignment operator
-	  PointsAlpakaView(const PointsAlpakaView&) = delete;
-	  PointsAlpakaView& operator=(const PointsAlpakaView&) = delete;
-	  // Move constructor/assignment operator
-	  PointsAlpakaView(PointsAlpakaView&&) = default;
-	  PointsAlpakaView& operator=(PointsAlpakaView&&) = default;
-	  // Destructor
-	  ~PointsAlpakaView() = delete;
-
       VecArray<float, Ndim>* coords;
-      float* weights;
+      float* weight;
       float* rho;
       float* delta;
       int* nearest_higher;
