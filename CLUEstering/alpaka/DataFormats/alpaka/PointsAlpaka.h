@@ -25,7 +25,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
           nearest_higher{cms::alpakatools::make_device_buffer<int[]>(stream, n_points)},
           cluster_index{cms::alpakatools::make_device_buffer<int[]>(stream, n_points)},
           is_seed{cms::alpakatools::make_device_buffer<int[]>(stream, n_points)},
-          view_d{cms::alpakatools::make_device_buffer<PointsAlpakaView>(stream)} {
+          view_dev{cms::alpakatools::make_device_buffer<PointsAlpakaView>(stream)} {
       auto view_host = cms::alpakatools::make_host_buffer<PointsAlpakaView>(stream);
       view_host->coords = coords.data();
       view_host->weights = weights.data();
