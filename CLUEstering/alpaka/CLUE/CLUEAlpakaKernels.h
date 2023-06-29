@@ -13,10 +13,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <uint8_t Ndim>
   using PointsView = typename PointsAlpaka<Ndim>::PointsAlpakaView;
 
-  struct KernelPrepareDataStructures {
+  struct KernelFillTiles {
     template <typename TAcc, uint8_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  PointsAlpaka<Ndim>* points,
+                                  PointsView<Ndim>* points,
                                   TilesAlpaka<TAcc, Ndim>* tiles,
                                   uint32_t n_points) const {
       cms::alpakatools::for_each_element_in_grid(
@@ -73,21 +73,113 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       const float dc_squared{dc * dc};
       cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         float rho_i{0.f};
-        VecArray<float, Ndim> point_coordinates{dev_points.coords[i]};
+        VecArray<float, Ndim> coords_i{dev_points->coords[i]};
 
+        // Get the extremes of the search box
         VecArray<VecArray<float, 2>, Ndim> searchbox_extremes;
         for (int dim{}; dim != Ndim; ++dim) {
           VecArray<float, 2> dim_extremes;
-          dim_extremes.push_back(acc, point_coordinates[dim] - dc);
-          dim_extremes.push_back(acc, point_coordinates[dim] + dc);
+          dim_extremes.push_back(acc, coords_i[dim] - dc);
+          dim_extremes.push_back(acc, coords_i[dim] + dc);
 
           searchbox_extremes.push_back(acc, dim_extremes);
         }
 
+        // Calculate the search box
         VecArray<VecArray<uint32_t, 2>, Ndim> search_box = dev_tiles->searchBox(searchbox_extremes);
 
         VecArray<uint32_t, Ndim> base_vec;
-        for_recursion<TAcc, Ndim, Ndim>(base_vec, search_box, dev_tiles, dev_points, point_coordinates, &rho_i, dc, i);
+        for_recursion<TAcc, Ndim, Ndim>(base_vec, search_box, dev_tiles, dev_points, coords_i, &rho_i, dc, i);
+      });
+    }
+  };
+
+  template <typename TAcc, uint8_t Ndim, uint8_t N_>
+  ALPAKA_FN_HOST_ACC void for_recursion_nearest_higher(VecArray<uint32_t, Ndim>& base_vec,
+                                                       const VecArray<VecArray<uint32_t, 2>, Ndim>& s_box,
+                                                       TilesAlpaka<TAcc, Ndim>* tiles,
+                                                       PointsView<Ndim>* dev_points,
+                                                       float rho_i,
+                                                       float* delta_i,
+                                                       float* nh_i,
+                                                       float dm_sq,
+                                                       uint32_t i) {
+    if constexpr (N_ == 0) {
+      int binId{tiles->getGlobalBinByBin(base_vec)};
+      // get the size of this bin
+      int binSize{(*tiles)[binId].size()};
+
+      // iterate inside this bin
+      for (int binIter{}; binIter < binSize; ++binIter) {
+        int j{lt_[binId][binIter]};
+        // query N'_{dm}(i)
+        float rho_j{dev_points->rho[j]};
+        bool found_higher{(rho_j > rho_i)};
+        // in the rare case where rho is the same, use detid
+        found_higher = found_higher || ((rho_j == rho_i) && (j > i));
+
+        // Calculate the distance between the two points
+        VecArray<float, Ndim> j_coords{dev_points[j]};
+        float dist_ij_sq{0.f};
+        for (int dim{}; dim != Ndim; ++dim) {
+          dist_ij_sq += (j_coords[dim] - point_coordinates[dim]) * (j_coords[dim] - point_coordinates[dim]);
+        }
+
+        if (found_higher && dist_ij_sq <= dm_sq) {
+          // find the nearest point within N'_{dm}(i)
+          if (dist_ij_sq < *delta_i) {
+            // update delta_i and nearestHigher_i
+            *delta_i = dist_ij;
+            *nh_i = j;
+          }
+        }
+      }  // end of interate inside this bin
+
+      return;
+    } else {
+      for (int i{dim_min[dim_min.size() - N_]}; i <= dim_max[dim_max.size() - N_]; ++i) {
+        base_vector[base_vector.size() - N_] = i;
+        for_recursion_DistanceToHigher<N_ - 1>(
+            base_vector, dim_min, dim_max, lt_, rho_i, delta_i, nearestHigher_i, point_id);
+      }
+    }
+  }
+
+  struct KernelCalculateNearestHigher {
+    template <typename TAcc, uint8_t Ndim>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  TilesAlpaka<TAcc, Ndim>* dev_tiles,
+                                  PointsView<Ndim>* dev_points,
+                                  float outlier_delta_factor,
+                                  float dc,
+                                  uint32_t n_points) {
+      float dm{outlier_delta_factor * dc};
+      float dm_squared{dm * dm};
+      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
+        float delta_i{std::numeric_limits<float>::max()};
+        int nh_i{-1};
+        VecArray<float, Ndim> coords_i{dev_points->coords[i]};
+        float rho_i{dev_points->rho[i]};
+
+        // Get the extremes of the search box
+        VecArray<VecArray<float, 2>, Ndim> searchbox_extremes;
+        for (int dim{}; dim != Ndim; ++dim) {
+          VecArray<float, 2> dim_extremes;
+          dim_extremes.push_back(acc, coords_i[dim] - dc);
+          dim_extremes.push_back(acc, coords_i[dim] + dc);
+
+          searchbox_extremes.push_back(acc, dim_extremes);
+        }
+
+        // Calculate the search box
+        VecArray<VecArray<uint32_t, 2>, Ndim> search_box = dev_tiles->searchBox(searchbox_extremes);
+
+        VecArray<uint32_t, Ndim> base_vec;
+        for_recursion_nearest_higher<TAcc, Ndim, Ndim>(
+            base_vec, search_box, dev_tiles, dev_points, rho_i, &delta_i, &nh_i, dm_squared, i);
+
+        dev_points->delta[i] = alpaka::math::sqrt(acc, delta_i);
+        dev_points->nearest_higher[i] = nh_i;
       });
     }
   };
