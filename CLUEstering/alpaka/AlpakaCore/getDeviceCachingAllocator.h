@@ -5,10 +5,10 @@
 #include <mutex>
 #include <vector>
 
-#include "AlpakaCore/AllocatorConfig.h"
-#include "AlpakaCore/CachingAllocator.h"
-#include "AlpakaCore/alpakaDevices.h"
-#include "AlpakaCore/getDeviceIndex.h"
+#include "AllocatorConfig.h"
+#include "CachingAllocator.h"
+#include "alpakaDevices.h"
+#include "getDeviceIndex.h"
 
 namespace cms::alpakatools {
 

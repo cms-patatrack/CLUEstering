@@ -3,9 +3,9 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "AlpakaCore/getDeviceCachingAllocator.h"
-#include "AlpakaCore/getHostCachingAllocator.h"
-#include "Framework/demangle.h"
+#include "getDeviceCachingAllocator.h"
+#include "getHostCachingAllocator.h"
+#include "demangle.h"
 
 namespace cms::alpakatools {
 

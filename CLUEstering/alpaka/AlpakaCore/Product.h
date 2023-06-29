@@ -4,8 +4,8 @@
 #include <memory>
 #include <utility>
 
-#include "AlpakaCore/alpakaConfig.h"
-#include "AlpakaCore/ProductBase.h"
+#include "alpakaConfig.h"
+#include "ProductBase.h"
 
 namespace edm {
   template <typename T>

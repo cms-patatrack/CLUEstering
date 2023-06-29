@@ -27,10 +27,10 @@ namespace cms {
 
 #include <alpaka/alpaka.hpp>
 
-#include "AlpakaCore/AllocatorPolicy.h"
-#include "AlpakaCore/CachedBufAlloc.h"
-#include "AlpakaCore/alpakaConfig.h"
-#include "AlpakaCore/alpakaDevices.h"
+#include "AllocatorPolicy.h"
+#include "CachedBufAlloc.h"
+#include "alpakaConfig.h"
+#include "alpakaDevices.h"
 
 namespace cms::alpakatools {
 

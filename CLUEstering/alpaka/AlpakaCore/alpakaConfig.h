@@ -1,7 +1,7 @@
 #ifndef AlpakaCore_alpakaConfig_h
 #define AlpakaCore_alpakaConfig_h
 
-#include "AlpakaCore/alpakaFwd.h"
+#include "alpakaFwd.h"
 
 namespace alpaka_common {
 

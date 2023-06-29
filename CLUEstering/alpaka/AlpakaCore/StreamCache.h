@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 
-#include "AlpakaCore/alpakaConfig.h"
-#include "AlpakaCore/getDeviceIndex.h"
+#include "alpakaConfig.h"
+#include "getDeviceIndex.h"
 #include "Framework/ReusableObjectHolder.h"
 
 namespace cms::alpakatools {

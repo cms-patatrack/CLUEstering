@@ -6,8 +6,8 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "AlpakaCore/alpakaConfig.h"
-#include "AlpakaCore/getDeviceIndex.h"
+#include "alpakaConfig.h"
+#include "getDeviceIndex.h"
 
 namespace cms::alpakatools {
 

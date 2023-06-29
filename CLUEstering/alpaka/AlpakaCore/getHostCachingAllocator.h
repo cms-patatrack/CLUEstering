@@ -1,9 +1,9 @@
 #ifndef AlpakaCore_getHostCachingAllocator_h
 #define AlpakaCore_getHostCachingAllocator_h
 
-#include "AlpakaCore/AllocatorConfig.h"
-#include "AlpakaCore/CachingAllocator.h"
-#include "AlpakaCore/alpakaDevices.h"
+#include "AllocatorConfig.h"
+#include "CachingAllocator.h"
+#include "alpakaDevices.h"
 
 namespace cms::alpakatools {
 
