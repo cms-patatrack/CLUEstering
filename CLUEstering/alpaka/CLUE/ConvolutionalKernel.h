@@ -14,7 +14,7 @@ struct ConvolutionalKernel {
   ConvolutionalKernel() = default;
 
   template <typename TAcc>
-  virtual ALPAKA_FN_ACC auto operator()(const TAcc &acc, double dist_ij, int point_id, int j) const {
+  ALPAKA_FN_ACC auto operator()(const TAcc &acc, double dist_ij, int point_id, int j) const {
     return 0.f;
   }
 };
@@ -25,7 +25,7 @@ struct FlatKernel : ConvolutionalKernel {
   FlatKernel(float flat) : m_flat{flat} {}
 
   template <typename TAcc>
-  ALPAKA_FN_ACC auto operator()(const TAcc &acc, double dist_ij, int point_id, int j) const override {
+  ALPAKA_FN_ACC auto operator()(const TAcc &acc, double dist_ij, int point_id, int j) const {
     if (point_id == j) {
       return 1.f;
     } else {
@@ -43,8 +43,8 @@ struct GaussianKernel : ConvolutionalKernel {
       : m_gaus_amplitude{gaus_amplitude}, m_gaus_avg{gaus_avg}, m_gaus_std{gaus_std} {}
 
   template <typename TAcc>
-  ALPAKA_FN_ACC auto operator()(const TAcc &acc, float dist_ij, int point_id, int j) const override {
-    return (m_gaus_amplitude * alpaka::math::exp(-alpaka::math::pow(dist_ij - m_gaus_avg, 2) / (2 * alpaka::math::pow(m_gaus_std, 2))));
+  ALPAKA_FN_ACC auto operator()(const TAcc &acc, float dist_ij, int point_id, int j) const {
+    return (m_gaus_amplitude * alpaka::math::exp(acc, -alpaka::math::pow(acc, dist_ij - m_gaus_avg, 2) / (2 * alpaka::math::pow(acc, m_gaus_std, 2))));
   }
 };
 
@@ -55,18 +55,18 @@ struct ExponentialKernel : ConvolutionalKernel {
   ExponentialKernel(float exp_amplitude, float exp_avg) : m_exp_amplitude{exp_amplitude}, m_exp_avg{exp_avg} {}
 
   template <typename TAcc>
-  ALPAKA_FN_ACC auto operator()(const TAcc &acc, float dist_ij, int point_id, int j) const override {
-    return (m_exp_amplitude * alpaka::math::exp(-m_exp_avg * dist_ij))
+  ALPAKA_FN_ACC auto operator()(const TAcc &acc, float dist_ij, int point_id, int j) const {
+    return (m_exp_amplitude * alpaka::math::exp(acc, -m_exp_avg * dist_ij));
   }
 };
 
 struct CustomKernel : ConvolutionalKernel {
   kernel_t m_function;
-  customKernel() = delete;
-  customKernel(kernel_t function) : m_function{std::move(function)} {}
+  CustomKernel() = delete;
+  CustomKernel(kernel_t function) : m_function{std::move(function)} {}
 
   template <typename TAcc>
-  ALPAKA_FN_ACC auto operator()(const TAcc &acc, float dist_ij, int point_id, int j) const override {
+  ALPAKA_FN_ACC auto operator()(const TAcc &acc, float dist_ij, int point_id, int j) const {
     return m_function(dist_ij, point_id, j);
   }
 };
