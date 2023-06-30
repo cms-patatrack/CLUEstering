@@ -1,10 +1,10 @@
-#ifndef clustering_h
-#define clustering_h
+#ifndef CLUE_Algo_Alpaka_h
+#define CLUE_Algo_Alpaka_h
 
 #include <algorithm>
-#include <array>
+#include <alpaka/vec/Vec.hpp>
 #include <cmath>
-#include <fstream>
+#include <cstdint>
 #include <functional>
 #include <iostream>
 #include <sstream>
@@ -13,201 +13,170 @@
 #include <vector>
 #include <utility>
 
+#include "CLUEAlpakaKernels.h"
 #include "ConvolutionalKernel.h"
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
 #include "../DataFormats/Math/DeltaPhi.h"
 
-/* struct domain_t { */
-/*   float min = -std::numeric_limits<float>::max(); */
-/*   float max = std::numeric_limits<float>::max(); */
-/* }; */
+using cms::alpakatools::VecArray;
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
   template <typename TAcc, uint8_t Ndim>
   class CLUEAlgoAlpaka {
   public:
-	CLUEAlgoAlpaka() = delete;
-	explicit CLUEAlgoAlpaka(float dc, float rhoc, float outlierDeltaFactor, int pPBin) {
-	  dc_ = dc;
-	  rhoc_ = rhoc;
-	  outlierDeltaFactor_ = outlierDeltaFactor;
-	  pointsPerTile_ = pPBin;
-	  /* domains_ = std::move(domains); */
-	}
+    CLUEAlgoAlpaka() = delete;
+    explicit CLUEAlgoAlpaka(float dc, float rhoc, float outlierDeltaFactor, int pPBin, Queue queue_)
+        : dc_{dc}, rhoc_{rhoc}, outlierDeltaFactor_{outlierDeltaFactor}, pointsPerTile_{pPBin} {
+      init_device(queue_);
+    }
 
-	Points<Ndim> m_points_h;
-	TilesAlpaka<TAcc, Ndim>* m_tiles;
+    /* Points<Ndim> m_points_h; */
+    TilesAlpaka<Ndim>* m_tiles;
+    VecArray<uint32_t, max_seeds>* m_seeds;
+    VecArray<uint32_t, max_followers>* m_followers;
+    /* cms::alpakatools::device_buffer<Device, uint32_t[]> m_seeds; */
+    /* cms::alpakatools::device_buffer<Device, VecArray<uint32_t, max_followers>> m_followers; */
 
-	/* int calculateNTiles(int pointPerBin) { */
-	/*   int ntiles{points_.n / pointPerBin}; */
-	/*   try { */
-	/* 	if (ntiles == 0) { */
-	/* 	  throw 100; */
-	/* 	} */
-	/*   } catch (...) { */
-	/* 	std::cout */
-	/* 		<< "pointPerBin is set too high for you number of points. You must lower it in the clusterer constructor.\n"; */
-	/*   } */
-	/*   return ntiles; */
-	/* } */
+    /* int calculateNTiles(int pointPerBin) { */
+    /*   int ntiles{points_.n / pointPerBin}; */
+    /*   try { */
+    /* 	if (ntiles == 0) { */
+    /* 	  throw 100; */
+    /* 	} */
+    /*   } catch (...) { */
+    /* 	std::cout */
+    /* 		<< "pointPerBin is set too high for you number of points. You must lower it in the clusterer constructor.\n"; */
+    /*   } */
+    /*   return ntiles; */
+    /* } */
 
-	/* std::array<float, Ndim> calculateTileSize(int NTiles, tiles<Ndim>& tiles_) { */
-	/*   std::array<float, Ndim> tileSizes; */
-	/*   int NperDim{static_cast<int>(std::pow(NTiles, 1.0 / Ndim))}; */
+    /* std::array<float, Ndim> calculateTileSize(int NTiles, tiles<Ndim>& tiles_) { */
+    /*   std::array<float, Ndim> tileSizes; */
+    /*   int NperDim{static_cast<int>(std::pow(NTiles, 1.0 / Ndim))}; */
 
-	/*   for (int i{}; i != Ndim; ++i) { */
-	/* 	float tileSize; */
-	/* 	float dimMax{*std::max_element(points_.coordinates_[i].begin(), points_.coordinates_[i].end())}; */
-	/* 	float dimMin{*std::min_element(points_.coordinates_[i].begin(), points_.coordinates_[i].end())}; */
-	/* 	tiles_.minMax[i] = {dimMin, dimMax}; */
-	/* 	tileSize = (dimMax - dimMin) / NperDim; */
+    /*   for (int i{}; i != Ndim; ++i) { */
+    /* 	float tileSize; */
+    /* 	float dimMax{*std::max_element(points_.coordinates_[i].begin(), points_.coordinates_[i].end())}; */
+    /* 	float dimMin{*std::min_element(points_.coordinates_[i].begin(), points_.coordinates_[i].end())}; */
+    /* 	tiles_.minMax[i] = {dimMin, dimMax}; */
+    /* 	tileSize = (dimMax - dimMin) / NperDim; */
 
-	/* 	tileSizes[i] = tileSize; */
-	/*   } */
-	/*   return tileSizes; */
-	/* } */
+    /* 	tileSizes[i] = tileSize; */
+    /*   } */
+    /*   return tileSizes; */
+    /* } */
 
-	/* std::vector<std::vector<int>> makeClusters(const kernel& ker) { */
-	/*   tiles<Ndim> Tiles; */
-	/*   Tiles.nTiles = calculateNTiles(pointsPerTile_); */
-	/*   Tiles.resizeTiles(); */
-	/*   Tiles.tilesSize = calculateTileSize(Tiles.nTiles, Tiles); */
+    void make_clusters(const Points<Ndim>& h_points, PointsAlpaka<Ndim>& d_points, Queue queue_);
+    /* { */
+    /*   Tiles.nTiles = calculateNTiles(pointsPerTile_); */
+    /*   Tiles.resizeTiles(); */
+    /*   Tiles.tilesSize = calculateTileSize(Tiles.nTiles, Tiles); */
 
-	/*   prepareDataStructures(Tiles); */
-	/*   calculateLocalDensity(Tiles, ker); */
-	/*   calculateDistanceToHigher(Tiles); */
-	/*   findAndAssignClusters(); */
-
-	/*   return {points_.clusterIndex, points_.isSeed}; */
-	/* } */
+    /*   return {points_.clusterIndex, points_.isSeed}; */
+    /* } */
 
   private:
-	float dc_;    // cut-off distance in the calculation of local density
-	float rhoc_;  // minimum density to promote a point as a seed or the maximum density to demote a point as an outlier
-	float outlierDeltaFactor_;
-	int pointsPerTile_;  // average number of points found in a tile
+    float dc_;
+    float rhoc_;
+    float outlierDeltaFactor_;
+    // average number of points found in a tile
+    int pointsPerTile_;
 
-	// Array containing the domain extremes of every coordinate
-	/* std::array<domain_t, Ndim> domains_; */
+    // Buffers
+    std::optional<cms::alpakatools::device_buffer<Device, TilesAlpaka<Ndim>>> d_tiles;
+    std::optional<cms::alpakatools::device_buffer<Device, cms::alpakatools::VecArray<uint32_t, max_seeds>>>
+        d_seeds;
+    std::optional<
+        cms::alpakatools::device_buffer<Device, cms::alpakatools::VecArray<uint32_t, max_followers>[]>>
+        d_followers;
 
-	/* void calculateDistanceToHigher(tiles<Ndim>& tiles) { */
-	/*   float dm{outlierDeltaFactor_ * dc_}; */
-
-	/*   // loop over all points */
-	/*   for (int i{}; i < points_.n; ++i) { */
-	/* 	// default values of delta and nearest higher for i */
-	/* 	float delta_i{std::numeric_limits<float>::max()}; */
-	/* 	int nearestHigher_i{-1};  // if this doesn't change, the point is either a seed or an outlier */
-	/* 	float rho_i{points_.rho[i]}; */
-
-	/* 	// get search box */
-	/* 	std::array<std::vector<int>, Ndim> xjBins; */
-	/* 	for (int j{}; j != Ndim; ++j) { */
-	/* 	  xjBins[j] = tiles.getBinsFromRange(points_.coordinates_[j][i] - dm, points_.coordinates_[j][i] + dm, j); */
-
-	/* 	  // Overflow */
-	/* 	  if (points_.coordinates_[j][i] + dm > domains_[j].max) { */
-	/* 		std::vector<int> overflowBins = std::move(tiles.getBinsFromRange(domains_[j].min, domains_[j].min + dm, j)); */
-	/* 		xjBins[j].insert(xjBins[j].end(), overflowBins.begin(), overflowBins.end()); */
-	/* 		// Underflow */
-	/* 	  } else if (points_.coordinates_[j][i] - dm < domains_[j].min) { */
-	/* 		std::vector<int> underflowBins = std::move(tiles.getBinsFromRange(domains_[j].max - dm, domains_[j].max, j)); */
-	/* 		xjBins[j].insert(xjBins[j].end(), underflowBins.begin(), underflowBins.end()); */
-	/* 	  } */
-	/* 	} */
-	/* 	std::vector<int> search_box; */
-	/* 	tiles.searchBox(xjBins, search_box); */
-
-	/* 	// loop over all bins in the search box */
-	/* 	for (int binId : search_box) { */
-	/* 	  // get the size of this bin */
-	/* 	  size_t binSize{tiles[binId].size()}; */
-
-	/* 	  // iterate inside this bin */
-	/* 	  for (size_t binIter{}; binIter < binSize; ++binIter) { */
-	/* 		int j{tiles[binId][binIter]}; */
-	/* 		// query N'_{dm}(i) */
-	/* 		bool foundHigher{(points_.rho[j] > rho_i)}; */
-	/* 		// in the rare case where rho is the same, use detid */
-	/* 		foundHigher = foundHigher || ((points_.rho[j] == rho_i) && (j > i)); */
-	/* 		float dist_ij{distance(i, j)}; */
-	/* 		if (foundHigher && dist_ij <= dm) {  // definition of N'_{dm}(i) */
-	/* 		  // find the nearest point within N'_{dm}(i) */
-	/* 		  if (dist_ij < delta_i) { */
-	/* 			// update delta_i and nearestHigher_i */
-	/* 			delta_i = dist_ij; */
-	/* 			nearestHigher_i = j; */
-	/* 		  } */
-	/* 		} */
-		  /* }  // end of interate inside this bin */
-		/* }    // end of loop over bins in the search box */
-
-		/* points_.delta[i] = delta_i; */
-		/* points_.nearestHigher[i] = nearestHigher_i; */
-	  /* }  // end of loop over points */
-	/* } */
-
-	/* void findAndAssignClusters() { */
-	  /* int nClusters{}; */
-
-	  /* // find cluster seeds and outlier */
-	  /* std::vector<int> localStack;  // this vector will contain the indexes of all the seeds */
-	  /* // loop over all points */
-	  /* for (int i{}; i < points_.n; ++i) { */
-		/* // initialize clusterIndex */
-		/* points_.clusterIndex[i] = -1; */
-
-		/* float deltai{points_.delta[i]}; */
-		/* float rhoi{points_.rho[i]}; */
-
-		/* // determine seed or outlier */
-		/* bool isSeed{(deltai > dc_) && (rhoi >= rhoc_)}; */
-		/* bool isOutlier{(deltai > outlierDeltaFactor_ * dc_) && (rhoi < rhoc_)}; */
-		/* if (isSeed) { */
-		  /* // set isSeed as 1 */
-		  /* points_.isSeed[i] = 1; */
-		  /* // set cluster id */
-		  /* points_.clusterIndex[i] = nClusters; */
-		  /* // increment number of clusters */
-		  /* ++nClusters; */
-		  /* // add seed into local stack */
-		  /* localStack.push_back(i); */
-		/* } else if (!isOutlier) { */
-		  /* // register as follower at its nearest higher */
-		  /* points_.followers[points_.nearestHigher[i]].push_back(i); */
-		/* } */
-	  /* } */
-
-	  /* // expend clusters from seeds */
-	  /* while (!localStack.empty()) { */
-		/* int i{localStack.back()}; */
-		/* auto& followers{points_.followers[i]}; */
-		/* localStack.pop_back(); */
-
-		/* // loop over followers */
-		/* for (int j : followers) { */
-		  /* // pass id from i to a i's follower */
-		  /* points_.clusterIndex[j] = points_.clusterIndex[i]; */
-		  /* // push this follower to localStack */
-		  /* localStack.push_back(j); */
-		/* } */
-	  /* } */
-	/* } */
-
-	/* inline float distance(int i, int j) const { */
-	  /* float qSum{};  // quadratic sum */
-	  /* for (int k{}; k != Ndim; ++k) { */
-		/* float delta_xk{ */
-			/* deltaPhi(points_.coordinates_[k][i], points_.coordinates_[k][j], domains_[k].min, domains_[k].max)}; */
-		/* qSum += std::pow(delta_xk, 2); */
-	  /* } */
-
-	  /* return std::sqrt(qSum); */
-	/* } */
+    // Private methods
+    void init_device(Queue queue_);
+    void setup(const Points<Ndim>& h_points, PointsAlpaka<Ndim>& d_points, Queue queue_);
   };
 
-} 	// namespace ALPAKA_ACCELERATOR_NAMESPACE  
+  template <typename TAcc, uint8_t Ndim>
+  void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
+    d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
+    d_seeds = cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<uint32_t, max_seeds>>(queue_);
+    d_followers =
+        cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<uint32_t, max_followers>[]>(
+            queue_, reserve);
+
+    // Copy to the public pointers
+    m_tiles = (*d_tiles).data();
+    m_seeds = (*d_seeds).data();
+    m_followers = (*d_followers).data();
+  }
+
+  template <typename TAcc, uint8_t Ndim>
+  void CLUEAlgoAlpaka<TAcc, Ndim>::setup(const Points<Ndim>& h_points,
+                                         PointsAlpaka<Ndim>& d_points,
+                                         Queue queue_) {
+    alpaka::memcpy(queue_,
+                   d_points.coords,
+                   cms::alpakatools::make_host_view(h_points.coords.data(), h_points.coords.size()));
+    alpaka::memcpy(queue_,
+                   d_points.weight,
+                   cms::alpakatools::make_host_view(h_points.weight.data(), h_points.weight.size()));
+    alpaka::memset(queue_, (*d_seeds), 0x00);
+
+    // Define the working division
+    const Idx block_size{1024};
+    Idx grid_size = std::ceil(h_points.coords.size() / static_cast<float>(block_size));
+    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(
+                        working_div, KernelResetFollowers(), m_followers, h_points.coords.size()));
+  }
+
+  template <typename TAcc, uint8_t Ndim>
+  void CLUEAlgoAlpaka<TAcc, Ndim>::make_clusters(const Points<Ndim>& h_points,
+                                                 PointsAlpaka<Ndim>& d_points,
+                                                 Queue queue_) {
+    setup(h_points, d_points, queue_);
+
+    const Idx block_size{1024};
+    const Idx grid_size = std::ceil(h_points.coords.size() / static_cast<float>(block_size));
+    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(
+                        working_div, KernelFillTiles(), d_points.view(), m_tiles, h_points.coords.size()));
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(working_div,
+                                                    KernelCalculateLocalDensity(),
+                                                    m_tiles,
+                                                    d_points.view(),
+                                                    dc_,
+                                                    h_points.coords.size()));
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(working_div,
+                                                    KernelCalculateNearestHigher(),
+                                                    m_tiles,
+                                                    d_points.view(),
+                                                    outlierDeltaFactor_,
+                                                    dc_,
+                                                    h_points.coords.size()));
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(working_div,
+                                                    KernelFindClusters(),
+                                                    m_seeds,
+                                                    m_followers,
+                                                    d_points.view(),
+                                                    outlierDeltaFactor_,
+                                                    dc_,
+                                                    rhoc_,
+                                                    h_points.coords.size()));
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(
+                        working_div, KernelAssignClusters(), m_seeds, max_followers, d_points.view()));
+
+    // Wait for all the operations in the queue to finish
+    alpaka::wait(queue_);
+  }
+
+}  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 #endif
