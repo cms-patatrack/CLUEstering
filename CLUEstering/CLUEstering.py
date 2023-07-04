@@ -236,6 +236,7 @@ class clusterer:
         # Initialize attributes
         ## Data containers
         self.clust_data = clustering_data()
+        self.scaler = StandardScaler()
 
         ## Kernel for calculation of local density
         self.kernel = Algo.flatKernel(0.5)
@@ -350,18 +351,17 @@ class clusterer:
                 sys.exit()
 
         # Normalize all the coordinates as x'_j = (x_j - mu_j) / sigma_j
-        scaler = StandardScaler()
         for dim in range(self.clust_data.n_dim):
             self.clust_data.coords[dim] = \
-                scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
+                self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
         # Construct the domains of all the coordinates
         empty_domain = Algo.domain_t()
         self.clust_data.domain_ranges = [empty_domain for _ in range(self.clust_data.n_dim)]
         for coord, domain in kwargs.items():
             self.clust_data.domain_ranges[int(coord[1])] = \
-                Algo.domain_t(scaler.transform([[domain[0]]])[0][0],
-                              scaler.transform([[domain[1]]])[0][0])
+                Algo.domain_t(self.scaler.transform([[domain[0]]])[0][0],
+                              self.scaler.transform([[domain[1]]])[0][0])
 
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
         """
@@ -389,9 +389,41 @@ class clusterer:
 
             # Normalize the coordinate as x'_j = (x_j - mu_j) / sigma_j
             self.clust_data.coords[int(coord[1])] = \
-                StandardScaler().fit_transform(
+                self.scaler.fit_transform(
                     self.clust_data.coords[int(coord[1])].reshape(-1, 1)
                 ).reshape(1, -1)[0]
+
+    def change_domains(self, **kwargs) -> None:
+        """
+        Change the domain range of the coordinates
+
+        This method allows to change the domain of periodic coordinates by passing the domain of each
+        of these coordinates as a tuple, with the argument keyword in the form 'x*'.
+
+        Parameters
+        ----------
+        kwargs : tuples
+            Tuples corresponding to the domain of any periodic variables. The
+            keyword should be the keyword of the corrispoding variable.
+
+        Modified attributes
+        -------------------
+        domain_ranges : list of Algo.domain_t
+            List of the domains for each coordinate.
+
+        Returns
+        -------
+        None
+        """
+
+        # Construct the domains of all the coordinates
+        empty_domain = Algo.domain_t()
+        self.clust_data.domain_ranges = [empty_domain for _ in range(self.clust_data.n_dim)]
+
+        for coord, domain in kwargs.items():
+            self.clust_data.domain_ranges[int(coord[1])] = \
+                Algo.domain_t(self.scaler.transform([[domain[0]]])[0][0],
+                              self.scaler.transform([[domain[1]]])[0][0])
 
     def choose_kernel(self,
                       choice: str,
