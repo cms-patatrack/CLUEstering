@@ -149,12 +149,9 @@ private:
 
       // loop over bins in the search box
       for (int binId : search_box) {
-        // get the size of this bin
-        size_t binSize = tiles[binId].size();
-
-        // iterate inside this bin
-        for (size_t binIter{}; binIter < binSize; ++binIter) {
-          int j{tiles[binId][binIter]};
+        // iterate over the points inside this bin
+        for (auto binIterId : tiles[binId]) {
+          int j{binIterId};
           // query N_{dc_}(i)
           float dist_ij{distance(i, j)};
 
@@ -197,12 +194,9 @@ private:
 
       // loop over all bins in the search box
       for (int binId : search_box) {
-        // get the size of this bin
-        size_t binSize{tiles[binId].size()};
-
-        // iterate inside this bin
-        for (size_t binIter{}; binIter < binSize; ++binIter) {
-          int j{tiles[binId][binIter]};
+        // iterate over the points inside this bin
+        for (auto binIterId : tiles[binId]) {
+          int j{binIterId};
           // query N'_{dm}(i)
           bool foundHigher{(points_.rho[j] > rho_i)};
           // in the rare case where rho is the same, use detid
