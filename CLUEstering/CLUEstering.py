@@ -4,8 +4,7 @@ Density based clustering algorithm developed at CERN.
 
 from dataclasses import dataclass
 import random as rnd
-from math import sqrt
-from math import pi
+from math import pi, sqrt
 import sys
 import time
 import types
@@ -15,32 +14,8 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import make_blobs
 from sklearn.datasets import make_circles
+from sklearn.preprocessing import StandardScaler
 import CLUEsteringCPP as Algo
-
-def normalize_data(data, mean: float, std: float):
-    """
-    Function that normalizes the data using the transformation x' = (x - mu)/sigma.
-
-    Parameters
-    ----------
-    data : array_like
-        The data value or list of values to normalize.
-    mean : float
-        Mean of the data values.
-    std : float
-        Standard deviations of the data values.
-
-    Returns
-    -------
-    data : array_like
-        Spatially normalized data.
-    """
-
-    data -= mean
-    if std != 0:
-        data /= std
-
-    return data
 
 def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float =30, y_max: float = 30) -> pd.DataFrame:
@@ -374,30 +349,19 @@ class clusterer:
                 print(ve_)
                 sys.exit()
 
-        # Calculate mean and standard deviations in all the coordinates
-        means = np.zeros(shape=(self.clust_data.n_dim, 1))
-        st_devs = np.zeros(shape=(self.clust_data.n_dim, 1))
-        for dim in range(self.clust_data.n_dim):
-            means[dim] = np.mean(self.clust_data.coords[dim])
-            st_devs[dim] = np.std(self.clust_data.coords[dim])
-
         # Normalize all the coordinates as x'_j = (x_j - mu_j) / sigma_j
+        scaler = StandardScaler()
         for dim in range(self.clust_data.n_dim):
-            self.clust_data.coords[dim] = normalize_data(self.clust_data.coords[dim],
-                                                         means[dim],
-                                                         st_devs[dim])
+            self.clust_data.coords[dim] = \
+                scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
         # Construct the domains of all the coordinates
         empty_domain = Algo.domain_t()
-        self.clust_data.domain_ranges = [empty_domain for i in range(self.clust_data.n_dim)]
+        self.clust_data.domain_ranges = [empty_domain for _ in range(self.clust_data.n_dim)]
         for coord, domain in kwargs.items():
             self.clust_data.domain_ranges[int(coord[1])] = \
-                Algo.domain_t(normalize_data(domain[0],
-                                             means[int(coord[1])],
-                                             st_devs[int(coord[1])]),
-                              normalize_data(domain[1],
-                                             means[int(coord[1])],
-                                             st_devs[int(coord[1])]))
+                Algo.domain_t(scaler.transform([[domain[0]]])[0][0],
+                              scaler.transform([[domain[1]]])[0][0])
 
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
         """
@@ -422,6 +386,12 @@ class clusterer:
         # Change the coordinate system
         for coord, func in kwargs.items():
             self.clust_data.coords[int(coord[1])] = func(self.clust_data.original_coords)
+
+            # Normalize the coordinate as x'_j = (x_j - mu_j) / sigma_j
+            self.clust_data.coords[int(coord[1])] = \
+                StandardScaler().fit_transform(
+                    self.clust_data.coords[int(coord[1])].reshape(-1, 1)
+                ).reshape(1, -1)[0]
 
     def choose_kernel(self,
                       choice: str,
@@ -519,7 +489,7 @@ class clusterer:
         self.clust_prop.is_seed = np.array(cluster_id_is_seed[1])
         self.clust_prop.n_clusters = len(np.unique(self.clust_prop.cluster_ids))
 
-        cluster_points = [[] for i in range(self.clust_prop.n_clusters)]
+        cluster_points = [[] for _ in range(self.clust_prop.n_clusters)]
         for i in range(self.clust_data.n_points):
             cluster_points[self.clust_prop.cluster_ids[i]].append(i)
 
@@ -846,7 +816,7 @@ if __name__ == "__main__":
     new_data = {}
     new_data['x0'] = np.sqrt(df['x0']**2 + df['x1']**2)
     new_data['x1'] = np.arctan2(df['x1'], df['x0'])
-    new_data['weight'] = [1 for k in range(len(new_data['x0']))]
+    new_data['weight'] = [1 for _ in range(len(new_data['x0']))]
     new_df = pd.DataFrame(new_data)
 
     # Test circles dataset
