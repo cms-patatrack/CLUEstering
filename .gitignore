@@ -14,3 +14,7 @@ build/
 
 # Misc.
 *.pdf
+*file1.csv
+*file2.csv
+*_output.csv
+*_passed.py

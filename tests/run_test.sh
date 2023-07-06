@@ -5,7 +5,7 @@ echo "### Installing the latest version of CLUEstering from pip"
 pip3 install CLUEstering==1.4.0
 echo "## Running the first test"
 START1=$(date +%s)
-python3 -m pytest test_blob.py
+python3 -m pytest test_versions.py
 END1=$(date +%s)
 DIFF1=$(( $END1 - $START1 )).0
 mv ./file.csv ./file1.csv
@@ -19,7 +19,7 @@ pip install .
 cd tests
 echo "## Running the second test"
 START2=$(date +%s)
-python3 -m pytest test_blob.py
+python3 -m pytest test_versions.py
 END2=$(date +%s)
 DIFF2=$(( $END2 - $START2 )).0
 mv ./file.csv ./file2.csv
@@ -37,3 +37,6 @@ then
 	echo "def test(): assert(True)" > test_output_passed.py
 fi
 python3 -m pytest test_output_passed.py
+
+# Run the tests of the test datasets
+python3 -m pytest test_*_dataset.py
