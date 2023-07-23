@@ -245,6 +245,74 @@ class clusterer:
         self.clust_prop = cluster_properties()
         self.elapsed_time = 0.
 
+    def _read_array(self, input_data: Union[list,np.ndarray]) -> None:
+        try:
+            if len(input_data) < 2:
+                raise ValueError("Error: inadequate data\nThe data must contain"
+                                 + " at least one coordinate and the energy.")
+            self.clust_data.coords = np.asarray(input_data[:-1])
+            self.clust_data.weight = np.asarray(input_data[-1])
+            if len(input_data[:-1]) > 10:
+                raise ValueError("Error: inadequate data\nThe maximum number of"
+                                 + " dimensions supported is 10.")
+            self.clust_data.n_dim = len(self.clust_data.coords)
+            self.clust_data.n_points = self.clust_data.weight.size
+
+            # Save the original coordinates before any normalization
+            self.clust_data.original_coords = np.copy(self.clust_data.coords)
+
+        except ValueError as ve_:
+            print(ve_)
+            sys.exit()
+
+    def _read_string(self, input_data: str) -> pd.DataFrame:
+        try:
+            if input_data[-3:] != 'csv':
+                raise ValueError('Error: wrong type of file\nThe file is not a csv file.')
+            df_ = pd.read_csv(input_data)
+            return df_
+
+        except ValueError as ve_:
+            print(ve_)
+            sys.exit()
+
+    def _read_dict_df(self, input_data: Union[dict,pd.DataFrame]) -> pd.DataFrame:
+        df_ = pd.DataFrame(input_data, copy=False)
+        return df_
+
+    def _handle_dataframe(self, df_: pd.DataFrame) -> None:
+        try:
+            if 'weight' not in df_.columns:
+                raise ValueError("Error: inadequate data\nThe input dataframe must"
+                                 + " contain a weight column.")
+
+            coordinate_columns = [col for col in df_.columns if col[0] == 'x']
+            if len(df_.columns) < 2:
+                raise ValueError("Error: inadequate data\nThe data must contain"
+                                 + " at least one coordinate and the energy.")
+            if len(coordinate_columns) > 10:
+                raise ValueError("Error: inadequate data\nThe maximum number of"
+                                 + " dimensions supported is 10.")
+            self.clust_data.n_dim = len(coordinate_columns)
+            self.clust_data.n_points = len(df_.index)
+            self.clust_data.coords = np.zeros(shape=(self.clust_data.n_dim,
+                                                     self.clust_data.n_points))
+            for dim in range(self.clust_data.n_dim):
+                self.clust_data.coords[dim] = np.array(df_.iloc[:,dim])
+            self.clust_data.weight = df_['weight']
+
+            # Save the original coordinates before any normalization
+            self.clust_data.original_coords = np.copy(self.clust_data.coords)
+
+        except ValueError as ve_:
+            print(ve_)
+            sys.exit()
+
+    def _rescale(self) -> None:
+        for dim in range(self.clust_data.n_dim):
+            self.clust_data.coords[dim] = \
+                self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
+
     def read_data(self,
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray],
                   **kwargs: tuple) -> None:
@@ -290,70 +358,19 @@ class clusterer:
 
         # lists and np ndarrays
         if isinstance(input_data, (list, np.ndarray)):
-            try:
-                if len(input_data) < 2:
-                    raise ValueError("Error: inadequate data\nThe data must contain"
-                                     + " at least one coordinate and the energy.")
-                self.clust_data.coords = np.asarray(input_data[:-1])
-                self.clust_data.weight = np.asarray(input_data[-1])
-                if len(input_data[:-1]) > 10:
-                    raise ValueError("Error: inadequate data\nThe maximum number of"
-                                     + " dimensions supported is 10.")
-                self.clust_data.n_dim = len(self.clust_data.coords)
-                self.clust_data.n_points = self.clust_data.weight.size
-
-                # Save the original coordinates before any normalization
-                self.clust_data.original_coords = np.copy(self.clust_data.coords)
-
-            except ValueError as ve_:
-                print(ve_)
-                sys.exit()
+            self._read_array(input_data)
 
         # path to .csv file or pandas dataframe
-        if isinstance(input_data, (str, dict, pd.DataFrame)):
-            if isinstance(input_data, (str)):
-                try:
-                    if input_data[-3:] != 'csv':
-                        raise ValueError('Error: wrong type of file\nThe file is not a csv file.')
-                    input_data = pd.read_csv(input_data)
+        if isinstance(input_data, (str)):
+            df = self._read_string(input_data)
+            self._handle_dataframe(df)
 
-                except ValueError as ve_:
-                    print(ve_)
-                    sys.exit()
-            if isinstance(input_data, (dict, pd.DataFrame)):
-                df_ = pd.DataFrame(input_data, copy=False)
+        if isinstance(input_data, (dict, pd.DataFrame)):
+            df = self._read_dict_df(input_data)
+            self._handle_dataframe(df)
 
-            try:
-                if 'weight' not in df_.columns:
-                    raise ValueError("Error: inadequate data\nThe input dataframe must"
-                                     + " contain a weight column.")
-
-                coordinate_columns = [col for col in df_.columns if col[0] == 'x']
-                if len(df_.columns) < 2:
-                    raise ValueError("Error: inadequate data\nThe data must contain"
-                                     + " at least one coordinate and the energy.")
-                if len(coordinate_columns) > 10:
-                    raise ValueError("Error: inadequate data\nThe maximum number of"
-                                     + " dimensions supported is 10.")
-                self.clust_data.n_dim = len(coordinate_columns)
-                self.clust_data.n_points = len(df_.index)
-                self.clust_data.coords = np.zeros(shape=(self.clust_data.n_dim,
-                                                         self.clust_data.n_points))
-                for dim in range(self.clust_data.n_dim):
-                    self.clust_data.coords[dim] = np.array(df_.iloc[:,dim])
-                self.clust_data.weight = df_['weight']
-
-                # Save the original coordinates before any normalization
-                self.clust_data.original_coords = np.copy(self.clust_data.coords)
-
-            except ValueError as ve_:
-                print(ve_)
-                sys.exit()
-
-        # Normalize all the coordinates as x'_j = (x_j - mu_j) / sigma_j
-        for dim in range(self.clust_data.n_dim):
-            self.clust_data.coords[dim] = \
-                self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
+        # Rescae the coordinates with a standard scaler
+        self._rescale()
 
         # Construct the domains of all the coordinates
         empty_domain = Algo.domain_t()
@@ -817,3 +834,9 @@ class clusterer:
 
         df_ = pd.DataFrame(data)
         df_.to_csv(out_path,index=False)
+
+if __name__ == "__main__":
+    c = clusterer(1, 5, 1.5)
+    c.read_data('../tests/test_datasets/blob.csv')
+    c.run_clue()
+    c.cluster_plotter()
