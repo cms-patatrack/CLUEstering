@@ -215,23 +215,10 @@ class clusterer:
     """
 
     def __init__(self, dc_: float, rhoc_: float, outlier_: float, ppbin: int = 10):
-        try:
-            if float(dc_) != dc_:
-                raise ValueError('Error: wrong parameter type\nThe dc parameter must be a float.')
-            self.dc_ = dc_
-            if float(rhoc_) != rhoc_:
-                raise ValueError('Error: wrong parameter type\nThe rhoc parameter must be a float.')
-            self.rhoc = rhoc_
-            if float(outlier_) != outlier_:
-                raise ValueError("Error: wrong parameter type\n"
-                                 + "The outlier parameter must be a float.")
-            self.outlier = outlier_
-            if not isinstance(ppbin, (int)):
-                raise ValueError("Error: wrong parameter type\nThe ppbin parameter must be a int.")
-            self.ppbin = ppbin
-        except ValueError as ve_:
-            print(ve_)
-            sys.exit()
+        self.dc_ = dc_
+        self.rhoc = rhoc_
+        self.outlier = outlier_
+        self.ppbin = ppbin
 
         # Initialize attributes
         ## Data containers
