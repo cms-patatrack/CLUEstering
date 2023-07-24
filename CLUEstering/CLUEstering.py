@@ -360,12 +360,7 @@ class clusterer:
         self._rescale()
 
         # Construct the domains of all the coordinates
-        empty_domain = Algo.domain_t()
-        self.clust_data.domain_ranges = [empty_domain for _ in range(self.clust_data.n_dim)]
-        for coord, domain in kwargs.items():
-            self.clust_data.domain_ranges[int(coord[1])] = \
-                Algo.domain_t(self.scaler.transform([[domain[0]]])[0][0],
-                              self.scaler.transform([[domain[1]]])[0][0])
+        self.change_domains(**kwargs)
 
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
         """
@@ -397,7 +392,7 @@ class clusterer:
                     self.clust_data.coords[int(coord[1])].reshape(-1, 1)
                 ).reshape(1, -1)[0]
 
-    def change_domains(self, **kwargs) -> None:
+    def change_domains(self, **kwargs: tuple) -> None:
         """
         Change the domain range of the coordinates
 
