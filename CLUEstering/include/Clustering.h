@@ -7,6 +7,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <stdint.h>
 #include <string>
@@ -21,6 +22,10 @@
 struct domain_t {
   float min = -std::numeric_limits<float>::max();
   float max = std::numeric_limits<float>::max();
+
+  bool empty() {
+    return (min == -std::numeric_limits<float>::max()) && (max == std::numeric_limits<float>::max());
+  }
 };
 
 ////////////////////////////
