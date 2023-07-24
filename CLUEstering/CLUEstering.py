@@ -4,7 +4,7 @@ Density based clustering algorithm developed at CERN.
 
 from dataclasses import dataclass
 import random as rnd
-from math import pi, sqrt
+from math import sqrt
 import sys
 import time
 import types
@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.datasets import make_blobs
-from sklearn.datasets import make_circles
 from sklearn.preprocessing import StandardScaler
 import CLUEsteringCPP as Algo
 
@@ -93,7 +92,7 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
         print(ve_)
         sys.exit()
 
-@dataclass(init=False)
+@dataclass()
 class clustering_data:
     """
     Container characterizing the data used for clustering.
@@ -121,16 +120,7 @@ class clustering_data:
     n_dim : int
     n_points : int
 
-    # Default constructor
-    def __init__(self):
-        self.coords = np.array([])
-        self.original_coords = np.array([])
-        self.weight = np.array([])
-        self.domain_ranges = []
-        self.n_dim = 0
-        self.n_points = 0
-
-@dataclass(init=False, eq=False)
+@dataclass(eq=False)
 class cluster_properties:
     """
     Container of the data resulting from the clusterization of the input data.
@@ -158,15 +148,6 @@ class cluster_properties:
     cluster_points : np.ndarray
     points_per_cluster : np.ndarray
     output_df : pd.DataFrame
-
-    # Default constructor
-    def __init__(self):
-        self.n_clusters = 0
-        self.cluster_ids = []
-        self.is_seed = []
-        self.cluster_points = []
-        self.points_per_cluster = []
-        self.output_df = pd.DataFrame(None)
 
     def __eq__(self, other):
         if self.n_clusters != other.n_clusters:
@@ -222,31 +203,27 @@ class clusterer:
 
         # Initialize attributes
         ## Data containers
-        self.clust_data = clustering_data()
+        self.clust_data = None
         self.scaler = StandardScaler()
 
         ## Kernel for calculation of local density
         self.kernel = Algo.flatKernel(0.5)
 
         ## Output attributes
-        self.clust_prop = cluster_properties()
+        self.clust_prop = None
         self.elapsed_time = 0.
 
     def _read_array(self, input_data: Union[list,np.ndarray]) -> None:
         try:
-            if len(input_data) < 2:
-                raise ValueError("Error: inadequate data\nThe data must contain"
-                                 + " at least one coordinate and the energy.")
-            self.clust_data.coords = np.asarray(input_data[:-1])
-            self.clust_data.weight = np.asarray(input_data[-1])
-            if len(input_data[:-1]) > 10:
-                raise ValueError("Error: inadequate data\nThe maximum number of"
-                                 + " dimensions supported is 10.")
-            self.clust_data.n_dim = len(self.clust_data.coords)
-            self.clust_data.n_points = self.clust_data.weight.size
-
-            # Save the original coordinates before any normalization
-            self.clust_data.original_coords = np.copy(self.clust_data.coords)
+            if len(input_data) > 2 and len(input_data) < 10:
+                self.clust_data = clustering_data(np.asarray(input_data[:-1]),
+                                                  np.copy(np.asarray(input_data[:-1])),
+                                                  np.asarray(input_data[-1]),
+                                                  Algo.domain_t(),
+                                                  len(input_data[:-1]),
+                                                  len(input_data[-1]))
+            else:
+                raise ValueError("")
 
         except ValueError as ve_:
             print(ve_)
@@ -280,16 +257,19 @@ class clusterer:
             if len(coordinate_columns) > 10:
                 raise ValueError("Error: inadequate data\nThe maximum number of"
                                  + " dimensions supported is 10.")
-            self.clust_data.n_dim = len(coordinate_columns)
-            self.clust_data.n_points = len(df_.index)
-            self.clust_data.coords = np.zeros(shape=(self.clust_data.n_dim,
-                                                     self.clust_data.n_points))
-            for dim in range(self.clust_data.n_dim):
-                self.clust_data.coords[dim] = np.array(df_.iloc[:,dim])
-            self.clust_data.weight = df_['weight']
 
-            # Save the original coordinates before any normalization
-            self.clust_data.original_coords = np.copy(self.clust_data.coords)
+            n_dim = len(coordinate_columns)
+            n_points = len(df_.index)
+            coords = np.zeros(shape=(n_dim, n_points))
+            for dim in range(n_dim):
+                coords[dim] = np.array(df_.iloc[:,dim])
+
+            self.clust_data = clustering_data(coords,
+                                              np.copy(coords),
+                                              np.asarray(df_['weight']),
+                                              Algo.domain_t(),
+                                              n_dim,
+                                              n_points)
 
         except ValueError as ve_:
             print(ve_)
@@ -298,7 +278,7 @@ class clusterer:
     def _rescale(self) -> None:
         for dim in range(self.clust_data.n_dim):
             self.clust_data.coords[dim] = \
-                self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
+            self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
     def read_data(self,
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray],
@@ -396,8 +376,8 @@ class clusterer:
         """
         Change the domain range of the coordinates
 
-        This method allows to change the domain of periodic coordinates by passing the domain of each
-        of these coordinates as a tuple, with the argument keyword in the form 'x*'.
+        This method allows to change the domain of periodic coordinates by passing the domain of
+        each of these coordinates as a tuple, with the argument keyword in the form 'x*'.
 
         Parameters
         ----------
@@ -516,19 +496,25 @@ class clusterer:
                                           self.clust_data.coords,self.clust_data.weight,
                                           self.clust_data.n_dim)
         finish = time.time_ns()
-        self.clust_prop.cluster_ids = np.array(cluster_id_is_seed[0])
-        self.clust_prop.is_seed = np.array(cluster_id_is_seed[1])
-        self.clust_prop.n_clusters = len(np.unique(self.clust_prop.cluster_ids))
+        cluster_ids = np.array(cluster_id_is_seed[0])
+        is_seed = np.array(cluster_id_is_seed[1])
+        n_clusters = len(np.unique(cluster_ids))
 
-        cluster_points = [[] for _ in range(self.clust_prop.n_clusters)]
+        cluster_points = [[] for _ in range(n_clusters)]
         for i in range(self.clust_data.n_points):
-            cluster_points[self.clust_prop.cluster_ids[i]].append(i)
+            cluster_points[cluster_ids[i]].append(i)
 
-        self.clust_prop.cluster_points = cluster_points
-        self.clust_prop.points_per_cluster = np.array([len(clust) for clust in cluster_points])
+        points_per_cluster = np.array([len(clust) for clust in cluster_points])
 
-        data = {'cluster_ids': self.clust_prop.cluster_ids, 'is_seed': self.clust_prop.is_seed}
-        self.clust_prop.output_df = pd.DataFrame(data)
+        data = {'cluster_ids': cluster_ids, 'is_seed': is_seed}
+        output_df = pd.DataFrame(data)
+
+        self.clust_prop = cluster_properties(n_clusters,
+                                             cluster_ids,
+                                             is_seed,
+                                             np.asarray(cluster_points),
+                                             points_per_cluster,
+                                             output_df)
 
         self.elapsed_time = (finish - start)/(10**6)
         if verbose:
