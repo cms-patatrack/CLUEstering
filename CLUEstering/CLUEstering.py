@@ -47,14 +47,14 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
 
     try:
         if x_max < 0. or y_max < 0.:
-            raise ValueError('Error: wrong parameter value\nx_max and y_max must be positive.')
+            raise ValueError('Wrong parameter value\nx_max and y_max must be positive.')
         if n_blobs < 0:
-            raise ValueError('Error: wrong parameter value\nThe number of blobs must be positive.')
+            raise ValueError('Wrong parameter value\nThe number of blobs must be positive.')
         if mean < 0. or sigma < 0.:
-            raise ValueError("Error: wrong parameter value\nThe mean and sigma of the blobs"
+            raise ValueError("Wrong parameter value\nThe mean and sigma of the blobs"
                              + " cannot be negative.")
         if n_dim > 3:
-            raise ValueError("Error: wrong number of dimensions\nBlobs can only be generated"
+            raise ValueError("Wrong number of dimensions\nBlobs can only be generated"
                              + " in 2 or 3 dimensions.")
     except ValueError as ve_:
         print(ve_)
@@ -62,14 +62,13 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
     else:
         centers = []
         if n_dim == 2:
-            data = {'x0': [], 'x1': [], 'weight': []}
+            data = {'x0': np.array([]), 'x1': np.array([]), 'weight': np.array([])}
             centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
             blob_data = make_blobs(n_samples=n_samples, centers=np.array(centers))[0]
 
-            for i in range(n_samples):
-                data['x0'] += [blob_data[i][0]]
-                data['x1'] += [blob_data[i][1]]
-                data['weight'] += [1]
+            data['x0'] = blob_data.T[0]
+            data['x1'] = blob_data.T[1]
+            data['weight'] = np.asarray([1 for _ in range(len(data['x0']))])
 
             return pd.DataFrame(data)
         if n_dim == 3:
@@ -80,11 +79,10 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
 
             for value in z_values: # for every z value, a layer is generated.
                 blob_data = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))[0]
-                for i in range(sqrt_samples):
-                    data['x0'] += [blob_data[i][0]]
-                    data['x1'] += [blob_data[i][1]]
-                    data['x2'] += [value]
-                    data['weight'] += [1]
+                data['x0'] = np.concatenate([data['x0'], blob_data.T[0]])
+                data['x1'] = np.concatenate([data['x1'], blob_data.T[1]])
+                data['x2'] = np.concatenate([data['x2'], [value for _ in range(sqrt_samples)]])
+                data['weight'] = np.concatenate([data['weight'], [1 for _ in range(sqrt_samples)]])
 
             return pd.DataFrame(data)
 
@@ -228,9 +226,10 @@ class clusterer:
     def _read_string(self, input_data: str) -> Union[pd.DataFrame,None]:
         try:
             if input_data[-3:] != 'csv':
-                raise ValueError('Error: wrong type of file\nThe file is not a csv file.')
+                raise ValueError('Wrong type of file. The file is not a csv file.')
         except ValueError as ve_:
             print(ve_)
+            raise
         else:
             df_ = pd.read_csv(input_data)
             return df_
@@ -243,20 +242,21 @@ class clusterer:
         try:
             # Check that the user provided the weights
             if 'weight' not in df_.columns:
-                raise ValueError("Error: inadequate data\nThe input dataframe must"
+                raise ValueError("Inadequate data. The input dataframe must"
                                  + " contain a weight column.")
 
             coordinate_columns = [col for col in df_.columns if col[0] == 'x']
 
             # Check that the dimensionality of the dataset is adequate
             if len(df_.columns) < 2:
-                raise ValueError("inadequate data\nThe data must contain"
+                raise ValueError("Inadequate data. The data must contain"
                                  + " at least one coordinate and the energy.")
             if len(coordinate_columns) > 10:
-                raise ValueError("Error: inadequate data\nThe maximum number of"
+                raise ValueError("Inadequate data. The maximum number of"
                                  + " dimensions supported is 10.")
         except ValueError as ve_:
             print(ve_)
+            raise
         else:
             n_dim = len(coordinate_columns)
             n_points = len(df_.index)
@@ -362,7 +362,7 @@ class clusterer:
         for coord, func in kwargs.items():
             self.clust_data.coords[int(coord[1])] = func(self.clust_data.original_coords)
 
-            # Normalize the coordinate as x'_j = (x_j - mu_j) / sigma_j
+            # Normalize the coordinate with a standard scaler
             self.clust_data.coords[int(coord[1])] = \
                 self.scaler.fit_transform(
                     self.clust_data.coords[int(coord[1])].reshape(-1, 1)
@@ -438,24 +438,24 @@ class clusterer:
                     self.kernel = Algo.flatKernel(parameters[0])
             elif choice == "exp":
                 if len(parameters) != 2:
-                    raise ValueError("Error: wrong number of parameters. The exponential"
+                    raise ValueError("Wrong number of parameters. The exponential"
                                      + " kernel requires 2 parameters.")
                 else:
                     self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
             elif choice == "gaus":
                 if len(parameters) != 3:
-                    raise ValueError("Error: wrong number of parameters. The gaussian" +
+                    raise ValueError("Wrong number of parameters. The gaussian" +
                                      " kernel requires 3 parameters.")
                 else:
                     self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
             elif choice == "custom":
                 if len(parameters) != 0:
-                    raise ValueError("Error: wrong number of parameters. Custom kernels"
+                    raise ValueError("Wrong number of parameters. Custom kernels"
                                      + " requires 0 parameters.")
                 else:
                     self.kernel = Algo.customKernel(function)
             else:
-                raise ValueError("Error: invalid kernel. The allowed choices for the"
+                raise ValueError("Invalid kernel. The allowed choices for the"
                                  + " kernels are: flat, exp, gaus and custom.")
         except ValueError as ve_:
             print(ve_)
@@ -512,7 +512,7 @@ class clusterer:
         self.clust_prop = cluster_properties(n_clusters,
                                              cluster_ids,
                                              is_seed,
-                                             np.asarray(cluster_points),
+                                             np.asarray(cluster_points, dtype=object),
                                              points_per_cluster,
                                              output_df)
 
@@ -810,5 +810,11 @@ if __name__ == "__main__":
     c.cluster_plotter()
 
     d = clusterer(1, 5, 1.5)
-    arr = np.array([[1,2,3]])
-    d.read_data(arr)
+    d.read_data(test_blobs(1000,2))
+    d.run_clue()
+    d.cluster_plotter()
+
+    e = clusterer(1, 5, 1.5)
+    e.read_data(test_blobs(10000,3))
+    e.run_clue()
+    e.cluster_plotter()
