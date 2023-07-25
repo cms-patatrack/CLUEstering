@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import pandas as pd
 import pytest
 import sys
@@ -11,6 +12,10 @@ def blobs():
     return pd.read_csv("./test_datasets/blob.csv")
 
 def test_blobs_clustering(blobs):
+    # Check if the output file already exists and if it does, delete it
+    if os.path.isfile('./blobs_output.csv'):
+        os.remove('./blobs_output.csv')
+
     c = clue.clusterer(0.8,5,1.5)
     c.read_data(blobs)
     c.run_clue()

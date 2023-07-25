@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import pandas as pd
 import pytest
 import sys
@@ -11,6 +12,10 @@ def moons():
     return pd.read_csv("./test_datasets/moons_1000.csv")
 
 def test_circles_clustering(moons):
+    # Check if the output file already exists and if it does, delete it
+    if os.path.isfile('./moons_output.csv'):
+        os.remove('./moons_output.csv')
+
     c = clue.clusterer(0.5,5,1.)
     c.read_data(moons)
     c.run_clue()

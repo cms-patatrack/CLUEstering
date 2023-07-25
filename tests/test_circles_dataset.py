@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import pandas as pd
 import pytest
 import sys
@@ -11,6 +12,10 @@ def circles():
     return pd.read_csv("./test_datasets/circles_1000.csv")
 
 def test_circles_clustering(circles):
+    # Check if the output file already exists and if it does, delete it
+    if os.path.isfile('./circles_output.csv'):
+        os.remove('./circles_output.csv')
+
     c = clue.clusterer(0.9,5,1.5)
     c.read_data(circles)
     c.change_coordinates(x0=lambda x: np.sqrt(x[0]**2 + x[1]**2),
