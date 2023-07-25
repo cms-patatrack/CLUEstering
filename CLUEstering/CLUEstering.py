@@ -47,14 +47,14 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
 
     try:
         if x_max < 0. or y_max < 0.:
-            raise ValueError('Wrong parameter value\nx_max and y_max must be positive.')
+            raise ValueError('Wrong parameter value. x_max and y_max must be positive.')
         if n_blobs < 0:
-            raise ValueError('Wrong parameter value\nThe number of blobs must be positive.')
+            raise ValueError('Wrong parameter value. The number of blobs must be positive.')
         if mean < 0. or sigma < 0.:
-            raise ValueError("Wrong parameter value\nThe mean and sigma of the blobs"
+            raise ValueError("Wrong parameter value. The mean and sigma of the blobs"
                              + " cannot be negative.")
         if n_dim > 3:
-            raise ValueError("Wrong number of dimensions\nBlobs can only be generated"
+            raise ValueError("Wrong number of dimensions. Blobs can only be generated"
                              + " in 2 or 3 dimensions.")
     except ValueError as ve_:
         print(ve_)
@@ -64,11 +64,12 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
         if n_dim == 2:
             data = {'x0': np.array([]), 'x1': np.array([]), 'weight': np.array([])}
             centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
-            blob_data = make_blobs(n_samples=n_samples, centers=np.array(centers))[0]
+            blob_data, _ = make_blobs(n_samples=n_samples, centers=np.array(centers))
 
             data['x0'] = blob_data.T[0]
             data['x1'] = blob_data.T[1]
-            data['weight'] = np.asarray([1 for _ in range(len(data['x0']))])
+            data['weight'] = np.full(shape=len(blob_data.T[0]), fill_value=1)
+
 
             return pd.DataFrame(data)
         if n_dim == 3:
@@ -78,11 +79,13 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
             centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
 
             for value in z_values: # for every z value, a layer is generated.
-                blob_data = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))[0]
+                blob_data, _ = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))
                 data['x0'] = np.concatenate([data['x0'], blob_data.T[0]])
                 data['x1'] = np.concatenate([data['x1'], blob_data.T[1]])
-                data['x2'] = np.concatenate([data['x2'], [value for _ in range(sqrt_samples)]])
-                data['weight'] = np.concatenate([data['weight'], [1 for _ in range(sqrt_samples)]])
+                data['x2'] = np.concatenate([data['x2'], np.full(shape=sqrt_samples,
+                                                                 fill_value=value)])
+                data['weight'] = np.concatenate([data['weight'], np.full(shape=sqrt_samples,
+                                                                         fill_value=1)])
 
             return pd.DataFrame(data)
 
