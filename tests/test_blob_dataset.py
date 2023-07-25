@@ -22,10 +22,3 @@ def test_blobs_clustering(blobs):
     c.to_csv('./','blobs_output.csv')
 
     assert cmp('./blobs_output.csv', './test_datasets/blobs_truth.csv')
-
-if __name__ == "__main__":
-    c = clue.clusterer(0.8,5,1.5)
-    c.read_data('./test_datasets/blob.csv')
-    c.run_clue()
-    c.cluster_plotter()
-    c.to_csv('./test_datasets/', 'blobs_truth.csv')

@@ -5,14 +5,14 @@ import sys
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
-def test_read_array():
+def test_read_array_except():
     arr = np.array([[1, 4, 5]])
     clust = clue.clusterer(0.4, 5., 1.2) 
 
     with pytest.raises(ValueError):
         clust.read_data(arr)
 
-def test_read_string():
+def test_read_string_except():
     clust = clue.clusterer(0.4, 5., 1.2) 
 
     with pytest.raises(ValueError):
@@ -53,9 +53,9 @@ def high_dimensionality_dataset():
 
     return pd.DataFrame(data)
 
-def test_handle_dataframe(no_weight_dataset,
-                          low_dimensionality_dataset,
-                          high_dimensionality_dataset):
+def test_handle_dataframe_except(no_weight_dataset,
+                                 low_dimensionality_dataset,
+                                 high_dimensionality_dataset):
     clust = clue.clusterer(0.5,5.,1.)
 
     with pytest.raises(ValueError):

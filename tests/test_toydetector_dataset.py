@@ -22,9 +22,3 @@ def test_circles_clustering(toy_det):
     c.to_csv('./','toy_det_output.csv')
 
     assert cmp('./toy_det_output.csv', './test_datasets/toy_det_1000_truth.csv')
-
-if __name__ == "__main__":
-    c = clue.clusterer(0.06,5,1.)
-    c.read_data('./test_datasets/toyDetector_1000.csv')
-    c.run_clue()
-    c.cluster_plotter()

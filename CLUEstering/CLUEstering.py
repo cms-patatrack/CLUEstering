@@ -805,19 +805,3 @@ class clusterer:
 
         df_ = pd.DataFrame(data)
         df_.to_csv(out_path,index=False)
-
-if __name__ == "__main__":
-    c = clusterer(1, 5, 1.5)
-    c.read_data('../tests/test_datasets/blob.csv')
-    c.run_clue()
-    c.cluster_plotter()
-
-    d = clusterer(1, 5, 1.5)
-    d.read_data(test_blobs(1000,2))
-    d.run_clue()
-    d.cluster_plotter()
-
-    e = clusterer(1, 5, 1.5)
-    e.read_data(test_blobs(10000,3))
-    e.run_clue()
-    e.cluster_plotter()
