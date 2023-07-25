@@ -1,12 +1,10 @@
+from pathlib import Path
 from setuptools import setup, find_packages
 from pybind11.setup_helpers import Pybind11Extension
-from pathlib import Path
-import codecs
-import os
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 this_directory = Path(__file__).parent
-long_description = (this_directory/'README.md').read_text() 
+long_description = (this_directory/'README.md').read_text()
 
 ext_modules = [
 	Pybind11Extension(
@@ -21,7 +19,8 @@ setup(
     version=__version__,
     author="Simone Balducci",
     author_email="simone.balducci00@gmail.com",
-    description="A library that generalizes the original 2-dimensional CLUE algorithm made at CERN.",
+    description='''A library that generalizes the original 2-dimensional CLUE
+				 algorithm made at CERN.''',
 	 long_description=long_description,
 	 long_description_content_type='text/markdown',
 	 packages=find_packages(),

@@ -11,10 +11,17 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "Kernels.h"
 #include "Point.h"
 #include "Tiles.h"
+#include "deltaPhi.h"
+
+struct domain_t {
+  float min = -std::numeric_limits<float>::max();
+  float max = std::numeric_limits<float>::max();
+};
 
 ////////////////////////////
 //////  Clustering.h  //////
@@ -22,11 +29,12 @@
 template <uint8_t Ndim>
 class ClusteringAlgo {
 public:
-  ClusteringAlgo(float dc, float rhoc, float outlierDeltaFactor, int pPBin) {
+  ClusteringAlgo(float dc, float rhoc, float outlierDeltaFactor, int pPBin, std::vector<domain_t> domains) {
     dc_ = dc;
     rhoc_ = rhoc;
     outlierDeltaFactor_ = outlierDeltaFactor;
     pointsPerTile_ = pPBin;
+    domains_ = std::move(domains);
   }
 
   // public variables
@@ -34,6 +42,9 @@ public:
   float rhoc_;  // minimum density to promote a point as a seed or the maximum density to demote a point as an outlier
   float outlierDeltaFactor_;
   int pointsPerTile_;  // average number of points found in a tile
+
+  // Array containing the domain extremes of every coordinate
+  std::vector<domain_t> domains_;
 
   Points<Ndim> points_;
 
@@ -94,104 +105,12 @@ public:
     Tiles.resizeTiles();
     Tiles.tilesSize = calculateTileSize(Tiles.nTiles, Tiles);
 
-    // start clustering
-    //auto start { std::chrono::high_resolution_clock::now() };
     prepareDataStructures(Tiles);
-    //auto finish { std::chrono::high_resolution_clock::now() };
-    //std::chrono::duration<double> elapsed { finish - start };
-    //std::cout << "--- prepareDataStructures:     " << elapsed.count() *1000 << " ms\n";
-
-    //start = std::chrono::high_resolution_clock::now();
     calculateLocalDensity(Tiles, ker);
-    //finish = std::chrono::high_resolution_clock::now();
-    //elapsed = finish - start;
-    //std::cout << "--- calculateLocalDensity:     " << elapsed.count() *1000 << " ms\n";
-
-    //start = std::chrono::high_resolution_clock::now();
     calculateDistanceToHigher(Tiles);
-    //finish = std::chrono::high_resolution_clock::now();
-    //elapsed = finish - start;
-    //std::cout << "--- calculateDistanceToHigher: " << elapsed.count() *1000 << " ms\n";
-
     findAndAssignClusters();
 
     return {points_.clusterIndex, points_.isSeed};
-  }
-
-  template <uint8_t N_>
-  void for_recursion(std::vector<int>& base_vector,
-                     std::vector<int>& dim_min,
-                     std::vector<int>& dim_max,
-                     tiles<Ndim>& lt_,
-                     kernel const& ker,
-                     int point_id) {
-    if constexpr (N_ == 0) {
-      int binId{lt_.getGlobalBinByBin(base_vector)};
-      // get the size of this bin
-      int binSize{static_cast<int>(lt_[binId].size())};
-
-      // iterate inside this bin
-      for (int binIter{}; binIter < binSize; ++binIter) {
-        int j{lt_[binId][binIter]};
-        // query N_{dc_}(i)
-        float dist_ij{distance(point_id, j)};
-
-        if (dist_ij <= dc_) {
-          // sum weights within N_{dc_}(i) using the chosen kernel
-          points_.rho[point_id] += ker(dist_ij, point_id, j) * points_.weight[j];
-        }
-      }  // end of interate inside this bin
-      return;
-    } else {
-      for (int i{dim_min[dim_min.size() - N_]}; i <= dim_max[dim_max.size() - N_]; ++i) {
-        base_vector[base_vector.size() - N_] = i;
-        for_recursion<N_ - 1>(base_vector, dim_min, dim_max, lt_, ker, point_id);
-      }
-    }
-  }
-
-  template <uint8_t N_>
-  void for_recursion_DistanceToHigher(std::vector<int>& base_vector,
-                                      std::vector<int>& dim_min,
-                                      std::vector<int>& dim_max,
-                                      tiles<Ndim>& lt_,
-                                      float rho_i,
-                                      float& delta_i,
-                                      int& nearestHigher_i,
-                                      int point_id) {
-    if constexpr (N_ == 0) {
-      float dm{outlierDeltaFactor_ * dc_};
-
-      int binId{lt_.getGlobalBinByBin(base_vector)};
-      // get the size of this bin
-      int binSize{lt_[binId].size()};
-
-      // iterate inside this bin
-      for (int binIter{}; binIter < binSize; ++binIter) {
-        int j{lt_[binId][binIter]};
-        // query N'_{dm}(i)
-        bool foundHigher{(points_.rho[j] > rho_i)};
-        // in the rare case where rho is the same, use detid
-        foundHigher = foundHigher || ((points_.rho[j] == rho_i) && (j > point_id));
-        float dist_ij{distance(point_id, j)};
-        if (foundHigher && dist_ij <= dm) {  // definition of N'_{dm}(i)
-          // find the nearest point within N'_{dm}(i)
-          if (dist_ij < delta_i) {
-            // update delta_i and nearestHigher_i
-            delta_i = dist_ij;
-            nearestHigher_i = j;
-          }
-        }
-      }  // end of interate inside this bin
-
-      return;
-    } else {
-      for (int i{dim_min[dim_min.size() - N_]}; i <= dim_max[dim_max.size() - N_]; ++i) {
-        base_vector[base_vector.size() - N_] = i;
-        for_recursion_DistanceToHigher<N_ - 1>(
-            base_vector, dim_min, dim_max, lt_, rho_i, delta_i, nearestHigher_i, point_id);
-      }
-    }
   }
 
 private:
@@ -211,27 +130,38 @@ private:
     // loop over all points
     for (int i{}; i < points_.n; ++i) {
       // get search box
-      std::array<std::vector<float>, Ndim> minMax;
+      std::array<std::vector<int>, Ndim> xjBins;
       for (int j{}; j != Ndim; ++j) {
-        std::vector<float> partial_minMax{points_.coordinates_[j][i] - dc_, points_.coordinates_[j][i] + dc_};
-        minMax[j] = partial_minMax;
-      }
-      std::array<int, 2 * Ndim> search_box = tiles.searchBox(minMax);
+        xjBins[j] = tiles.getBinsFromRange(points_.coordinates_[j][i] - dc_, points_.coordinates_[j][i] + dc_, j);
 
-      // loop over bins in the search box(binIter_f - binIter_i)
-      std::vector<int> binVec(Ndim);
-      std::vector<int> dimMin(Ndim);
-      std::vector<int> dimMax(Ndim);
-      for (int j{}; j != (int)(search_box.size()); ++j) {
-        if (j % 2 == 0) {
-          dimMin[j/2] = search_box[j];
-        } else {
-          dimMax[j/2] = search_box[j];
+        // Overflow
+        if (points_.coordinates_[j][i] + dc_ > domains_[j].max) {
+          std::vector<int> overflowBins = std::move(tiles.getBinsFromRange(domains_[j].min, domains_[j].min + dc_, j));
+          xjBins[j].insert(xjBins[j].end(), overflowBins.begin(), overflowBins.end());
+          // Underflow
+        } else if (points_.coordinates_[j][i] - dc_ < domains_[j].min) {
+          std::vector<int> underflowBins = std::move(tiles.getBinsFromRange(domains_[j].max - dc_, domains_[j].max, j));
+          xjBins[j].insert(xjBins[j].end(), underflowBins.begin(), underflowBins.end());
         }
       }
+      std::vector<int> search_box;
+      tiles.searchBox(xjBins, search_box);
 
-      for_recursion<Ndim>(binVec, dimMin, dimMax, tiles, ker, i);
-    }  // end of loop over points
+      // loop over bins in the search box
+      for (int binId : search_box) {
+        // iterate over the points inside this bin
+        for (auto binIterId : tiles[binId]) {
+          int j{binIterId};
+          // query N_{dc_}(i)
+          float dist_ij{distance(i, j)};
+
+          if (dist_ij <= dc_) {
+            // sum weights within N_{dc_}(i) using the chosen kernel
+            points_.rho[i] += ker(dist_ij, i, j) * points_.weight[j];
+          }
+        }  // end of interate inside this bin
+      }    // end of loop over bins in the search box
+    }      // end of loop over points
   }
 
   void calculateDistanceToHigher(tiles<Ndim>& tiles) {
@@ -245,26 +175,43 @@ private:
       float rho_i{points_.rho[i]};
 
       // get search box
-      std::array<std::vector<float>, Ndim> minMax;
+      std::array<std::vector<int>, Ndim> xjBins;
       for (int j{}; j != Ndim; ++j) {
-        std::vector<float> partial_minMax{points_.coordinates_[j][i] - dm, points_.coordinates_[j][i] + dm};
-        minMax[j] = partial_minMax;
-      }
-      std::array<int, 2 * Ndim> search_box{tiles.searchBox(minMax)};
+        xjBins[j] = tiles.getBinsFromRange(points_.coordinates_[j][i] - dm, points_.coordinates_[j][i] + dm, j);
 
-      // loop over all bins in the search box
-      std::vector<int> binVec(Ndim);
-      std::vector<int> dimMin(Ndim);
-      std::vector<int> dimMax(Ndim);
-      for (int j{}; j != (int)(search_box.size()); ++j) {
-        if (j % 2 == 0) {
-          dimMin[j/2] = search_box[j];
-        } else {
-          dimMax[j/2] = search_box[j];
+        // Overflow
+        if (points_.coordinates_[j][i] + dm > domains_[j].max) {
+          std::vector<int> overflowBins = std::move(tiles.getBinsFromRange(domains_[j].min, domains_[j].min + dm, j));
+          xjBins[j].insert(xjBins[j].end(), overflowBins.begin(), overflowBins.end());
+          // Underflow
+        } else if (points_.coordinates_[j][i] - dm < domains_[j].min) {
+          std::vector<int> underflowBins = std::move(tiles.getBinsFromRange(domains_[j].max - dm, domains_[j].max, j));
+          xjBins[j].insert(xjBins[j].end(), underflowBins.begin(), underflowBins.end());
         }
       }
+      std::vector<int> search_box;
+      tiles.searchBox(xjBins, search_box);
 
-      for_recursion_DistanceToHigher<Ndim>(binVec, dimMin, dimMax, tiles, rho_i, delta_i, nearestHigher_i, i);
+      // loop over all bins in the search box
+      for (int binId : search_box) {
+        // iterate over the points inside this bin
+        for (auto binIterId : tiles[binId]) {
+          int j{binIterId};
+          // query N'_{dm}(i)
+          bool foundHigher{(points_.rho[j] > rho_i)};
+          // in the rare case where rho is the same, use detid
+          foundHigher = foundHigher || ((points_.rho[j] == rho_i) && (j > i));
+          float dist_ij{distance(i, j)};
+          if (foundHigher && dist_ij <= dm) {  // definition of N'_{dm}(i)
+            // find the nearest point within N'_{dm}(i)
+            if (dist_ij < delta_i) {
+              // update delta_i and nearestHigher_i
+              delta_i = dist_ij;
+              nearestHigher_i = j;
+            }
+          }
+        }  // end of interate inside this bin
+      }    // end of loop over bins in the search box
 
       points_.delta[i] = delta_i;
       points_.nearestHigher[i] = nearestHigher_i;
@@ -272,8 +219,6 @@ private:
   }
 
   void findAndAssignClusters() {
-    //auto start { std::chrono::high_resolution_clock::now() };
-
     int nClusters{};
 
     // find cluster seeds and outlier
@@ -304,11 +249,6 @@ private:
       }
     }
 
-    //auto finish { std::chrono::high_resolution_clock::now() };
-    //std::chrono::duration<double> elapsed { finish - start };
-    //std::cout << "--- findSeedAndFollowers:      " << elapsed.count() *1000 << " ms\n";
-
-    //start = std::chrono::high_resolution_clock::now();
     // expend clusters from seeds
     while (!localStack.empty()) {
       int i{localStack.back()};
@@ -323,15 +263,14 @@ private:
         localStack.push_back(j);
       }
     }
-    //finish = std::chrono::high_resolution_clock::now();
-    //elapsed = finish - start;
-    //std::cout << "--- assignClusters:            " << elapsed.count() *1000 << " ms\n";
   }
 
   inline float distance(int i, int j) const {
     float qSum{};  // quadratic sum
     for (int k{}; k != Ndim; ++k) {
-      qSum += std::pow(points_.coordinates_[k][i] - points_.coordinates_[k][j], 2);
+      float delta_xk{
+          deltaPhi(points_.coordinates_[k][i], points_.coordinates_[k][j], domains_[k].min, domains_[k].max)};
+      qSum += std::pow(delta_xk, 2);
     }
 
     return std::sqrt(qSum);
