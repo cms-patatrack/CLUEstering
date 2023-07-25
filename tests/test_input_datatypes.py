@@ -1,7 +1,70 @@
 import numpy as np
 import pandas as pd
 import pytest
+import sys
+sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
+
+def test_read_array():
+    arr = np.array([[1, 4, 5]])
+    clust = clue.clusterer(0.4, 5., 1.2) 
+
+    with pytest.raises(ValueError):
+        clust.read_data(arr)
+
+def test_read_string():
+    clust = clue.clusterer(0.4, 5., 1.2) 
+
+    with pytest.raises(ValueError):
+        clust.read_data('./test_datasets/blob.dat')
+
+@pytest.fixture
+def no_weight_dataset():
+    x0 = np.array([0,1,2,3,4])
+    x1 = np.array([5,6,7,8,9])
+    x2 = np.array([10,11,12,13,14])
+    data = {'x0': x0, 'x1': x1, 'x2': x2}
+
+    return pd.DataFrame(data)
+
+@pytest.fixture
+def low_dimensionality_dataset():
+    weight = np.array([1,1,1,1,1])
+    data = {'weight': weight}
+
+    return pd.DataFrame(data)
+
+@pytest.fixture
+def high_dimensionality_dataset():
+    x0 = np.array([0,1,2,3,4])
+    x1 = np.array([0,1,2,3,4])
+    x2 = np.array([0,1,2,3,4])
+    x3 = np.array([0,1,2,3,4])
+    x4 = np.array([0,1,2,3,4])
+    x5 = np.array([0,1,2,3,4])
+    x6 = np.array([0,1,2,3,4])
+    x7 = np.array([0,1,2,3,4])
+    x8 = np.array([0,1,2,3,4])
+    x9 = np.array([0,1,2,3,4])
+    x10 = np.array([0,1,2,3,4])
+    weight = np.array([1,1,1,1,1])
+    data = {'x0': x0, 'x1': x1, 'x2': x2, 'x3': x3, 'x4': x4, 'x5': x5,
+            'x6': x6, 'x7': x7, 'x8': x8, 'x9': x9, 'x10': x10, 'weight': weight}
+
+    return pd.DataFrame(data)
+
+def test_handle_dataframe(no_weight_dataset,
+                          low_dimensionality_dataset,
+                          high_dimensionality_dataset):
+    clust = clue.clusterer(0.5,5.,1.)
+
+    with pytest.raises(ValueError):
+        clust._handle_dataframe(no_weight_dataset)
+    with pytest.raises(ValueError):
+        clust._handle_dataframe(low_dimensionality_dataset)
+    with pytest.raises(ValueError):
+        clust._handle_dataframe(high_dimensionality_dataset)
+
 
 @pytest.fixture
 def file():
