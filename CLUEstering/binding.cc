@@ -207,7 +207,9 @@ PYBIND11_MODULE(CLUEsteringCPP, m) {
 
   pybind11::class_<domain_t>(m, "domain_t")
 	  .def(pybind11::init<>())
-	  .def(pybind11::init<float,float>());
+	  .def(pybind11::init<float,float>())
+	  .def_readwrite("min", &domain_t::min)
+	  .def_readwrite("max", &domain_t::max);
 
   pybind11::class_<kernel>(m, "kernel")
 	  .def(pybind11::init<>())
