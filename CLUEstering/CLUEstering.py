@@ -45,49 +45,44 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
         DataFrame containing n_blobs gaussian blobs.
     """
 
-    try:
-        if x_max < 0. or y_max < 0.:
-            raise ValueError('Wrong parameter value. x_max and y_max must be positive.')
-        if n_blobs < 0:
-            raise ValueError('Wrong parameter value. The number of blobs must be positive.')
-        if mean < 0. or sigma < 0.:
-            raise ValueError("Wrong parameter value. The mean and sigma of the blobs"
-                             + " cannot be negative.")
-        if n_dim > 3:
-            raise ValueError("Wrong number of dimensions. Blobs can only be generated"
-                             + " in 2 or 3 dimensions.")
-    except ValueError as ve_:
-        print(ve_)
-        raise
-    else:
-        centers = []
-        if n_dim == 2:
-            data = {'x0': np.array([]), 'x1': np.array([]), 'weight': np.array([])}
-            centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
-            blob_data, _ = make_blobs(n_samples=n_samples, centers=np.array(centers))
+    if x_max < 0. or y_max < 0.:
+        raise ValueError('Wrong parameter value. x_max and y_max must be positive.')
+    if n_blobs < 0:
+        raise ValueError('Wrong parameter value. The number of blobs must be positive.')
+    if mean < 0. or sigma < 0.:
+        raise ValueError("Wrong parameter value. The mean and sigma of the blobs"
+                         + " cannot be negative.")
+    if n_dim > 3:
+        raise ValueError("Wrong number of dimensions. Blobs can only be generated"
+                         + " in 2 or 3 dimensions.")
+    centers = []
+    if n_dim == 2:
+        data = {'x0': np.array([]), 'x1': np.array([]), 'weight': np.array([])}
+        centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
+        blob_data, _, _ = make_blobs(n_samples=n_samples, centers=np.array(centers))
 
-            data['x0'] = blob_data.T[0]
-            data['x1'] = blob_data.T[1]
-            data['weight'] = np.full(shape=len(blob_data.T[0]), fill_value=1)
+        data['x0'] = blob_data.T[0]
+        data['x1'] = blob_data.T[1]
+        data['weight'] = np.full(shape=len(blob_data.T[0]), fill_value=1)
 
 
-            return pd.DataFrame(data)
-        if n_dim == 3:
-            data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
-            sqrt_samples = int(sqrt(n_samples))
-            z_values = np.random.normal(mean,sigma,sqrt_samples)
-            centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
+        return pd.DataFrame(data)
+    if n_dim == 3:
+        data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
+        sqrt_samples = int(sqrt(n_samples))
+        z_values = np.random.normal(mean,sigma,sqrt_samples)
+        centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
 
-            for value in z_values: # for every z value, a layer is generated.
-                blob_data, _ = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))
-                data['x0'] = np.concatenate([data['x0'], blob_data.T[0]])
-                data['x1'] = np.concatenate([data['x1'], blob_data.T[1]])
-                data['x2'] = np.concatenate([data['x2'], np.full(shape=sqrt_samples,
-                                                                 fill_value=value)])
-                data['weight'] = np.concatenate([data['weight'], np.full(shape=sqrt_samples,
-                                                                         fill_value=1)])
+        for value in z_values: # for every z value, a layer is generated.
+            blob_data, _, _ = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))
+            data['x0'] = np.concatenate([data['x0'], blob_data.T[0]])
+            data['x1'] = np.concatenate([data['x1'], blob_data.T[1]])
+            data['x2'] = np.concatenate([data['x2'], np.full(shape=sqrt_samples,
+                                                             fill_value=value)])
+            data['weight'] = np.concatenate([data['weight'], np.full(shape=sqrt_samples,
+                                                                     fill_value=1)])
 
-            return pd.DataFrame(data)
+        return pd.DataFrame(data)
 
 
 @dataclass()
@@ -230,19 +225,15 @@ class clusterer:
         None
         """
 
-        try:
-            if len(input_data) < 2 or len(input_data) > 10:
-                raise ValueError("Wrong data format.")
-        except ValueError as ve_:
-            print(ve_)
-            raise
-        else:
-            self.clust_data = clustering_data(np.asarray(input_data[:-1]),
-                                              np.copy(np.asarray(input_data[:-1])),
-                                              np.asarray(input_data[-1]),
-                                              Algo.domain_t(),
-                                              len(input_data[:-1]),
-                                              len(input_data[-1]))
+        if len(input_data) < 2 or len(input_data) > 10:
+            raise ValueError("Inadequate data. The data must contain at least one coordinate" +
+                             " and the energy.")
+        self.clust_data = clustering_data(np.asarray(input_data[:-1]),
+                                          np.copy(np.asarray(input_data[:-1])),
+                                          np.asarray(input_data[-1]),
+                                          Algo.domain_t(),
+                                          len(input_data[:-1]),
+                                          len(input_data[-1]))
 
     def _read_string(self, input_data: str) -> Union[pd.DataFrame,None]:
         """
@@ -263,15 +254,10 @@ class clusterer:
             Dataframe containing the input data
         """
 
-        try:
-            if input_data[-3:] != 'csv':
-                raise ValueError('Wrong type of file. The file is not a csv file.')
-        except ValueError as ve_:
-            print(ve_)
-            raise
-        else:
-            df_ = pd.read_csv(input_data)
-            return df_
+        if input_data[-3:] != 'csv':
+            raise ValueError('Wrong type of file. The file is not a csv file.')
+        df_ = pd.read_csv(input_data)
+        return df_
 
     def _read_dict_df(self, input_data: Union[dict,pd.DataFrame]) -> pd.DataFrame:
         """
@@ -310,37 +296,32 @@ class clusterer:
         None
         """
 
-        try:
-            # Check that the user provided the weights
-            if 'weight' not in df_.columns:
-                raise ValueError("Inadequate data. The input dataframe must"
-                                 + " contain a weight column.")
+        # Check that the user provided the weights
+        if 'weight' not in df_.columns:
+            raise ValueError("Inadequate data. The input dataframe must"
+                             + " contain a weight column.")
 
-            coordinate_columns = [col for col in df_.columns if col[0] == 'x']
+        coordinate_columns = [col for col in df_.columns if col[0] == 'x']
 
-            # Check that the dimensionality of the dataset is adequate
-            if len(df_.columns) < 2:
-                raise ValueError("Inadequate data. The data must contain"
-                                 + " at least one coordinate and the energy.")
-            if len(coordinate_columns) > 10:
-                raise ValueError("Inadequate data. The maximum number of"
-                                 + " dimensions supported is 10.")
-        except ValueError as ve_:
-            print(ve_)
-            raise
-        else:
-            n_dim = len(coordinate_columns)
-            n_points = len(df_.index)
-            coords = np.zeros(shape=(n_dim, n_points))
-            for dim in range(n_dim):
-                coords[dim] = np.array(df_.iloc[:,dim])
+        # Check that the dimensionality of the dataset is adequate
+        if len(df_.columns) < 2:
+            raise ValueError("Inadequate data. The data must contain"
+                             + " at least one coordinate and the energy.")
+        if len(coordinate_columns) > 10:
+            raise ValueError("Inadequate data. The maximum number of"
+                             + " dimensions supported is 10.")
+        n_dim = len(coordinate_columns)
+        n_points = len(df_.index)
+        coords = np.zeros(shape=(n_dim, n_points))
+        for dim in range(n_dim):
+            coords[dim] = np.array(df_.iloc[:,dim])
 
-            self.clust_data = clustering_data(coords,
-                                              np.copy(coords),
-                                              np.asarray(df_['weight']),
-                                              Algo.domain_t(),
-                                              n_dim,
-                                              n_points)
+        self.clust_data = clustering_data(coords,
+                                          np.copy(coords),
+                                          np.asarray(df_['weight']),
+                                          Algo.domain_t(),
+                                          n_dim,
+                                          n_points)
 
     def _rescale(self) -> None:
         """
@@ -513,37 +494,29 @@ class clusterer:
         None
         """
 
-        try:
-            if choice == "flat":
-                if len(parameters) != 1:
-                    raise ValueError("Wrong number of parameters. The flat kernel"
-                                     + " requires 1 parameter.")
-                else:
-                    self.kernel = Algo.flatKernel(parameters[0])
-            elif choice == "exp":
-                if len(parameters) != 2:
-                    raise ValueError("Wrong number of parameters. The exponential"
-                                     + " kernel requires 2 parameters.")
-                else:
-                    self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
-            elif choice == "gaus":
-                if len(parameters) != 3:
-                    raise ValueError("Wrong number of parameters. The gaussian" +
-                                     " kernel requires 3 parameters.")
-                else:
-                    self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
-            elif choice == "custom":
-                if len(parameters) != 0:
-                    raise ValueError("Wrong number of parameters. Custom kernels"
-                                     + " requires 0 parameters.")
-                else:
-                    self.kernel = Algo.customKernel(function)
-            else:
-                raise ValueError("Invalid kernel. The allowed choices for the"
-                                 + " kernels are: flat, exp, gaus and custom.")
-        except ValueError as ve_:
-            print(ve_)
-            raise
+        if choice == "flat":
+            if len(parameters) != 1:
+                raise ValueError("Wrong number of parameters. The flat kernel"
+                                 + " requires 1 parameter.")
+            self.kernel = Algo.flatKernel(parameters[0])
+        elif choice == "exp":
+            if len(parameters) != 2:
+                raise ValueError("Wrong number of parameters. The exponential"
+                                 + " kernel requires 2 parameters.")
+            self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
+        elif choice == "gaus":
+            if len(parameters) != 3:
+                raise ValueError("Wrong number of parameters. The gaussian" +
+                                 " kernel requires 3 parameters.")
+            self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
+        elif choice == "custom":
+            if len(parameters) != 0:
+                raise ValueError("Wrong number of parameters. Custom kernels"
+                                 + " requires 0 parameters.")
+            self.kernel = Algo.customKernel(function)
+        else:
+            raise ValueError("Invalid kernel. The allowed choices for the"
+                             + " kernels are: flat, exp, gaus and custom.")
 
     def run_clue(self, verbose: bool = False) -> None:
         """
