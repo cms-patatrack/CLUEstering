@@ -212,6 +212,24 @@ class clusterer:
         self.elapsed_time = 0.
 
     def _read_array(self, input_data: Union[list,np.ndarray]) -> None:
+        """
+        Reads data provided with lists or np.ndarrays
+
+        Attributes
+        ----------
+        input_data : list, np.ndarray
+            The coordinates and energy values of the data points
+
+        Modified attributes
+        -------------------
+        clust_data : clustering_data
+            Properties of the input data
+
+        Returns
+        -------
+        None
+        """
+
         try:
             if len(input_data) < 2 or len(input_data) > 10:
                 raise ValueError("Wrong data format.")
@@ -227,6 +245,24 @@ class clusterer:
                                               len(input_data[-1]))
 
     def _read_string(self, input_data: str) -> Union[pd.DataFrame,None]:
+        """
+        Reads data provided by passing a string containing the path to a csv file
+
+        Attributes
+        ----------
+        input_data : str
+            The path to the csv file containing the input data
+
+        Modified attributes
+        -------------------
+        None
+
+        Returns
+        -------------------
+        pd.DataFrame
+            Dataframe containing the input data
+        """
+
         try:
             if input_data[-3:] != 'csv':
                 raise ValueError('Wrong type of file. The file is not a csv file.')
@@ -238,10 +274,42 @@ class clusterer:
             return df_
 
     def _read_dict_df(self, input_data: Union[dict,pd.DataFrame]) -> pd.DataFrame:
+        """
+        Reads data provided using dictionaries or pandas dataframes
+
+        Attributes
+        ----------
+        input_data : dict, pd.DataFrame
+            The coordinates and energy values of the data points
+
+        Modified attributes
+        -------------------
+        None
+
+        Returns
+        -------------------
+        pd.DataFrame
+            Dataframe containing the input data
+        """
+
         df_ = pd.DataFrame(input_data, copy=False)
         return df_
 
     def _handle_dataframe(self, df_: pd.DataFrame) -> None:
+        """
+        Constructs the clust_data attribute from the dataframe produced by the
+        _read_string or _read_dict_df methods
+
+        Modified attributes
+        -------------------
+        clust_data : clustering_data
+            Properties of the input data
+
+        Returns
+        -------
+        None
+        """
+
         try:
             # Check that the user provided the weights
             if 'weight' not in df_.columns:
@@ -275,6 +343,19 @@ class clusterer:
                                               n_points)
 
     def _rescale(self) -> None:
+        """
+        Normalizes the input data using a standard scaler
+
+        Modified attributes
+        -------------------
+        clust_data.coords : np.ndarray
+            Array containing the coordinates and energy values of the data points
+
+        Returns
+        -------
+        None
+        """
+
         for dim in range(self.clust_data.n_dim):
             self.clust_data.coords[dim] = \
             self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
