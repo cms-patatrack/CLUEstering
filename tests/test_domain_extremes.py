@@ -12,11 +12,11 @@ def opposite_angles():
 def test_opposite_angles(opposite_angles):
     # Test points with angles distributed at opposite extremes of the domain
     # This test assures that the code works for data with periodic coordinates
-    clust = clue.clusterer(0.05, 1, 1.1)
+    clust = clue.clusterer(0.1, 1, 1.1)
     clust.read_data(opposite_angles, x1=(-pi, pi))
     clust.run_clue()
 
-    # We just check that the number of clusters is two
+    # We just check that the number of clusters is one
     # If it is, the code recognizes points at the opposite extremes of the domain
-    # as very far away from each other
-    assert clust.clust_prop.n_clusters == 2
+    # as very near each other
+    assert clust.clust_prop.n_clusters == 1
