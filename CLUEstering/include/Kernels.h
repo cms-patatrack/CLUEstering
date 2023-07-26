@@ -1,3 +1,7 @@
+//
+// Header for the convolutional kernels used in the calculation of the local density of a point
+//
+
 #ifndef kernels_h
 #define kernels_h
 
@@ -63,14 +67,15 @@ public:
       : m_exp_avg{exp_avg}, m_exp_amplitude{exp_amplitude} {}
 
   float operator()(float dist_ij, int point_id, int j) const override {
-	if (point_id == j) {
-	  return 1.f;
-	} else {
-	  return static_cast<float>(m_exp_amplitude * std::exp(-m_exp_avg * dist_ij));
-	}
+    if (point_id == j) {
+      return 1.f;
+    } else {
+      return static_cast<float>(m_exp_amplitude * std::exp(-m_exp_avg * dist_ij));
+    }
   }
 };
 
+// The user can also use a generic kernel by passing a function object
 class customKernel : public kernel {
 private:
   kernel_t m_function;

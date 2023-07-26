@@ -1,15 +1,11 @@
 #ifndef point_h
 #define point_h
 
-#include <vector>
-#include <iostream>
-#include <functional>
-#include <cmath>
 #include <algorithm>
+#include <cmath>
+#include <iostream>
+#include <vector>
 
-///////////////////////
-//////  Point.h  //////
-///////////////////////
 template <uint8_t Ndim>
 struct Points {
   std::vector<std::vector<float>> coordinates_;

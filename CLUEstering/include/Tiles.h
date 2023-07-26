@@ -1,3 +1,7 @@
+//
+// Header for the tiles class, which represents the tiles that the clustering phase space is divided into
+//
+
 #ifndef tiles_h
 #define tiles_h
 
@@ -9,16 +13,15 @@
 #include <numeric>
 #include <stdint.h>
 
-///////////////////////
-//////  Tiles.h  //////
-///////////////////////
 template <uint8_t Ndim>
 class tiles {
 private:
+  // The elements of the outer vector represent the tiles/bins
+  // The elements of the inner vectors represent the ids of the points in the corresponding tile
   std::vector<std::vector<int>> tiles_;
 
 public:
-  tiles() {}
+  tiles() = default;
   void resizeTiles() { tiles_.resize(nTiles); }
 
   int nTiles;
