@@ -1,4 +1,3 @@
-import numpy as np
 import os
 import pandas as pd
 import pytest
@@ -9,7 +8,7 @@ from filecmp import cmp
 
 @pytest.fixture
 def sissa():
-    return pd.read_csv("./test_datasets/sissa_1000.csv")
+    return pd.read_csv("./test_datasets/sissa.csv")
 
 def test_circles_clustering(sissa):
     # Check if the output file already exists and if it does, delete it
@@ -21,4 +20,4 @@ def test_circles_clustering(sissa):
     c.run_clue()
     c.to_csv('./','sissa_output.csv')
 
-    assert cmp('./sissa_output.csv', './test_datasets/sissa_1000_truth.csv')
+    assert cmp('./sissa_output.csv', './test_datasets/truth_files/sissa_1000_truth.csv')

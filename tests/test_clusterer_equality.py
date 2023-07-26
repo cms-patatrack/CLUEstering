@@ -6,11 +6,11 @@ import CLUEstering as clue
 
 @pytest.fixture
 def moons():
-    return pd.read_csv("./test_datasets/moons_1000.csv")
+    return pd.read_csv("./test_datasets/moons.csv")
 
 @pytest.fixture
 def circles():
-    return pd.read_csv("./test_datasets/circles_1000.csv")
+    return pd.read_csv("./test_datasets/circles.csv")
 
 
 def test_clusterer_equality(moons, circles):

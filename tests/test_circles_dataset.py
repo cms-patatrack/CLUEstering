@@ -9,7 +9,7 @@ from filecmp import cmp
 
 @pytest.fixture
 def circles():
-    return pd.read_csv("./test_datasets/circles_1000.csv")
+    return pd.read_csv("./test_datasets/circles.csv")
 
 def test_circles_clustering(circles):
     # Check if the output file already exists and if it does, delete it
@@ -23,4 +23,4 @@ def test_circles_clustering(circles):
     c.run_clue()
     c.to_csv('./','circles_output.csv')
 
-    assert cmp('./circles_output.csv', './test_datasets/circles_1000_truth.csv')
+    assert cmp('./circles_output.csv', './test_datasets/truth_files/circles_1000_truth.csv')

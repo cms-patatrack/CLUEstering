@@ -21,4 +21,4 @@ def test_blobs_clustering(blobs):
     c.run_clue()
     c.to_csv('./','blobs_output.csv')
 
-    assert cmp('./blobs_output.csv', './test_datasets/blobs_truth.csv')
+    assert cmp('./blobs_output.csv', './test_datasets/truth_files/blobs_truth.csv')
