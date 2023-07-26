@@ -1,5 +1,12 @@
 #
 
+if [[ $1 == "-h" || $1 == "--help" ]]
+then
+  echo "-h, --help: Print the list of flags"
+  echo "-c, --clean: Delete the output files generated during the execution"
+  exit
+fi
+
 # Test the different input data types
 echo "## Testing that CLUE works for all the supported data types"
 python3 -m pytest test_input_datatypes.py
@@ -27,3 +34,8 @@ python3 -m pytest test_change_domains.py
 # Test the clustering of points at the opposite extremes of a finite domain
 echo "## Test the clustering of points at the opposite extremes of a finite domain"
 python3 -m pytest test_domain_extremes.py
+
+if [[ $1 == "-" || $1 == "--clean" ]]
+then
+  rm -f ./*_output.csv
+fi
