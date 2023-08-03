@@ -13,9 +13,9 @@ using cms::alpakatools::VecArray;
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
-  constexpr uint32_t max_followers{100};
-  constexpr uint32_t max_seeds{100};
-  constexpr uint32_t reserve{1000000};
+  constexpr int32_t max_followers{100};
+  constexpr int32_t max_seeds{100};
+  constexpr int32_t reserve{1000000};
 
   template <uint8_t Ndim>
   using PointsView = typename PointsAlpaka<Ndim>::PointsAlpakaView;
@@ -24,7 +24,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int, max_followers>* d_followers,
-                                  uint32_t const& n_points) const {
+                                  uint32_t n_points) const {
       cms::alpakatools::for_each_element_in_grid(
           acc, n_points, [&](uint32_t i) { d_followers[i].reset(); });
     }
@@ -221,14 +221,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
   struct KernelFindClusters {
     template <typename TAcc, uint8_t Ndim>
-    ALPAKA_FN_ACC void operator()(TAcc const& acc,
-                                  VecArray<uint32_t, max_followers>* followers,
-                                  VecArray<uint32_t, max_seeds>* seeds,
-                                  PointsAlpaka<Ndim>* points,
-                                  uint32_t n_points,
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  VecArray<int32_t, max_seeds>* seeds,
+                                  VecArray<int32_t, max_followers>* followers,
+                                  PointsView<Ndim>* points,
                                   float outlier_delta_factor,
                                   float d_c,
-                                  float rho_c) const {
+                                  float rho_c,
+								  uint32_t n_points) const {
       cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         // initialize cluster_index
         points->cluster_index[i] = -1;
@@ -256,14 +256,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   struct KernelAssignClusters {
     template <typename TAcc, uint8_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  VecArray<uint32_t, max_seeds>* seeds,
-                                  VecArray<uint32_t, max_followers>* followers,
-                                  PointsAlpaka<Ndim>* points,
-                                  uint32_t local_stack_size_per_seed) const {
+                                  VecArray<int32_t, max_seeds>* seeds,
+                                  VecArray<int32_t, max_followers>* followers,
+                                  PointsView<Ndim>* points) const {
       const auto& seeds_0{seeds[0]};
       const auto n_seeds{seeds_0.size()};
       cms::alpakatools::for_each_element_in_grid(acc, n_seeds, [&](uint32_t idx_cls) {
-        int local_stack[local_stack_size_per_seed]{-1};
+        int local_stack[256]{-1};
         int local_stack_size{};
 
         int idx_this_seed{seeds_0[idx_cls]};

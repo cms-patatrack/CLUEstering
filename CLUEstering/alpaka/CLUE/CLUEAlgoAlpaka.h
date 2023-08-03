@@ -35,8 +35,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     /* Points<Ndim> m_points_h; */
     TilesAlpaka<Ndim>* m_tiles;
-    VecArray<uint32_t, max_seeds>* m_seeds;
-    VecArray<uint32_t, max_followers>* m_followers;
+    VecArray<int32_t, max_seeds>* m_seeds;
+    VecArray<int32_t, max_followers>* m_followers;
     /* cms::alpakatools::device_buffer<Device, uint32_t[]> m_seeds; */
     /* cms::alpakatools::device_buffer<Device, VecArray<uint32_t, max_followers>> m_followers; */
 
@@ -87,10 +87,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Buffers
     std::optional<cms::alpakatools::device_buffer<Device, TilesAlpaka<Ndim>>> d_tiles;
-    std::optional<cms::alpakatools::device_buffer<Device, cms::alpakatools::VecArray<uint32_t, max_seeds>>>
+    std::optional<cms::alpakatools::device_buffer<Device, cms::alpakatools::VecArray<int32_t, max_seeds>>>
         d_seeds;
     std::optional<
-        cms::alpakatools::device_buffer<Device, cms::alpakatools::VecArray<uint32_t, max_followers>[]>>
+        cms::alpakatools::device_buffer<Device, cms::alpakatools::VecArray<int32_t, max_followers>[]>>
         d_followers;
 
     // Private methods
@@ -101,9 +101,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <typename TAcc, uint8_t Ndim>
   void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
     d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
-    d_seeds = cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<uint32_t, max_seeds>>(queue_);
+    d_seeds = cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<int32_t, max_seeds>>(queue_);
     d_followers =
-        cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<uint32_t, max_followers>[]>(
+        cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<int32_t, max_followers>[]>(
             queue_, reserve);
 
     // Copy to the public pointers
@@ -130,7 +130,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
-                        working_div, KernelResetFollowers(), m_followers, h_points.coords.size()));
+                        working_div, KernelResetFollowers{}, m_followers, h_points.coords.size()));
   }
 
   template <typename TAcc, uint8_t Ndim>
@@ -144,17 +144,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
-                        working_div, KernelFillTiles(), d_points.view(), m_tiles, h_points.coords.size()));
+                        working_div, KernelFillTiles{}, d_points.view(), m_tiles, h_points.coords.size()));
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
-                                                    KernelCalculateLocalDensity(),
+                                                    KernelCalculateLocalDensity{},
                                                     m_tiles,
                                                     d_points.view(),
                                                     dc_,
                                                     h_points.coords.size()));
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
-                                                    KernelCalculateNearestHigher(),
+                                                    KernelCalculateNearestHigher{},
                                                     m_tiles,
                                                     d_points.view(),
                                                     outlierDeltaFactor_,
@@ -162,7 +162,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     h_points.coords.size()));
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
-                                                    KernelFindClusters(),
+                                                    KernelFindClusters{},
                                                     m_seeds,
                                                     m_followers,
                                                     d_points.view(),
@@ -170,9 +170,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     dc_,
                                                     rhoc_,
                                                     h_points.coords.size()));
-    alpaka::enqueue(queue_,
-                    alpaka::createTaskKernel<Acc1D>(
-                        working_div, KernelAssignClusters(), m_seeds, max_followers, d_points.view()));
+    /* alpaka::enqueue(queue_, */
+    /*                 alpaka::createTaskKernel<Acc1D>( */
+    /*                     working_div, KernelAssignClusters{}, m_seeds, m_followers, d_points.view())); */
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
