@@ -20,8 +20,7 @@ jobs:
 
     - name: Install doctest
       run: |
-        apt update && apt upgrade 
-        apt-get install -y doctest
+        sudo apt-get install -y doctest
     # Sets up Python on the machine with the right version
     - name: Compile and run the C++ tests
       run: |
