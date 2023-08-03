@@ -1,4 +1,6 @@
 
+#include <alpaka/dev/DevCpu.hpp>
+#include <cstdint>
 #include <fstream>
 #include <iostream>
 
@@ -11,16 +13,18 @@
 #include <cstdio>
 
 using ALPAKA_ACCELERATOR_NAMESPACE::CLUEAlgoAlpaka;
-using ALPAKA_ACCELERATOR_NAMESPACE::KernelPrepareDataStructures;
+using ALPAKA_ACCELERATOR_NAMESPACE::PointsAlpaka;
 
 int main() {
-  using Dim = alpaka::DimInt<3>;
-  using Idx = std::size_t;
+  std::cout << __LINE__ << std::endl;
+  using Dim = alpaka::DimInt<1u>;
+  using Idx = uint32_t;
 
   using Acc = alpaka::AccCpuSerial<Dim, Idx>;
 
   using QueueProperty = alpaka::Blocking;
   using Queue = alpaka::Queue<Acc, QueueProperty>;
+  using Device = alpaka::DevCpu;
 
   const float dc{1.f};
   const float rhoc{5.f};
@@ -32,20 +36,20 @@ int main() {
   Queue queue_(dev_acc);
 
   using Vec = alpaka::Vec<Dim, Idx>;
-  Vec const elementsPerThread(Vec::all(static_cast<Idx>(1)));
-  Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8)));
+  const Vec elementsPerThread(Vec::all(static_cast<Idx>(1)));
+  const Vec threadsPerGrid(Vec::all(static_cast<Idx>(1)));
   using WorkDiv = alpaka::WorkDivMembers<Dim, Idx>;
   WorkDiv const work_div = alpaka::getValidWorkDiv<Acc>(
       dev_acc, threadsPerGrid, elementsPerThread, false, alpaka::GridBlockExtentSubDivRestrictions::Unrestricted);
 
-  CLUEAlgoAlpaka<Acc, 2> clueAlgo(dc, rhoc, outlierDeltaFactor, ppbin);
+  CLUEAlgoAlpaka<Acc, 2> clueAlgo(dc, rhoc, outlierDeltaFactor, ppbin, queue_);
 
-  Points<2> points;
+  Points<2> points_host;
   // Read points
   std::ifstream file_stream("./test_data.csv");
   std::string val;
   getline(file_stream, val);
-  std::array<float, 2> arr;
+  VecArray<float, 2> arr;
   float weight;
 
   int n_points;
@@ -56,14 +60,14 @@ int main() {
     getline(file_stream, val);
     weight = std::stof(val);
 
-    points.coordinates_.push_back(arr);
-    points.weight.push_back(weight);
+    points_host.coords.push_back(arr);
+    points_host.weight.push_back(weight);
     ++n_points;
   }
+  std::cout << __LINE__ << std::endl;
+  PointsAlpaka<2> points_dev(queue_, n_points);
+  std::cout << __LINE__ << std::endl;
 
-  clueAlgo.m_points_h = points;
   auto tiles = clueAlgo.m_tiles;
-  alpaka::exec<Acc>(queue_, work_div, KernelPrepareDataStructures{}, points, n_points, tiles);
-
-  return 0;
+  clueAlgo.make_clusters(points_host, points_dev, queue_);
 }
