@@ -50,7 +50,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                         const VecArray<float, Ndim>& coords_i,
                                         float* rho_i,
                                         float dc,
-                                        int point_id) {
+                                        uint32_t point_id) {
     if constexpr (N_ == 0) {
       int binId{tiles->getGlobalBinByBin(acc, base_vec)};
       // get the size of this bin
@@ -91,7 +91,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   PointsView<Ndim>* dev_points,
                                   float dc,
                                   uint32_t n_points) const {
-      const float dc_squared{dc * dc};
       cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         float rho_i{0.f};
         VecArray<float, Ndim> coords_i{dev_points->coords[i]};
@@ -110,7 +109,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         VecArray<VecArray<uint32_t, 2>, Ndim> search_box;
         dev_tiles->searchBox(acc, searchbox_extremes, &search_box);
 
-        VecArray<uint32_t, Ndim> base_vec;
+        VecArray<uint32_t, Ndim> base_vec{};
         for_recursion<TAcc, Ndim, Ndim>(
             acc, base_vec, search_box, dev_tiles, dev_points, coords_i, &rho_i, dc, i);
       });
@@ -200,7 +199,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         VecArray<VecArray<uint32_t, 2>, Ndim> search_box;
         dev_tiles->searchBox(acc, searchbox_extremes, &search_box);
 
-        VecArray<uint32_t, Ndim> base_vec;
+        VecArray<uint32_t, Ndim> base_vec{};
         for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
                                                        base_vec,
                                                        search_box,
@@ -219,8 +218,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
   };
 
+  template <uint8_t Ndim>
   struct KernelFindClusters {
-    template <typename TAcc, uint8_t Ndim>
+    template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, max_seeds>* seeds,
                                   VecArray<int32_t, max_followers>* followers,
@@ -243,9 +243,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         // seeds and followers seems to be buffer of VecArray
         if (is_seed) {
           points->is_seed[i] = 1;
-          seeds[0] = i;
+          seeds[0].push_back(acc, i);
         } else if (!is_outlier) {
-          followers[points->nearest_higher[i]][i] = i;
+          followers[points->nearest_higher[i]].push_back(acc, i);
         }
 
         points->is_seed[i] = 0;
@@ -253,16 +253,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
   };
 
+  template <uint8_t Ndim>
   struct KernelAssignClusters {
-    template <typename TAcc, uint8_t Ndim>
+    template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  VecArray<int32_t, max_seeds>* seeds,
-                                  VecArray<int32_t, max_followers>* followers,
+                                  VecArray<int, max_seeds>* seeds,
+                                  VecArray<int, max_followers>* followers,
                                   PointsView<Ndim>* points) const {
       const auto& seeds_0{seeds[0]};
       const auto n_seeds{seeds_0.size()};
       cms::alpakatools::for_each_element_in_grid(acc, n_seeds, [&](uint32_t idx_cls) {
-        int local_stack[256]{-1};
+        int local_stack[256] = {-1};
         int local_stack_size{};
 
         int idx_this_seed{seeds_0[idx_cls]};
