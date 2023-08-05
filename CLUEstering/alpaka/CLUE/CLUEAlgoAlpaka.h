@@ -14,7 +14,6 @@
 #include <utility>
 
 #include "CLUEAlpakaKernels.h"
-#include "ConvolutionalKernel.h"
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
@@ -28,8 +27,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   class CLUEAlgoAlpaka {
   public:
     CLUEAlgoAlpaka() = delete;
-    explicit CLUEAlgoAlpaka(float dc, float rhoc, float outlierDeltaFactor, int pPBin, Queue queue_)
-        : dc_{dc}, rhoc_{rhoc}, outlierDeltaFactor_{outlierDeltaFactor}, pointsPerTile_{pPBin} {
+    explicit CLUEAlgoAlpaka(float dc,
+                            float rhoc,
+                            float outlierDeltaFactor,
+                            int pPBin,
+                            Queue queue_)
+        : dc_{dc},
+          rhoc_{rhoc},
+          outlierDeltaFactor_{outlierDeltaFactor},
+          pointsPerTile_{pPBin} {
       init_device(queue_);
     }
 
@@ -37,46 +43,39 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     TilesAlpaka<Ndim>* m_tiles;
     VecArray<int32_t, max_seeds>* m_seeds;
     VecArray<int32_t, max_followers>* m_followers;
-    /* cms::alpakatools::device_buffer<Device, uint32_t[]> m_seeds; */
-    /* cms::alpakatools::device_buffer<Device, VecArray<uint32_t, max_followers>> m_followers; */
 
-    /* int calculateNTiles(int pointPerBin) { */
-    /*   int ntiles{points_.n / pointPerBin}; */
-    /*   try { */
-    /* 	if (ntiles == 0) { */
-    /* 	  throw 100; */
-    /* 	} */
-    /*   } catch (...) { */
-    /* 	std::cout */
-    /* 		<< "pointPerBin is set too high for you number of points. You must lower it in the clusterer constructor.\n"; */
-    /*   } */
-    /*   return ntiles; */
-    /* } */
+    int calculateNTiles(const Points<Ndim>& h_points) {
+      int n_tiles{h_points.n / pointsPerTile_};
+      try {
+        if (n_tiles == 0) {
+          throw 100;
+        }
+      } catch (...) {
+        std::cout << "pointPerBin is set too high for you number of points. You must lower it in the "
+                     "clusterer constructor.\n";
+      }
+      return n_tiles;
+    }
 
-    /* std::array<float, Ndim> calculateTileSize(int NTiles, tiles<Ndim>& tiles_) { */
-    /*   std::array<float, Ndim> tileSizes; */
-    /*   int NperDim{static_cast<int>(std::pow(NTiles, 1.0 / Ndim))}; */
+    VecArray<float, Ndim> calculate_tile_size(int nTiles, const Points<Ndim>& h_points) {
+      VecArray<float, Ndim> tileSizes;
+      int NperDim{static_cast<int>(std::pow(nTiles, 1.0 / Ndim))};
 
-    /*   for (int i{}; i != Ndim; ++i) { */
-    /* 	float tileSize; */
-    /* 	float dimMax{*std::max_element(points_.coordinates_[i].begin(), points_.coordinates_[i].end())}; */
-    /* 	float dimMin{*std::min_element(points_.coordinates_[i].begin(), points_.coordinates_[i].end())}; */
-    /* 	tiles_.minMax[i] = {dimMin, dimMax}; */
-    /* 	tileSize = (dimMax - dimMin) / NperDim; */
+      for (int i{}; i != Ndim; ++i) {
+        float tileSize;
+        float dimMax{*std::max_element(h_points.coords[i].begin(), h_points.coords[i].end())};
+        float dimMin{*std::min_element(h_points.coords[i].begin(), h_points.coords[i].end())};
+        m_tiles->min_max[i] = {dimMin, dimMax};
+        tileSize = (dimMax - dimMin) / NperDim;
 
-    /* 	tileSizes[i] = tileSize; */
-    /*   } */
-    /*   return tileSizes; */
-    /* } */
+        tileSizes[i] = tileSize;
+      }
+      return tileSizes;
+    }
 
-    void make_clusters(const Points<Ndim>& h_points, PointsAlpaka<Ndim>& d_points, Queue queue_);
-    /* { */
-    /*   Tiles.nTiles = calculateNTiles(pointsPerTile_); */
-    /*   Tiles.resizeTiles(); */
-    /*   Tiles.tilesSize = calculateTileSize(Tiles.nTiles, Tiles); */
-
-    /*   return {points_.clusterIndex, points_.isSeed}; */
-    /* } */
+    std::vector<std::vector<int>> make_clusters(const Points<Ndim>& h_points,
+                                                PointsAlpaka<Ndim>& d_points,
+                                                Queue queue_);
 
   private:
     float dc_;
@@ -103,8 +102,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
     d_seeds = cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<int32_t, max_seeds>>(queue_);
     d_followers =
-        cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<int32_t, max_followers>[]>(
-            queue_, reserve);
+        cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<int32_t, max_followers>[]>(queue_,
+                                                                                                   reserve);
 
     // Copy to the public pointers
     m_tiles = (*d_tiles).data();
@@ -116,6 +115,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   void CLUEAlgoAlpaka<TAcc, Ndim>::setup(const Points<Ndim>& h_points,
                                          PointsAlpaka<Ndim>& d_points,
                                          Queue queue_) {
+    m_tiles->n_tiles = calculateNTiles(h_points);
+    m_tiles->resizeTiles();
+    m_tiles->tile_size = calculate_tile_size(m_tiles->n_tiles, h_points);
+
     alpaka::memcpy(queue_,
                    d_points.coords,
                    cms::alpakatools::make_host_view(h_points.coords.data(), h_points.coords.size()));
@@ -134,9 +137,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   }
 
   template <typename TAcc, uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::make_clusters(const Points<Ndim>& h_points,
-                                                 PointsAlpaka<Ndim>& d_points,
-                                                 Queue queue_) {
+  std::vector<std::vector<int>> CLUEAlgoAlpaka<TAcc, Ndim>::make_clusters(const Points<Ndim>& h_points,
+                                                                          PointsAlpaka<Ndim>& d_points,
+                                                                          Queue queue_) {
     setup(h_points, d_points, queue_);
 
     const Idx block_size{1024};
@@ -176,6 +179,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
+
+    return {h_points.clusterIndex, h_points.isSeed};
   }
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 #endif

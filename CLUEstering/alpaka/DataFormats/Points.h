@@ -23,6 +23,8 @@ struct Points {
   std::vector<int> nearestHigher;
   std::vector<int> clusterIndex;
   std::vector<int> isSeed;
+
+  int n;
 };
 
 #endif
