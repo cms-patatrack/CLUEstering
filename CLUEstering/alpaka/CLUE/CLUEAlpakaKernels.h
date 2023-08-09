@@ -54,7 +54,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     if constexpr (N_ == 0) {
       int binId{tiles->getGlobalBinByBin(acc, base_vec)};
       // get the size of this bin
-      int binSize{static_cast<int>(tiles[binId].size())};
+      int binSize{static_cast<int>((*tiles)[binId].size())};
 
       // iterate inside this bin
       for (int binIter{}; binIter < binSize; ++binIter) {
@@ -70,14 +70,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         if (dist_ij_sq <= dc * dc) {
           *rho_i += (point_id == j ? 1.f : 0.5f);
         }
+
       }  // end of interate inside this bin
 
       return;
     } else {
-      for (unsigned int i{search_box[search_box.size() - N_][0]};
-           i <= search_box[search_box.size() - N_][1];
+      for (unsigned int i{search_box[search_box.capacity() - N_][0]};
+           i <= search_box[search_box.capacity() - N_][1];
            ++i) {
-        base_vec[base_vec.size() - N_] = i;
+        base_vec[base_vec.capacity() - N_] = i;
         for_recursion<TAcc, Ndim, N_ - 1>(
             acc, base_vec, search_box, tiles, dev_points, coords_i, rho_i, dc, point_id);
       }
@@ -112,6 +113,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         VecArray<uint32_t, Ndim> base_vec{};
         for_recursion<TAcc, Ndim, Ndim>(
             acc, base_vec, search_box, dev_tiles, dev_points, coords_i, &rho_i, dc, i);
+
+        dev_points->rho[i] = rho_i;
       });
     }
   };
@@ -161,8 +164,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
       return;
     } else {
-      for (unsigned int i{s_box[s_box.size() - N_][0]}; i <= s_box[s_box.size() - N_][1]; ++i) {
-        base_vec[base_vec.size() - N_] = i;
+      for (unsigned int i{s_box[s_box.capacity() - N_][0]}; i <= s_box[s_box.capacity() - N_][1]; ++i) {
+        base_vec[base_vec.capacity() - N_] = i;
         for_recursion_nearest_higher<TAcc, Ndim, N_ - 1>(
             acc, base_vec, s_box, tiles, dev_points, coords_i, rho_i, delta_i, nh_i, dm_sq, point_id);
       }
@@ -224,17 +227,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, max_seeds>* seeds,
                                   VecArray<int32_t, max_followers>* followers,
-                                  PointsView<Ndim>* points,
+                                  PointsView<Ndim>* dev_points,
                                   float outlier_delta_factor,
                                   float d_c,
                                   float rho_c,
-								  uint32_t n_points) const {
+                                  uint32_t n_points) const {
       cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         // initialize cluster_index
-        points->cluster_index[i] = -1;
+        dev_points->cluster_index[i] = -1;
 
-        float delta_i{points->delta[i]};
-        float rho_i{points->rho[i]};
+        float delta_i{dev_points->delta[i]};
+        float rho_i{dev_points->rho[i]};
 
         // determine seed or outlier
         bool is_seed{(delta_i > d_c) && (rho_i >= rho_c)};
@@ -242,13 +245,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
         // seeds and followers seems to be buffer of VecArray
         if (is_seed) {
-          points->is_seed[i] = 1;
+          dev_points->is_seed[i] = 1;
           seeds[0].push_back(acc, i);
-        } else if (!is_outlier) {
-          followers[points->nearest_higher[i]].push_back(acc, i);
+        } else {
+          if (!is_outlier) {
+            followers[dev_points->nearest_higher[i]].push_back(acc, i);
+          }
+          dev_points->is_seed[i] = 0;
         }
-
-        points->is_seed[i] = 0;
       });
     }
   };
@@ -259,7 +263,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int, max_seeds>* seeds,
                                   VecArray<int, max_followers>* followers,
-                                  PointsView<Ndim>* points) const {
+                                  PointsView<Ndim>* dev_points) const {
       const auto& seeds_0{seeds[0]};
       const auto n_seeds{seeds_0.size()};
       cms::alpakatools::for_each_element_in_grid(acc, n_seeds, [&](uint32_t idx_cls) {
@@ -267,7 +271,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         int local_stack_size{};
 
         int idx_this_seed{seeds_0[idx_cls]};
-        points->cluster_index[idx_this_seed] = idx_cls;
+        dev_points->cluster_index[idx_this_seed] = idx_cls;
         // push_back idThisSeed to localStack
         // assert((localStackSize < localStackSizePerSeed));
         local_stack[local_stack_size] = idx_this_seed;
@@ -277,7 +281,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
           // get last element of localStack
           // assert((localStackSize - 1 < localStackSizePerSeed));
           int idx_end_of_local_stack{local_stack[local_stack_size - 1]};
-          int temp_cluster_index{points->cluster_index[idx_end_of_local_stack]};
+          int temp_cluster_index{dev_points->cluster_index[idx_end_of_local_stack]};
           // pop_back last element of localStack
           // assert((localStackSize - 1 < localStackSizePerSeed));
           local_stack[local_stack_size - 1] = -1;
@@ -288,7 +292,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
           for (int j{}; j != followers_size; ++j) {
             // pass id to follower
             int follower{followers_ies[j]};
-            points->cluster_index[follower] = temp_cluster_index;
+            dev_points->cluster_index[follower] = temp_cluster_index;
             // push_back follower to localStack
             // assert((localStackSize < localStackSizePerSeed));
             local_stack[local_stack_size] = follower;
