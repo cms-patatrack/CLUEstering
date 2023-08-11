@@ -8,6 +8,7 @@
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
 #include "../DataFormats/alpaka/AlpakaVecArray.h"
+#include "ConvolutionalKernel.h"
 
 using cms::alpakatools::VecArray;
 
@@ -47,6 +48,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                         const VecArray<VecArray<uint32_t, 2>, Ndim>& search_box,
                                         TilesAlpaka<Ndim>* tiles,
                                         PointsView<Ndim>* dev_points,
+                                        const kernel_t* kernel_operator,
                                         const VecArray<float, Ndim>& coords_i,
                                         float* rho_i,
                                         float dc,
@@ -68,7 +70,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         }
 
         if (dist_ij_sq <= dc * dc) {
-          *rho_i += (point_id == j ? 1.f : 0.5f);
+          *rho_i += (*kernel_operator)(alpaka::math::sqrt(acc, dist_ij_sq), point_id, j);
         }
 
       }  // end of interate inside this bin
@@ -80,7 +82,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
         for_recursion<TAcc, Ndim, N_ - 1>(
-            acc, base_vec, search_box, tiles, dev_points, coords_i, rho_i, dc, point_id);
+            acc, base_vec, search_box, tiles, dev_points, kernel_operator, coords_i, rho_i, dc, point_id);
       }
     }
   }
@@ -90,6 +92,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   TilesAlpaka<Ndim>* dev_tiles,
                                   PointsView<Ndim>* dev_points,
+                                  const kernel_t* kernel_operator,
                                   float dc,
                                   uint32_t n_points) const {
       cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
@@ -112,7 +115,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
         VecArray<uint32_t, Ndim> base_vec{};
         for_recursion<TAcc, Ndim, Ndim>(
-            acc, base_vec, search_box, dev_tiles, dev_points, coords_i, &rho_i, dc, i);
+            acc, base_vec, search_box, dev_tiles, dev_points, kernel_operator, coords_i, &rho_i, dc, i);
 
         dev_points->rho[i] = rho_i;
       });

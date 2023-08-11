@@ -19,6 +19,7 @@
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
 #include "../DataFormats/Math/DeltaPhi.h"
+#include "ConvolutionalKernel.h"
 
 using cms::alpakatools::VecArray;
 
@@ -39,6 +40,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     std::vector<std::vector<int>> make_clusters(Points<Ndim>& h_points,
                                                 PointsAlpaka<Ndim>& d_points,
+                                                const ConvolutionalKernel& kernel,
                                                 Queue queue_);
 
   private:
@@ -124,45 +126,44 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     m_tiles->resizeTiles();
     m_tiles->tile_size = calculate_tile_size(m_tiles->n_tiles, h_points);
 
-    alpaka::memcpy(queue_,
-                   d_points.coords,
-                   cms::alpakatools::make_host_view(h_points.m_coords.data(), h_points.n));
-    alpaka::memcpy(queue_,
-                   d_points.weight,
-                   cms::alpakatools::make_host_view(h_points.m_weight.data(), h_points.n));
+    alpaka::memcpy(
+        queue_, d_points.coords, cms::alpakatools::make_host_view(h_points.m_coords.data(), h_points.n));
+    alpaka::memcpy(
+        queue_, d_points.weight, cms::alpakatools::make_host_view(h_points.m_weight.data(), h_points.n));
     alpaka::memset(queue_, (*d_seeds), 0x00);
 
     // Define the working division
     const Idx block_size{1024};
     Idx grid_size = std::ceil(h_points.n / static_cast<float>(block_size));
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
-    alpaka::enqueue(queue_,
-                    alpaka::createTaskKernel<Acc1D>(
-                        working_div, KernelResetFollowers{}, m_followers, h_points.n));
+    alpaka::enqueue(
+        queue_,
+        alpaka::createTaskKernel<Acc1D>(working_div, KernelResetFollowers{}, m_followers, h_points.n));
   }
 
   // Public methods
   template <typename TAcc, uint8_t Ndim>
   std::vector<std::vector<int>> CLUEAlgoAlpaka<TAcc, Ndim>::make_clusters(Points<Ndim>& h_points,
                                                                           PointsAlpaka<Ndim>& d_points,
+                                                                          const ConvolutionalKernel& kernel,
                                                                           Queue queue_) {
     setup(h_points, d_points, queue_);
 
-	std::cout << "The number of points is: " << h_points.n << std::endl;
+    auto kernel_operator{kernel.extract()};
 
     const Idx block_size{1024};
     const Idx grid_size = std::ceil(h_points.n / static_cast<float>(block_size));
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
-    alpaka::enqueue(
-        queue_,
-        alpaka::createTaskKernel<Acc1D>(
-            working_div, KernelFillTiles(), d_points.view(), m_tiles, h_points.n));
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(
+                        working_div, KernelFillTiles(), d_points.view(), m_tiles, h_points.n));
 
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelCalculateLocalDensity(),
                                                     m_tiles,
                                                     d_points.view(),
+                                                    &kernel_operator,
                                                     dc_,
                                                     h_points.n));
     alpaka::enqueue(queue_,
@@ -190,25 +191,20 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
 
-	auto rho_view = cms::alpakatools::make_host_view(h_points.m_rho.data(), h_points.n);
-    alpaka::memcpy(queue_,
-				   rho_view,
-                   d_points.rho,
-                   static_cast<uint32_t>(h_points.n));
+    auto rho_view = cms::alpakatools::make_host_view(h_points.m_rho.data(), h_points.n);
+    alpaka::memcpy(queue_, rho_view, d_points.rho, static_cast<uint32_t>(h_points.n));
     alpaka::memcpy(queue_,
                    cms::alpakatools::make_host_view(h_points.m_delta.data(), h_points.n),
                    d_points.delta,
                    static_cast<uint32_t>(h_points.n));
-    alpaka::memcpy(
-        queue_,
-        cms::alpakatools::make_host_view(h_points.m_nearestHigher.data(), h_points.n),
-        d_points.nearest_higher,
-        static_cast<uint32_t>(h_points.n));
-    alpaka::memcpy(
-        queue_,
-        cms::alpakatools::make_host_view(h_points.m_clusterIndex.data(), h_points.n),
-        d_points.cluster_index,
-        static_cast<uint32_t>(h_points.n));
+    alpaka::memcpy(queue_,
+                   cms::alpakatools::make_host_view(h_points.m_nearestHigher.data(), h_points.n),
+                   d_points.nearest_higher,
+                   static_cast<uint32_t>(h_points.n));
+    alpaka::memcpy(queue_,
+                   cms::alpakatools::make_host_view(h_points.m_clusterIndex.data(), h_points.n),
+                   d_points.cluster_index,
+                   static_cast<uint32_t>(h_points.n));
     alpaka::memcpy(queue_,
                    cms::alpakatools::make_host_view(h_points.m_isSeed.data(), h_points.n),
                    d_points.is_seed,

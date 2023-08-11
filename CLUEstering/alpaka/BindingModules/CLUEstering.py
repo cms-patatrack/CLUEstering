@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
+import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
 import CLUE_CPU_TBB as cpu_tbb
 
@@ -198,6 +199,9 @@ class clusterer:
         ## Data containers
         self.clust_data = None
         self.scaler = StandardScaler()
+
+        ## Kernel for calculation of local density
+        self.kernel = clue_kernels.FlatKernel(0.5)
 
         ## Output attributes
         self.clust_prop = None
@@ -426,6 +430,59 @@ class clusterer:
                     self.clust_data.coords[int(coord[1])].reshape(-1, 1)
                 ).reshape(1, -1)[0]
 
+    def choose_kernel(self,
+                      choice: str,
+                      parameters: Union[list,None] = None,
+                      function: types.FunctionType = lambda: 0) -> None:
+        """
+        Changes the kernel used in the calculation of local density. The default kernel
+        is a flat kernel with parameter 0.5
+
+        Parameters
+        ----------
+        choice : string
+            The type of kernel that you want to choose (flat, exp, gaus or custom).
+        parameters : array_like, optional
+            List of the parameters needed by the kernels.
+            The flat kernel requires one, the exponential requires two
+            (amplitude and mean), the gaussian requires three (amplitude,
+            mean and standard deviation) and the custom doesn't require any.
+        function : function object, optional
+            Function that should be used as kernel when the custom kernel is chosen.
+
+        Modified attributes
+        -------------------
+        kernel : Algo.kernel
+
+        Return
+        ------
+        None
+        """
+
+        if choice == "flat":
+            if len(parameters) != 1:
+                raise ValueError("Wrong number of parameters. The flat kernel"
+                                 + " requires 1 parameter.")
+            self.kernel = Algo.FlatKernel(parameters[0])
+        elif choice == "exp":
+            if len(parameters) != 2:
+                raise ValueError("Wrong number of parameters. The exponential"
+                                 + " kernel requires 2 parameters.")
+            self.kernel = Algo.ExponentialKernel(parameters[0], parameters[1])
+        elif choice == "gaus":
+            if len(parameters) != 3:
+                raise ValueError("Wrong number of parameters. The gaussian" +
+                                 " kernel requires 3 parameters.")
+            self.kernel = Algo.GaussianKernel(parameters[0], parameters[1], parameters[2])
+        elif choice == "custom":
+            if len(parameters) != 0:
+                raise ValueError("Wrong number of parameters. Custom kernels"
+                                 + " requires 0 parameters.")
+            self.kernel = Algo.CustomKernel(function)
+        else:
+            raise ValueError("Invalid kernel. The allowed choices for the"
+                             + " kernels are: flat, exp, gaus and custom.")
+
     def run_clue(self, backend: str = "cpu serial", verbose: bool = False) -> None:
         """
         Executes the CLUE clustering algorithm.
@@ -457,13 +514,13 @@ class clusterer:
 
         start = time.time_ns()
         if backend == "cpu serial":
-            cluster_id_is_seed = cpu_serial.mainRun(self.dc_,self.rhoc,self.outlier,self.ppbin,
-                                                    self.clust_data.coords,self.clust_data.weight,
-                                                    self.clust_data.n_dim)
+            cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+                                                    self.clust_data.coords, self.clust_data.weight,
+                                                    self.kernel, self.clust_data.n_dim)
         elif backend == "cpu tbb":
-            cluster_id_is_seed = cpu_tbb.mainRun(self.dc_,self.rhoc,self.outlier,self.ppbin,
-                                                 self.clust_data.coords,self.clust_data.weight,
-                                                 self.clust_data.n_dim)
+            cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+                                                 self.clust_data.coords, self.clust_data.weight,
+                                                 self.kernel, self.clust_data.n_dim)
         finish = time.time_ns()
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])
@@ -776,8 +833,8 @@ if __name__ == "__main__":
     c = clusterer(0.4,5,1.)
     c.read_data('./sissa.csv')
     print(c.clust_data.coords)
-    c.run_clue(backend="cpu serial")
-    print(c.clust_prop.is_seed)
-    print(c.clust_prop.cluster_ids)
+    c.run_clue(backend="cpu tbb", verbose=True)
+    # print(c.clust_prop.is_seed)
+    # print(c.clust_prop.cluster_ids)
     c.cluster_plotter()
-    c.to_csv('./','sissa_output.csv')
+    c.to_csv('./','sissa_output_tbb.csv')
