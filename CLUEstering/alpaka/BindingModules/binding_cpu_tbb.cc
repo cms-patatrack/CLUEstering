@@ -19,10 +19,11 @@ namespace alpaka_tbb_async {
                                         int pPBin,
                                         const std::vector<std::vector<float>>& coords,
                                         const std::vector<float>& weights,
+										const ConvolutionalKernel& kernel,
                                         int Ndim) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 
-	// Create the queue
+    // Create the queue
     Queue queue_(dev_acc);
 
     /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
@@ -37,34 +38,34 @@ namespace alpaka_tbb_async {
     // Running the clustering algorithm //
     switch (Ndim) {
       [[unlikely]] case (1) :
-        return run1(dc, rhoc, outlier, pPBin, coords, weights, queue_);
+        return run1(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[likely]] case (2) :
-        return run2(dc, rhoc, outlier, pPBin, coords, weights, queue_);
+        return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[likely]] case (3) :
-        return run3(dc, rhoc, outlier, pPBin, coords, weights, queue_);
+        return run3(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[unlikely]] case (4) :
-        return run4(dc, rhoc, outlier, pPBin, coords, weights, queue_);
+        return run4(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[unlikely]] case (5) :
-        return run5(dc, rhoc, outlier, pPBin, coords, weights, queue_);
+        return run5(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[unlikely]] case (6) :
-        return run6(dc, rhoc, outlier, pPBin, coords, weights, queue_);
+        return run6(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[unlikely]] case (7) :
-        return run7(dc, rhoc, outlier, pPBin, coords, weights, queue_);
+        return run7(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[unlikely]] case (8) :
-        return run8(dc, rhoc, outlier, pPBin, coords, weights, queue_);
+        return run8(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[unlikely]] case (9) :
-        return run9(dc, rhoc, outlier, pPBin, coords, weights, queue_);
+        return run9(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[unlikely]] case (10) :
-        return run10(dc, rhoc, outlier, pPBin,coords, weights, queue_);
+        return run10(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
         break;
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";
@@ -74,8 +75,23 @@ namespace alpaka_tbb_async {
   }
 
   PYBIND11_MODULE(CLUE_CPU_TBB, m) {
-    m.doc() = "Binding of the CLUE algorithm running serially on CPU";
+    m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
+
+    /* pybind11::class_<ConvolutionalKernel>(m, "ConvolutionalKernel").def(pybind11::init<>()) */
+		/* .def("operator()", &ConvolutionalKernel::operator()); */
+    /* pybind11::class_<FlatKernel, ConvolutionalKernel>(m, "FlatKernel") */
+    /*     .def(pybind11::init<float>()) */
+    /*     .def("operator()", &FlatKernel::operator()); */
+    /* pybind11::class_<GaussianKernel, ConvolutionalKernel>(m, "GaussianKernel") */
+    /*     .def(pybind11::init<float, float, float>()) */
+    /*     .def("operator()", &GaussianKernel::operator()); */
+    /* pybind11::class_<ExponentialKernel, ConvolutionalKernel>(m, "ExponentialKernel") */
+    /*     .def(pybind11::init<float, float>()) */
+    /*     .def("operator()", &ExponentialKernel::operator()); */
+    /* pybind11::class_<CustomKernel, ConvolutionalKernel>(m, "CustomKernel") */
+    /*     .def(pybind11::init<kernel_t>()) */
+    /*     .def("operator()", &CustomKernel::operator()); */
 
     m.def("mainRun", &mainRun, "mainRun");
   }
-};  // namespace alpaka_serial_sync
+};  // namespace alpaka_tbb_async
