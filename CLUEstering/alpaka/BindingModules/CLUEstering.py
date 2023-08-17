@@ -4,7 +4,7 @@ Density based clustering algorithm developed at CERN.
 
 from dataclasses import dataclass
 import random as rnd
-from math import sqrt, e
+from math import sqrt
 import time
 import types
 from typing import Union
@@ -15,7 +15,8 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
-import CLUE_CPU_TBB as cpu_tbb
+# import CLUE_CPU_TBB as cpu_tbb
+import CLUE_GPU_CUDA as gpu_cuda
 
 def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
@@ -152,32 +153,32 @@ class cluster_properties:
 
         return True
 
-def _flat(alpha: float) -> types.FunctionType:
-    def _operator(dist: float, i: int, j: int):
-        if i == j:
-            return 1.
-        else:
-            return alpha
+# def _flat(alpha: float) -> types.FunctionType:
+#     def _operator(dist: float, i: int, j: int):
+#         if i == j:
+#             return 1.
+#         else:
+#             return alpha
 
-    return _operator
+#     return _operator
 
-def _exp(avg: float, amplitude: float) -> types.FunctionType:
-    def _operator(dist: float, i: int, j: int) -> float:
-        if i == j:
-            return 1.
-        else:
-            return amplitude * np.exp(-avg * dist)
+# def _exp(avg: float, amplitude: float) -> types.FunctionType:
+#     def _operator(dist: float, i: int, j: int) -> float:
+#         if i == j:
+#             return 1.
+#         else:
+#             return amplitude * np.exp(-avg * dist)
 
-    return _operator
+#     return _operator
 
-def _gaus(avg: float, std: float, amplitude: float) -> types.FunctionType:
-    def _operator(dist: float, i: int, j: int) -> float:
-        if i == j:
-            return 1.
-        else:
-            return amplitude * np.exp(-(dist - avg)**2 / (2 * std**2))
+# def _gaus(avg: float, std: float, amplitude: float) -> types.FunctionType:
+#     def _operator(dist: float, i: int, j: int) -> float:
+#         if i == j:
+#             return 1.
+#         else:
+#             return amplitude * np.exp(-(dist - avg)**2 / (2 * std**2))
 
-    return _operator
+#     return _operator
 
 class clusterer:
     """
@@ -226,7 +227,7 @@ class clusterer:
         self.scaler = StandardScaler()
 
         ## Kernel for calculation of local density
-        self.kernel = clue_kernels.ConvolutionalKernel(_flat(0.5))
+        self.kernel = clue_kernels.FlatKernel(0.5)
 
         ## Output attributes
         self.clust_prop = None
@@ -488,22 +489,21 @@ class clusterer:
             if len(parameters) != 1:
                 raise ValueError("Wrong number of parameters. The flat kernel"
                                  + " requires 1 parameter.")
-            self.kernel = CLUE_Convolutional_Kernels.ConvolutionalKernel(_flat(parameters[0]))
+            self.kernel = CLUE_Convolutional_Kernels.FlatKernel(parameters[0])
         elif choice == "exp":
             if len(parameters) != 2:
                 raise ValueError("Wrong number of parameters. The exponential"
                                  + " kernel requires 2 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.ConvolutionalKernel(_exp(parameters[0], parameters[1]))
+            self.kernel = CLUE_Convolutional_Kernels.ExponentialKernel(parameters[0], parameters[1])
         elif choice == "gaus":
             if len(parameters) != 3:
                 raise ValueError("Wrong number of parameters. The gaussian" +
                                  " kernel requires 3 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.ConvolutionalKernel(_gaus(parameters[0], parameters[1], parameters[2]))
+            self.kernel = CLUE_Convolutional_Kernels.GaussinKernel(parameters[0], parameters[1], parameters[2])
         elif choice == "custom":
             if len(parameters) != 0:
                 raise ValueError("Wrong number of parameters. Custom kernels"
                                  + " requires 0 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.ConvolutionalKernel(function)
         else:
             raise ValueError("Invalid kernel. The allowed choices for the"
                              + " kernels are: flat, exp, gaus and custom.")
@@ -543,9 +543,16 @@ class clusterer:
                                                     self.clust_data.coords, self.clust_data.weight,
                                                     self.kernel, self.clust_data.n_dim)
         elif backend == "cpu tbb":
-            cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
-                                                 self.clust_data.coords, self.clust_data.weight,
-                                                 self.kernel, self.clust_data.n_dim)
+            cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+                                                    self.clust_data.coords, self.clust_data.weight,
+                                                    self.kernel, self.clust_data.n_dim)
+        elif backend == "gpu cuda":
+            cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+                                                  self.clust_data.coords, self.clust_data.weight,
+                                                  self.kernel, self.clust_data.n_dim)
+            # cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+            #                                      self.clust_data.coords, self.clust_data.weight,
+            #                                      self.kernel, self.clust_data.n_dim)
         finish = time.time_ns()
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])
@@ -856,10 +863,11 @@ class clusterer:
 
 if __name__ == "__main__":
     c = clusterer(0.4,5,1.)
-    c.read_data('./toyDetector_large.csv')
+    c.read_data('./sissa.csv')
     print(c.clust_data.coords)
     # c.run_clue(backend="cpu serial", verbose=True)
-    c.run_clue(backend="cpu tbb", verbose=True)
+    # c.run_clue(backend="cpu tbb", verbose=True)
+    c.run_clue(backend="gpu cuda", verbose=True)
     # print(c.clust_prop.is_seed)
     # print(c.clust_prop.cluster_ids)
     c.cluster_plotter()
