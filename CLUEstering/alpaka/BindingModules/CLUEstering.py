@@ -4,7 +4,7 @@ Density based clustering algorithm developed at CERN.
 
 from dataclasses import dataclass
 import random as rnd
-from math import sqrt
+from math import sqrt, e
 import time
 import types
 from typing import Union
@@ -86,7 +86,6 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
 
         return pd.DataFrame(data)
 
-
 @dataclass()
 class clustering_data:
     """
@@ -153,6 +152,32 @@ class cluster_properties:
 
         return True
 
+def _flat(alpha: float) -> types.FunctionType:
+    def _operator(dist: float, i: int, j: int):
+        if i == j:
+            return 1.
+        else:
+            return alpha
+
+    return _operator
+
+def _exp(avg: float, amplitude: float) -> types.FunctionType:
+    def _operator(dist: float, i: int, j: int) -> float:
+        if i == j:
+            return 1.
+        else:
+            return amplitude * np.exp(-avg * dist)
+
+    return _operator
+
+def _gaus(avg: float, std: float, amplitude: float) -> types.FunctionType:
+    def _operator(dist: float, i: int, j: int) -> float:
+        if i == j:
+            return 1.
+        else:
+            return amplitude * np.exp(-(dist - avg)**2 / (2 * std**2))
+
+    return _operator
 
 class clusterer:
     """
@@ -201,7 +226,7 @@ class clusterer:
         self.scaler = StandardScaler()
 
         ## Kernel for calculation of local density
-        self.kernel = clue_kernels.FlatKernel(0.5)
+        self.kernel = clue_kernels.ConvolutionalKernel(_flat(0.5))
 
         ## Output attributes
         self.clust_prop = None
@@ -463,22 +488,22 @@ class clusterer:
             if len(parameters) != 1:
                 raise ValueError("Wrong number of parameters. The flat kernel"
                                  + " requires 1 parameter.")
-            self.kernel = Algo.FlatKernel(parameters[0])
+            self.kernel = CLUE_Convolutional_Kernels.ConvolutionalKernel(_flat(parameters[0]))
         elif choice == "exp":
             if len(parameters) != 2:
                 raise ValueError("Wrong number of parameters. The exponential"
                                  + " kernel requires 2 parameters.")
-            self.kernel = Algo.ExponentialKernel(parameters[0], parameters[1])
+            self.kernel = CLUE_Convolutional_Kernels.ConvolutionalKernel(_exp(parameters[0], parameters[1]))
         elif choice == "gaus":
             if len(parameters) != 3:
                 raise ValueError("Wrong number of parameters. The gaussian" +
                                  " kernel requires 3 parameters.")
-            self.kernel = Algo.GaussianKernel(parameters[0], parameters[1], parameters[2])
+            self.kernel = CLUE_Convolutional_Kernels.ConvolutionalKernel(_gaus(parameters[0], parameters[1], parameters[2]))
         elif choice == "custom":
             if len(parameters) != 0:
                 raise ValueError("Wrong number of parameters. Custom kernels"
                                  + " requires 0 parameters.")
-            self.kernel = Algo.CustomKernel(function)
+            self.kernel = CLUE_Convolutional_Kernels.ConvolutionalKernel(function)
         else:
             raise ValueError("Invalid kernel. The allowed choices for the"
                              + " kernels are: flat, exp, gaus and custom.")
@@ -831,8 +856,9 @@ class clusterer:
 
 if __name__ == "__main__":
     c = clusterer(0.4,5,1.)
-    c.read_data('./sissa.csv')
+    c.read_data('./toyDetector_large.csv')
     print(c.clust_data.coords)
+    # c.run_clue(backend="cpu serial", verbose=True)
     c.run_clue(backend="cpu tbb", verbose=True)
     # print(c.clust_prop.is_seed)
     # print(c.clust_prop.cluster_ids)

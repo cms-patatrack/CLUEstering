@@ -25,6 +25,31 @@ using cms::alpakatools::VecArray;
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
+  /* template <uint8_t Ndim> */
+  /* class domain_t { */
+  /* private: */
+	/* VecArray<VecArray<float, 2>, Ndim> domains_; */
+
+  /* public: */
+	/* domain_t(const std::array<std::pair<float, float>, Ndim>& domains) { */
+	  /* for (int dim{}; dim < Ndim; ++dim) { */
+		/* VecArray<float, 2> temp; */
+		/* temp.push_back_unsafe(domains[dim][0]); */
+		/* temp.push_back_unsafe(domains[dim][1]); */
+
+		/* domains_.push_back_unsafe(temp); */
+	  /* } */
+	/* } */
+
+	/* // Getters */
+	/* VecArray<VecArray<float, 2>, Ndim> data() { */
+	  /* return domains_; */
+	/* } */
+	/* VecArray<VecArray<float, 2>, Ndim>* get() { */
+	  /* return domains_[0].begin(); */
+	/* } */
+  /* }; */
+
   template <typename TAcc, uint8_t Ndim>
   class CLUEAlgoAlpaka {
   public:
@@ -49,6 +74,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     float outlierDeltaFactor_;
     // average number of points found in a tile
     int pointsPerTile_;
+
+	/* domain_t<Ndim> m_domains; */
 
     // Buffers
     std::optional<cms::alpakatools::device_buffer<Device, TilesAlpaka<Ndim>>> d_tiles;
@@ -149,8 +176,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                                           Queue queue_) {
     setup(h_points, d_points, queue_);
 
-    auto kernel_operator{kernel.extract()};
-
     const Idx block_size{1024};
     const Idx grid_size = std::ceil(h_points.n / static_cast<float>(block_size));
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
@@ -163,7 +188,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     KernelCalculateLocalDensity(),
                                                     m_tiles,
                                                     d_points.view(),
-                                                    &kernel_operator,
+                                                    kernel,
+													/* m_domains.data(), */
                                                     dc_,
                                                     h_points.n));
     alpaka::enqueue(queue_,
@@ -171,6 +197,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     KernelCalculateNearestHigher(),
                                                     m_tiles,
                                                     d_points.view(),
+													/* m_domains.data(), */
                                                     outlierDeltaFactor_,
                                                     dc_,
                                                     h_points.n));
