@@ -338,11 +338,7 @@ class clusterer:
                              + " dimensions supported is 10.")
         n_dim = len(coordinate_columns)
         n_points = len(df_.index)
-        print(df_.iloc[:, 0:-1].to_numpy())
         coords = df_.iloc[:, 0:-1].to_numpy()
-        # coords = np.zeros(shape=(n_dim, n_points))
-        # for dim in range(n_dim):
-        #     coords[dim] = np.array(df_.iloc[:,dim])
 
         self.clust_data = clustering_data(coords,
                                           np.copy(coords),
@@ -547,7 +543,7 @@ class clusterer:
                                                     self.clust_data.coords, self.clust_data.weight,
                                                     self.kernel, self.clust_data.n_dim)
         elif backend == "gpu cuda":
-            cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+            cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
                                                   self.clust_data.coords, self.clust_data.weight,
                                                   self.kernel, self.clust_data.n_dim)
             # cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
@@ -864,11 +860,8 @@ class clusterer:
 if __name__ == "__main__":
     c = clusterer(0.4,5,1.)
     c.read_data('./sissa.csv')
-    print(c.clust_data.coords)
     # c.run_clue(backend="cpu serial", verbose=True)
-    # c.run_clue(backend="cpu tbb", verbose=True)
+    c.run_clue(backend="cpu tbb", verbose=True)
     c.run_clue(backend="gpu cuda", verbose=True)
-    # print(c.clust_prop.is_seed)
-    # print(c.clust_prop.cluster_ids)
     c.cluster_plotter()
     c.to_csv('./','sissa_output_tbb.csv')

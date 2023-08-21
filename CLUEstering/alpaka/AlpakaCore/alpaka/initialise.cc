@@ -2,10 +2,10 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "AlpakaCore/alpakaConfig.h"
-#include "AlpakaCore/alpakaDevices.h"
-#include "AlpakaCore/initialise.h"
-#include "Framework/demangle.h"
+#include "../alpakaConfig.h"
+#include "../alpakaDevices.h"
+#include "../initialise.h"
+#include "../demangle.h"
 
 namespace cms::alpakatools {
 

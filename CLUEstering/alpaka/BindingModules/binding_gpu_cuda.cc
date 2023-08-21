@@ -5,11 +5,14 @@
 #include "../CLUE/Run.h"
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
+#include "../AlpakaCore/initialise.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
 #include <stdint.h>
+
+using cms::alpakatools::initialise;
 
 namespace alpaka_cuda_async {
   std::vector<std::vector<int>> mainRun(float dc,
@@ -28,6 +31,8 @@ namespace alpaka_cuda_async {
 	}
 
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
+
+	/* initialise<Platform>(); */
 
     // Create the queue
     Queue queue_(dev_acc);

@@ -21,7 +21,8 @@ ALPAKA_CUDA_FLAGS = -DALPAKA_ACC_GPU_CUDA_PRESENT -DALPAKA_ACC_GPU_CUDA_ENABLED 
 PYTHON_VERS := $(shell python3 -V | awk -F '' '{print $$8$$9$$10$$11}' | sed 's/\.//g'  )
 PYTHON_VERS_DOT := $(shell python3 -V | awk -F '' '{print $$8$$9$$10$$11}' )
 PYTHON_PATH := /usr/include/python$(PYTHON_VERS_DOT)
-PYBIND_PATH := ${HOME}/.local/lib/python$(PYTHON_VERS_DOT)/site-packages/pybind11/include
+# PYBIND_PATH := ${HOME}/.local/lib/python$(PYTHON_VERS_DOT)/site-packages/pybind11/include
+PYBIND_PATH := ../../../extern/pybind11/include
 BINDING_FLAGS := -Wall -shared -fPIC -I$(PYTHON_PATH) -I$(PYBIND_PATH)
 CUDA_BINDING_FLAGS := -shared --compiler-options '-fPIC' -I$(PYTHON_PATH) -I$(PYBIND_PATH)
 
@@ -34,7 +35,7 @@ CUDA_MODULE_NAME := CLUE_GPU_CUDA.cpython-$(PYTHON_VERS)-x86_64-linux-gnu.so
 all:
 	$(CXX) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_SERIAL_FLAGS) $(BINDING_FLAGS) binding_cpu.cc -o $(SERIAL_MODULE_NAME)
 	$(CXX) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_SERIAL_FLAGS) $(BINDING_FLAGS) binding_kernels.cc -o $(KERNELS_MODULE_NAME)
-	# $(CXX) $(CXX_FLAGS) $(TBB_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_TBB_FLAGS) $(BINDING_FLAGS) binding_cpu_tbb.cc -o $(TBB_MODULE_NAME)
+	$(CXX) $(CXX_FLAGS) $(TBB_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_TBB_FLAGS) $(BINDING_FLAGS) binding_cpu_tbb.cc -o $(TBB_MODULE_NAME)
 	$(CUDA) $(CUDA_FLAGS) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_CUDA_FLAGS) $(CUDA_BINDING_FLAGS) binding_gpu_cuda.cc -o $(CUDA_MODULE_NAME)
 
 serial:
