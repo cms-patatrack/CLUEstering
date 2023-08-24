@@ -20,7 +20,6 @@ namespace cms::alpakatools {
 
   template <typename TPlatform>
   std::vector<alpaka::Dev<TPlatform>> enumerate() {
-	std::cout << __LINE__ << std::endl;
     assert(getDeviceIndex(host) == 0u);
 
     using Device = alpaka::Dev<TPlatform>;

@@ -61,7 +61,6 @@ namespace cms::alpakatools {
           -> alpaka::BufCudaRt<TElem, TDim, TIdx> {
         ALPAKA_DEBUG_MINIMAL_LOG_SCOPE;
 
-		std::cout << "Dentro allocCachedBuf" << std::endl;
         auto& allocator = getDeviceCachingAllocator<alpaka::DevCudaRt, TQueue>(dev);
 
         size_t width = alpaka::getWidth(extent);

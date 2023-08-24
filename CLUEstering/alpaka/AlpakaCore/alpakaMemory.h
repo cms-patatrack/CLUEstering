@@ -164,18 +164,13 @@ namespace cms::alpakatools {
   template <typename T, typename TQueue>
   std::enable_if_t<not std::is_array_v<T>, device_buffer<alpaka::Dev<TQueue>, T>> make_device_buffer(
       TQueue const& queue) {
-	std::cout << "e' la numero 1" << std::endl;
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
-	  std::cout << "primo if" << std::endl;
-	  std::cout << "He deduces that the device is " << alpaka::getName(alpaka::getDev(queue)) << std::endl;
       return allocCachedBuf<T, Idx>(alpaka::getDev(queue), queue, Scalar{});
     }
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Asynchronous) {
-	  std::cout << "secondo if" << std::endl;
       return alpaka::allocAsyncBuf<T, Idx>(queue, Scalar{});
     }
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
-	  std::cout << "terzo if" << std::endl;
       return alpaka::allocBuf<T, Idx>(alpaka::getDev(queue), Scalar{});
     }
   }

@@ -18,9 +18,8 @@ namespace cms::alpakatools {
     template <typename TDevice, typename TQueue>
     auto allocate_device_allocators() {
       using Allocator = CachingAllocator<TDevice, TQueue>;
-      auto const& devices = cms::alpakatools::devices<alpaka::Pltf<TDevice>>;
+      auto const& devices = cms::alpakatools::enumerate<alpaka::Pltf<TDevice>>();
       auto const size = devices.size();
-	  std::cout << "size inside allocator " << size << std::endl;
 
       // allocate the storage for the objects
       auto ptr = std::allocator<Allocator>().allocate(size);
@@ -55,20 +54,11 @@ namespace cms::alpakatools {
     // initialise all allocators, one per device
     static auto allocators = detail::allocate_device_allocators<TDevice, TQueue>();
 
-	std::cout << alpaka::getName(device) << std::endl;
     size_t const index = getDeviceIndex(device);
-	std::cout << "from inside the size is " << cms::alpakatools::devices<alpaka::Pltf<TDevice>>.size() << std::endl;
-	std::cout << "from inside the index is " << index << std::endl;
-	std::cout << "ther other size is " << cms::alpakatools::devices<alpaka::DevCudaRt>.size() << std::endl;
 
 	std::vector<TDevice> devs = alpaka::getDevs<alpaka::Pltf<TDevice>>();
-	std::cout << devs.size() << std::endl;
 
-	for (const auto& device : devs) {
-	  std::cout << alpaka::getName(device) << std::endl;
-	}
-
-    assert(index < cms::alpakatools::devices<alpaka::Pltf<TDevice>>.size());
+    assert(index < cms::alpakatools::enumerate<alpaka::Pltf<TDevice>>().size());
 
     // the public interface is thread safe
     return allocators[index];

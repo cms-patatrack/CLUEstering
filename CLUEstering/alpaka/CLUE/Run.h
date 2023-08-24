@@ -32,15 +32,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      std::vector<float> const &weight,
 									 const FlatKernel& kernel,
 									 Queue queue_) {
-	std::cout << __LINE__ << std::endl;
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
-	std::cout << __LINE__ << std::endl;
 
 	// Create the host and device points
 	Points<2> h_points(coordinates, weight);
-	std::cout << __LINE__ << std::endl;
 	PointsAlpaka<2> d_points(queue_, weight.size());
-	std::cout << __LINE__ << std::endl;
 
     return algo.make_clusters(h_points, d_points, kernel, queue_);
   }
