@@ -56,7 +56,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     CLUEAlgoAlpaka() = delete;
     explicit CLUEAlgoAlpaka(float dc, float rhoc, float outlierDeltaFactor, int pPBin, Queue queue_)
         : dc_{dc}, rhoc_{rhoc}, outlierDeltaFactor_{outlierDeltaFactor}, pointsPerTile_{pPBin} {
-	  std::cout << __LINE__ << std::endl;
       init_device(queue_);
     }
 
@@ -92,13 +91,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     void setup(const Points<Ndim>& h_points, PointsAlpaka<Ndim>& d_points, Queue queue_);
 
     // Construction of the tiles
-    int calculateNTiles(const Points<Ndim>& h_points);
-    VecArray<float, Ndim> calculate_tile_size(int nTiles, const Points<Ndim>& h_points);
+    size_t calculateNTiles(const Points<Ndim>& h_points);
+    void calculate_tile_size(int nTiles, TilesAlpaka<Ndim>& h_tiles, const Points<Ndim>& h_points);
   };
 
   // Private methods
   template <typename TAcc, uint8_t Ndim>
-  int CLUEAlgoAlpaka<TAcc, Ndim>::calculateNTiles(const Points<Ndim>& h_points) {
+  size_t CLUEAlgoAlpaka<TAcc, Ndim>::calculateNTiles(const Points<Ndim>& h_points) {
     size_t n_tiles{h_points.n / pointsPerTile_};
     try {
       if (n_tiles == 0) {
@@ -112,9 +111,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   }
 
   template <typename TAcc, uint8_t Ndim>
-  VecArray<float, Ndim> CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(int nTiles,
-                                                                        const Points<Ndim>& h_points) {
-    VecArray<float, Ndim> tileSizes;
+  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(int nTiles,
+                                                       TilesAlpaka<Ndim>& h_tiles,
+                                                       const Points<Ndim>& h_points) {
+    /* VecArray<float, Ndim> tileSizes; */
     int NperDim{static_cast<int>(std::pow(nTiles, 1.0 / Ndim))};
 
     for (int i{}; i != Ndim; ++i) {
@@ -125,31 +125,23 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       VecArray<float, 2> temp;
       temp.push_back_unsafe(dimMin);
       temp.push_back_unsafe(dimMax);
-      m_tiles->min_max[i] = temp;
+      h_tiles.min_max[i] = temp;
       tileSize = (dimMax - dimMin) / NperDim;
 
-      tileSizes[i] = tileSize;
+      h_tiles.tile_size[i] = tileSize;
     }
-    return tileSizes;
   }
 
   template <typename TAcc, uint8_t Ndim>
   void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
-	std::cout << __LINE__ << std::endl;
     d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
-	std::cout << __LINE__ << std::endl;
     d_seeds = cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<int32_t, max_seeds>>(queue_);
-	std::cout << __LINE__ << std::endl;
     d_followers =
         cms::alpakatools::make_device_buffer<cms::alpakatools::VecArray<int32_t, max_followers>[]>(queue_,
                                                                                                    reserve);
-	std::cout << __LINE__ << std::endl;
 
     // Copy to the public pointers
-    m_tiles = (*d_tiles).data();
-	std::cout << __LINE__ << std::endl;
     m_seeds = (*d_seeds).data();
-	std::cout << __LINE__ << std::endl;
     m_followers = (*d_followers).data();
   }
 
@@ -157,10 +149,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   void CLUEAlgoAlpaka<TAcc, Ndim>::setup(const Points<Ndim>& h_points,
                                          PointsAlpaka<Ndim>& d_points,
                                          Queue queue_) {
-    m_tiles->n_tiles = calculateNTiles(h_points);
-    m_tiles->resizeTiles();
-    m_tiles->tile_size = calculate_tile_size(m_tiles->n_tiles, h_points);
+    // Create temporary tiles object
+    size_t ntiles{calculateNTiles(h_points)};
+    int ntiles_per_dim{static_cast<int>(std::pow(ntiles, 1. / Ndim))};
+    TilesAlpaka<Ndim> temp(ntiles, ntiles_per_dim);
+    calculate_tile_size(ntiles, temp, h_points);
+    temp.resizeTiles();
 
+    alpaka::memcpy(queue_, *d_tiles, cms::alpakatools::make_host_view(temp));
+    m_tiles = (*d_tiles).data();
     alpaka::memcpy(
         queue_, d_points.coords, cms::alpakatools::make_host_view(h_points.m_coords.data(), h_points.n));
     alpaka::memcpy(
@@ -184,16 +181,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                                           const KernelType& kernel,
                                                                           Queue queue_) {
     setup(h_points, d_points, queue_);
-	std::cout << __LINE__ << std::endl;
 
     const Idx block_size{1024};
     const Idx grid_size = std::ceil(h_points.n / static_cast<float>(block_size));
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
-	std::cout << __LINE__ << std::endl;
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         working_div, KernelFillTiles(), d_points.view(), m_tiles, h_points.n));
-	std::cout << __LINE__ << std::endl;
 
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
@@ -204,7 +198,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     /* m_domains.data(), */
                                                     dc_,
                                                     h_points.n));
-	std::cout << __LINE__ << std::endl;
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelCalculateNearestHigher(),
@@ -214,7 +207,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     outlierDeltaFactor_,
                                                     dc_,
                                                     h_points.n));
-	std::cout << __LINE__ << std::endl;
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelFindClusters<Ndim>(),
@@ -225,17 +217,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     dc_,
                                                     rhoc_,
                                                     h_points.n));
-	std::cout << __LINE__ << std::endl;
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         working_div, KernelAssignClusters<Ndim>(), m_seeds, m_followers, d_points.view()));
-	std::cout << __LINE__ << std::endl;
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
 
-    auto rho_view = cms::alpakatools::make_host_view(h_points.m_rho.data(), h_points.n);
-    alpaka::memcpy(queue_, rho_view, d_points.rho, static_cast<uint32_t>(h_points.n));
+    alpaka::memcpy(queue_,
+                   cms::alpakatools::make_host_view(h_points.m_rho.data(), h_points.n),
+                   d_points.rho,
+                   static_cast<uint32_t>(h_points.n));
     alpaka::memcpy(queue_,
                    cms::alpakatools::make_host_view(h_points.m_delta.data(), h_points.n),
                    d_points.delta,
