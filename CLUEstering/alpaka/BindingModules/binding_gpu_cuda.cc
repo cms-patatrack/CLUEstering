@@ -24,11 +24,6 @@ namespace alpaka_cuda_async {
                                         const FlatKernel& kernel,
                                         int Ndim) {
 	std::vector<Device> devices = alpaka::getDevs<Platform>();
-	std::cout << devices.size() << std::endl;
-
-	for (const auto& device : devices) {
-	  std::cout << alpaka::getName(device) << std::endl;
-	}
 
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 

@@ -3,10 +3,21 @@
 export CXX := g++
 export CUDA := nvcc
 
+export CUDA_ARCH := 50 60 61 62 70
+
 # Compiler flags
-CXX_FLAGS = -std=c++17 -g -O2
-CUDA_FLAGS = -x cu --expt-relaxed-constexpr
+CXX_FLAGS = -std=c++17 -g -O2 
+export CUDA_FLAGS = -x cu --expt-relaxed-constexpr -gencode arch=compute_61,code=[sm_61,compute_61] -G 
+# -Wno-deprecated-gpu-targets -Xcudafe --diag_suppress=esa_on_defaulted_function_ignored --expt-relaxed-constexpr --expt-extended-lambda --generate-line-info --source-in-ptx --display-error-number --cudart=shared --threads 1
+
+# CUDA_FLAGS := $$(foreach ARCH,-gencode arch=compute_$$(CUDA_ARCH),code=[sm_$$(CUDA_ARCH),compute_$$(CUDA_ARCH)]) -Wno-deprecated-gpu-targets -Xcudafe --diag_suppress=esa_on_defaulted_function_ignored --expt-relaxed-constexpr --expt-extended-lambda --generate-line-info --source-in-ptx --display-error-number --cudart=shared
+# $(2)NVCC_COMMON := -std=c++17 -O3 -g $$($(2)NVCC_FLAGS) -ccbin $(CXX) --compiler-options '$(HOST_CXXFLAGS) $(USER_CXXFLAGS)'
+
 TBB_FLAGS = -ltbb
+
+export CUDA_CXXFLAGS := -I$(CUDA_BASE)/include
+# export CUDA_LDFLAGS := -L$(CUDA_LIBDIR) -lcudart -lcudadevrt
+# export CUDA_NVCC := $(CUDA_BASE)/bin/nvcc
 
 # Dependencies flags
 ALPAKA_PATH = /install/include
@@ -34,8 +45,8 @@ CUDA_MODULE_NAME := CLUE_GPU_CUDA.cpython-$(PYTHON_VERS)-x86_64-linux-gnu.so
 
 all:
 	$(CXX) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_SERIAL_FLAGS) $(BINDING_FLAGS) binding_cpu.cc -o $(SERIAL_MODULE_NAME)
-	$(CXX) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_SERIAL_FLAGS) $(BINDING_FLAGS) binding_kernels.cc -o $(KERNELS_MODULE_NAME)
-	$(CXX) $(CXX_FLAGS) $(TBB_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_TBB_FLAGS) $(BINDING_FLAGS) binding_cpu_tbb.cc -o $(TBB_MODULE_NAME)
+	# $(CXX) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_SERIAL_FLAGS) $(BINDING_FLAGS) binding_kernels.cc -o $(KERNELS_MODULE_NAME)
+	# $(CXX) $(CXX_FLAGS) $(TBB_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_TBB_FLAGS) $(BINDING_FLAGS) binding_cpu_tbb.cc -o $(TBB_MODULE_NAME)
 	$(CUDA) $(CUDA_FLAGS) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_CUDA_FLAGS) $(CUDA_BINDING_FLAGS) binding_gpu_cuda.cc -o $(CUDA_MODULE_NAME)
 
 serial:
