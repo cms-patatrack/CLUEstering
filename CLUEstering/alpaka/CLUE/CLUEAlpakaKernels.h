@@ -61,7 +61,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
       // iterate inside this bin
       for (int binIter{}; binIter < binSize; ++binIter) {
-        unsigned int j{(*tiles)[binId][binIter]};
+        uint32_t j{(*tiles)[binId][binIter]};
         // query N_{dc_}(i)
 
         VecArray<float, Ndim> coords_j{dev_points->coords[j]};
@@ -105,17 +105,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         VecArray<VecArray<float, 2>, Ndim> searchbox_extremes;
         for (int dim{}; dim != Ndim; ++dim) {
           VecArray<float, 2> dim_extremes;
-          dim_extremes.push_back(acc, coords_i[dim] - dc);
-          dim_extremes.push_back(acc, coords_i[dim] + dc);
+          dim_extremes.push_back_unsafe(coords_i[dim] - dc);
+          dim_extremes.push_back_unsafe(coords_i[dim] + dc);
 
-          searchbox_extremes.push_back(acc, dim_extremes);
+          searchbox_extremes.push_back_unsafe(dim_extremes);
         }
 
         // Calculate the search box
         VecArray<VecArray<uint32_t, 2>, Ndim> search_box;
         dev_tiles->searchBox(acc, searchbox_extremes, &search_box);
 
-        VecArray<uint32_t, Ndim> base_vec{};
+        VecArray<uint32_t, Ndim> base_vec;
         for_recursion<TAcc, Ndim, Ndim>(
             acc, base_vec, search_box, dev_tiles, dev_points, kernel, coords_i, &rho_i, dc, i);
 
@@ -200,10 +200,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         VecArray<VecArray<float, 2>, Ndim> searchbox_extremes;
         for (int dim{}; dim != Ndim; ++dim) {
           VecArray<float, 2> dim_extremes;
-          dim_extremes.push_back(acc, coords_i[dim] - dc);
-          dim_extremes.push_back(acc, coords_i[dim] + dc);
+          dim_extremes.push_back_unsafe(coords_i[dim] - dc);
+          dim_extremes.push_back_unsafe(coords_i[dim] + dc);
 
-          searchbox_extremes.push_back(acc, dim_extremes);
+          searchbox_extremes.push_back_unsafe(dim_extremes);
         }
 
         // Calculate the search box
