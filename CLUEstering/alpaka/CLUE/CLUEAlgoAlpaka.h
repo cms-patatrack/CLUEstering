@@ -218,12 +218,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     rhoc_,
                                                     h_points.n));
 
-	// We change the working division when assigning the clusters
+    // We change the working division when assigning the clusters
     const Idx grid_size_seeds = ceil(max_seeds / static_cast<float>(block_size));
     auto working_div_seeds = cms::alpakatools::make_workdiv<Acc1D>(grid_size_seeds, block_size);
-    alpaka::enqueue(queue_,
-                    alpaka::createTaskKernel<Acc1D>(
-                        working_div_seeds, KernelAssignClusters<Ndim>(), m_seeds, m_followers, d_points.view()));
+    alpaka::enqueue(
+        queue_,
+        alpaka::createTaskKernel<Acc1D>(
+            working_div_seeds, KernelAssignClusters<Ndim>(), m_seeds, m_followers, d_points.view()));
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);

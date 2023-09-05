@@ -247,11 +247,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         float delta_i{dev_points->delta[i]};
         float rho_i{dev_points->rho[i]};
 
-        // determine seed or outlier
+        // Determine whether the point is a seed or an outlier
         bool is_seed{(delta_i > d_c) && (rho_i >= rho_c)};
         bool is_outlier{(delta_i > outlier_delta_factor * d_c) && (rho_i < rho_c)};
 
-        // seeds and followers seems to be buffer of VecArray
         if (is_seed) {
           dev_points->is_seed[i] = 1;
           seeds[0].push_back(acc, i);
