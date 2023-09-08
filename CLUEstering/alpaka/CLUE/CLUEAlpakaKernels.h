@@ -280,17 +280,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         int idx_this_seed{seeds_0[idx_cls]};
         dev_points->cluster_index[idx_this_seed] = idx_cls;
         // push_back idThisSeed to localStack
-        // assert((localStackSize < localStackSizePerSeed));
         local_stack[local_stack_size] = idx_this_seed;
         ++local_stack_size;
         // process all elements in localStack
         while (local_stack_size > 0) {
           // get last element of localStack
-          // assert((localStackSize - 1 < localStackSizePerSeed));
           int idx_end_of_local_stack{local_stack[local_stack_size - 1]};
           int temp_cluster_index{dev_points->cluster_index[idx_end_of_local_stack]};
           // pop_back last element of localStack
-          // assert((localStackSize - 1 < localStackSizePerSeed));
           local_stack[local_stack_size - 1] = -1;
           --local_stack_size;
           const auto& followers_ies{followers[idx_end_of_local_stack]};
@@ -301,7 +298,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
             int follower{followers_ies[j]};
             dev_points->cluster_index[follower] = temp_cluster_index;
             // push_back follower to localStack
-            // assert((localStackSize < localStackSizePerSeed));
             local_stack[local_stack_size] = follower;
             ++local_stack_size;
           }

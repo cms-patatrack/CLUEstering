@@ -91,32 +91,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     void setup(const Points<Ndim>& h_points, PointsAlpaka<Ndim>& d_points, Queue queue_);
 
     // Construction of the tiles
-    size_t calculateNTiles(const Points<Ndim>& h_points);
-    void calculate_tile_size(int nTiles, TilesAlpaka<Ndim>& h_tiles, const Points<Ndim>& h_points);
+    void calculate_tile_size(TilesAlpaka<Ndim>& h_tiles, const Points<Ndim>& h_points);
   };
 
   // Private methods
   template <typename TAcc, uint8_t Ndim>
-  size_t CLUEAlgoAlpaka<TAcc, Ndim>::calculateNTiles(const Points<Ndim>& h_points) {
-    size_t n_tiles{h_points.n / pointsPerTile_};
-    try {
-      if (n_tiles == 0) {
-        throw 100;
-      }
-    } catch (...) {
-      std::cout << "pointPerBin is set too high for you number of points. You must lower it in the "
-                   "clusterer constructor.\n";
-    }
-    return n_tiles;
-  }
-
-  template <typename TAcc, uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(int nTiles,
-                                                       TilesAlpaka<Ndim>& h_tiles,
+  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(TilesAlpaka<Ndim>& h_tiles,
                                                        const Points<Ndim>& h_points) {
-    /* VecArray<float, Ndim> tileSizes; */
-    int NperDim{static_cast<int>(std::pow(nTiles, 1.0 / Ndim))};
-
     for (int i{}; i != Ndim; ++i) {
       float tileSize;
       float dimMax{*std::max_element(h_points.m_coords[i].begin(), h_points.m_coords[i].end())};
@@ -126,7 +107,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       temp.push_back_unsafe(dimMin);
       temp.push_back_unsafe(dimMax);
       h_tiles.min_max[i] = temp;
-      tileSize = (dimMax - dimMin) / NperDim;
+      tileSize = (dimMax - dimMin) / h_tiles.nPerDim();
 
       h_tiles.tile_size[i] = tileSize;
     }
@@ -150,10 +131,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                          PointsAlpaka<Ndim>& d_points,
                                          Queue queue_) {
     // Create temporary tiles object
-    size_t ntiles{calculateNTiles(h_points)};
-    int ntiles_per_dim{static_cast<int>(std::pow(ntiles, 1. / Ndim))};
-    TilesAlpaka<Ndim> temp(ntiles, ntiles_per_dim);
-    calculate_tile_size(ntiles, temp, h_points);
+    TilesAlpaka<Ndim> temp;
+    calculate_tile_size(temp, h_points);
     temp.resizeTiles();
 
     alpaka::memcpy(queue_, *d_tiles, cms::alpakatools::make_host_view(temp));

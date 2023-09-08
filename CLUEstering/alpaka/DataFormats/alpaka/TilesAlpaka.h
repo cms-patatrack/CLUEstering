@@ -20,15 +20,15 @@
 
 using cms::alpakatools::VecArray;
 
-constexpr uint32_t max_tile_depth{300};
-constexpr uint32_t max_n_tiles{1000};
+constexpr uint32_t max_tile_depth{1 << 10};
+constexpr uint32_t max_n_tiles{1 << 10};
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
   template <uint8_t Ndim>
   class TilesAlpaka {
   public:
-    TilesAlpaka(size_t n, int n_perdim) : n_tiles{n}, n_tiles_per_dim{n_perdim} {};
+    TilesAlpaka() : n_tiles{1000}, n_tiles_per_dim{static_cast<int>(std::pow(1000, 1. / Ndim))} {};
 
     // Public member
     VecArray<VecArray<float, 2>, Ndim> min_max;
@@ -37,11 +37,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     // Public methods
     void resizeTiles() { m_tiles.resize(n_tiles); }
 
+	// getter
+	int nPerDim() const { return n_tiles_per_dim; }
+
     template <typename TAcc>
     ALPAKA_FN_HOST_ACC inline constexpr int getBin(const TAcc& acc, float coord_, int dim_) const {
       int coord_Bin{(int)((coord_ - min_max[dim_][0]) / tile_size[dim_])};
-      // Address the cases of underflow and overflow and underflow
 
+      // Address the cases of underflow and overflow and underflow
       coord_Bin = alpaka::math::min(acc, coord_Bin, n_tiles_per_dim - 1);
       coord_Bin = alpaka::math::max(acc, coord_Bin, 0);
 
