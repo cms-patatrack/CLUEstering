@@ -18,37 +18,11 @@
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
-#include "../DataFormats/Math/DeltaPhi.h"
 #include "ConvolutionalKernel.h"
 
 using cms::alpakatools::VecArray;
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
-
-  /* template <uint8_t Ndim> */
-  /* class domain_t { */
-  /* private: */
-  /* VecArray<VecArray<float, 2>, Ndim> domains_; */
-
-  /* public: */
-  /* domain_t(const std::array<std::pair<float, float>, Ndim>& domains) { */
-  /* for (int dim{}; dim < Ndim; ++dim) { */
-  /* VecArray<float, 2> temp; */
-  /* temp.push_back_unsafe(domains[dim][0]); */
-  /* temp.push_back_unsafe(domains[dim][1]); */
-
-  /* domains_.push_back_unsafe(temp); */
-  /* } */
-  /* } */
-
-  /* // Getters */
-  /* VecArray<VecArray<float, 2>, Ndim> data() { */
-  /* return domains_; */
-  /* } */
-  /* VecArray<VecArray<float, 2>, Ndim>* get() { */
-  /* return domains_[0].begin(); */
-  /* } */
-  /* }; */
 
   template <typename TAcc, uint8_t Ndim>
   class CLUEAlgoAlpaka {
