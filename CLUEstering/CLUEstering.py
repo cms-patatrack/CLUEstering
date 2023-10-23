@@ -397,7 +397,7 @@ class clusterer:
             df = self._read_dict_df(input_data)
             self._handle_dataframe(df)
 
-        # Rescae the coordinates with a standard scaler
+        # Rescale the coordinates with a standard scaler
         self._rescale()
 
         # Construct the domains of all the coordinates
