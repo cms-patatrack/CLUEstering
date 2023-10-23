@@ -49,7 +49,7 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
         raise ValueError('Wrong parameter value. x_max and y_max must be positive.')
     if n_blobs < 0:
         raise ValueError('Wrong parameter value. The number of blobs must be positive.')
-    if mean < 0. or sigma < 0.:
+    if sigma < 0.:
         raise ValueError("Wrong parameter value. The mean and sigma of the blobs"
                          + " cannot be negative.")
     if n_dim > 3:
