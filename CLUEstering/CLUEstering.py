@@ -343,6 +343,7 @@ class clusterer:
 
     def read_data(self,
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray],
+                  rescale: bool = True,
                   **kwargs: tuple) -> None:
         """
         Reads the data in input and fills the class members containing the coordinates
@@ -360,6 +361,8 @@ class clusterer:
         input_data : array_like
             The list or numpy array should contain a list of lists for the
             coordinates and a list for the weight.
+        restale : bool
+            Whether or not ot rescale the input data using a StandardScaler
         kwargs : tuples
             Tuples corresponding to the domain of any periodic variables. The
             keyword should be the keyword of the corrispoding variable.
@@ -398,7 +401,8 @@ class clusterer:
             self._handle_dataframe(df)
 
         # Rescale the coordinates with a standard scaler
-        self._rescale()
+        if rescale:
+            self._rescale()
 
         # Construct the domains of all the coordinates
         self.change_domains(**kwargs)
