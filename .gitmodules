@@ -2,3 +2,9 @@
 	path = extern/pybind11
 	url = https://github.com/sbaldu/pybind11.git
 	branch = master
+[submodule "extern/boost"]
+	path = extern/boost
+	url = https://github.com/boostorg/boost.git
+[submodule "extern/alpaka"]
+	path = extern/alpaka
+	url = https://github.com/cms-patatrack/alpaka.git
