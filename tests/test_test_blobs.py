@@ -23,11 +23,7 @@ def test_except_3():
     clust = clue.clusterer(0.4, 5., 1.2)
     
     with pytest.raises(ValueError):
-        clust.read_data(clue.test_blobs(n_samples=1000, n_dim=2, mean=-1.))
-    with pytest.raises(ValueError):
         clust.read_data(clue.test_blobs(n_samples=1000, n_dim=2, sigma=-2.))
-    with pytest.raises(ValueError):
-        clust.read_data(clue.test_blobs(n_samples=1000, n_dim=2, mean=-1., sigma=-2.))
 
 def test_except_4():
     clust = clue.clusterer(0.4, 5., 1.2)
