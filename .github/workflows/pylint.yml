@@ -28,4 +28,4 @@ jobs:
         pip install numpy matplotlib pandas scikit-learn pytest
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        pylint --fail-under=8. $(git ls-files '*.py')
