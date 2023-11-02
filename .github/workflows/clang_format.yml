@@ -21,3 +21,4 @@ jobs:
       with:
         clang-format-version: '16'
         check-path: ${{ matrix.path }}
+        exclude-regex: 'CLUEstering/include/test/doctest.h'
