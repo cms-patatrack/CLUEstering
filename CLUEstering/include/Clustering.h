@@ -7,6 +7,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <stdint.h>
 #include <string>
@@ -21,11 +22,12 @@
 struct domain_t {
   float min = -std::numeric_limits<float>::max();
   float max = std::numeric_limits<float>::max();
+
+  bool empty() {
+    return (min == -std::numeric_limits<float>::max()) && (max == std::numeric_limits<float>::max());
+  }
 };
 
-////////////////////////////
-//////  Clustering.h  //////
-////////////////////////////
 template <uint8_t Ndim>
 class ClusteringAlgo {
 public:
@@ -39,12 +41,12 @@ public:
 
   // public variables
   float dc_;    // cut-off distance in the calculation of local density
-  float rhoc_;  // minimum density to promote a point as a seed or the maximum density to demote a point as an outlier
+  float rhoc_;  // minimum density to promote a point as a seed or the
+      // maximum density to demote a point as an outlier
   float outlierDeltaFactor_;
   int pointsPerTile_;  // average number of points found in a tile
 
-  // Array containing the domain extremes of every coordinate
-  std::vector<domain_t> domains_;
+  std::vector<domain_t> domains_;  // Array containing the domain extremes of every coordinate
 
   Points<Ndim> points_;
 
@@ -77,8 +79,8 @@ public:
         throw 100;
       }
     } catch (...) {
-      std::cout
-          << "pointPerBin is set too high for you number of points. You must lower it in the clusterer constructor.\n";
+      std::cout << "pointPerBin is set too high for you number of points. You must lower it in the "
+                   "clusterer constructor.\n";
     }
     return ntiles;
   }
@@ -132,15 +134,18 @@ private:
       // get search box
       std::array<std::vector<int>, Ndim> xjBins;
       for (int j{}; j != Ndim; ++j) {
-        xjBins[j] = tiles.getBinsFromRange(points_.coordinates_[j][i] - dc_, points_.coordinates_[j][i] + dc_, j);
+        xjBins[j] =
+            tiles.getBinsFromRange(points_.coordinates_[j][i] - dc_, points_.coordinates_[j][i] + dc_, j);
 
         // Overflow
         if (points_.coordinates_[j][i] + dc_ > domains_[j].max) {
-          std::vector<int> overflowBins = std::move(tiles.getBinsFromRange(domains_[j].min, domains_[j].min + dc_, j));
+          std::vector<int> overflowBins =
+              std::move(tiles.getBinsFromRange(domains_[j].min, domains_[j].min + dc_, j));
           xjBins[j].insert(xjBins[j].end(), overflowBins.begin(), overflowBins.end());
           // Underflow
         } else if (points_.coordinates_[j][i] - dc_ < domains_[j].min) {
-          std::vector<int> underflowBins = std::move(tiles.getBinsFromRange(domains_[j].max - dc_, domains_[j].max, j));
+          std::vector<int> underflowBins =
+              std::move(tiles.getBinsFromRange(domains_[j].max - dc_, domains_[j].max, j));
           xjBins[j].insert(xjBins[j].end(), underflowBins.begin(), underflowBins.end());
         }
       }
@@ -177,15 +182,18 @@ private:
       // get search box
       std::array<std::vector<int>, Ndim> xjBins;
       for (int j{}; j != Ndim; ++j) {
-        xjBins[j] = tiles.getBinsFromRange(points_.coordinates_[j][i] - dm, points_.coordinates_[j][i] + dm, j);
+        xjBins[j] =
+            tiles.getBinsFromRange(points_.coordinates_[j][i] - dm, points_.coordinates_[j][i] + dm, j);
 
         // Overflow
         if (points_.coordinates_[j][i] + dm > domains_[j].max) {
-          std::vector<int> overflowBins = std::move(tiles.getBinsFromRange(domains_[j].min, domains_[j].min + dm, j));
+          std::vector<int> overflowBins =
+              std::move(tiles.getBinsFromRange(domains_[j].min, domains_[j].min + dm, j));
           xjBins[j].insert(xjBins[j].end(), overflowBins.begin(), overflowBins.end());
           // Underflow
         } else if (points_.coordinates_[j][i] - dm < domains_[j].min) {
-          std::vector<int> underflowBins = std::move(tiles.getBinsFromRange(domains_[j].max - dm, domains_[j].max, j));
+          std::vector<int> underflowBins =
+              std::move(tiles.getBinsFromRange(domains_[j].max - dm, domains_[j].max, j));
           xjBins[j].insert(xjBins[j].end(), underflowBins.begin(), underflowBins.end());
         }
       }
@@ -268,8 +276,8 @@ private:
   inline float distance(int i, int j) const {
     float qSum{};  // quadratic sum
     for (int k{}; k != Ndim; ++k) {
-      float delta_xk{
-          deltaPhi(points_.coordinates_[k][i], points_.coordinates_[k][j], domains_[k].min, domains_[k].max)};
+      float delta_xk{deltaPhi(
+          points_.coordinates_[k][i], points_.coordinates_[k][j], domains_[k].min, domains_[k].max)};
       qSum += std::pow(delta_xk, 2);
     }
 

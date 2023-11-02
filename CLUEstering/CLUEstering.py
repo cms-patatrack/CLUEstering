@@ -4,8 +4,7 @@ Density based clustering algorithm developed at CERN.
 
 from dataclasses import dataclass
 import random as rnd
-from math import pi, sqrt
-import sys
+from math import sqrt
 import time
 import types
 from typing import Union
@@ -13,12 +12,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.datasets import make_blobs
-from sklearn.datasets import make_circles
 from sklearn.preprocessing import StandardScaler
 import CLUEsteringCPP as Algo
 
 def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
-               sigma: float = 0.5, x_max: float =30, y_max: float = 30) -> pd.DataFrame:
+               sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
     """
     Returns a dataframe containing randomly generated 2-dimensional or 3-dimensional blobs.
 
@@ -47,53 +45,47 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
         DataFrame containing n_blobs gaussian blobs.
     """
 
-    try:
-        if x_max < 0. or y_max < 0.:
-            raise ValueError('Error: wrong parameter value\nx_max and y_max must be positive.')
-        if n_blobs < 0:
-            raise ValueError('Error: wrong parameter value\nThe number of blobs must be positive.')
-        if mean < 0. or sigma < 0.:
-            raise ValueError("Error: wrong parameter value\nThe mean and sigma of the blobs"
-                             + " cannot be negative.")
-
-        centers = []
-        if n_dim == 2:
-            data = {'x0': [], 'x1': [], 'weight': []}
-            for i in range(n_blobs):
-                centers.append([x_max * rnd.random(),
-                                y_max * rnd.random()])
-            blob_data = make_blobs(n_samples=n_samples, centers=np.array(centers))[0]
-            for i in range(n_samples):
-                data['x0'] += [blob_data[i][0]]
-                data['x1'] += [blob_data[i][1]]
-                data['weight'] += [1]
-
-            return pd.DataFrame(data)
-        if n_dim == 3:
-            data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
-            sqrt_samples = int(sqrt(n_samples))
-            z_values = np.random.normal(mean,sigma,sqrt_samples)
-            for i in range(n_blobs):
-                centers.append([x_max * rnd.random(),  # the centers are 2D because we
-                                y_max * rnd.random()]) # create them for each layer
-            for value in z_values: # for every z value, a layer is generated.
-                blob_data = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))[0]
-                for i in range(sqrt_samples):
-                    data['x0'] += [blob_data[i][0]]
-                    data['x1'] += [blob_data[i][1]]
-                    data['x2'] += [value]
-                    data['weight'] += [1]
-
-            return pd.DataFrame(data)
-
-        # If it gets to the bottom we raise the exception
-        raise ValueError("Error: wrong number of dimensions\nBlobs can only be generated"
+    if x_max < 0. or y_max < 0.:
+        raise ValueError('Wrong parameter value. x_max and y_max must be positive.')
+    if n_blobs < 0:
+        raise ValueError('Wrong parameter value. The number of blobs must be positive.')
+    if sigma < 0.:
+        raise ValueError("Wrong parameter value. The mean and sigma of the blobs"
+                         + " cannot be negative.")
+    if n_dim > 3:
+        raise ValueError("Wrong number of dimensions. Blobs can only be generated"
                          + " in 2 or 3 dimensions.")
-    except ValueError as ve_:
-        print(ve_)
-        sys.exit()
+    centers = []
+    if n_dim == 2:
+        data = {'x0': np.array([]), 'x1': np.array([]), 'weight': np.array([])}
+        centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
+        blob_data = make_blobs(n_samples=n_samples, centers=np.array(centers))[0]
 
-@dataclass(init=False)
+        data['x0'] = blob_data.T[0]
+        data['x1'] = blob_data.T[1]
+        data['weight'] = np.full(shape=len(blob_data.T[0]), fill_value=1)
+
+
+        return pd.DataFrame(data)
+    if n_dim == 3:
+        data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
+        sqrt_samples = int(sqrt(n_samples))
+        z_values = np.random.normal(mean,sigma,sqrt_samples)
+        centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
+
+        for value in z_values: # for every z value, a layer is generated.
+            blob_data = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))[0]
+            data['x0'] = np.concatenate([data['x0'], blob_data.T[0]])
+            data['x1'] = np.concatenate([data['x1'], blob_data.T[1]])
+            data['x2'] = np.concatenate([data['x2'], np.full(shape=sqrt_samples,
+                                                             fill_value=value)])
+            data['weight'] = np.concatenate([data['weight'], np.full(shape=sqrt_samples,
+                                                                     fill_value=1)])
+
+        return pd.DataFrame(data)
+
+
+@dataclass()
 class clustering_data:
     """
     Container characterizing the data used for clustering.
@@ -121,16 +113,7 @@ class clustering_data:
     n_dim : int
     n_points : int
 
-    # Default constructor
-    def __init__(self):
-        self.coords = np.array([])
-        self.original_coords = np.array([])
-        self.weight = np.array([])
-        self.domain_ranges = []
-        self.n_dim = 0
-        self.n_points = 0
-
-@dataclass(init=False, eq=False)
+@dataclass(eq=False)
 class cluster_properties:
     """
     Container of the data resulting from the clusterization of the input data.
@@ -159,21 +142,12 @@ class cluster_properties:
     points_per_cluster : np.ndarray
     output_df : pd.DataFrame
 
-    # Default constructor
-    def __init__(self):
-        self.n_clusters = 0
-        self.cluster_ids = []
-        self.is_seed = []
-        self.cluster_points = []
-        self.points_per_cluster = []
-        self.output_df = pd.DataFrame(None)
-
     def __eq__(self, other):
         if self.n_clusters != other.n_clusters:
             return False
-        if self.cluster_ids.all() != other.cluster_ids.all():
+        if not (self.cluster_ids == other.cluster_ids).all():
             return False
-        if self.is_seed.all() != other.is_seed.all():
+        if not (self.is_seed == other.is_seed).all():
             return False
 
         return True
@@ -215,38 +189,161 @@ class clusterer:
     """
 
     def __init__(self, dc_: float, rhoc_: float, outlier_: float, ppbin: int = 10):
-        try:
-            if float(dc_) != dc_:
-                raise ValueError('Error: wrong parameter type\nThe dc parameter must be a float.')
-            self.dc_ = dc_
-            if float(rhoc_) != rhoc_:
-                raise ValueError('Error: wrong parameter type\nThe rhoc parameter must be a float.')
-            self.rhoc = rhoc_
-            if float(outlier_) != outlier_:
-                raise ValueError("Error: wrong parameter type\n"
-                                 + "The outlier parameter must be a float.")
-            self.outlier = outlier_
-            if not isinstance(ppbin, (int)):
-                raise ValueError("Error: wrong parameter type\nThe ppbin parameter must be a int.")
-            self.ppbin = ppbin
-        except ValueError as ve_:
-            print(ve_)
-            sys.exit()
+        self.dc_ = dc_
+        self.rhoc = rhoc_
+        self.outlier = outlier_
+        self.ppbin = ppbin
 
         # Initialize attributes
         ## Data containers
-        self.clust_data = clustering_data()
+        self.clust_data = None
         self.scaler = StandardScaler()
 
         ## Kernel for calculation of local density
         self.kernel = Algo.flatKernel(0.5)
 
         ## Output attributes
-        self.clust_prop = cluster_properties()
+        self.clust_prop = None
         self.elapsed_time = 0.
+
+    def _read_array(self, input_data: Union[list,np.ndarray]) -> None:
+        """
+        Reads data provided with lists or np.ndarrays
+
+        Attributes
+        ----------
+        input_data : list, np.ndarray
+            The coordinates and energy values of the data points
+
+        Modified attributes
+        -------------------
+        clust_data : clustering_data
+            Properties of the input data
+
+        Returns
+        -------
+        None
+        """
+
+        if len(input_data) < 2 or len(input_data) > 10:
+            raise ValueError("Inadequate data. The data must contain at least one coordinate" +
+                             " and the energy.")
+        self.clust_data = clustering_data(np.asarray(input_data[:-1]),
+                                          np.copy(np.asarray(input_data[:-1])),
+                                          np.asarray(input_data[-1]),
+                                          Algo.domain_t(),
+                                          len(input_data[:-1]),
+                                          len(input_data[-1]))
+
+    def _read_string(self, input_data: str) -> Union[pd.DataFrame,None]:
+        """
+        Reads data provided by passing a string containing the path to a csv file
+
+        Attributes
+        ----------
+        input_data : str
+            The path to the csv file containing the input data
+
+        Modified attributes
+        -------------------
+        None
+
+        Returns
+        -------------------
+        pd.DataFrame
+            Dataframe containing the input data
+        """
+
+        if input_data[-3:] != 'csv':
+            raise ValueError('Wrong type of file. The file is not a csv file.')
+        df_ = pd.read_csv(input_data)
+        return df_
+
+    def _read_dict_df(self, input_data: Union[dict,pd.DataFrame]) -> pd.DataFrame:
+        """
+        Reads data provided using dictionaries or pandas dataframes
+
+        Attributes
+        ----------
+        input_data : dict, pd.DataFrame
+            The coordinates and energy values of the data points
+
+        Modified attributes
+        -------------------
+        None
+
+        Returns
+        -------------------
+        pd.DataFrame
+            Dataframe containing the input data
+        """
+
+        df_ = pd.DataFrame(input_data, copy=False)
+        return df_
+
+    def _handle_dataframe(self, df_: pd.DataFrame) -> None:
+        """
+        Constructs the clust_data attribute from the dataframe produced by the
+        _read_string or _read_dict_df methods
+
+        Modified attributes
+        -------------------
+        clust_data : clustering_data
+            Properties of the input data
+
+        Returns
+        -------
+        None
+        """
+
+        # Check that the user provided the weights
+        if 'weight' not in df_.columns:
+            raise ValueError("Inadequate data. The input dataframe must"
+                             + " contain a weight column.")
+
+        coordinate_columns = [col for col in df_.columns if col[0] == 'x']
+
+        # Check that the dimensionality of the dataset is adequate
+        if len(df_.columns) < 2:
+            raise ValueError("Inadequate data. The data must contain"
+                             + " at least one coordinate and the energy.")
+        if len(coordinate_columns) > 10:
+            raise ValueError("Inadequate data. The maximum number of"
+                             + " dimensions supported is 10.")
+        n_dim = len(coordinate_columns)
+        n_points = len(df_.index)
+        coords = np.zeros(shape=(n_dim, n_points))
+        for dim in range(n_dim):
+            coords[dim] = np.array(df_.iloc[:,dim])
+
+        self.clust_data = clustering_data(coords,
+                                          np.copy(coords),
+                                          np.asarray(df_['weight']),
+                                          Algo.domain_t(),
+                                          n_dim,
+                                          n_points)
+
+    def _rescale(self) -> None:
+        """
+        Normalizes the input data using a standard scaler
+
+        Modified attributes
+        -------------------
+        clust_data.coords : np.ndarray
+            Array containing the coordinates and energy values of the data points
+
+        Returns
+        -------
+        None
+        """
+
+        for dim in range(self.clust_data.n_dim):
+            self.clust_data.coords[dim] = \
+            self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
     def read_data(self,
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray],
+                  rescale: bool = True,
                   **kwargs: tuple) -> None:
         """
         Reads the data in input and fills the class members containing the coordinates
@@ -264,6 +361,8 @@ class clusterer:
         input_data : array_like
             The list or numpy array should contain a list of lists for the
             coordinates and a list for the weight.
+        restale : bool
+            Whether or not ot rescale the input data using a StandardScaler
         kwargs : tuples
             Tuples corresponding to the domain of any periodic variables. The
             keyword should be the keyword of the corrispoding variable.
@@ -290,78 +389,23 @@ class clusterer:
 
         # lists and np ndarrays
         if isinstance(input_data, (list, np.ndarray)):
-            try:
-                if len(input_data) < 2:
-                    raise ValueError("Error: inadequate data\nThe data must contain"
-                                     + " at least one coordinate and the energy.")
-                self.clust_data.coords = np.asarray(input_data[:-1])
-                self.clust_data.weight = np.asarray(input_data[-1])
-                if len(input_data[:-1]) > 10:
-                    raise ValueError("Error: inadequate data\nThe maximum number of"
-                                     + " dimensions supported is 10.")
-                self.clust_data.n_dim = len(self.clust_data.coords)
-                self.clust_data.n_points = self.clust_data.weight.size
-
-                # Save the original coordinates before any normalization
-                self.clust_data.original_coords = np.copy(self.clust_data.coords)
-
-            except ValueError as ve_:
-                print(ve_)
-                sys.exit()
+            self._read_array(input_data)
 
         # path to .csv file or pandas dataframe
-        if isinstance(input_data, (str, dict, pd.DataFrame)):
-            if isinstance(input_data, (str)):
-                try:
-                    if input_data[-3:] != 'csv':
-                        raise ValueError('Error: wrong type of file\nThe file is not a csv file.')
-                    input_data = pd.read_csv(input_data)
+        if isinstance(input_data, (str)):
+            df = self._read_string(input_data)
+            self._handle_dataframe(df)
 
-                except ValueError as ve_:
-                    print(ve_)
-                    sys.exit()
-            if isinstance(input_data, (dict, pd.DataFrame)):
-                df_ = pd.DataFrame(input_data, copy=False)
+        if isinstance(input_data, (dict, pd.DataFrame)):
+            df = self._read_dict_df(input_data)
+            self._handle_dataframe(df)
 
-            try:
-                if 'weight' not in df_.columns:
-                    raise ValueError("Error: inadequate data\nThe input dataframe must"
-                                     + " contain a weight column.")
-
-                coordinate_columns = [col for col in df_.columns if col[0] == 'x']
-                if len(df_.columns) < 2:
-                    raise ValueError("Error: inadequate data\nThe data must contain"
-                                     + " at least one coordinate and the energy.")
-                if len(coordinate_columns) > 10:
-                    raise ValueError("Error: inadequate data\nThe maximum number of"
-                                     + " dimensions supported is 10.")
-                self.clust_data.n_dim = len(coordinate_columns)
-                self.clust_data.n_points = len(df_.index)
-                self.clust_data.coords = np.zeros(shape=(self.clust_data.n_dim,
-                                                         self.clust_data.n_points))
-                for dim in range(self.clust_data.n_dim):
-                    self.clust_data.coords[dim] = np.array(df_.iloc[:,dim])
-                self.clust_data.weight = df_['weight']
-
-                # Save the original coordinates before any normalization
-                self.clust_data.original_coords = np.copy(self.clust_data.coords)
-
-            except ValueError as ve_:
-                print(ve_)
-                sys.exit()
-
-        # Normalize all the coordinates as x'_j = (x_j - mu_j) / sigma_j
-        for dim in range(self.clust_data.n_dim):
-            self.clust_data.coords[dim] = \
-                self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
+        # Rescale the coordinates with a standard scaler
+        if rescale:
+            self._rescale()
 
         # Construct the domains of all the coordinates
-        empty_domain = Algo.domain_t()
-        self.clust_data.domain_ranges = [empty_domain for _ in range(self.clust_data.n_dim)]
-        for coord, domain in kwargs.items():
-            self.clust_data.domain_ranges[int(coord[1])] = \
-                Algo.domain_t(self.scaler.transform([[domain[0]]])[0][0],
-                              self.scaler.transform([[domain[1]]])[0][0])
+        self.change_domains(**kwargs)
 
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
         """
@@ -387,18 +431,18 @@ class clusterer:
         for coord, func in kwargs.items():
             self.clust_data.coords[int(coord[1])] = func(self.clust_data.original_coords)
 
-            # Normalize the coordinate as x'_j = (x_j - mu_j) / sigma_j
+            # Normalize the coordinate with a standard scaler
             self.clust_data.coords[int(coord[1])] = \
                 self.scaler.fit_transform(
                     self.clust_data.coords[int(coord[1])].reshape(-1, 1)
                 ).reshape(1, -1)[0]
 
-    def change_domains(self, **kwargs) -> None:
+    def change_domains(self, **kwargs: tuple) -> None:
         """
         Change the domain range of the coordinates
 
-        This method allows to change the domain of periodic coordinates by passing the domain of each
-        of these coordinates as a tuple, with the argument keyword in the form 'x*'.
+        This method allows to change the domain of periodic coordinates by passing the domain of
+        each of these coordinates as a tuple, with the argument keyword in the form 'x*'.
 
         Parameters
         ----------
@@ -454,33 +498,29 @@ class clusterer:
         None
         """
 
-        try:
-            if choice == "flat":
-                if len(parameters) != 1:
-                    raise ValueError("Error: wrong number of parameters\nThe flat kernel"
-                                     + " requires 1 parameter.")
-                self.kernel = Algo.flatKernel(parameters[0])
-            elif choice == "exp":
-                if len(parameters) != 2:
-                    raise ValueError("Error: wrong number of parameters\nThe exponential"
-                                     + " kernel requires 2 parameters.")
-                self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
-            elif choice == "gaus":
-                if len(parameters) != 3:
-                    raise ValueError("Error: wrong number of parameters\nThe gaussian" +
-                                     " kernel requires 3 parameters.")
-                self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
-            elif choice == "custom":
-                if len(parameters) != 0:
-                    raise ValueError("Error: wrong number of parameters\nCustom kernels"
-                                     + " requires 0 parameters.")
-                self.kernel = Algo.customKernel(function)
-            else:
-                raise ValueError("Error: invalid kernel\nThe allowed choices for the"
-                                 + " kernels are: flat, exp, gaus and custom.")
-        except ValueError as ve_:
-            print(ve_)
-            sys.exit()
+        if choice == "flat":
+            if len(parameters) != 1:
+                raise ValueError("Wrong number of parameters. The flat kernel"
+                                 + " requires 1 parameter.")
+            self.kernel = Algo.flatKernel(parameters[0])
+        elif choice == "exp":
+            if len(parameters) != 2:
+                raise ValueError("Wrong number of parameters. The exponential"
+                                 + " kernel requires 2 parameters.")
+            self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
+        elif choice == "gaus":
+            if len(parameters) != 3:
+                raise ValueError("Wrong number of parameters. The gaussian" +
+                                 " kernel requires 3 parameters.")
+            self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
+        elif choice == "custom":
+            if len(parameters) != 0:
+                raise ValueError("Wrong number of parameters. Custom kernels"
+                                 + " requires 0 parameters.")
+            self.kernel = Algo.customKernel(function)
+        else:
+            raise ValueError("Invalid kernel. The allowed choices for the"
+                             + " kernels are: flat, exp, gaus and custom.")
 
     def run_clue(self, verbose: bool = False) -> None:
         """
@@ -517,19 +557,25 @@ class clusterer:
                                           self.clust_data.coords,self.clust_data.weight,
                                           self.clust_data.n_dim)
         finish = time.time_ns()
-        self.clust_prop.cluster_ids = np.array(cluster_id_is_seed[0])
-        self.clust_prop.is_seed = np.array(cluster_id_is_seed[1])
-        self.clust_prop.n_clusters = len(np.unique(self.clust_prop.cluster_ids))
+        cluster_ids = np.array(cluster_id_is_seed[0])
+        is_seed = np.array(cluster_id_is_seed[1])
+        n_clusters = len(np.unique(cluster_ids))
 
-        cluster_points = [[] for _ in range(self.clust_prop.n_clusters)]
+        cluster_points = [[] for _ in range(n_clusters)]
         for i in range(self.clust_data.n_points):
-            cluster_points[self.clust_prop.cluster_ids[i]].append(i)
+            cluster_points[cluster_ids[i]].append(i)
 
-        self.clust_prop.cluster_points = cluster_points
-        self.clust_prop.points_per_cluster = np.array([len(clust) for clust in cluster_points])
+        points_per_cluster = np.array([len(clust) for clust in cluster_points])
 
-        data = {'cluster_ids': self.clust_prop.cluster_ids, 'is_seed': self.clust_prop.is_seed}
-        self.clust_prop.output_df = pd.DataFrame(data)
+        data = {'cluster_ids': cluster_ids, 'is_seed': is_seed}
+        output_df = pd.DataFrame(data)
+
+        self.clust_prop = cluster_properties(n_clusters,
+                                             cluster_ids,
+                                             is_seed,
+                                             np.asarray(cluster_points, dtype=object),
+                                             points_per_cluster,
+                                             output_df)
 
         self.elapsed_time = (finish - start)/(10**6)
         if verbose:
@@ -817,45 +863,3 @@ class clusterer:
 
         df_ = pd.DataFrame(data)
         df_.to_csv(out_path,index=False)
-
-if __name__ == "__main__":
-    # Test 2-dimensional blobs
-    a = clusterer(0.3, 5, 1.2)
-    a.read_data(test_blobs(1000, 2))
-    a.run_clue()
-    a.cluster_plotter()
-
-    # Test points with angles distributed at opposite extremes of the domain
-    # This test assures that the code works for data with periodic coordinates
-    b = clusterer(0.2, 1, 1.5)
-    b.read_data('../tests/test_datasets/opposite_angles.csv', x1=(-pi, pi))
-    b.input_plotter()
-    b.run_clue()
-    b.cluster_plotter(x0=lambda x: x[0]*np.cos(x[1]),
-                      x1=lambda x: x[0]*np.sin(x[1]))
-    b.cluster_plotter()
-
-    # Create circles dataset
-    circ_data, labels = make_circles(n_samples=1000, factor=0.4)
-    df = {'x0': [], 'x1': [], 'weight': []}
-    for j in range(1000):
-        df['x0'] += [circ_data[j][0]]
-        df['x1'] += [circ_data[j][1]]
-        df['weight'] += [1]
-    df = pd.DataFrame(df)
-
-    # Convert it to polar coordinates
-    new_data = {}
-    new_data['x0'] = np.sqrt(df['x0']**2 + df['x1']**2)
-    new_data['x1'] = np.arctan2(df['x1'], df['x0'])
-    new_data['weight'] = [1 for _ in range(len(new_data['x0']))]
-    new_df = pd.DataFrame(new_data)
-
-    # Test circles dataset
-    c = clusterer(1, 5, 5)
-    c.read_data(new_df, x1=(-pi, pi))
-    c.input_plotter(x0=lambda x: x[0]*np.cos(x[1]),
-                    x1=lambda x: x[0]*np.sin(x[1]))
-    c.run_clue()
-    c.cluster_plotter(x0=lambda x: x[0]*np.cos(x[1]),
-                      x1=lambda x: x[0]*np.sin(x[1]))
