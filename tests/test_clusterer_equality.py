@@ -1,12 +1,14 @@
+import CLUEstering as clue
 import pandas as pd
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
-import CLUEstering as clue
+
 
 @pytest.fixture
 def moons():
     return pd.read_csv("./test_datasets/moons.csv")
+
 
 @pytest.fixture
 def circles():
@@ -25,12 +27,12 @@ def test_clusterer_equality(moons, circles):
     clust1_copy.run_clue()
 
     # Circles dataset
-    clust2 = clue.clusterer(0.9,5,1.5)
+    clust2 = clue.clusterer(0.9, 5, 1.5)
     clust2.read_data(circles)
     clust2.run_clue()
 
     # Create a copy of the circles clusterer to check the equality of clusterers
-    clust2_copy = clue.clusterer(0.9,5,1.5)
+    clust2_copy = clue.clusterer(0.9, 5, 1.5)
     clust2_copy.read_data(circles)
     clust2_copy.run_clue()
 

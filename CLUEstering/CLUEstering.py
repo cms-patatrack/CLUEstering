@@ -15,7 +15,8 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 import CLUEsteringCPP as Algo
 
-def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
+
+def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
     """
     Returns a dataframe containing randomly generated 2-dimensional or 3-dimensional blobs.
@@ -65,15 +66,14 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
         data['x1'] = blob_data.T[1]
         data['weight'] = np.full(shape=len(blob_data.T[0]), fill_value=1)
 
-
         return pd.DataFrame(data)
     if n_dim == 3:
         data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
         sqrt_samples = int(sqrt(n_samples))
-        z_values = np.random.normal(mean,sigma,sqrt_samples)
+        z_values = np.random.normal(mean, sigma, sqrt_samples)
         centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
 
-        for value in z_values: # for every z value, a layer is generated.
+        for value in z_values:  # for every z value, a layer is generated.
             blob_data = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))[0]
             data['x0'] = np.concatenate([data['x0'], blob_data.T[0]])
             data['x1'] = np.concatenate([data['x1'], blob_data.T[1]])
@@ -106,12 +106,13 @@ class clustering_data:
         Number of points in the clustering data.
     """
 
-    coords : np.ndarray
-    original_coords : np.ndarray
-    weight : np.ndarray
-    domain_ranges : list
-    n_dim : int
-    n_points : int
+    coords: np.ndarray
+    original_coords: np.ndarray
+    weight: np.ndarray
+    domain_ranges: list
+    n_dim: int
+    n_points: int
+
 
 @dataclass(eq=False)
 class cluster_properties:
@@ -135,12 +136,12 @@ class cluster_properties:
         Dataframe containing is_seed and cluster_ids as columns.
     """
 
-    n_clusters : int
-    cluster_ids : np.ndarray
-    is_seed : np.ndarray
-    cluster_points : np.ndarray
-    points_per_cluster : np.ndarray
-    output_df : pd.DataFrame
+    n_clusters: int
+    cluster_ids: np.ndarray
+    is_seed: np.ndarray
+    cluster_points: np.ndarray
+    points_per_cluster: np.ndarray
+    output_df: pd.DataFrame
 
     def __eq__(self, other):
         if self.n_clusters != other.n_clusters:
@@ -195,18 +196,18 @@ class clusterer:
         self.ppbin = ppbin
 
         # Initialize attributes
-        ## Data containers
+        # Data containers
         self.clust_data = None
         self.scaler = StandardScaler()
 
-        ## Kernel for calculation of local density
+        # Kernel for calculation of local density
         self.kernel = Algo.flatKernel(0.5)
 
-        ## Output attributes
+        # Output attributes
         self.clust_prop = None
         self.elapsed_time = 0.
 
-    def _read_array(self, input_data: Union[list,np.ndarray]) -> None:
+    def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
         """
         Reads data provided with lists or np.ndarrays
 
@@ -235,7 +236,7 @@ class clusterer:
                                           len(input_data[:-1]),
                                           len(input_data[-1]))
 
-    def _read_string(self, input_data: str) -> Union[pd.DataFrame,None]:
+    def _read_string(self, input_data: str) -> Union[pd.DataFrame, None]:
         """
         Reads data provided by passing a string containing the path to a csv file
 
@@ -259,7 +260,7 @@ class clusterer:
         df_ = pd.read_csv(input_data)
         return df_
 
-    def _read_dict_df(self, input_data: Union[dict,pd.DataFrame]) -> pd.DataFrame:
+    def _read_dict_df(self, input_data: Union[dict, pd.DataFrame]) -> pd.DataFrame:
         """
         Reads data provided using dictionaries or pandas dataframes
 
@@ -314,7 +315,7 @@ class clusterer:
         n_points = len(df_.index)
         coords = np.zeros(shape=(n_dim, n_points))
         for dim in range(n_dim):
-            coords[dim] = np.array(df_.iloc[:,dim])
+            coords[dim] = np.array(df_.iloc[:, dim])
 
         self.clust_data = clustering_data(coords,
                                           np.copy(coords),
@@ -339,10 +340,10 @@ class clusterer:
 
         for dim in range(self.clust_data.n_dim):
             self.clust_data.coords[dim] = \
-            self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
+                self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
     def read_data(self,
-                  input_data: Union[pd.DataFrame,str,dict,list,np.ndarray],
+                  input_data: Union[pd.DataFrame, str, dict, list, np.ndarray],
                   rescale: bool = True,
                   **kwargs: tuple) -> None:
         """
@@ -435,7 +436,7 @@ class clusterer:
             self.clust_data.coords[int(coord[1])] = \
                 self.scaler.fit_transform(
                     self.clust_data.coords[int(coord[1])].reshape(-1, 1)
-                ).reshape(1, -1)[0]
+            ).reshape(1, -1)[0]
 
     def change_domains(self, **kwargs: tuple) -> None:
         """
@@ -471,7 +472,7 @@ class clusterer:
 
     def choose_kernel(self,
                       choice: str,
-                      parameters: Union[list,None] = None,
+                      parameters: Union[list, None] = None,
                       function: types.FunctionType = lambda: 0) -> None:
         """
         Changes the kernel used in the calculation of local density. The default kernel
@@ -552,9 +553,9 @@ class clusterer:
         """
 
         start = time.time_ns()
-        cluster_id_is_seed = Algo.mainRun(self.dc_,self.rhoc,self.outlier,self.ppbin,
-                                          self.clust_data.domain_ranges,self.kernel,
-                                          self.clust_data.coords,self.clust_data.weight,
+        cluster_id_is_seed = Algo.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+                                          self.clust_data.domain_ranges, self.kernel,
+                                          self.clust_data.coords, self.clust_data.weight,
                                           self.clust_data.n_dim)
         finish = time.time_ns()
         cluster_ids = np.array(cluster_id_is_seed[0])
@@ -577,12 +578,12 @@ class clusterer:
                                              points_per_cluster,
                                              output_df)
 
-        self.elapsed_time = (finish - start)/(10**6)
+        self.elapsed_time = (finish - start) / (10**6)
         if verbose:
             print(f'CLUE run in {self.elapsed_time} ms')
             print(f'Number of clusters found: {self.clust_prop.n_clusters}')
 
-    def input_plotter(self, plot_title: str='', title_size: float = 16,
+    def input_plotter(self, plot_title: str = '', title_size: float = 16,
                       x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
                       label_size: float = 16, pt_size: float = 1, pt_colour: str = 'b',
                       grid: bool = True, grid_style: str = '--', grid_size: float = 0.2,
@@ -667,10 +668,10 @@ class clusterer:
             fig = plt.figure()
             ax_ = fig.add_subplot(projection='3d')
             ax_.scatter(cartesian_coords[0],
-                       cartesian_coords[1],
-                       cartesian_coords[2],
-                       s=pt_size,
-                       color=pt_colour)
+                        cartesian_coords[1],
+                        cartesian_coords[2],
+                        s=pt_size,
+                        color=pt_colour)
 
             # Customization of the plot title
             ax_.set_title(plot_title, fontsize=title_size)
@@ -765,12 +766,12 @@ class clusterer:
 
             max_clusterid = max(df_["cluster_ids"])
 
-            df_out = df_[df_.cluster_ids == -1] # Outliers
+            df_out = df_[df_.cluster_ids == -1]  # Outliers
             plt.scatter(df_out.x0, df_out.x1, s=outl_size, marker='x', color='0.4')
-            for i in range(0, max_clusterid+1):
-                dfi = df_[df_.cluster_ids == i] # ith cluster
+            for i in range(0, max_clusterid + 1):
+                dfi = df_[df_.cluster_ids == i]  # ith cluster
                 plt.scatter(dfi.x0, dfi.x1, s=pt_size, marker='.')
-            df_seed = df_[df_.isSeed == 1] # Only Seeds
+            df_seed = df_[df_.isSeed == 1]  # Only Seeds
             plt.scatter(df_seed.x0, df_seed.x1, s=seed_size, color='r', marker='*')
 
             # Customization of the plot title
@@ -804,13 +805,13 @@ class clusterer:
             ax_ = fig.add_subplot(projection='3d')
 
             df_out = df_[df_.cluster_ids == -1]
-            ax_.scatter(df_out.x0, df_out.x1, df_out.x2, s=outl_size, color = 'grey', marker = 'x')
-            for i in range(0, max_clusterid+1):
+            ax_.scatter(df_out.x0, df_out.x1, df_out.x2, s=outl_size, color='grey', marker='x')
+            for i in range(0, max_clusterid + 1):
                 dfi = df_[df_.cluster_ids == i]
-                ax_.scatter(dfi.x0, dfi.x1, dfi.x2, s=pt_size, marker = '.')
+                ax_.scatter(dfi.x0, dfi.x1, dfi.x2, s=pt_size, marker='.')
 
-            df_seed = df_[df_.isSeed == 1] # Only Seeds
-            ax_.scatter(df_seed.x0, df_seed.x1, df_seed.x2, s=seed_size, color = 'r', marker = '*')
+            df_seed = df_[df_.isSeed == 1]  # Only Seeds
+            ax_.scatter(df_seed.x0, df_seed.x1, df_seed.x2, s=seed_size, color='r', marker='*')
 
             # Customization of the plot title
             ax_.set_title(plot_title, fontsize=title_size)
@@ -862,4 +863,4 @@ class clusterer:
         data['is_seed'] = self.clust_prop.is_seed
 
         df_ = pd.DataFrame(data)
-        df_.to_csv(out_path,index=False)
+        df_.to_csv(out_path, index=False)

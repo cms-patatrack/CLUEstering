@@ -1,13 +1,15 @@
+from math import pi
+import CLUEstering as clue
 import pandas as pd
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
-import CLUEstering as clue
-from math import pi
+
 
 @pytest.fixture
 def opposite_angles():
     return pd.read_csv("./test_datasets/opposite_angles.csv")
+
 
 def test_opposite_angles(opposite_angles):
     # Test points with angles distributed at opposite extremes of the domain
