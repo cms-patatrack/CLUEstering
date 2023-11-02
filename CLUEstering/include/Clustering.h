@@ -42,7 +42,7 @@ public:
   // public variables
   float dc_;    // cut-off distance in the calculation of local density
   float rhoc_;  // minimum density to promote a point as a seed or the
-      // maximum density to demote a point as an outlier
+                // maximum density to demote a point as an outlier
   float outlierDeltaFactor_;
   int pointsPerTile_;  // average number of points found in a tile
 

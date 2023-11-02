@@ -24,9 +24,12 @@ TEST_CASE("Test the flat kernel kernel") {
 TEST_CASE("Test the gaussian kernel kernel") {
   CHECK(gaussianKernel(1.5, 1., 1.)(0., 0, 0) == 1.);
   CHECK(gaussianKernel(1.5, 1., 1.)(2., 0, 0) == 1.);
-  CHECK(doctest::Approx(gaussianKernel(1.5, 1., 1.)(0., 1, 0)).epsilon(0.000001) == std::exp(-(1.5 * 1.5) / 2));
-  CHECK(doctest::Approx(gaussianKernel(1.5, 1., 1.)(0., 0, 1)).epsilon(0.000001) == std::exp(-(1.5 * 1.5) / 2));
-  CHECK(doctest::Approx(gaussianKernel(1.5, 1., 1.)(2., 0, 1)).epsilon(0.000001) == std::exp(-(0.5 * 0.5) / 2));
+  CHECK(doctest::Approx(gaussianKernel(1.5, 1., 1.)(0., 1, 0)).epsilon(0.000001) ==
+        std::exp(-(1.5 * 1.5) / 2));
+  CHECK(doctest::Approx(gaussianKernel(1.5, 1., 1.)(0., 0, 1)).epsilon(0.000001) ==
+        std::exp(-(1.5 * 1.5) / 2));
+  CHECK(doctest::Approx(gaussianKernel(1.5, 1., 1.)(2., 0, 1)).epsilon(0.000001) ==
+        std::exp(-(0.5 * 0.5) / 2));
 }
 
 TEST_CASE("Test the exponential kernel") {
