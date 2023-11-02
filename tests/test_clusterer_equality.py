@@ -1,3 +1,7 @@
+'''
+Test that the equality operator for clusterer objects works correctly
+'''
+
 import CLUEstering as clue
 import pandas as pd
 import pytest
@@ -7,15 +11,24 @@ sys.path.insert(1, '../CLUEstering/')
 
 @pytest.fixture
 def moons():
+    '''
+    Returns the dataframe containing the moon dataset
+    '''
     return pd.read_csv("./test_datasets/moons.csv")
 
 
 @pytest.fixture
 def circles():
+    '''
+    Returns the dataframe containing the circle dataset
+    '''
     return pd.read_csv("./test_datasets/circles.csv")
 
 
 def test_clusterer_equality(moons, circles):
+    '''
+    Test the equality operator for clusterer objects
+    '''
     # Moons dataset
     clust1 = clue.clusterer(0.5, 5, 1.)
     clust1.read_data(moons)

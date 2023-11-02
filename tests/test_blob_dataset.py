@@ -1,3 +1,8 @@
+'''
+Testing the algorithm on the blob dataset, a dataset where points are distributed to form
+round clusters
+'''
+
 from filecmp import cmp
 import CLUEstering as clue
 import numpy as np
@@ -10,10 +15,17 @@ sys.path.insert(1, '../CLUEstering/')
 
 @pytest.fixture
 def blobs():
+    '''
+    Returns the dataframe containing the blob dataset
+    '''
     return pd.read_csv("./test_datasets/blob.csv")
 
 
 def test_blobs_clustering(blobs):
+    '''
+    Checks that the output of the clustering is the one given by the truth dataset
+    '''
+
     # Check if the output file already exists and if it does, delete it
     if os.path.isfile('./blobs_output.csv'):
         os.remove('./blobs_output.csv')

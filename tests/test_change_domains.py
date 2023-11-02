@@ -1,3 +1,7 @@
+'''
+Testing the function for changing the domain ranges, using the blob dataset as a reference
+'''
+
 from math import pi
 import CLUEstering as clue
 import numpy as np
@@ -8,11 +12,17 @@ sys.path.insert(1, '../CLUEstering/')
 
 @pytest.fixture
 def blob():
+    '''
+    Returns the dataframe containing the blob dataset
+    '''
     csv_file = './test_datasets/blob.csv'
     return csv_file
 
 
 def test_default_domains(blob):
+    '''
+    Check the values of the default domain ranges
+    '''
     clust = clue.clusterer(0.5, 5., 1.2)
     clust.read_data(blob)
 
@@ -25,6 +35,9 @@ def test_default_domains(blob):
 
 
 def test_change_domains_1():
+    '''
+    Check the renormalization for uniform data
+    '''
     # We generate data with zero mean and standard deviation, so that the
     # domain extremes are not normalized by the standard scaler
     x0 = np.zeros(shape=5)
@@ -55,6 +68,9 @@ def test_change_domains_1():
 
 
 def test_change_domains_2():
+    '''
+    Check the renormalization for non-uniform data
+    '''
     # We generate data with non-zero mean and standard deviation, and we check
     # that the domain exctremes are re-calculated as expected by the scaler
     x0 = np.arange(0, 5)

@@ -1,3 +1,8 @@
+'''
+Testing the algorithm on the circle dataset, a dataset where points are distributed to form
+many small clusters
+'''
+
 from filecmp import cmp
 import CLUEstering as clue
 import os
@@ -9,10 +14,17 @@ sys.path.insert(1, '../CLUEstering/')
 
 @pytest.fixture
 def sissa():
+    '''
+    Returns the dataframe containing the sissa dataset
+    '''
     return pd.read_csv("./test_datasets/sissa.csv")
 
 
 def test_circles_clustering(sissa):
+    '''
+    Checks that the output of the clustering is the one given by the truth dataset
+    '''
+
     # Check if the output file already exists and if it does, delete it
     if os.path.isfile('./sissa_output.csv'):
         os.remove('./sissa_output.csv')

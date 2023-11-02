@@ -1,3 +1,7 @@
+'''
+Test the test_blobs function, which produces a set of gaussianely distributed blobs
+'''
+
 import CLUEstering as clue
 import pytest
 import sys
@@ -5,6 +9,9 @@ sys.path.insert(1, '../CLUEstering/')
 
 
 def test_except_1():
+    '''
+    Test exception of test_blobs for incorrect blob coordinates
+    '''
     clust = clue.clusterer(0.4, 5., 1.2)
 
     with pytest.raises(ValueError):
@@ -17,6 +24,9 @@ def test_except_1():
 
 
 def test_except_2():
+    '''
+    Test exception of test_blobs for negative number of blobs
+    '''
     clust = clue.clusterer(0.4, 5., 1.2)
 
     with pytest.raises(ValueError):
@@ -24,6 +34,9 @@ def test_except_2():
 
 
 def test_except_3():
+    '''
+    Test exception of test_blobs for negative standard deviations
+    '''
     clust = clue.clusterer(0.4, 5., 1.2)
 
     with pytest.raises(ValueError):
@@ -31,6 +44,9 @@ def test_except_3():
 
 
 def test_except_4():
+    '''
+    Test exception of test_blobs for too high dimensions
+    '''
     clust = clue.clusterer(0.4, 5., 1.2)
 
     with pytest.raises(ValueError):
@@ -38,6 +54,9 @@ def test_except_4():
 
 
 def test_successful_run():
+    '''
+    Test correct use of test_blobs
+    '''
     # Since the blobs are randomly generated, it is not possible to precisely
     # predict the result of the clustering a priory
     # So, we simply check that the clustering runs without errors

@@ -1,3 +1,8 @@
+'''
+Testing the algorithm on the circle dataset, a dataset where points are distributed to form
+two concentric circles
+'''
+
 from filecmp import cmp
 import CLUEstering as clue
 import numpy as np
@@ -10,10 +15,17 @@ sys.path.insert(1, '../CLUEstering/')
 
 @pytest.fixture
 def circles():
+    '''
+    Returns the dataframe containing the circle dataset
+    '''
     return pd.read_csv("./test_datasets/circles.csv")
 
 
 def test_circles_clustering(circles):
+    '''
+    Checks that the output of the clustering is the one given by the truth dataset
+    '''
+
     # Check if the output file already exists and if it does, delete it
     if os.path.isfile('./circles_output.csv'):
         os.remove('./circles_output.csv')

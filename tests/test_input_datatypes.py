@@ -1,3 +1,7 @@
+'''
+Testing the algorithm with all the supported input data types
+'''
+
 import CLUEstering as clue
 import numpy as np
 import pandas as pd
@@ -7,6 +11,9 @@ sys.path.insert(1, '../CLUEstering/')
 
 
 def test_read_array_except():
+    '''
+    Test the exception raised when passing incorrect arrays
+    '''
     arr = np.array([[1, 4, 5]])
     clust = clue.clusterer(0.4, 5., 1.2)
 
@@ -15,6 +22,9 @@ def test_read_array_except():
 
 
 def test_read_string_except():
+    '''
+    Test the exception raised when passing incorrect data files
+    '''
     clust = clue.clusterer(0.4, 5., 1.2)
 
     with pytest.raises(ValueError):
@@ -23,6 +33,9 @@ def test_read_string_except():
 
 @pytest.fixture
 def no_weight_dataset():
+    '''
+    Returns a dataset with no weight associated to the points
+    '''
     x0 = np.array([0, 1, 2, 3, 4])
     x1 = np.array([5, 6, 7, 8, 9])
     x2 = np.array([10, 11, 12, 13, 14])
@@ -33,6 +46,9 @@ def no_weight_dataset():
 
 @pytest.fixture
 def low_dimensionality_dataset():
+    '''
+    Returns a dataset with no coordinates
+    '''
     weight = np.array([1, 1, 1, 1, 1])
     data = {'weight': weight}
 
@@ -41,6 +57,9 @@ def low_dimensionality_dataset():
 
 @pytest.fixture
 def high_dimensionality_dataset():
+    '''
+    Returns a 11-dimensional dataset
+    '''
     x0 = np.array([0, 1, 2, 3, 4])
     x1 = np.array([0, 1, 2, 3, 4])
     x2 = np.array([0, 1, 2, 3, 4])
@@ -62,6 +81,9 @@ def high_dimensionality_dataset():
 def test_handle_dataframe_except(no_weight_dataset,
                                  low_dimensionality_dataset,
                                  high_dimensionality_dataset):
+    '''
+    Test the error handling when passing incorrect dataframes
+    '''
     clust = clue.clusterer(0.5, 5., 1.)
 
     with pytest.raises(ValueError):
@@ -74,12 +96,18 @@ def test_handle_dataframe_except(no_weight_dataset,
 
 @pytest.fixture
 def file():
+    '''
+    Returns the path to a test csv file
+    '''
     csv_file = './test_datasets/blob.csv'
     return csv_file
 
 
 @pytest.fixture
 def dataframe():
+    '''
+    Returns the dataframe of a test dataset
+    '''
     csv_file = './test_datasets/blob.csv'
     df_ = pd.read_csv(csv_file)
     return df_
@@ -87,6 +115,9 @@ def dataframe():
 
 @pytest.fixture
 def dictionary(dataframe):
+    '''
+    Returns a test dataset as dictionary
+    '''
     data_dict = {'x0': dataframe['x0'].values.tolist(),
                  'x1': dataframe['x1'].values.tolist(),
                  'x2': dataframe['x2'].values.tolist(),
@@ -96,6 +127,9 @@ def dictionary(dataframe):
 
 @pytest.fixture
 def lists(dataframe):
+    '''
+    Returns a test dataset as a list of lists
+    '''
     data_lists = [dataframe['x0'].values.tolist(),
                   dataframe['x1'].values.tolist(),
                   dataframe['x2'].values.tolist(),
@@ -105,6 +139,9 @@ def lists(dataframe):
 
 @pytest.fixture
 def arrays(dataframe):
+    '''
+    Returns a test dataset as an array of arrays
+    '''
     data_arrays = np.array([np.array(dataframe['x0'].values.tolist()),
                             np.array(dataframe['x1'].values.tolist()),
                             np.array(dataframe['x2'].values.tolist()),

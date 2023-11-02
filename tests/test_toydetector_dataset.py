@@ -1,3 +1,8 @@
+'''
+Testing the algorithm on the circle dataset, a dataset where points are distributed to 
+simulate the hits of a small set of particles in a detector
+'''
+
 from filecmp import cmp
 import CLUEstering as clue
 import os
@@ -9,10 +14,17 @@ sys.path.insert(1, '../CLUEstering/')
 
 @pytest.fixture
 def toy_det():
+    '''
+    Returns the dataframe containing the toy-detector dataset
+    '''
     return pd.read_csv("./test_datasets/toyDetector.csv")
 
 
 def test_circles_clustering(toy_det):
+    '''
+    Checks that the output of the clustering is the one given by the truth dataset
+    '''
+
     # Check if the output file already exists and if it does, delete it
     if os.path.isfile('./toy_det_output.csv'):
         os.remove('./toy_det_output.csv')
