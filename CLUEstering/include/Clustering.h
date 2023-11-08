@@ -1,3 +1,7 @@
+/// \file Clustering.h
+/// \brief Class that represents the clustering algorithm
+///
+
 #ifndef clustering_h
 #define clustering_h
 
@@ -25,6 +29,8 @@ struct domain_t {
   float min = -std::numeric_limits<float>::max();
   float max = std::numeric_limits<float>::max();
 
+  /// @brief empty checks if the domain is empty.
+  /// @return True if the domain is empty, false otherwise.
   bool empty() {
     return (min == -std::numeric_limits<float>::max()) && (max == std::numeric_limits<float>::max());
   }
@@ -44,7 +50,7 @@ public:
     domains_ = std::move(domains);
   }
 
-  // public variables
+  // public data members
   float dc_;    // cut-off distance in the calculation of local density
   float rhoc_;  // minimum density to promote a point as a seed or the
                 // maximum density to demote a point as an outlier
@@ -53,22 +59,74 @@ public:
   std::vector<domain_t> domains_;  // Array containing the domain extremes of every coordinate
   Points<Ndim> points_;
 
+  /// @brief setPoints sets the points to be clustered.
+  /// @param n Number of points.
+  /// @param coordinates Coordinates of the points.
+  /// @param weight Weight of the points.
+  /// @return True if the number of points is zero, false otherwise.
   bool setPoints(int n, std::vector<std::vector<float>> coordinates, std::vector<float> weight);
+  /// @brief clearPoints clears the points.
+  /// @return void
+  ///
+  /// @note This method is called automatically by setPoints.
   void clearPoints();
+  /// @brief calculateNTiles calculates the number of tiles.
+  /// @param pointPerBin Average number of points found in a tile.
+  /// @return Number of tiles.
+  ///
+  /// @note This method is called automatically by makeClusters.
   int calculateNTiles(int pointPerBin);
+  /// @brief calculateTileSize calculates the size of the tiles.
+  /// @param NTiles Number of tiles.
+  /// @param tiles_ Tiles object.
+  /// @return Array containing the size of the tiles.
+  ///
+  /// @note This method is called automatically by makeClusters.
   std::array<float, Ndim> calculateTileSize(int NTiles, tiles<Ndim>& tiles_);
+  /// @brief makeClusters performs the clustering.
+  /// @param ker Kernel object.
+  /// @return Array containing the cluster index and the seed flag.
+  ///
+  /// @note This method is called automatically by makeClusters.
   std::vector<std::vector<int>> makeClusters(kernel const& ker);
 
 private:
+  /// @brief prepareDataStructures prepares the data structures.
+  /// @param tiles Tiles object.
+  /// @return void
+  ///
+  /// @note This method is called automatically by makeClusters.
   void prepareDataStructures(tiles<Ndim>& tiles);
+  /// @brief calculateLocalDensity calculates the local density of the points.
+  /// @param tiles Tiles object.
+  /// @param ker Kernel object.
+  /// @return void
+  ///
+  /// @note This method is called automatically by makeClusters.
   void calculateLocalDensity(tiles<Ndim>& tiles, kernel const& ker);
+  /// @brief calculateDistanceToHigher calculates the distance to the nearest higher point.
+  /// @param tiles Tiles object.
+  /// @return void
+  ///
+  /// @note This method is called automatically by makeClusters.
   void calculateDistanceToHigher(tiles<Ndim>& tiles);
+  /// @brief findAndAssignClusters finds and assigns the clusters.
+  /// @return void
+  ///
+  /// @note This method is called automatically by makeClusters.
   void findAndAssignClusters();
+  /// @brief distance calculates the distance between two points.
+  /// @param i Index of the first point.
+  /// @param j Index of the second point.
+  /// @return Distance between the two points.
   inline float distance(int i, int j) const;
 };
 
+// public methods
 template <uint8_t Ndim>
-bool ClusteringAlgo<Ndim>::setPoints(int n, std::vector<std::vector<float>> coordinates, std::vector<float> weight) {
+bool ClusteringAlgo<Ndim>::setPoints(int n,
+                                     std::vector<std::vector<float>> coordinates,
+                                     std::vector<float> weight) {
   //points_.clear();
   // input variables
   points_.coordinates_ = std::move(coordinates);
@@ -89,7 +147,9 @@ bool ClusteringAlgo<Ndim>::setPoints(int n, std::vector<std::vector<float>> coor
 }
 
 template <uint8_t Ndim>
-void ClusteringAlgo<Ndim>::clearPoints() { points_.clear(); }
+void ClusteringAlgo<Ndim>::clearPoints() {
+  points_.clear();
+}
 
 template <uint8_t Ndim>
 int ClusteringAlgo<Ndim>::calculateNTiles(int pointPerBin) {
@@ -137,6 +197,7 @@ std::vector<std::vector<int>> ClusteringAlgo<Ndim>::makeClusters(kernel const& k
   return {points_.clusterIndex, points_.isSeed};
 }
 
+// private methods
 template <uint8_t Ndim>
 void ClusteringAlgo<Ndim>::prepareDataStructures(tiles<Ndim>& tiles) {
   for (int i{}; i < points_.n; ++i) {
