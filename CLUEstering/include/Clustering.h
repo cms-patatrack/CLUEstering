@@ -19,6 +19,8 @@
 #include "Tiles.h"
 #include "deltaPhi.h"
 
+/// @brief The domain_t struct contains the minimum and maximum values of a
+/// coordinate.
 struct domain_t {
   float min = -std::numeric_limits<float>::max();
   float max = std::numeric_limits<float>::max();
@@ -28,6 +30,9 @@ struct domain_t {
   }
 };
 
+/// @brief The ClusteringAlgo class is the main class of the clustering algorithm.
+/// It contains the data structures and methods to perform the clustering.
+/// @tparam Ndim Number of dimensions of the data.
 template <uint8_t Ndim>
 class ClusteringAlgo {
 public:
