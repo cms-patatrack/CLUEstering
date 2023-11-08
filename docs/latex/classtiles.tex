@@ -1,0 +1,55 @@
+\doxysection{tiles\texorpdfstring{$<$}{<} Ndim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classtiles}{}\label{classtiles}\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classtiles_a42f5f569f63045db69608e81693ec41c}\label{classtiles_a42f5f569f63045db69608e81693ec41c} 
+void {\bfseries resize\+Tiles} ()
+\item 
+\Hypertarget{classtiles_a3db1ae140972e10014931dffd9f81c16}\label{classtiles_a3db1ae140972e10014931dffd9f81c16} 
+int {\bfseries get\+Bin} (float coord\+\_\+, int dim\+\_\+) const
+\item 
+\Hypertarget{classtiles_ae64dc9786a94998c529128ceabf69e2c}\label{classtiles_ae64dc9786a94998c529128ceabf69e2c} 
+int {\bfseries get\+Global\+Bin} (std\+::vector$<$ float $>$ const \&coords) const
+\item 
+\Hypertarget{classtiles_acd8949b89d96ece56e63d19d072474de}\label{classtiles_acd8949b89d96ece56e63d19d072474de} 
+int {\bfseries get\+Global\+Bin\+By\+Bin} (std\+::array$<$ int, Ndim $>$ const \&Bins) const
+\item 
+\Hypertarget{classtiles_a50bf1aca72a294ca3652948b8e376add}\label{classtiles_a50bf1aca72a294ca3652948b8e376add} 
+void {\bfseries fill} (std\+::vector$<$ float $>$ const \&coords, int i)
+\item 
+\Hypertarget{classtiles_a5824264e8ed3af1e4e5c663c21ee0527}\label{classtiles_a5824264e8ed3af1e4e5c663c21ee0527} 
+void {\bfseries fill} (std\+::vector$<$ std\+::vector$<$ float $>$ $>$ const \&coordinates)
+\item 
+\Hypertarget{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}\label{classtiles_a4741daa535e2b21af7c14c0a1ea1081b} 
+{\footnotesize template$<$int N\+\_\+$>$ }\\void {\bfseries search\+Box} (std\+::array$<$ std\+::vector$<$ int $>$, Ndim $>$ const \&xj\+Bins, std\+::array$<$ int, Ndim $>$ \&comb, std\+::vector$<$ int $>$ \&s\+Box)
+\item 
+\Hypertarget{classtiles_a9606242308d7b2b53ee02c7f6ad88cfd}\label{classtiles_a9606242308d7b2b53ee02c7f6ad88cfd} 
+void {\bfseries search\+Box} (std\+::array$<$ std\+::vector$<$ int $>$, Ndim $>$ const \&xj\+Bins, std\+::vector$<$ int $>$ \&s\+Box)
+\item 
+\Hypertarget{classtiles_a4a213c8899448168c7077b815038cc6c}\label{classtiles_a4a213c8899448168c7077b815038cc6c} 
+std\+::vector$<$ int $>$ {\bfseries get\+Bins\+From\+Range} (float x\+\_\+min, float x\+\_\+max, int dim\+\_\+)
+\item 
+\Hypertarget{classtiles_a36df03fb4a1344e994e5a8b0891f98cb}\label{classtiles_a36df03fb4a1344e994e5a8b0891f98cb} 
+void {\bfseries clear} ()
+\item 
+\Hypertarget{classtiles_ac89b9b65164a679f7b715fdfed2ea4f3}\label{classtiles_ac89b9b65164a679f7b715fdfed2ea4f3} 
+std\+::vector$<$ int $>$ \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (int global\+Bin\+Id)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classtiles_a1ad1a157717cc6fd1db49c851ae73df2}\label{classtiles_a1ad1a157717cc6fd1db49c851ae73df2} 
+int {\bfseries n\+Tiles}
+\item 
+\Hypertarget{classtiles_a1cc68db8f8d8132fd54a3f31ab728b30}\label{classtiles_a1cc68db8f8d8132fd54a3f31ab728b30} 
+std\+::array$<$ float, Ndim $>$ {\bfseries tiles\+Size}
+\item 
+\Hypertarget{classtiles_a8e542c1f9adaf302db0db1663f41ab31}\label{classtiles_a8e542c1f9adaf302db0db1663f41ab31} 
+std\+::array$<$ std\+::vector$<$ float $>$, Ndim $>$ {\bfseries min\+Max}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+CLUEstering/include/Tiles.\+h\end{DoxyCompactItemize}

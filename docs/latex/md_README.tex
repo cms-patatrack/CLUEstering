@@ -1,0 +1,171 @@
+\chapter{CLUEstering}
+\hypertarget{md_README}{}\label{md_README}\index{CLUEstering@{CLUEstering}}
+\label{md_README_autotoc_md0}%
+\Hypertarget{md_README_autotoc_md0}%
+The CLUE algorithm is a clustering algorithm written at CERN.
+
+The original algorithm was designed to work in 2 dimensions, with the data distributed in parallel layers. Unlike other clustering algorithms, CLUE takes the coordinates of the points and also their weight, which represents their energy, and calculates the energy density of each point. This energy density is used to find the seeds for each cluster, their followers and the outliers, which are dismissed as noise. CLUE takes 4 parameters in input\+:
+\begin{DoxyItemize}
+\item {\ttfamily dc\+\_\+}, which is the side of the box inside of which the density of a point is calculated;
+\item {\ttfamily rhoc}, which is the minimum energy density that a point must have to not be considered an outlier,
+\item {\ttfamily outlier\+Delta\+Factor}, that multiplied by dc\+\_\+ gives dm\+\_\+, the side of the box inside of which the followers of a point are searched;
+\item {\ttfamily points\+Per\+Bin}, which is the average number of points that are to be found inside a bin. This value allows to control the size of the bins.
+\end{DoxyItemize}
+
+This library generalizes the original algorithm, making it N-\/dimensional, and turns it into a general purpose algorithm, usable by any user and applicaple to a wider range of applications, in particular outside particle physics.
+
+
+
+  
+
+The C++ code is binded using Py\+Bind11, and the module is created locally during the installation of the library.
+
+In the library is defined the {\ttfamily clusterer} class, which contains the methods for reading the data, running the algorithm, plotting the data both in input and output, and others. ~\newline
+ Outside of the class is also defined the function test\+\_\+blobs, which takes the number of points and the number of dimensions, and is a way to test quickly the library, producing some N-\/dimensional blobs.
+
+Below is shown a basic example of how the library can be used\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{import\ CLUEstering\ as\ clue}
+\DoxyCodeLine{}
+\DoxyCodeLine{clust\ =\ clue.clusterer(1.,\ 5.,\ 1.5)}
+\DoxyCodeLine{clust.read\_data(clue.test\_blobs(1000,2))}
+\DoxyCodeLine{clust.run\_clue()}
+\DoxyCodeLine{clust.cluster\_plotter()}
+
+\end{DoxyCode}
+ 
+
+ \hypertarget{md_README_autotoc_md1}{}\doxysection{\texorpdfstring{The $<$tt$>$clusterer$<$/tt$>$ class}{The <tt>clusterer</tt> class}}\label{md_README_autotoc_md1}
+The {\ttfamily clusterer} class represents a wrapper class around the method {\ttfamily main\+Run}, which is binded from {\ttfamily C++} and that is the method that runs the CLUE algorithm. ~\newline
+ When an instance of this class is created, it requires at least three parameters\+: {\ttfamily dc}, {\ttfamily rhoc} and {\ttfamily outlier\+Delta\+Factor}. There is a fourth parameter, {\ttfamily p\+PBin}, which represents the desired average number of points found in each of the bins that the clustering space is divided into. This parameter has a default value of {\ttfamily 10}. ~\newline
+ The parameters {\ttfamily dc}, {\ttfamily rhoc} and {\ttfamily outlier\+Delta\+Factor} must be {\ttfamily floats} or a type convertible to a {\ttfamily float}. {\ttfamily pp\+Bin}, on the other hand, is an {\ttfamily integer}.
+
+The class has several methods\+:
+\begin{DoxyItemize}
+\item {\ttfamily read\+\_\+data}, which takes the data in input and inizializes the class members. The data can be in the form of list, numpy array, dictionary, string containing the path to a csv file or pandas Data\+Frame;
+\item {\ttfamily change\+\_\+coordinates}, which allows to change the coordinate system used for clustering;
+\item {\ttfamily change\+\_\+domains}, which allows to change the domain ranges of any eventual periodic coordinates;
+\item {\ttfamily choose\+\_\+kernel}, which allows to change the convolution kernel used when calculating the local density of each point. The default kernel is a flat kernel with parameter {\ttfamily 0.\+5}, but it can be changed to an exponential or gaussian kernel, or a custom kernel, which is user defined and can be any continuous function;
+\item {\ttfamily run\+\_\+clue}, which takes no parameters and runs the CLUE algorithm;
+\item {\ttfamily input\+\_\+plotter}, which plots all the points in input. This method is useful for getting an idea of the shape of the dataset before clustering. In addition to some plot customizations (like the colour or the size of the points, the addition of a grid, the axis labels and so on) it\textquotesingle{}s also possible to pass the functions for the change of coordinates and change the coordinate system used for plotting.
+\item {\ttfamily cluster\+\_\+plotter}, which plots the data using a different colour for each cluster. The seeds are indicated by stars and the outliers by small grey crosses.
+\item {\ttfamily to\+\_\+csv}, which takes two strings, the first containing the path to a folder and the second containing the desired name for the csv file (also with the .csv suffix) and produces the csv file containing the cluster informations.
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md2}{}\doxysection{\texorpdfstring{Reading data}{Reading data}}\label{md_README_autotoc_md2}
+Data is read with the {\ttfamily read\+\_\+data} method. ~\newline
+ For the data to be acceptable, it must contain the values of at least one coordinate for all the points, and their {\ttfamily weights}. The {\ttfamily weights} of the points represent their relative importance in the dataset, so in most cases they can all be set to 1. There are several accepted formats for providing the data\+: ~\newline
+
+\begin{DoxyItemize}
+\item {\ttfamily string}, where the string contains the relative path to a {\ttfamily csv} file. The file must contain at least one column for the coordinates, which must be named as {\ttfamily x\texorpdfstring{$\ast$}{*}} ({\ttfamily x0}, {\ttfamily x1}, ecc.) and one column for the {\ttfamily weight}
+\item {\ttfamily pandas.\+Data\+Frame}, where the columns for the coordinates must be named {\ttfamily x\texorpdfstring{$\ast$}{*}} ({\ttfamily x1}, {\ttfamily x2}, ecc.) and one column should contain the {\ttfamily weight}
+\item {\ttfamily list} or {\ttfamily np.\+ndarray}, where the coordinate data should be provided as a list of lists (or array of arrays), and the weights inserted in a second, separate list/array
+\item {\ttfamily dictionary}, where the coordinate data must be contained in lists, each with key {\ttfamily x\texorpdfstring{$\ast$}{*}} ({\ttfamily ,}, ecc.) and the weights in another list with key {\ttfamily weight}
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md3}{}\doxysection{\texorpdfstring{Generating a test dataset with $<$tt$>$test\+\_\+blobs$<$/tt$>$}{Generating a test dataset with <tt>test\_blobs</tt>}}\label{md_README_autotoc_md3}
+If a user wants to test the library without using real data, they can easily do so using the {\ttfamily test\+\_\+blobs} method. {\ttfamily test\+\_\+blobs} generates a dataset containing any number of gaussian blobs (4 by default), i.\+e. regular distributions of points distributed gaussianly in a round shape. These blobs can be generated in 2 or 3 dimensions. ~\newline
+ It is possible to customize\+:
+\begin{DoxyItemize}
+\item the number of points in the dataset, through the parameter {\ttfamily n\+\_\+samples}
+\item how spread out the points are, through the {\ttfamily mean} and {\ttfamily sigma} parameters
+\item the spatial span over which these blobs are placed, throught the parameters {\ttfamily x\+\_\+max} and {\ttfamily y\+\_\+max}. By modifying this parameters it\textquotesingle{}s possible to make the blobs more crammed or more well separated, thus making it harder or easier to clusterize them
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md4}{}\doxysection{\texorpdfstring{Change of kernels for the calculation of local density}{Change of kernels for the calculation of local density}}\label{md_README_autotoc_md4}
+Since {\ttfamily version 1.\+3.\+0} it is possible to choose what kernel to use when calculating the local density of each point. The default choices are {\ttfamily gaussian}, {\ttfamily exponential} and {\ttfamily flat}. Each of the kernels require a list of parameters\+:
+\begin{DoxyItemize}
+\item {\ttfamily flat}, takes a single parameter
+\item {\ttfamily exp}, takes two parameters, the amplitude and the mean.
+\item {\ttfamily gaus}, takes three parameters, the amplitude, the mean and the standard deviation. ~\newline
+
+\end{DoxyItemize}
+
+The default kernel is a flat kernel with parameter {\ttfamily 0.\+5}. The different kernels can be chosen using the {\ttfamily choose\+\_\+kernel} method. It is also possible to use a user-\/defined kernel, by passing it as a function object. Custom kernels require an empty list to be passed as parameters. ~\newline
+ The functions used to define a custom kernel should take three parameters\+:
+\begin{DoxyItemize}
+\item The distance {\ttfamily dist\+\_\+ij} between the two points.
+\item The id {\ttfamily point\+\_\+id} of the fixed point.
+\item The id {\ttfamily j} of the neighbouring points.
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{import\ CLUEstering\ as\ clue}
+\DoxyCodeLine{}
+\DoxyCodeLine{clust\ =\ clue.clusterer(1.,\ 5.,\ 1.5)\ \#\ the\ default\ kernel\ is\ flat(0.5)}
+\DoxyCodeLine{}
+\DoxyCodeLine{\#\ Change\ to\ an\ exponential\ kernel\ }
+\DoxyCodeLine{clust.choose\_kernel('exp',\ [1.\ 1.5])}
+\DoxyCodeLine{}
+\DoxyCodeLine{\#\ Now\ use\ a\ custom\ kernel,\ a\ linear\ function}
+\DoxyCodeLine{clust.choose\_kernel('custom',\ [],\ lambda\ x,\ y,\ z:\ 2\ *\ x)}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md5}{}\doxysection{\texorpdfstring{Use of periodic coordinates and change of the coordinate system}{Use of periodic coordinates and change of the coordinate system}}\label{md_README_autotoc_md5}
+Since version {\ttfamily version 1.\+4.\+0} it is possible to use periodic coordinates. The finite domain of a periodic variable con be specified in the call of the {\ttfamily read\+\_\+data} method by passing a tuple containing the extremes of the domain with a keyword that specifies which coordinate should be bounded ({\ttfamily x0}, {\ttfamily x1}, {\ttfamily x2}, ecc.).
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{import\ CLUEstering\ as\ clue}
+\DoxyCodeLine{from\ math\ import\ pi}
+\DoxyCodeLine{}
+\DoxyCodeLine{clust\ =\ clue.clusterer(1.,\ 5.,\ 1.5)}
+\DoxyCodeLine{clue.read\_data('my\_data.csv',\ x1=(0,\ 2*pi))}
+
+\end{DoxyCode}
+
+
+The domain of a periodic variable can also be changed after the call to {\ttfamily read\+\_\+data}, using the method {\ttfamily change\+\_\+domains}.
+
+It is also possible to change the coordinate system used for the clustering. This can be done through the {\ttfamily change\+\_\+coordinates} method, which takes as arguments function objects representing the change of system for each of the coordinates.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{import\ CLUEstering\ as\ clue}
+\DoxyCodeLine{from\ math\ import\ pi}
+\DoxyCodeLine{}
+\DoxyCodeLine{clust\ =\ clue.clusterer(1.,\ 5.,\ 1.5)}
+\DoxyCodeLine{clust.read\_data('my\_data.csv')}
+\DoxyCodeLine{}
+\DoxyCodeLine{\#\ Move\ from\ cartesian\ to\ polar\ coordinate\ system}
+\DoxyCodeLine{\#\#\ x0\ is\ the\ radius,\ x1\ is\ the\ polar\ angle}
+\DoxyCodeLine{clust.change\_coordinates(x0=lambda\ x,\ y:\ np.sqrt(x**2\ +\ y**2),\ x1=\ lambda\ x,\ y:\ np.arctan2(y,\ x))}
+
+\end{DoxyCode}
+
+
+Finally, it\textquotesingle{}s also possible to change the coordiantes system used for plotting. This can be useful when a specific coordinate system is well suited for clustering a given dataset, because it takes advantage of some symmetries in the data, but the plots should still be in cartesian coordinates. To do this the equations for the change of coordinates can be passed as function objects to the two plotting methods.\hypertarget{md_README_autotoc_md6}{}\doxysection{\texorpdfstring{Input and cluster $<$tt$>$plotter$<$/tt$>$ methods}{Input and cluster <tt>plotter</tt> methods}}\label{md_README_autotoc_md6}
+The {\ttfamily input\+\_\+plotter} and {\ttfamily cluster\+\_\+plotter} methods two plotting methods based on matplotlib. {\ttfamily input\+\_\+plotter} is intenteded to be used as a way to observe the data before clustering and getting an idea of the expected result, whereas {\ttfamily cluster\+\_\+plotter} plots the results of the clustering, plotting the points corresponding to the same cluster with the same colour and the outliers as small grey crosses. ~\newline
+ Both methods allow for a wide range of customizations\+:
+\begin{DoxyItemize}
+\item the title of the plot and its size can be changed with the {\ttfamily plot\+\_\+title} and {\ttfamily title\+\_\+size} parameters
+\item the labels of the axis can be changed with the {\ttfamily x\+\_\+label}, {\ttfamily y\+\_\+label} and {\ttfamily z\+\_\+label} parameters
+\item the size and colour of the points. In the cluster plotter it is possible to change the size of the three classes of points (normal, seed and outlier) singularly
+\item it\textquotesingle{}s possible to add a grid to the point with the {\ttfamily grid} boolean parameter, and change its style and size with the {\ttfamily grid\+\_\+style} and {\ttfamily grid\+\_\+size} parameters
+\item the ticks on the axis can be changed with the {\ttfamily x\+\_\+ticks}, {\ttfamily y\+\_\+ticks} and {\ttfamily z\+\_\+ticks} parameters
+\end{DoxyItemize}
+
+Since {\ttfamily version 1.\+4.\+0} both plotting methods can take function objects as kwargs, where the functions represent equations for the change of coordinates, thus allowing to change the coordinate system used for plotting.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{import\ CLUEstering\ as\ clue}
+\DoxyCodeLine{}
+\DoxyCodeLine{clust\ =\ clue.clusterer(1.,\ 5.,\ 1.5)}
+\DoxyCodeLine{clust.read\_data(data)}
+\DoxyCodeLine{}
+\DoxyCodeLine{\#\ Plot\ the\ data\ in\ polar\ coordinates}
+\DoxyCodeLine{clust.input\_plotter(x0=lambda\ x:\ np.sqrt(x[0]**2\ +\ x[1]**2),}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ x1=lambda\ x:\ np.arctan2(x[1],\ x[0]))}
+\DoxyCodeLine{clust.run\_clue()}
+
+\end{DoxyCode}
+ This is particularly useful when the data has some kind of simmetry, which allows it to be clustered more easily in another coordinate system.\hypertarget{md_README_autotoc_md7}{}\doxysection{\texorpdfstring{Writing the results of the clustering to file}{Writing the results of the clustering to file}}\label{md_README_autotoc_md7}
+The results of the clustering can be saved to a csv file for later analysis, using the method {\ttfamily to\+\_\+csv}. ~\newline
+ This method taks as parameter the path to the {\ttfamily output\+\_\+folder} and the {\ttfamily file\+\_\+name}, where the name of the file must include the {\ttfamily .csv} suffix. ~\newline
+ The data saved on the file include the entire input, so the points\textquotesingle{} coordinates and weights, as well as their {\ttfamily cluster\+\_\+id}s, an integer that indicates to what cluster they belong, and {\ttfamily is\+\_\+seed}, a boolean value indicating whether a point is a seed or not. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{import\ CLUEstering\ as\ clue}
+\DoxyCodeLine{}
+\DoxyCodeLine{clust\ =\ clue.clusterer(1.,\ 5.,\ 1.5)}
+\DoxyCodeLine{clust.read\_data(data)}
+\DoxyCodeLine{clust.run\_clue()}
+\DoxyCodeLine{clust.to\_csv('./output/',\ 'data\_results.csv')}
+
+\end{DoxyCode}
+ 

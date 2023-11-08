@@ -1,0 +1,97 @@
+\doxysection{Kernels.\+h}
+\hypertarget{Kernels_8h_source}{}\label{Kernels_8h_source}\index{CLUEstering/include/Kernels.h@{CLUEstering/include/Kernels.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Header\ for\ the\ convolutional\ kernels\ used\ in\ the\ calculation\ of\ the\ local\ density\ of\ a\ point}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ kernels\_h}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ kernels\_h}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{using\ }kernel\_t\ =\ std::function<float(\textcolor{keywordtype}{float},\ \textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int})>;}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ Define\ the\ kernels\ used\ for\ the\ calculation\ of\ local\ density}}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classkernel}{kernel}}\ \{}
+\DoxyCodeLine{00018\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \mbox{\hyperlink{classkernel}{kernel}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ operator()(\textcolor{keywordtype}{float}\ dist\_ij,\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ 0.f;\ \};}
+\DoxyCodeLine{00022\ \};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classflatKernel}{flatKernel}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classkernel}{kernel}}\ \{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{float}\ m\_flat;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00029\ \ \ \mbox{\hyperlink{classflatKernel}{flatKernel}}(\textcolor{keywordtype}{float}\ flat)\ :\ m\_flat\{flat\}\ \{\}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \textcolor{keywordtype}{float}\ operator()(\textcolor{keywordtype}{float}\ dist\_ij,\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordflow}{if}\ (point\_id\ ==\ j)\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1.f;}
+\DoxyCodeLine{00034\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ m\_flat;}
+\DoxyCodeLine{00036\ \ \ \ \ \}}
+\DoxyCodeLine{00037\ \ \ \}}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classgaussianKernel}{gaussianKernel}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classkernel}{kernel}}\ \{}
+\DoxyCodeLine{00041\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \textcolor{keywordtype}{float}\ m\_gaus\_avg;}
+\DoxyCodeLine{00043\ \ \ \textcolor{keywordtype}{float}\ m\_gaus\_std;}
+\DoxyCodeLine{00044\ \ \ \textcolor{keywordtype}{float}\ m\_gaus\_amplitude;}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00047\ \ \ \mbox{\hyperlink{classgaussianKernel}{gaussianKernel}}(\textcolor{keywordtype}{float}\ gaus\_avg,\ \textcolor{keywordtype}{float}\ gaus\_std,\ \textcolor{keywordtype}{float}\ gaus\_amplitude)}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ :\ m\_gaus\_avg\{gaus\_avg\},\ m\_gaus\_std\{gaus\_std\},\ m\_gaus\_amplitude\{gaus\_amplitude\}\ \{\}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \textcolor{keywordtype}{float}\ operator()(\textcolor{keywordtype}{float}\ dist\_ij,\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordflow}{if}\ (point\_id\ ==\ j)\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1.f;}
+\DoxyCodeLine{00053\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ m\_gaus\_amplitude\ *\ std::exp(-\/std::pow(dist\_ij\ -\/\ m\_gaus\_avg,\ 2)\ /\ (2\ *\ std::pow(m\_gaus\_std,\ 2))));}
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \}}
+\DoxyCodeLine{00058\ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classexponentialKernel}{exponentialKernel}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classkernel}{kernel}}\ \{}
+\DoxyCodeLine{00061\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00062\ \ \ \textcolor{keywordtype}{float}\ m\_exp\_avg;}
+\DoxyCodeLine{00063\ \ \ \textcolor{keywordtype}{float}\ m\_exp\_amplitude;}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00066\ \ \ \mbox{\hyperlink{classexponentialKernel}{exponentialKernel}}(\textcolor{keywordtype}{float}\ exp\_avg,\ \textcolor{keywordtype}{float}\ exp\_amplitude)}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ :\ m\_exp\_avg\{exp\_avg\},\ m\_exp\_amplitude\{exp\_amplitude\}\ \{\}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \textcolor{keywordtype}{float}\ operator()(\textcolor{keywordtype}{float}\ dist\_ij,\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordflow}{if}\ (point\_id\ ==\ j)\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1.f;}
+\DoxyCodeLine{00072\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(m\_exp\_amplitude\ *\ std::exp(-\/m\_exp\_avg\ *\ dist\_ij));}
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ \ \ \}}
+\DoxyCodeLine{00076\ \};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{comment}{//\ The\ user\ can\ also\ use\ a\ generic\ kernel\ by\ passing\ a\ function\ object}}
+\DoxyCodeLine{00079\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classcustomKernel}{customKernel}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classkernel}{kernel}}\ \{}
+\DoxyCodeLine{00080\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00081\ \ \ kernel\_t\ m\_function;}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00084\ \ \ \mbox{\hyperlink{classcustomKernel}{customKernel}}(kernel\_t\ function)\ :\ m\_function\{std::move(function)\}\ \{\}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \textcolor{keywordtype}{float}\ operator()(\textcolor{keywordtype}{float}\ dist\_ij,\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordflow}{return}\ m\_function(dist\_ij,\ point\_id,\ j);}
+\DoxyCodeLine{00088\ \ \ \}}
+\DoxyCodeLine{00089\ \};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

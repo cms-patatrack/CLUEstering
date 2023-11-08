@@ -1,0 +1,13 @@
+\doxysection{delta\+Phi.\+h}
+\hypertarget{deltaPhi_8h_source}{}\label{deltaPhi_8h_source}\index{CLUEstering/include/deltaPhi.h@{CLUEstering/include/deltaPhi.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00004\ T\ deltaPhi(T\ phi1,\ T\ phi2,\ T\ x\_min,\ T\ x\_max)\ \{}
+\DoxyCodeLine{00005\ \ \ T\ delta\_phi\{std::abs(phi2\ -\/\ phi1)\};}
+\DoxyCodeLine{00006\ \ \ \textcolor{keywordflow}{return}\ std::min(delta\_phi,\ x\_max\ -\/\ x\_min\ -\/\ delta\_phi);}
+\DoxyCodeLine{00007\ \}}
+
+\end{DoxyCode}

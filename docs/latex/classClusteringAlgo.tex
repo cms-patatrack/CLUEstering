@@ -1,0 +1,49 @@
+\doxysection{Clustering\+Algo\texorpdfstring{$<$}{<} Ndim \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classClusteringAlgo}{}\label{classClusteringAlgo}\index{ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classClusteringAlgo_a1b510ebbb296613ed4fe9584bb83b241}\label{classClusteringAlgo_a1b510ebbb296613ed4fe9584bb83b241} 
+{\bfseries Clustering\+Algo} (float dc, float rhoc, float outlier\+Delta\+Factor, int p\+PBin, std\+::vector$<$ \mbox{\hyperlink{structdomain__t}{domain\+\_\+t}} $>$ domains)
+\item 
+\Hypertarget{classClusteringAlgo_a08aea6dfeb6dad41a96f049e8e5d1a50}\label{classClusteringAlgo_a08aea6dfeb6dad41a96f049e8e5d1a50} 
+bool {\bfseries set\+Points} (int n, std\+::vector$<$ std\+::vector$<$ float $>$ $>$ coordinates, std\+::vector$<$ float $>$ weight)
+\item 
+\Hypertarget{classClusteringAlgo_ad03eeabc4605a06ee785486214f29daf}\label{classClusteringAlgo_ad03eeabc4605a06ee785486214f29daf} 
+void {\bfseries clear\+Points} ()
+\item 
+\Hypertarget{classClusteringAlgo_a1e973008a68ad8bf6c08b914e190b278}\label{classClusteringAlgo_a1e973008a68ad8bf6c08b914e190b278} 
+int {\bfseries calculate\+NTiles} (int point\+Per\+Bin)
+\item 
+\Hypertarget{classClusteringAlgo_a32697a029ff013d277f5c2c62f06c514}\label{classClusteringAlgo_a32697a029ff013d277f5c2c62f06c514} 
+std\+::array$<$ float, Ndim $>$ {\bfseries calculate\+Tile\+Size} (int NTiles, \mbox{\hyperlink{classtiles}{tiles}}$<$ Ndim $>$ \&tiles\+\_\+)
+\item 
+\Hypertarget{classClusteringAlgo_ad490a41fdcb9e4e7ba802d19eb4b58db}\label{classClusteringAlgo_ad490a41fdcb9e4e7ba802d19eb4b58db} 
+std\+::vector$<$ std\+::vector$<$ int $>$ $>$ {\bfseries make\+Clusters} (\mbox{\hyperlink{classkernel}{kernel}} const \&ker)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classClusteringAlgo_aaa404d2a3479c030c1256286993acc14}\label{classClusteringAlgo_aaa404d2a3479c030c1256286993acc14} 
+float {\bfseries dc\+\_\+}
+\item 
+\Hypertarget{classClusteringAlgo_a57e0474d1b944bfafe30a7697b0ff709}\label{classClusteringAlgo_a57e0474d1b944bfafe30a7697b0ff709} 
+float {\bfseries rhoc\+\_\+}
+\item 
+\Hypertarget{classClusteringAlgo_af6c260d2b5a247a5e4fc03ca34bd63d0}\label{classClusteringAlgo_af6c260d2b5a247a5e4fc03ca34bd63d0} 
+float {\bfseries outlier\+Delta\+Factor\+\_\+}
+\item 
+\Hypertarget{classClusteringAlgo_ad72b319425b2705d12a7577d7b161397}\label{classClusteringAlgo_ad72b319425b2705d12a7577d7b161397} 
+int {\bfseries points\+Per\+Tile\+\_\+}
+\item 
+\Hypertarget{classClusteringAlgo_ae57df3e9c9ae0fee9f0c745e594471fc}\label{classClusteringAlgo_ae57df3e9c9ae0fee9f0c745e594471fc} 
+std\+::vector$<$ \mbox{\hyperlink{structdomain__t}{domain\+\_\+t}} $>$ {\bfseries domains\+\_\+}
+\item 
+\Hypertarget{classClusteringAlgo_a58190d692bf899c662531405149a658b}\label{classClusteringAlgo_a58190d692bf899c662531405149a658b} 
+\mbox{\hyperlink{structPoints}{Points}}$<$ Ndim $>$ {\bfseries points\+\_\+}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+CLUEstering/include/Clustering.\+h\end{DoxyCompactItemize}

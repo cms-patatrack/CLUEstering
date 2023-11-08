@@ -1,0 +1,64 @@
+\doxysection{CLUEstering.\+CLUEstering.\+cluster\+\_\+properties Class Reference}
+\hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties}{}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties}\index{CLUEstering.CLUEstering.cluster\_properties@{CLUEstering.CLUEstering.cluster\_properties}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a4251d53b029e4358c6519cc65ff857b0}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a4251d53b029e4358c6519cc65ff857b0} 
+{\bfseries \+\_\+\+\_\+eq\+\_\+\+\_\+} (self, other)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties_acab41c6cc9eaa2c63f12a9ff7d63560e}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties_acab41c6cc9eaa2c63f12a9ff7d63560e} 
+{\bfseries cluster\+\_\+ids}
+\item 
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties_ac8ed238de71ea17056c0671963159cc3}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties_ac8ed238de71ea17056c0671963159cc3} 
+{\bfseries is\+\_\+seed}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a52e90e505fff7749d7ff885cca615ea3}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a52e90e505fff7749d7ff885cca615ea3} 
+int {\bfseries n\+\_\+clusters}
+\item 
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a9eb7b63196a2501ef14c924bf8cb763a}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a9eb7b63196a2501ef14c924bf8cb763a} 
+np {\bfseries cluster\+\_\+ids} .ndarray
+\item 
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a2d4e779c4832454b5755459f205b612f}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a2d4e779c4832454b5755459f205b612f} 
+np {\bfseries is\+\_\+seed} .ndarray
+\item 
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties_aa0ae8b88fe94b11dd571ff083ab5c155}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties_aa0ae8b88fe94b11dd571ff083ab5c155} 
+np {\bfseries cluster\+\_\+points} .ndarray
+\item 
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a574cc1768dd68879c3355b7849070309}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a574cc1768dd68879c3355b7849070309} 
+np {\bfseries points\+\_\+per\+\_\+cluster} .ndarray
+\item 
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a8979d34c1206a664e74b42fa7a5d53d2}\label{classCLUEstering_1_1CLUEstering_1_1cluster__properties_a8979d34c1206a664e74b42fa7a5d53d2} 
+pd {\bfseries output\+\_\+df} .Data\+Frame
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Container of the data resulting from the clusterization of the input data.
+
+Attributes
+----------
+n_clusters : int
+    Number of clusters constructed.
+cluster_ids : np.ndarray
+    Array containing the cluster_id of each point.
+is_seed : np.ndarray
+    Array of integers containing '1' if a point is a seed and '0' if it isn't
+cluster_points : np.ndarray
+    Array containing, for each cluster, the list of point_ids corresponding to the
+    clusters bolonging to that cluster.
+points_per_cluster : np.ndarray
+    Array containing the number of points belonging to each cluster.
+output_df : pd.DataFrame
+    Dataframe containing is_seed and cluster_ids as columns.
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+CLUEstering/CLUEstering.\+py\end{DoxyCompactItemize}

@@ -1,0 +1,294 @@
+\doxysection{Clustering.\+h}
+\hypertarget{Clustering_8h_source}{}\label{Clustering_8h_source}\index{CLUEstering/include/Clustering.h@{CLUEstering/include/Clustering.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ clustering\_h}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ clustering\_h}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}Kernels.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}Point.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}Tiles.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}deltaPhi.h"{}}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structdomain__t}{domain\_t}}\ \{}
+\DoxyCodeLine{00023\ \ \ \textcolor{keywordtype}{float}\ min\ =\ -\/std::numeric\_limits<float>::max();}
+\DoxyCodeLine{00024\ \ \ \textcolor{keywordtype}{float}\ max\ =\ std::numeric\_limits<float>::max();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{bool}\ empty()\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordflow}{return}\ (min\ ==\ -\/std::numeric\_limits<float>::max())\ \&\&\ (max\ ==\ std::numeric\_limits<float>::max());}
+\DoxyCodeLine{00028\ \ \ \}}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
+\DoxyCodeLine{00032\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classClusteringAlgo}{ClusteringAlgo}}\ \{}
+\DoxyCodeLine{00033\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \mbox{\hyperlink{classClusteringAlgo}{ClusteringAlgo}}(\textcolor{keywordtype}{float}\ dc,\ \textcolor{keywordtype}{float}\ rhoc,\ \textcolor{keywordtype}{float}\ outlierDeltaFactor,\ \textcolor{keywordtype}{int}\ pPBin,\ std::vector<domain\_t>\ domains)\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ dc\_\ =\ dc;}
+\DoxyCodeLine{00036\ \ \ \ \ rhoc\_\ =\ rhoc;}
+\DoxyCodeLine{00037\ \ \ \ \ outlierDeltaFactor\_\ =\ outlierDeltaFactor;}
+\DoxyCodeLine{00038\ \ \ \ \ pointsPerTile\_\ =\ pPBin;}
+\DoxyCodeLine{00039\ \ \ \ \ domains\_\ =\ std::move(domains);}
+\DoxyCodeLine{00040\ \ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \textcolor{comment}{//\ public\ variables}}
+\DoxyCodeLine{00043\ \ \ \textcolor{keywordtype}{float}\ dc\_;\ \ \ \ \textcolor{comment}{//\ cut-\/off\ distance\ in\ the\ calculation\ of\ local\ density}}
+\DoxyCodeLine{00044\ \ \ \textcolor{keywordtype}{float}\ rhoc\_;\ \ \textcolor{comment}{//\ minimum\ density\ to\ promote\ a\ point\ as\ a\ seed\ or\ the}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ maximum\ density\ to\ demote\ a\ point\ as\ an\ outlier}}
+\DoxyCodeLine{00046\ \ \ \textcolor{keywordtype}{float}\ outlierDeltaFactor\_;}
+\DoxyCodeLine{00047\ \ \ \textcolor{keywordtype}{int}\ pointsPerTile\_;\ \ \textcolor{comment}{//\ average\ number\ of\ points\ found\ in\ a\ tile}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ std::vector<domain\_t>\ domains\_;\ \ \textcolor{comment}{//\ Array\ containing\ the\ domain\ extremes\ of\ every\ coordinate}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \mbox{\hyperlink{structPoints}{Points<Ndim>}}\ points\_;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \textcolor{keywordtype}{bool}\ setPoints(\textcolor{keywordtype}{int}\ n,\ std::vector<std::vector<float>>\ coordinates,\ std::vector<float>\ weight)\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//points\_.clear();}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{//\ input\ variables}}
+\DoxyCodeLine{00056\ \ \ \ \ points\_.coordinates\_\ =\ std::move(coordinates);}
+\DoxyCodeLine{00057\ \ \ \ \ points\_.weight\ =\ std::move(weight);}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ points\_.n\ =\ n;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{if}\ (points\_.n\ ==\ 0)}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{//\ result\ variables}}
+\DoxyCodeLine{00064\ \ \ \ \ points\_.rho.resize(points\_.n,\ 0);}
+\DoxyCodeLine{00065\ \ \ \ \ points\_.delta.resize(points\_.n,\ std::numeric\_limits<float>::max());}
+\DoxyCodeLine{00066\ \ \ \ \ points\_.nearestHigher.resize(points\_.n,\ -\/1);}
+\DoxyCodeLine{00067\ \ \ \ \ points\_.followers.resize(points\_.n);}
+\DoxyCodeLine{00068\ \ \ \ \ points\_.clusterIndex.resize(points\_.n,\ -\/1);}
+\DoxyCodeLine{00069\ \ \ \ \ points\_.isSeed.resize(points\_.n,\ 0);}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00071\ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \textcolor{keywordtype}{void}\ clearPoints()\ \{\ points\_.clear();\ \}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \textcolor{keywordtype}{int}\ calculateNTiles(\textcolor{keywordtype}{int}\ pointPerBin)\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{int}\ ntiles\{points\_.n\ /\ pointPerBin\};}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ntiles\ ==\ 0)\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ 100;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00081\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}pointPerBin\ is\ set\ too\ high\ for\ you\ number\ of\ points.\ You\ must\ lower\ it\ in\ the\ "{}}}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}clusterer\ constructor.\(\backslash\)n"{}};}
+\DoxyCodeLine{00084\ \ \ \ \ \}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordflow}{return}\ ntiles;}
+\DoxyCodeLine{00086\ \ \ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ std::array<float,\ Ndim>\ calculateTileSize(\textcolor{keywordtype}{int}\ NTiles,\ \mbox{\hyperlink{classtiles}{tiles<Ndim>}}\&\ tiles\_)\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ std::array<float,\ Ndim>\ tileSizes;}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{int}\ NperDim\{\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(std::pow(NTiles,\ 1.0\ /\ Ndim))\};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{\};\ i\ !=\ Ndim;\ ++i)\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ tileSize;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dimMax\{*std::max\_element(points\_.coordinates\_[i].begin(),\ points\_.coordinates\_[i].end())\};}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dimMin\{*std::min\_element(points\_.coordinates\_[i].begin(),\ points\_.coordinates\_[i].end())\};}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ tiles\_.minMax[i]\ =\ \{dimMin,\ dimMax\};}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ tileSize\ =\ (dimMax\ -\/\ dimMin)\ /\ NperDim;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ tileSizes[i]\ =\ tileSize;}
+\DoxyCodeLine{00100\ \ \ \ \ \}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordflow}{return}\ tileSizes;}
+\DoxyCodeLine{00102\ \ \ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ std::vector<std::vector<int>>\ makeClusters(\mbox{\hyperlink{classkernel}{kernel}}\ \textcolor{keyword}{const}\&\ ker)\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{classtiles}{tiles<Ndim>}}\ Tiles;}
+\DoxyCodeLine{00106\ \ \ \ \ Tiles.nTiles\ =\ calculateNTiles(pointsPerTile\_);}
+\DoxyCodeLine{00107\ \ \ \ \ Tiles.resizeTiles();}
+\DoxyCodeLine{00108\ \ \ \ \ Tiles.tilesSize\ =\ calculateTileSize(Tiles.nTiles,\ Tiles);}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ prepareDataStructures(Tiles);}
+\DoxyCodeLine{00111\ \ \ \ \ calculateLocalDensity(Tiles,\ ker);}
+\DoxyCodeLine{00112\ \ \ \ \ calculateDistanceToHigher(Tiles);}
+\DoxyCodeLine{00113\ \ \ \ \ findAndAssignClusters();}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordflow}{return}\ \{points\_.clusterIndex,\ points\_.isSeed\};}
+\DoxyCodeLine{00116\ \ \ \}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00119\ \ \ \textcolor{comment}{//\ private\ member\ methods}}
+\DoxyCodeLine{00120\ \ \ \textcolor{keywordtype}{void}\ prepareDataStructures(\mbox{\hyperlink{classtiles}{tiles<Ndim>}}\&\ \mbox{\hyperlink{classtiles}{tiles}})\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{\};\ i\ <\ points\_.n;\ ++i)\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \textcolor{comment}{//\ push\ index\ of\ points\ into\ tiles}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ std::vector<float>\ coords;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j\{\};\ j\ !=\ Ndim;\ ++j)\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ coords.push\_back(points\_.coordinates\_[j][i]);}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \mbox{\hyperlink{classtiles}{tiles}}.fill(coords,\ i);}
+\DoxyCodeLine{00128\ \ \ \ \ \}}
+\DoxyCodeLine{00129\ \ \ \}}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \textcolor{keywordtype}{void}\ calculateLocalDensity(\mbox{\hyperlink{classtiles}{tiles<Ndim>}}\&\ \mbox{\hyperlink{classtiles}{tiles}},\ \mbox{\hyperlink{classkernel}{kernel}}\ \textcolor{keyword}{const}\&\ ker)\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{comment}{//\ loop\ over\ all\ points}}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{\};\ i\ <\ points\_.n;\ ++i)\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \textcolor{comment}{//\ get\ search\ box}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ std::array<std::vector<int>,\ Ndim>\ xjBins;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j\{\};\ j\ !=\ Ndim;\ ++j)\ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ xjBins[j]\ =}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classtiles}{tiles}}.getBinsFromRange(points\_.coordinates\_[j][i]\ -\/\ dc\_,\ points\_.coordinates\_[j][i]\ +\ dc\_,\ j);}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Overflow}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (points\_.coordinates\_[j][i]\ +\ dc\_\ >\ domains\_[j].max)\ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ std::vector<int>\ overflowBins\ =}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::move(\mbox{\hyperlink{classtiles}{tiles}}.getBinsFromRange(domains\_[j].min,\ domains\_[j].min\ +\ dc\_,\ j));}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ xjBins[j].insert(xjBins[j].end(),\ overflowBins.begin(),\ overflowBins.end());}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Underflow}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (points\_.coordinates\_[j][i]\ -\/\ dc\_\ <\ domains\_[j].min)\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ std::vector<int>\ underflowBins\ =}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::move(\mbox{\hyperlink{classtiles}{tiles}}.getBinsFromRange(domains\_[j].max\ -\/\ dc\_,\ domains\_[j].max,\ j));}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ xjBins[j].insert(xjBins[j].end(),\ underflowBins.begin(),\ underflowBins.end());}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ std::vector<int>\ search\_box;}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \mbox{\hyperlink{classtiles}{tiles}}.searchBox(xjBins,\ search\_box);}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \textcolor{comment}{//\ loop\ over\ bins\ in\ the\ search\ box}}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ binId\ :\ search\_box)\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ iterate\ over\ the\ points\ inside\ this\ bin}}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ binIterId\ :\ \mbox{\hyperlink{classtiles}{tiles}}[binId])\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ j\{binIterId\};}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ query\ N\_\{dc\_\}(i)}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dist\_ij\{distance(i,\ j)\};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dist\_ij\ <=\ dc\_)\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sum\ weights\ within\ N\_\{dc\_\}(i)\ using\ the\ chosen\ kernel}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ points\_.rho[i]\ +=\ ker(dist\_ij,\ i,\ j)\ *\ points\_.weight[j];}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \}\ \ \textcolor{comment}{//\ end\ of\ interate\ inside\ this\ bin}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \}\ \ \ \ \textcolor{comment}{//\ end\ of\ loop\ over\ bins\ in\ the\ search\ box}}
+\DoxyCodeLine{00169\ \ \ \ \ \}\ \ \ \ \ \ \textcolor{comment}{//\ end\ of\ loop\ over\ points}}
+\DoxyCodeLine{00170\ \ \ \}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \textcolor{keywordtype}{void}\ calculateDistanceToHigher(\mbox{\hyperlink{classtiles}{tiles<Ndim>}}\&\ \mbox{\hyperlink{classtiles}{tiles}})\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordtype}{float}\ dm\{outlierDeltaFactor\_\ *\ dc\_\};}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{comment}{//\ loop\ over\ all\ points}}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{\};\ i\ <\ points\_.n;\ ++i)\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \textcolor{comment}{//\ default\ values\ of\ delta\ and\ nearest\ higher\ for\ i}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ delta\_i\{std::numeric\_limits<float>::max()\};}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ nearestHigher\_i\{-\/1\};\ \ \textcolor{comment}{//\ if\ this\ doesn't\ change,\ the\ point\ is\ either\ a\ seed\ or\ an\ outlier}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ rho\_i\{points\_.rho[i]\};}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \textcolor{comment}{//\ get\ search\ box}}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ std::array<std::vector<int>,\ Ndim>\ xjBins;}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j\{\};\ j\ !=\ Ndim;\ ++j)\ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ xjBins[j]\ =}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classtiles}{tiles}}.getBinsFromRange(points\_.coordinates\_[j][i]\ -\/\ dm,\ points\_.coordinates\_[j][i]\ +\ dm,\ j);}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Overflow}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (points\_.coordinates\_[j][i]\ +\ dm\ >\ domains\_[j].max)\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ std::vector<int>\ overflowBins\ =}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::move(\mbox{\hyperlink{classtiles}{tiles}}.getBinsFromRange(domains\_[j].min,\ domains\_[j].min\ +\ dm,\ j));}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ xjBins[j].insert(xjBins[j].end(),\ overflowBins.begin(),\ overflowBins.end());}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Underflow}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (points\_.coordinates\_[j][i]\ -\/\ dm\ <\ domains\_[j].min)\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ std::vector<int>\ underflowBins\ =}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::move(\mbox{\hyperlink{classtiles}{tiles}}.getBinsFromRange(domains\_[j].max\ -\/\ dm,\ domains\_[j].max,\ j));}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ xjBins[j].insert(xjBins[j].end(),\ underflowBins.begin(),\ underflowBins.end());}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ std::vector<int>\ search\_box;}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \mbox{\hyperlink{classtiles}{tiles}}.searchBox(xjBins,\ search\_box);}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \textcolor{comment}{//\ loop\ over\ all\ bins\ in\ the\ search\ box}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ binId\ :\ search\_box)\ \{}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ iterate\ over\ the\ points\ inside\ this\ bin}}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ binIterId\ :\ \mbox{\hyperlink{classtiles}{tiles}}[binId])\ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ j\{binIterId\};}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ query\ N'\_\{dm\}(i)}}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ foundHigher\{(points\_.rho[j]\ >\ rho\_i)\};}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ in\ the\ rare\ case\ where\ rho\ is\ the\ same,\ use\ detid}}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ foundHigher\ =\ foundHigher\ ||\ ((points\_.rho[j]\ ==\ rho\_i)\ \&\&\ (j\ >\ i));}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dist\_ij\{distance(i,\ j)\};}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (foundHigher\ \&\&\ dist\_ij\ <=\ dm)\ \{\ \ \textcolor{comment}{//\ definition\ of\ N'\_\{dm\}(i)}}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ find\ the\ nearest\ point\ within\ N'\_\{dm\}(i)}}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dist\_ij\ <\ delta\_i)\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ update\ delta\_i\ and\ nearestHigher\_i}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ delta\_i\ =\ dist\_ij;}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nearestHigher\_i\ =\ j;}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \}\ \ \textcolor{comment}{//\ end\ of\ interate\ inside\ this\ bin}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \}\ \ \ \ \textcolor{comment}{//\ end\ of\ loop\ over\ bins\ in\ the\ search\ box}}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \ \ \ \ \ \ points\_.delta[i]\ =\ delta\_i;}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ points\_.nearestHigher[i]\ =\ nearestHigher\_i;}
+\DoxyCodeLine{00226\ \ \ \ \ \}\ \ \textcolor{comment}{//\ end\ of\ loop\ over\ points}}
+\DoxyCodeLine{00227\ \ \ \}}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \textcolor{keywordtype}{void}\ findAndAssignClusters()\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordtype}{int}\ nClusters\{\};}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{//\ find\ cluster\ seeds\ and\ outlier}}
+\DoxyCodeLine{00233\ \ \ \ \ std::vector<int>\ localStack;\ \ \textcolor{comment}{//\ this\ vector\ will\ contain\ the\ indexes\ of\ all\ the\ seeds}}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{comment}{//\ loop\ over\ all\ points}}
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{\};\ i\ <\ points\_.n;\ ++i)\ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \textcolor{comment}{//\ initialize\ clusterIndex}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ points\_.clusterIndex[i]\ =\ -\/1;}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ deltai\{points\_.delta[i]\};}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ rhoi\{points\_.rho[i]\};}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \textcolor{comment}{//\ determine\ seed\ or\ outlier}}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isSeed\{(deltai\ >\ dc\_)\ \&\&\ (rhoi\ >=\ rhoc\_)\};}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isOutlier\{(deltai\ >\ outlierDeltaFactor\_\ *\ dc\_)\ \&\&\ (rhoi\ <\ rhoc\_)\};}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isSeed)\ \{}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ isSeed\ as\ 1}}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ points\_.isSeed[i]\ =\ 1;}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ cluster\ id}}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ points\_.clusterIndex[i]\ =\ nClusters;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ increment\ number\ of\ clusters}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ ++nClusters;}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ add\ seed\ into\ local\ stack}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ localStack.push\_back(i);}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (!isOutlier)\ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ register\ as\ follower\ at\ its\ nearest\ higher}}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ points\_.followers[points\_.nearestHigher[i]].push\_back(i);}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00258\ \ \ \ \ \}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{comment}{//\ expend\ clusters\ from\ seeds}}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordflow}{while}\ (!localStack.empty())\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\{localStack.back()\};}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ followers\{points\_.followers[i]\};}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ localStack.pop\_back();}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \textcolor{comment}{//\ loop\ over\ followers}}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j\ :\ followers)\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ pass\ id\ from\ i\ to\ a\ i's\ follower}}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ points\_.clusterIndex[j]\ =\ points\_.clusterIndex[i];}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ push\ this\ follower\ to\ localStack}}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ localStack.push\_back(j);}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00273\ \ \ \ \ \}}
+\DoxyCodeLine{00274\ \ \ \}}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{float}\ distance(\textcolor{keywordtype}{int}\ i,\ \textcolor{keywordtype}{int}\ j)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordtype}{float}\ qSum\{\};\ \ \textcolor{comment}{//\ quadratic\ sum}}
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k\{\};\ k\ !=\ Ndim;\ ++k)\ \{}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ delta\_xk\{deltaPhi(}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ points\_.coordinates\_[k][i],\ points\_.coordinates\_[k][j],\ domains\_[k].min,\ domains\_[k].max)\};}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ qSum\ +=\ std::pow(delta\_xk,\ 2);}
+\DoxyCodeLine{00282\ \ \ \ \ \}}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keywordflow}{return}\ std::sqrt(qSum);}
+\DoxyCodeLine{00285\ \ \ \}}
+\DoxyCodeLine{00286\ \};}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

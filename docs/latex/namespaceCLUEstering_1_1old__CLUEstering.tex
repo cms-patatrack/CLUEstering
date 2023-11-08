@@ -1,0 +1,57 @@
+\doxysection{CLUEstering.\+old\+\_\+\+CLUEstering Namespace Reference}
+\hypertarget{namespaceCLUEstering_1_1old__CLUEstering}{}\label{namespaceCLUEstering_1_1old__CLUEstering}\index{CLUEstering.old\_CLUEstering@{CLUEstering.old\_CLUEstering}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classCLUEstering_1_1old__CLUEstering_1_1cluster__properties}{cluster\+\_\+properties}}
+\item 
+class \mbox{\hyperlink{classCLUEstering_1_1old__CLUEstering_1_1clusterer}{clusterer}}
+\item 
+class \mbox{\hyperlink{classCLUEstering_1_1old__CLUEstering_1_1clustering__data}{clustering\+\_\+data}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+pd.\+Data\+Frame \mbox{\hyperlink{namespaceCLUEstering_1_1old__CLUEstering_aaf327ec40541de6c676dd1c5e11e50ad}{test\+\_\+blobs}} (int n\+\_\+samples, int n\+\_\+dim, int n\+\_\+blobs=4, float mean=0, float sigma=0.\+5, float x\+\_\+max=30, float y\+\_\+max=30)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Density based clustering algorithm developed at CERN.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceCLUEstering_1_1old__CLUEstering_aaf327ec40541de6c676dd1c5e11e50ad}\label{namespaceCLUEstering_1_1old__CLUEstering_aaf327ec40541de6c676dd1c5e11e50ad} 
+\index{CLUEstering.old\_CLUEstering@{CLUEstering.old\_CLUEstering}!test\_blobs@{test\_blobs}}
+\index{test\_blobs@{test\_blobs}!CLUEstering.old\_CLUEstering@{CLUEstering.old\_CLUEstering}}
+\doxysubsubsection{\texorpdfstring{test\_blobs()}{test\_blobs()}}
+{\footnotesize\ttfamily  pd.\+Data\+Frame CLUEstering.\+old\+\_\+\+CLUEstering.\+test\+\_\+blobs (\begin{DoxyParamCaption}\item[{int}]{n\+\_\+samples,  }\item[{int}]{n\+\_\+dim,  }\item[{int }]{n\+\_\+blobs = {\ttfamily 4},  }\item[{float }]{mean = {\ttfamily 0},  }\item[{float }]{sigma = {\ttfamily 0.5},  }\item[{float }]{x\+\_\+max = {\ttfamily 30},  }\item[{float }]{y\+\_\+max = {\ttfamily 30} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Returns a dataframe containing randomly generated 2-dimensional or 3-dimensional blobs.
+
+This functions serves as a tool for generating a random dataset to test the library.
+
+Parameters
+----------
+n_samples : int
+    The number of points in the dataset.
+n_dim : int
+    The number of dimensions.
+n_blobs : int, optional
+    The number of blobs that should be produced. By default it is set to 4.
+mean : float, optional
+    The mean of the gaussian distribution of the z values.
+sigma : float, optional
+    The standard deviation of the gaussian distribution of the z values.
+x_max : float, optional
+    Limit of the space where the blobs are created in the x direction.
+y_max : float, optional
+    Limit of the space where the blobs are created in the y direction.
+
+Returns
+-------
+Pandas DataFrame
+    DataFrame containing n_blobs gaussian blobs.
+\end{DoxyVerb}
+ 

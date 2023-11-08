@@ -1,0 +1,114 @@
+\doxysection{Tiles.\+h}
+\hypertarget{Tiles_8h_source}{}\label{Tiles_8h_source}\index{CLUEstering/include/Tiles.h@{CLUEstering/include/Tiles.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Header\ for\ the\ tiles\ class,\ which\ represents\ the\ tiles\ that\ the\ clustering\ phase\ space\ is\ divided\ into}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ tiles\_h}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ tiles\_h}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <numeric>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classtiles}{tiles}}\ \{}
+\DoxyCodeLine{00018\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00019\ \ \ \textcolor{comment}{//\ The\ elements\ of\ the\ outer\ vector\ represent\ the\ tiles/bins}}
+\DoxyCodeLine{00020\ \ \ \textcolor{comment}{//\ The\ elements\ of\ the\ inner\ vectors\ represent\ the\ ids\ of\ the\ points\ in\ the\ corresponding\ tile}}
+\DoxyCodeLine{00021\ \ \ std::vector<std::vector<int>>\ tiles\_;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \mbox{\hyperlink{classtiles}{tiles}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00025\ \ \ \textcolor{keywordtype}{void}\ resizeTiles()\ \{\ tiles\_.resize(nTiles);\ \}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \textcolor{keywordtype}{int}\ nTiles;}
+\DoxyCodeLine{00028\ \ \ std::array<float,\ Ndim>\ tilesSize;}
+\DoxyCodeLine{00029\ \ \ std::array<std::vector<float>,\ Ndim>\ minMax;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \textcolor{keywordtype}{int}\ getBin(\textcolor{keywordtype}{float}\ coord\_,\ \textcolor{keywordtype}{int}\ dim\_)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{int}\ coord\_Bin\{\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}((coord\_\ -\/\ minMax[dim\_][0])\ /\ tilesSize[dim\_])\};}
+\DoxyCodeLine{00033\ \ \ \ \ coord\_Bin\ =\ std::min(coord\_Bin,\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(std::pow(nTiles,\ 1.0\ /\ Ndim)\ -\/\ 1));}
+\DoxyCodeLine{00034\ \ \ \ \ coord\_Bin\ =\ std::max(coord\_Bin,\ 0);}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordflow}{return}\ coord\_Bin;}
+\DoxyCodeLine{00036\ \ \ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \textcolor{keywordtype}{int}\ getGlobalBin(std::vector<float>\ \textcolor{keyword}{const}\&\ coords)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ globalBin\{getBin(coords[0],\ 0)\};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{int}\ nTilesPerDim\{\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(std::pow(nTiles,\ 1.0\ /\ Ndim))\};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{1\};\ i\ !=\ Ndim;\ ++i)\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ globalBin\ +=\ nTilesPerDim\ *\ getBin(coords[i],\ i);}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordflow}{return}\ globalBin;}
+\DoxyCodeLine{00045\ \ \ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \textcolor{keywordtype}{int}\ getGlobalBinByBin(std::array<int,\ Ndim>\ \textcolor{keyword}{const}\&\ Bins)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{int}\ globalBin\{Bins[0]\};}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{int}\ nTilesPerDim\{\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(std::pow(nTiles,\ 1.0\ /\ Ndim))\};}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{1\};\ i\ !=\ Ndim;\ ++i)\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ globalBin\ +=\ nTilesPerDim\ *\ Bins[i];}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordflow}{return}\ globalBin;}
+\DoxyCodeLine{00054\ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \textcolor{keywordtype}{void}\ fill(std::vector<float>\ \textcolor{keyword}{const}\&\ coords,\ \textcolor{keywordtype}{int}\ i)\ \{\ tiles\_[getGlobalBin(coords)].push\_back(i);\ \}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \textcolor{keywordtype}{void}\ fill(std::vector<std::vector<float>>\ \textcolor{keyword}{const}\&\ coordinates)\ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{auto}\ cellsSize\ =\ coordinates[0].size();}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{\};\ i\ <\ cellsSize;\ ++i)\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ std::vector<float>\ bin\_coords;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j\{\};\ j\ !=\ Ndim;\ ++j)\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ bin\_coords.push\_back(coordinates[j][i]);}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ tiles\_[getGlobalBin(bin\_coords)].push\_back(i);}
+\DoxyCodeLine{00066\ \ \ \ \ \}}
+\DoxyCodeLine{00067\ \ \ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{int}\ N\_>}
+\DoxyCodeLine{00070\ \ \ \textcolor{keywordtype}{void}\ searchBox(std::array<std::vector<int>,\ Ndim>\ \textcolor{keyword}{const}\&\ xjBins,}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::array<int,\ Ndim>\&\ comb,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<int>\&\ sBox)\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (N\_\ ==\ Ndim)\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ sBox.push\_back(getGlobalBinByBin(comb));}
+\DoxyCodeLine{00075\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ x\ :\ xjBins[N\_])\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ comb[N\_]\ =\ x;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ searchBox<N\_\ +\ 1>(xjBins,\ comb,\ sBox);}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00080\ \ \ \ \ \}}
+\DoxyCodeLine{00081\ \ \ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \textcolor{keywordtype}{void}\ searchBox(std::array<std::vector<int>,\ Ndim>\ \textcolor{keyword}{const}\&\ xjBins,\ std::vector<int>\&\ sBox)\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ x\ :\ xjBins[0])\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ std::array<int,\ Ndim>\ comb\{x\};}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ searchBox<1>(xjBins,\ comb,\ sBox);}
+\DoxyCodeLine{00087\ \ \ \ \ \}}
+\DoxyCodeLine{00088\ \ \ \}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ std::vector<int>\ getBinsFromRange(\textcolor{keywordtype}{float}\ x\_min,\ \textcolor{keywordtype}{float}\ x\_max,\ \textcolor{keywordtype}{int}\ dim\_)\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{int}\ minBin\{getBin(x\_min,\ dim\_)\};}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{int}\ maxBin\{getBin(x\_max,\ dim\_)\};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ std::vector<int>\ listOfBins(maxBin\ -\/\ minBin\ +\ 1);}
+\DoxyCodeLine{00095\ \ \ \ \ std::iota(listOfBins.begin(),\ listOfBins.end(),\ minBin);}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordflow}{return}\ listOfBins;}
+\DoxyCodeLine{00097\ \ \ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \textcolor{keywordtype}{void}\ clear()\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ t\ :\ tiles\_)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ t.clear();}
+\DoxyCodeLine{00102\ \ \ \ \ \}}
+\DoxyCodeLine{00103\ \ \ \}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ std::vector<int>\&\ operator[](\textcolor{keywordtype}{int}\ globalBinId)\ \{\ \textcolor{keywordflow}{return}\ tiles\_[globalBinId];\ \}}
+\DoxyCodeLine{00106\ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
