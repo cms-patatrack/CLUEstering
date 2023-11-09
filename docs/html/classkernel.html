@@ -75,25 +75,93 @@ $(function() {
   <div class="headertitle"><div class="title">kernel Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class that represents the kernels used in the calculation of local density.  
+ <a href="classkernel.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Kernels_8h_source.html">Kernels.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for kernel:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classkernel.png" usemap="#kernel_map" alt=""/>
   <map id="kernel_map" name="kernel_map">
-<area href="classcustomKernel.html" alt="customKernel" shape="rect" coords="0,56,113,80"/>
-<area href="classexponentialKernel.html" alt="exponentialKernel" shape="rect" coords="123,56,236,80"/>
-<area href="classflatKernel.html" alt="flatKernel" shape="rect" coords="246,56,359,80"/>
-<area href="classgaussianKernel.html" alt="gaussianKernel" shape="rect" coords="369,56,482,80"/>
+<area href="classcustomKernel.html" title="Class that represents a custom kernel." alt="customKernel" shape="rect" coords="0,56,113,80"/>
+<area href="classexponentialKernel.html" title="Class that represents the exponential kernel." alt="exponentialKernel" shape="rect" coords="123,56,236,80"/>
+<area href="classflatKernel.html" title="Class that represents the flat kernel." alt="flatKernel" shape="rect" coords="246,56,359,80"/>
+<area href="classgaussianKernel.html" title="Class that represents the gaussian kernel." alt="gaussianKernel" shape="rect" coords="369,56,482,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae025bd255402ba47757d66a997241f8b" id="r_ae025bd255402ba47757d66a997241f8b"><td class="memItemLeft" align="right" valign="top"><a id="ae025bd255402ba47757d66a997241f8b" name="ae025bd255402ba47757d66a997241f8b"></a>
-virtual float&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (float dist_ij, int point_id, int j) const</td></tr>
+<tr class="memitem:a76d133306f92aa1d4aa804d646bef2ba" id="r_a76d133306f92aa1d4aa804d646bef2ba"><td class="memItemLeft" align="right" valign="top"><a id="a76d133306f92aa1d4aa804d646bef2ba" name="a76d133306f92aa1d4aa804d646bef2ba"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>kernel</b> ()=default</td></tr>
+<tr class="memdesc:a76d133306f92aa1d4aa804d646bef2ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="separator:a76d133306f92aa1d4aa804d646bef2ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae025bd255402ba47757d66a997241f8b" id="r_ae025bd255402ba47757d66a997241f8b"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classkernel.html#ae025bd255402ba47757d66a997241f8b">operator()</a> (float dist_ij, int point_id, int j) const</td></tr>
+<tr class="memdesc:ae025bd255402ba47757d66a997241f8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the kernel.  <br /></td></tr>
 <tr class="separator:ae025bd255402ba47757d66a997241f8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class that represents the kernels used in the calculation of local density. </p>
+<p>The user can choose between a flat kernel, a gaussian kernel, an exponential kernel or a custom kernel </p><dl class="section note"><dt>Note</dt><dd>The user can use a generic kernel by passing a function object </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae025bd255402ba47757d66a997241f8b" name="ae025bd255402ba47757d66a997241f8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae025bd255402ba47757d66a997241f8b">&#9670;&#160;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual float kernel::operator() </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>dist_ij</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>point_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>j</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Evaluate the kernel. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dist_ij</td><td>distance between the points i and j </td></tr>
+    <tr><td class="paramname">point_id</td><td>id of the point i </td></tr>
+    <tr><td class="paramname">j</td><td>id of the point j </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the value of the kernel </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classflatKernel.html#ae0656e377e0b502beb95523aec667689">flatKernel</a>, <a class="el" href="classgaussianKernel.html#a41666aa75d8bf8df85f76768196410b2">gaussianKernel</a>, <a class="el" href="classexponentialKernel.html#ada1fe5c5ec76498445d14326f3f3a023">exponentialKernel</a>, and <a class="el" href="classcustomKernel.html#a7a165ed65d4726caa22f00f9b1a1b581">customKernel</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>CLUEstering/include/<a class="el" href="Kernels_8h_source.html">Kernels.h</a></li>
 </ul>

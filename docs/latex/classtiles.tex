@@ -1,55 +1,274 @@
 \doxysection{tiles\texorpdfstring{$<$}{<} Ndim \texorpdfstring{$>$}{>} Class Template Reference}
 \hypertarget{classtiles}{}\label{classtiles}\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+
+
+Class that represents the tiles that the clustering space is divided into.  
+
+
+
+
+{\ttfamily \#include $<$Tiles.\+h$>$}
+
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classtiles_a42f5f569f63045db69608e81693ec41c}\label{classtiles_a42f5f569f63045db69608e81693ec41c} 
-void {\bfseries resize\+Tiles} ()
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{void}} {\bfseries resize\+Tiles} ()
 \item 
-\Hypertarget{classtiles_a3db1ae140972e10014931dffd9f81c16}\label{classtiles_a3db1ae140972e10014931dffd9f81c16} 
-int {\bfseries get\+Bin} (float coord\+\_\+, int dim\+\_\+) const
-\item 
-\Hypertarget{classtiles_ae64dc9786a94998c529128ceabf69e2c}\label{classtiles_ae64dc9786a94998c529128ceabf69e2c} 
-int {\bfseries get\+Global\+Bin} (std\+::vector$<$ float $>$ const \&coords) const
-\item 
-\Hypertarget{classtiles_acd8949b89d96ece56e63d19d072474de}\label{classtiles_acd8949b89d96ece56e63d19d072474de} 
-int {\bfseries get\+Global\+Bin\+By\+Bin} (std\+::array$<$ int, Ndim $>$ const \&Bins) const
-\item 
-\Hypertarget{classtiles_a50bf1aca72a294ca3652948b8e376add}\label{classtiles_a50bf1aca72a294ca3652948b8e376add} 
-void {\bfseries fill} (std\+::vector$<$ float $>$ const \&coords, int i)
-\item 
-\Hypertarget{classtiles_a5824264e8ed3af1e4e5c663c21ee0527}\label{classtiles_a5824264e8ed3af1e4e5c663c21ee0527} 
-void {\bfseries fill} (std\+::vector$<$ std\+::vector$<$ float $>$ $>$ const \&coordinates)
-\item 
-\Hypertarget{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}\label{classtiles_a4741daa535e2b21af7c14c0a1ea1081b} 
-{\footnotesize template$<$int N\+\_\+$>$ }\\void {\bfseries search\+Box} (std\+::array$<$ std\+::vector$<$ int $>$, Ndim $>$ const \&xj\+Bins, std\+::array$<$ int, Ndim $>$ \&comb, std\+::vector$<$ int $>$ \&s\+Box)
-\item 
-\Hypertarget{classtiles_a9606242308d7b2b53ee02c7f6ad88cfd}\label{classtiles_a9606242308d7b2b53ee02c7f6ad88cfd} 
-void {\bfseries search\+Box} (std\+::array$<$ std\+::vector$<$ int $>$, Ndim $>$ const \&xj\+Bins, std\+::vector$<$ int $>$ \&s\+Box)
-\item 
-\Hypertarget{classtiles_a4a213c8899448168c7077b815038cc6c}\label{classtiles_a4a213c8899448168c7077b815038cc6c} 
-std\+::vector$<$ int $>$ {\bfseries get\+Bins\+From\+Range} (float x\+\_\+min, float x\+\_\+max, int dim\+\_\+)
-\item 
-\Hypertarget{classtiles_a36df03fb4a1344e994e5a8b0891f98cb}\label{classtiles_a36df03fb4a1344e994e5a8b0891f98cb} 
-void {\bfseries clear} ()
-\item 
-\Hypertarget{classtiles_ac89b9b65164a679f7b715fdfed2ea4f3}\label{classtiles_ac89b9b65164a679f7b715fdfed2ea4f3} 
-std\+::vector$<$ int $>$ \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (int global\+Bin\+Id)
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles_a3db1ae140972e10014931dffd9f81c16}{get\+Bin}} (\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{coord\+\_\+}}, \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{dim\+\_\+}}) \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}}
+\begin{DoxyCompactList}\small\item\em get the bin id of a point in a given dimension \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles_ae64dc9786a94998c529128ceabf69e2c}{get\+Global\+Bin}} (std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} $>$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}} \&coords) \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}}
+\begin{DoxyCompactList}\small\item\em get the global bin id of a point \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles_acd8949b89d96ece56e63d19d072474de}{get\+Global\+Bin\+By\+Bin}} (std\+::array$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}}, \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}} \&\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Bins}}) \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}}
+\begin{DoxyCompactList}\small\item\em get the global bin id of a point given its bin ids in each dimension \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{void}} \mbox{\hyperlink{classtiles_a50bf1aca72a294ca3652948b8e376add}{fill}} (std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} $>$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}} \&coords, \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{i}})
+\begin{DoxyCompactList}\small\item\em fill the tiles with the points \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{void}} \mbox{\hyperlink{classtiles_a5824264e8ed3af1e4e5c663c21ee0527}{fill}} (std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} $>$ $>$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}} \&\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{coordinates}})
+\begin{DoxyCompactList}\small\item\em fill the tiles with the points \end{DoxyCompactList}\item 
+{\footnotesize template$<$int N\+\_\+$>$ }\\void \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{search\+Box}} (std\+::array$<$ std\+::vector$<$ int $>$, Ndim $>$ const \&xj\+Bins, std\+::array$<$ int, Ndim $>$ \&comb, std\+::vector$<$ int $>$ \&s\+Box)
+\begin{DoxyCompactList}\small\item\em search the tiles that are in the box defined by the given ranges \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classtiles_a9606242308d7b2b53ee02c7f6ad88cfd}{search\+Box}} (std\+::array$<$ std\+::vector$<$ int $>$, Ndim $>$ const \&xj\+Bins, std\+::vector$<$ int $>$ \&s\+Box)
+\begin{DoxyCompactList}\small\item\em search the tiles that are in the box defined by the given ranges \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} $>$ \mbox{\hyperlink{classtiles_a4a213c8899448168c7077b815038cc6c}{get\+Bins\+From\+Range}} (\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{x\+\_\+min}}, \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{x\+\_\+max}}, \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{dim\+\_\+}})
+\begin{DoxyCompactList}\small\item\em get the list of the bins that are in the given range \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{void}} \mbox{\hyperlink{classtiles_a36df03fb4a1344e994e5a8b0891f98cb}{clear}} ()
+\begin{DoxyCompactList}\small\item\em clear the tiles \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} $>$ \& \mbox{\hyperlink{classtiles_ac89b9b65164a679f7b715fdfed2ea4f3}{operator\mbox{[}$\,$\mbox{]}}} (\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{global\+Bin\+Id}})
+\begin{DoxyCompactList}\small\item\em operator that returns the list of the points in the given tile \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classtiles_a1ad1a157717cc6fd1db49c851ae73df2}\label{classtiles_a1ad1a157717cc6fd1db49c851ae73df2} 
-int {\bfseries n\+Tiles}
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} {\bfseries n\+Tiles}
 \item 
 \Hypertarget{classtiles_a1cc68db8f8d8132fd54a3f31ab728b30}\label{classtiles_a1cc68db8f8d8132fd54a3f31ab728b30} 
-std\+::array$<$ float, Ndim $>$ {\bfseries tiles\+Size}
+std\+::array$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}}, \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$ {\bfseries tiles\+Size}
 \item 
 \Hypertarget{classtiles_a8e542c1f9adaf302db0db1663f41ab31}\label{classtiles_a8e542c1f9adaf302db0db1663f41ab31} 
-std\+::array$<$ std\+::vector$<$ float $>$, Ndim $>$ {\bfseries min\+Max}
+std\+::array$<$ std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} $>$, \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$ {\bfseries min\+Max}
 \end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{uint8\+\_\+t}} Ndim$>$\newline
+class tiles$<$ Ndim $>$}
+Class that represents the tiles that the clustering space is divided into. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ndim} & Number of dimensions of the clustering space \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classtiles_a36df03fb4a1344e994e5a8b0891f98cb}\label{classtiles_a36df03fb4a1344e994e5a8b0891f98cb} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!clear@{clear}}
+\index{clear@{clear}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{uint8\+\_\+t}} Ndim$>$ \\
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{void}} \mbox{\hyperlink{classtiles}{tiles}}$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+clear the tiles 
+
+\begin{DoxyNote}{Note}
+the tiles are not resized 
+\end{DoxyNote}
+\Hypertarget{classtiles_a50bf1aca72a294ca3652948b8e376add}\label{classtiles_a50bf1aca72a294ca3652948b8e376add} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!fill@{fill}}
+\index{fill@{fill}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{fill()}{fill()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{uint8\+\_\+t}} Ndim$>$ \\
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{void}} \mbox{\hyperlink{classtiles}{tiles}}$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$\+::fill (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} $>$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}} \&}]{coords,  }\item[{\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}}}]{i }\end{DoxyParamCaption})}
+
+
+
+fill the tiles with the points 
+
+
+\begin{DoxyParams}{Parameters}
+{\em coords} & coordinates of the point \\
+\hline
+{\em i} & id of the point \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classtiles_a5824264e8ed3af1e4e5c663c21ee0527}\label{classtiles_a5824264e8ed3af1e4e5c663c21ee0527} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!fill@{fill}}
+\index{fill@{fill}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{fill()}{fill()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{uint8\+\_\+t}} Ndim$>$ \\
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{void}} \mbox{\hyperlink{classtiles}{tiles}}$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$\+::fill (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} $>$ $>$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}} \&}]{coordinates }\end{DoxyParamCaption})}
+
+
+
+fill the tiles with the points 
+
+
+\begin{DoxyParams}{Parameters}
+{\em coordinates} & coordinates of the points \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classtiles_a3db1ae140972e10014931dffd9f81c16}\label{classtiles_a3db1ae140972e10014931dffd9f81c16} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!getBin@{getBin}}
+\index{getBin@{getBin}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{getBin()}{getBin()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{uint8\+\_\+t}} Ndim$>$ \\
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles}{tiles}}$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$\+::get\+Bin (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}}}]{coord\+\_\+,  }\item[{\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}}}]{dim\+\_\+ }\end{DoxyParamCaption}) const}
+
+
+
+get the bin id of a point in a given dimension 
+
+
+\begin{DoxyParams}{Parameters}
+{\em coord\+\_\+} & coordinate of the point \\
+\hline
+{\em dim\+\_\+} & dimension of the point \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the bin id of the point 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+the bin id is the id of the tile that the point belongs to 
+\end{DoxyNote}
+\Hypertarget{classtiles_a4a213c8899448168c7077b815038cc6c}\label{classtiles_a4a213c8899448168c7077b815038cc6c} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!getBinsFromRange@{getBinsFromRange}}
+\index{getBinsFromRange@{getBinsFromRange}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{getBinsFromRange()}{getBinsFromRange()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{uint8\+\_\+t}} Ndim$>$ \\
+std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} $>$ \mbox{\hyperlink{classtiles}{tiles}}$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$\+::get\+Bins\+From\+Range (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}}}]{x\+\_\+min,  }\item[{\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}}}]{x\+\_\+max,  }\item[{\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}}}]{dim\+\_\+ }\end{DoxyParamCaption})}
+
+
+
+get the list of the bins that are in the given range 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x\+\_\+min} & minimum value of the range \\
+\hline
+{\em x\+\_\+max} & maximum value of the range \\
+\hline
+{\em dim\+\_\+} & dimension of the range \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the list of the bins that are in the given range 
+\end{DoxyReturn}
+\Hypertarget{classtiles_ae64dc9786a94998c529128ceabf69e2c}\label{classtiles_ae64dc9786a94998c529128ceabf69e2c} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!getGlobalBin@{getGlobalBin}}
+\index{getGlobalBin@{getGlobalBin}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{getGlobalBin()}{getGlobalBin()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{uint8\+\_\+t}} Ndim$>$ \\
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles}{tiles}}$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$\+::get\+Global\+Bin (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{float}} $>$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}} \&}]{coords }\end{DoxyParamCaption}) const}
+
+
+
+get the global bin id of a point 
+
+
+\begin{DoxyParams}{Parameters}
+{\em coords} & coordinates of the point \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the global bin id of the point 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+the global bin id is the id of the tile that the point belongs to 
+\end{DoxyNote}
+\Hypertarget{classtiles_acd8949b89d96ece56e63d19d072474de}\label{classtiles_acd8949b89d96ece56e63d19d072474de} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!getGlobalBinByBin@{getGlobalBinByBin}}
+\index{getGlobalBinByBin@{getGlobalBinByBin}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{getGlobalBinByBin()}{getGlobalBinByBin()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{uint8\+\_\+t}} Ndim$>$ \\
+\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} \mbox{\hyperlink{classtiles}{tiles}}$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$\+::get\+Global\+Bin\+By\+Bin (\begin{DoxyParamCaption}\item[{std\+::array$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}}, \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{const}} \&}]{Bins }\end{DoxyParamCaption}) const}
+
+
+
+get the global bin id of a point given its bin ids in each dimension 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Bins} & bin ids of the point in each dimension \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the global bin id of the point 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+the global bin id is the id of the tile that the point belongs to 
+\end{DoxyNote}
+\Hypertarget{classtiles_ac89b9b65164a679f7b715fdfed2ea4f3}\label{classtiles_ac89b9b65164a679f7b715fdfed2ea4f3} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{uint8\+\_\+t}} Ndim$>$ \\
+std\+::vector$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}} $>$ \& \mbox{\hyperlink{classtiles}{tiles}}$<$ \mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{Ndim}} $>$\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{\+::operator}}\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}{int}}}]{global\+Bin\+Id }\end{DoxyParamCaption})}
+
+
+
+operator that returns the list of the points in the given tile 
+
+
+\begin{DoxyParams}{Parameters}
+{\em global\+Bin\+Id} & id of the tile \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the list of the points in the given tile 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+the global bin id is the id of the tile that the point belongs to 
+\end{DoxyNote}
+\Hypertarget{classtiles_a4741daa535e2b21af7c14c0a1ea1081b}\label{classtiles_a4741daa535e2b21af7c14c0a1ea1081b} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!searchBox@{searchBox}}
+\index{searchBox@{searchBox}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{searchBox()}{searchBox()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$uint8\+\_\+t Ndim$>$ \\
+template$<$int N\+\_\+$>$ \\
+void \mbox{\hyperlink{classtiles}{tiles}}$<$ Ndim $>$\+::search\+Box (\begin{DoxyParamCaption}\item[{std\+::array$<$ std\+::vector$<$ int $>$, Ndim $>$ const \&}]{xj\+Bins,  }\item[{std\+::array$<$ int, Ndim $>$ \&}]{comb,  }\item[{std\+::vector$<$ int $>$ \&}]{s\+Box }\end{DoxyParamCaption})}
+
+
+
+search the tiles that are in the box defined by the given ranges 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em N\+\_\+} & dimension of the box \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em xj\+Bins} & bin ids of the points in each dimension \\
+\hline
+{\em comb} & bin ids of the points in each dimension \\
+\hline
+{\em s\+Box} & list of the tiles that are in the box \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classtiles_a9606242308d7b2b53ee02c7f6ad88cfd}\label{classtiles_a9606242308d7b2b53ee02c7f6ad88cfd} 
+\index{tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}!searchBox@{searchBox}}
+\index{searchBox@{searchBox}!tiles$<$ Ndim $>$@{tiles$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{searchBox()}{searchBox()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$uint8\+\_\+t Ndim$>$ \\
+void \mbox{\hyperlink{classtiles}{tiles}}$<$ Ndim $>$\+::search\+Box (\begin{DoxyParamCaption}\item[{std\+::array$<$ std\+::vector$<$ int $>$, Ndim $>$ const \&}]{xj\+Bins,  }\item[{std\+::vector$<$ int $>$ \&}]{s\+Box }\end{DoxyParamCaption})}
+
+
+
+search the tiles that are in the box defined by the given ranges 
+
+
+\begin{DoxyParams}{Parameters}
+{\em xj\+Bins} & bin ids of the points in each dimension \\
+\hline
+{\em s\+Box} & list of the tiles that are in the box \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-CLUEstering/include/Tiles.\+h\end{DoxyCompactItemize}
+CLUEstering/include/\mbox{\hyperlink{Tiles_8h}{Tiles.\+h}}\end{DoxyCompactItemize}

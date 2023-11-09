@@ -1,5 +1,14 @@
 \doxysection{custom\+Kernel Class Reference}
 \hypertarget{classcustomKernel}{}\label{classcustomKernel}\index{customKernel@{customKernel}}
+
+
+Class that represents a custom kernel.  
+
+
+
+
+{\ttfamily \#include $<$Kernels.\+h$>$}
+
 Inheritance diagram for custom\+Kernel\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -9,11 +18,54 @@ Inheritance diagram for custom\+Kernel\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classcustomKernel_af1255a2f9663492f81dc703e37a29b17}\label{classcustomKernel_af1255a2f9663492f81dc703e37a29b17} 
-{\bfseries custom\+Kernel} (kernel\+\_\+t function)
-\item 
+\mbox{\hyperlink{classcustomKernel_af1255a2f9663492f81dc703e37a29b17}{custom\+Kernel}} (kernel\+\_\+t function)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
 float \mbox{\hyperlink{classcustomKernel_a7a165ed65d4726caa22f00f9b1a1b581}{operator()}} (float dist\+\_\+ij, int point\+\_\+id, int j) const override
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Evaluate the custom kernel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classkernel}{kernel}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries kernel} ()=default
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class that represents a custom kernel. 
+
+The user can pass a function object to the constructor \begin{DoxyNote}{Note}
+The function object must have the following signature\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ function(\textcolor{keywordtype}{float}\ dist\_ij,\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j);}
+
+\end{DoxyCode}
+ where $ dist_{ij} $ is the distance between the points i and j, $ point_{id} $ is the id of the point i and $ j $ is the id of the point j 
+\end{DoxyNote}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcustomKernel_af1255a2f9663492f81dc703e37a29b17}\label{classcustomKernel_af1255a2f9663492f81dc703e37a29b17} 
+\index{customKernel@{customKernel}!customKernel@{customKernel}}
+\index{customKernel@{customKernel}!customKernel@{customKernel}}
+\doxysubsubsection{\texorpdfstring{customKernel()}{customKernel()}}
+{\footnotesize\ttfamily custom\+Kernel\+::custom\+Kernel (\begin{DoxyParamCaption}\item[{kernel\+\_\+t}]{function }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em function} & function object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The function object must have the following signature\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{float}\ function(\textcolor{keywordtype}{float}\ dist\_ij,\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j);}
+
+\end{DoxyCode}
+ where $ dist_{ij} $ is the distance between the points i and j, $ point_{id} $ is the id of the point i and $ j $ is the id of the point j 
+\end{DoxyNote}
 
 
 \doxysubsection{Member Function Documentation}
@@ -25,10 +77,26 @@ float \mbox{\hyperlink{classcustomKernel_a7a165ed65d4726caa22f00f9b1a1b581}{oper
 
 
 
-Reimplemented from \mbox{\hyperlink{classkernel}{kernel}}.
+Evaluate the custom kernel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dist\+\_\+ij} & distance between the points i and j \\
+\hline
+{\em point\+\_\+id} & id of the point i \\
+\hline
+{\em j} & id of the point j \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the custom kernel 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classkernel_ae025bd255402ba47757d66a997241f8b}{kernel}}.
 
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-CLUEstering/include/Kernels.\+h\end{DoxyCompactItemize}
+CLUEstering/include/\mbox{\hyperlink{Kernels_8h}{Kernels.\+h}}\end{DoxyCompactItemize}

@@ -76,56 +76,431 @@ $(function() {
   <div class="headertitle"><div class="title">tiles&lt; Ndim &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class that represents the tiles that the clustering space is divided into.  
+ <a href="classtiles.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Tiles_8h_source.html">Tiles.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a42f5f569f63045db69608e81693ec41c" id="r_a42f5f569f63045db69608e81693ec41c"><td class="memItemLeft" align="right" valign="top"><a id="a42f5f569f63045db69608e81693ec41c" name="a42f5f569f63045db69608e81693ec41c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>resizeTiles</b> ()</td></tr>
+<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>resizeTiles</b> ()</td></tr>
 <tr class="separator:a42f5f569f63045db69608e81693ec41c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3db1ae140972e10014931dffd9f81c16" id="r_a3db1ae140972e10014931dffd9f81c16"><td class="memItemLeft" align="right" valign="top"><a id="a3db1ae140972e10014931dffd9f81c16" name="a3db1ae140972e10014931dffd9f81c16"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getBin</b> (float coord_, int dim_) const</td></tr>
+<tr class="memitem:a3db1ae140972e10014931dffd9f81c16" id="r_a3db1ae140972e10014931dffd9f81c16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtiles.html#a3db1ae140972e10014931dffd9f81c16">getBin</a> (<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">coord_</a>, <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">dim_</a>) <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a></td></tr>
+<tr class="memdesc:a3db1ae140972e10014931dffd9f81c16"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the bin id of a point in a given dimension  <br /></td></tr>
 <tr class="separator:a3db1ae140972e10014931dffd9f81c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae64dc9786a94998c529128ceabf69e2c" id="r_ae64dc9786a94998c529128ceabf69e2c"><td class="memItemLeft" align="right" valign="top"><a id="ae64dc9786a94998c529128ceabf69e2c" name="ae64dc9786a94998c529128ceabf69e2c"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getGlobalBin</b> (std::vector&lt; float &gt; const &amp;coords) const</td></tr>
+<tr class="memitem:ae64dc9786a94998c529128ceabf69e2c" id="r_ae64dc9786a94998c529128ceabf69e2c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtiles.html#ae64dc9786a94998c529128ceabf69e2c">getGlobalBin</a> (std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> &gt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a> &amp;coords) <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a></td></tr>
+<tr class="memdesc:ae64dc9786a94998c529128ceabf69e2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the global bin id of a point  <br /></td></tr>
 <tr class="separator:ae64dc9786a94998c529128ceabf69e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd8949b89d96ece56e63d19d072474de" id="r_acd8949b89d96ece56e63d19d072474de"><td class="memItemLeft" align="right" valign="top"><a id="acd8949b89d96ece56e63d19d072474de" name="acd8949b89d96ece56e63d19d072474de"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getGlobalBinByBin</b> (std::array&lt; int, Ndim &gt; const &amp;Bins) const</td></tr>
+<tr class="memitem:acd8949b89d96ece56e63d19d072474de" id="r_acd8949b89d96ece56e63d19d072474de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtiles.html#acd8949b89d96ece56e63d19d072474de">getGlobalBinByBin</a> (std::array&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>, <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a> &amp;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Bins</a>) <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a></td></tr>
+<tr class="memdesc:acd8949b89d96ece56e63d19d072474de"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the global bin id of a point given its bin ids in each dimension  <br /></td></tr>
 <tr class="separator:acd8949b89d96ece56e63d19d072474de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50bf1aca72a294ca3652948b8e376add" id="r_a50bf1aca72a294ca3652948b8e376add"><td class="memItemLeft" align="right" valign="top"><a id="a50bf1aca72a294ca3652948b8e376add" name="a50bf1aca72a294ca3652948b8e376add"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>fill</b> (std::vector&lt; float &gt; const &amp;coords, int i)</td></tr>
+<tr class="memitem:a50bf1aca72a294ca3652948b8e376add" id="r_a50bf1aca72a294ca3652948b8e376add"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtiles.html#a50bf1aca72a294ca3652948b8e376add">fill</a> (std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> &gt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a> &amp;coords, <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">i</a>)</td></tr>
+<tr class="memdesc:a50bf1aca72a294ca3652948b8e376add"><td class="mdescLeft">&#160;</td><td class="mdescRight">fill the tiles with the points  <br /></td></tr>
 <tr class="separator:a50bf1aca72a294ca3652948b8e376add"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5824264e8ed3af1e4e5c663c21ee0527" id="r_a5824264e8ed3af1e4e5c663c21ee0527"><td class="memItemLeft" align="right" valign="top"><a id="a5824264e8ed3af1e4e5c663c21ee0527" name="a5824264e8ed3af1e4e5c663c21ee0527"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>fill</b> (std::vector&lt; std::vector&lt; float &gt; &gt; const &amp;coordinates)</td></tr>
+<tr class="memitem:a5824264e8ed3af1e4e5c663c21ee0527" id="r_a5824264e8ed3af1e4e5c663c21ee0527"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtiles.html#a5824264e8ed3af1e4e5c663c21ee0527">fill</a> (std::vector&lt; std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> &gt; &gt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a> &amp;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">coordinates</a>)</td></tr>
+<tr class="memdesc:a5824264e8ed3af1e4e5c663c21ee0527"><td class="mdescLeft">&#160;</td><td class="mdescRight">fill the tiles with the points  <br /></td></tr>
 <tr class="separator:a5824264e8ed3af1e4e5c663c21ee0527"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4741daa535e2b21af7c14c0a1ea1081b" id="r_a4741daa535e2b21af7c14c0a1ea1081b"><td class="memTemplParams" colspan="2"><a id="a4741daa535e2b21af7c14c0a1ea1081b" name="a4741daa535e2b21af7c14c0a1ea1081b"></a>
-template&lt;int N_&gt; </td></tr>
-<tr class="memitem:a4741daa535e2b21af7c14c0a1ea1081b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>searchBox</b> (std::array&lt; std::vector&lt; int &gt;, Ndim &gt; const &amp;xjBins, std::array&lt; int, Ndim &gt; &amp;comb, std::vector&lt; int &gt; &amp;sBox)</td></tr>
+<tr class="memitem:a4741daa535e2b21af7c14c0a1ea1081b" id="r_a4741daa535e2b21af7c14c0a1ea1081b"><td class="memTemplParams" colspan="2">template&lt;int N_&gt; </td></tr>
+<tr class="memitem:a4741daa535e2b21af7c14c0a1ea1081b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">searchBox</a> (std::array&lt; std::vector&lt; int &gt;, Ndim &gt; const &amp;xjBins, std::array&lt; int, Ndim &gt; &amp;comb, std::vector&lt; int &gt; &amp;sBox)</td></tr>
+<tr class="memdesc:a4741daa535e2b21af7c14c0a1ea1081b"><td class="mdescLeft">&#160;</td><td class="mdescRight">search the tiles that are in the box defined by the given ranges  <br /></td></tr>
 <tr class="separator:a4741daa535e2b21af7c14c0a1ea1081b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9606242308d7b2b53ee02c7f6ad88cfd" id="r_a9606242308d7b2b53ee02c7f6ad88cfd"><td class="memItemLeft" align="right" valign="top"><a id="a9606242308d7b2b53ee02c7f6ad88cfd" name="a9606242308d7b2b53ee02c7f6ad88cfd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>searchBox</b> (std::array&lt; std::vector&lt; int &gt;, Ndim &gt; const &amp;xjBins, std::vector&lt; int &gt; &amp;sBox)</td></tr>
+<tr class="memitem:a9606242308d7b2b53ee02c7f6ad88cfd" id="r_a9606242308d7b2b53ee02c7f6ad88cfd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtiles.html#a9606242308d7b2b53ee02c7f6ad88cfd">searchBox</a> (std::array&lt; std::vector&lt; int &gt;, Ndim &gt; const &amp;xjBins, std::vector&lt; int &gt; &amp;sBox)</td></tr>
+<tr class="memdesc:a9606242308d7b2b53ee02c7f6ad88cfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">search the tiles that are in the box defined by the given ranges  <br /></td></tr>
 <tr class="separator:a9606242308d7b2b53ee02c7f6ad88cfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a213c8899448168c7077b815038cc6c" id="r_a4a213c8899448168c7077b815038cc6c"><td class="memItemLeft" align="right" valign="top"><a id="a4a213c8899448168c7077b815038cc6c" name="a4a213c8899448168c7077b815038cc6c"></a>
-std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getBinsFromRange</b> (float x_min, float x_max, int dim_)</td></tr>
+<tr class="memitem:a4a213c8899448168c7077b815038cc6c" id="r_a4a213c8899448168c7077b815038cc6c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtiles.html#a4a213c8899448168c7077b815038cc6c">getBinsFromRange</a> (<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">x_min</a>, <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">x_max</a>, <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">dim_</a>)</td></tr>
+<tr class="memdesc:a4a213c8899448168c7077b815038cc6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the list of the bins that are in the given range  <br /></td></tr>
 <tr class="separator:a4a213c8899448168c7077b815038cc6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36df03fb4a1344e994e5a8b0891f98cb" id="r_a36df03fb4a1344e994e5a8b0891f98cb"><td class="memItemLeft" align="right" valign="top"><a id="a36df03fb4a1344e994e5a8b0891f98cb" name="a36df03fb4a1344e994e5a8b0891f98cb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="memitem:a36df03fb4a1344e994e5a8b0891f98cb" id="r_a36df03fb4a1344e994e5a8b0891f98cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtiles.html#a36df03fb4a1344e994e5a8b0891f98cb">clear</a> ()</td></tr>
+<tr class="memdesc:a36df03fb4a1344e994e5a8b0891f98cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">clear the tiles  <br /></td></tr>
 <tr class="separator:a36df03fb4a1344e994e5a8b0891f98cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac89b9b65164a679f7b715fdfed2ea4f3" id="r_ac89b9b65164a679f7b715fdfed2ea4f3"><td class="memItemLeft" align="right" valign="top"><a id="ac89b9b65164a679f7b715fdfed2ea4f3" name="ac89b9b65164a679f7b715fdfed2ea4f3"></a>
-std::vector&lt; int &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (int globalBinId)</td></tr>
+<tr class="memitem:ac89b9b65164a679f7b715fdfed2ea4f3" id="r_ac89b9b65164a679f7b715fdfed2ea4f3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtiles.html#ac89b9b65164a679f7b715fdfed2ea4f3">operator[]</a> (<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">globalBinId</a>)</td></tr>
+<tr class="memdesc:ac89b9b65164a679f7b715fdfed2ea4f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">operator that returns the list of the points in the given tile  <br /></td></tr>
 <tr class="separator:ac89b9b65164a679f7b715fdfed2ea4f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a1ad1a157717cc6fd1db49c851ae73df2" id="r_a1ad1a157717cc6fd1db49c851ae73df2"><td class="memItemLeft" align="right" valign="top"><a id="a1ad1a157717cc6fd1db49c851ae73df2" name="a1ad1a157717cc6fd1db49c851ae73df2"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>nTiles</b></td></tr>
+<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>&#160;</td><td class="memItemRight" valign="bottom"><b>nTiles</b></td></tr>
 <tr class="separator:a1ad1a157717cc6fd1db49c851ae73df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1cc68db8f8d8132fd54a3f31ab728b30" id="r_a1cc68db8f8d8132fd54a3f31ab728b30"><td class="memItemLeft" align="right" valign="top"><a id="a1cc68db8f8d8132fd54a3f31ab728b30" name="a1cc68db8f8d8132fd54a3f31ab728b30"></a>
-std::array&lt; float, Ndim &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tilesSize</b></td></tr>
+std::array&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a>, <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tilesSize</b></td></tr>
 <tr class="separator:a1cc68db8f8d8132fd54a3f31ab728b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e542c1f9adaf302db0db1663f41ab31" id="r_a8e542c1f9adaf302db0db1663f41ab31"><td class="memItemLeft" align="right" valign="top"><a id="a8e542c1f9adaf302db0db1663f41ab31" name="a8e542c1f9adaf302db0db1663f41ab31"></a>
-std::array&lt; std::vector&lt; float &gt;, Ndim &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>minMax</b></td></tr>
+std::array&lt; std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> &gt;, <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>minMax</b></td></tr>
 <tr class="separator:a8e542c1f9adaf302db0db1663f41ab31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">uint8_t</a> Ndim&gt;<br />
+class tiles&lt; Ndim &gt;</div><p>Class that represents the tiles that the clustering space is divided into. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Ndim</td><td>Number of dimensions of the clustering space </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a36df03fb4a1344e994e5a8b0891f98cb" name="a36df03fb4a1344e994e5a8b0891f98cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36df03fb4a1344e994e5a8b0891f98cb">&#9670;&#160;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">uint8_t</a> Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">void</a> <a class="el" href="classtiles.html">tiles</a>&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>clear the tiles </p>
+<dl class="section note"><dt>Note</dt><dd>the tiles are not resized </dd></dl>
+
+</div>
+</div>
+<a id="a50bf1aca72a294ca3652948b8e376add" name="a50bf1aca72a294ca3652948b8e376add"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50bf1aca72a294ca3652948b8e376add">&#9670;&#160;</a></span>fill() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">uint8_t</a> Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">void</a> <a class="el" href="classtiles.html">tiles</a>&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;::fill </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> &gt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>coords</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>fill the tiles with the points </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coords</td><td>coordinates of the point </td></tr>
+    <tr><td class="paramname">i</td><td>id of the point </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5824264e8ed3af1e4e5c663c21ee0527" name="a5824264e8ed3af1e4e5c663c21ee0527"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5824264e8ed3af1e4e5c663c21ee0527">&#9670;&#160;</a></span>fill() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">uint8_t</a> Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">void</a> <a class="el" href="classtiles.html">tiles</a>&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;::fill </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> &gt; &gt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>coordinates</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>fill the tiles with the points </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coordinates</td><td>coordinates of the points </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3db1ae140972e10014931dffd9f81c16" name="a3db1ae140972e10014931dffd9f81c16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3db1ae140972e10014931dffd9f81c16">&#9670;&#160;</a></span>getBin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">uint8_t</a> Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> <a class="el" href="classtiles.html">tiles</a>&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;::getBin </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a>&#160;</td>
+          <td class="paramname"><em>coord_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>&#160;</td>
+          <td class="paramname"><em>dim_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the bin id of a point in a given dimension </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coord_</td><td>coordinate of the point </td></tr>
+    <tr><td class="paramname">dim_</td><td>dimension of the point </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the bin id of the point </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>the bin id is the id of the tile that the point belongs to </dd></dl>
+
+</div>
+</div>
+<a id="a4a213c8899448168c7077b815038cc6c" name="a4a213c8899448168c7077b815038cc6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a213c8899448168c7077b815038cc6c">&#9670;&#160;</a></span>getBinsFromRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">uint8_t</a> Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> &gt; <a class="el" href="classtiles.html">tiles</a>&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;::getBinsFromRange </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a>&#160;</td>
+          <td class="paramname"><em>x_min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a>&#160;</td>
+          <td class="paramname"><em>x_max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>&#160;</td>
+          <td class="paramname"><em>dim_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the list of the bins that are in the given range </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x_min</td><td>minimum value of the range </td></tr>
+    <tr><td class="paramname">x_max</td><td>maximum value of the range </td></tr>
+    <tr><td class="paramname">dim_</td><td>dimension of the range </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the list of the bins that are in the given range </dd></dl>
+
+</div>
+</div>
+<a id="ae64dc9786a94998c529128ceabf69e2c" name="ae64dc9786a94998c529128ceabf69e2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae64dc9786a94998c529128ceabf69e2c">&#9670;&#160;</a></span>getGlobalBin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">uint8_t</a> Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> <a class="el" href="classtiles.html">tiles</a>&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;::getGlobalBin </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">float</a> &gt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>coords</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the global bin id of a point </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coords</td><td>coordinates of the point </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the global bin id of the point </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>the global bin id is the id of the tile that the point belongs to </dd></dl>
+
+</div>
+</div>
+<a id="acd8949b89d96ece56e63d19d072474de" name="acd8949b89d96ece56e63d19d072474de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd8949b89d96ece56e63d19d072474de">&#9670;&#160;</a></span>getGlobalBinByBin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">uint8_t</a> Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> <a class="el" href="classtiles.html">tiles</a>&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;::getGlobalBinByBin </td>
+          <td>(</td>
+          <td class="paramtype">std::array&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>, <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">const</a> &amp;&#160;</td>
+          <td class="paramname"><em>Bins</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the global bin id of a point given its bin ids in each dimension </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Bins</td><td>bin ids of the point in each dimension </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the global bin id of the point </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>the global bin id is the id of the tile that the point belongs to </dd></dl>
+
+</div>
+</div>
+<a id="ac89b9b65164a679f7b715fdfed2ea4f3" name="ac89b9b65164a679f7b715fdfed2ea4f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac89b9b65164a679f7b715fdfed2ea4f3">&#9670;&#160;</a></span>operator[]()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">uint8_t</a> Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a> &gt; &amp; <a class="el" href="classtiles.html">tiles</a>&lt; <a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">Ndim</a> &gt;<a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">::operator</a>[] </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classtiles.html#a4741daa535e2b21af7c14c0a1ea1081b">int</a>&#160;</td>
+          <td class="paramname"><em>globalBinId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>operator that returns the list of the points in the given tile </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">globalBinId</td><td>id of the tile </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the list of the points in the given tile </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>the global bin id is the id of the tile that the point belongs to </dd></dl>
+
+</div>
+</div>
+<a id="a4741daa535e2b21af7c14c0a1ea1081b" name="a4741daa535e2b21af7c14c0a1ea1081b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4741daa535e2b21af7c14c0a1ea1081b">&#9670;&#160;</a></span>searchBox() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint8_t Ndim&gt; </div>
+<div class="memtemplate">
+template&lt;int N_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classtiles.html">tiles</a>&lt; Ndim &gt;::searchBox </td>
+          <td>(</td>
+          <td class="paramtype">std::array&lt; std::vector&lt; int &gt;, Ndim &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>xjBins</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::array&lt; int, Ndim &gt; &amp;&#160;</td>
+          <td class="paramname"><em>comb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>sBox</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>search the tiles that are in the box defined by the given ranges </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">N_</td><td>dimension of the box </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">xjBins</td><td>bin ids of the points in each dimension </td></tr>
+    <tr><td class="paramname">comb</td><td>bin ids of the points in each dimension </td></tr>
+    <tr><td class="paramname">sBox</td><td>list of the tiles that are in the box </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9606242308d7b2b53ee02c7f6ad88cfd" name="a9606242308d7b2b53ee02c7f6ad88cfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9606242308d7b2b53ee02c7f6ad88cfd">&#9670;&#160;</a></span>searchBox() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint8_t Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classtiles.html">tiles</a>&lt; Ndim &gt;::searchBox </td>
+          <td>(</td>
+          <td class="paramtype">std::array&lt; std::vector&lt; int &gt;, Ndim &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>xjBins</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>sBox</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>search the tiles that are in the box defined by the given ranges </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">xjBins</td><td>bin ids of the points in each dimension </td></tr>
+    <tr><td class="paramname">sBox</td><td>list of the tiles that are in the box </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>CLUEstering/include/<a class="el" href="Tiles_8h_source.html">Tiles.h</a></li>
 </ul>

@@ -1,26 +1,30 @@
 \doxysection{Clustering\+Algo\texorpdfstring{$<$}{<} Ndim \texorpdfstring{$>$}{>} Class Template Reference}
 \hypertarget{classClusteringAlgo}{}\label{classClusteringAlgo}\index{ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}}
+
+
+The \doxylink{classClusteringAlgo}{Clustering\+Algo} class is the main class of the clustering algorithm. It contains the data structures and methods to perform the clustering.  
+
+
+
+
+{\ttfamily \#include $<$Clustering.\+h$>$}
+
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classClusteringAlgo_a1b510ebbb296613ed4fe9584bb83b241}\label{classClusteringAlgo_a1b510ebbb296613ed4fe9584bb83b241} 
 {\bfseries Clustering\+Algo} (float dc, float rhoc, float outlier\+Delta\+Factor, int p\+PBin, std\+::vector$<$ \mbox{\hyperlink{structdomain__t}{domain\+\_\+t}} $>$ domains)
 \item 
-\Hypertarget{classClusteringAlgo_a08aea6dfeb6dad41a96f049e8e5d1a50}\label{classClusteringAlgo_a08aea6dfeb6dad41a96f049e8e5d1a50} 
-bool {\bfseries set\+Points} (int n, std\+::vector$<$ std\+::vector$<$ float $>$ $>$ coordinates, std\+::vector$<$ float $>$ weight)
-\item 
-\Hypertarget{classClusteringAlgo_ad03eeabc4605a06ee785486214f29daf}\label{classClusteringAlgo_ad03eeabc4605a06ee785486214f29daf} 
-void {\bfseries clear\+Points} ()
-\item 
-\Hypertarget{classClusteringAlgo_a1e973008a68ad8bf6c08b914e190b278}\label{classClusteringAlgo_a1e973008a68ad8bf6c08b914e190b278} 
-int {\bfseries calculate\+NTiles} (int point\+Per\+Bin)
-\item 
-\Hypertarget{classClusteringAlgo_a32697a029ff013d277f5c2c62f06c514}\label{classClusteringAlgo_a32697a029ff013d277f5c2c62f06c514} 
-std\+::array$<$ float, Ndim $>$ {\bfseries calculate\+Tile\+Size} (int NTiles, \mbox{\hyperlink{classtiles}{tiles}}$<$ Ndim $>$ \&tiles\+\_\+)
-\item 
-\Hypertarget{classClusteringAlgo_ad490a41fdcb9e4e7ba802d19eb4b58db}\label{classClusteringAlgo_ad490a41fdcb9e4e7ba802d19eb4b58db} 
-std\+::vector$<$ std\+::vector$<$ int $>$ $>$ {\bfseries make\+Clusters} (\mbox{\hyperlink{classkernel}{kernel}} const \&ker)
-\end{DoxyCompactItemize}
+bool \mbox{\hyperlink{classClusteringAlgo_a08aea6dfeb6dad41a96f049e8e5d1a50}{set\+Points}} (int n, std\+::vector$<$ std\+::vector$<$ float $>$ $>$ coordinates, std\+::vector$<$ float $>$ weight)
+\begin{DoxyCompactList}\small\item\em set\+Points sets the points to be clustered. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClusteringAlgo_ad03eeabc4605a06ee785486214f29daf}{clear\+Points}} ()
+\begin{DoxyCompactList}\small\item\em clear\+Points clears the points. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClusteringAlgo_a1e973008a68ad8bf6c08b914e190b278}{calculate\+NTiles}} (int point\+Per\+Bin)
+\begin{DoxyCompactList}\small\item\em calculate\+NTiles calculates the number of tiles. \end{DoxyCompactList}\item 
+std\+::array$<$ float, Ndim $>$ \mbox{\hyperlink{classClusteringAlgo_a32697a029ff013d277f5c2c62f06c514}{calculate\+Tile\+Size}} (int NTiles, \mbox{\hyperlink{classtiles}{tiles}}$<$ Ndim $>$ \&tiles\+\_\+)
+\begin{DoxyCompactList}\small\item\em calculate\+Tile\+Size calculates the size of the tiles. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ int $>$ $>$ \mbox{\hyperlink{classClusteringAlgo_ad490a41fdcb9e4e7ba802d19eb4b58db}{make\+Clusters}} (\mbox{\hyperlink{classkernel}{kernel}} const \&ker)
+\begin{DoxyCompactList}\small\item\em make\+Clusters performs the clustering. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -44,6 +48,129 @@ std\+::vector$<$ \mbox{\hyperlink{structdomain__t}{domain\+\_\+t}} $>$ {\bfserie
 \end{DoxyCompactItemize}
 
 
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$uint8\+\_\+t Ndim$>$\newline
+class Clustering\+Algo$<$ Ndim $>$}
+The \doxylink{classClusteringAlgo}{Clustering\+Algo} class is the main class of the clustering algorithm. It contains the data structures and methods to perform the clustering. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ndim} & Number of dimensions of the data. \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classClusteringAlgo_a1e973008a68ad8bf6c08b914e190b278}\label{classClusteringAlgo_a1e973008a68ad8bf6c08b914e190b278} 
+\index{ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}!calculateNTiles@{calculateNTiles}}
+\index{calculateNTiles@{calculateNTiles}!ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{calculateNTiles()}{calculateNTiles()}}
+{\footnotesize\ttfamily template$<$uint8\+\_\+t Ndim$>$ \\
+int \mbox{\hyperlink{classClusteringAlgo}{Clustering\+Algo}}$<$ Ndim $>$\+::calculate\+NTiles (\begin{DoxyParamCaption}\item[{int}]{point\+Per\+Bin }\end{DoxyParamCaption})}
+
+
+
+calculate\+NTiles calculates the number of tiles. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point\+Per\+Bin} & Average number of points found in a tile. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Number of tiles.
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This method is called automatically by make\+Clusters. 
+\end{DoxyNote}
+\Hypertarget{classClusteringAlgo_a32697a029ff013d277f5c2c62f06c514}\label{classClusteringAlgo_a32697a029ff013d277f5c2c62f06c514} 
+\index{ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}!calculateTileSize@{calculateTileSize}}
+\index{calculateTileSize@{calculateTileSize}!ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{calculateTileSize()}{calculateTileSize()}}
+{\footnotesize\ttfamily template$<$uint8\+\_\+t Ndim$>$ \\
+std\+::array$<$ float, Ndim $>$ \mbox{\hyperlink{classClusteringAlgo}{Clustering\+Algo}}$<$ Ndim $>$\+::calculate\+Tile\+Size (\begin{DoxyParamCaption}\item[{int}]{NTiles,  }\item[{\mbox{\hyperlink{classtiles}{tiles}}$<$ Ndim $>$ \&}]{tiles\+\_\+ }\end{DoxyParamCaption})}
+
+
+
+calculate\+Tile\+Size calculates the size of the tiles. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em NTiles} & Number of tiles. \\
+\hline
+{\em tiles\+\_\+} & Tiles object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Array containing the size of the tiles.
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This method is called automatically by make\+Clusters. 
+\end{DoxyNote}
+\Hypertarget{classClusteringAlgo_ad03eeabc4605a06ee785486214f29daf}\label{classClusteringAlgo_ad03eeabc4605a06ee785486214f29daf} 
+\index{ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}!clearPoints@{clearPoints}}
+\index{clearPoints@{clearPoints}!ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{clearPoints()}{clearPoints()}}
+{\footnotesize\ttfamily template$<$uint8\+\_\+t Ndim$>$ \\
+void \mbox{\hyperlink{classClusteringAlgo}{Clustering\+Algo}}$<$ Ndim $>$\+::clear\+Points (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+clear\+Points clears the points. 
+
+\begin{DoxyReturn}{Returns}
+void
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This method is called automatically by set\+Points. 
+\end{DoxyNote}
+\Hypertarget{classClusteringAlgo_ad490a41fdcb9e4e7ba802d19eb4b58db}\label{classClusteringAlgo_ad490a41fdcb9e4e7ba802d19eb4b58db} 
+\index{ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}!makeClusters@{makeClusters}}
+\index{makeClusters@{makeClusters}!ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{makeClusters()}{makeClusters()}}
+{\footnotesize\ttfamily template$<$uint8\+\_\+t Ndim$>$ \\
+std\+::vector$<$ std\+::vector$<$ int $>$ $>$ \mbox{\hyperlink{classClusteringAlgo}{Clustering\+Algo}}$<$ Ndim $>$\+::make\+Clusters (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classkernel}{kernel}} const \&}]{ker }\end{DoxyParamCaption})}
+
+
+
+make\+Clusters performs the clustering. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ker} & Kernel object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Array containing the cluster index and the seed flag.
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This method is called automatically by make\+Clusters. 
+\end{DoxyNote}
+\Hypertarget{classClusteringAlgo_a08aea6dfeb6dad41a96f049e8e5d1a50}\label{classClusteringAlgo_a08aea6dfeb6dad41a96f049e8e5d1a50} 
+\index{ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}!setPoints@{setPoints}}
+\index{setPoints@{setPoints}!ClusteringAlgo$<$ Ndim $>$@{ClusteringAlgo$<$ Ndim $>$}}
+\doxysubsubsection{\texorpdfstring{setPoints()}{setPoints()}}
+{\footnotesize\ttfamily template$<$uint8\+\_\+t Ndim$>$ \\
+bool \mbox{\hyperlink{classClusteringAlgo}{Clustering\+Algo}}$<$ Ndim $>$\+::set\+Points (\begin{DoxyParamCaption}\item[{int}]{n,  }\item[{std\+::vector$<$ std\+::vector$<$ float $>$ $>$}]{coordinates,  }\item[{std\+::vector$<$ float $>$}]{weight }\end{DoxyParamCaption})}
+
+
+
+set\+Points sets the points to be clustered. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & Number of points. \\
+\hline
+{\em coordinates} & Coordinates of the points. \\
+\hline
+{\em weight} & Weight of the points. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the number of points is zero, false otherwise. 
+\end{DoxyReturn}
+
+
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-CLUEstering/include/Clustering.\+h\end{DoxyCompactItemize}
+CLUEstering/include/\mbox{\hyperlink{Clustering_8h}{Clustering.\+h}}\end{DoxyCompactItemize}

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['read_5fdata_0',['read_data',['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#a0bdfb873bd7c98a694b50c39599849c8',1,'CLUEstering::CLUEstering::clusterer']]],
-  ['run_5fclue_1',['run_clue',['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#a43e0ef2dbb9ffc2c2823f96b38b36524',1,'CLUEstering::CLUEstering::clusterer']]]
+  ['makeclusters_0',['makeClusters',['../classClusteringAlgo.html#ad490a41fdcb9e4e7ba802d19eb4b58db',1,'ClusteringAlgo']]],
+  ['modified_20attributes_1',['modified attributes',['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md5',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md7',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md9',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md11',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md15',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md19',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md22',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md23',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md25',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md27',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md29',1,'Modified attributes']]],
+  ['modifies_20attributes_2',['Modifies attributes',['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md17',1,'']]]
 ];

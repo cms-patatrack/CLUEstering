@@ -1,5 +1,14 @@
 \doxysection{exponential\+Kernel Class Reference}
 \hypertarget{classexponentialKernel}{}\label{classexponentialKernel}\index{exponentialKernel@{exponentialKernel}}
+
+
+Class that represents the exponential kernel.  
+
+
+
+
+{\ttfamily \#include $<$Kernels.\+h$>$}
+
 Inheritance diagram for exponential\+Kernel\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -9,11 +18,48 @@ Inheritance diagram for exponential\+Kernel\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classexponentialKernel_a9d8f301f5849edafe7f6786dfe14f277}\label{classexponentialKernel_a9d8f301f5849edafe7f6786dfe14f277} 
-{\bfseries exponential\+Kernel} (float exp\+\_\+avg, float exp\+\_\+amplitude)
-\item 
+\mbox{\hyperlink{classexponentialKernel_a9d8f301f5849edafe7f6786dfe14f277}{exponential\+Kernel}} (float exp\+\_\+avg, float exp\+\_\+amplitude)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
 float \mbox{\hyperlink{classexponentialKernel_ada1fe5c5ec76498445d14326f3f3a023}{operator()}} (float dist\+\_\+ij, int point\+\_\+id, int j) const override
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Evaluate the exponential kernel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classkernel}{kernel}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries kernel} ()=default
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class that represents the exponential kernel. 
+
+The exponential kernel is defined as\+:  \[
+K_{ij} = \begin{cases}
+1 & \text{if } i = j \\
+\text{exp_amplitude} \cdot \exp \left( - \text{exp_avg} \cdot dist_{ij} \right) & \text{if } i \neq j
+\end{cases}
+\] where $ \text{exp_avg} $ and $ \text{exp_amplitude} $ are user-\/defined parameters \begin{DoxyNote}{Note}
+The user can choose the values of $ \text{exp_avg} $ and $ \text{exp_amplitude} $ 
+\end{DoxyNote}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classexponentialKernel_a9d8f301f5849edafe7f6786dfe14f277}\label{classexponentialKernel_a9d8f301f5849edafe7f6786dfe14f277} 
+\index{exponentialKernel@{exponentialKernel}!exponentialKernel@{exponentialKernel}}
+\index{exponentialKernel@{exponentialKernel}!exponentialKernel@{exponentialKernel}}
+\doxysubsubsection{\texorpdfstring{exponentialKernel()}{exponentialKernel()}}
+{\footnotesize\ttfamily exponential\+Kernel\+::exponential\+Kernel (\begin{DoxyParamCaption}\item[{float}]{exp\+\_\+avg,  }\item[{float}]{exp\+\_\+amplitude }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exp\+\_\+avg} & value of the parameter $ \text{exp_avg} $ \\
+\hline
+{\em exp\+\_\+amplitude} & value of the parameter $ \text{exp_amplitude} $ \\
+\hline
+\end{DoxyParams}
 
 
 \doxysubsection{Member Function Documentation}
@@ -25,10 +71,26 @@ float \mbox{\hyperlink{classexponentialKernel_ada1fe5c5ec76498445d14326f3f3a023}
 
 
 
-Reimplemented from \mbox{\hyperlink{classkernel}{kernel}}.
+Evaluate the exponential kernel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dist\+\_\+ij} & distance between the points i and j \\
+\hline
+{\em point\+\_\+id} & id of the point i \\
+\hline
+{\em j} & id of the point j \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the exponential kernel 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classkernel_ae025bd255402ba47757d66a997241f8b}{kernel}}.
 
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-CLUEstering/include/Kernels.\+h\end{DoxyCompactItemize}
+CLUEstering/include/\mbox{\hyperlink{Kernels_8h}{Kernels.\+h}}\end{DoxyCompactItemize}

@@ -1,45 +1,47 @@
 \doxysection{Point.\+h}
 \hypertarget{Point_8h_source}{}\label{Point_8h_source}\index{CLUEstering/include/Point.h@{CLUEstering/include/Point.h}}
-
+\mbox{\hyperlink{Point_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ point\_h}}
-\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ point\_h}}
-\DoxyCodeLine{00003\ }
-\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <algorithm>}}
-\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <cmath>}}
-\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <iostream>}}
-\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <vector>}}
-\DoxyCodeLine{00008\ }
-\DoxyCodeLine{00009\ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
-\DoxyCodeLine{00010\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structPoints}{Points}}\ \{}
-\DoxyCodeLine{00011\ \ \ std::vector<std::vector<float>>\ coordinates\_;}
-\DoxyCodeLine{00012\ \ \ std::vector<float>\ weight;}
-\DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \ \ std::vector<float>\ rho;}
-\DoxyCodeLine{00015\ \ \ std::vector<float>\ delta;}
-\DoxyCodeLine{00016\ \ \ std::vector<int>\ nearestHigher;}
-\DoxyCodeLine{00017\ \ \ std::vector<int>\ clusterIndex;}
-\DoxyCodeLine{00018\ \ \ std::vector<std::vector<int>>\ followers;}
-\DoxyCodeLine{00019\ \ \ std::vector<int>\ isSeed;}
-\DoxyCodeLine{00020\ \ \ \textcolor{keywordtype}{int}\ n;}
-\DoxyCodeLine{00021\ }
-\DoxyCodeLine{00022\ \ \ \textcolor{keywordtype}{void}\ clear()\ \{}
-\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{\};\ i\ !=\ Ndim;\ ++i)\ \{}
-\DoxyCodeLine{00024\ \ \ \ \ \ \ coordinates\_[i].clear();}
-\DoxyCodeLine{00025\ \ \ \ \ \}}
-\DoxyCodeLine{00026\ \ \ \ \ weight.clear();}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ point\_h}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ point\_h}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
+\DoxyCodeLine{00016\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structPoints}{Points}}\ \{}
+\DoxyCodeLine{00017\ \ \ std::vector<std::vector<float>>\ coordinates\_;}
+\DoxyCodeLine{00018\ \ \ std::vector<float>\ weight;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ std::vector<float>\ rho;}
+\DoxyCodeLine{00021\ \ \ std::vector<float>\ delta;}
+\DoxyCodeLine{00022\ \ \ std::vector<int>\ nearestHigher;}
+\DoxyCodeLine{00023\ \ \ std::vector<int>\ clusterIndex;}
+\DoxyCodeLine{00024\ \ \ std::vector<std::vector<int>>\ followers;}
+\DoxyCodeLine{00025\ \ \ std::vector<int>\ isSeed;}
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{int}\ n;}
 \DoxyCodeLine{00027\ }
-\DoxyCodeLine{00028\ \ \ \ \ rho.clear();}
-\DoxyCodeLine{00029\ \ \ \ \ delta.clear();}
-\DoxyCodeLine{00030\ \ \ \ \ nearestHigher.clear();}
-\DoxyCodeLine{00031\ \ \ \ \ clusterIndex.clear();}
-\DoxyCodeLine{00032\ \ \ \ \ followers.clear();}
-\DoxyCodeLine{00033\ \ \ \ \ isSeed.clear();}
+\DoxyCodeLine{00029\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structPoints_a7e3c80e6d5008fcee7b68e6246f4303c}{clear}}()\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\{\};\ i\ !=\ Ndim;\ ++i)\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ coordinates\_[i].clear();}
+\DoxyCodeLine{00032\ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \ \ \ \ weight.clear();}
 \DoxyCodeLine{00034\ }
-\DoxyCodeLine{00035\ \ \ \ \ n\ =\ 0;}
-\DoxyCodeLine{00036\ \ \ \}}
-\DoxyCodeLine{00037\ \};}
-\DoxyCodeLine{00038\ }
-\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00035\ \ \ \ \ rho.clear();}
+\DoxyCodeLine{00036\ \ \ \ \ delta.clear();}
+\DoxyCodeLine{00037\ \ \ \ \ nearestHigher.clear();}
+\DoxyCodeLine{00038\ \ \ \ \ clusterIndex.clear();}
+\DoxyCodeLine{00039\ \ \ \ \ followers.clear();}
+\DoxyCodeLine{00040\ \ \ \ \ isSeed.clear();}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ n\ =\ 0;}
+\DoxyCodeLine{00043\ \ \ \}}
+\DoxyCodeLine{00044\ \};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}

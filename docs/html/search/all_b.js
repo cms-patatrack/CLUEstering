@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['reading_20data_0',['Reading data',['../md_README.html#autotoc_md2',1,'']]],
-  ['results_20of_20the_20clustering_20to_20file_1',['Writing the results of the clustering to file',['../md_README.html#autotoc_md7',1,'']]]
+  ['parameters_0',['parameters',['../CLUEstering_8py.html#autotoc_md0',1,'Parameters'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md14',1,'Parameters'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md21',1,'Parameters']]],
+  ['point_2eh_1',['Point.h',['../Point_8h.html',1,'']]],
+  ['points_2',['Points',['../structPoints.html',1,'']]]
 ];

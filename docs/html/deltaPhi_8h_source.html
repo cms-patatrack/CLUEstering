@@ -81,13 +81,18 @@ $(document).ready(function() { init_codefold(0); });
   <div class="headertitle"><div class="title">deltaPhi.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span>T deltaPhi(T phi1, T phi2, T x_min, T x_max) {</div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span>  T delta_phi{std::abs(phi2 - phi1)};</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>  <span class="keywordflow">return</span> std::min(delta_phi, x_max - x_min - delta_phi);</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>}</div>
+<a href="deltaPhi_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="foldopen" id="foldopen00015" data-start="{" data-end="}">
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="deltaPhi_8h.html#aec363da364a7181073f14d64365178b1">   15</a></span>T <a class="code hl_function" href="deltaPhi_8h.html#aec363da364a7181073f14d64365178b1">deltaPhi</a>(T phi1, T phi2, T x_min, T x_max) {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  T delta_phi{std::abs(phi2 - phi1)};</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  <span class="keywordflow">return</span> std::min(delta_phi, x_max - x_min - delta_phi);</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>}</div>
+</div>
+<div class="ttc" id="adeltaPhi_8h_html_aec363da364a7181073f14d64365178b1"><div class="ttname"><a href="deltaPhi_8h.html#aec363da364a7181073f14d64365178b1">deltaPhi</a></div><div class="ttdeci">T deltaPhi(T phi1, T phi2, T x_min, T x_max)</div><div class="ttdoc">Calculate the difference in phi between two points.</div><div class="ttdef"><b>Definition</b> deltaPhi.h:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

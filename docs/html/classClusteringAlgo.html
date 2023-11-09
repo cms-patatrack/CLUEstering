@@ -76,26 +76,31 @@ $(function() {
   <div class="headertitle"><div class="title">ClusteringAlgo&lt; Ndim &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>The <a class="el" href="classClusteringAlgo.html" title="The ClusteringAlgo class is the main class of the clustering algorithm. It contains the data structur...">ClusteringAlgo</a> class is the main class of the clustering algorithm. It contains the data structures and methods to perform the clustering.  
+ <a href="classClusteringAlgo.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Clustering_8h_source.html">Clustering.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1b510ebbb296613ed4fe9584bb83b241" id="r_a1b510ebbb296613ed4fe9584bb83b241"><td class="memItemLeft" align="right" valign="top"><a id="a1b510ebbb296613ed4fe9584bb83b241" name="a1b510ebbb296613ed4fe9584bb83b241"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ClusteringAlgo</b> (float dc, float rhoc, float outlierDeltaFactor, int pPBin, std::vector&lt; <a class="el" href="structdomain__t.html">domain_t</a> &gt; domains)</td></tr>
 <tr class="separator:a1b510ebbb296613ed4fe9584bb83b241"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08aea6dfeb6dad41a96f049e8e5d1a50" id="r_a08aea6dfeb6dad41a96f049e8e5d1a50"><td class="memItemLeft" align="right" valign="top"><a id="a08aea6dfeb6dad41a96f049e8e5d1a50" name="a08aea6dfeb6dad41a96f049e8e5d1a50"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>setPoints</b> (int n, std::vector&lt; std::vector&lt; float &gt; &gt; coordinates, std::vector&lt; float &gt; weight)</td></tr>
+<tr class="memitem:a08aea6dfeb6dad41a96f049e8e5d1a50" id="r_a08aea6dfeb6dad41a96f049e8e5d1a50"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClusteringAlgo.html#a08aea6dfeb6dad41a96f049e8e5d1a50">setPoints</a> (int n, std::vector&lt; std::vector&lt; float &gt; &gt; coordinates, std::vector&lt; float &gt; weight)</td></tr>
+<tr class="memdesc:a08aea6dfeb6dad41a96f049e8e5d1a50"><td class="mdescLeft">&#160;</td><td class="mdescRight">setPoints sets the points to be clustered.  <br /></td></tr>
 <tr class="separator:a08aea6dfeb6dad41a96f049e8e5d1a50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad03eeabc4605a06ee785486214f29daf" id="r_ad03eeabc4605a06ee785486214f29daf"><td class="memItemLeft" align="right" valign="top"><a id="ad03eeabc4605a06ee785486214f29daf" name="ad03eeabc4605a06ee785486214f29daf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clearPoints</b> ()</td></tr>
+<tr class="memitem:ad03eeabc4605a06ee785486214f29daf" id="r_ad03eeabc4605a06ee785486214f29daf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClusteringAlgo.html#ad03eeabc4605a06ee785486214f29daf">clearPoints</a> ()</td></tr>
+<tr class="memdesc:ad03eeabc4605a06ee785486214f29daf"><td class="mdescLeft">&#160;</td><td class="mdescRight">clearPoints clears the points.  <br /></td></tr>
 <tr class="separator:ad03eeabc4605a06ee785486214f29daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e973008a68ad8bf6c08b914e190b278" id="r_a1e973008a68ad8bf6c08b914e190b278"><td class="memItemLeft" align="right" valign="top"><a id="a1e973008a68ad8bf6c08b914e190b278" name="a1e973008a68ad8bf6c08b914e190b278"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>calculateNTiles</b> (int pointPerBin)</td></tr>
+<tr class="memitem:a1e973008a68ad8bf6c08b914e190b278" id="r_a1e973008a68ad8bf6c08b914e190b278"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClusteringAlgo.html#a1e973008a68ad8bf6c08b914e190b278">calculateNTiles</a> (int pointPerBin)</td></tr>
+<tr class="memdesc:a1e973008a68ad8bf6c08b914e190b278"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculateNTiles calculates the number of tiles.  <br /></td></tr>
 <tr class="separator:a1e973008a68ad8bf6c08b914e190b278"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32697a029ff013d277f5c2c62f06c514" id="r_a32697a029ff013d277f5c2c62f06c514"><td class="memItemLeft" align="right" valign="top"><a id="a32697a029ff013d277f5c2c62f06c514" name="a32697a029ff013d277f5c2c62f06c514"></a>
-std::array&lt; float, Ndim &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>calculateTileSize</b> (int NTiles, <a class="el" href="classtiles.html">tiles</a>&lt; Ndim &gt; &amp;tiles_)</td></tr>
+<tr class="memitem:a32697a029ff013d277f5c2c62f06c514" id="r_a32697a029ff013d277f5c2c62f06c514"><td class="memItemLeft" align="right" valign="top">std::array&lt; float, Ndim &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClusteringAlgo.html#a32697a029ff013d277f5c2c62f06c514">calculateTileSize</a> (int NTiles, <a class="el" href="classtiles.html">tiles</a>&lt; Ndim &gt; &amp;tiles_)</td></tr>
+<tr class="memdesc:a32697a029ff013d277f5c2c62f06c514"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculateTileSize calculates the size of the tiles.  <br /></td></tr>
 <tr class="separator:a32697a029ff013d277f5c2c62f06c514"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad490a41fdcb9e4e7ba802d19eb4b58db" id="r_ad490a41fdcb9e4e7ba802d19eb4b58db"><td class="memItemLeft" align="right" valign="top"><a id="ad490a41fdcb9e4e7ba802d19eb4b58db" name="ad490a41fdcb9e4e7ba802d19eb4b58db"></a>
-std::vector&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>makeClusters</b> (<a class="el" href="classkernel.html">kernel</a> const &amp;ker)</td></tr>
+<tr class="memitem:ad490a41fdcb9e4e7ba802d19eb4b58db" id="r_ad490a41fdcb9e4e7ba802d19eb4b58db"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClusteringAlgo.html#ad490a41fdcb9e4e7ba802d19eb4b58db">makeClusters</a> (<a class="el" href="classkernel.html">kernel</a> const &amp;ker)</td></tr>
+<tr class="memdesc:ad490a41fdcb9e4e7ba802d19eb4b58db"><td class="mdescLeft">&#160;</td><td class="mdescRight">makeClusters performs the clustering.  <br /></td></tr>
 <tr class="separator:ad490a41fdcb9e4e7ba802d19eb4b58db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -119,6 +124,187 @@ std::vector&lt; <a class="el" href="structdomain__t.html">domain_t</a> &gt;&#160
 <a class="el" href="structPoints.html">Points</a>&lt; Ndim &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>points_</b></td></tr>
 <tr class="separator:a58190d692bf899c662531405149a658b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;uint8_t Ndim&gt;<br />
+class ClusteringAlgo&lt; Ndim &gt;</div><p>The <a class="el" href="classClusteringAlgo.html" title="The ClusteringAlgo class is the main class of the clustering algorithm. It contains the data structur...">ClusteringAlgo</a> class is the main class of the clustering algorithm. It contains the data structures and methods to perform the clustering. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Ndim</td><td>Number of dimensions of the data. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1e973008a68ad8bf6c08b914e190b278" name="a1e973008a68ad8bf6c08b914e190b278"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e973008a68ad8bf6c08b914e190b278">&#9670;&#160;</a></span>calculateNTiles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint8_t Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classClusteringAlgo.html">ClusteringAlgo</a>&lt; Ndim &gt;::calculateNTiles </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pointPerBin</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculateNTiles calculates the number of tiles. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pointPerBin</td><td>Average number of points found in a tile. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of tiles.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This method is called automatically by makeClusters. </dd></dl>
+
+</div>
+</div>
+<a id="a32697a029ff013d277f5c2c62f06c514" name="a32697a029ff013d277f5c2c62f06c514"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32697a029ff013d277f5c2c62f06c514">&#9670;&#160;</a></span>calculateTileSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint8_t Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt; float, Ndim &gt; <a class="el" href="classClusteringAlgo.html">ClusteringAlgo</a>&lt; Ndim &gt;::calculateTileSize </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>NTiles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtiles.html">tiles</a>&lt; Ndim &gt; &amp;&#160;</td>
+          <td class="paramname"><em>tiles_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculateTileSize calculates the size of the tiles. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">NTiles</td><td>Number of tiles. </td></tr>
+    <tr><td class="paramname">tiles_</td><td>Tiles object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Array containing the size of the tiles.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This method is called automatically by makeClusters. </dd></dl>
+
+</div>
+</div>
+<a id="ad03eeabc4605a06ee785486214f29daf" name="ad03eeabc4605a06ee785486214f29daf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad03eeabc4605a06ee785486214f29daf">&#9670;&#160;</a></span>clearPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint8_t Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classClusteringAlgo.html">ClusteringAlgo</a>&lt; Ndim &gt;::clearPoints </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>clearPoints clears the points. </p>
+<dl class="section return"><dt>Returns</dt><dd>void</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This method is called automatically by setPoints. </dd></dl>
+
+</div>
+</div>
+<a id="ad490a41fdcb9e4e7ba802d19eb4b58db" name="ad490a41fdcb9e4e7ba802d19eb4b58db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad490a41fdcb9e4e7ba802d19eb4b58db">&#9670;&#160;</a></span>makeClusters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint8_t Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::vector&lt; int &gt; &gt; <a class="el" href="classClusteringAlgo.html">ClusteringAlgo</a>&lt; Ndim &gt;::makeClusters </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classkernel.html">kernel</a> const &amp;&#160;</td>
+          <td class="paramname"><em>ker</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>makeClusters performs the clustering. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ker</td><td>Kernel object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Array containing the cluster index and the seed flag.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This method is called automatically by makeClusters. </dd></dl>
+
+</div>
+</div>
+<a id="a08aea6dfeb6dad41a96f049e8e5d1a50" name="a08aea6dfeb6dad41a96f049e8e5d1a50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08aea6dfeb6dad41a96f049e8e5d1a50">&#9670;&#160;</a></span>setPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint8_t Ndim&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classClusteringAlgo.html">ClusteringAlgo</a>&lt; Ndim &gt;::setPoints </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; float &gt; &gt;&#160;</td>
+          <td class="paramname"><em>coordinates</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; float &gt;&#160;</td>
+          <td class="paramname"><em>weight</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>setPoints sets the points to be clustered. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Number of points. </td></tr>
+    <tr><td class="paramname">coordinates</td><td>Coordinates of the points. </td></tr>
+    <tr><td class="paramname">weight</td><td>Weight of the points. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the number of points is zero, false otherwise. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>CLUEstering/include/<a class="el" href="Clustering_8h_source.html">Clustering.h</a></li>
 </ul>

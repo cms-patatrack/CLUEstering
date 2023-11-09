@@ -1,5 +1,14 @@
 \doxysection{flat\+Kernel Class Reference}
 \hypertarget{classflatKernel}{}\label{classflatKernel}\index{flatKernel@{flatKernel}}
+
+
+Class that represents the flat kernel.  
+
+
+
+
+{\ttfamily \#include $<$Kernels.\+h$>$}
+
 Inheritance diagram for flat\+Kernel\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -9,11 +18,48 @@ Inheritance diagram for flat\+Kernel\+:\begin{figure}[H]
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classflatKernel_a756eaa37692c2922c7ff417cb122f45c}\label{classflatKernel_a756eaa37692c2922c7ff417cb122f45c} 
-{\bfseries flat\+Kernel} (float flat)
-\item 
+\mbox{\hyperlink{classflatKernel_a756eaa37692c2922c7ff417cb122f45c}{flat\+Kernel}} (float flat)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
 float \mbox{\hyperlink{classflatKernel_ae0656e377e0b502beb95523aec667689}{operator()}} (float dist\+\_\+ij, int point\+\_\+id, int j) const override
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Evaluate the flat kernel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classkernel}{kernel}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries kernel} ()=default
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class that represents the flat kernel. 
+
+The flat kernel is defined as\+:  \[
+ K_{ij} = \begin{cases}
+ 1 & \text{if } i = j \\
+ \text{flat} & \text{if } i \neq j
+ \end{cases}
+ \] where $ \text{flat} $ is a user-\/defined parameter \begin{DoxyNote}{Note}
+The user can choose the value of $ \text{flat} $ 
+
+The flat kernel is the default kernel 
+\end{DoxyNote}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classflatKernel_a756eaa37692c2922c7ff417cb122f45c}\label{classflatKernel_a756eaa37692c2922c7ff417cb122f45c} 
+\index{flatKernel@{flatKernel}!flatKernel@{flatKernel}}
+\index{flatKernel@{flatKernel}!flatKernel@{flatKernel}}
+\doxysubsubsection{\texorpdfstring{flatKernel()}{flatKernel()}}
+{\footnotesize\ttfamily flat\+Kernel\+::flat\+Kernel (\begin{DoxyParamCaption}\item[{float}]{flat }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em flat} & value of the parameter $ \text{flat} $ \\
+\hline
+\end{DoxyParams}
 
 
 \doxysubsection{Member Function Documentation}
@@ -25,10 +71,26 @@ float \mbox{\hyperlink{classflatKernel_ae0656e377e0b502beb95523aec667689}{operat
 
 
 
-Reimplemented from \mbox{\hyperlink{classkernel}{kernel}}.
+Evaluate the flat kernel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dist\+\_\+ij} & distance between the points i and j \\
+\hline
+{\em point\+\_\+id} & id of the point i \\
+\hline
+{\em j} & id of the point j \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the flat kernel 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classkernel_ae025bd255402ba47757d66a997241f8b}{kernel}}.
 
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-CLUEstering/include/Kernels.\+h\end{DoxyCompactItemize}
+CLUEstering/include/\mbox{\hyperlink{Kernels_8h}{Kernels.\+h}}\end{DoxyCompactItemize}

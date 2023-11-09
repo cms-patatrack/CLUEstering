@@ -75,24 +75,76 @@ $(function() {
   <div class="headertitle"><div class="title">customKernel Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class that represents a custom kernel.  
+ <a href="classcustomKernel.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Kernels_8h_source.html">Kernels.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for customKernel:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classcustomKernel.png" usemap="#customKernel_map" alt=""/>
   <map id="customKernel_map" name="customKernel_map">
-<area href="classkernel.html" alt="kernel" shape="rect" coords="0,0,88,24"/>
+<area href="classkernel.html" title="Class that represents the kernels used in the calculation of local density." alt="kernel" shape="rect" coords="0,0,88,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af1255a2f9663492f81dc703e37a29b17" id="r_af1255a2f9663492f81dc703e37a29b17"><td class="memItemLeft" align="right" valign="top"><a id="af1255a2f9663492f81dc703e37a29b17" name="af1255a2f9663492f81dc703e37a29b17"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>customKernel</b> (kernel_t function)</td></tr>
+<tr class="memitem:af1255a2f9663492f81dc703e37a29b17" id="r_af1255a2f9663492f81dc703e37a29b17"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcustomKernel.html#af1255a2f9663492f81dc703e37a29b17">customKernel</a> (kernel_t function)</td></tr>
+<tr class="memdesc:af1255a2f9663492f81dc703e37a29b17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
 <tr class="separator:af1255a2f9663492f81dc703e37a29b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a165ed65d4726caa22f00f9b1a1b581" id="r_a7a165ed65d4726caa22f00f9b1a1b581"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcustomKernel.html#a7a165ed65d4726caa22f00f9b1a1b581">operator()</a> (float dist_ij, int point_id, int j) const override</td></tr>
+<tr class="memdesc:a7a165ed65d4726caa22f00f9b1a1b581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the custom kernel.  <br /></td></tr>
 <tr class="separator:a7a165ed65d4726caa22f00f9b1a1b581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classkernel"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classkernel')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classkernel.html">kernel</a></td></tr>
+<tr class="memitem:a76d133306f92aa1d4aa804d646bef2ba inherit pub_methods_classkernel" id="r_a76d133306f92aa1d4aa804d646bef2ba"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>kernel</b> ()=default</td></tr>
+<tr class="memdesc:a76d133306f92aa1d4aa804d646bef2ba inherit pub_methods_classkernel"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="separator:a76d133306f92aa1d4aa804d646bef2ba inherit pub_methods_classkernel"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class that represents a custom kernel. </p>
+<p>The user can pass a function object to the constructor </p><dl class="section note"><dt>Note</dt><dd>The function object must have the following signature: <div class="fragment"><div class="line"><span class="keywordtype">float</span> function(<span class="keywordtype">float</span> dist_ij, <span class="keywordtype">int</span> point_id, <span class="keywordtype">int</span> j);</div>
+</div><!-- fragment --> where <picture><source srcset="form_9_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ dist_{ij} $" src="form_9.png"/></picture> is the distance between the points i and j, <picture><source srcset="form_10_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ point_{id} $" src="form_10.png"/></picture> is the id of the point i and <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ j $" src="form_11.png"/></picture> is the id of the point j </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af1255a2f9663492f81dc703e37a29b17" name="af1255a2f9663492f81dc703e37a29b17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1255a2f9663492f81dc703e37a29b17">&#9670;&#160;</a></span>customKernel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">customKernel::customKernel </td>
+          <td>(</td>
+          <td class="paramtype">kernel_t&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>function object </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>The function object must have the following signature: <div class="fragment"><div class="line"><span class="keywordtype">float</span> function(<span class="keywordtype">float</span> dist_ij, <span class="keywordtype">int</span> point_id, <span class="keywordtype">int</span> j);</div>
+</div><!-- fragment --> where <picture><source srcset="form_9_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ dist_{ij} $" src="form_9.png"/></picture> is the distance between the points i and j, <picture><source srcset="form_10_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ point_{id} $" src="form_10.png"/></picture> is the id of the point i and <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ j $" src="form_11.png"/></picture> is the id of the point j </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a7a165ed65d4726caa22f00f9b1a1b581" name="a7a165ed65d4726caa22f00f9b1a1b581"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7a165ed65d4726caa22f00f9b1a1b581">&#9670;&#160;</a></span>operator()()</h2>
@@ -134,7 +186,18 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classkernel.html">kernel</a>.</p>
+<p>Evaluate the custom kernel. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dist_ij</td><td>distance between the points i and j </td></tr>
+    <tr><td class="paramname">point_id</td><td>id of the point i </td></tr>
+    <tr><td class="paramname">j</td><td>id of the point j </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the value of the custom kernel </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classkernel.html#ae025bd255402ba47757d66a997241f8b">kernel</a>.</p>
 
 </div>
 </div>

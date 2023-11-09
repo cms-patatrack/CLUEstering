@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>CLUEstering</b></li><li class="navelem"><a class="el" href="namespaceCLUEstering_1_1CLUEstering.html">CLUEstering</a></li><li class="navelem"><a class="el" href="classCLUEstering_1_1CLUEstering_1_1cluster__properties.html">cluster_properties</a></li>  </ul>
+<li class="navelem"><b>CLUEstering</b></li><li class="navelem"><b>CLUEstering</b></li><li class="navelem"><a class="el" href="classCLUEstering_1_1CLUEstering_1_1cluster__properties.html">cluster_properties</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -81,6 +81,9 @@ $(function() {
   <div class="headertitle"><div class="title">CLUEstering.CLUEstering.cluster_properties Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Container of the data resulting from the clusterization of the input data.  
+ <a href="classCLUEstering_1_1CLUEstering_1_1cluster__properties.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -119,24 +122,11 @@ pd&#160;</td><td class="memItemRight" valign="bottom"><b>output_df</b> .DataFram
 <tr class="separator:a8979d34c1206a664e74b42fa7a5d53d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><pre class="fragment">Container of the data resulting from the clusterization of the input data.
-
-Attributes
-----------
-n_clusters : int
-    Number of clusters constructed.
-cluster_ids : np.ndarray
-    Array containing the cluster_id of each point.
-is_seed : np.ndarray
-    Array of integers containing '1' if a point is a seed and '0' if it isn't
-cluster_points : np.ndarray
-    Array containing, for each cluster, the list of point_ids corresponding to the
-    clusters bolonging to that cluster.
-points_per_cluster : np.ndarray
-    Array containing the number of points belonging to each cluster.
-output_df : pd.DataFrame
-    Dataframe containing is_seed and cluster_ids as columns.
-</pre> </div><hr/>The documentation for this class was generated from the following file:<ul>
+<div class="textblock"><p>Container of the data resulting from the clusterization of the input data. </p>
+<h2><a class="anchor" id="autotoc_md3"></a>
+Attributes</h2>
+<p>n_clusters int Number of clusters constructed. cluster_ids np.ndarray Array containing the cluster_id of each point. is_seed np.ndarray Array of integers containing '1' if a point is a seed and '0' if it isn't cluster_points np.ndarray Array containing, for each cluster, the list of point_ids corresponding to the clusters bolonging to that cluster. points_per_cluster np.ndarray Array containing the number of points belonging to each cluster. output_df pd.DataFrame Dataframe containing is_seed and cluster_ids as columns. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>CLUEstering/<b>CLUEstering.py</b></li>
 </ul>
 </div><!-- contents -->

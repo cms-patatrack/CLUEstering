@@ -75,24 +75,99 @@ $(function() {
   <div class="headertitle"><div class="title">gaussianKernel Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class that represents the gaussian kernel.  
+ <a href="classgaussianKernel.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Kernels_8h_source.html">Kernels.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for gaussianKernel:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classgaussianKernel.png" usemap="#gaussianKernel_map" alt=""/>
   <map id="gaussianKernel_map" name="gaussianKernel_map">
-<area href="classkernel.html" alt="kernel" shape="rect" coords="0,0,99,24"/>
+<area href="classkernel.html" title="Class that represents the kernels used in the calculation of local density." alt="kernel" shape="rect" coords="0,0,99,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af6c9fe9c5e5fe5e4bfdfe1993e4d90a2" id="r_af6c9fe9c5e5fe5e4bfdfe1993e4d90a2"><td class="memItemLeft" align="right" valign="top"><a id="af6c9fe9c5e5fe5e4bfdfe1993e4d90a2" name="af6c9fe9c5e5fe5e4bfdfe1993e4d90a2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>gaussianKernel</b> (float gaus_avg, float gaus_std, float gaus_amplitude)</td></tr>
+<tr class="memitem:af6c9fe9c5e5fe5e4bfdfe1993e4d90a2" id="r_af6c9fe9c5e5fe5e4bfdfe1993e4d90a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgaussianKernel.html#af6c9fe9c5e5fe5e4bfdfe1993e4d90a2">gaussianKernel</a> (float gaus_avg, float gaus_std, float gaus_amplitude)</td></tr>
+<tr class="memdesc:af6c9fe9c5e5fe5e4bfdfe1993e4d90a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
 <tr class="separator:af6c9fe9c5e5fe5e4bfdfe1993e4d90a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41666aa75d8bf8df85f76768196410b2" id="r_a41666aa75d8bf8df85f76768196410b2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgaussianKernel.html#a41666aa75d8bf8df85f76768196410b2">operator()</a> (float dist_ij, int point_id, int j) const override</td></tr>
+<tr class="memdesc:a41666aa75d8bf8df85f76768196410b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the gaussian kernel.  <br /></td></tr>
 <tr class="separator:a41666aa75d8bf8df85f76768196410b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classkernel"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classkernel')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classkernel.html">kernel</a></td></tr>
+<tr class="memitem:a76d133306f92aa1d4aa804d646bef2ba inherit pub_methods_classkernel" id="r_a76d133306f92aa1d4aa804d646bef2ba"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>kernel</b> ()=default</td></tr>
+<tr class="memdesc:a76d133306f92aa1d4aa804d646bef2ba inherit pub_methods_classkernel"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="separator:a76d133306f92aa1d4aa804d646bef2ba inherit pub_methods_classkernel"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class that represents the gaussian kernel. </p>
+<p>The gaussian kernel is defined as:  </p><p class="formulaDsp">
+<picture><source srcset="form_2_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+K_{ij} = \begin{cases}
+1 &amp; \text{if } i = j \\
+\text{gaus_amplitude} \cdot \exp \left( - \frac{(dist_{ij} - \text{gaus_avg})^2}{2 \cdot \text{gaus_std}^2} \right) &amp; \text{if } i \neq j
+\end{cases}
+\]" src="form_2.png"/></picture>
+</p>
+<p> where <picture><source srcset="form_3_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ \text{gaus_avg} $" src="form_3.png"/></picture>, <picture><source srcset="form_4_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ \text{gaus_std} $" src="form_4.png"/></picture> and <picture><source srcset="form_5_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ \text{gaus_amplitude} $" src="form_5.png"/></picture> are user-defined parameters </p><dl class="section note"><dt>Note</dt><dd>The user can choose the values of <picture><source srcset="form_3_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ \text{gaus_avg} $" src="form_3.png"/></picture>, <picture><source srcset="form_4_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ \text{gaus_std} $" src="form_4.png"/></picture> and <picture><source srcset="form_5_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ \text{gaus_amplitude} $" src="form_5.png"/></picture> </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af6c9fe9c5e5fe5e4bfdfe1993e4d90a2" name="af6c9fe9c5e5fe5e4bfdfe1993e4d90a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6c9fe9c5e5fe5e4bfdfe1993e4d90a2">&#9670;&#160;</a></span>gaussianKernel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">gaussianKernel::gaussianKernel </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>gaus_avg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>gaus_std</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>gaus_amplitude</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gaus_avg</td><td>value of the parameter <picture><source srcset="form_3_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ \text{gaus_avg} $" src="form_3.png"/></picture> </td></tr>
+    <tr><td class="paramname">gaus_std</td><td>value of the parameter <picture><source srcset="form_4_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ \text{gaus_std} $" src="form_4.png"/></picture> </td></tr>
+    <tr><td class="paramname">gaus_amplitude</td><td>value of the parameter <picture><source srcset="form_5_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ \text{gaus_amplitude} $" src="form_5.png"/></picture> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a41666aa75d8bf8df85f76768196410b2" name="a41666aa75d8bf8df85f76768196410b2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a41666aa75d8bf8df85f76768196410b2">&#9670;&#160;</a></span>operator()()</h2>
@@ -134,7 +209,18 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classkernel.html">kernel</a>.</p>
+<p>Evaluate the gaussian kernel. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dist_ij</td><td>distance between the points i and j </td></tr>
+    <tr><td class="paramname">point_id</td><td>id of the point i </td></tr>
+    <tr><td class="paramname">j</td><td>id of the point j </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the value of the gaussian kernel </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classkernel.html#ae025bd255402ba47757d66a997241f8b">kernel</a>.</p>
 
 </div>
 </div>
