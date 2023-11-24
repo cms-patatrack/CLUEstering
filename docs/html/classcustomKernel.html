@@ -9,10 +9,15 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -46,6 +51,23 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classcustomKernel.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -67,7 +89,6 @@ $(function() {
 </div>
 </div>
 
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
@@ -107,7 +128,7 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class that represents a custom kernel. </p>
 <p>The user can pass a function object to the constructor </p><dl class="section note"><dt>Note</dt><dd>The function object must have the following signature: <div class="fragment"><div class="line"><span class="keywordtype">float</span> function(<span class="keywordtype">float</span> dist_ij, <span class="keywordtype">int</span> point_id, <span class="keywordtype">int</span> j);</div>
-</div><!-- fragment --> where <picture><source srcset="form_9_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ dist_{ij} $" src="form_9.png"/></picture> is the distance between the points i and j, <picture><source srcset="form_10_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ point_{id} $" src="form_10.png"/></picture> is the id of the point i and <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ j $" src="form_11.png"/></picture> is the id of the point j </dd></dl>
+</div><!-- fragment --> where <img class="formulaInl" alt="$ dist_{ij} $" src="form_9.png"/> is the distance between the points i and j, <img class="formulaInl" alt="$ point_{id} $" src="form_10.png"/> is the id of the point i and <img class="formulaInl" alt="$ j $" src="form_11.png"/> is the id of the point j </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af1255a2f9663492f81dc703e37a29b17" name="af1255a2f9663492f81dc703e37a29b17"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af1255a2f9663492f81dc703e37a29b17">&#9670;&#160;</a></span>customKernel()</h2>
@@ -141,7 +162,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>The function object must have the following signature: <div class="fragment"><div class="line"><span class="keywordtype">float</span> function(<span class="keywordtype">float</span> dist_ij, <span class="keywordtype">int</span> point_id, <span class="keywordtype">int</span> j);</div>
-</div><!-- fragment --> where <picture><source srcset="form_9_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ dist_{ij} $" src="form_9.png"/></picture> is the distance between the points i and j, <picture><source srcset="form_10_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ point_{id} $" src="form_10.png"/></picture> is the id of the point i and <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ j $" src="form_11.png"/></picture> is the id of the point j </dd></dl>
+</div><!-- fragment --> where <img class="formulaInl" alt="$ dist_{ij} $" src="form_9.png"/> is the distance between the points i and j, <img class="formulaInl" alt="$ point_{id} $" src="form_10.png"/> is the id of the point i and <img class="formulaInl" alt="$ j $" src="form_11.png"/> is the id of the point j </dd></dl>
 
 </div>
 </div>
@@ -205,9 +226,13 @@ Public Member Functions</h2></td></tr>
 <li>CLUEstering/include/<a class="el" href="Kernels_8h_source.html">Kernels.h</a></li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="classcustomKernel.html">customKernel</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
 </body>
 </html>
