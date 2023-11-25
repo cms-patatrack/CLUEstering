@@ -4,7 +4,7 @@
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a6d17015fe60c938771f530d5f66ff3e0}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a6d17015fe60c938771f530d5f66ff3e0} 
-{\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, float dc\+\_\+, float rhoc\+\_\+, float outlier\+\_\+, int ppbin=10)
+{\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, float \mbox{\hyperlink{classCLUEstering_1_1CLUEstering_1_1clusterer_a50b5dc258f40de9e3be47136bdc80e78}{dc\+\_\+}}, float rhoc\+\_\+, float outlier\+\_\+, int \mbox{\hyperlink{classCLUEstering_1_1CLUEstering_1_1clusterer_a8ccc83b5e4c99070e681990617365328}{ppbin}}=10)
 \item 
 None \mbox{\hyperlink{classCLUEstering_1_1CLUEstering_1_1clusterer_a0bdfb873bd7c98a694b50c39599849c8}{read\+\_\+data}} (self, Union\mbox{[}pd.\+Data\+Frame, str, dict, list, np.\+ndarray\mbox{]} input\+\_\+data, bool rescale=True, \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}tuple kwargs)
 \begin{DoxyCompactList}\small\item\em Reads the data in input and fills the class members containing the coordinates of the points, the energy weight, the number of dimensions and the number of points. \end{DoxyCompactList}\item 
@@ -27,31 +27,31 @@ None \mbox{\hyperlink{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d78d96fa0b7
 \item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a50b5dc258f40de9e3be47136bdc80e78}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a50b5dc258f40de9e3be47136bdc80e78} 
 {\bfseries dc\+\_\+}
-\item 
+\begin{DoxyCompactList}\small\item\em Spatial parameter indicating how large is the region over which the local. \end{DoxyCompactList}\item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_ac864cf6136c319954c4130df6df6b390}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_ac864cf6136c319954c4130df6df6b390} 
 {\bfseries rhoc}
-\item 
+\begin{DoxyCompactList}\small\item\em Energetic parameter representing the energy threshold value which divides. \end{DoxyCompactList}\item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a8b737ac0e8e73245b407f53f5fbc5334}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a8b737ac0e8e73245b407f53f5fbc5334} 
 {\bfseries outlier}
-\item 
+\begin{DoxyCompactList}\small\item\em Multiplicative increment of dc\+\_\+ for getting the region over which the. \end{DoxyCompactList}\item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a8ccc83b5e4c99070e681990617365328}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a8ccc83b5e4c99070e681990617365328} 
 {\bfseries ppbin}
-\item 
+\begin{DoxyCompactList}\small\item\em Average number of points to be found in each tile. \end{DoxyCompactList}\item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_aacb232787280880c09d122659f547531}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_aacb232787280880c09d122659f547531} 
 {\bfseries clust\+\_\+data}
-\item 
+\begin{DoxyCompactList}\small\item\em Container of the data used by the clustering algorithm. \end{DoxyCompactList}\item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a7f7e5262e49bbcd486374a8592575fd4}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a7f7e5262e49bbcd486374a8592575fd4} 
 {\bfseries scaler}
 \item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_afc5c2ab618810adee1f4e65e364a4776}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_afc5c2ab618810adee1f4e65e364a4776} 
 {\bfseries kernel}
-\item 
+\begin{DoxyCompactList}\small\item\em Convolution kernel used to calculate the local density of the points. \end{DoxyCompactList}\item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a841a0770c367248131705788a16906c2}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a841a0770c367248131705788a16906c2} 
 {\bfseries clust\+\_\+prop}
-\item 
+\begin{DoxyCompactList}\small\item\em Container of the data produced as output of the algorithm. \end{DoxyCompactList}\item 
 \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a4635f9e4c2112e8d5bed0c3b10616d6a}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a4635f9e4c2112e8d5bed0c3b10616d6a} 
 {\bfseries elapsed\+\_\+time}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Execution time of the algorithm, expressed in nanoseconds. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -78,9 +78,17 @@ None \mbox{\hyperlink{classCLUEstering_1_1CLUEstering_1_1clusterer_aca12e8627a64
 
 Constructs the clust\+\_\+data attribute from the dataframe produced by the \+\_\+read\+\_\+string or \+\_\+read\+\_\+dict\+\_\+df methods. 
 
-\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md9}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md9}
-clust\+\_\+data clustering\+\_\+data Properties of the input data\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md10}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md10}
-None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_abb1dd3e1f132ced82ae26acdbf99cb62}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_abb1dd3e1f132ced82ae26acdbf99cb62} 
+
+\begin{DoxyParams}{Parameters}
+{\em df\+\_\+} & Dataframe containing the input data\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_abb1dd3e1f132ced82ae26acdbf99cb62}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_abb1dd3e1f132ced82ae26acdbf99cb62} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!\_read\_array@{\_read\_array}}
 \index{\_read\_array@{\_read\_array}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{\_read\_array()}{\_read\_array()}}
@@ -90,12 +98,17 @@ None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_abb1dd3e1f132ced8
 
 Reads data provided with lists or np.\+ndarrays. 
 
-\begin{DoxyVerb}   Attributes
-   ----------
-\end{DoxyVerb}
- input\+\_\+data list, np.\+ndarray The coordinates and energy values of the data points\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md3}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md3}
-clust\+\_\+data clustering\+\_\+data Properties of the input data\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md4}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md4}
-None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a78ec9e329eb55329248e86c21f4a4897}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a78ec9e329eb55329248e86c21f4a4897} 
+
+\begin{DoxyParams}{Parameters}
+{\em input\+\_\+data} & The coordinates and energy values of the data points\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a78ec9e329eb55329248e86c21f4a4897}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a78ec9e329eb55329248e86c21f4a4897} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!\_read\_dict\_df@{\_read\_dict\_df}}
 \index{\_read\_dict\_df@{\_read\_dict\_df}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{\_read\_dict\_df()}{\_read\_dict\_df()}}
@@ -105,12 +118,17 @@ None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a78ec9e329eb55329
 
 Reads data provided using dictionaries or pandas dataframes. 
 
-\begin{DoxyVerb}   Attributes
-   ----------
-\end{DoxyVerb}
- input\+\_\+data dict, pd.\+Data\+Frame The coordinates and energy values of the data points\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md7}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md7}
-None\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md8}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md8}
-pd.\+Data\+Frame Dataframe containing the input data \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_ac7e4cde4b0ed3ea9346dbbd9ad22398e}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_ac7e4cde4b0ed3ea9346dbbd9ad22398e} 
+
+\begin{DoxyParams}{Parameters}
+{\em input\+\_\+data} & The coordinates and energy values of the data points\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+pd Dataframe containing the input data 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_ac7e4cde4b0ed3ea9346dbbd9ad22398e}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_ac7e4cde4b0ed3ea9346dbbd9ad22398e} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!\_read\_string@{\_read\_string}}
 \index{\_read\_string@{\_read\_string}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{\_read\_string()}{\_read\_string()}}
@@ -120,12 +138,17 @@ pd.\+Data\+Frame Dataframe containing the input data \Hypertarget{classCLUEsteri
 
 Reads data provided by passing a string containing the path to a csv file. 
 
-\begin{DoxyVerb}   Attributes
-   ----------
-\end{DoxyVerb}
- input\+\_\+data str The path to the csv file containing the input data\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md5}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md5}
-None\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md6}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md6}
-pd.\+Data\+Frame Dataframe containing the input data \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_aca12e8627a6408cdfb917b053ce8024c}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_aca12e8627a6408cdfb917b053ce8024c} 
+
+\begin{DoxyParams}{Parameters}
+{\em input\+\_\+data} & The path to the csv file containing the input data\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+pd Dataframe containing the input data 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_aca12e8627a6408cdfb917b053ce8024c}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_aca12e8627a6408cdfb917b053ce8024c} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!\_rescale@{\_rescale}}
 \index{\_rescale@{\_rescale}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{\_rescale()}{\_rescale()}}
@@ -135,11 +158,12 @@ pd.\+Data\+Frame Dataframe containing the input data \Hypertarget{classCLUEsteri
 
 Normalizes the input data using a standard scaler. 
 
-\begin{DoxyVerb}   Modified attributes
-   -------------------
-\end{DoxyVerb}
- clust\+\_\+data np.\+ndarray Array containing the coordinates and energy values of the data points\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md11}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md11}
-None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a2aecdbc8a42cfc8b5191974ac9218564}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a2aecdbc8a42cfc8b5191974ac9218564} 
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a2aecdbc8a42cfc8b5191974ac9218564}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a2aecdbc8a42cfc8b5191974ac9218564} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!change\_coordinates@{change\_coordinates}}
 \index{change\_coordinates@{change\_coordinates}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{change\_coordinates()}{change\_coordinates()}}
@@ -149,12 +173,17 @@ None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a2aecdbc8a42cfc8b
 
 Change the coordinate system. 
 
-\begin{DoxyVerb}   Parameters
-   ----------
-\end{DoxyVerb}
- kwargs function objects The functions for the change of coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md12}{}\doxysubsubsection{\texorpdfstring{Modifies attributes}{Modifies attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md12}
-coords ndarray Coordinates used for clustering converted in the chosen coordinate system.\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md13}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md13}
-None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a2ca055d2377dad6a118b4bc266ffb0ba}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a2ca055d2377dad6a118b4bc266ffb0ba} 
+
+\begin{DoxyParams}{Parameters}
+{\em kwargs} & The functions for the change of coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a2ca055d2377dad6a118b4bc266ffb0ba}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a2ca055d2377dad6a118b4bc266ffb0ba} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!change\_domains@{change\_domains}}
 \index{change\_domains@{change\_domains}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{change\_domains()}{change\_domains()}}
@@ -166,13 +195,20 @@ Change the domain range of the coordinates.
 
 \begin{DoxyVerb}   This method allows to change the domain of periodic coordinates by passing the domain of
    each of these coordinates as a tuple, with the argument keyword in the form 'x*'.
-
-   Parameters
-   ----------
 \end{DoxyVerb}
- kwargs tuples Tuples corresponding to the domain of any periodic variables. The keyword should be the keyword of the corrispoding variable.\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md14}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md14}
-domain\+\_\+ranges list of Algo.\+domain\+\_\+t List of the domains for each coordinate.\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md15}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md15}
-None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d05a61f50b4dc1cecdc7b87f95e650b}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d05a61f50b4dc1cecdc7b87f95e650b} 
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em kwargs} & Tuples corresponding to the domain of any periodic variables. The keyword should be the keyword of the corrispoding variable.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d05a61f50b4dc1cecdc7b87f95e650b}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d05a61f50b4dc1cecdc7b87f95e650b} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!choose\_kernel@{choose\_kernel}}
 \index{choose\_kernel@{choose\_kernel}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{choose\_kernel()}{choose\_kernel()}}
@@ -182,13 +218,23 @@ None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d05a61f50b4dc1c
 
 Changes the kernel used in the calculation of local density. 
 
-The default kernel is a flat kernel with parameter 0.\+5\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md16}{}\doxysubsubsection{\texorpdfstring{Parameters}{Parameters}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md16}
-choice string The type of kernel that you want to choose (flat, exp, gaus or custom). parameters array\+\_\+like, optional List of the parameters needed by the kernels. The flat kernel requires one, the exponential requires two (amplitude and mean), the gaussian requires three (amplitude, mean and standard deviation) and the custom doesn\textquotesingle{}t require any. function function object, optional Function that should be used as kernel when the custom kernel is chosen.\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md17}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md17}
-kernel Algo.\+kernel \begin{DoxyVerb}Return
-------
-None
-\end{DoxyVerb}
- \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_abcd0609825ac57fd21a3e94fdd9aaec1}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_abcd0609825ac57fd21a3e94fdd9aaec1} 
+The default kernel is a flat kernel with parameter 0.\+5
+
+
+\begin{DoxyParams}{Parameters}
+{\em choice} & The type of kernel that you want to choose (flat, exp, gaus or custom). \\
+\hline
+{\em parameters} & List of the parameters needed by the kernels. The flat kernel requires one, the exponential requires two (amplitude and mean), the gaussian requires three (amplitude, mean and standard deviation) and the custom doesn\textquotesingle{}t require any. \\
+\hline
+{\em function} & Function that should be used as kernel when the custom kernel is chosen.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_abcd0609825ac57fd21a3e94fdd9aaec1}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_abcd0609825ac57fd21a3e94fdd9aaec1} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!cluster\_plotter@{cluster\_plotter}}
 \index{cluster\_plotter@{cluster\_plotter}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{cluster\_plotter()}{cluster\_plotter()}}
@@ -200,13 +246,50 @@ Plots the clusters with a different colour for every cluster.
 
 \begin{DoxyVerb}   The points assigned to a cluster are printed as points, the seeds
    as stars and the outliers as little grey crosses.
-
-   Parameters
-   ----------
 \end{DoxyVerb}
- plot\+\_\+title string, optional Title of the plot title\+\_\+size float, optional Size of the plot title x\+\_\+label string, optional Label on x-\/axis y\+\_\+label string, optional Label on y-\/axis z\+\_\+label string, optional Label on z-\/axis label\+\_\+size int, optional Fontsize of the axis labels outl\+\_\+size int, optional Size of the outliers in the plot pt\+\_\+size int, optional Size of the points in the plot seed\+\_\+size int, optional Size of the seeds in the plot grid bool, optional f true displays grids in the plot grid\+\_\+style string, optional Style of the grid grid\+\_\+size float, optional Linewidth of the plot grid x\+\_\+ticks list, optional List of ticks for the x axis. y\+\_\+ticks list, optional List of ticks for the y axis. z\+\_\+ticks list, optional List of ticks for the z axis. kwargs function objects, optional Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md22}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md22}
-None\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md23}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md23}
-None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_ae0102f61dd4acc787ed0e1d6ffca633e}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_ae0102f61dd4acc787ed0e1d6ffca633e} 
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em plot\+\_\+title} & Title of the plot. \\
+\hline
+{\em title\+\_\+size} & Size of the plot title. \\
+\hline
+{\em x\+\_\+label} & Label on x-\/axis. \\
+\hline
+{\em y\+\_\+label} & Label on y-\/axis. \\
+\hline
+{\em z\+\_\+label} & Label on z-\/axis. \\
+\hline
+{\em label\+\_\+size} & Fontsize of the axis labels. \\
+\hline
+{\em outl\+\_\+size} & Size of the outliers in the plot. \\
+\hline
+{\em pt\+\_\+size} & Size of the points in the plot. \\
+\hline
+{\em seed\+\_\+size} & Size of the seeds in the plot. \\
+\hline
+{\em grid} & If true displays grids in the plot. \\
+\hline
+{\em grid\+\_\+style} & Style of the grid. \\
+\hline
+{\em grid\+\_\+size} & Linewidth of the plot grid. \\
+\hline
+{\em x\+\_\+ticks} & List of ticks for the x axis. \\
+\hline
+{\em y\+\_\+ticks} & List of ticks for the y axis. \\
+\hline
+{\em z\+\_\+ticks} & List of ticks for the z axis.\\
+\hline
+{\em kwargs} & function objects, optional\+: Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_ae0102f61dd4acc787ed0e1d6ffca633e}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_ae0102f61dd4acc787ed0e1d6ffca633e} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!input\_plotter@{input\_plotter}}
 \index{input\_plotter@{input\_plotter}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{input\_plotter()}{input\_plotter()}}
@@ -216,12 +299,45 @@ None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_ae0102f61dd4acc78
 
 Plots the points in input. 
 
-\begin{DoxyVerb}   Parameters
-   ----------
-\end{DoxyVerb}
- plot\+\_\+title string, optional Title of the plot. title\+\_\+size float, optional Size of the plot title. x\+\_\+label string, optional Label on x-\/axis. y\+\_\+label string, optional Label on y-\/axis. z\+\_\+label string, optional Label on z-\/axis. label\+\_\+size int, optional Fontsize of the axis labels. pt\+\_\+size int, optional Size of the points in the plot. pt\+\_\+colour string, optional Colour of the points in the plot. grid bool, optional If true displays grids in the plot. grid\+\_\+style string, optional Style of the grid. grid\+\_\+size float, optional Linewidth of the plot grid. x\+\_\+ticks list, optional List of ticks for the x axis. y\+\_\+ticks list, optional List of ticks for the y axis. z\+\_\+ticks list, optional List of ticks for the z axis. kwargs function objects, optional Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md20}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md20}
-None\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md21}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md21}
-None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a0bdfb873bd7c98a694b50c39599849c8}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a0bdfb873bd7c98a694b50c39599849c8} 
+
+\begin{DoxyParams}{Parameters}
+{\em plot\+\_\+title} & Title of the plot. \\
+\hline
+{\em title\+\_\+size} & Size of the plot title. \\
+\hline
+{\em x\+\_\+label} & Label on x-\/axis. \\
+\hline
+{\em y\+\_\+label} & Label on y-\/axis. \\
+\hline
+{\em z\+\_\+label} & Label on z-\/axis. \\
+\hline
+{\em label\+\_\+size} & Fontsize of the axis labels. \\
+\hline
+{\em pt\+\_\+size} & Size of the points in the plot. \\
+\hline
+{\em pt\+\_\+colour} & Colour of the points in the plot. \\
+\hline
+{\em grid} & If true displays grids in the plot. \\
+\hline
+{\em grid\+\_\+style} & Style of the grid. \\
+\hline
+{\em grid\+\_\+size} & Linewidth of the plot grid. \\
+\hline
+{\em x\+\_\+ticks} & List of ticks for the x axis. \\
+\hline
+{\em y\+\_\+ticks} & List of ticks for the y axis. \\
+\hline
+{\em z\+\_\+ticks} & List of ticks for the z axis.\\
+\hline
+{\em kwargs} & Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a0bdfb873bd7c98a694b50c39599849c8}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a0bdfb873bd7c98a694b50c39599849c8} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!read\_data@{read\_data}}
 \index{read\_data@{read\_data}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{read\_data()}{read\_data()}}
@@ -231,10 +347,10 @@ None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a0bdfb873bd7c98a6
 
 Reads the data in input and fills the class members containing the coordinates of the points, the energy weight, the number of dimensions and the number of points. 
 
-\begin{DoxyVerb}       input_data (pandas dataframe): The dataframe should contain one column for every coordinate, each one called 'x*', and one column for the weight.
-\end{DoxyVerb}
- 
+
 \begin{DoxyParams}{Parameters}
+{\em input\+\_\+data} & The dataframe should contain one column for every coordinate, each one called \textquotesingle{}x\texorpdfstring{$\ast$}{*}\textquotesingle{}, and one column for the weight. \\
+\hline
 {\em input\+\_\+data} & The string should contain the full path to a csv file containing the data. \\
 \hline
 {\em input\+\_\+data} & The dictionary should contain one key for every coordinate, each one called \textquotesingle{}x\texorpdfstring{$\ast$}{*}\textquotesingle{}, and one key for the weight. \\
@@ -243,22 +359,7 @@ Reads the data in input and fills the class members containing the coordinates o
 \hline
 {\em rescale} & Whether or not ot rescale the input data using a Standard\+Scaler\\
 \hline
-{\em kwargs} & Tuples corresponding to the domain of any periodic variables. The keyword should be the keyword of the corrispoding variable. \begin{DoxyVerb}   Modified attributes
-   -------------------
-\end{DoxyVerb}
- \\
-\hline
-{\em coords} & ndarray Point coordinates used for clustering, spatially normalized. \\
-\hline
-{\em original\+\_\+coords} & ndarray Point coordinates in the original coordinate system used by the user. \\
-\hline
-{\em weight} & ndarray Weights of all the points. \\
-\hline
-{\em domain\+\_\+ranges} & list of Algo.\+domain\+\_\+t List of the domains for each coordinate. \\
-\hline
-{\em n\+\_\+dim} & int The number of dimensions in which we are calculating the clusters. \\
-\hline
-{\em n\+\_\+points} & int The number of points in the dataset.\\
+{\em kwargs} & Tuples corresponding to the domain of any periodic variables. The keyword should be the keyword of the corrispoding variable.\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -276,12 +377,17 @@ None
 
 Executes the CLUE clustering algorithm. 
 
-\begin{DoxyVerb}   Parameters
-   ----------
-\end{DoxyVerb}
- verbose bool, optional The verbose option prints the execution time of run\+CLUE and the number of clusters found.\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md18}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md18}
-cluster\+\_\+ids ndarray Contains the cluster\+\_\+id corresponding to every point. is\+\_\+seed ndarray For every point the value is 1 if the point is a seed or an outlier and 0 if it isn\textquotesingle{}t. n\+\_\+clusters int Number of clusters reconstructed. cluster\+\_\+points ndarray of lists Contains, for every cluster, the list of points associated to id. points\+\_\+per\+\_\+cluster ndarray Contains the number of points associated to every cluster.\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md19}{}\doxysubsubsection{\texorpdfstring{Return}{Return}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md19}
-None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d78d96fa0b758ac0e76c6f41991a378}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d78d96fa0b758ac0e76c6f41991a378} 
+
+\begin{DoxyParams}{Parameters}
+{\em verbose} & The verbose option prints the execution time of the CLUE algorithm and the number of clusters found.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+\Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d78d96fa0b758ac0e76c6f41991a378}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d78d96fa0b758ac0e76c6f41991a378} 
 \index{CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}!to\_csv@{to\_csv}}
 \index{to\_csv@{to\_csv}!CLUEstering.CLUEstering.clusterer@{CLUEstering.CLUEstering.clusterer}}
 \doxysubsubsection{\texorpdfstring{to\_csv()}{to\_csv()}}
@@ -291,12 +397,19 @@ None \Hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_a1d78d96fa0b758ac
 
 Creates a file containing the coordinates of all the points, their cluster\+\_\+ids and is\+\_\+seed. 
 
-\begin{DoxyVerb}   Parameters
-   ----------
-\end{DoxyVerb}
- output\+\_\+folder string Full path to the desired ouput folder. file\+\_\+name string Name of the file, with the \textquotesingle{}.csv\textquotesingle{} suffix.\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md24}{}\doxysubsubsection{\texorpdfstring{Modified attributes}{Modified attributes}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md24}
-None\hypertarget{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md25}{}\doxysubsubsection{\texorpdfstring{Returns}{Returns}}\label{classCLUEstering_1_1CLUEstering_1_1clusterer_autotoc_md25}
+
+\begin{DoxyParams}{Parameters}
+{\em output\+\_\+folder} & Full path to the desired ouput folder. \\
+\hline
+{\em file\+\_\+name} & Name of the file, with the \textquotesingle{}.csv\textquotesingle{} suffix.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
 None 
+\end{DoxyReturn}
+
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

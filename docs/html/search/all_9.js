@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['makeclusters_0',['makeClusters',['../classClusteringAlgo.html#ad490a41fdcb9e4e7ba802d19eb4b58db',1,'ClusteringAlgo']]],
-  ['modified_20attributes_1',['modified attributes',['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md3',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md5',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md7',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md9',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md14',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md17',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md18',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md20',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md22',1,'Modified attributes'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md24',1,'Modified attributes']]],
-  ['modifies_20attributes_2',['Modifies attributes',['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#autotoc_md12',1,'']]]
+  ['kernel_0',['kernel',['../classkernel.html',1,'kernel'],['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#afc5c2ab618810adee1f4e65e364a4776',1,'CLUEstering.CLUEstering.clusterer.kernel'],['../classkernel.html#a76d133306f92aa1d4aa804d646bef2ba',1,'kernel::kernel()']]],
+  ['kernels_2eh_1',['Kernels.h',['../Kernels_8h.html',1,'']]]
 ];

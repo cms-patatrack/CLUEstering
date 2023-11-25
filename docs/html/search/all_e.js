@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['tiles_0',['tiles',['../classtiles.html',1,'']]],
-  ['tiles_2eh_1',['Tiles.h',['../Tiles_8h.html',1,'']]],
-  ['to_5fcsv_2',['to_csv',['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#a1d78d96fa0b758ac0e76c6f41991a378',1,'CLUEstering::CLUEstering::clusterer']]]
+  ['point_2eh_0',['Point.h',['../Point_8h.html',1,'']]],
+  ['points_1',['Points',['../structPoints.html',1,'']]],
+  ['points_5fper_5fcluster_2',['points_per_cluster',['../classCLUEstering_1_1CLUEstering_1_1cluster__properties.html#a4e3038f68d5e106bf4c2ad4217334548',1,'CLUEstering::CLUEstering::cluster_properties']]],
+  ['ppbin_3',['ppbin',['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#a8ccc83b5e4c99070e681990617365328',1,'CLUEstering::CLUEstering::clusterer']]]
 ];

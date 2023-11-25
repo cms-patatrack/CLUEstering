@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('classCLUEstering_1_1CLUEstering_1_1clu
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6d17015fe60c938771f530d5f66ff3e0" id="r_a6d17015fe60c938771f530d5f66ff3e0"><td class="memItemLeft" align="right" valign="top"><a id="a6d17015fe60c938771f530d5f66ff3e0" name="a6d17015fe60c938771f530d5f66ff3e0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>__init__</b> (self, float dc_, float rhoc_, float outlier_, int ppbin=10)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>__init__</b> (self, float <a class="el" href="classCLUEstering_1_1CLUEstering_1_1clusterer.html#a50b5dc258f40de9e3be47136bdc80e78">dc_</a>, float rhoc_, float outlier_, int <a class="el" href="classCLUEstering_1_1CLUEstering_1_1clusterer.html#a8ccc83b5e4c99070e681990617365328">ppbin</a>=10)</td></tr>
 <tr class="separator:a6d17015fe60c938771f530d5f66ff3e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bdfb873bd7c98a694b50c39599849c8" id="r_a0bdfb873bd7c98a694b50c39599849c8"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCLUEstering_1_1CLUEstering_1_1clusterer.html#a0bdfb873bd7c98a694b50c39599849c8">read_data</a> (self, Union[pd.DataFrame, str, dict, list, np.ndarray] input_data, bool rescale=True, **tuple kwargs)</td></tr>
 <tr class="memdesc:a0bdfb873bd7c98a694b50c39599849c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the data in input and fills the class members containing the coordinates of the points, the energy weight, the number of dimensions and the number of points.  <br /></td></tr>
@@ -133,30 +133,38 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a50b5dc258f40de9e3be47136bdc80e78" id="r_a50b5dc258f40de9e3be47136bdc80e78"><td class="memItemLeft" align="right" valign="top"><a id="a50b5dc258f40de9e3be47136bdc80e78" name="a50b5dc258f40de9e3be47136bdc80e78"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>dc_</b></td></tr>
+<tr class="memdesc:a50b5dc258f40de9e3be47136bdc80e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spatial parameter indicating how large is the region over which the local. <br /></td></tr>
 <tr class="separator:a50b5dc258f40de9e3be47136bdc80e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac864cf6136c319954c4130df6df6b390" id="r_ac864cf6136c319954c4130df6df6b390"><td class="memItemLeft" align="right" valign="top"><a id="ac864cf6136c319954c4130df6df6b390" name="ac864cf6136c319954c4130df6df6b390"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>rhoc</b></td></tr>
+<tr class="memdesc:ac864cf6136c319954c4130df6df6b390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Energetic parameter representing the energy threshold value which divides. <br /></td></tr>
 <tr class="separator:ac864cf6136c319954c4130df6df6b390"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b737ac0e8e73245b407f53f5fbc5334" id="r_a8b737ac0e8e73245b407f53f5fbc5334"><td class="memItemLeft" align="right" valign="top"><a id="a8b737ac0e8e73245b407f53f5fbc5334" name="a8b737ac0e8e73245b407f53f5fbc5334"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>outlier</b></td></tr>
+<tr class="memdesc:a8b737ac0e8e73245b407f53f5fbc5334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplicative increment of dc_ for getting the region over which the. <br /></td></tr>
 <tr class="separator:a8b737ac0e8e73245b407f53f5fbc5334"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ccc83b5e4c99070e681990617365328" id="r_a8ccc83b5e4c99070e681990617365328"><td class="memItemLeft" align="right" valign="top"><a id="a8ccc83b5e4c99070e681990617365328" name="a8ccc83b5e4c99070e681990617365328"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ppbin</b></td></tr>
+<tr class="memdesc:a8ccc83b5e4c99070e681990617365328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Average number of points to be found in each tile. <br /></td></tr>
 <tr class="separator:a8ccc83b5e4c99070e681990617365328"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacb232787280880c09d122659f547531" id="r_aacb232787280880c09d122659f547531"><td class="memItemLeft" align="right" valign="top"><a id="aacb232787280880c09d122659f547531" name="aacb232787280880c09d122659f547531"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>clust_data</b></td></tr>
+<tr class="memdesc:aacb232787280880c09d122659f547531"><td class="mdescLeft">&#160;</td><td class="mdescRight">Container of the data used by the clustering algorithm. <br /></td></tr>
 <tr class="separator:aacb232787280880c09d122659f547531"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f7e5262e49bbcd486374a8592575fd4" id="r_a7f7e5262e49bbcd486374a8592575fd4"><td class="memItemLeft" align="right" valign="top"><a id="a7f7e5262e49bbcd486374a8592575fd4" name="a7f7e5262e49bbcd486374a8592575fd4"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>scaler</b></td></tr>
 <tr class="separator:a7f7e5262e49bbcd486374a8592575fd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc5c2ab618810adee1f4e65e364a4776" id="r_afc5c2ab618810adee1f4e65e364a4776"><td class="memItemLeft" align="right" valign="top"><a id="afc5c2ab618810adee1f4e65e364a4776" name="afc5c2ab618810adee1f4e65e364a4776"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>kernel</b></td></tr>
+<tr class="memdesc:afc5c2ab618810adee1f4e65e364a4776"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convolution kernel used to calculate the local density of the points. <br /></td></tr>
 <tr class="separator:afc5c2ab618810adee1f4e65e364a4776"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a841a0770c367248131705788a16906c2" id="r_a841a0770c367248131705788a16906c2"><td class="memItemLeft" align="right" valign="top"><a id="a841a0770c367248131705788a16906c2" name="a841a0770c367248131705788a16906c2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>clust_prop</b></td></tr>
+<tr class="memdesc:a841a0770c367248131705788a16906c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Container of the data produced as output of the algorithm. <br /></td></tr>
 <tr class="separator:a841a0770c367248131705788a16906c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4635f9e4c2112e8d5bed0c3b10616d6a" id="r_a4635f9e4c2112e8d5bed0c3b10616d6a"><td class="memItemLeft" align="right" valign="top"><a id="a4635f9e4c2112e8d5bed0c3b10616d6a" name="a4635f9e4c2112e8d5bed0c3b10616d6a"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>elapsed_time</b></td></tr>
+<tr class="memdesc:a4635f9e4c2112e8d5bed0c3b10616d6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execution time of the algorithm, expressed in nanoseconds. <br /></td></tr>
 <tr class="separator:a4635f9e4c2112e8d5bed0c3b10616d6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
@@ -213,12 +221,15 @@ Protected Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Constructs the clust_data attribute from the dataframe produced by the _read_string or _read_dict_df methods. </p>
-<h2><a class="anchor" id="autotoc_md9"></a>
-Modified attributes</h2>
-<p>clust_data clustering_data Properties of the input data</p>
-<h2><a class="anchor" id="autotoc_md10"></a>
-Returns</h2>
-<p>None </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">df_</td><td>Dataframe containing the input data</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
 
 </div>
 </div>
@@ -257,15 +268,15 @@ Returns</h2>
 </div><div class="memdoc">
 
 <p>Reads data provided with lists or np.ndarrays. </p>
-<pre class="fragment">   Attributes
-   ----------
-</pre><p> input_data list, np.ndarray The coordinates and energy values of the data points</p>
-<h2><a class="anchor" id="autotoc_md3"></a>
-Modified attributes</h2>
-<p>clust_data clustering_data Properties of the input data</p>
-<h2><a class="anchor" id="autotoc_md4"></a>
-Returns</h2>
-<p>None </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input_data</td><td>The coordinates and energy values of the data points</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
 
 </div>
 </div>
@@ -304,15 +315,15 @@ Returns</h2>
 </div><div class="memdoc">
 
 <p>Reads data provided using dictionaries or pandas dataframes. </p>
-<pre class="fragment">   Attributes
-   ----------
-</pre><p> input_data dict, pd.DataFrame The coordinates and energy values of the data points</p>
-<h2><a class="anchor" id="autotoc_md7"></a>
-Modified attributes</h2>
-<p>None</p>
-<h2><a class="anchor" id="autotoc_md8"></a>
-Returns</h2>
-<p>pd.DataFrame Dataframe containing the input data </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input_data</td><td>The coordinates and energy values of the data points</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+pd Dataframe containing the input data </dd></dl>
 
 </div>
 </div>
@@ -351,15 +362,15 @@ Returns</h2>
 </div><div class="memdoc">
 
 <p>Reads data provided by passing a string containing the path to a csv file. </p>
-<pre class="fragment">   Attributes
-   ----------
-</pre><p> input_data str The path to the csv file containing the input data</p>
-<h2><a class="anchor" id="autotoc_md5"></a>
-Modified attributes</h2>
-<p>None</p>
-<h2><a class="anchor" id="autotoc_md6"></a>
-Returns</h2>
-<p>pd.DataFrame Dataframe containing the input data </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input_data</td><td>The path to the csv file containing the input data</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+pd Dataframe containing the input data </dd></dl>
 
 </div>
 </div>
@@ -388,12 +399,9 @@ Returns</h2>
 </div><div class="memdoc">
 
 <p>Normalizes the input data using a standard scaler. </p>
-<pre class="fragment">   Modified attributes
-   -------------------
-</pre><p> clust_data np.ndarray Array containing the coordinates and energy values of the data points</p>
-<h2><a class="anchor" id="autotoc_md11"></a>
-Returns</h2>
-<p>None </p>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
 
 </div>
 </div>
@@ -424,15 +432,15 @@ Returns</h2>
 </div><div class="memdoc">
 
 <p>Change the coordinate system. </p>
-<pre class="fragment">   Parameters
-   ----------
-</pre><p> kwargs function objects The functions for the change of coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
-Modifies attributes</h2>
-<p>coords ndarray Coordinates used for clustering converted in the chosen coordinate system.</p>
-<h2><a class="anchor" id="autotoc_md13"></a>
-Returns</h2>
-<p>None </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kwargs</td><td>The functions for the change of coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
 
 </div>
 </div>
@@ -465,16 +473,15 @@ Returns</h2>
 <p>Change the domain range of the coordinates. </p>
 <pre class="fragment">   This method allows to change the domain of periodic coordinates by passing the domain of
    each of these coordinates as a tuple, with the argument keyword in the form 'x*'.
-
-   Parameters
-   ----------
-</pre><p> kwargs tuples Tuples corresponding to the domain of any periodic variables. The keyword should be the keyword of the corrispoding variable.</p>
-<h2><a class="anchor" id="autotoc_md14"></a>
-Modified attributes</h2>
-<p>domain_ranges list of Algo.domain_t List of the domains for each coordinate.</p>
-<h2><a class="anchor" id="autotoc_md15"></a>
-Returns</h2>
-<p>None </p>
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kwargs</td><td>Tuples corresponding to the domain of any periodic variables. The keyword should be the keyword of the corrispoding variable.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
 
 </div>
 </div>
@@ -518,15 +525,18 @@ Returns</h2>
 
 <p>Changes the kernel used in the calculation of local density. </p>
 <p>The default kernel is a flat kernel with parameter 0.5</p>
-<h2><a class="anchor" id="autotoc_md16"></a>
-Parameters</h2>
-<p>choice string The type of kernel that you want to choose (flat, exp, gaus or custom). parameters array_like, optional List of the parameters needed by the kernels. The flat kernel requires one, the exponential requires two (amplitude and mean), the gaussian requires three (amplitude, mean and standard deviation) and the custom doesn't require any. function function object, optional Function that should be used as kernel when the custom kernel is chosen.</p>
-<h2><a class="anchor" id="autotoc_md17"></a>
-Modified attributes</h2>
-<p>kernel Algo.kernel </p><pre class="fragment">Return
-------
-None
-</pre> 
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">choice</td><td>The type of kernel that you want to choose (flat, exp, gaus or custom). </td></tr>
+    <tr><td class="paramname">parameters</td><td>List of the parameters needed by the kernels. The flat kernel requires one, the exponential requires two (amplitude and mean), the gaussian requires three (amplitude, mean and standard deviation) and the custom doesn't require any. </td></tr>
+    <tr><td class="paramname">function</td><td>Function that should be used as kernel when the custom kernel is chosen.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
+
 </div>
 </div>
 <a id="abcd0609825ac57fd21a3e94fdd9aaec1" name="abcd0609825ac57fd21a3e94fdd9aaec1"></a>
@@ -648,16 +658,30 @@ None
 <p>Plots the clusters with a different colour for every cluster. </p>
 <pre class="fragment">   The points assigned to a cluster are printed as points, the seeds
    as stars and the outliers as little grey crosses.
-
-   Parameters
-   ----------
-</pre><p> plot_title string, optional Title of the plot title_size float, optional Size of the plot title x_label string, optional Label on x-axis y_label string, optional Label on y-axis z_label string, optional Label on z-axis label_size int, optional Fontsize of the axis labels outl_size int, optional Size of the outliers in the plot pt_size int, optional Size of the points in the plot seed_size int, optional Size of the seeds in the plot grid bool, optional f true displays grids in the plot grid_style string, optional Style of the grid grid_size float, optional Linewidth of the plot grid x_ticks list, optional List of ticks for the x axis. y_ticks list, optional List of ticks for the y axis. z_ticks list, optional List of ticks for the z axis. kwargs function objects, optional Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).</p>
-<h2><a class="anchor" id="autotoc_md22"></a>
-Modified attributes</h2>
-<p>None</p>
-<h2><a class="anchor" id="autotoc_md23"></a>
-Returns</h2>
-<p>None </p>
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">plot_title</td><td>Title of the plot. </td></tr>
+    <tr><td class="paramname">title_size</td><td>Size of the plot title. </td></tr>
+    <tr><td class="paramname">x_label</td><td>Label on x-axis. </td></tr>
+    <tr><td class="paramname">y_label</td><td>Label on y-axis. </td></tr>
+    <tr><td class="paramname">z_label</td><td>Label on z-axis. </td></tr>
+    <tr><td class="paramname">label_size</td><td>Fontsize of the axis labels. </td></tr>
+    <tr><td class="paramname">outl_size</td><td>Size of the outliers in the plot. </td></tr>
+    <tr><td class="paramname">pt_size</td><td>Size of the points in the plot. </td></tr>
+    <tr><td class="paramname">seed_size</td><td>Size of the seeds in the plot. </td></tr>
+    <tr><td class="paramname">grid</td><td>If true displays grids in the plot. </td></tr>
+    <tr><td class="paramname">grid_style</td><td>Style of the grid. </td></tr>
+    <tr><td class="paramname">grid_size</td><td>Linewidth of the plot grid. </td></tr>
+    <tr><td class="paramname">x_ticks</td><td>List of ticks for the x axis. </td></tr>
+    <tr><td class="paramname">y_ticks</td><td>List of ticks for the y axis. </td></tr>
+    <tr><td class="paramname">z_ticks</td><td>List of ticks for the z axis.</td></tr>
+    <tr><td class="paramname">kwargs</td><td>function objects, optional: Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
 
 </div>
 </div>
@@ -772,15 +796,29 @@ Returns</h2>
 </div><div class="memdoc">
 
 <p>Plots the points in input. </p>
-<pre class="fragment">   Parameters
-   ----------
-</pre><p> plot_title string, optional Title of the plot. title_size float, optional Size of the plot title. x_label string, optional Label on x-axis. y_label string, optional Label on y-axis. z_label string, optional Label on z-axis. label_size int, optional Fontsize of the axis labels. pt_size int, optional Size of the points in the plot. pt_colour string, optional Colour of the points in the plot. grid bool, optional If true displays grids in the plot. grid_style string, optional Style of the grid. grid_size float, optional Linewidth of the plot grid. x_ticks list, optional List of ticks for the x axis. y_ticks list, optional List of ticks for the y axis. z_ticks list, optional List of ticks for the z axis. kwargs function objects, optional Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).</p>
-<h2><a class="anchor" id="autotoc_md20"></a>
-Modified attributes</h2>
-<p>None</p>
-<h2><a class="anchor" id="autotoc_md21"></a>
-Returns</h2>
-<p>None </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">plot_title</td><td>Title of the plot. </td></tr>
+    <tr><td class="paramname">title_size</td><td>Size of the plot title. </td></tr>
+    <tr><td class="paramname">x_label</td><td>Label on x-axis. </td></tr>
+    <tr><td class="paramname">y_label</td><td>Label on y-axis. </td></tr>
+    <tr><td class="paramname">z_label</td><td>Label on z-axis. </td></tr>
+    <tr><td class="paramname">label_size</td><td>Fontsize of the axis labels. </td></tr>
+    <tr><td class="paramname">pt_size</td><td>Size of the points in the plot. </td></tr>
+    <tr><td class="paramname">pt_colour</td><td>Colour of the points in the plot. </td></tr>
+    <tr><td class="paramname">grid</td><td>If true displays grids in the plot. </td></tr>
+    <tr><td class="paramname">grid_style</td><td>Style of the grid. </td></tr>
+    <tr><td class="paramname">grid_size</td><td>Linewidth of the plot grid. </td></tr>
+    <tr><td class="paramname">x_ticks</td><td>List of ticks for the x axis. </td></tr>
+    <tr><td class="paramname">y_ticks</td><td>List of ticks for the y axis. </td></tr>
+    <tr><td class="paramname">z_ticks</td><td>List of ticks for the z axis.</td></tr>
+    <tr><td class="paramname">kwargs</td><td>Functions for converting the used coordinates to cartesian coordinates. The keywords of the arguments are the coordinates names (x0, x1, ...).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
 
 </div>
 </div>
@@ -823,22 +861,14 @@ Returns</h2>
 </div><div class="memdoc">
 
 <p>Reads the data in input and fills the class members containing the coordinates of the points, the energy weight, the number of dimensions and the number of points. </p>
-<pre class="fragment">       input_data (pandas dataframe): The dataframe should contain one column for every coordinate, each one called 'x*', and one column for the weight.
-</pre> <dl class="params"><dt>Parameters</dt><dd>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">input_data</td><td>The dataframe should contain one column for every coordinate, each one called 'x*', and one column for the weight. </td></tr>
     <tr><td class="paramname">input_data</td><td>The string should contain the full path to a csv file containing the data. </td></tr>
     <tr><td class="paramname">input_data</td><td>The dictionary should contain one key for every coordinate, each one called 'x*', and one key for the weight. </td></tr>
     <tr><td class="paramname">input_data</td><td>The list or numpy array should contain a list of lists for the coordinates and a list for the weight. </td></tr>
     <tr><td class="paramname">rescale</td><td>Whether or not ot rescale the input data using a StandardScaler</td></tr>
-    <tr><td class="paramname">kwargs</td><td>Tuples corresponding to the domain of any periodic variables. The keyword should be the keyword of the corrispoding variable. <pre class="fragment">   Modified attributes
-   -------------------
-</pre> </td></tr>
-    <tr><td class="paramname">coords</td><td>ndarray Point coordinates used for clustering, spatially normalized. </td></tr>
-    <tr><td class="paramname">original_coords</td><td>ndarray Point coordinates in the original coordinate system used by the user. </td></tr>
-    <tr><td class="paramname">weight</td><td>ndarray Weights of all the points. </td></tr>
-    <tr><td class="paramname">domain_ranges</td><td>list of Algo.domain_t List of the domains for each coordinate. </td></tr>
-    <tr><td class="paramname">n_dim</td><td>int The number of dimensions in which we are calculating the clusters. </td></tr>
-    <tr><td class="paramname">n_points</td><td>int The number of points in the dataset.</td></tr>
+    <tr><td class="paramname">kwargs</td><td>Tuples corresponding to the domain of any periodic variables. The keyword should be the keyword of the corrispoding variable.</td></tr>
   </table>
   </dd>
 </dl>
@@ -875,15 +905,15 @@ None </dd></dl>
 </div><div class="memdoc">
 
 <p>Executes the CLUE clustering algorithm. </p>
-<pre class="fragment">   Parameters
-   ----------
-</pre><p> verbose bool, optional The verbose option prints the execution time of runCLUE and the number of clusters found.</p>
-<h2><a class="anchor" id="autotoc_md18"></a>
-Modified attributes</h2>
-<p>cluster_ids ndarray Contains the cluster_id corresponding to every point. is_seed ndarray For every point the value is 1 if the point is a seed or an outlier and 0 if it isn't. n_clusters int Number of clusters reconstructed. cluster_points ndarray of lists Contains, for every cluster, the list of points associated to id. points_per_cluster ndarray Contains the number of points associated to every cluster.</p>
-<h2><a class="anchor" id="autotoc_md19"></a>
-Return</h2>
-<p>None </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">verbose</td><td>The verbose option prints the execution time of the CLUE algorithm and the number of clusters found.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
 
 </div>
 </div>
@@ -920,15 +950,16 @@ Return</h2>
 </div><div class="memdoc">
 
 <p>Creates a file containing the coordinates of all the points, their cluster_ids and is_seed. </p>
-<pre class="fragment">   Parameters
-   ----------
-</pre><p> output_folder string Full path to the desired ouput folder. file_name string Name of the file, with the '.csv' suffix.</p>
-<h2><a class="anchor" id="autotoc_md24"></a>
-Modified attributes</h2>
-<p>None</p>
-<h2><a class="anchor" id="autotoc_md25"></a>
-Returns</h2>
-<p>None </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">output_folder</td><td>Full path to the desired ouput folder. </td></tr>
+    <tr><td class="paramname">file_name</td><td>Name of the file, with the '.csv' suffix.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+None </dd></dl>
 
 </div>
 </div>

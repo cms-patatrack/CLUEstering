@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['fill_0',['fill',['../classtiles.html#a50bf1aca72a294ca3652948b8e376add',1,'tiles::fill(std::vector&lt; float &gt; const &amp;coords, int i)'],['../classtiles.html#a5824264e8ed3af1e4e5c663c21ee0527',1,'tiles::fill(std::vector&lt; std::vector&lt; float &gt; &gt; const &amp;coordinates)']]],
-  ['flatkernel_1',['flatkernel',['../classflatKernel.html',1,'flatKernel'],['../classflatKernel.html#a756eaa37692c2922c7ff417cb122f45c',1,'flatKernel::flatKernel()']]]
+  ['elapsed_5ftime_0',['elapsed_time',['../classCLUEstering_1_1CLUEstering_1_1clusterer.html#a4635f9e4c2112e8d5bed0c3b10616d6a',1,'CLUEstering::CLUEstering::clusterer']]],
+  ['empty_1',['empty',['../structdomain__t.html#a3ae191a6e375a41171b5b302f0009aa6',1,'domain_t']]],
+  ['exponentialkernel_2',['exponentialkernel',['../classexponentialKernel.html',1,'exponentialKernel'],['../classexponentialKernel.html#a9d8f301f5849edafe7f6786dfe14f277',1,'exponentialKernel::exponentialKernel()']]]
 ];

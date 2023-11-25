@@ -12,5 +12,13 @@ var classCLUEstering_1_1CLUEstering_1_1clusterer =
     [ "input_plotter", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#ae0102f61dd4acc787ed0e1d6ffca633e", null ],
     [ "read_data", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#a0bdfb873bd7c98a694b50c39599849c8", null ],
     [ "run_clue", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#a43e0ef2dbb9ffc2c2823f96b38b36524", null ],
-    [ "to_csv", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#a1d78d96fa0b758ac0e76c6f41991a378", null ]
+    [ "to_csv", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#a1d78d96fa0b758ac0e76c6f41991a378", null ],
+    [ "clust_data", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#aacb232787280880c09d122659f547531", null ],
+    [ "clust_prop", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#a841a0770c367248131705788a16906c2", null ],
+    [ "dc_", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#a50b5dc258f40de9e3be47136bdc80e78", null ],
+    [ "elapsed_time", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#a4635f9e4c2112e8d5bed0c3b10616d6a", null ],
+    [ "kernel", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#afc5c2ab618810adee1f4e65e364a4776", null ],
+    [ "outlier", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#a8b737ac0e8e73245b407f53f5fbc5334", null ],
+    [ "ppbin", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#a8ccc83b5e4c99070e681990617365328", null ],
+    [ "rhoc", "classCLUEstering_1_1CLUEstering_1_1clusterer.html#ac864cf6136c319954c4130df6df6b390", null ]
 ];
