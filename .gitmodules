@@ -1,0 +1,4 @@
+[submodule "extern/doxygen-awesome"]
+	path = extern/doxygen-awesome
+	url = https://github.com/jothepro/doxygen-awesome-css.git
+	branch = v2.2.1

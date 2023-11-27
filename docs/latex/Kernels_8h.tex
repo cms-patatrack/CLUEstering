@@ -1,0 +1,36 @@
+\doxysection{CLUEstering/include/\+Kernels.h File Reference}
+\hypertarget{Kernels_8h}{}\label{Kernels_8h}\index{CLUEstering/include/Kernels.h@{CLUEstering/include/Kernels.h}}
+
+
+Header file for the kernels used in the calculation of local density.  
+
+
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$cstdint$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classkernel}{kernel}}
+\begin{DoxyCompactList}\small\item\em Class that represents the kernels used in the calculation of local density. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classflatKernel}{flat\+Kernel}}
+\begin{DoxyCompactList}\small\item\em Class that represents the flat kernel. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classgaussianKernel}{gaussian\+Kernel}}
+\begin{DoxyCompactList}\small\item\em Class that represents the gaussian kernel. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classexponentialKernel}{exponential\+Kernel}}
+\begin{DoxyCompactList}\small\item\em Class that represents the exponential kernel. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classcustomKernel}{custom\+Kernel}}
+\begin{DoxyCompactList}\small\item\em Class that represents a custom kernel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{Kernels_8h_a6c0fc07e70ffcd022331bdb40eb2c39c}\label{Kernels_8h_a6c0fc07e70ffcd022331bdb40eb2c39c} 
+using {\bfseries kernel\+\_\+t} = std\+::function$<$ float(float, int, int)$>$
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for the kernels used in the calculation of local density. 
+

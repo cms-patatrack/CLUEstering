@@ -23,27 +23,17 @@ def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
 
     This functions serves as a tool for generating a random dataset to test the library.
 
-    Parameters
-    ----------
-    n_samples : int
-        The number of points in the dataset.
-    n_dim : int
-        The number of dimensions.
-    n_blobs : int, optional
-        The number of blobs that should be produced. By default it is set to 4.
-    mean : float, optional
-        The mean of the gaussian distribution of the z values.
-    sigma : float, optional
-        The standard deviation of the gaussian distribution of the z values.
-    x_max : float, optional
-        Limit of the space where the blobs are created in the x direction.
-    y_max : float, optional
-        Limit of the space where the blobs are created in the y direction.
+    Args:
+        n_samples: The number of points in the dataset.
+        n_dim: The number of dimensions.
+        n_blobs: The number of blobs that should be produced. By default it is set to 4.
+        mean: The mean of the gaussian distribution of the z values.
+        sigma: The standard deviation of the gaussian distribution of the z values.
+        x_max: Limit of the space where the blobs are created in the x direction.
+        y_max: Limit of the space where the blobs are created in the y direction.
 
-    Returns
-    -------
-    Pandas DataFrame
-        DataFrame containing n_blobs gaussian blobs.
+    Returns:
+        Pandas DataFrame: DataFrame containing n_blobs gaussian blobs.
     """
 
     if x_max < 0. or y_max < 0.:
@@ -90,20 +80,15 @@ class clustering_data:
     """
     Container characterizing the data used for clustering.
 
-    Attributes
-    ----------
-    coords : np.ndarray
-        Spatially normalized data coordinates in the coordinate system used for clustering.
-    original_coords : np.ndarray
-        Data coordinates in the original coordinate system provided by the user.
-    weight : np.ndarray
-        Weight values of the data points.
-    domain_ranges : list
-        List containing the ranges of the domains for every coordinate.
-    n_dim : int
-        Number of dimensions.
-    n_points : int
-        Number of points in the clustering data.
+    Attributes:
+        coords (np.ndarray): Spatially normalized data coordinates in the coordinate system used
+            for clustering.
+        original_coords (np.ndarray): Data coordinates in the original coordinate system provided
+            by the user.
+        weight (np.ndarray): Weight values of the data points.
+        domain_ranges (list): List containing the ranges of the domains for every coordinate.
+        n_dim (int): Number of dimensions.
+        n_points (int): Number of points in the clustering data.
     """
 
     coords: np.ndarray
@@ -119,21 +104,16 @@ class cluster_properties:
     """
     Container of the data resulting from the clusterization of the input data.
 
-    Attributes
-    ----------
-    n_clusters : int
-        Number of clusters constructed.
-    cluster_ids : np.ndarray
-        Array containing the cluster_id of each point.
-    is_seed : np.ndarray
-        Array of integers containing '1' if a point is a seed and '0' if it isn't
-    cluster_points : np.ndarray
-        Array containing, for each cluster, the list of point_ids corresponding to the
-        clusters bolonging to that cluster.
-    points_per_cluster : np.ndarray
-        Array containing the number of points belonging to each cluster.
-    output_df : pd.DataFrame
-        Dataframe containing is_seed and cluster_ids as columns.
+    Attributes:
+        n_clusters (int): Number of clusters constructed.
+        cluster_ids (np.ndarray): Array containing the cluster_id of each point.
+        is_seed (np.ndarray): Array of integers containing '1' if a point is a seed and '0' if
+            it isn't.
+        cluster_points (np.ndarray): Array containing, for each cluster, the list of point_ids
+            corresponding to the clusters bolonging to that cluster.
+        points_per_cluster (np.ndarray): Array containing the number of points belonging to each
+            cluster.
+        output_df (pd.DataFrame): Dataframe containing is_seed and cluster_ids as columns.
     """
 
     n_clusters: int
@@ -159,34 +139,22 @@ class clusterer:
     Class representing a wrapper for the methods using in the process of clustering using
     the CLUE algorithm.
 
-    Attributes
-    ----------
-    dc_ : float
-        Spatial parameter indicating how large is the region over which the local density of
-        each point is calculated.
-    rhoc : float
-        Energetic parameter representing the energy threshold value which divides seeds and
-        outliers.
-
-        Points with an energy density lower than rhoc can't be seeds, can only be followers
-        or outliers.
-    outlier : float
-        Multiplicative increment of dc_ for getting the region over which the followers of a
-        point are searched.
-
-        While dc_ determines the size of the search box in which the neighbors of a point are
-        searched when calculating its local density, when looking for followers while trying
-        to find potential seeds the size of the search box is given by dm = dc_ * outlier.
-    ppbin : int
-        Average number of points to be found in each tile.
-    kernel : Algo.kernel
-        Convolution kernel used to calculate the local density of the points.
-    clust_data : clustering_data
-        Container of the data used by the clustering algorithm.
-    clust_prop : cluster_properties
-        Container of the data produced as output of the algorithm.
-    elapsed_time : int
-        Execution time of the algorithm, expressed in nanoseconds.
+    Attributes:
+        dc_ (float): Spatial parameter indicating how large is the region over which the local
+            density of each point is calculated.
+        rhoc (float): Energetic parameter representing the energy threshold value which divides
+            seeds and outliers. Points with an energy density lower than rhoc can't be seeds,
+            can only be followers or outliers.
+        outlier (float): Multiplicative increment of dc_ for getting the region over which the
+            followers of a point are searched. While dc_ determines the size of the search box
+            in which the neighbors of a point are searched when calculating its local density,
+            when looking for followers while trying to find potential seeds the size of the
+            search box is given by dm = dc_ * outlier.
+        ppbin (int): Average number of points to be found in each tile.
+        kernel (Algo.kernel): Convolution kernel used to calculate the local density of the points.
+        clust_data (clustering_data): Container of the data used by the clustering algorithm.
+        clust_prop (cluster_properties): Container of the data produced as output of the algorithm.
+        elapsed_time (int): Execution time of the algorithm, expressed in nanoseconds.
     """
 
     def __init__(self, dc_: float, rhoc_: float, outlier_: float, ppbin: int = 10):
@@ -211,19 +179,11 @@ class clusterer:
         """
         Reads data provided with lists or np.ndarrays
 
-        Attributes
-        ----------
-        input_data : list, np.ndarray
-            The coordinates and energy values of the data points
+        Args:
+            input_data: The coordinates and energy values of the data points
 
-        Modified attributes
-        -------------------
-        clust_data : clustering_data
-            Properties of the input data
-
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
 
         if len(input_data) < 2 or len(input_data) > 10:
@@ -240,19 +200,11 @@ class clusterer:
         """
         Reads data provided by passing a string containing the path to a csv file
 
-        Attributes
-        ----------
-        input_data : str
-            The path to the csv file containing the input data
+        Args:
+            input_data: The path to the csv file containing the input data
 
-        Modified attributes
-        -------------------
-        None
-
-        Returns
-        -------------------
-        pd.DataFrame
-            Dataframe containing the input data
+        Returns:
+            pd.DataFrame: Dataframe containing the input data
         """
 
         if input_data[-3:] != 'csv':
@@ -264,19 +216,11 @@ class clusterer:
         """
         Reads data provided using dictionaries or pandas dataframes
 
-        Attributes
-        ----------
-        input_data : dict, pd.DataFrame
-            The coordinates and energy values of the data points
+        Args:
+            input_data: The coordinates and energy values of the data points
 
-        Modified attributes
-        -------------------
-        None
-
-        Returns
-        -------------------
-        pd.DataFrame
-            Dataframe containing the input data
+        Returns:
+            pd.DataFrame: Dataframe containing the input data
         """
 
         df_ = pd.DataFrame(input_data, copy=False)
@@ -287,14 +231,11 @@ class clusterer:
         Constructs the clust_data attribute from the dataframe produced by the
         _read_string or _read_dict_df methods
 
-        Modified attributes
-        -------------------
-        clust_data : clustering_data
-            Properties of the input data
+        Args:
+            df_: Dataframe containing the input data
 
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
 
         # Check that the user provided the weights
@@ -328,14 +269,8 @@ class clusterer:
         """
         Normalizes the input data using a standard scaler
 
-        Modified attributes
-        -------------------
-        clust_data.coords : np.ndarray
-            Array containing the coordinates and energy values of the data points
-
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
 
         for dim in range(self.clust_data.n_dim):
@@ -350,42 +285,23 @@ class clusterer:
         Reads the data in input and fills the class members containing the coordinates
         of the points, the energy weight, the number of dimensions and the number of points.
 
-        Parameters
-        ----------
-        input_data : pandas dataframe
-            The dataframe should contain one column for every
-            coordinate, each one called 'x*', and one column for the weight.
-        input_data : string
-            The string should contain the full path to a csv file containing
-            the data.
-        input_data : dict
-        input_data : array_like
-            The list or numpy array should contain a list of lists for the
-            coordinates and a list for the weight.
-        restale : bool
-            Whether or not ot rescale the input data using a StandardScaler
-        kwargs : tuples
-            Tuples corresponding to the domain of any periodic variables. The
-            keyword should be the keyword of the corrispoding variable.
+        Args:
+            input_data (pd.Dataframe): The dataframe should contain one column for every
+                coordinate, each one called 'x*', and one column for the weight.
+            input_data (str): The string should contain the full path to a csv file containing
+                the data.
+            input_data (dict): The dictionary should contain one key for every coordinate, each
+                one called 'x*', and one key for the weight.
+            input_data (array_like): The list or numpy array should contain a list of lists for
+                the coordinates and a list for the weight.
+            rescale: Whether or not ot rescale the input data using a StandardScaler
 
-        Modified attributes
-        -------------------
-        coords : ndarray
-            Point coordinates used for clustering, spatially normalized.
-        original_coords : ndarray
-            Point coordinates in the original coordinate system used by the user.
-        weight : ndarray
-            Weights of all the points.
-        domain_ranges : list of Algo.domain_t
-            List of the domains for each coordinate.
-        n_dim : int
-            The number of dimensions in which we are calculating the clusters.
-        n_points : int
-            The number of points in the dataset.
+        Kwargs:
+            kwargs: Tuples corresponding to the domain of any periodic variables. The
+                keyword should be the keyword of the corrispoding variable.
 
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
 
         # lists and np ndarrays
@@ -412,20 +328,12 @@ class clusterer:
         """
         Change the coordinate system
 
-        Parameters
-        ----------
-        kwargs : function objects
-            The functions for the change of coordinates.
-            The keywords of the arguments are the coordinates names (x0, x1, ...).
+        Kwargs:
+            kwargs: The functions for the change of coordinates. The keywords of the
+                arguments are the coordinates names (x0, x1, ...).
 
-        Modifies attributes
-        -------------------
-        coords : ndarray
-            Coordinates used for clustering converted in the chosen coordinate system.
-
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
 
         # Change the coordinate system
@@ -445,20 +353,12 @@ class clusterer:
         This method allows to change the domain of periodic coordinates by passing the domain of
         each of these coordinates as a tuple, with the argument keyword in the form 'x*'.
 
-        Parameters
-        ----------
-        kwargs : tuples
-            Tuples corresponding to the domain of any periodic variables. The
-            keyword should be the keyword of the corrispoding variable.
+        Kwargs:
+            kwargs: Tuples corresponding to the domain of any periodic variables. The keyword
+                should be the keyword of the corrispoding variable.
 
-        Modified attributes
-        -------------------
-        domain_ranges : list of Algo.domain_t
-            List of the domains for each coordinate.
-
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
 
         # Construct the domains of all the coordinates
@@ -478,25 +378,16 @@ class clusterer:
         Changes the kernel used in the calculation of local density. The default kernel
         is a flat kernel with parameter 0.5
 
-        Parameters
-        ----------
-        choice : string
-            The type of kernel that you want to choose (flat, exp, gaus or custom).
-        parameters : array_like, optional
-            List of the parameters needed by the kernels.
-            The flat kernel requires one, the exponential requires two
-            (amplitude and mean), the gaussian requires three (amplitude,
-            mean and standard deviation) and the custom doesn't require any.
-        function : function object, optional
-            Function that should be used as kernel when the custom kernel is chosen.
+        Args:
+            choice: The type of kernel that you want to choose (flat, exp, gaus or custom).
+            parameters: List of the parameters needed by the kernels.
+                The flat kernel requires one, the exponential requires two (amplitude and mean),
+                the gaussian requires three (amplitude, mean and standard deviation) and the
+                custom doesn't require any.
+            function: Function that should be used as kernel when the custom kernel is chosen.
 
-        Modified attributes
-        -------------------
-        kernel : Algo.kernel
-
-        Return
-        ------
-        None
+        Returns:
+            None
         """
 
         if choice == "flat":
@@ -527,29 +418,12 @@ class clusterer:
         """
         Executes the CLUE clustering algorithm.
 
-        Parameters
-        ----------
-        verbose : bool, optional
-            The verbose option prints the execution time of runCLUE and the number
-            of clusters found.
+        Args:
+            verbose: The verbose option prints the execution time of the CLUE algorithm and
+                the number of clusters found.
 
-        Modified attributes
-        -------------------
-        cluster_ids : ndarray
-            Contains the cluster_id corresponding to every point.
-        is_seed : ndarray
-            For every point the value is 1 if the point is a seed or an
-            outlier and 0 if it isn't.
-        n_clusters : int
-            Number of clusters reconstructed.
-        cluster_points : ndarray of lists
-            Contains, for every cluster, the list of points associated to id.
-        points_per_cluster : ndarray
-            Contains the number of points associated to every cluster.
-
-        Return
-        ------
-        None
+        Returns:
+            None
         """
 
         start = time.time_ns()
@@ -592,47 +466,28 @@ class clusterer:
         """
         Plots the points in input.
 
-        Parameters
-        ----------
-        plot_title : string, optional
-            Title of the plot.
-        title_size : float, optional
-            Size of the plot title.
-        x_label : string, optional
-            Label on x-axis.
-        y_label : string, optional
-            Label on y-axis.
-        z_label : string, optional
-            Label on z-axis.
-        label_size : int, optional
-            Fontsize of the axis labels.
-        pt_size : int, optional
-            Size of the points in the plot.
-        pt_colour : string, optional
-            Colour of the points in the plot.
-        grid : bool, optional
-            If true displays grids in the plot.
-        grid_style : string, optional
-            Style of the grid.
-        grid_size : float, optional
-            Linewidth of the plot grid.
-        x_ticks : list, optional
-            List of ticks for the x axis.
-        y_ticks : list, optional
-            List of ticks for the y axis.
-        z_ticks : list, optional
-            List of ticks for the z axis.
-        kwargs : function objects, optional
-            Functions for converting the used coordinates to cartesian coordinates.
-            The keywords of the arguments are the coordinates names (x0, x1, ...).
+        Args:
+            plot_title: Title of the plot.
+            title_size: Size of the plot title.
+            x_label: Label on x-axis.
+            y_label: Label on y-axis.
+            z_label: Label on z-axis.
+            label_size: Fontsize of the axis labels.
+            pt_size: Size of the points in the plot.
+            pt_colour: Colour of the points in the plot.
+            grid: If true displays grids in the plot.
+            grid_style: Style of the grid.
+            grid_size: Linewidth of the plot grid.
+            x_ticks: List of ticks for the x axis.
+            y_ticks: List of ticks for the y axis.
+            z_ticks: List of ticks for the z axis.
 
-        Modified attributes
-        -------------------
-        None
+        Kwargs:
+            kwargs: Functions for converting the used coordinates to cartesian coordinates.
+                The keywords of the arguments are the coordinates names (x0, x1, ...).
 
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
 
         # Convert the used coordinates to cartesian coordiantes
@@ -707,49 +562,30 @@ class clusterer:
         The points assigned to a cluster are printed as points, the seeds
         as stars and the outliers as little grey crosses.
 
-        Parameters
-        ----------
-        plot_title : string, optional
-            Title of the plot
-        title_size : float, optional
-            Size of the plot title
-        x_label : string, optional
-            Label on x-axis
-        y_label : string, optional
-            Label on y-axis
-        z_label : string, optional
-            Label on z-axis
-        label_size : int, optional
-            Fontsize of the axis labels
-        outl_size : int, optional
-            Size of the outliers in the plot
-        pt_size : int, optional
-            Size of the points in the plot
-        seed_size : int, optional
-            Size of the seeds in the plot
-        grid : bool, optional
-            f true displays grids in the plot
-        grid_style : string, optional
-            Style of the grid
-        grid_size : float, optional
-            Linewidth of the plot grid
-        x_ticks : list, optional
-            List of ticks for the x axis.
-        y_ticks : list, optional
-            List of ticks for the y axis.
-        z_ticks : list, optional
-            List of ticks for the z axis.
-        kwargs : function objects, optional
-            Functions for converting the used coordinates to cartesian coordinates.
-            The keywords of the arguments are the coordinates names (x0, x1, ...).
+        Args:
+            plot_title: Title of the plot.
+            title_size: Size of the plot title.
+            x_label: Label on x-axis.
+            y_label: Label on y-axis.
+            z_label: Label on z-axis.
+            label_size: Fontsize of the axis labels.
+            outl_size: Size of the outliers in the plot.
+            pt_size: Size of the points in the plot.
+            seed_size: Size of the seeds in the plot.
+            grid: If true displays grids in the plot.
+            grid_style: Style of the grid.
+            grid_size: Linewidth of the plot grid.
+            x_ticks: List of ticks for the x axis.
+            y_ticks: List of ticks for the y axis.
+            z_ticks: List of ticks for the z axis.
 
-        Modified attributes
-        -------------------
-        None
+        Kwargs:
+            kwargs : function objects, optional: Functions for converting the used coordinates
+                to cartesian coordinates. The keywords of the arguments are the coordinates
+                names (x0, x1, ...).
 
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
 
         # Convert the used coordinates to cartesian coordiantes
@@ -839,20 +675,12 @@ class clusterer:
         """
         Creates a file containing the coordinates of all the points, their cluster_ids and is_seed.
 
-        Parameters
-        ----------
-        output_folder : string
-            Full path to the desired ouput folder.
-        file_name : string
-            Name of the file, with the '.csv' suffix.
+        Args:
+            output_folder: Full path to the desired ouput folder.
+            file_name: Name of the file, with the '.csv' suffix.
 
-        Modified attributes
-        -------------------
-        None
-
-        Returns
-        -------
-        None
+        Returns:
+            None
         """
 
         out_path = output_folder + file_name
