@@ -20,8 +20,8 @@ export CUDA_CXXFLAGS := -I$(CUDA_BASE)/include
 # export CUDA_NVCC := $(CUDA_BASE)/bin/nvcc
 
 # Dependencies flags
-ALPAKA_PATH = /install/include
-BOOST_PATH = /usr/install/boost
+ALPAKA_PATH = ../../../extern/alpaka/include
+BOOST_PATH = /usr/include/boost
 
 # Alpaka backend compilation flags
 ALPAKA_SERIAL_FLAGS = -DALPAKA_HOST_ONLY -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_PRESENT -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND
