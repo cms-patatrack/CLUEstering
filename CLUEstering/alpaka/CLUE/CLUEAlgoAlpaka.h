@@ -119,7 +119,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Define the working division
     const Idx block_size{1024};
-    Idx grid_size = std::ceil(h_points.n / static_cast<float>(block_size));
+    Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
     alpaka::enqueue(
         queue_,
@@ -136,7 +136,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     setup(h_points, d_points, queue_);
 
     const Idx block_size{1024};
-    const Idx grid_size = std::ceil(h_points.n / static_cast<float>(block_size));
+    const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
