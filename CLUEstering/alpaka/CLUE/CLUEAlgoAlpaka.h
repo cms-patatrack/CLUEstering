@@ -37,6 +37,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     VecArray<int32_t, max_seeds>* m_seeds;
     VecArray<int32_t, max_followers>* m_followers;
 
+	void setBlockSize(std::size_t blockSize) { blockSize_ = blockSize; }
+
     template <typename KernelType>
     std::vector<std::vector<int>> make_clusters(Points<Ndim>& h_points,
                                                 PointsAlpaka<Ndim>& d_points,
@@ -49,6 +51,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     float outlierDeltaFactor_;
     // average number of points found in a tile
     int pointsPerTile_;
+
+	std::size_t blockSize_ = 1024;
 
     /* domain_t<Ndim> m_domains; */
 
@@ -118,9 +122,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     alpaka::memset(queue_, (*d_seeds), 0x00);
 
     // Define the working division
-    const Idx block_size{1024};
-    Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
-    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
+    Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, blockSize_);
+    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, blockSize_);
     alpaka::enqueue(
         queue_,
         alpaka::createTaskKernel<Acc1D>(working_div, KernelResetFollowers{}, m_followers, h_points.n));
@@ -135,9 +138,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                                           Queue queue_) {
     setup(h_points, d_points, queue_);
 
-    const Idx block_size{1024};
-    const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
-    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
+    const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, blockSize_);
+    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, blockSize_);
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         working_div, KernelFillTiles(), d_points.view(), m_tiles, h_points.n));
@@ -172,8 +174,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     h_points.n));
 
     // We change the working division when assigning the clusters
-    const Idx grid_size_seeds = ceil(max_seeds / static_cast<float>(block_size));
-    auto working_div_seeds = cms::alpakatools::make_workdiv<Acc1D>(grid_size_seeds, block_size);
+    const Idx grid_size_seeds = cms::alpakatools::divide_up_by(max_seeds, blockSize_);
+    auto working_div_seeds = cms::alpakatools::make_workdiv<Acc1D>(grid_size_seeds, blockSize_);
     alpaka::enqueue(
         queue_,
         alpaka::createTaskKernel<Acc1D>(

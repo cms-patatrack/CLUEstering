@@ -229,5 +229,7 @@ namespace alpaka_serial_sync {
                                   const GaussianKernel&,
                                   int>(&mainRun),
           "mainRun");
+
+	m.def("set_blocksize", CLUEAlgoAlpaka::setBlockSize, "set_blocksize");
   }
 };  // namespace alpaka_serial_sync
