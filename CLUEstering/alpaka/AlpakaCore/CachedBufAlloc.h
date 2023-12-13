@@ -5,7 +5,6 @@
 
 #include "getDeviceCachingAllocator.h"
 #include "getHostCachingAllocator.h"
-#include "demangle.h"
 
 namespace cms::alpakatools {
 
