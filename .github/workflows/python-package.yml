@@ -40,4 +40,4 @@ jobs:
     - name: Run tests of the Python library
       working-directory: ${{github.workspace}}/tests
       run: |
-        ./run_test.sh 
+        python3 -m pytest ./*.py

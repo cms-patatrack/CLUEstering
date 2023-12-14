@@ -37,4 +37,4 @@ jobs:
       working-directory: ${{github.workspace}}/tests
       run: |
         pip install .
-        ./tests/run_test.sh
+        python3 -m pytest ./*.py
