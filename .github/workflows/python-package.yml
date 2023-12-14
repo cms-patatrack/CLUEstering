@@ -42,6 +42,7 @@ jobs:
     - name: Compile binding of C++ backend
       working-directory: ${{github.workspace}}/CLUEstering
       run: |
+        find / -name pybind11.h
         g++ -std=c++17 -O3 -Wall -shared -fPIC ./binding.cc \
         -o CLUEsteringCPP.cpython-38-x86_64-linux-gnu.so && clear
     - name: Run tests of the Python library
