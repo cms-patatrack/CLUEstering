@@ -23,12 +23,12 @@ namespace alpaka_cuda_async {
                                         const std::vector<float>& weights,
                                         const FlatKernel& kernel,
                                         int Ndim,
-										size_t block_size) {
-	std::vector<Device> devices = alpaka::getDevs<Platform>();
+                                        size_t block_size) {
+    std::vector<Device> devices = alpaka::getDevs<Platform>();
 
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 
-	/* initialise<Platform>(); */
+    /* initialise<Platform>(); */
 
     // Create the queue
     Queue queue_(dev_acc);
@@ -89,7 +89,7 @@ namespace alpaka_cuda_async {
                                         const std::vector<float>& weights,
                                         const ExponentialKernel& kernel,
                                         int Ndim,
-										size_t block_size) {
+                                        size_t block_size) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 
     // Create the queue
@@ -151,7 +151,7 @@ namespace alpaka_cuda_async {
                                         const std::vector<float>& weights,
                                         const GaussianKernel& kernel,
                                         int Ndim,
-										size_t block_size) {
+                                        size_t block_size) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 
     // Create the queue
@@ -217,7 +217,7 @@ namespace alpaka_cuda_async {
                                   const std::vector<float>&,
                                   const FlatKernel&,
                                   int,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -228,7 +228,7 @@ namespace alpaka_cuda_async {
                                   const std::vector<float>&,
                                   const ExponentialKernel&,
                                   int,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -239,7 +239,7 @@ namespace alpaka_cuda_async {
                                   const std::vector<float>&,
                                   const GaussianKernel&,
                                   int,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
   }
-};  // namespace alpaka_tbb_async
+};  // namespace alpaka_cuda_async

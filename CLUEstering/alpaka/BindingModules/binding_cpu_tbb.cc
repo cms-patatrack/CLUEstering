@@ -19,9 +19,9 @@ namespace alpaka_tbb_async {
                                         int pPBin,
                                         const std::vector<std::vector<float>>& coords,
                                         const std::vector<float>& weights,
-										const FlatKernel& kernel,
+                                        const FlatKernel& kernel,
                                         int Ndim,
-										size_t block_size) {
+                                        size_t block_size) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 
     // Create the queue
@@ -81,9 +81,9 @@ namespace alpaka_tbb_async {
                                         int pPBin,
                                         const std::vector<std::vector<float>>& coords,
                                         const std::vector<float>& weights,
-										const ExponentialKernel& kernel,
+                                        const ExponentialKernel& kernel,
                                         int Ndim,
-										size_t block_size) {
+                                        size_t block_size) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 
     // Create the queue
@@ -143,9 +143,9 @@ namespace alpaka_tbb_async {
                                         int pPBin,
                                         const std::vector<std::vector<float>>& coords,
                                         const std::vector<float>& weights,
-										const GaussianKernel& kernel,
+                                        const GaussianKernel& kernel,
                                         int Ndim,
-										size_t block_size) {
+                                        size_t block_size) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 
     // Create the queue
@@ -203,7 +203,7 @@ namespace alpaka_tbb_async {
     m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
 
     /* pybind11::class_<ConvolutionalKernel>(m, "ConvolutionalKernel").def(pybind11::init<>()) */
-		/* .def("operator()", &ConvolutionalKernel::operator()); */
+    /* .def("operator()", &ConvolutionalKernel::operator()); */
     /* pybind11::class_<FlatKernel, ConvolutionalKernel>(m, "FlatKernel") */
     /*     .def(pybind11::init<float>()) */
     /*     .def("operator()", &FlatKernel::operator()); */
@@ -225,7 +225,7 @@ namespace alpaka_tbb_async {
                                   const std::vector<float>&,
                                   const FlatKernel&,
                                   int,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -236,7 +236,7 @@ namespace alpaka_tbb_async {
                                   const std::vector<float>&,
                                   const ExponentialKernel&,
                                   int,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -247,7 +247,7 @@ namespace alpaka_tbb_async {
                                   const std::vector<float>&,
                                   const GaussianKernel&,
                                   int,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
 
     /* m.def("mainRun", &mainRun, "mainRun"); */

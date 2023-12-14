@@ -42,7 +42,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                 PointsAlpaka<Ndim>& d_points,
                                                 const KernelType& kernel,
                                                 Queue queue_,
-												size_t block_size);
+                                                size_t block_size);
 
   private:
     float dc_;
@@ -105,7 +105,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   void CLUEAlgoAlpaka<TAcc, Ndim>::setup(const Points<Ndim>& h_points,
                                          PointsAlpaka<Ndim>& d_points,
                                          Queue queue_,
-										 size_t block_size) {
+                                         size_t block_size) {
     // Create temporary tiles object
     TilesAlpaka<Ndim> temp;
     calculate_tile_size(temp, h_points);
@@ -134,7 +134,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                                           PointsAlpaka<Ndim>& d_points,
                                                                           const KernelType& kernel,
                                                                           Queue queue_,
-																		  size_t block_size) {
+                                                                          size_t block_size) {
     setup(h_points, d_points, queue_, block_size);
 
     const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
