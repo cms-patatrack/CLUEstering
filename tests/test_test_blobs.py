@@ -2,10 +2,10 @@
 Test the test_blobs function, which produces a set of gaussianely distributed blobs
 '''
 
-import CLUEstering as clue
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
+import CLUEstering as clue
 
 
 def test_except_1():

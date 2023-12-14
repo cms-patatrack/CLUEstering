@@ -4,13 +4,13 @@ two concentric circles
 '''
 
 from filecmp import cmp
-import CLUEstering as clue
 import numpy as np
 import os
 import pandas as pd
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
+import CLUEstering as clue
 
 
 @pytest.fixture

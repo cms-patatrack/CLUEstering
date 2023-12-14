@@ -3,11 +3,11 @@ Testing the function for changing the domain ranges, using the blob dataset as a
 '''
 
 from math import pi
-import CLUEstering as clue
 import numpy as np
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
+import CLUEstering as clue
 
 
 @pytest.fixture

@@ -3,11 +3,11 @@ Test that points at opposite extremes of a finite domain are adjacent
 '''
 
 from math import pi
-import CLUEstering as clue
 import pandas as pd
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
+import CLUEstering as clue
 
 
 @pytest.fixture

@@ -2,11 +2,11 @@
 Test that the equality operator for clusterer objects works correctly
 '''
 
-import CLUEstering as clue
 import pandas as pd
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
+import CLUEstering as clue
 
 
 @pytest.fixture
