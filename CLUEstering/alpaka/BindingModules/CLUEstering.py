@@ -280,7 +280,7 @@ class clusterer:
             Dataframe containing the input data
         """
 
-        if input_data[-3:] != 'csv':
+        if not input_data.endswith('.csv'):
             raise ValueError('Wrong type of file. The file is not a csv file.')
         df_ = pd.read_csv(input_data)
         return df_
