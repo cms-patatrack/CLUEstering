@@ -23,7 +23,7 @@ jobs:
         sudo apt-get install -y doctest
     # Sets up Python on the machine with the right version
     - name: Compile and run the C++ tests
+      working-directory: ${{github.workspace}}/CLUEstering/include/test
       run: |
-        cd ./CLUEstering/include/test/ && make
-        ./run_tests.sh
+        make && ./run_tests.sh
 
