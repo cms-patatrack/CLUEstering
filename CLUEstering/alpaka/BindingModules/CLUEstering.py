@@ -48,11 +48,9 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
         DataFrame containing n_blobs gaussian blobs.
     """
 
-    if x_max < 0. or y_max < 0.:
-        raise ValueError('Wrong parameter value. x_max and y_max must be positive.')
     if n_blobs < 0:
         raise ValueError('Wrong parameter value. The number of blobs must be positive.')
-    if mean < 0. or sigma < 0.:
+    if sigma < 0.:
         raise ValueError("Wrong parameter value. The mean and sigma of the blobs"
                          + " cannot be negative.")
     if n_dim > 3:
@@ -73,7 +71,7 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
     if n_dim == 3:
         data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
         sqrt_samples = int(sqrt(n_samples))
-        z_values = np.random.normal(mean,sigma,sqrt_samples)
+        z_values = np.random.normal(mean, sigma,sqrt_samples)
         centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
 
         for value in z_values: # for every z value, a layer is generated.
@@ -153,32 +151,6 @@ class cluster_properties:
 
         return True
 
-# def _flat(alpha: float) -> types.FunctionType:
-#     def _operator(dist: float, i: int, j: int):
-#         if i == j:
-#             return 1.
-#         else:
-#             return alpha
-
-#     return _operator
-
-# def _exp(avg: float, amplitude: float) -> types.FunctionType:
-#     def _operator(dist: float, i: int, j: int) -> float:
-#         if i == j:
-#             return 1.
-#         else:
-#             return amplitude * np.exp(-avg * dist)
-
-#     return _operator
-
-# def _gaus(avg: float, std: float, amplitude: float) -> types.FunctionType:
-#     def _operator(dist: float, i: int, j: int) -> float:
-#         if i == j:
-#             return 1.
-#         else:
-#             return amplitude * np.exp(-(dist - avg)**2 / (2 * std**2))
-
-#     return _operator
 
 class clusterer:
     """
@@ -419,7 +391,7 @@ class clusterer:
             df = self._read_dict_df(input_data)
             self._handle_dataframe(df)
 
-        # Rescae the coordinates with a standard scaler
+        # Rescale the coordinates with a standard scaler
         self._rescale()
 
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
@@ -549,9 +521,6 @@ class clusterer:
             cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
                                                   self.clust_data.coords, self.clust_data.weight,
                                                   self.kernel, self.clust_data.n_dim, block_size)
-            # cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
-            #                                      self.clust_data.coords, self.clust_data.weight,
-            #                                      self.kernel, self.clust_data.n_dim)
         finish = time.time_ns()
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])
@@ -575,7 +544,7 @@ class clusterer:
 
         self.elapsed_time = (finish - start)/(10**6)
         if verbose:
-            print(f'CLUE run in {self.elapsed_time} ms')
+            print(f'CLUE executed in {self.elapsed_time} ms')
             print(f'Number of clusters found: {self.clust_prop.n_clusters}')
 
     def input_plotter(self, plot_title: str='', title_size: float = 16,
