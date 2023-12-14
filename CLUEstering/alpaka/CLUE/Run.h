@@ -31,14 +31,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      std::vector<std::vector<float>> const &coordinates,
                                      std::vector<float> const &weight,
 									 const FlatKernel& kernel,
-									 Queue queue_) {
+									 Queue queue_,
+									 size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
 
 	// Create the host and device points
 	Points<2> h_points(coordinates, weight);
 	PointsAlpaka<2> d_points(queue_, weight.size());
 
-    return algo.make_clusters(h_points, d_points, kernel, queue_);
+    return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
 
   std::vector<std::vector<int>> run2(float dc,
@@ -48,14 +49,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      std::vector<std::vector<float>> const &coordinates,
                                      std::vector<float> const &weight,
 									 const ExponentialKernel& kernel,
-									 Queue queue_) {
+									 Queue queue_,
+									 size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
 
 	// Create the host and device points
 	Points<2> h_points(coordinates, weight);
 	PointsAlpaka<2> d_points(queue_, weight.size());
 
-    return algo.make_clusters(h_points, d_points, kernel, queue_);
+    return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
 
   std::vector<std::vector<int>> run2(float dc,
@@ -65,14 +67,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      std::vector<std::vector<float>> const &coordinates,
                                      std::vector<float> const &weight,
 									 const GaussianKernel& kernel,
-									 Queue queue_) {
+									 Queue queue_,
+									 size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
 
 	// Create the host and device points
 	Points<2> h_points(coordinates, weight);
 	PointsAlpaka<2> d_points(queue_, weight.size());
 
-    return algo.make_clusters(h_points, d_points, kernel, queue_);
+    return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
 
   /* std::vector<std::vector<int>> run3(float dc, */

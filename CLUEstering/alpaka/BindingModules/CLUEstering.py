@@ -504,7 +504,10 @@ class clusterer:
             raise ValueError("Invalid kernel. The allowed choices for the"
                              + " kernels are: flat, exp, gaus and custom.")
 
-    def run_clue(self, backend: str = "cpu serial", verbose: bool = False) -> None:
+    def run_clue(self,
+                 backend: str = "cpu serial",
+                 block_size: int = 1024,
+                 verbose: bool = False) -> None:
         """
         Executes the CLUE clustering algorithm.
 
@@ -537,15 +540,15 @@ class clusterer:
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
                                                     self.clust_data.coords, self.clust_data.weight,
-                                                    self.kernel, self.clust_data.n_dim)
+                                                    self.kernel, self.clust_data.n_dim, block_size)
         elif backend == "cpu tbb":
             cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
                                                     self.clust_data.coords, self.clust_data.weight,
-                                                    self.kernel, self.clust_data.n_dim)
+                                                    self.kernel, self.clust_data.n_dim, block_size)
         elif backend == "gpu cuda":
             cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
                                                   self.clust_data.coords, self.clust_data.weight,
-                                                  self.kernel, self.clust_data.n_dim)
+                                                  self.kernel, self.clust_data.n_dim, block_size)
             # cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
             #                                      self.clust_data.coords, self.clust_data.weight,
             #                                      self.kernel, self.clust_data.n_dim)

@@ -22,7 +22,8 @@ namespace alpaka_cuda_async {
                                         const std::vector<std::vector<float>>& coords,
                                         const std::vector<float>& weights,
                                         const FlatKernel& kernel,
-                                        int Ndim) {
+                                        int Ndim,
+										size_t block_size) {
 	std::vector<Device> devices = alpaka::getDevs<Platform>();
 
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
@@ -47,7 +48,7 @@ namespace alpaka_cuda_async {
         /* return run1(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
         break;
       [[likely]] case (2) :
-        return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
+        return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
         break;
       [[likely]] case (3) :
         /* return run3(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
@@ -87,7 +88,8 @@ namespace alpaka_cuda_async {
                                         const std::vector<std::vector<float>>& coords,
                                         const std::vector<float>& weights,
                                         const ExponentialKernel& kernel,
-                                        int Ndim) {
+                                        int Ndim,
+										size_t block_size) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 
     // Create the queue
@@ -108,7 +110,7 @@ namespace alpaka_cuda_async {
         /* return run1(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
         break;
       [[likely]] case (2) :
-        return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
+        return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
         break;
       [[likely]] case (3) :
         /* return run3(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
@@ -148,7 +150,8 @@ namespace alpaka_cuda_async {
                                         const std::vector<std::vector<float>>& coords,
                                         const std::vector<float>& weights,
                                         const GaussianKernel& kernel,
-                                        int Ndim) {
+                                        int Ndim,
+										size_t block_size) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
 
     // Create the queue
@@ -169,7 +172,7 @@ namespace alpaka_cuda_async {
         /* return run1(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
         break;
       [[likely]] case (2) :
-        return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_);
+        return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
         break;
       [[likely]] case (3) :
         /* return run3(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
@@ -213,7 +216,8 @@ namespace alpaka_cuda_async {
                                   const std::vector<std::vector<float>>&,
                                   const std::vector<float>&,
                                   const FlatKernel&,
-                                  int>(&mainRun),
+                                  int,
+								  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -223,7 +227,8 @@ namespace alpaka_cuda_async {
                                   const std::vector<std::vector<float>>&,
                                   const std::vector<float>&,
                                   const ExponentialKernel&,
-                                  int>(&mainRun),
+                                  int,
+								  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -233,7 +238,8 @@ namespace alpaka_cuda_async {
                                   const std::vector<std::vector<float>>&,
                                   const std::vector<float>&,
                                   const GaussianKernel&,
-                                  int>(&mainRun),
+                                  int,
+								  size_t>(&mainRun),
           "mainRun");
   }
 };  // namespace alpaka_tbb_async

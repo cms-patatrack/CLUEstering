@@ -37,13 +37,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     VecArray<int32_t, max_seeds>* m_seeds;
     VecArray<int32_t, max_followers>* m_followers;
 
-	void setBlockSize(std::size_t blockSize) { blockSize_ = blockSize; }
-
     template <typename KernelType>
     std::vector<std::vector<int>> make_clusters(Points<Ndim>& h_points,
                                                 PointsAlpaka<Ndim>& d_points,
                                                 const KernelType& kernel,
-                                                Queue queue_);
+                                                Queue queue_,
+												size_t block_size);
 
   private:
     float dc_;
@@ -51,8 +50,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     float outlierDeltaFactor_;
     // average number of points found in a tile
     int pointsPerTile_;
-
-	std::size_t blockSize_ = 1024;
 
     /* domain_t<Ndim> m_domains; */
 
@@ -66,7 +63,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Private methods
     void init_device(Queue queue_);
-    void setup(const Points<Ndim>& h_points, PointsAlpaka<Ndim>& d_points, Queue queue_);
+    void setup(const Points<Ndim>& h_points, PointsAlpaka<Ndim>& d_points, Queue queue_, size_t block_size);
 
     // Construction of the tiles
     void calculate_tile_size(TilesAlpaka<Ndim>& h_tiles, const Points<Ndim>& h_points);
@@ -107,7 +104,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <typename TAcc, uint8_t Ndim>
   void CLUEAlgoAlpaka<TAcc, Ndim>::setup(const Points<Ndim>& h_points,
                                          PointsAlpaka<Ndim>& d_points,
-                                         Queue queue_) {
+                                         Queue queue_,
+										 size_t block_size) {
     // Create temporary tiles object
     TilesAlpaka<Ndim> temp;
     calculate_tile_size(temp, h_points);
@@ -122,8 +120,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     alpaka::memset(queue_, (*d_seeds), 0x00);
 
     // Define the working division
-    Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, blockSize_);
-    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, blockSize_);
+    Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
+    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
     alpaka::enqueue(
         queue_,
         alpaka::createTaskKernel<Acc1D>(working_div, KernelResetFollowers{}, m_followers, h_points.n));
@@ -135,11 +133,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   std::vector<std::vector<int>> CLUEAlgoAlpaka<TAcc, Ndim>::make_clusters(Points<Ndim>& h_points,
                                                                           PointsAlpaka<Ndim>& d_points,
                                                                           const KernelType& kernel,
-                                                                          Queue queue_) {
-    setup(h_points, d_points, queue_);
+                                                                          Queue queue_,
+																		  size_t block_size) {
+    setup(h_points, d_points, queue_, block_size);
 
-    const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, blockSize_);
-    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, blockSize_);
+    const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
+    auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         working_div, KernelFillTiles(), d_points.view(), m_tiles, h_points.n));
@@ -174,8 +173,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     h_points.n));
 
     // We change the working division when assigning the clusters
-    const Idx grid_size_seeds = cms::alpakatools::divide_up_by(max_seeds, blockSize_);
-    auto working_div_seeds = cms::alpakatools::make_workdiv<Acc1D>(grid_size_seeds, blockSize_);
+    const Idx grid_size_seeds = cms::alpakatools::divide_up_by(max_seeds, block_size);
+    auto working_div_seeds = cms::alpakatools::make_workdiv<Acc1D>(grid_size_seeds, block_size);
     alpaka::enqueue(
         queue_,
         alpaka::createTaskKernel<Acc1D>(
