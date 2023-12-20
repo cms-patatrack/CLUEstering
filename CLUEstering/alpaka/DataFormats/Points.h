@@ -19,20 +19,20 @@ struct Points {
       : m_coords{coords}, m_weight{weight}, n{weight.size()} {}
   Points(const std::vector<std::vector<float>>& coords, const std::vector<float>& weight)
       : m_weight{weight}, n{weight.size()} {
-		for (const auto& x : coords) {
-		  VecArray<float, Ndim> temp_vecarray;
-		  for (auto value : x) {
-			temp_vecarray.push_back_unsafe(value);
-		  }
-		  m_coords.push_back(temp_vecarray);
-		}
+    for (const auto& x : coords) {
+      VecArray<float, Ndim> temp_vecarray;
+      for (auto value : x) {
+        temp_vecarray.push_back_unsafe(value);
+      }
+      m_coords.push_back(temp_vecarray);
+    }
 
-		m_rho.resize(n);
-		m_delta.resize(n);
-		m_nearestHigher.resize(n);
-		m_clusterIndex.resize(n);
-		m_isSeed.resize(n);
-	  }
+    m_rho.resize(n);
+    m_delta.resize(n);
+    m_nearestHigher.resize(n);
+    m_clusterIndex.resize(n);
+    m_isSeed.resize(n);
+  }
 
   std::vector<VecArray<float, Ndim>> m_coords;
   std::vector<float> m_weight;

@@ -14,13 +14,13 @@
 
 namespace alpaka_tbb_async {
   void listDevices(const std::string& backend) {
-	const char tab = '\t';
+    const char tab = '\t';
     const std::vector<Device> devices = alpaka::getDevs<Platform>();
     if (devices.empty()) {
       std::cout << "No devices found for the " << backend << " backend." << std::endl;
       return;
     } else {
-	  std::cout << backend << " devices found: \n";
+      std::cout << backend << " devices found: \n";
       for (size_t i{}; i < devices.size(); ++i) {
         std::cout << tab << "Device " << i << ": " << alpaka::getName(devices[i]) << '\n';
       }
@@ -36,20 +36,11 @@ namespace alpaka_tbb_async {
                                         const FlatKernel& kernel,
                                         int Ndim,
                                         size_t block_size,
-										size_t device_id) {
+                                        size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
-
-    /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
-    /* Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8))); */
-    /* WorkDiv const work_div = */
-    /*     alpaka::getValidWorkDiv<Acc1D>(dev_acc, */
-    /*                                  threadsPerGrid, */
-    /*                                  elementsPerThread, */
-    /*                                  false, */
-    /*                                  alpaka::GridBlockExtentSubDivRestrictions::Unrestricted); */
 
     // Running the clustering algorithm //
     switch (Ndim) {
@@ -99,20 +90,11 @@ namespace alpaka_tbb_async {
                                         const ExponentialKernel& kernel,
                                         int Ndim,
                                         size_t block_size,
-										size_t device_id) {
+                                        size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
-
-    /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
-    /* Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8))); */
-    /* WorkDiv const work_div = */
-    /*     alpaka::getValidWorkDiv<Acc1D>(dev_acc, */
-    /*                                  threadsPerGrid, */
-    /*                                  elementsPerThread, */
-    /*                                  false, */
-    /*                                  alpaka::GridBlockExtentSubDivRestrictions::Unrestricted); */
 
     // Running the clustering algorithm //
     switch (Ndim) {
@@ -162,20 +144,11 @@ namespace alpaka_tbb_async {
                                         const GaussianKernel& kernel,
                                         int Ndim,
                                         size_t block_size,
-										size_t device_id) {
+                                        size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
-
-    /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
-    /* Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8))); */
-    /* WorkDiv const work_div = */
-    /*     alpaka::getValidWorkDiv<Acc1D>(dev_acc, */
-    /*                                  threadsPerGrid, */
-    /*                                  elementsPerThread, */
-    /*                                  false, */
-    /*                                  alpaka::GridBlockExtentSubDivRestrictions::Unrestricted); */
 
     // Running the clustering algorithm //
     switch (Ndim) {
@@ -219,21 +192,7 @@ namespace alpaka_tbb_async {
   PYBIND11_MODULE(CLUE_CPU_TBB, m) {
     m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
 
-    /* pybind11::class_<ConvolutionalKernel>(m, "ConvolutionalKernel").def(pybind11::init<>()) */
-    /* .def("operator()", &ConvolutionalKernel::operator()); */
-    /* pybind11::class_<FlatKernel, ConvolutionalKernel>(m, "FlatKernel") */
-    /*     .def(pybind11::init<float>()) */
-    /*     .def("operator()", &FlatKernel::operator()); */
-    /* pybind11::class_<GaussianKernel, ConvolutionalKernel>(m, "GaussianKernel") */
-    /*     .def(pybind11::init<float, float, float>()) */
-    /*     .def("operator()", &GaussianKernel::operator()); */
-    /* pybind11::class_<ExponentialKernel, ConvolutionalKernel>(m, "ExponentialKernel") */
-    /*     .def(pybind11::init<float, float>()) */
-    /*     .def("operator()", &ExponentialKernel::operator()); */
-    /* pybind11::class_<CustomKernel, ConvolutionalKernel>(m, "CustomKernel") */
-    /*     .def(pybind11::init<kernel_t>()) */
-    /*     .def("operator()", &CustomKernel::operator()); */
-	m.def("listDevices", &listDevices, "List the available devices for the TBB backend");
+    m.def("listDevices", &listDevices, "List the available devices for the TBB backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,
@@ -244,7 +203,7 @@ namespace alpaka_tbb_async {
                                   const FlatKernel&,
                                   int,
                                   size_t,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -256,7 +215,7 @@ namespace alpaka_tbb_async {
                                   const ExponentialKernel&,
                                   int,
                                   size_t,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -268,9 +227,7 @@ namespace alpaka_tbb_async {
                                   const GaussianKernel&,
                                   int,
                                   size_t,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
-
-    /* m.def("mainRun", &mainRun, "mainRun"); */
   }
 };  // namespace alpaka_tbb_async

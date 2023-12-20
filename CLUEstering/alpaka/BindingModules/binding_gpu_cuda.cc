@@ -16,13 +16,13 @@ using cms::alpakatools::initialise;
 
 namespace alpaka_cuda_async {
   void listDevices(const std::string& backend) {
-	const char tab = '\t';
+    const char tab = '\t';
     const std::vector<Device> devices = alpaka::getDevs<Platform>();
     if (devices.empty()) {
       std::cout << "No devices found for the " << backend << " backend." << std::endl;
       return;
     } else {
-	  std::cout << backend << " devices found: \n";
+      std::cout << backend << " devices found: \n";
       for (size_t i{}; i < devices.size(); ++i) {
         std::cout << tab << "device " << i << ": " << alpaka::getName(devices[i]) << '\n';
       }
@@ -38,24 +38,13 @@ namespace alpaka_cuda_async {
                                         const FlatKernel& kernel,
                                         int Ndim,
                                         size_t block_size,
-										size_t device_id) {
-    std::vector<Device> devices = alpaka::getDevs<Platform>();
-
+                                        size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     /* initialise<Platform>(); */
 
     // Create the queue
     Queue queue_(dev_acc);
-
-    /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
-    /* Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8))); */
-    /* WorkDiv const work_div = */
-    /*     alpaka::getValidWorkDiv<Acc1D>(dev_acc, */
-    /*                                  threadsPerGrid, */
-    /*                                  elementsPerThread, */
-    /*                                  false, */
-    /*                                  alpaka::GridBlockExtentSubDivRestrictions::Unrestricted); */
 
     // Running the clustering algorithm //
     switch (Ndim) {
@@ -105,20 +94,11 @@ namespace alpaka_cuda_async {
                                         const ExponentialKernel& kernel,
                                         int Ndim,
                                         size_t block_size,
-										size_t device_id) {
+                                        size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
-
-    /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
-    /* Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8))); */
-    /* WorkDiv const work_div = */
-    /*     alpaka::getValidWorkDiv<Acc1D>(dev_acc, */
-    /*                                  threadsPerGrid, */
-    /*                                  elementsPerThread, */
-    /*                                  false, */
-    /*                                  alpaka::GridBlockExtentSubDivRestrictions::Unrestricted); */
 
     // Running the clustering algorithm //
     switch (Ndim) {
@@ -168,20 +148,11 @@ namespace alpaka_cuda_async {
                                         const GaussianKernel& kernel,
                                         int Ndim,
                                         size_t block_size,
-										size_t device_id) {
+                                        size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
-
-    /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
-    /* Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8))); */
-    /* WorkDiv const work_div = */
-    /*     alpaka::getValidWorkDiv<Acc1D>(dev_acc, */
-    /*                                  threadsPerGrid, */
-    /*                                  elementsPerThread, */
-    /*                                  false, */
-    /*                                  alpaka::GridBlockExtentSubDivRestrictions::Unrestricted); */
 
     // Running the clustering algorithm //
     switch (Ndim) {
@@ -225,7 +196,7 @@ namespace alpaka_cuda_async {
   PYBIND11_MODULE(CLUE_GPU_CUDA, m) {
     m.doc() = "Binding of the CLUE algorithm running on CUDA GPUs";
 
-	m.def("listDevices", &listDevices, "List the available devices for the CUDA backend");
+    m.def("listDevices", &listDevices, "List the available devices for the CUDA backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,
@@ -236,7 +207,7 @@ namespace alpaka_cuda_async {
                                   const FlatKernel&,
                                   int,
                                   size_t,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -248,7 +219,7 @@ namespace alpaka_cuda_async {
                                   const ExponentialKernel&,
                                   int,
                                   size_t,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -260,7 +231,7 @@ namespace alpaka_cuda_async {
                                   const GaussianKernel&,
                                   int,
                                   size_t,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
   }
 };  // namespace alpaka_cuda_async

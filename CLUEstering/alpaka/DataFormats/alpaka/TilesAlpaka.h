@@ -37,8 +37,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     // Public methods
     void resizeTiles() { m_tiles.resize(n_tiles); }
 
-	// getter
-	int nPerDim() const { return n_tiles_per_dim; }
+    // getter
+    int nPerDim() const { return n_tiles_per_dim; }
 
     template <typename TAcc>
     ALPAKA_FN_HOST_ACC inline constexpr int getBin(const TAcc& acc, float coord_, int dim_) const {

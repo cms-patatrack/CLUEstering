@@ -14,13 +14,13 @@
 
 namespace alpaka_serial_sync {
   void listDevices(const std::string& backend) {
-	const char tab = '\t';
+    const char tab = '\t';
     const std::vector<Device> devices = alpaka::getDevs<Platform>();
     if (devices.empty()) {
       std::cout << "No devices found for the " << backend << " backend." << std::endl;
       return;
     } else {
-	  std::cout << backend << " devices found: \n";
+      std::cout << backend << " devices found: \n";
       for (size_t i{}; i < devices.size(); ++i) {
         std::cout << tab << "device " << i << ": " << alpaka::getName(devices[i]) << '\n';
       }
@@ -36,20 +36,11 @@ namespace alpaka_serial_sync {
                                         const FlatKernel& kernel,
                                         int Ndim,
                                         size_t block_size,
-										size_t device_id) {
+                                        size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
-
-    /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
-    /* Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8))); */
-    /* WorkDiv const work_div = */
-    /*     alpaka::getValidWorkDiv<Acc1D>(dev_acc, */
-    /*                                  threadsPerGrid, */
-    /*                                  elementsPerThread, */
-    /*                                  false, */
-    /*                                  alpaka::GridBlockExtentSubDivRestrictions::Unrestricted); */
 
     // Running the clustering algorithm //
     switch (Ndim) {
@@ -99,20 +90,11 @@ namespace alpaka_serial_sync {
                                         const ExponentialKernel& kernel,
                                         int Ndim,
                                         size_t block_size,
-										size_t device_id) {
+                                        size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
-
-    /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
-    /* Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8))); */
-    /* WorkDiv const work_div = */
-    /*     alpaka::getValidWorkDiv<Acc1D>(dev_acc, */
-    /*                                  threadsPerGrid, */
-    /*                                  elementsPerThread, */
-    /*                                  false, */
-    /*                                  alpaka::GridBlockExtentSubDivRestrictions::Unrestricted); */
 
     // Running the clustering algorithm //
     switch (Ndim) {
@@ -162,20 +144,11 @@ namespace alpaka_serial_sync {
                                         const GaussianKernel& kernel,
                                         int Ndim,
                                         size_t block_size,
-										size_t device_id) {
+                                        size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
-
-    /* Vec const elementsPerThread(Vec::all(static_cast<Idx>(1))); */
-    /* Vec const threadsPerGrid(Vec::all(static_cast<Idx>(8))); */
-    /* WorkDiv const work_div = */
-    /*     alpaka::getValidWorkDiv<Acc1D>(dev_acc, */
-    /*                                  threadsPerGrid, */
-    /*                                  elementsPerThread, */
-    /*                                  false, */
-    /*                                  alpaka::GridBlockExtentSubDivRestrictions::Unrestricted); */
 
     // Running the clustering algorithm //
     switch (Ndim) {
@@ -219,7 +192,7 @@ namespace alpaka_serial_sync {
   PYBIND11_MODULE(CLUE_CPU_Serial, m) {
     m.doc() = "Binding of the CLUE algorithm running serially on CPU";
 
-	m.def("listDevices", &listDevices, "List the available devices for the CPU serial backend");
+    m.def("listDevices", &listDevices, "List the available devices for the CPU serial backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,
@@ -230,7 +203,7 @@ namespace alpaka_serial_sync {
                                   const FlatKernel&,
                                   int,
                                   size_t,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -242,7 +215,7 @@ namespace alpaka_serial_sync {
                                   const ExponentialKernel&,
                                   int,
                                   size_t,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -254,7 +227,7 @@ namespace alpaka_serial_sync {
                                   const GaussianKernel&,
                                   int,
                                   size_t,
-								  size_t>(&mainRun),
+                                  size_t>(&mainRun),
           "mainRun");
   }
 };  // namespace alpaka_serial_sync

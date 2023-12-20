@@ -38,14 +38,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       // Copy memory inside the host view to device
       alpaka::memcpy(stream, view_dev, view_host);
     }
-	// Copy constructor/assignment operator
+    // Copy constructor/assignment operator
     PointsAlpaka(const PointsAlpaka&) = delete;
     PointsAlpaka& operator=(const PointsAlpaka&) = delete;
-	// Move constructor/assignment operator
+    // Move constructor/assignment operator
     PointsAlpaka(PointsAlpaka&&) = default;
     PointsAlpaka& operator=(PointsAlpaka&&) = default;
-	// Destructor
-	~PointsAlpaka() = default;
+    // Destructor
+    ~PointsAlpaka() = default;
 
     cms::alpakatools::device_buffer<Device, VecArray<float, Ndim>[]> coords;
     cms::alpakatools::device_buffer<Device, float[]> weight;
