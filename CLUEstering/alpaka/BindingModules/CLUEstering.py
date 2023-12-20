@@ -509,6 +509,7 @@ class clusterer:
     def run_clue(self,
                  backend: str = "cpu serial",
                  block_size: int = 1024,
+                 device_id: int = 0,
                  verbose: bool = False) -> None:
         """
         Executes the CLUE clustering algorithm.
@@ -542,15 +543,18 @@ class clusterer:
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
                                                     self.clust_data.coords, self.clust_data.weight,
-                                                    self.kernel, self.clust_data.n_dim, block_size)
+                                                    self.kernel, self.clust_data.n_dim, block_size,
+                                                    device_id)
         elif backend == "cpu tbb":
             cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
                                                     self.clust_data.coords, self.clust_data.weight,
-                                                    self.kernel, self.clust_data.n_dim, block_size)
+                                                    self.kernel, self.clust_data.n_dim, block_size,
+                                                    device_id)
         elif backend == "gpu cuda":
             cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
                                                   self.clust_data.coords, self.clust_data.weight,
-                                                  self.kernel, self.clust_data.n_dim, block_size)
+                                                  self.kernel, self.clust_data.n_dim, block_size,
+                                                  device_id)
         finish = time.time_ns()
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])

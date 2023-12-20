@@ -35,8 +35,9 @@ namespace alpaka_serial_sync {
                                         const std::vector<float>& weights,
                                         const FlatKernel& kernel,
                                         int Ndim,
-                                        size_t block_size = 1024) {
-    auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
+                                        size_t block_size,
+										size_t device_id) {
+    auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
@@ -97,8 +98,9 @@ namespace alpaka_serial_sync {
                                         const std::vector<float>& weights,
                                         const ExponentialKernel& kernel,
                                         int Ndim,
-                                        size_t block_size = 1024) {
-    auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
+                                        size_t block_size,
+										size_t device_id) {
+    auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
@@ -159,8 +161,9 @@ namespace alpaka_serial_sync {
                                         const std::vector<float>& weights,
                                         const GaussianKernel& kernel,
                                         int Ndim,
-                                        size_t block_size) {
-    auto const dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
+                                        size_t block_size,
+										size_t device_id) {
+    auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
@@ -226,7 +229,8 @@ namespace alpaka_serial_sync {
                                   const std::vector<float>&,
                                   const FlatKernel&,
                                   int,
-                                  size_t>(&mainRun),
+                                  size_t,
+								  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -237,7 +241,8 @@ namespace alpaka_serial_sync {
                                   const std::vector<float>&,
                                   const ExponentialKernel&,
                                   int,
-                                  size_t>(&mainRun),
+                                  size_t,
+								  size_t>(&mainRun),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -248,7 +253,8 @@ namespace alpaka_serial_sync {
                                   const std::vector<float>&,
                                   const GaussianKernel&,
                                   int,
-                                  size_t>(&mainRun),
+                                  size_t,
+								  size_t>(&mainRun),
           "mainRun");
   }
 };  // namespace alpaka_serial_sync
