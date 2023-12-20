@@ -15,6 +15,20 @@
 using cms::alpakatools::initialise;
 
 namespace alpaka_cuda_async {
+  void listDevices(const std::string& backend) {
+	const char tab = '\t';
+    const std::vector<Device> devices = alpaka::getDevs<Platform>();
+    if (devices.empty()) {
+      std::cout << "No devices found for the " << backend << " backend." << std::endl;
+      return;
+    } else {
+	  std::cout << backend << " devices found: \n";
+      for (size_t i{}; i < devices.size(); ++i) {
+        std::cout << tab << "device " << i << ": " << alpaka::getName(devices[i]) << '\n';
+      }
+    }
+  }
+
   std::vector<std::vector<int>> mainRun(float dc,
                                         float rhoc,
                                         float outlier,
@@ -208,6 +222,7 @@ namespace alpaka_cuda_async {
   PYBIND11_MODULE(CLUE_GPU_CUDA, m) {
     m.doc() = "Binding of the CLUE algorithm running on CUDA GPUs";
 
+	m.def("listDevices", &listDevices, "List the available devices for the CUDA backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,

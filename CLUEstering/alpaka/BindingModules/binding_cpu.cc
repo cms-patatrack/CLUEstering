@@ -13,6 +13,20 @@
 #include <stdint.h>
 
 namespace alpaka_serial_sync {
+  void listDevices(const std::string& backend) {
+	const char tab = '\t';
+    const std::vector<Device> devices = alpaka::getDevs<Platform>();
+    if (devices.empty()) {
+      std::cout << "No devices found for the " << backend << " backend." << std::endl;
+      return;
+    } else {
+	  std::cout << backend << " devices found: \n";
+      for (size_t i{}; i < devices.size(); ++i) {
+        std::cout << tab << "device " << i << ": " << alpaka::getName(devices[i]) << '\n';
+      }
+    }
+  }
+
   std::vector<std::vector<int>> mainRun(float dc,
                                         float rhoc,
                                         float outlier,
@@ -202,6 +216,7 @@ namespace alpaka_serial_sync {
   PYBIND11_MODULE(CLUE_CPU_Serial, m) {
     m.doc() = "Binding of the CLUE algorithm running serially on CPU";
 
+	m.def("listDevices", &listDevices, "List the available devices for the CPU serial backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,

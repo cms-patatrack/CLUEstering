@@ -13,6 +13,20 @@
 #include <stdint.h>
 
 namespace alpaka_tbb_async {
+  void listDevices(const std::string& backend) {
+	const char tab = '\t';
+    const std::vector<Device> devices = alpaka::getDevs<Platform>();
+    if (devices.empty()) {
+      std::cout << "No devices found for the " << backend << " backend." << std::endl;
+      return;
+    } else {
+	  std::cout << backend << " devices found: \n";
+      for (size_t i{}; i < devices.size(); ++i) {
+        std::cout << tab << "Device " << i << ": " << alpaka::getName(devices[i]) << '\n';
+      }
+    }
+  }
+
   std::vector<std::vector<int>> mainRun(float dc,
                                         float rhoc,
                                         float outlier,
@@ -216,6 +230,7 @@ namespace alpaka_tbb_async {
     /* pybind11::class_<CustomKernel, ConvolutionalKernel>(m, "CustomKernel") */
     /*     .def(pybind11::init<kernel_t>()) */
     /*     .def("operator()", &CustomKernel::operator()); */
+	m.def("listDevices", &listDevices, "List the available devices for the TBB backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,

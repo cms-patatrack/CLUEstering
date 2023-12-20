@@ -15,7 +15,7 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
-# import CLUE_CPU_TBB as cpu_tbb
+import CLUE_CPU_TBB as cpu_tbb
 import CLUE_GPU_CUDA as gpu_cuda
 
 def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
@@ -476,6 +476,36 @@ class clusterer:
             raise ValueError("Invalid kernel. The allowed choices for the"
                              + " kernels are: flat, exp, gaus and custom.")
 
+    def list_devices(self, backend: str = "all") -> None:
+        """
+        Lists the devices available for the chosen backend.
+
+        Parameters
+        ----------
+        backend : string, optional
+            The backend for which the devices are listed. The allowed values are
+            'all', 'cpu serial', 'cpu tbb' and 'gpu cuda'.
+            The default value is 'all'.
+
+        Raises
+        ------
+        ValueError : If the backend is not valid.
+        """
+
+        if backend == "all":
+            cpu_serial.listDevices('cpu serial')
+            cpu_tbb.listDevices('cpu tbb')
+            gpu_cuda.listDevices('gpu cuda')
+        elif backend == "cpu serial":
+            cpu_serial.listDevices(backend)
+        elif backend == "cpu tbb":
+            cpu_tbb.listDevices(backend)
+        elif backend == "gpu cuda":
+            gpu_cuda.listDevices(backend)
+        else:
+            raise ValueError("Invalid backend. The allowed choices for the"
+                             + " backend are: all, cpu serial, cpu tbb and gpu cuda.")
+
     def run_clue(self,
                  backend: str = "cpu serial",
                  block_size: int = 1024,
@@ -832,8 +862,12 @@ class clusterer:
 if __name__ == "__main__":
     c = clusterer(0.4,5,1.)
     c.read_data('./sissa.csv')
-    # c.run_clue(backend="cpu serial", verbose=True)
-    c.run_clue(backend="cpu tbb", verbose=True)
-    c.run_clue(backend="gpu cuda", verbose=True)
+    c.run_clue(backend="cpu serial", verbose=True)
+    # c.run_clue(backend="cpu tbb", verbose=True)
+    # c.run_clue(backend="gpu cuda", verbose=True)
     c.cluster_plotter()
-    c.to_csv('./','sissa_output_tbb.csv')
+    # c.to_csv('./','sissa_output_tbb.csv')
+    c.list_devices('cpu serial')
+    c.list_devices('cpu tbb')
+    c.list_devices('gpu cuda')
+    c.list_devices()
