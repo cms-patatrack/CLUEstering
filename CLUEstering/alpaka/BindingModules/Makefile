@@ -2,6 +2,7 @@
 # Compilers
 export CXX := g++
 export CUDA := nvcc
+export HIP := hipcc
 
 export CUDA_ARCH := 50 60 61 62 70
 
@@ -12,6 +13,10 @@ export CUDA_FLAGS = -x cu --expt-relaxed-constexpr -gencode arch=compute_61,code
 
 # CUDA_FLAGS := $$(foreach ARCH,-gencode arch=compute_$$(CUDA_ARCH),code=[sm_$$(CUDA_ARCH),compute_$$(CUDA_ARCH)]) -Wno-deprecated-gpu-targets -Xcudafe --diag_suppress=esa_on_defaulted_function_ignored --expt-relaxed-constexpr --expt-extended-lambda --generate-line-info --source-in-ptx --display-error-number --cudart=shared
 # $(2)NVCC_COMMON := -std=c++17 -O3 -g $$($(2)NVCC_FLAGS) -ccbin $(CXX) --compiler-options '$(HOST_CXXFLAGS) $(USER_CXXFLAGS)'
+export HIP_BASE = /opt/rocm/
+export HIP_FLAGS := -I$(HIP_BASE)/include \
+					-I$(HIP_BASE)/hiprand/include \
+					-I$(HIP_BASE)/rocrand/include
 
 TBB_FLAGS = -ltbb
 
@@ -27,6 +32,7 @@ BOOST_PATH = /usr/include/boost
 ALPAKA_SERIAL_FLAGS = -DALPAKA_HOST_ONLY -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_PRESENT -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND
 ALPAKA_TBB_FLAGS = -DALPAKA_ACC_CPU_B_TBB_T_SEQ_PRESENT -DALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED -DALPAKA_ACC_CPU_B_TBB_T_SEQ_ASYNC_BACKEND
 ALPAKA_CUDA_FLAGS = -DALPAKA_ACC_GPU_CUDA_PRESENT -DALPAKA_ACC_GPU_CUDA_ENABLED -DALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND 
+ALPAKA_HIP_FLAGS = -DALPAKA_ACC_GPU_HIP_PRESENT -DALPAKA_ACC_GPU_HIP_ENABLED -DALPAKA_ACC_GPU_HIP_ASYNC_BACKEND
 
 # Binding flags
 PYTHON_VERS := $(shell python3 -V | awk -F '' '{print $$8$$9$$10$$11}' | sed 's/\.//g'  )
@@ -57,6 +63,9 @@ tbb:
 
 cuda:
 	$(CUDA) $(CUDA_FLAGS) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_CUDA_FLAGS) $(CUDA_BINDING_FLAGS) binding_gpu_cuda.cc -o $(CUDA_MODULE_NAME)
+
+hip:
+	$(HIP) $(HIP_FLAGS) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_HIP_FLAGS) $(BINDING_FLAGS) binding_gpu_hip.cc -o CLUE_GPU_HIP.cpython-$(PYTHON_VERS)-x86_64-linux-gnu.so
 
 kernel:
 	$(CXX) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_SERIAL_FLAGS) $(BINDING_FLAGS) binding_kernels.cc -o $(KERNELS_MODULE_NAME)
