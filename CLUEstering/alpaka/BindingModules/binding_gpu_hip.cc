@@ -12,8 +12,6 @@
 #include <pybind11/functional.h>
 #include <stdint.h>
 
-using cms::alpakatools::initialise;
-
 namespace alpaka_rocm_async {
   void listDevices(const std::string& backend) {
     const char tab = '\t';
@@ -41,47 +39,34 @@ namespace alpaka_rocm_async {
                                         size_t device_id) {
     auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
-    /* initialise<Platform>(); */
-
     // Create the queue
     Queue queue_(dev_acc);
 
     // Running the clustering algorithm //
     switch (Ndim) {
       [[unlikely]] case (1) :
-        /* return run1(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run1(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[likely]] case (2) :
         return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-        break;
       [[likely]] case (3) :
-        /* return run3(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run3(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (4) :
-        /* return run4(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run4(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (5) :
-        /* return run5(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run5(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (6) :
-        /* return run6(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run6(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (7) :
-        /* return run7(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run7(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (8) :
-        /* return run8(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run8(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (9) :
-        /* return run9(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run9(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (10) :
-        /* return run10(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run10(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";
         return {};
-        break;
     }
   }
 
@@ -103,39 +88,28 @@ namespace alpaka_rocm_async {
     // Running the clustering algorithm //
     switch (Ndim) {
       [[unlikely]] case (1) :
-        /* return run1(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run1(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[likely]] case (2) :
         return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-        break;
       [[likely]] case (3) :
-        /* return run3(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run3(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (4) :
-        /* return run4(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run4(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (5) :
-        /* return run5(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run5(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (6) :
-        /* return run6(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run6(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (7) :
-        /* return run7(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run7(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (8) :
-        /* return run8(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run8(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (9) :
-        /* return run9(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run9(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (10) :
-        /* return run10(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run10(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";
         return {};
-        break;
     }
   }
 
@@ -157,39 +131,28 @@ namespace alpaka_rocm_async {
     // Running the clustering algorithm //
     switch (Ndim) {
       [[unlikely]] case (1) :
-        /* return run1(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run1(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[likely]] case (2) :
         return run2(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-        break;
       [[likely]] case (3) :
-        /* return run3(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run3(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (4) :
-        /* return run4(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run4(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (5) :
-        /* return run5(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run5(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (6) :
-        /* return run6(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run6(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (7) :
-        /* return run7(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run7(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (8) :
-        /* return run8(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run8(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (9) :
-        /* return run9(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run9(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (10) :
-        /* return run10(dc, rhoc, outlier, pPBin, coords, weights, queue_); */
-        break;
+        return run10(dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";
         return {};
-        break;
     }
   }
 
