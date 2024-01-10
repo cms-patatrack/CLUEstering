@@ -17,6 +17,7 @@ import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
 import CLUE_CPU_TBB as cpu_tbb
 import CLUE_GPU_CUDA as gpu_cuda
+import CLUE_GPU_HIP as gpu_hip
 
 def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
@@ -496,12 +497,15 @@ class clusterer:
             cpu_serial.listDevices('cpu serial')
             cpu_tbb.listDevices('cpu tbb')
             gpu_cuda.listDevices('gpu cuda')
+            gpu_hip.listDevices('gpu hip')
         elif backend == "cpu serial":
             cpu_serial.listDevices(backend)
         elif backend == "cpu tbb":
             cpu_tbb.listDevices(backend)
         elif backend == "gpu cuda":
             gpu_cuda.listDevices(backend)
+        elif backend == "gpu hip":
+            gpu_hip.listDevices(backend)
         else:
             raise ValueError("Invalid backend. The allowed choices for the"
                              + " backend are: all, cpu serial, cpu tbb and gpu cuda.")
@@ -546,12 +550,17 @@ class clusterer:
                                                     self.kernel, self.clust_data.n_dim, block_size,
                                                     device_id)
         elif backend == "cpu tbb":
-            cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
-                                                    self.clust_data.coords, self.clust_data.weight,
-                                                    self.kernel, self.clust_data.n_dim, block_size,
-                                                    device_id)
+            cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+                                                 self.clust_data.coords, self.clust_data.weight,
+                                                 self.kernel, self.clust_data.n_dim, block_size,
+                                                 device_id)
         elif backend == "gpu cuda":
             cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
+                                                  self.clust_data.coords, self.clust_data.weight,
+                                                  self.kernel, self.clust_data.n_dim, block_size,
+                                                  device_id)
+        elif backend == "gpu hip":
+            cluster_id_is_seed = gpu_hip.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
                                                   self.clust_data.coords, self.clust_data.weight,
                                                   self.kernel, self.clust_data.n_dim, block_size,
                                                   device_id)
@@ -869,9 +878,11 @@ if __name__ == "__main__":
     c.run_clue(backend="cpu serial", verbose=True)
     # c.run_clue(backend="cpu tbb", verbose=True)
     # c.run_clue(backend="gpu cuda", verbose=True)
+    # c.run_clue(backend="gpu hip", verbose=True)
     c.cluster_plotter()
     # c.to_csv('./','sissa_output_tbb.csv')
     c.list_devices('cpu serial')
     c.list_devices('cpu tbb')
     c.list_devices('gpu cuda')
+    c.list_devices('gpu hip')
     c.list_devices()
