@@ -573,28 +573,31 @@ class clusterer:
                                                     device_id)
         elif backend == "cpu tbb":
             if tbb_found:
-                cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
-                                                     self.clust_data.coords, self.clust_data.weight,
-                                                     self.kernel, self.clust_data.n_dim, block_size,
+                cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier,
+                                                     self.ppbin, self.clust_data.coords,
+                                                     self.clust_data.weight, self.kernel,
+                                                     self.clust_data.n_dim, block_size,
                                                      device_id)
             else:
                 print("TBB module not found. Please re-compile the library and try again.")
 
         elif backend == "gpu cuda":
             if cuda_found:
-                cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
-                                                      self.clust_data.coords, self.clust_data.weight,
-                                                      self.kernel, self.clust_data.n_dim, block_size,
+                cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.outlier,
+                                                      self.ppbin, self.clust_data.coords,
+                                                      self.clust_data.weight, self.kernel,
+                                                      self.clust_data.n_dim, block_size,
                                                       device_id)
             else:
                 print("CUDA module not found. Please re-compile the library and try again.")
 
         elif backend == "gpu hip":
             if hip_found:
-                cluster_id_is_seed = gpu_hip.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
-                                                      self.clust_data.coords, self.clust_data.weight,
-                                                      self.kernel, self.clust_data.n_dim, block_size,
-                                                      device_id)
+                cluster_id_is_seed = gpu_hip.mainRun(self.dc_, self.rhoc, self.outlier,
+                                                     self.ppbin, self.clust_data.coords,
+                                                     self.clust_data.weight, self.kernel,
+                                                     self.clust_data.n_dim, block_size,
+                                                     device_id)
             else:
                 print("HIP module not found. Please re-compile the library and try again.")
 
