@@ -3,6 +3,7 @@ Density based clustering algorithm developed at CERN.
 """
 
 from dataclasses import dataclass
+from glob import glob
 import random as rnd
 from math import sqrt
 import time
@@ -15,9 +16,18 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
-import CLUE_CPU_TBB as cpu_tbb
-import CLUE_GPU_CUDA as gpu_cuda
-import CLUE_GPU_HIP as gpu_hip
+tbb_found = False
+if len(glob('./CLUE_CPU_TBB*.so')) != 0:
+    import CLUE_CPU_TBB as cpu_tbb
+    tbb_found = True
+cuda_found = False
+if len(glob('./CLUE_GPU_CUDA*.so')) != 0:
+    import CLUE_GPU_CUDA as gpu_cuda
+    cuda_found = True
+hip_found = False
+if len(glob('./CLUE_GPU_HIP*.so')) != 0:
+    import CLUE_GPU_HIP as gpu_hip
+    hip_found = True
 
 def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
@@ -495,17 +505,29 @@ class clusterer:
 
         if backend == "all":
             cpu_serial.listDevices('cpu serial')
-            cpu_tbb.listDevices('cpu tbb')
-            gpu_cuda.listDevices('gpu cuda')
-            gpu_hip.listDevices('gpu hip')
+            if tbb_found:
+                cpu_tbb.listDevices('cpu tbb')
+            if cuda_found:
+                gpu_cuda.listDevices('gpu cuda')
+            if hip_found:
+                gpu_hip.listDevices('gpu hip')
         elif backend == "cpu serial":
             cpu_serial.listDevices(backend)
         elif backend == "cpu tbb":
-            cpu_tbb.listDevices(backend)
+            if tbb_found:
+                cpu_tbb.listDevices(backend)
+            else:
+                print("TBB module not found. Please re-compile the library and try again.")
         elif backend == "gpu cuda":
-            gpu_cuda.listDevices(backend)
+            if cuda_found:
+                gpu_cuda.listDevices(backend)
+            else:
+                print("CUDA module not found. Please re-compile the library and try again.")
         elif backend == "gpu hip":
-            gpu_hip.listDevices(backend)
+            if hip_found:
+                gpu_hip.listDevices(backend)
+            else:
+                print("HIP module not found. Please re-compile the library and try again.")
         else:
             raise ValueError("Invalid backend. The allowed choices for the"
                              + " backend are: all, cpu serial, cpu tbb and gpu cuda.")
@@ -550,20 +572,32 @@ class clusterer:
                                                     self.kernel, self.clust_data.n_dim, block_size,
                                                     device_id)
         elif backend == "cpu tbb":
-            cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
-                                                 self.clust_data.coords, self.clust_data.weight,
-                                                 self.kernel, self.clust_data.n_dim, block_size,
-                                                 device_id)
+            if tbb_found:
+                cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+                                                     self.clust_data.coords, self.clust_data.weight,
+                                                     self.kernel, self.clust_data.n_dim, block_size,
+                                                     device_id)
+            else:
+                print("TBB module not found. Please re-compile the library and try again.")
+
         elif backend == "gpu cuda":
-            cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
-                                                  self.clust_data.coords, self.clust_data.weight,
-                                                  self.kernel, self.clust_data.n_dim, block_size,
-                                                  device_id)
+            if cuda_found:
+                cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
+                                                      self.clust_data.coords, self.clust_data.weight,
+                                                      self.kernel, self.clust_data.n_dim, block_size,
+                                                      device_id)
+            else:
+                print("CUDA module not found. Please re-compile the library and try again.")
+
         elif backend == "gpu hip":
-            cluster_id_is_seed = gpu_hip.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
-                                                  self.clust_data.coords, self.clust_data.weight,
-                                                  self.kernel, self.clust_data.n_dim, block_size,
-                                                  device_id)
+            if hip_found:
+                cluster_id_is_seed = gpu_hip.mainRun(self.dc_, float(self.rhoc), self.outlier, self.ppbin,
+                                                      self.clust_data.coords, self.clust_data.weight,
+                                                      self.kernel, self.clust_data.n_dim, block_size,
+                                                      device_id)
+            else:
+                print("HIP module not found. Please re-compile the library and try again.")
+
         finish = time.time_ns()
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])

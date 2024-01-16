@@ -61,10 +61,18 @@ all:
 		$(BINDING_FLAGS) binding_kernels.cc -o $(KERNELS_MODULE_NAME)
 	$(CXX) $(CXX_FLAGS) $(TBB_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_TBB_FLAGS) \
 		$(BINDING_FLAGS) binding_cpu_tbb.cc -o $(TBB_MODULE_NAME)
+ifeq ($(call,$(shell which nvcc))$(.SHELLSTATUS),0)
 	$(CUDA) $(CUDA_FLAGS) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_CUDA_FLAGS) \
 		$(CUDA_BINDING_FLAGS) binding_gpu_cuda.cc -o $(CUDA_MODULE_NAME)
-	$(HIP) $(HIP_FLAGS) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_HIP_FLAGS) \
+else
+	echo "No CUDA compiler found, skipping CUDA backend"
+endif
+ifeq ($(call,$(shell which hipcc))$(.SHELLSTATUS),0)
+	$(HIP) $(CXX_FLAGS) $(HIP_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_HIP_FLAGS) \
 		$(BINDING_FLAGS) binding_gpu_hip.cc -o $(HIP_MODULE_NAME)
+else
+	echo "No HIP compiler found, skipping HIP backend"
+endif
 
 serial:
 	$(CXX) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_SERIAL_FLAGS) \
@@ -75,12 +83,20 @@ tbb:
 		$(BINDING_FLAGS) binding_cpu_tbb.cc -o $(TBB_MODULE_NAME)
 
 cuda:
-	$(CUDA) $(CXX_FLAGS) $(CUDA_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_CUDA_FLAGS) \
+ifeq ($(call,$(shell which nvcc))$(.SHELLSTATUS),0)
+	$(CUDA) $(CUDA_FLAGS) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_CUDA_FLAGS) \
 		$(CUDA_BINDING_FLAGS) binding_gpu_cuda.cc -o $(CUDA_MODULE_NAME)
+else
+	echo "No CUDA compiler found, skipping CUDA backend"
+endif
 
 hip:
+ifeq ($(call,$(shell which hipcc))$(.SHELLSTATUS),0)
 	$(HIP) $(CXX_FLAGS) $(HIP_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_HIP_FLAGS) \
 		$(BINDING_FLAGS) binding_gpu_hip.cc -o $(HIP_MODULE_NAME)
+else
+	echo "No HIP compiler found, skipping HIP backend"
+endif
 
 kernel:
 	$(CXX) $(CXX_FLAGS) -I$(BOOST_PATH) -I$(ALPAKA_PATH) $(ALPAKA_SERIAL_FLAGS) \
