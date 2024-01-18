@@ -174,10 +174,10 @@ class clusterer:
         Spatial parameter indicating how large is the region over which the local density of
         each point is calculated.
     rhoc : float
-        Energetic parameter representing the energy threshold value which divides seeds and
+        Parameter representing the density threshold value which divides seeds and
         outliers.
 
-        Points with an energy density lower than rhoc can't be seeds, can only be followers
+        Points with a density lower than rhoc can't be seeds, can only be followers
         or outliers.
     outlier : float
         Multiplicative increment of dc_ for getting the region over which the followers of a
@@ -223,7 +223,7 @@ class clusterer:
         Attributes
         ----------
         input_data : list, np.ndarray
-            The coordinates and energy values of the data points
+            The coordinates and weight values of the data points
 
         Modified attributes
         -------------------
@@ -237,7 +237,7 @@ class clusterer:
 
         if len(input_data) < 2 or len(input_data) > 10:
             raise ValueError("Inadequate data. The data must contain at least one coordinate" +
-                             " and the energy.")
+                             " and the weight.")
         self.clust_data = clustering_data(np.asarray(input_data[:-1]),
                                           np.copy(np.asarray(input_data[:-1])),
                                           np.asarray(input_data[-1]),
@@ -275,7 +275,7 @@ class clusterer:
         Attributes
         ----------
         input_data : dict, pd.DataFrame
-            The coordinates and energy values of the data points
+            The coordinates and weight values of the data points
 
         Modified attributes
         -------------------
@@ -315,7 +315,7 @@ class clusterer:
         # Check that the dimensionality of the dataset is adequate
         if len(df_.columns) < 2:
             raise ValueError("Inadequate data. The data must contain"
-                             + " at least one coordinate and the energy.")
+                             + " at least one coordinate and the weight.")
         if len(coordinate_columns) > 10:
             raise ValueError("Inadequate data. The maximum number of"
                              + " dimensions supported is 10.")
@@ -336,7 +336,7 @@ class clusterer:
         Modified attributes
         -------------------
         clust_data.coords : np.ndarray
-            Array containing the coordinates and energy values of the data points
+            Array containing the coordinates and weight values of the data points
 
         Returns
         -------
@@ -351,7 +351,7 @@ class clusterer:
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray]) -> None:
         """
         Reads the data in input and fills the class members containing the coordinates
-        of the points, the energy weight, the number of dimensions and the number of points.
+        of the points, the weight, the number of dimensions and the number of points.
 
         Parameters
         ----------
