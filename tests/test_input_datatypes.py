@@ -2,12 +2,12 @@
 Testing the algorithm with all the supported input data types
 '''
 
-import CLUEstering as clue
 import numpy as np
 import pandas as pd
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
+import CLUEstering as clue
 
 
 def test_read_array_except():

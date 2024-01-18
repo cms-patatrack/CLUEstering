@@ -4,12 +4,12 @@ many small clusters
 '''
 
 from filecmp import cmp
-import CLUEstering as clue
 import os
 import pandas as pd
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
+import CLUEstering as clue
 
 
 @pytest.fixture

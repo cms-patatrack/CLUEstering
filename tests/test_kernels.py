@@ -2,10 +2,10 @@
 Test of the convolutional kernels
 '''
 
-import CLUEstering as clue
 import pytest
 import sys
 sys.path.insert(1, '../CLUEstering/')
+import CLUEstering as clue
 
 
 def test_flat_kernel_except():

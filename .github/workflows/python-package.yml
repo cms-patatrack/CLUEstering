@@ -31,12 +31,19 @@ jobs:
         python -m pip install flake8 pytest
         python -m pip install scikit-learn 
         python -m pip install pandas
+        python -m pip install matplotlib
+        python -m pip install pybind11
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Run tests of the Python library
+    - name: Install CLUEstering
+      working-directory: ${{github.workspace}}
       run: |
-        ./tests/run_test.sh 
+        pip install .
+    - name: Run tests of the Python library
+      working-directory: ${{github.workspace}}/tests
+      run: |
+        python3 -m pytest ./*.py
