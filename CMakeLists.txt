@@ -46,7 +46,7 @@ set_target_properties(CLUE_Convolutional_Kernels
 # compile cpu serial module
 pybind11_add_module(CLUE_CPU_Serial SHARED
                     ./CLUEstering/alpaka/BindingModules/binding_cpu.cc)
-				  target_link_libraries(CLUE_CPU_Serial PRIVATE ${Boost_LIBRARIES})
+target_link_libraries(CLUE_CPU_Serial PRIVATE ${Boost_LIBRARIES})
 target_include_directories(CLUE_CPU_Serial PRIVATE ${Boost_PATH})
 target_compile_options(
   CLUE_CPU_Serial
@@ -108,5 +108,32 @@ if (CMAKE_CUDA_COMPILER)
 	CLUE_GPU_CUDA PRIVATE --expt-relaxed-constexpr -gencode
                         arch=compute_61,code=[sm_61,compute_61])
   set_target_properties(CLUE_GPU_CUDA PROPERTIES LIBRARY_OUTPUT_DIRECTORY
+												 ../CLUEstering/)
+endif()
+
+# check if HIP is available
+check_language(HIP)
+if (CMAKE_HIP_COMPILER)
+  # enable HIP
+  enable_language(HIP)
+  set(CMAKE_HIP_HOST_COMPILER ${CMAKE_HIP_COMPILER})
+
+  # look for the hip package folder
+  find_package(hip)
+  message("${hip_INCLUDE_DIRS}")
+  message("${CMAKE_HIP_COMPILER}")
+
+  set(CMAKE_CXX_COMPILER "hipcc")
+  pybind11_add_module(CLUE_GPU_HIP SHARED
+					  ./CLUEstering/alpaka/BindingModules/binding_gpu_hip.cc)
+  target_link_libraries(CLUE_Convolutional_Kernels PRIVATE ${Boost_LIBRARIES})
+  target_include_directories(CLUE_Convolutional_Kernels PRIVATE ${Boost_PATH})
+  target_compile_options(CLUE_GPU_HIP PRIVATE -DALPAKA_ACC_GPU_HIP_PRESENT
+											  -DALPAKA_ACC_GPU_HIP_ENABLED
+											  -DALPAKA_ACC_GPU_HIP_ASYNC_BACKEND)
+  target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_INCLUDE_DIRS})
+  target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_INCLUDE_DIRS}/../hiprand/include)
+  target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_INCLUDE_DIRS}/../rocrand/include)
+  set_target_properties(CLUE_GPU_HIP PROPERTIES LIBRARY_OUTPUT_DIRECTORY
 												 ../CLUEstering/)
 endif()
