@@ -74,54 +74,39 @@ if (TBB_FOUND)
 												../CLUEstering/)
 endif()
 
-# compile cpu tbb module
-
-# check if CUDA is available
 include(CheckLanguage)
+# check if CUDA is available
 check_language(CUDA)
 if (CMAKE_CUDA_COMPILER)
-# enable CUDA
-enable_language(CUDA)
-# require cuda to compile the test file
-find_package(CUDA)
+  # enable CUDA
+  enable_language(CUDA)
+  set(CMAKE_CUDA_HOST_COMPILER ${CMAKE_CUDA_COMPILER})
 
-# set the CUDA standard
-if(NOT DEFINED CMAKE_CUDA_STANDARD)
-  set(CMAKE_CUDA_STANDARD 17)
-  set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-endif()
+  # set the CUDA standard
+  if(NOT DEFINED CMAKE_CUDA_STANDARD)
+	set(CMAKE_CUDA_STANDARD 17)
+	set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+  endif()
 
-set(CMAKE_CUDA_FLAGS "-Wall -Wextra -g -O2")
+  set(CMAKE_CUDA_FLAGS "-Wall -Wextra -g -O2")
 
-# compile nvidia gpu async module
-pybind11_add_module(CLUE_GPU_CUDA SHARED
-                    ./CLUEstering/alpaka/BindingModules/binding_gpu_cuda.cu)
-target_link_libraries(CLUE_Convolutional_Kernels PRIVATE ${Boost_LIBRARIES})
-target_include_directories(CLUE_Convolutional_Kernels PRIVATE ./build/_deps/boost-src)
-# set the cuda architectures
-set_target_properties(CLUE_GPU_CUDA PROPERTIES CUDA_ARCHITECTURES
-                                               "50;60;61;62;70")
-# alpaka compilation flags
-target_compile_options(
-  CLUE_GPU_CUDA
-  PRIVATE -DALPAKA_ACC_GPU_CUDA_PRESENT -DALPAKA_ACC_GPU_CUDA_ENABLED
-          -DALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND)
-# nvcc compilation flags
-target_compile_options(
-  CLUE_GPU_CUDA PRIVATE --expt-relaxed-constexpr -gencode
+  # compile nvidia gpu async module
+  pybind11_add_module(CLUE_GPU_CUDA SHARED
+					  ./CLUEstering/alpaka/BindingModules/binding_gpu_cuda.cu)
+  target_link_libraries(CLUE_Convolutional_Kernels PRIVATE ${Boost_LIBRARIES})
+  target_include_directories(CLUE_Convolutional_Kernels PRIVATE ${Boost_PATH})
+  # set the cuda architectures
+  set_target_properties(CLUE_GPU_CUDA PROPERTIES CUDA_ARCHITECTURES
+												 "50;60;61;62;70")
+  # alpaka compilation flags
+  target_compile_options(
+	CLUE_GPU_CUDA
+	PRIVATE -DALPAKA_ACC_GPU_CUDA_PRESENT -DALPAKA_ACC_GPU_CUDA_ENABLED
+			-DALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND)
+  # nvcc compilation flags
+  target_compile_options(
+	CLUE_GPU_CUDA PRIVATE --expt-relaxed-constexpr -gencode
                         arch=compute_61,code=[sm_61,compute_61])
-set_target_properties(CLUE_GPU_CUDA PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-                                               ../CLUEstering/)
+  set_target_properties(CLUE_GPU_CUDA PROPERTIES LIBRARY_OUTPUT_DIRECTORY
+												 ../CLUEstering/)
 endif()
-
-## need to work on the hip module
-# find_package(hip REQUIRED)
-
-# # compile amd gpu module
-# pybind11_add_module(CLUE_GPU_HIP SHARED
-# 					./CLUEstering/alpaka/BindingModules/binding_gpu_hip.cc)
-# target_compile_options(CLUE_GPU_HIP PRIVATE -DALPAKA_ACC_GPU_HIP_PRESENT
-# 										    -DALPAKA_ACC_GPU_HIP_ENABLED
-# 										    -DALPAKA_ACC_GPU_HIP_ASYNC_BACKEND)
-# set_target_properties(CLUE_GPU_HIP PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-#                                                ../CLUEstering/)
