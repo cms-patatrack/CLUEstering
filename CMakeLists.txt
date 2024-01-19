@@ -12,22 +12,29 @@ include_directories(extern/alpaka/include)
 # include pybind11 extern subfolder
 add_subdirectory(extern/pybind11)
 
-include(FetchContent)
-FetchContent_Declare(
-    boost
-    URL https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz
-)
+find_package(Boost 1.75.0)
 
-FetchContent_GetProperties(boost)
-if (NOT boost_POPULATED)
+if (NOT Boost_FOUND)
+  include(FetchContent)
+  FetchContent_Declare(
+	boost
+	URL https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz
+  )
+
+  FetchContent_GetProperties(boost)
+  if (NOT boost_POPULATED)
     FetchContent_Populate(boost)
+  endif()
+  set(Boost_PATH ./build/_deps/boost-src)
+else()
+  set(Boost_PATH ${Boost_INCLUDE_DIRS})
 endif()
 
 # compile convolutional kernel module
 pybind11_add_module(CLUE_Convolutional_Kernels SHARED
                     ./CLUEstering/alpaka/BindingModules/binding_kernels.cc)
 target_link_libraries(CLUE_Convolutional_Kernels PRIVATE ${Boost_LIBRARIES})
-target_include_directories(CLUE_Convolutional_Kernels PRIVATE ./build/_deps/boost-src)
+target_include_directories(CLUE_Convolutional_Kernels PRIVATE ${Boost_PATH})
 target_compile_options(
   CLUE_Convolutional_Kernels
   PRIVATE -DALPAKA_HOST_ONLY -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_PRESENT
@@ -39,8 +46,8 @@ set_target_properties(CLUE_Convolutional_Kernels
 # compile cpu serial module
 pybind11_add_module(CLUE_CPU_Serial SHARED
                     ./CLUEstering/alpaka/BindingModules/binding_cpu.cc)
-target_link_libraries(CLUE_CPU_Serial PRIVATE ${Boost_LIBRARIES})
-target_include_directories(CLUE_CPU_Serial PRIVATE ./build/_deps/boost-src)
+				  target_link_libraries(CLUE_CPU_Serial PRIVATE ${Boost_LIBRARIES})
+target_include_directories(CLUE_CPU_Serial PRIVATE ${Boost_PATH})
 target_compile_options(
   CLUE_CPU_Serial
   PRIVATE -DALPAKA_HOST_ONLY -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_PRESENT
@@ -52,10 +59,11 @@ set_target_properties(CLUE_CPU_Serial PROPERTIES LIBRARY_OUTPUT_DIRECTORY
 find_package(TBB)
 
 if (TBB_FOUND)
+  # compile cpu tbb module
   pybind11_add_module(CLUE_CPU_TBB SHARED
 					  ./CLUEstering/alpaka/BindingModules/binding_cpu_tbb.cc)
-target_link_libraries(CLUE_CPU_TBB PRIVATE ${Boost_LIBRARIES})
-target_include_directories(CLUE_CPU_TBB PRIVATE ./build/_deps/boost-src)
+  target_link_libraries(CLUE_CPU_TBB PRIVATE ${Boost_LIBRARIES})
+  target_include_directories(CLUE_CPU_TBB PRIVATE ${Boost_PATH})
   target_compile_options(
 	CLUE_CPU_TBB
 	PRIVATE -ltbb -DALPAKA_ACC_CPU_B_TBB_T_SEQ_PRESENT
