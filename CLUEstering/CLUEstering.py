@@ -3,6 +3,7 @@ Density based clustering algorithm developed at CERN.
 """
 
 from dataclasses import dataclass
+from glob import glob
 import random as rnd
 from math import sqrt
 import time
@@ -13,10 +14,22 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
-import CLUEsteringCPP as Algo
+import CLUE_Convolutional_Kernels as clue_kernels
+import CLUE_CPU_Serial as cpu_serial
+tbb_found = False
+if len(glob('./CLUE_CPU_TBB*.so')) != 0:
+    import CLUE_CPU_TBB as cpu_tbb
+    tbb_found = True
+cuda_found = False
+if len(glob('./CLUE_GPU_CUDA*.so')) != 0:
+    import CLUE_GPU_CUDA as gpu_cuda
+    cuda_found = True
+hip_found = False
+if len(glob('./CLUE_GPU_HIP*.so')) != 0:
+    import CLUE_GPU_HIP as gpu_hip
+    hip_found = True
 
-
-def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
+def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
     """
     Returns a dataframe containing randomly generated 2-dimensional or 3-dimensional blobs.
@@ -46,8 +59,6 @@ def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
         DataFrame containing n_blobs gaussian blobs.
     """
 
-    if x_max < 0. or y_max < 0.:
-        raise ValueError('Wrong parameter value. x_max and y_max must be positive.')
     if n_blobs < 0:
         raise ValueError('Wrong parameter value. The number of blobs must be positive.')
     if sigma < 0.:
@@ -66,14 +77,15 @@ def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
         data['x1'] = blob_data.T[1]
         data['weight'] = np.full(shape=len(blob_data.T[0]), fill_value=1)
 
+
         return pd.DataFrame(data)
     if n_dim == 3:
         data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
         sqrt_samples = int(sqrt(n_samples))
-        z_values = np.random.normal(mean, sigma, sqrt_samples)
+        z_values = np.random.normal(mean, sigma,sqrt_samples)
         centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
 
-        for value in z_values:  # for every z value, a layer is generated.
+        for value in z_values: # for every z value, a layer is generated.
             blob_data = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))[0]
             data['x0'] = np.concatenate([data['x0'], blob_data.T[0]])
             data['x1'] = np.concatenate([data['x1'], blob_data.T[1]])
@@ -83,7 +95,6 @@ def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
                                                                      fill_value=1)])
 
         return pd.DataFrame(data)
-
 
 @dataclass()
 class clustering_data:
@@ -106,13 +117,11 @@ class clustering_data:
         Number of points in the clustering data.
     """
 
-    coords: np.ndarray
-    original_coords: np.ndarray
-    weight: np.ndarray
-    domain_ranges: list
-    n_dim: int
-    n_points: int
-
+    coords : np.ndarray
+    original_coords : np.ndarray
+    weight : np.ndarray
+    n_dim : int
+    n_points : int
 
 @dataclass(eq=False)
 class cluster_properties:
@@ -136,12 +145,12 @@ class cluster_properties:
         Dataframe containing is_seed and cluster_ids as columns.
     """
 
-    n_clusters: int
-    cluster_ids: np.ndarray
-    is_seed: np.ndarray
-    cluster_points: np.ndarray
-    points_per_cluster: np.ndarray
-    output_df: pd.DataFrame
+    n_clusters : int
+    cluster_ids : np.ndarray
+    is_seed : np.ndarray
+    cluster_points : np.ndarray
+    points_per_cluster : np.ndarray
+    output_df : pd.DataFrame
 
     def __eq__(self, other):
         if self.n_clusters != other.n_clusters:
@@ -165,10 +174,10 @@ class clusterer:
         Spatial parameter indicating how large is the region over which the local density of
         each point is calculated.
     rhoc : float
-        Energetic parameter representing the energy threshold value which divides seeds and
+        Parameter representing the density threshold value which divides seeds and
         outliers.
 
-        Points with an energy density lower than rhoc can't be seeds, can only be followers
+        Points with a density lower than rhoc can't be seeds, can only be followers
         or outliers.
     outlier : float
         Multiplicative increment of dc_ for getting the region over which the followers of a
@@ -196,25 +205,25 @@ class clusterer:
         self.ppbin = ppbin
 
         # Initialize attributes
-        # Data containers
+        ## Data containers
         self.clust_data = None
         self.scaler = StandardScaler()
 
-        # Kernel for calculation of local density
-        self.kernel = Algo.flatKernel(0.5)
+        ## Kernel for calculation of local density
+        self.kernel = clue_kernels.FlatKernel(0.5)
 
-        # Output attributes
+        ## Output attributes
         self.clust_prop = None
         self.elapsed_time = 0.
 
-    def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
+    def _read_array(self, input_data: Union[list,np.ndarray]) -> None:
         """
         Reads data provided with lists or np.ndarrays
 
         Attributes
         ----------
         input_data : list, np.ndarray
-            The coordinates and energy values of the data points
+            The coordinates and weight values of the data points
 
         Modified attributes
         -------------------
@@ -228,15 +237,14 @@ class clusterer:
 
         if len(input_data) < 2 or len(input_data) > 10:
             raise ValueError("Inadequate data. The data must contain at least one coordinate" +
-                             " and the energy.")
+                             " and the weight.")
         self.clust_data = clustering_data(np.asarray(input_data[:-1]),
                                           np.copy(np.asarray(input_data[:-1])),
                                           np.asarray(input_data[-1]),
-                                          Algo.domain_t(),
                                           len(input_data[:-1]),
                                           len(input_data[-1]))
 
-    def _read_string(self, input_data: str) -> Union[pd.DataFrame, None]:
+    def _read_string(self, input_data: str) -> Union[pd.DataFrame,None]:
         """
         Reads data provided by passing a string containing the path to a csv file
 
@@ -255,19 +263,19 @@ class clusterer:
             Dataframe containing the input data
         """
 
-        if input_data[-3:] != 'csv':
+        if not input_data.endswith('.csv'):
             raise ValueError('Wrong type of file. The file is not a csv file.')
         df_ = pd.read_csv(input_data)
         return df_
 
-    def _read_dict_df(self, input_data: Union[dict, pd.DataFrame]) -> pd.DataFrame:
+    def _read_dict_df(self, input_data: Union[dict,pd.DataFrame]) -> pd.DataFrame:
         """
         Reads data provided using dictionaries or pandas dataframes
 
         Attributes
         ----------
         input_data : dict, pd.DataFrame
-            The coordinates and energy values of the data points
+            The coordinates and weight values of the data points
 
         Modified attributes
         -------------------
@@ -307,20 +315,17 @@ class clusterer:
         # Check that the dimensionality of the dataset is adequate
         if len(df_.columns) < 2:
             raise ValueError("Inadequate data. The data must contain"
-                             + " at least one coordinate and the energy.")
+                             + " at least one coordinate and the weight.")
         if len(coordinate_columns) > 10:
             raise ValueError("Inadequate data. The maximum number of"
                              + " dimensions supported is 10.")
         n_dim = len(coordinate_columns)
         n_points = len(df_.index)
-        coords = np.zeros(shape=(n_dim, n_points))
-        for dim in range(n_dim):
-            coords[dim] = np.array(df_.iloc[:, dim])
+        coords = df_.iloc[:, 0:-1].to_numpy()
 
         self.clust_data = clustering_data(coords,
                                           np.copy(coords),
                                           np.asarray(df_['weight']),
-                                          Algo.domain_t(),
                                           n_dim,
                                           n_points)
 
@@ -331,7 +336,7 @@ class clusterer:
         Modified attributes
         -------------------
         clust_data.coords : np.ndarray
-            Array containing the coordinates and energy values of the data points
+            Array containing the coordinates and weight values of the data points
 
         Returns
         -------
@@ -339,16 +344,14 @@ class clusterer:
         """
 
         for dim in range(self.clust_data.n_dim):
-            self.clust_data.coords[dim] = \
-                self.scaler.fit_transform(self.clust_data.coords[dim].reshape(-1, 1)).reshape(1, -1)[0]
+            self.clust_data.coords.T[dim] = \
+            self.scaler.fit_transform(self.clust_data.coords.T[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
     def read_data(self,
-                  input_data: Union[pd.DataFrame, str, dict, list, np.ndarray],
-                  rescale: bool = True,
-                  **kwargs: tuple) -> None:
+                  input_data: Union[pd.DataFrame,str,dict,list,np.ndarray]) -> None:
         """
         Reads the data in input and fills the class members containing the coordinates
-        of the points, the energy weight, the number of dimensions and the number of points.
+        of the points, the weight, the number of dimensions and the number of points.
 
         Parameters
         ----------
@@ -362,8 +365,6 @@ class clusterer:
         input_data : array_like
             The list or numpy array should contain a list of lists for the
             coordinates and a list for the weight.
-        restale : bool
-            Whether or not ot rescale the input data using a StandardScaler
         kwargs : tuples
             Tuples corresponding to the domain of any periodic variables. The
             keyword should be the keyword of the corrispoding variable.
@@ -402,11 +403,7 @@ class clusterer:
             self._handle_dataframe(df)
 
         # Rescale the coordinates with a standard scaler
-        if rescale:
-            self._rescale()
-
-        # Construct the domains of all the coordinates
-        self.change_domains(**kwargs)
+        self._rescale()
 
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
         """
@@ -436,43 +433,11 @@ class clusterer:
             self.clust_data.coords[int(coord[1])] = \
                 self.scaler.fit_transform(
                     self.clust_data.coords[int(coord[1])].reshape(-1, 1)
-            ).reshape(1, -1)[0]
-
-    def change_domains(self, **kwargs: tuple) -> None:
-        """
-        Change the domain range of the coordinates
-
-        This method allows to change the domain of periodic coordinates by passing the domain of
-        each of these coordinates as a tuple, with the argument keyword in the form 'x*'.
-
-        Parameters
-        ----------
-        kwargs : tuples
-            Tuples corresponding to the domain of any periodic variables. The
-            keyword should be the keyword of the corrispoding variable.
-
-        Modified attributes
-        -------------------
-        domain_ranges : list of Algo.domain_t
-            List of the domains for each coordinate.
-
-        Returns
-        -------
-        None
-        """
-
-        # Construct the domains of all the coordinates
-        empty_domain = Algo.domain_t()
-        self.clust_data.domain_ranges = [empty_domain for _ in range(self.clust_data.n_dim)]
-
-        for coord, domain in kwargs.items():
-            self.clust_data.domain_ranges[int(coord[1])] = \
-                Algo.domain_t(self.scaler.transform([[domain[0]]])[0][0],
-                              self.scaler.transform([[domain[1]]])[0][0])
+                ).reshape(1, -1)[0]
 
     def choose_kernel(self,
                       choice: str,
-                      parameters: Union[list, None] = None,
+                      parameters: Union[list,None] = None,
                       function: types.FunctionType = lambda: 0) -> None:
         """
         Changes the kernel used in the calculation of local density. The default kernel
@@ -503,27 +468,75 @@ class clusterer:
             if len(parameters) != 1:
                 raise ValueError("Wrong number of parameters. The flat kernel"
                                  + " requires 1 parameter.")
-            self.kernel = Algo.flatKernel(parameters[0])
+            self.kernel = CLUE_Convolutional_Kernels.FlatKernel(parameters[0])
         elif choice == "exp":
             if len(parameters) != 2:
                 raise ValueError("Wrong number of parameters. The exponential"
                                  + " kernel requires 2 parameters.")
-            self.kernel = Algo.exponentialKernel(parameters[0], parameters[1])
+            self.kernel = CLUE_Convolutional_Kernels.ExponentialKernel(parameters[0], parameters[1])
         elif choice == "gaus":
             if len(parameters) != 3:
                 raise ValueError("Wrong number of parameters. The gaussian" +
                                  " kernel requires 3 parameters.")
-            self.kernel = Algo.gaussianKernel(parameters[0], parameters[1], parameters[2])
+            self.kernel = CLUE_Convolutional_Kernels.GaussinKernel(parameters[0], parameters[1], parameters[2])
         elif choice == "custom":
             if len(parameters) != 0:
                 raise ValueError("Wrong number of parameters. Custom kernels"
                                  + " requires 0 parameters.")
-            self.kernel = Algo.customKernel(function)
         else:
             raise ValueError("Invalid kernel. The allowed choices for the"
                              + " kernels are: flat, exp, gaus and custom.")
 
-    def run_clue(self, verbose: bool = False) -> None:
+    def list_devices(self, backend: str = "all") -> None:
+        """
+        Lists the devices available for the chosen backend.
+
+        Parameters
+        ----------
+        backend : string, optional
+            The backend for which the devices are listed. The allowed values are
+            'all', 'cpu serial', 'cpu tbb' and 'gpu cuda'.
+            The default value is 'all'.
+
+        Raises
+        ------
+        ValueError : If the backend is not valid.
+        """
+
+        if backend == "all":
+            cpu_serial.listDevices('cpu serial')
+            if tbb_found:
+                cpu_tbb.listDevices('cpu tbb')
+            if cuda_found:
+                gpu_cuda.listDevices('gpu cuda')
+            if hip_found:
+                gpu_hip.listDevices('gpu hip')
+        elif backend == "cpu serial":
+            cpu_serial.listDevices(backend)
+        elif backend == "cpu tbb":
+            if tbb_found:
+                cpu_tbb.listDevices(backend)
+            else:
+                print("TBB module not found. Please re-compile the library and try again.")
+        elif backend == "gpu cuda":
+            if cuda_found:
+                gpu_cuda.listDevices(backend)
+            else:
+                print("CUDA module not found. Please re-compile the library and try again.")
+        elif backend == "gpu hip":
+            if hip_found:
+                gpu_hip.listDevices(backend)
+            else:
+                print("HIP module not found. Please re-compile the library and try again.")
+        else:
+            raise ValueError("Invalid backend. The allowed choices for the"
+                             + " backend are: all, cpu serial, cpu tbb and gpu cuda.")
+
+    def run_clue(self,
+                 backend: str = "cpu serial",
+                 block_size: int = 1024,
+                 device_id: int = 0,
+                 verbose: bool = False) -> None:
         """
         Executes the CLUE clustering algorithm.
 
@@ -553,10 +566,41 @@ class clusterer:
         """
 
         start = time.time_ns()
-        cluster_id_is_seed = Algo.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
-                                          self.clust_data.domain_ranges, self.kernel,
-                                          self.clust_data.coords, self.clust_data.weight,
-                                          self.clust_data.n_dim)
+        if backend == "cpu serial":
+            cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+                                                    self.clust_data.coords, self.clust_data.weight,
+                                                    self.kernel, self.clust_data.n_dim, block_size,
+                                                    device_id)
+        elif backend == "cpu tbb":
+            if tbb_found:
+                cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier,
+                                                     self.ppbin, self.clust_data.coords,
+                                                     self.clust_data.weight, self.kernel,
+                                                     self.clust_data.n_dim, block_size,
+                                                     device_id)
+            else:
+                print("TBB module not found. Please re-compile the library and try again.")
+
+        elif backend == "gpu cuda":
+            if cuda_found:
+                cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.outlier,
+                                                      self.ppbin, self.clust_data.coords,
+                                                      self.clust_data.weight, self.kernel,
+                                                      self.clust_data.n_dim, block_size,
+                                                      device_id)
+            else:
+                print("CUDA module not found. Please re-compile the library and try again.")
+
+        elif backend == "gpu hip":
+            if hip_found:
+                cluster_id_is_seed = gpu_hip.mainRun(self.dc_, self.rhoc, self.outlier,
+                                                     self.ppbin, self.clust_data.coords,
+                                                     self.clust_data.weight, self.kernel,
+                                                     self.clust_data.n_dim, block_size,
+                                                     device_id)
+            else:
+                print("HIP module not found. Please re-compile the library and try again.")
+
         finish = time.time_ns()
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])
@@ -578,12 +622,12 @@ class clusterer:
                                              points_per_cluster,
                                              output_df)
 
-        self.elapsed_time = (finish - start) / (10**6)
+        self.elapsed_time = (finish - start)/(10**6)
         if verbose:
-            print(f'CLUE run in {self.elapsed_time} ms')
+            print(f'CLUE executed in {self.elapsed_time} ms')
             print(f'Number of clusters found: {self.clust_prop.n_clusters}')
 
-    def input_plotter(self, plot_title: str = '', title_size: float = 16,
+    def input_plotter(self, plot_title: str='', title_size: float = 16,
                       x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
                       label_size: float = 16, pt_size: float = 1, pt_colour: str = 'b',
                       grid: bool = True, grid_style: str = '--', grid_size: float = 0.2,
@@ -668,10 +712,10 @@ class clusterer:
             fig = plt.figure()
             ax_ = fig.add_subplot(projection='3d')
             ax_.scatter(cartesian_coords[0],
-                        cartesian_coords[1],
-                        cartesian_coords[2],
-                        s=pt_size,
-                        color=pt_colour)
+                       cartesian_coords[1],
+                       cartesian_coords[2],
+                       s=pt_size,
+                       color=pt_colour)
 
             # Customization of the plot title
             ax_.set_title(plot_title, fontsize=title_size)
@@ -753,7 +797,7 @@ class clusterer:
         """
 
         # Convert the used coordinates to cartesian coordiantes
-        cartesian_coords = np.copy(self.clust_data.original_coords)
+        cartesian_coords = np.copy(self.clust_data.original_coords.T)
         for coord, func in kwargs.items():
             cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords)
 
@@ -766,12 +810,12 @@ class clusterer:
 
             max_clusterid = max(df_["cluster_ids"])
 
-            df_out = df_[df_.cluster_ids == -1]  # Outliers
+            df_out = df_[df_.cluster_ids == -1] # Outliers
             plt.scatter(df_out.x0, df_out.x1, s=outl_size, marker='x', color='0.4')
-            for i in range(0, max_clusterid + 1):
-                dfi = df_[df_.cluster_ids == i]  # ith cluster
+            for i in range(0, max_clusterid+1):
+                dfi = df_[df_.cluster_ids == i] # ith cluster
                 plt.scatter(dfi.x0, dfi.x1, s=pt_size, marker='.')
-            df_seed = df_[df_.isSeed == 1]  # Only Seeds
+            df_seed = df_[df_.isSeed == 1] # Only Seeds
             plt.scatter(df_seed.x0, df_seed.x1, s=seed_size, color='r', marker='*')
 
             # Customization of the plot title
@@ -805,13 +849,13 @@ class clusterer:
             ax_ = fig.add_subplot(projection='3d')
 
             df_out = df_[df_.cluster_ids == -1]
-            ax_.scatter(df_out.x0, df_out.x1, df_out.x2, s=outl_size, color='grey', marker='x')
-            for i in range(0, max_clusterid + 1):
+            ax_.scatter(df_out.x0, df_out.x1, df_out.x2, s=outl_size, color = 'grey', marker = 'x')
+            for i in range(0, max_clusterid+1):
                 dfi = df_[df_.cluster_ids == i]
-                ax_.scatter(dfi.x0, dfi.x1, dfi.x2, s=pt_size, marker='.')
+                ax_.scatter(dfi.x0, dfi.x1, dfi.x2, s=pt_size, marker = '.')
 
-            df_seed = df_[df_.isSeed == 1]  # Only Seeds
-            ax_.scatter(df_seed.x0, df_seed.x1, df_seed.x2, s=seed_size, color='r', marker='*')
+            df_seed = df_[df_.isSeed == 1] # Only Seeds
+            ax_.scatter(df_seed.x0, df_seed.x1, df_seed.x2, s=seed_size, color = 'r', marker = '*')
 
             # Customization of the plot title
             ax_.set_title(plot_title, fontsize=title_size)
@@ -858,9 +902,24 @@ class clusterer:
         out_path = output_folder + file_name
         data = {}
         for i in range(self.clust_data.n_dim):
-            data['x' + str(i)] = self.clust_data.coords[i]
+            data['x' + str(i)] = self.clust_data.coords.T[i]
         data['cluster_ids'] = self.clust_prop.cluster_ids
         data['is_seed'] = self.clust_prop.is_seed
 
         df_ = pd.DataFrame(data)
-        df_.to_csv(out_path, index=False)
+        df_.to_csv(out_path,index=False)
+
+if __name__ == "__main__":
+    c = clusterer(0.4,5,1.)
+    c.read_data('./sissa.csv')
+    c.run_clue(backend="cpu serial", verbose=True)
+    # c.run_clue(backend="cpu tbb", verbose=True)
+    # c.run_clue(backend="gpu cuda", verbose=True)
+    # c.run_clue(backend="gpu hip", verbose=True)
+    c.cluster_plotter()
+    # c.to_csv('./','sissa_output_tbb.csv')
+    c.list_devices('cpu serial')
+    c.list_devices('cpu tbb')
+    c.list_devices('gpu cuda')
+    c.list_devices('gpu hip')
+    c.list_devices()
