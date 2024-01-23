@@ -21,7 +21,7 @@ setup(
 	 long_description_content_type='text/markdown',
 	 packages=find_packages(),
 	 install_requires=['scikit-learn','numpy','matplotlib','pandas'],
-     package_data={'': ['*.so']},
+     package_data={'': ['lib/*.so']},
 	 keywords=['Python','Clustering','Binding'],
 	 python_requires='>=3.7',
 	 classifiers=[

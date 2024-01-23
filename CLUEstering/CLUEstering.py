@@ -14,18 +14,22 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
+from os.path import dirname, join
+path = dirname(__file__)
+import sys
+sys.path.insert(1, join(path, 'lib'))
 import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
 tbb_found = False
-if len(glob('./CLUE_CPU_TBB*.so')) != 0:
+if len(glob(join(path, 'lib/CLUE_CPU_TBB*.so'))) != 0:
     import CLUE_CPU_TBB as cpu_tbb
     tbb_found = True
 cuda_found = False
-if len(glob('./CLUE_GPU_CUDA*.so')) != 0:
+if len(glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))) != 0:
     import CLUE_GPU_CUDA as gpu_cuda
     cuda_found = True
 hip_found = False
-if len(glob('./CLUE_GPU_HIP*.so')) != 0:
+if len(glob(join(path, 'lib/CLUE_GPU_HIP*.so'))) != 0:
     import CLUE_GPU_HIP as gpu_hip
     hip_found = True
 
