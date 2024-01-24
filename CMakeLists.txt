@@ -90,9 +90,12 @@ if(CMAKE_CUDA_COMPILER)
 
   set(CMAKE_CUDA_FLAGS "-Wall -Wextra -g -O2")
 
-  # compile nvidia gpu async module
+  # compile nvidia gpu async module set(CMAKE_CXX_COMPILER "/opt/cuda/bin/nvcc")
+  set_source_files_properties(
+    ./CLUEstering/alpaka/BindingModules/binding_gpu_cuda.cc PROPERTIES LANGUAGE
+                                                                       CUDA)
   pybind11_add_module(CLUE_GPU_CUDA SHARED
-                      ./CLUEstering/alpaka/BindingModules/binding_gpu_cuda.cu)
+                      ./CLUEstering/alpaka/BindingModules/binding_gpu_cuda.cc)
   target_link_libraries(CLUE_Convolutional_Kernels PRIVATE ${Boost_LIBRARIES})
   target_include_directories(CLUE_Convolutional_Kernels PRIVATE ${Boost_PATH})
   # set the cuda architectures
