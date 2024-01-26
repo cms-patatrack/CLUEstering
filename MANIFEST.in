@@ -1,1 +1,6 @@
-graft CLUEstering/include
+graft CLUEstering/alpaka/
+graft extern/
+include CMakeLists.txt
+
+exclude tests/*.py
+exclude build/*

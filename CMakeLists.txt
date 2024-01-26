@@ -46,8 +46,9 @@ target_compile_options(
           -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
           -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND)
 # set output directory
-set_target_properties(CLUE_Convolutional_Kernels
-                      PROPERTIES LIBRARY_OUTPUT_DIRECTORY ../CLUEstering/lib/)
+set_target_properties(
+  CLUE_Convolutional_Kernels PROPERTIES LIBRARY_OUTPUT_DIRECTORY
+                                        ./lib/CLUEstering/lib/)
 
 # CPU Serial compile cpu serial module
 pybind11_add_module(CLUE_CPU_Serial SHARED
@@ -63,7 +64,7 @@ target_compile_options(
           -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND)
 # set output directory
 set_target_properties(CLUE_CPU_Serial PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-                                                 ../CLUEstering/lib/)
+                                                 ./lib/CLUEstering/lib/)
 
 find_package(TBB)
 
@@ -81,7 +82,7 @@ if(TBB_FOUND)
             -DALPAKA_ACC_CPU_B_TBB_T_SEQ_ASYNC_BACKEND)
   target_link_libraries(CLUE_CPU_TBB PRIVATE TBB::tbb)
   set_target_properties(CLUE_CPU_TBB PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-                                                ../CLUEstering/lib/)
+                                                ./lib/CLUEstering/lib/)
 endif()
 
 # check if CUDA is available
@@ -126,7 +127,7 @@ if(CMAKE_CUDA_COMPILER)
                           arch=compute_61,code=[sm_61,compute_61])
   # set output directory
   set_target_properties(CLUE_GPU_CUDA PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-                                                 ../CLUEstering/lib/)
+                                                 ./lib/CLUEstering/lib/)
 endif()
 
 # GPU HIP check if HIP is available
@@ -159,5 +160,5 @@ if(CMAKE_HIP_COMPILER)
   target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_BASE}/rocrand/include)
   # set output directory
   set_target_properties(CLUE_GPU_HIP PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-                                                ../CLUEstering/lib/)
+                                                ./lib/CLUEstering/lib/)
 endif()
