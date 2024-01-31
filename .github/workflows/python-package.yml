@@ -19,6 +19,8 @@ jobs:
     steps:
     # Checks out the code in the repository
     - uses: actions/checkout@v3
+      with: 
+        submodules: true
     # Sets up Python on the machine with the right version
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
