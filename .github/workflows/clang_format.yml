@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         path:
-          - 'CLUEstering/include'
+          - 'CLUEstering/alpaka'
     steps:
     - uses: actions/checkout@v3
     - name: Run clang-format style check
