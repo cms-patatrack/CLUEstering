@@ -19,7 +19,9 @@ namespace cms::alpakatools {
   /*
    * If the first argument is not a multiple of the second argument, round it up to the next multiple.
    */
-  inline constexpr Idx round_up_by(Idx value, Idx divisor) { return (value + divisor - 1) / divisor * divisor; }
+  inline constexpr Idx round_up_by(Idx value, Idx divisor) {
+    return (value + divisor - 1) / divisor * divisor;
+  }
 
   /*
    * Return the integer division of the first argument by the second argument, rounded up to the next integer.
@@ -62,8 +64,9 @@ namespace cms::alpakatools {
    * Creates the accelerator-dependent workdiv for N-dimensional operations.
    */
   template <typename TAcc>
-  inline WorkDiv<alpaka::Dim<TAcc>> make_workdiv(const Vec<alpaka::Dim<TAcc>>& blocksPerGrid,
-                                                 const Vec<alpaka::Dim<TAcc>>& threadsPerBlockOrElementsPerThread) {
+  inline WorkDiv<alpaka::Dim<TAcc>> make_workdiv(
+      const Vec<alpaka::Dim<TAcc>>& blocksPerGrid,
+      const Vec<alpaka::Dim<TAcc>>& threadsPerBlockOrElementsPerThread) {
     using Dim = alpaka::Dim<TAcc>;
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
     if constexpr (std::is_same_v<TAcc, alpaka::AccGpuCudaRt<Dim, Idx>>) {
@@ -124,14 +127,16 @@ namespace cms::alpakatools {
    * Truncated by the max number of elements of interest.
    */
   template <typename TAcc>
-  ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_block_truncated(const TAcc& acc,
-                                                                           const Idx maxNumberOfElements,
-                                                                           const Idx elementIdxShift,
-                                                                           const unsigned int dimIndex = 0u) {
+  ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_block_truncated(
+      const TAcc& acc,
+      const Idx maxNumberOfElements,
+      const Idx elementIdxShift,
+      const unsigned int dimIndex = 0u) {
     // Check dimension
     //static_assert(alpaka::Dim<TAcc>::value == Dim1D::value,
     //              "Accelerator and maxNumberOfElements need to have same dimension.");
-    auto [firstElementIdxLocal, endElementIdxLocal] = element_index_range_in_block(acc, elementIdxShift, dimIndex);
+    auto [firstElementIdxLocal, endElementIdxLocal] =
+        element_index_range_in_block(acc, elementIdxShift, dimIndex);
 
     // Truncate
     endElementIdxLocal = std::min(endElementIdxLocal, maxNumberOfElements);
@@ -171,7 +176,8 @@ namespace cms::alpakatools {
     // Check dimension
     //static_assert(dimIndex <= alpaka::Dim<TAcc>::value,
     //"Accelerator and maxNumberOfElements need to have same dimension.");
-    auto [firstElementIdxGlobal, endElementIdxGlobal] = element_index_range_in_grid(acc, elementIdxShift, dimIndex);
+    auto [firstElementIdxGlobal, endElementIdxGlobal] =
+        element_index_range_in_grid(acc, elementIdxShift, dimIndex);
 
     // Truncate
     endElementIdxGlobal = std::min(endElementIdxGlobal, maxNumberOfElements);
@@ -185,9 +191,8 @@ namespace cms::alpakatools {
    * Truncated by the max number of elements of interest.
    */
   template <typename TAcc>
-  ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_grid_truncated(const TAcc& acc,
-                                                                          const Idx maxNumberOfElements,
-                                                                          const unsigned int dimIndex = 0u) {
+  ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_grid_truncated(
+      const TAcc& acc, const Idx maxNumberOfElements, const unsigned int dimIndex = 0u) {
     Idx elementIdxShift = 0u;
     return element_index_range_in_grid_truncated(acc, maxNumberOfElements, elementIdxShift, dimIndex);
   }

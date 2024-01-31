@@ -56,7 +56,7 @@ namespace cms::alpakatools {
 
     size_t const index = getDeviceIndex(device);
 
-	std::vector<TDevice> devs = alpaka::getDevs<alpaka::Pltf<TDevice>>();
+    std::vector<TDevice> devs = alpaka::getDevs<alpaka::Pltf<TDevice>>();
 
     assert(index < cms::alpakatools::enumerate<alpaka::Pltf<TDevice>>().size());
 
