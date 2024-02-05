@@ -8,9 +8,9 @@ import os
 import pandas as pd
 import pytest
 import sys
+from check_result import check_result
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
-
 
 @pytest.fixture
 def sissa():
@@ -20,7 +20,7 @@ def sissa():
     return pd.read_csv("./test_datasets/sissa.csv")
 
 
-def test_circles_clustering(sissa):
+def test_sissa_clustering(sissa):
     '''
     Checks that the output of the clustering is the one given by the truth dataset
     '''
@@ -34,5 +34,11 @@ def test_circles_clustering(sissa):
     c.run_clue()
     c.to_csv('./', 'sissa_output.csv')
 
-    assert cmp('./sissa_output.csv',
-               './test_datasets/truth_files/sissa_1000_truth.csv')
+    check_result('./sissa_output.csv',
+                 './test_datasets/truth_files/sissa_1000_truth.csv')
+
+if __name__ == "__main__":
+    c = clue.clusterer(0.8, 5, 1.5)
+    c.read_data("./test_datasets/sissa.csv")
+    c.run_clue()
+    c.cluster_plotter()

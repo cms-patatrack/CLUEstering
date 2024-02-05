@@ -4,14 +4,14 @@ round clusters
 '''
 
 from filecmp import cmp
-import numpy as np
 import os
 import pandas as pd
 import pytest
 import sys
+sys.path.insert(1, '.')
+from check_result import check_result
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
-
 
 @pytest.fixture
 def blobs():
@@ -35,5 +35,11 @@ def test_blobs_clustering(blobs):
     c.run_clue()
     c.to_csv('./', 'blobs_output.csv')
 
-    assert cmp('./blobs_output.csv',
-               './test_datasets/truth_files/blobs_truth.csv')
+    check_result('./blobs_output.csv',
+                 './test_datasets/truth_files/blobs_truth.csv')
+
+if __name__ == "__main__":
+    c = clue.clusterer(0.8, 5, 1.5)
+    c.read_data("./test_datasets/blob.csv")
+    c.run_clue()
+    c.cluster_plotter()
