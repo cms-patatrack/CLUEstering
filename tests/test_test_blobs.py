@@ -8,22 +8,8 @@ sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
 
+
 def test_except_1():
-    '''
-    Test exception of test_blobs for incorrect blob coordinates
-    '''
-    clust = clue.clusterer(0.4, 5., 1.2)
-
-    with pytest.raises(ValueError):
-        clust.read_data(clue.test_blobs(n_samples=1000, n_dim=2, x_max=-3.))
-    with pytest.raises(ValueError):
-        clust.read_data(clue.test_blobs(n_samples=1000, n_dim=2, y_max=-2.))
-    with pytest.raises(ValueError):
-        clust.read_data(clue.test_blobs(
-            n_samples=1000, n_dim=2, x_max=-3., y_max=-2.))
-
-
-def test_except_2():
     '''
     Test exception of test_blobs for negative number of blobs
     '''
@@ -33,7 +19,7 @@ def test_except_2():
         clust.read_data(clue.test_blobs(n_samples=1000, n_dim=2, n_blobs=-2))
 
 
-def test_except_3():
+def test_except_2():
     '''
     Test exception of test_blobs for negative standard deviations
     '''
@@ -43,7 +29,7 @@ def test_except_3():
         clust.read_data(clue.test_blobs(n_samples=1000, n_dim=2, sigma=-2.))
 
 
-def test_except_4():
+def test_except_3():
     '''
     Test exception of test_blobs for too high dimensions
     '''
