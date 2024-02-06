@@ -26,10 +26,11 @@ jobs:
     - name: Install dependencies
       run: |
         conda env update --file ${{github.workspace}}/.env/test_env.yml --name base
-    - name: Install locally
+    - name: Compile CLUEstering modules
       working-directory: ${{github.workspace}}
       run: |
-        pip install .
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build
+        cmake -B build
     - name: Test with pytest
       working-directory: ${{github.workspace}}/tests
       run: |
