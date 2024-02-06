@@ -236,14 +236,26 @@ class clusterer:
         None
         """
 
-        if len(input_data) < 2 or len(input_data) > 10:
-            raise ValueError("Inadequate data. The data must contain at least one coordinate" +
-                             " and the weight.")
-        self.clust_data = clustering_data(np.asarray(input_data[:-1]),
-                                          np.copy(np.asarray(input_data[:-1])),
-                                          np.asarray(input_data[-1]),
-                                          len(input_data[:-1]),
-                                          len(input_data[-1]))
+        # [[x0, x1, x2, ...], [y0, y1, y2, ...], ... , [weights]]
+        if isinstance(input_data[0][0], (int, float)):
+            if len(input_data) < 2 or len(input_data) > 11:
+                raise ValueError("Inadequate data. The supported dimensions are between" +
+                                 "1 and 10.")
+            self.clust_data = clustering_data(np.asarray(input_data[:-1]).T,
+                                              np.copy(np.asarray(input_data[:-1]).T),
+                                              np.asarray(input_data[-1]),
+                                              len(input_data[:-1]),
+                                              len(input_data[-1]))
+        # [[[x0, y0, z0, ...], [x1, y1, z1, ...], ...], [weights]]
+        else:
+            if len(input_data) != 2:
+                raise ValueError("Inadequate data. The data must contain a weight value" +
+                                 "for each point.")
+            self.clust_data = clustering_data(np.asarray(input_data[0]),
+                                              np.copy(np.asarray(input_data[0])),
+                                              np.asarray(input_data[-1]),
+                                              len(input_data[0][0]),
+                                              len(input_data[-1]))
 
     def _read_string(self, input_data: str) -> Union[pd.DataFrame,None]:
         """
