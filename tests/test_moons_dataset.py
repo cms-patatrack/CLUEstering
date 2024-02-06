@@ -3,11 +3,10 @@ Testing the algorithm on the circle dataset, a dataset where points are distribu
 two moon shaped clusters
 '''
 
-from filecmp import cmp
 import os
+import sys
 import pandas as pd
 import pytest
-import sys
 from check_result import check_result
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue

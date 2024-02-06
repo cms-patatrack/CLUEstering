@@ -2,6 +2,7 @@
 Density based clustering algorithm developed at CERN.
 """
 
+import sys
 from dataclasses import dataclass
 from glob import glob
 import random as rnd
@@ -16,7 +17,6 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 from os.path import dirname, exists, join
 path = dirname(__file__)
-import sys
 sys.path.insert(1, join(path, 'lib'))
 import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
@@ -358,7 +358,8 @@ class clusterer:
 
         for dim in range(self.clust_data.n_dim):
             self.clust_data.coords.T[dim] = \
-            self.scaler.fit_transform(self.clust_data.coords.T[dim].reshape(-1, 1)).reshape(1, -1)[0]
+            self.scaler.fit_transform(
+                    self.clust_data.coords.T[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
     def read_data(self,
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray]) -> None:
@@ -486,12 +487,15 @@ class clusterer:
             if len(parameters) != 2:
                 raise ValueError("Wrong number of parameters. The exponential"
                                  + " kernel requires 2 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.ExponentialKernel(parameters[0], parameters[1])
+            self.kernel = CLUE_Convolutional_Kernels.ExponentialKernel(parameters[0],
+                                                                       parameters[1])
         elif choice == "gaus":
             if len(parameters) != 3:
                 raise ValueError("Wrong number of parameters. The gaussian" +
                                  " kernel requires 3 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.GaussinKernel(parameters[0], parameters[1], parameters[2])
+            self.kernel = CLUE_Convolutional_Kernels.GaussinKernel(parameters[0],
+                                                                   parameters[1],
+                                                                   parameters[2])
         elif choice == "custom":
             if len(parameters) != 0:
                 raise ValueError("Wrong number of parameters. Custom kernels"

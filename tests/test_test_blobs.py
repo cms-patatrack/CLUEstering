@@ -2,8 +2,8 @@
 Test the test_blobs function, which produces a set of gaussianely distributed blobs
 '''
 
-import pytest
 import sys
+import pytest
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 

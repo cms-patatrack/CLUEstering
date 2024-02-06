@@ -2,10 +2,10 @@
 Testing the algorithm with all the supported input data types
 '''
 
+import sys
 import numpy as np
 import pandas as pd
 import pytest
-import sys
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 

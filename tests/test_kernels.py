@@ -2,8 +2,8 @@
 Test of the convolutional kernels
 '''
 
-import pytest
 import sys
+import pytest
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 

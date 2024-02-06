@@ -3,11 +3,10 @@ Testing the algorithm on the circle dataset, a dataset where points are distribu
 simulate the hits of a small set of particles in a detector
 '''
 
-from filecmp import cmp
 import os
+import sys
 import pandas as pd
 import pytest
-import sys
 from check_result import check_result
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
