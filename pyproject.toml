@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=42","wheel","pybind11","pathlib"]
+requires = ["setuptools>=42","wheel","pathlib"]
 build-backend = "setuptools.build_meta"
 
 [tool.autopep8]
