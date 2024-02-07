@@ -38,9 +38,7 @@ jobs:
 
     - name: Check number of modules
       run: |
-        ls dist/CLUEstering*/build
-        ls dist/CLUEstering*/CLUEstering
-        ls -l CLUEstering/lib | wc -l > output.txt
+        ls -l dist/CLUEstering*/build/lib/CLUEstering/lib | wc -l > output.txt
         if [[ $(cat output.txt) == 2 ]]
         then
           echo "Correct: Both and only the convolutional and serial modules are generated"
