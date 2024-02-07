@@ -1,10 +1,12 @@
 
 name: Test CUDA installation
 
+# The workflow gets triggered by pushes and pull requests
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   test:
