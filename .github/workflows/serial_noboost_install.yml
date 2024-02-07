@@ -46,7 +46,7 @@ jobs:
         ls 
         echo ' '
         ls -l build/lib/CLUEstering/lib
-        ls -l build/lib/CLUEstering/lib | wc -l > output.txt
+        ls -1 build/lib/CLUEstering/lib | wc -l > output.txt
         n_modules=$(cat output.txt)
         echo $n_modules
         if [[ $n_modules == 2 ]]
