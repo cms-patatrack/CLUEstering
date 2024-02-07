@@ -24,9 +24,11 @@ jobs:
         ./packaging.sh
 
     - name: Pull Docker image from Docker Hub
+      working-directory: ${{github.workspace}}
       run: docker pull sbalducci00/sbaldu:cluestering_arch.serial
 
     - name: Run commands inside Docker container
+      working-directory: ${{github.workspace}}
       run: |
         docker run -v $(pwd)/dist:/app -w /app \
         sbalducci00/sbaldu:cluestering_arch.serial bash -c '
@@ -37,8 +39,13 @@ jobs:
         '
 
     - name: Check number of modules
+      working-directory: ${{github.workspace}}/dist
       run: |
-        ls -l dist/CLUEstering*/build/lib/CLUEstering/lib | wc -l > output.txt
+        cd CLUEstering*
+        echo $PWD
+        ls 
+        ls build
+        ls -l build/lib/CLUEstering/lib | wc -l > output.txt
         if [[ $(cat output.txt) == 2 ]]
         then
           echo "Correct: Both and only the convolutional and serial modules are generated"
