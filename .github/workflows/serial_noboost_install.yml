@@ -32,3 +32,13 @@ jobs:
           cd CLUEstering*
           pip install .
         '
+
+    - name: Check number of modules
+      run: |
+        ls -l CLUEstering/lib | wc -l > output.txt
+        if [[ $(cat output.txt) == 2 ]]
+        then
+          echo "Correct: Both and only the convolutional and serial modules are generated"
+        else
+          exit 1
+        fi
