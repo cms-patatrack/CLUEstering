@@ -31,6 +31,7 @@ jobs:
         docker run -v $(pwd)/dist:/app -w /app \
         sbalducci00/sbaldu:cluestering_arch.serial bash -c '
           tar -xvf CLUEstering*.tar.gz
+          rm *.tar.gz
           cd CLUEstering*
           pip install .
         '
