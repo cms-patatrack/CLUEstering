@@ -38,6 +38,10 @@ jobs:
 
     - name: Check number of modules
       run: |
+        echo $PWD
+        ls 
+        ls build
+        ls CLUEstering
         ls -l CLUEstering/lib | wc -l > output.txt
         if [[ $(cat output.txt) == 2 ]]
         then
