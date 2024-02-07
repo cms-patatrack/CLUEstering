@@ -48,6 +48,7 @@ jobs:
         ls build/lib/CLUEstering/lib
         ls -l build/lib/CLUEstering/lib | wc -l > output.txt
         n_modules=$(cat output.txt)
+        echo $n_modules
         if [[ $n_modules == 2 ]]
         then
           echo "Correct: Both and only the convolutional and serial modules are generated"
