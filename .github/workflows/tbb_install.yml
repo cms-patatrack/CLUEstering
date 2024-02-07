@@ -1,0 +1,52 @@
+
+name: Test TBB installation
+
+# The workflow gets triggered by pushes and pull requests
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with: 
+        submodules: true
+
+    - name: Package the library inside a tarball
+      working-directory: ${{github.workspace}}
+      run: |
+        ./packaging.sh
+
+    - name: Pull Docker image from Docker Hub
+      working-directory: ${{github.workspace}}
+      run: docker pull sbalducci00/sbaldu:cluestering_arch.tbb
+
+    - name: Run commands inside Docker container
+      working-directory: ${{github.workspace}}
+      run: |
+        docker run -v $(pwd)/dist:/app -w /app \
+        sbalducci00/sbaldu:cluestering_arch.tbb bash -c '
+          tar -xvf CLUEstering*.tar.gz
+          rm *.tar.gz
+          cd CLUEstering*
+          pip install .
+        '
+
+    - name: Check number of modules
+      working-directory: ${{github.workspace}}/dist
+      run: |
+        cd CLUEstering*
+        ls -1 build/lib/CLUEstering/lib | wc -l > output.txt
+        if [[ $(cat output.txt) == 3 ]]
+        then
+          echo "Correct: Only the convolutional, serial and tbb modules are generated"
+        else
+          echo "Error: The number of modules generated is incorrect"
+          exit 1
+        fi
