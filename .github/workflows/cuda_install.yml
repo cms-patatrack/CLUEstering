@@ -1,0 +1,34 @@
+
+name: Test CUDA installation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with: 
+        submodules: true
+
+    - name: Package the library inside a tarball
+      working-directory: ${{github.workspace}}
+      run: |
+        ./packaging.sh
+
+    - name: Pull Docker image from Docker Hub
+      run: docker pull sbalducci00/sbaldu:cluestering_arch.cuda
+
+    - name: Run commands inside Docker container
+      run: |
+        docker run -v $(pwd)/dist:/app -w /app \
+        sbalducci00/sbaldu:cluestering_arch.cuda bash -c '
+          tar -xvf CLUEstering*.tar.gz
+          cd CLUEstering*
+          pip install .
+        '
