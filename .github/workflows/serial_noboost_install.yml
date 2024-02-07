@@ -44,11 +44,13 @@ jobs:
         cd CLUEstering*
         echo $PWD
         ls 
-        ls build
+        echo ' '
+        ls build/lib/CLUEstering/lib
         ls -l build/lib/CLUEstering/lib | wc -l > output.txt
         if [[ $(cat output.txt) == 2 ]]
         then
           echo "Correct: Both and only the convolutional and serial modules are generated"
         else
+          echo "Error: The number of modules generated is incorrect"
           exit 1
         fi
