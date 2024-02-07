@@ -24,13 +24,16 @@ jobs:
         ./packaging.sh
 
     - name: Pull Docker image from Docker Hub
+      working-directory: ${{github.workspace}}
       run: docker pull sbalducci00/sbaldu:cluestering_arch.hip
 
     - name: Run commands inside Docker container
+      working-directory: ${{github.workspace}}
       run: |
         docker run -v $(pwd)/dist:/app -w /app \
         sbalducci00/sbaldu:cluestering_arch.hip bash -c '
           tar -xvf CLUEstering*.tar.gz
+          rm *.tar.gz
           cd CLUEstering*
           pip install .
         '
