@@ -36,11 +36,14 @@ jobs:
         '
 
     - name: Check number of modules
+      working-directory: ${{github.workspace}}/dist
       run: |
-        ls -l CLUEstering/lib | wc -l > output.txt
+        cd CLUEstering*
+        ls -1 build/lib/CLUEstering/lib | wc -l > output.txt
         if [[ $(cat output.txt) == 3 ]]
         then
           echo "Correct: Only the convolutional, serial and hip modules are generated"
         else
+          echo "Error: The number of modules generated is incorrect"
           exit 1
         fi
