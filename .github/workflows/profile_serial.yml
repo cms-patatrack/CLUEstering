@@ -1,0 +1,44 @@
+name: Profile serial code and save log
+
+# The workflow gets triggered by pushes and pull requests
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    # checks out the code in the repository
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    # pull docker images for building and profiling
+    - name: Pull docker images from DockerHub
+      run: |
+        docker pull sbalducci00/sbaldu:cluestering_arch.serial
+        docker pull sbalducci00/sbaldu:profiler
+
+    - name: Build
+      working-directory: ${{github.workspace}}
+      run: |
+        docker run -v $(pwd):/app -w /app/profiling \
+        sbalducci00/sbaldu:cluestering_arch.serial bash -c '
+          cmake -B build && make -C build
+        '
+
+    - name: Profile
+      working-directory: ${{github.workspace}}/profiling
+      run: |
+        docker run -v $(pwd):/app -w /app/profiling \
+        sbalducci00/sbaldu:cluestering_arch.serial bash -c '
+          ./build/serial.out
+          gprof -b ./build/serial.out
+        '
