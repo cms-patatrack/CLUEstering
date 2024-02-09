@@ -35,7 +35,7 @@ jobs:
         '
 
     - name: Profile
-      working-directory: ${{github.workspace}}/profiling
+      working-directory: ${{github.workspace}}
       run: |
         docker run -v $(pwd):/app -w /app/profiling \
         sbalducci00/sbaldu:cluestering_arch.serial bash -c '
