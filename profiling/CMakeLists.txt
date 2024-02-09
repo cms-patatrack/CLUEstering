@@ -38,7 +38,7 @@ include_directories(../CLUEstering/alpaka/)
 include_directories(../CLUEstering/alpaka/)
 
 # CPU Serial 
-add_executable(serial.out test.cc)
+add_executable(serial.out main.cc)
 # link boost
 target_link_libraries(serial.out PRIVATE ${Boost_LIBRARIES})
 target_include_directories(serial.out PRIVATE ${Boost_PATH})
@@ -56,7 +56,7 @@ target_link_options(serial.out PRIVATE -pg)
 # # CPU TBB
 # if(TBB_FOUND)
 #   # compile cpu tbb module
-#   add_executable(tbb.out test.cc)
+#   add_executable(tbb.out main.cc)
 #   target_link_libraries(tbb.out PRIVATE ${Boost_LIBRARIES})
 #   target_include_directories(tbb.out PRIVATE ${Boost_PATH})
 #   target_compile_options(
@@ -86,9 +86,9 @@ target_link_options(serial.out PRIVATE -pg)
 #   set(CMAKE_CUDA_FLAGS "-Wall -Wextra -g -O2")
 
 #   # compile the file with .cc extension using nvcc
-#   set_source_files_properties(test.cc PROPERTIES LANGUAGE CUDA)
+#   set_source_files_properties(main.cc PROPERTIES LANGUAGE CUDA)
 #   # compile gpu cuda module
-#   add_executable(cuda.out test.cc)
+#   add_executable(cuda.out main.cc)
 #   # link boost
 #   target_link_libraries(cuda.out PRIVATE ${Boost_LIBRARIES})
 #   target_include_directories(cuda.out PRIVATE ${Boost_PATH})
@@ -120,7 +120,7 @@ target_link_options(serial.out PRIVATE -pg)
 #   # set the hipcc compiler
 #   set(CMAKE_CXX_COMPILER "${hip_BASE}/bin/hipcc")
 #   # compile gpu hip module
-#   add_executable(hip.out test.cc)
+#   add_executable(hip.out main.cc)
 #   # link boost
 #   target_link_libraries(hip.out PRIVATE ${Boost_LIBRARIES})
 #   target_include_directories(hip.out PRIVATE ${Boost_PATH})
