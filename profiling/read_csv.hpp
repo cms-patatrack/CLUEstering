@@ -18,6 +18,9 @@ std::pair<std::vector<VecArray<T, NDim>>, std::vector<T>> read_csv(const std::st
   std::vector<T> weights;
 
   std::fstream file(file_path);
+  if (!file.is_open()) {
+    throw std::runtime_error("Could not open file: " + file_path);
+  }
 
   // discard the header
   std::string buffer;
@@ -29,9 +32,9 @@ std::pair<std::vector<VecArray<T, NDim>>, std::vector<T>> read_csv(const std::st
     VecArray<T, NDim> point;
     for (size_t i{}; i < NDim; ++i) {
       getline(buffer_stream, value, ',');
-	  point.push_back_unsafe(static_cast<T>(std::stod(value)));
+      point.push_back_unsafe(static_cast<T>(std::stod(value)));
     }
-	coords.push_back(point);
+    coords.push_back(point);
     getline(buffer_stream, value);
     weights.push_back(static_cast<T>(std::stod(value)));
   }
