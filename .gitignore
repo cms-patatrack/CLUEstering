@@ -9,6 +9,10 @@ build/
 # Shared library files
 *.so
 
+# Profiling files
+*out*
+vgcore.*
+
 # Executables
 *.out
 *run_tests.sh
