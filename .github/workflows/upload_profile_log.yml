@@ -32,7 +32,7 @@ jobs:
       working-directory: ${{github.workspace}}/profiling
       run: |
         docker run -v $(pwd):/app -w /app/profiling \
-        sbalducci00/sbaldu:cluestering_arch.serial bash -c '
+        sbalducci00/sbaldu:profiler bash -c '
           ./build/serial.out
           mkdir -p logs
           gprof -b ./build/serial.out > logs/test.log
