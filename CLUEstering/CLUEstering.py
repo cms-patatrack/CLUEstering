@@ -553,7 +553,8 @@ class clusterer:
                  backend: str = "cpu serial",
                  block_size: int = 1024,
                  device_id: int = 0,
-                 verbose: bool = False) -> None:
+                 verbose: bool = False,
+                 dimensions: Union[tuple, None] = None) -> None:
         """
         Executes the CLUE clustering algorithm.
 
@@ -582,18 +583,20 @@ class clusterer:
         None
         """
 
+        if dimensions is None:
+            data = self.clust_data.coords
+        else:
+            data = np.array([self.clust_data.coords.T[dim] for dim in dimensions]).T
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
-                                                    self.clust_data.coords, self.clust_data.weight,
-                                                    self.kernel, self.clust_data.n_dim, block_size,
-                                                    device_id)
+                                                    data, self.clust_data.weight, self.kernel,
+                                                    self.clust_data.n_dim, block_size, device_id)
         elif backend == "cpu tbb":
             if tbb_found:
                 cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier,
-                                                     self.ppbin, self.clust_data.coords,
-                                                     self.clust_data.weight, self.kernel,
-                                                     self.clust_data.n_dim, block_size,
+                                                     self.ppbin, data, self.clust_data.weight,
+                                                     self.kernel, self.clust_data.n_dim, block_size,
                                                      device_id)
             else:
                 print("TBB module not found. Please re-compile the library and try again.")
@@ -601,9 +604,8 @@ class clusterer:
         elif backend == "gpu cuda":
             if cuda_found:
                 cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.outlier,
-                                                      self.ppbin, self.clust_data.coords,
-                                                      self.clust_data.weight, self.kernel,
-                                                      self.clust_data.n_dim, block_size,
+                                                      self.ppbin, data, self.clust_data.weight,
+                                                      self.kernel, self.clust_data.n_dim, block_size,
                                                       device_id)
             else:
                 print("CUDA module not found. Please re-compile the library and try again.")
@@ -611,9 +613,8 @@ class clusterer:
         elif backend == "gpu hip":
             if hip_found:
                 cluster_id_is_seed = gpu_hip.mainRun(self.dc_, self.rhoc, self.outlier,
-                                                     self.ppbin, self.clust_data.coords,
-                                                     self.clust_data.weight, self.kernel,
-                                                     self.clust_data.n_dim, block_size,
+                                                     self.ppbin, data, self.clust_data.weight,
+                                                     self.kernel, self.clust_data.n_dim, block_size,
                                                      device_id)
             else:
                 print("HIP module not found. Please re-compile the library and try again.")
