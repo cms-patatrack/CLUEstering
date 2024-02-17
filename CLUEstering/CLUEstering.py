@@ -551,12 +551,24 @@ class clusterer:
 
     def _partial_dimension_dataset(self, dimensions: list):
         """
+        Returns a dataset containing only the coordinates of the chosen dimensions.
+
+        This method returns a dataset containing only the coordinates of the chosen
+        dimensions when a set of dimensions is chosen in the `run_clue` method. This
+        allows to run the algorithm in a lower dimensional space.
+
+        Parameters
+        ----------
+        dimensions : list
+            The list of the dimensions that should be considered.
+
+        Returns
+        -------
+        np.ndarray
+            Array containing the coordinates of the chosen dimensions.
+
         """
 
-        # print('first')
-        # print(np.array([self.clust_data.coords.T[dim] for dim in dimensions]))
-        # print('second')
-        # print(np.array([self.clust_data.coords.T[dim] for dim in dimensions]).T)
         return np.array([self.clust_data.coords.T[dim] for dim in dimensions]).T
 
     def run_clue(self,
