@@ -554,7 +554,7 @@ class clusterer:
                  block_size: int = 1024,
                  device_id: int = 0,
                  verbose: bool = False,
-                 dimensions: Union[tuple, None] = None) -> None:
+                 dimensions: Union[list, None] = None) -> None:
         """
         Executes the CLUE clustering algorithm.
 
