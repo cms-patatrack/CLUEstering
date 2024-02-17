@@ -549,6 +549,16 @@ class clusterer:
             raise ValueError("Invalid backend. The allowed choices for the"
                              + " backend are: all, cpu serial, cpu tbb and gpu cuda.")
 
+    def _partial_dimension_dataset(self, dimensions: list):
+        """
+        """
+
+        # print('first')
+        # print(np.array([self.clust_data.coords.T[dim] for dim in dimensions]))
+        # print('second')
+        # print(np.array([self.clust_data.coords.T[dim] for dim in dimensions]).T)
+        return np.array([self.clust_data.coords.T[dim] for dim in dimensions]).T
+
     def run_clue(self,
                  backend: str = "cpu serial",
                  block_size: int = 1024,
@@ -586,7 +596,7 @@ class clusterer:
         if dimensions is None:
             data = self.clust_data.coords
         else:
-            data = np.array([self.clust_data.coords.T[dim] for dim in dimensions]).T
+            data = _partial_dimension_dataset(dimensions)
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
