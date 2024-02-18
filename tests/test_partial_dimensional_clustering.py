@@ -22,6 +22,18 @@ def blobs():
     '''
     return pd.read_csv("./test_datasets/blob.csv")
 
+@pytest.fixture
+def square():
+    '''
+    '''
+    return pd.read_csv("./test_datasets/square.csv")
+
+@pytest.fixture
+def box():
+    '''
+    '''
+    return pd.read_csv("./test_datasets/box.csv")
+
 def test_one_out_of_two(moons):
     c = clue.clusterer(.4, 2., 1.6)
     c.read_data(moons)
@@ -84,3 +96,16 @@ def test_two_out_of_three(blobs):
     assert len(coords_x0x1) == c.clust_data.n_points
     assert len(coords_x0x2) == c.clust_data.n_points
     assert len(coords_x1x2) == c.clust_data.n_points
+
+def test_square_box(square, box):
+    c1 = clue.clusterer(.4, 2., 1.6)
+    c1.read_data(square)
+    c1.run_clue()
+
+    c2 = clue.clusterer(.4, 2., 1.6)
+    c2.read_data(box)
+    c2.run_clue(dimensions=[0, 1])
+
+    # check that the result of clustering the 3D dataset using only
+    # two dimensions is the same as clustering the 2D dataset
+    assert c1.clust_prop == c2.clust_prop
