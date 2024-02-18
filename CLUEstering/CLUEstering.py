@@ -608,7 +608,7 @@ class clusterer:
         if dimensions is None:
             data = self.clust_data.coords
         else:
-            data = _partial_dimension_dataset(dimensions)
+            data = self._partial_dimension_dataset(dimensions)
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
