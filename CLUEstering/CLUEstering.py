@@ -681,9 +681,9 @@ class clusterer:
         """
 
         # Convert the used coordinates to cartesian coordiantes
-        cartesian_coords = np.copy(self.clust_data.original_coords)
+        cartesian_coords = np.copy(self.clust_data.original_coords.T)
         for coord, func in kwargs.items():
-            cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords)
+            cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords.T)
 
         if self.clust_data.n_dim == 2:
             plt.scatter(cartesian_coords[0],
@@ -800,7 +800,7 @@ class clusterer:
         # Convert the used coordinates to cartesian coordiantes
         cartesian_coords = np.copy(self.clust_data.original_coords.T)
         for coord, func in kwargs.items():
-            cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords)
+            cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords.T)
 
         if self.clust_data.n_dim == 2:
             data = {'x0': cartesian_coords[0],
@@ -912,7 +912,8 @@ class clusterer:
 
 if __name__ == "__main__":
     c = clusterer(0.4,5,1.)
-    c.read_data('./sissa.csv')
+    c.read_data('./blob.csv')
+    c.input_plotter()
     c.run_clue(backend="cpu serial", verbose=True)
     # c.run_clue(backend="cpu tbb", verbose=True)
     # c.run_clue(backend="gpu cuda", verbose=True)
