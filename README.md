@@ -12,9 +12,8 @@ CLUE takes 4 parameters in input:
 
 This library generalizes the original algorithm, making it N-dimensional, and turns it into a general purpose algorithm, usable by any user and applicaple to a wider range of applications, in particular outside particle physics.
 
-<p align="center">
-    <img src="./images/plot2d.png" width="300" height="300"> <img src="./images/plot3d.png" width="300" height="300">
-</p>
+![](https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/plot2d.png)
+![](https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/plot3d.png)
 
 The C++ code is binded using PyBind11, and the module is created locally during the installation of the library.
 
@@ -30,9 +29,8 @@ clust.read_data(clue.test_blobs(1000,2))
 clust.run_clue()
 clust.cluster_plotter()
 ```
-<p align="center">
-    <img src="./images/blobwithnoise.png" width="400" height="400"> 
-</p>
+
+![](https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/blobwithnoise.png)
 
 ## The `clusterer` class
 The `clusterer` class represents a wrapper class around the method `mainRun`, which is binded from `C++` and that is the method that runs the CLUE algorithm.  
