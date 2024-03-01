@@ -712,9 +712,9 @@ class clusterer:
         if self.clust_data.n_dim >= 3:
             fig = plt.figure()
             ax_ = fig.add_subplot(projection='3d')
-            ax_.scatter(cartesian_coords.T[0],
-                       cartesian_coords.T[1],
-                       cartesian_coords.T[2],
+            ax_.scatter(cartesian_coords[0],
+                       cartesian_coords[1],
+                       cartesian_coords[2],
                        s=pt_size,
                        color=pt_colour)
 
@@ -912,7 +912,7 @@ class clusterer:
 
 if __name__ == "__main__":
     c = clusterer(0.4,5,1.)
-    c.read_data('./sissa.csv')
+    c.read_data('./blob.csv')
     c.input_plotter()
     c.run_clue(backend="cpu serial", verbose=True)
     # c.run_clue(backend="cpu tbb", verbose=True)
