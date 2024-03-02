@@ -12,9 +12,6 @@ CLUE takes 4 parameters in input:
 
 This library generalizes the original algorithm, making it N-dimensional, and turns it into a general purpose algorithm, usable by any user and applicaple to a wider range of applications, in particular outside particle physics.
 
-![](https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/plot2d.png)
-![](https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/plot3d.png)
-
 The C++ code is binded using PyBind11, and the module is created locally during the installation of the library.
 
 In the library is defined the `clusterer` class, which contains the methods for reading the data, running the algorithm, plotting the data both in input and output, and others.  
