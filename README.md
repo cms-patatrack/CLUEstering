@@ -1,5 +1,5 @@
 # CLUEstering 
-The CLUE algorithm is a clustering algorithm written at CERN.
+The CLUE algorithm is a clustering algorithm written at CERN (https://www.frontiersin.org/articles/10.3389/fdata.2020.591315/full).
 
 The original algorithm was designed to work in 2 dimensions, with the data distributed in parallel layers.
 Unlike other clustering algorithms, CLUE takes the coordinates of the points and also their weight, which represents their energy, and calculates the energy density of each point.
