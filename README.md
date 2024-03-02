@@ -21,13 +21,15 @@ Below is shown a basic example of how the library can be used:
 ```
 import CLUEstering as clue
 
-clust = clue.clusterer(1., 5., 1.5)
+clust = clue.clusterer(.4, 2., 1.5)
 clust.read_data(clue.test_blobs(1000,2))
 clust.run_clue()
 clust.cluster_plotter()
 ```
 
-![](https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/blobwithnoise.png)
+<p align="center">
+  <img width="380" height="380" src="https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/blobwithnoise.png">
+</p>
 
 ## The `clusterer` class
 The `clusterer` class represents a wrapper class around the method `mainRun`, which is binded from `C++` and that is the method that runs the CLUE algorithm.  
@@ -86,37 +88,6 @@ clust.choose_kernel('exp', [1. 1.5])
 # Now use a custom kernel, a linear function
 clust.choose_kernel('custom', [], lambda x, y, z: 2 * x)
 ```
-
-## Use of periodic coordinates and change of the coordinate system
-Since version `version 1.4.0` it is possible to use periodic coordinates. 
-The finite domain of a periodic variable con be specified in the call of the `read_data` method by passing a tuple containing the extremes of the domain with a keyword that specifies which coordinate should be bounded (`x0`, `x1`, `x2`, ecc.). 
-
-```
-import CLUEstering as clue
-from math import pi
-
-clust = clue.clusterer(1., 5., 1.5)
-clue.read_data('my_data.csv', x1=(0, 2*pi))
-```
-
-The domain of a periodic variable can also be changed after the call to `read_data`, using the method `change_domains`.
-
-It is also possible to change the coordinate system used for the clustering. This can be done through the `change_coordinates` method, which takes as arguments function objects representing the change of system for each of the coordinates.
-
-```
-import CLUEstering as clue
-from math import pi
-
-clust = clue.clusterer(1., 5., 1.5)
-clust.read_data('my_data.csv')
-
-# Move from cartesian to polar coordinate system
-## x0 is the radius, x1 is the polar angle
-clust.change_coordinates(x0=lambda x, y: np.sqrt(x**2 + y**2), x1= lambda x, y: np.arctan2(y, x))
-```
-
-Finally, it's also possible to change the coordiantes system used for plotting. This can be useful when a specific coordinate system is well suited for clustering a given dataset, because it takes advantage of some symmetries in the data, but the plots should still be in cartesian coordinates. 
-To do this the equations for the change of coordinates can be passed as function objects to the two plotting methods.
 
 ## Input and cluster `plotter` methods
 The `input_plotter` and `cluster_plotter` methods two plotting methods based on matplotlib. `input_plotter` is intenteded to be used as a way to observe the data before clustering and getting an idea of the expected result, whereas `cluster_plotter` plots the results of the clustering, plotting the points corresponding to the same cluster with the same colour and the outliers as small grey crosses.  
