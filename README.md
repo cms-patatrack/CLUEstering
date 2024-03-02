@@ -31,6 +31,35 @@ clust.cluster_plotter()
   <img width="380" height="380" src="https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/blobwithnoise.png">
 </p>
 
+## Heterogeneous backend support with `Alpaka`
+Since version `2.0.0` the pybind module is compiled for all the supported backends using the `Alpaka` portability library (https://github.com/alpaka-group/alpaka).  
+Currently the supported backends include:
+* CPU serial
+* CPU parallel using TBB
+* NVIDIA GPUs
+* AMD GPUs  
+
+The modules are compiled automatically at the moment of installation, and the user can choose the backend to use when running by passing a parameter to the
+`run_clue` method.
+```
+clust.run_clue("cpu serial")
+clust.run_clue("cpu tbb")
+clust.run_clue("gpu cuda")
+clust.run_clue("gpu hip")
+```
+If no argument is passed, by default the serial backend is used.  
+It is possible to list all the available devices with the `list_devices` method. If no argument is passed, the method lists all the devices for all the backends,
+but it's also possible to specify the backend whose devices want to be listed.
+```
+# list devices for all backends
+c.list_devices()
+# specify the backend
+c.list_devices('cpu serial')
+c.list_devices('cpu tbb')
+c.list_devices('gpu cuda')
+c.list_devices('gpu hip')
+```
+
 ## The `clusterer` class
 The `clusterer` class represents a wrapper class around the method `mainRun`, which is binded from `C++` and that is the method that runs the CLUE algorithm.  
 When an instance of this class is created, it requires at least three parameters: `dc`, `rhoc` and `outlierDeltaFactor`. There is a fourth parameter, `pPBin`, which represents the desired average number of points found in each of the bins that the clustering space is divided into. This parameter has a default value of `10`.  
@@ -41,7 +70,8 @@ The class has several methods:
 * `change_coordinates`, which allows to change the coordinate system used for clustering;
 * `change_domains`, which allows to change the domain ranges of any eventual periodic coordinates;
 * `choose_kernel`, which allows to change the convolution kernel used when calculating the local density of each point. The default kernel is a flat kernel with parameter `0.5`, but it can be changed to an exponential or gaussian kernel, or a custom kernel, which is user defined and can be any continuous function;
-* `run_clue`, which takes no parameters and runs the CLUE algorithm;
+* `run_clue`, which runs the CLUE algorithm;
+* `list_devices`, which lists all the available devices for the supported backends;
 * `input_plotter`, which plots all the points in input. This method is useful for getting an idea of the shape of the dataset before clustering. In addition to some plot customizations (like the colour or the size of the points, the addition of a grid, the axis labels and so on) it's also possible to pass the functions for the change of coordinates and change the coordinate system used for plotting.
 * `cluster_plotter`, which plots the data using a different colour for each cluster. The seeds are indicated by stars and the outliers by small grey crosses.
 * `to_csv`, which takes two strings, the first containing the path to a folder and the second containing the desired name for the csv file (also with the .csv suffix) and produces the csv file containing the cluster informations.
