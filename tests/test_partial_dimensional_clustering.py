@@ -43,6 +43,8 @@ def test_one_out_of_two(moons):
 
     c = clue.clusterer(.4, 2., 1.6)
     c.read_data(moons)
+    # check the initial number of dimensions
+    assert len(c.clust_data.coords[0]) == 2
     coords_x0 = c._partial_dimension_dataset([0])
     coords_x1 = c._partial_dimension_dataset([1])
     
@@ -64,6 +66,8 @@ def test_one_out_of_three(blobs):
 
     c = clue.clusterer(.4, 2., 1.6)
     c.read_data(blobs)
+    # check the initial number of dimensions
+    assert len(c.clust_data.coords[0]) == 3
     coords_x0 = c._partial_dimension_dataset([0])
     coords_x1 = c._partial_dimension_dataset([1])
     coords_x2 = c._partial_dimension_dataset([2])
@@ -89,7 +93,8 @@ def test_two_out_of_three(blobs):
 
     c = clue.clusterer(.4, 2., 1.6)
     c.read_data(blobs)
-    print(c.clust_data.coords)
+    # check the initial number of dimensions
+    assert len(c.clust_data.coords[0]) == 3
     coords_x0x1 = c._partial_dimension_dataset([0, 1])
     coords_x0x2 = c._partial_dimension_dataset([0, 2])
     coords_x1x2 = c._partial_dimension_dataset([1, 2])
