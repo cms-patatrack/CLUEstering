@@ -867,7 +867,7 @@ class clusterer:
 
         if self.clust_data.n_dim == 1:
             data = {'x0': cartesian_coords[0],
-                    np.zeros(self.clust_data.n_points),
+                    'x1': np.zeros(self.clust_data.n_points),
                     'cluster_ids': self.clust_prop.cluster_ids,
                     'isSeed': self.clust_prop.is_seed}
             df_ = pd.DataFrame(data)
