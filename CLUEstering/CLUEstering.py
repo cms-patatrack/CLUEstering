@@ -549,11 +549,34 @@ class clusterer:
             raise ValueError("Invalid backend. The allowed choices for the"
                              + " backend are: all, cpu serial, cpu tbb and gpu cuda.")
 
+    def _partial_dimension_dataset(self, dimensions: list):
+        """
+        Returns a dataset containing only the coordinates of the chosen dimensions.
+
+        This method returns a dataset containing only the coordinates of the chosen
+        dimensions when a set of dimensions is chosen in the `run_clue` method. This
+        allows to run the algorithm in a lower dimensional space.
+
+        Parameters
+        ----------
+        dimensions : list
+            The list of the dimensions that should be considered.
+
+        Returns
+        -------
+        np.ndarray
+            Array containing the coordinates of the chosen dimensions.
+
+        """
+
+        return np.array([self.clust_data.coords.T[dim] for dim in dimensions]).T
+
     def run_clue(self,
                  backend: str = "cpu serial",
                  block_size: int = 1024,
                  device_id: int = 0,
-                 verbose: bool = False) -> None:
+                 verbose: bool = False,
+                 dimensions: Union[list, None] = None) -> None:
         """
         Executes the CLUE clustering algorithm.
 
@@ -582,18 +605,20 @@ class clusterer:
         None
         """
 
+        if dimensions is None:
+            data = self.clust_data.coords
+        else:
+            data = self._partial_dimension_dataset(dimensions)
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
-                                                    self.clust_data.coords, self.clust_data.weight,
-                                                    self.kernel, self.clust_data.n_dim, block_size,
-                                                    device_id)
+                                                    data, self.clust_data.weight, self.kernel,
+                                                    self.clust_data.n_dim, block_size, device_id)
         elif backend == "cpu tbb":
             if tbb_found:
                 cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier,
-                                                     self.ppbin, self.clust_data.coords,
-                                                     self.clust_data.weight, self.kernel,
-                                                     self.clust_data.n_dim, block_size,
+                                                     self.ppbin, data, self.clust_data.weight,
+                                                     self.kernel, self.clust_data.n_dim, block_size,
                                                      device_id)
             else:
                 print("TBB module not found. Please re-compile the library and try again.")
@@ -601,9 +626,8 @@ class clusterer:
         elif backend == "gpu cuda":
             if cuda_found:
                 cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.outlier,
-                                                      self.ppbin, self.clust_data.coords,
-                                                      self.clust_data.weight, self.kernel,
-                                                      self.clust_data.n_dim, block_size,
+                                                      self.ppbin, data, self.clust_data.weight,
+                                                      self.kernel, self.clust_data.n_dim, block_size,
                                                       device_id)
             else:
                 print("CUDA module not found. Please re-compile the library and try again.")
@@ -611,9 +635,8 @@ class clusterer:
         elif backend == "gpu hip":
             if hip_found:
                 cluster_id_is_seed = gpu_hip.mainRun(self.dc_, self.rhoc, self.outlier,
-                                                     self.ppbin, self.clust_data.coords,
-                                                     self.clust_data.weight, self.kernel,
-                                                     self.clust_data.n_dim, block_size,
+                                                     self.ppbin, data, self.clust_data.weight,
+                                                     self.kernel, self.clust_data.n_dim, block_size,
                                                      device_id)
             else:
                 print("HIP module not found. Please re-compile the library and try again.")
