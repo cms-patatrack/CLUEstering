@@ -724,7 +724,31 @@ class clusterer:
         for coord, func in kwargs.items():
             cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords.T)
 
-        if self.clust_data.n_dim == 2:
+        if self.clust_data.n_dim == 1:
+            plt.scatter(cartesian_coords[0],
+                        np.zeros(self.clust_data.n_points),
+                        s=pt_size,
+                        color=pt_colour)
+
+            # Customization of the plot title
+            plt.title(plot_title, fontsize=title_size)
+
+            # Customization of axis labels
+            plt.xlabel(x_label, fontsize=label_size)
+            plt.ylabel(y_label, fontsize=label_size)
+
+            # Customization of the grid
+            if grid:
+                plt.grid(linestyle=grid_style, linewidth=grid_size)
+
+            # Customization of axis ticks
+            if x_ticks is not None:
+                plt.xticks(x_ticks)
+            if y_ticks is not None:
+                plt.yticks(y_ticks)
+
+            plt.show()
+        elif self.clust_data.n_dim == 2:
             plt.scatter(cartesian_coords[0],
                         cartesian_coords[1],
                         s=pt_size,
@@ -748,7 +772,7 @@ class clusterer:
                 plt.yticks(y_ticks)
 
             plt.show()
-        if self.clust_data.n_dim >= 3:
+        else:
             fig = plt.figure()
             ax_ = fig.add_subplot(projection='3d')
             ax_.scatter(cartesian_coords[0],
