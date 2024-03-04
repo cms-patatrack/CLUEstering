@@ -25,16 +25,22 @@ def blobs():
 @pytest.fixture
 def square():
     '''
+    Retuns a dataframe where the points are distributed in a square
     '''
     return pd.read_csv("./test_datasets/square.csv")
 
 @pytest.fixture
 def box():
     '''
+    Retuns a dataframe where the points are distributed in a 3D box
     '''
     return pd.read_csv("./test_datasets/box.csv")
 
 def test_one_out_of_two(moons):
+    '''
+    Test the dimension reduction from 2D to 1D
+    '''
+
     c = clue.clusterer(.4, 2., 1.6)
     c.read_data(moons)
     coords_x0 = c._partial_dimension_dataset([0])
@@ -52,6 +58,10 @@ def test_one_out_of_two(moons):
     assert len(coords_x1) == c.clust_data.n_points
 
 def test_one_out_of_three(blobs):
+    '''
+    Test the dimension reduction from 3D to 1D
+    '''
+
     c = clue.clusterer(.4, 2., 1.6)
     c.read_data(blobs)
     coords_x0 = c._partial_dimension_dataset([0])
@@ -73,6 +83,10 @@ def test_one_out_of_three(blobs):
     assert len(coords_x2) == c.clust_data.n_points
 
 def test_two_out_of_three(blobs):
+    '''
+    Test the dimension reduction from 3D to 2D
+    '''
+
     c = clue.clusterer(.4, 2., 1.6)
     c.read_data(blobs)
     print(c.clust_data.coords)
@@ -98,6 +112,10 @@ def test_two_out_of_three(blobs):
     assert len(coords_x1x2) == c.clust_data.n_points
 
 def test_square_box(square, box):
+    '''
+    Compare the clustering of a 2D square with that of a 3D box 
+    clustered using only two dimensions
+    '''
     c1 = clue.clusterer(.4, 2., 1.6)
     c1.read_data(square)
     c1.run_clue()
