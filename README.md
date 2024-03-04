@@ -1,5 +1,5 @@
 # CLUEstering 
-The CLUE algorithm is a clustering algorithm written at CERN.
+The CLUE algorithm is a clustering algorithm written at CERN (https://www.frontiersin.org/articles/10.3389/fdata.2020.591315/full).
 
 The original algorithm was designed to work in 2 dimensions, with the data distributed in parallel layers.
 Unlike other clustering algorithms, CLUE takes the coordinates of the points and also their weight, which represents their energy, and calculates the energy density of each point.
@@ -12,10 +12,6 @@ CLUE takes 4 parameters in input:
 
 This library generalizes the original algorithm, making it N-dimensional, and turns it into a general purpose algorithm, usable by any user and applicaple to a wider range of applications, in particular outside particle physics.
 
-<p align="center">
-    <img src="./images/plot2d.png" width="300" height="300"> <img src="./images/plot3d.png" width="300" height="300">
-</p>
-
 The C++ code is binded using PyBind11, and the module is created locally during the installation of the library.
 
 In the library is defined the `clusterer` class, which contains the methods for reading the data, running the algorithm, plotting the data both in input and output, and others.  
@@ -25,14 +21,44 @@ Below is shown a basic example of how the library can be used:
 ```
 import CLUEstering as clue
 
-clust = clue.clusterer(1., 5., 1.5)
+clust = clue.clusterer(.4, 2., 1.5)
 clust.read_data(clue.test_blobs(1000,2))
 clust.run_clue()
 clust.cluster_plotter()
 ```
+
 <p align="center">
-    <img src="./images/blobwithnoise.png" width="400" height="400"> 
+  <img width="380" height="380" src="https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/blobwithnoise.png">
 </p>
+
+## Heterogeneous backend support with `Alpaka`
+Since version `2.0.0` the pybind module is compiled for all the supported backends using the `Alpaka` portability library (https://github.com/alpaka-group/alpaka).  
+Currently the supported backends include:
+* CPU serial
+* CPU parallel using TBB
+* NVIDIA GPUs
+* AMD GPUs  
+
+The modules are compiled automatically at the moment of installation, and the user can choose the backend to use when running by passing a parameter to the
+`run_clue` method.
+```
+clust.run_clue("cpu serial")
+clust.run_clue("cpu tbb")
+clust.run_clue("gpu cuda")
+clust.run_clue("gpu hip")
+```
+If no argument is passed, by default the serial backend is used.  
+It is possible to list all the available devices with the `list_devices` method. If no argument is passed, the method lists all the devices for all the backends,
+but it's also possible to specify the backend whose devices want to be listed.
+```
+# list devices for all backends
+c.list_devices()
+# specify the backend
+c.list_devices('cpu serial')
+c.list_devices('cpu tbb')
+c.list_devices('gpu cuda')
+c.list_devices('gpu hip')
+```
 
 ## The `clusterer` class
 The `clusterer` class represents a wrapper class around the method `mainRun`, which is binded from `C++` and that is the method that runs the CLUE algorithm.  
@@ -44,7 +70,8 @@ The class has several methods:
 * `change_coordinates`, which allows to change the coordinate system used for clustering;
 * `change_domains`, which allows to change the domain ranges of any eventual periodic coordinates;
 * `choose_kernel`, which allows to change the convolution kernel used when calculating the local density of each point. The default kernel is a flat kernel with parameter `0.5`, but it can be changed to an exponential or gaussian kernel, or a custom kernel, which is user defined and can be any continuous function;
-* `run_clue`, which takes no parameters and runs the CLUE algorithm;
+* `run_clue`, which runs the CLUE algorithm;
+* `list_devices`, which lists all the available devices for the supported backends;
 * `input_plotter`, which plots all the points in input. This method is useful for getting an idea of the shape of the dataset before clustering. In addition to some plot customizations (like the colour or the size of the points, the addition of a grid, the axis labels and so on) it's also possible to pass the functions for the change of coordinates and change the coordinate system used for plotting.
 * `cluster_plotter`, which plots the data using a different colour for each cluster. The seeds are indicated by stars and the outliers by small grey crosses.
 * `to_csv`, which takes two strings, the first containing the path to a folder and the second containing the desired name for the csv file (also with the .csv suffix) and produces the csv file containing the cluster informations.
@@ -91,37 +118,6 @@ clust.choose_kernel('exp', [1. 1.5])
 # Now use a custom kernel, a linear function
 clust.choose_kernel('custom', [], lambda x, y, z: 2 * x)
 ```
-
-## Use of periodic coordinates and change of the coordinate system
-Since version `version 1.4.0` it is possible to use periodic coordinates. 
-The finite domain of a periodic variable con be specified in the call of the `read_data` method by passing a tuple containing the extremes of the domain with a keyword that specifies which coordinate should be bounded (`x0`, `x1`, `x2`, ecc.). 
-
-```
-import CLUEstering as clue
-from math import pi
-
-clust = clue.clusterer(1., 5., 1.5)
-clue.read_data('my_data.csv', x1=(0, 2*pi))
-```
-
-The domain of a periodic variable can also be changed after the call to `read_data`, using the method `change_domains`.
-
-It is also possible to change the coordinate system used for the clustering. This can be done through the `change_coordinates` method, which takes as arguments function objects representing the change of system for each of the coordinates.
-
-```
-import CLUEstering as clue
-from math import pi
-
-clust = clue.clusterer(1., 5., 1.5)
-clust.read_data('my_data.csv')
-
-# Move from cartesian to polar coordinate system
-## x0 is the radius, x1 is the polar angle
-clust.change_coordinates(x0=lambda x, y: np.sqrt(x**2 + y**2), x1= lambda x, y: np.arctan2(y, x))
-```
-
-Finally, it's also possible to change the coordiantes system used for plotting. This can be useful when a specific coordinate system is well suited for clustering a given dataset, because it takes advantage of some symmetries in the data, but the plots should still be in cartesian coordinates. 
-To do this the equations for the change of coordinates can be passed as function objects to the two plotting methods.
 
 ## Input and cluster `plotter` methods
 The `input_plotter` and `cluster_plotter` methods two plotting methods based on matplotlib. `input_plotter` is intenteded to be used as a way to observe the data before clustering and getting an idea of the expected result, whereas `cluster_plotter` plots the results of the clustering, plotting the points corresponding to the same cluster with the same colour and the outliers as small grey crosses.  
