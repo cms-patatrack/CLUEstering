@@ -2,9 +2,9 @@
 Test that the equality operator for clusterer objects works correctly
 '''
 
+import sys
 import pandas as pd
 import pytest
-import sys
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 

@@ -92,7 +92,8 @@ namespace cms::alpakatools {
 
     // The "memory device" type can either be the same as the "synchronisation device" type, or be the host CPU.
     static_assert(std::is_same_v<Device, alpaka::Dev<Queue>> or std::is_same_v<Device, alpaka::DevCpu>,
-                  "The \"memory device\" type can either be the same as the \"synchronisation device\" type, or be the "
+                  "The \"memory device\" type can either be the same as the \"synchronisation device\" "
+                  "type, or be the "
                   "host CPU.");
 
     struct CachedBytes {
@@ -103,17 +104,18 @@ namespace cms::alpakatools {
 
     explicit CachingAllocator(
         Device const& device,
-        unsigned int binGrowth,          // bin growth factor;
-        unsigned int minBin,             // smallest bin, corresponds to binGrowth^minBin bytes;
-                                         // smaller allocations are rounded to this value;
-        unsigned int maxBin,             // largest bin, corresponds to binGrowth^maxBin bytes;
-                                         // larger allocations will fail;
-        size_t maxCachedBytes,           // total storage for the allocator (0 means no limit);
-        double maxCachedFraction,        // fraction of total device memory taken for the allocator (0 means no limit);
-                                         // if both maxCachedBytes and maxCachedFraction are non-zero,
-                                         // the smallest resulting value is used.
+        unsigned int binGrowth,  // bin growth factor;
+        unsigned int minBin,     // smallest bin, corresponds to binGrowth^minBin bytes;
+                                 // smaller allocations are rounded to this value;
+        unsigned int maxBin,     // largest bin, corresponds to binGrowth^maxBin bytes;
+                                 // larger allocations will fail;
+        size_t maxCachedBytes,   // total storage for the allocator (0 means no limit);
+        double
+            maxCachedFraction,  // fraction of total device memory taken for the allocator (0 means no limit);
+                                // if both maxCachedBytes and maxCachedFraction are non-zero,
+                                // the smallest resulting value is used.
         bool reuseSameQueueAllocations,  // reuse non-ready allocations if they are in the same queue as the new one;
-                                         // this is safe only if all memory operations are scheduled in the same queue
+        // this is safe only if all memory operations are scheduled in the same queue
         bool debug)
         : device_(device),
           binGrowth_(binGrowth),
@@ -199,22 +201,22 @@ namespace cms::alpakatools {
 
         if (debug_) {
           std::ostringstream out;
-          out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " returned " << block.bytes << " bytes at "
-              << ptr << " from associated queue " << block.queue->m_spQueueImpl.get() << " , event "
-              << block.event->m_spEventImpl.get() << " .\n\t\t " << cachedBlocks_.size() << " available blocks cached ("
-              << cachedBytes_.free << " bytes), " << liveBlocks_.size() << " live blocks (" << cachedBytes_.live
-              << " bytes) outstanding." << std::endl;
+          out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " returned " << block.bytes
+              << " bytes at " << ptr << " from associated queue " << block.queue->m_spQueueImpl.get()
+              << " , event " << block.event->m_spEventImpl.get() << " .\n\t\t " << cachedBlocks_.size()
+              << " available blocks cached (" << cachedBytes_.free << " bytes), " << liveBlocks_.size()
+              << " live blocks (" << cachedBytes_.live << " bytes) outstanding." << std::endl;
           std::cout << out.str() << std::endl;
         }
       } else {
         // if the buffer is not recached, it is automatically freed when block goes out of scope
         if (debug_) {
           std::ostringstream out;
-          out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " freed " << block.bytes << " bytes at "
-              << ptr << " from associated queue " << block.queue->m_spQueueImpl.get() << ", event "
-              << block.event->m_spEventImpl.get() << " .\n\t\t " << cachedBlocks_.size() << " available blocks cached ("
-              << cachedBytes_.free << " bytes), " << liveBlocks_.size() << " live blocks (" << cachedBytes_.live
-              << " bytes) outstanding." << std::endl;
+          out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " freed " << block.bytes
+              << " bytes at " << ptr << " from associated queue " << block.queue->m_spQueueImpl.get()
+              << ", event " << block.event->m_spEventImpl.get() << " .\n\t\t " << cachedBlocks_.size()
+              << " available blocks cached (" << cachedBytes_.free << " bytes), " << liveBlocks_.size()
+              << " live blocks (" << cachedBytes_.live << " bytes) outstanding." << std::endl;
           std::cout << out.str() << std::endl;
         }
       }
@@ -302,8 +304,8 @@ namespace cms::alpakatools {
             out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " reused cached block at "
                 << block.buffer->data() << " (" << block.bytes << " bytes) for queue "
                 << block.queue->m_spQueueImpl.get() << ", event " << block.event->m_spEventImpl.get()
-                << " (previously associated with stream " << iBlock->second.queue->m_spQueueImpl.get() << " , event "
-                << iBlock->second.event->m_spEventImpl.get() << ")." << std::endl;
+                << " (previously associated with stream " << iBlock->second.queue->m_spQueueImpl.get()
+                << " , event " << iBlock->second.event->m_spEventImpl.get() << ")." << std::endl;
             std::cout << out.str() << std::endl;
           }
 
@@ -326,7 +328,8 @@ namespace cms::alpakatools {
       } else {
         // unsupported combination
         static_assert(std::is_same_v<Device, alpaka::Dev<Queue>> or std::is_same_v<Device, alpaka::DevCpu>,
-                      "The \"memory device\" type can either be the same as the \"synchronisation device\" type, or be "
+                      "The \"memory device\" type can either be the same as the \"synchronisation device\" "
+                      "type, or be "
                       "the host CPU.");
       }
     }
@@ -338,8 +341,8 @@ namespace cms::alpakatools {
         // the allocation attempt failed: free all cached blocks on the device and retry
         if (debug_) {
           std::ostringstream out;
-          out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " failed to allocate " << block.bytes
-              << " bytes for queue " << block.queue->m_spQueueImpl.get()
+          out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " failed to allocate "
+              << block.bytes << " bytes for queue " << block.queue->m_spQueueImpl.get()
               << ", retrying after freeing cached allocations" << std::endl;
           std::cout << out.str() << std::endl;
         }
@@ -365,7 +368,8 @@ namespace cms::alpakatools {
         std::ostringstream out;
         out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " allocated new block at "
             << block.buffer->data() << " (" << block.bytes << " bytes associated with queue "
-            << block.queue->m_spQueueImpl.get() << ", event " << block.event->m_spEventImpl.get() << "." << std::endl;
+            << block.queue->m_spQueueImpl.get() << ", event " << block.event->m_spEventImpl.get() << "."
+            << std::endl;
         std::cout << out.str() << std::endl;
       }
     }
@@ -380,9 +384,9 @@ namespace cms::alpakatools {
         if (debug_) {
           std::ostringstream out;
           out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " freed " << iBlock->second.bytes
-              << " bytes.\n\t\t  " << (cachedBlocks_.size() - 1) << " available blocks cached (" << cachedBytes_.free
-              << " bytes), " << liveBlocks_.size() << " live blocks (" << cachedBytes_.live << " bytes) outstanding."
-              << std::endl;
+              << " bytes.\n\t\t  " << (cachedBlocks_.size() - 1) << " available blocks cached ("
+              << cachedBytes_.free << " bytes), " << liveBlocks_.size() << " live blocks ("
+              << cachedBytes_.live << " bytes) outstanding." << std::endl;
           std::cout << out.str() << std::endl;
         }
 

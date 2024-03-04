@@ -3,11 +3,11 @@ Testing the algorithm on the circle dataset, a dataset where points are distribu
 two moon shaped clusters
 '''
 
-from filecmp import cmp
 import os
+import sys
 import pandas as pd
 import pytest
-import sys
+from check_result import check_result
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
@@ -34,5 +34,11 @@ def test_circles_clustering(moons):
     c.run_clue()
     c.to_csv('./', 'moons_output.csv')
 
-    assert cmp('./moons_output.csv',
-               './test_datasets/truth_files/moons_1000_truth.csv')
+    check_result('./moons_output.csv',
+                 './test_datasets/truth_files/moons_1000_truth.csv')
+
+if __name__ == "__main__":
+    c = clue.clusterer(0.8, 5, 1.5)
+    c.read_data("./test_datasets/moons.csv")
+    c.run_clue()
+    c.cluster_plotter()

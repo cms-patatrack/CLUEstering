@@ -2,6 +2,7 @@
 Density based clustering algorithm developed at CERN.
 """
 
+import sys
 from dataclasses import dataclass
 from glob import glob
 import random as rnd
@@ -16,17 +17,16 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 from os.path import dirname, exists, join
 path = dirname(__file__)
-import sys
 sys.path.insert(1, join(path, 'lib'))
 import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
-tbb_found = exists(*glob(join(path, 'lib/CLUE_CPU_TBB*.so')))
+tbb_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
 if tbb_found:
     import CLUE_CPU_TBB as cpu_tbb
-cuda_found = exists(*glob(join(path, 'lib/CLUE_CPU_TBB*.so')))
+cuda_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_CUDA*.so'))))
 if cuda_found:
     import CLUE_GPU_CUDA as gpu_cuda
-hip_found = exists(*glob(join(path, 'lib/CLUE_CPU_TBB*.so')))
+hip_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_HIP*.so'))))
 if hip_found:
     import CLUE_GPU_HIP as gpu_hip
 
@@ -236,14 +236,26 @@ class clusterer:
         None
         """
 
-        if len(input_data) < 2 or len(input_data) > 10:
-            raise ValueError("Inadequate data. The data must contain at least one coordinate" +
-                             " and the weight.")
-        self.clust_data = clustering_data(np.asarray(input_data[:-1]),
-                                          np.copy(np.asarray(input_data[:-1])),
-                                          np.asarray(input_data[-1]),
-                                          len(input_data[:-1]),
-                                          len(input_data[-1]))
+        # [[x0, x1, x2, ...], [y0, y1, y2, ...], ... , [weights]]
+        if isinstance(input_data[0][0], (int, float)):
+            if len(input_data) < 2 or len(input_data) > 11:
+                raise ValueError("Inadequate data. The supported dimensions are between" +
+                                 "1 and 10.")
+            self.clust_data = clustering_data(np.asarray(input_data[:-1]).T,
+                                              np.copy(np.asarray(input_data[:-1]).T),
+                                              np.asarray(input_data[-1]),
+                                              len(input_data[:-1]),
+                                              len(input_data[-1]))
+        # [[[x0, y0, z0, ...], [x1, y1, z1, ...], ...], [weights]]
+        else:
+            if len(input_data) != 2:
+                raise ValueError("Inadequate data. The data must contain a weight value" +
+                                 "for each point.")
+            self.clust_data = clustering_data(np.asarray(input_data[0]),
+                                              np.copy(np.asarray(input_data[0])),
+                                              np.asarray(input_data[-1]),
+                                              len(input_data[0][0]),
+                                              len(input_data[-1]))
 
     def _read_string(self, input_data: str) -> Union[pd.DataFrame,None]:
         """
@@ -346,7 +358,8 @@ class clusterer:
 
         for dim in range(self.clust_data.n_dim):
             self.clust_data.coords.T[dim] = \
-            self.scaler.fit_transform(self.clust_data.coords.T[dim].reshape(-1, 1)).reshape(1, -1)[0]
+            self.scaler.fit_transform(
+                    self.clust_data.coords.T[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
     def read_data(self,
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray]) -> None:
@@ -474,12 +487,15 @@ class clusterer:
             if len(parameters) != 2:
                 raise ValueError("Wrong number of parameters. The exponential"
                                  + " kernel requires 2 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.ExponentialKernel(parameters[0], parameters[1])
+            self.kernel = CLUE_Convolutional_Kernels.ExponentialKernel(parameters[0],
+                                                                       parameters[1])
         elif choice == "gaus":
             if len(parameters) != 3:
                 raise ValueError("Wrong number of parameters. The gaussian" +
                                  " kernel requires 3 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.GaussinKernel(parameters[0], parameters[1], parameters[2])
+            self.kernel = CLUE_Convolutional_Kernels.GaussinKernel(parameters[0],
+                                                                   parameters[1],
+                                                                   parameters[2])
         elif choice == "custom":
             if len(parameters) != 0:
                 raise ValueError("Wrong number of parameters. Custom kernels"
