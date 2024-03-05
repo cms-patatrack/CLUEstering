@@ -724,7 +724,31 @@ class clusterer:
         for coord, func in kwargs.items():
             cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords.T)
 
-        if self.clust_data.n_dim == 2:
+        if self.clust_data.n_dim == 1:
+            plt.scatter(cartesian_coords[0],
+                        np.zeros(self.clust_data.n_points),
+                        s=pt_size,
+                        color=pt_colour)
+
+            # Customization of the plot title
+            plt.title(plot_title, fontsize=title_size)
+
+            # Customization of axis labels
+            plt.xlabel(x_label, fontsize=label_size)
+            plt.ylabel(y_label, fontsize=label_size)
+
+            # Customization of the grid
+            if grid:
+                plt.grid(linestyle=grid_style, linewidth=grid_size)
+
+            # Customization of axis ticks
+            if x_ticks is not None:
+                plt.xticks(x_ticks)
+            if y_ticks is not None:
+                plt.yticks(y_ticks)
+
+            plt.show()
+        elif self.clust_data.n_dim == 2:
             plt.scatter(cartesian_coords[0],
                         cartesian_coords[1],
                         s=pt_size,
@@ -748,7 +772,7 @@ class clusterer:
                 plt.yticks(y_ticks)
 
             plt.show()
-        if self.clust_data.n_dim >= 3:
+        else:
             fig = plt.figure()
             ax_ = fig.add_subplot(projection='3d')
             ax_.scatter(cartesian_coords[0],
@@ -841,7 +865,42 @@ class clusterer:
         for coord, func in kwargs.items():
             cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords.T)
 
-        if self.clust_data.n_dim == 2:
+        if self.clust_data.n_dim == 1:
+            data = {'x0': cartesian_coords[0],
+                    'x1': np.zeros(self.clust_data.n_points),
+                    'cluster_ids': self.clust_prop.cluster_ids,
+                    'isSeed': self.clust_prop.is_seed}
+            df_ = pd.DataFrame(data)
+
+            max_clusterid = max(df_["cluster_ids"])
+
+            df_out = df_[df_.cluster_ids == -1] # Outliers
+            plt.scatter(df_out.x0, df_out.x1, s=outl_size, marker='x', color='0.4')
+            for i in range(0, max_clusterid+1):
+                dfi = df_[df_.cluster_ids == i] # ith cluster
+                plt.scatter(dfi.x0, dfi.x1, s=pt_size, marker='.')
+            df_seed = df_[df_.isSeed == 1] # Only Seeds
+            plt.scatter(df_seed.x0, df_seed.x1, s=seed_size, color='r', marker='*')
+
+            # Customization of the plot title
+            plt.title(plot_title, fontsize=title_size)
+
+            # Customization of axis labels
+            plt.xlabel(x_label, fontsize=label_size)
+            plt.ylabel(y_label, fontsize=label_size)
+
+            # Customization of the grid
+            if grid:
+                plt.grid(linestyle=grid_style, linewidth=grid_size)
+
+            # Customization of axis ticks
+            if x_ticks is not None:
+                plt.xticks(x_ticks)
+            if y_ticks is not None:
+                plt.yticks(y_ticks)
+
+            plt.show()
+        elif self.clust_data.n_dim == 2:
             data = {'x0': cartesian_coords[0],
                     'x1': cartesian_coords[1],
                     'cluster_ids': self.clust_prop.cluster_ids,
@@ -876,7 +935,7 @@ class clusterer:
                 plt.yticks(y_ticks)
 
             plt.show()
-        if self.clust_data.n_dim == 3:
+        else:
             data = {'x0': cartesian_coords[0],
                     'x1': cartesian_coords[1],
                     'x2': cartesian_coords[2],
