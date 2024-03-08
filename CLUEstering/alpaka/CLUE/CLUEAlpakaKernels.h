@@ -200,8 +200,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         VecArray<VecArray<float, 2>, Ndim> searchbox_extremes;
         for (int dim{}; dim != Ndim; ++dim) {
           VecArray<float, 2> dim_extremes;
-          dim_extremes.push_back_unsafe(coords_i[dim] - dc);
-          dim_extremes.push_back_unsafe(coords_i[dim] + dc);
+          dim_extremes.push_back_unsafe(coords_i[dim] - dm);
+          dim_extremes.push_back_unsafe(coords_i[dim] + dm);
 
           searchbox_extremes.push_back_unsafe(dim_extremes);
         }
