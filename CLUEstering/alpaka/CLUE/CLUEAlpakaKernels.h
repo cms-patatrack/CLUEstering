@@ -150,7 +150,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         float rho_j{dev_points->rho[j]};
         bool found_higher{(rho_j > rho_i)};
         // in the rare case where rho is the same, use detid
-        found_higher = found_higher || ((rho_j == rho_i) && (j > point_id));
+        found_higher = found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
 
         // Calculate the distance between the two points
         VecArray<float, Ndim> coords_j{dev_points->coords[j]};
