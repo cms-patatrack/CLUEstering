@@ -71,7 +71,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         }
 
         if (dist_ij_sq <= dc * dc) {
-          *rho_i += kernel(acc, alpaka::math::sqrt(acc, dist_ij_sq), point_id, j);
+          *rho_i += kernel(acc, alpaka::math::sqrt(acc, dist_ij_sq), point_id, j) * dev_points->weight[j];
         }
 
       }  // end of interate inside this bin
