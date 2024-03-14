@@ -38,7 +38,7 @@ namespace cms::alpakatools {
       if (m_size > 0) {
         return m_data[m_size - 1];
       } else
-        return T();  //undefined behaviour
+        return T();  // undefined behaviour
     }
 
     // thread-safe version of the vector, when used in a CUDA kernel
