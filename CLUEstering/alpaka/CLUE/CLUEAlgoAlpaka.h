@@ -85,11 +85,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                        const Points<Ndim> &h_points) {
     for (size_t dim{}; dim != Ndim; ++dim) {
       float tileSize;
-      float dimMax{(*std::max_element(
+      const float dimMax{(*std::max_element(
           h_points.m_coords.begin(),
           h_points.m_coords.end(),
           [dim](const auto &vec1, const auto &vec2) -> bool { return vec1[dim] < vec2[dim]; }))[dim]};
-      float dimMin{(*std::min_element(
+      const float dimMin{(*std::min_element(
           h_points.m_coords.begin(),
           h_points.m_coords.end(),
           [dim](const auto &vec1, const auto &vec2) -> bool { return vec1[dim] > vec2[dim]; }))[dim]};
