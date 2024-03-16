@@ -766,8 +766,7 @@ class clusterer:
                       x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
                       label_size: float = 16, pt_size: float = 1, pt_colour: str = 'b',
                       grid: bool = True, grid_style: str = '--', grid_size: float = 0.2,
-                      x_ticks=None, y_ticks=None, z_ticks=None,
-                      **kwargs) -> None:
+                      x_ticks=None, y_ticks=None, z_ticks=None, file_name=None, **kwargs) -> None:
         """
         Plots the points in input.
 
@@ -842,7 +841,10 @@ class clusterer:
             if y_ticks is not None:
                 plt.yticks(y_ticks)
 
-            plt.show()
+            if file_name is not None:
+                plt.savefig(file_name)
+            else:
+                plt.show()
         elif self.clust_data.n_dim == 2:
             plt.scatter(cartesian_coords[0],
                         cartesian_coords[1],
@@ -866,7 +868,10 @@ class clusterer:
             if y_ticks is not None:
                 plt.yticks(y_ticks)
 
-            plt.show()
+            if file_name is not None:
+                plt.savefig(file_name)
+            else:
+                plt.show()
         else:
             fig = plt.figure()
             ax_ = fig.add_subplot(projection='3d')
@@ -896,14 +901,17 @@ class clusterer:
             if z_ticks is not None:
                 ax_.set_zticks(z_ticks)
 
-            plt.show()
+            if file_name is not None:
+                plt.savefig(file_name)
+            else:
+                plt.show()
 
     def cluster_plotter(self, plot_title: str = '', title_size: float = 16,
                         x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
                         label_size: float = 16, outl_size: float = 10, pt_size: float = 10,
                         seed_size: float = 25, grid: bool = True, grid_style: str = '--',
                         grid_size: float = 0.2, x_ticks=None, y_ticks=None, z_ticks=None,
-                        **kwargs) -> None:
+                        file_name=None, **kwargs) -> None:
         """
         Plots the clusters with a different colour for every cluster.
 
@@ -994,7 +1002,10 @@ class clusterer:
             if y_ticks is not None:
                 plt.yticks(y_ticks)
 
-            plt.show()
+            if file_name is not None:
+                plt.savefig(file_name)
+            else:
+                plt.show()
         elif self.clust_data.n_dim == 2:
             data = {'x0': cartesian_coords[0],
                     'x1': cartesian_coords[1],
@@ -1029,7 +1040,10 @@ class clusterer:
             if y_ticks is not None:
                 plt.yticks(y_ticks)
 
-            plt.show()
+            if file_name is not None:
+                plt.savefig(file_name)
+            else:
+                plt.show()
         else:
             data = {'x0': cartesian_coords[0],
                     'x1': cartesian_coords[1],
@@ -1071,7 +1085,10 @@ class clusterer:
             if z_ticks is not None:
                 ax_.set_zticks(z_ticks)
 
-            plt.show()
+            if file_name is not None:
+                plt.savefig(file_name)
+            else:
+                plt.show()
 
     def to_csv(self, output_folder: str, file_name: str) -> None:
         """
