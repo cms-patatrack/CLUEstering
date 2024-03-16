@@ -37,14 +37,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       init_device(queue_);
     }
 
-    TilesAlpaka<Ndim> *m_tiles;
-    VecArray<int32_t, max_seeds> *m_seeds;
-    VecArray<int32_t, max_followers> *m_followers;
+    TilesAlpaka<Ndim>* m_tiles;
+    VecArray<int32_t, max_seeds>* m_seeds;
+    VecArray<int32_t, max_followers>* m_followers;
 
     template <typename KernelType>
-    std::vector<std::vector<int>> make_clusters(Points<Ndim> &h_points,
-                                                PointsAlpaka<Ndim> &d_points,
-                                                const KernelType &kernel,
+    std::vector<std::vector<int>> make_clusters(Points<Ndim>& h_points,
+                                                PointsAlpaka<Ndim>& d_points,
+                                                const KernelType& kernel,
                                                 Queue queue_,
                                                 size_t block_size);
 
@@ -76,23 +76,27 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                size_t block_size);
 
     // Construction of the tiles
-    void calculate_tile_size(TilesAlpaka<Ndim> &h_tiles, const Points<Ndim> &h_points);
+    void calculate_tile_size(TilesAlpaka<Ndim>& h_tiles, const Points<Ndim>& h_points);
   };
 
   // Private methods
   template <typename TAcc, uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(TilesAlpaka<Ndim> &h_tiles,
-                                                       const Points<Ndim> &h_points) {
+  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(TilesAlpaka<Ndim>& h_tiles,
+                                                       const Points<Ndim>& h_points) {
     for (size_t dim{}; dim != Ndim; ++dim) {
       float tileSize;
-      const float dimMax{(*std::max_element(
-          h_points.m_coords.begin(),
-          h_points.m_coords.end(),
-          [dim](const auto &vec1, const auto &vec2) -> bool { return vec1[dim] < vec2[dim]; }))[dim]};
-      const float dimMin{(*std::min_element(
-          h_points.m_coords.begin(),
-          h_points.m_coords.end(),
-          [dim](const auto &vec1, const auto &vec2) -> bool { return vec1[dim] > vec2[dim]; }))[dim]};
+      const float dimMax{
+          (*std::max_element(h_points.m_coords.begin(),
+                             h_points.m_coords.end(),
+                             [dim](const auto& vec1, const auto& vec2) -> bool {
+                               return vec1[dim] < vec2[dim];
+                             }))[dim]};
+      const float dimMin{
+          (*std::min_element(h_points.m_coords.begin(),
+                             h_points.m_coords.end(),
+                             [dim](const auto& vec1, const auto& vec2) -> bool {
+                               return vec1[dim] > vec2[dim];
+                             }))[dim]};
 
       VecArray<float, 2> temp;
       temp.push_back_unsafe(dimMin);
@@ -118,8 +122,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   }
 
   template <typename TAcc, uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::setup(const Points<Ndim> &h_points,
-                                         PointsAlpaka<Ndim> &d_points,
+  void CLUEAlgoAlpaka<TAcc, Ndim>::setup(const Points<Ndim>& h_points,
+                                         PointsAlpaka<Ndim>& d_points,
                                          Queue queue_,
                                          size_t block_size) {
     // Create temporary tiles object
@@ -150,11 +154,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   // Public methods
   template <typename TAcc, uint8_t Ndim>
   template <typename KernelType>
-  std::vector<std::vector<int>> CLUEAlgoAlpaka<TAcc, Ndim>::make_clusters(Points<Ndim> &h_points,
-                                                                          PointsAlpaka<Ndim> &d_points,
-                                                                          const KernelType &kernel,
-                                                                          Queue queue_,
-                                                                          size_t block_size) {
+  std::vector<std::vector<int>> CLUEAlgoAlpaka<TAcc, Ndim>::make_clusters(
+      Points<Ndim>& h_points,
+      PointsAlpaka<Ndim>& d_points,
+      const KernelType& kernel,
+      Queue queue_,
+      size_t block_size) {
     setup(h_points, d_points, queue_, block_size);
 
     const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
