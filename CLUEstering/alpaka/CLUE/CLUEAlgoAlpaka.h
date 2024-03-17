@@ -95,7 +95,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
           (*std::min_element(h_points.m_coords.begin(),
                              h_points.m_coords.end(),
                              [dim](const auto& vec1, const auto& vec2) -> bool {
-                               return vec1[dim] > vec2[dim];
+                               return vec1[dim] < vec2[dim];
                              }))[dim]};
 
       VecArray<float, 2> temp;
