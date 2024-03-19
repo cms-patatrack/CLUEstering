@@ -16,12 +16,16 @@ namespace cms::alpakatools {
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
   // overload for DevCudaRt
-  inline int getDeviceIndex(alpaka::DevCudaRt const& device) { return alpaka::getNativeHandle(device); }
+  inline int getDeviceIndex(alpaka::DevCudaRt const& device) {
+    return alpaka::getNativeHandle(device);
+  }
 #endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
 
 #ifdef ALPAKA_ACC_GPU_HIP_ENABLED
   // overload for DevHipRt
-  inline int getDeviceIndex(alpaka::DevHipRt const& device) { return alpaka::getNativeHandle(device); }
+  inline int getDeviceIndex(alpaka::DevHipRt const& device) {
+    return alpaka::getNativeHandle(device);
+  }
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED
 
 }  // namespace cms::alpakatools

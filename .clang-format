@@ -1,7 +1,7 @@
 ---
 Language:        Cpp
 BasedOnStyle:  Google
-ColumnLimit:     108
+ColumnLimit:     90
 NamespaceIndentation: All
 SortIncludes:    false
 IndentWidth:     2
@@ -11,8 +11,10 @@ PenaltyExcessCharacter: 100
 AlignAfterOpenBracket: Align
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
-BinPackParameters: false
 AlwaysBreakTemplateDeclarations: Yes
 ReflowComments: false
 BinPackArguments: false
 BinPackParameters: false
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Left

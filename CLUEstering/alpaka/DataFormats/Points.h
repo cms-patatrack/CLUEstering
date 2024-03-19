@@ -12,10 +12,11 @@
 
 using cms::alpakatools::VecArray;
 
-template <uint8_t Ndim> struct Points {
+template <uint8_t Ndim>
+struct Points {
   Points() = default;
-  Points(const std::vector<VecArray<float, Ndim>> &coords,
-         const std::vector<float> &weight)
+  Points(const std::vector<VecArray<float, Ndim>>& coords,
+         const std::vector<float>& weight)
       : m_coords{coords}, m_weight{weight}, n{weight.size()} {
     m_rho.resize(n);
     m_delta.resize(n);
@@ -23,10 +24,9 @@ template <uint8_t Ndim> struct Points {
     m_clusterIndex.resize(n);
     m_isSeed.resize(n);
   }
-  Points(const std::vector<std::vector<float>> &coords,
-         const std::vector<float> &weight)
+  Points(const std::vector<std::vector<float>>& coords, const std::vector<float>& weight)
       : m_weight{weight}, n{weight.size()} {
-    for (const auto &x : coords) {
+    for (const auto& x : coords) {
       VecArray<float, Ndim> temp_vecarray;
       for (auto value : x) {
         temp_vecarray.push_back_unsafe(value);

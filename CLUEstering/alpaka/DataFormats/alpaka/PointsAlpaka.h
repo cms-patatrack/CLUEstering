@@ -18,7 +18,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   public:
     PointsAlpaka() = delete;
     explicit PointsAlpaka(Queue stream, int n_points)
-        : coords{cms::alpakatools::make_device_buffer<VecArray<float, Ndim>[]>(stream, n_points)},
+        : coords{cms::alpakatools::make_device_buffer<VecArray<float, Ndim>[]>(stream,
+                                                                               n_points)},
           weight{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
           rho{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
           delta{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},

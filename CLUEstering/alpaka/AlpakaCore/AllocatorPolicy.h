@@ -14,7 +14,8 @@ namespace cms::alpakatools {
   template <typename TDev>
   constexpr inline AllocatorPolicy allocator_policy = AllocatorPolicy::Synchronous;
 
-#if defined ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED || defined ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
+#if defined ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED || \
+    defined ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
   template <>
   constexpr inline AllocatorPolicy allocator_policy<alpaka::DevCpu> =
 #if !defined ALPAKA_DISABLE_CACHING_ALLOCATOR
