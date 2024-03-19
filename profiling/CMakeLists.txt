@@ -32,7 +32,6 @@ endif()
 
 # include source directories
 include_directories(../CLUEstering/alpaka/)
-include_directories(../CLUEstering/alpaka/)
 
 # CPU Serial 
 add_executable(serial.out main.cc)
