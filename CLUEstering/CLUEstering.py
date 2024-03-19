@@ -694,6 +694,32 @@ class clusterer:
             print(f'CLUE executed in {self.elapsed_time} ms')
             print(f'Number of clusters found: {self.clust_prop.n_clusters}')
 
+    # getters for the properties of the clusters
+    @property
+    def n_clusters(self) -> int:
+        return self.clust_prop.n_clusters
+
+    @property
+    def cluster_ids(self) -> np.ndarray:
+        return self.clust_prop.cluster_ids
+
+    @property
+    def is_seed(self) -> np.ndarray:
+        return self.clust_prop.is_seed
+
+    @property
+    def cluster_points(self) -> np.ndarray:
+        return self.clust_prop.cluster_points
+
+    @property
+    def points_per_cluster(self) -> np.ndarray:
+        return self.clust_prop.points_per_cluster
+
+    @property
+    def output_df(self) -> pd.DataFrame:
+        return self.clust_prop.output_df
+
+
     def input_plotter(self, plot_title: str='', title_size: float = 16,
                       x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
                       label_size: float = 16, pt_size: float = 1, pt_colour: str = 'b',
