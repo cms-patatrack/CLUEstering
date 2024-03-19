@@ -11,13 +11,13 @@
 #include <sstream>
 #include <stdint.h>
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
-#include "CLUEAlpakaKernels.h"
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
+#include "CLUEAlpakaKernels.h"
 #include "ConvolutionalKernel.h"
 
 using cms::alpakatools::VecArray;
@@ -83,20 +83,28 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <typename TAcc, uint8_t Ndim>
   void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(TilesAlpaka<Ndim>& h_tiles,
                                                        const Points<Ndim>& h_points) {
-    for (int i{}; i != Ndim; ++i) {
+    for (size_t dim{}; dim != Ndim; ++dim) {
       float tileSize;
-      float dimMax{
-          *std::max_element(h_points.m_coords[i].begin(), h_points.m_coords[i].end())};
-      float dimMin{
-          *std::min_element(h_points.m_coords[i].begin(), h_points.m_coords[i].end())};
+      const float dimMax{
+          (*std::max_element(h_points.m_coords.begin(),
+                             h_points.m_coords.end(),
+                             [dim](const auto& vec1, const auto& vec2) -> bool {
+                               return vec1[dim] < vec2[dim];
+                             }))[dim]};
+      const float dimMin{
+          (*std::min_element(h_points.m_coords.begin(),
+                             h_points.m_coords.end(),
+                             [dim](const auto& vec1, const auto& vec2) -> bool {
+                               return vec1[dim] < vec2[dim];
+                             }))[dim]};
 
       VecArray<float, 2> temp;
       temp.push_back_unsafe(dimMin);
       temp.push_back_unsafe(dimMax);
-      h_tiles.min_max[i] = temp;
+      h_tiles.min_max[dim] = temp;
       tileSize = (dimMax - dimMin) / h_tiles.nPerDim();
 
-      h_tiles.tile_size[i] = tileSize;
+      h_tiles.tile_size[dim] = tileSize;
     }
   }
 

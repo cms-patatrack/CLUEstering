@@ -16,11 +16,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 1> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<1> h_points(coordinates, weight);
+    PointsAlpaka<1> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -34,11 +34,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 1> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<1> h_points(coordinates, weight);
+    PointsAlpaka<1> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -52,11 +52,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 1> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<1> h_points(coordinates, weight);
+    PointsAlpaka<1> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -124,11 +124,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 3> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<3> h_points(coordinates, weight);
+    PointsAlpaka<3> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -142,11 +142,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 3> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<3> h_points(coordinates, weight);
+    PointsAlpaka<3> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -160,11 +160,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 3> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<3> h_points(coordinates, weight);
+    PointsAlpaka<3> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -178,11 +178,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 4> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<4> h_points(coordinates, weight);
+    PointsAlpaka<4> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -196,11 +196,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 4> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<4> h_points(coordinates, weight);
+    PointsAlpaka<4> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -214,11 +214,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 4> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<4> h_points(coordinates, weight);
+    PointsAlpaka<4> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -232,11 +232,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 5> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<5> h_points(coordinates, weight);
+    PointsAlpaka<5> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -250,11 +250,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 5> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<5> h_points(coordinates, weight);
+    PointsAlpaka<5> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -268,11 +268,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 5> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<5> h_points(coordinates, weight);
+    PointsAlpaka<5> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -286,11 +286,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 6> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<6> h_points(coordinates, weight);
+    PointsAlpaka<6> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -304,11 +304,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 6> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<6> h_points(coordinates, weight);
+    PointsAlpaka<6> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -322,11 +322,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 6> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<6> h_points(coordinates, weight);
+    PointsAlpaka<6> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -340,11 +340,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 7> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<7> h_points(coordinates, weight);
+    PointsAlpaka<7> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -358,11 +358,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 7> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<7> h_points(coordinates, weight);
+    PointsAlpaka<7> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -376,11 +376,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 7> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<7> h_points(coordinates, weight);
+    PointsAlpaka<7> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -394,11 +394,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 8> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<8> h_points(coordinates, weight);
+    PointsAlpaka<8> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -412,11 +412,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 8> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<8> h_points(coordinates, weight);
+    PointsAlpaka<8> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -430,11 +430,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 8> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<8> h_points(coordinates, weight);
+    PointsAlpaka<8> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -448,11 +448,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 9> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<9> h_points(coordinates, weight);
+    PointsAlpaka<9> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -466,11 +466,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 9> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<9> h_points(coordinates, weight);
+    PointsAlpaka<9> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -484,11 +484,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 9> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<9> h_points(coordinates, weight);
+    PointsAlpaka<9> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -502,11 +502,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                       const FlatKernel& kernel,
                                       Queue queue_,
                                       size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 10> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<10> h_points(coordinates, weight);
+    PointsAlpaka<10> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -520,11 +520,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                       const ExponentialKernel& kernel,
                                       Queue queue_,
                                       size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 10> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<10> h_points(coordinates, weight);
+    PointsAlpaka<10> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
@@ -538,11 +538,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                       const GaussianKernel& kernel,
                                       Queue queue_,
                                       size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<Acc1D, 10> algo(dc, rhoc, outlier, pPBin, queue_);
 
     // Create the host and device points
-    Points<2> h_points(coordinates, weight);
-    PointsAlpaka<2> d_points(queue_, weight.size());
+    Points<10> h_points(coordinates, weight);
+    PointsAlpaka<10> d_points(queue_, weight.size());
 
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
