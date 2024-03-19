@@ -9,7 +9,7 @@ on:
 jobs:
   formatting-check:
     name: Formatting Check
-    runs-on: fedora-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         path:
