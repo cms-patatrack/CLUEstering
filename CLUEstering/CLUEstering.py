@@ -217,6 +217,12 @@ class clusterer:
         self.clust_prop = None
         self.elapsed_time = 0.
 
+    def set_params(self, **kwargs) -> None:
+        self.dc_ = kwargs.get('dc_', self.dc_)
+        self.rhoc = kwargs.get('rhoc_', self.rhoc)
+        self.outlier = kwargs.get('outlier_', self.outlier)
+        self.ppbin = kwargs.get('ppbin', self.ppbin)
+
     def _read_array(self, input_data: Union[list,np.ndarray]) -> None:
         """
         Reads data provided with lists or np.ndarrays
