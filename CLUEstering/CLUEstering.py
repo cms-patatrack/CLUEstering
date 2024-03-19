@@ -223,11 +223,12 @@ class clusterer:
         self.clust_prop = None
         self.elapsed_time = 0.
 
-    def set_params(self, **kwargs) -> None:
-        self.dc_ = kwargs.get('dc_', self.dc_)
-        self.rhoc = kwargs.get('rhoc_', self.rhoc)
-        self.outlier = kwargs.get('outlier_', self.outlier)
-        self.ppbin = kwargs.get('ppbin', self.ppbin)
+    def set_params(self, dc: float, rhoc: float,
+                   outlier: float, ppbin: int = 10) -> None:
+        self.dc_ = dc
+        self.rhoc = rhoc
+        self.outlier = outlier
+        self.ppbin = ppbin
 
     def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
         """
