@@ -71,31 +71,37 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
     centers = []
     if n_dim == 2:
         data = {'x0': np.array([]), 'x1': np.array([]), 'weight': np.array([])}
-        centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
-        blob_data = make_blobs(n_samples=n_samples, centers=np.array(centers))[0]
+        centers = [[x_max * rnd.random(),
+                    y_max * rnd.random()] for _ in range(n_blobs)]
+        blob_data = make_blobs(n_samples=n_samples,
+                               centers=np.array(centers))[0]
 
         data['x0'] = blob_data.T[0]
         data['x1'] = blob_data.T[1]
         data['weight'] = np.full(shape=len(blob_data.T[0]), fill_value=1)
 
-
         return pd.DataFrame(data)
     if n_dim == 3:
         data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
         sqrt_samples = int(sqrt(n_samples))
-        z_values = np.random.normal(mean, sigma,sqrt_samples)
-        centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
+        z_values = np.random.normal(mean, sigma, sqrt_samples)
+        centers = [[x_max * rnd.random(),
+                    y_max * rnd.random()] for _ in range(n_blobs)]
 
-        for value in z_values: # for every z value, a layer is generated.
-            blob_data = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))[0]
+        for value in z_values:  # for every z value, a layer is generated.
+            blob_data = make_blobs(n_samples=sqrt_samples,
+                                   centers=np.array(centers))[0]
             data['x0'] = np.concatenate([data['x0'], blob_data.T[0]])
             data['x1'] = np.concatenate([data['x1'], blob_data.T[1]])
-            data['x2'] = np.concatenate([data['x2'], np.full(shape=sqrt_samples,
-                                                             fill_value=value)])
-            data['weight'] = np.concatenate([data['weight'], np.full(shape=sqrt_samples,
-                                                                     fill_value=1)])
+            data['x2'] = np.concatenate([data['x2'],
+                                         np.full(shape=sqrt_samples,
+                                                 fill_value=value)])
+            data['weight'] = np.concatenate([data['weight'],
+                                             np.full(shape=sqrt_samples,
+                                                     fill_value=1)])
 
         return pd.DataFrame(data)
+
 
 @dataclass()
 class clustering_data:
@@ -217,7 +223,14 @@ class clusterer:
         self.clust_prop = None
         self.elapsed_time = 0.
 
-    def _read_array(self, input_data: Union[list,np.ndarray]) -> None:
+    def set_params(self, dc: float, rhoc: float,
+                   outlier: float, ppbin: int = 10) -> None:
+        self.dc_ = dc
+        self.rhoc = rhoc
+        self.outlier = outlier
+        self.ppbin = ppbin
+
+    def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
         """
         Reads data provided with lists or np.ndarrays
 
@@ -281,7 +294,7 @@ class clusterer:
         df_ = pd.read_csv(input_data)
         return df_
 
-    def _read_dict_df(self, input_data: Union[dict,pd.DataFrame]) -> pd.DataFrame:
+    def _read_dict_df(self, input_data: Union[dict, pd.DataFrame]) -> pd.DataFrame:
         """
         Reads data provided using dictionaries or pandas dataframes
 
@@ -504,6 +517,42 @@ class clusterer:
             raise ValueError("Invalid kernel. The allowed choices for the"
                              + " kernels are: flat, exp, gaus and custom.")
 
+    # getters for the properties of the clustering data
+    @property
+    def coords(self) -> np.ndarray:
+        '''
+        Returns the coordinates of the points used for clustering.
+        '''
+        return self.clust_data.coords
+
+    @property
+    def original_coords(self) -> np.ndarray:
+        '''
+        Returns the original, non-normalized coordinates.
+        '''
+        return self.clust_data.originalcoords
+
+    @property
+    def weight(self) -> np.ndarray:
+        '''
+        Returns the weight of the points.
+        '''
+        return self.clust_data.weight
+
+    @property
+    def n_dim(self) -> int:
+        '''
+        Returns the number of dimensions of the points.
+        '''
+        return self.clust_data.n_dim
+
+    @property
+    def n_points(self) -> int:
+        '''
+        Returns the number of points in the dataset.
+        '''
+        return self.clust_data.n_points
+
     def list_devices(self, backend: str = "all") -> None:
         """
         Lists the devices available for the chosen backend.
@@ -667,7 +716,53 @@ class clusterer:
             print(f'CLUE executed in {self.elapsed_time} ms')
             print(f'Number of clusters found: {self.clust_prop.n_clusters}')
 
-    def input_plotter(self, plot_title: str='', title_size: float = 16,
+    # getters for the properties of the clusters
+    @property
+    def n_clusters(self) -> int:
+        '''
+        Returns the number of clusters found.
+        '''
+
+        return self.clust_prop.n_clusters
+
+    @property
+    def cluster_ids(self) -> np.ndarray:
+        '''
+        Returns the index of the cluster to which each point belongs.
+        '''
+        return self.clust_prop.cluster_ids
+
+    @property
+    def is_seed(self) -> np.ndarray:
+        '''
+        Returns an array of integers containing '1' if a point is a seed
+        and '0' if it isn't.
+        '''
+        return self.clust_prop.is_seed
+
+    @property
+    def cluster_points(self) -> np.ndarray:
+        '''
+        Returns an array containing, for each cluster, the list of its points.
+        '''
+        return self.clust_prop.cluster_points
+
+    @property
+    def points_per_cluster(self) -> np.ndarray:
+        '''
+        Returns an array containing the number of points belonging to each cluster.
+        '''
+        return self.clust_prop.points_per_cluster
+
+    @property
+    def output_df(self) -> pd.DataFrame:
+        '''
+        Returns a dafaframe containing the cluster_ids and the is_seed values.
+        '''
+        return self.clust_prop.output_df
+
+
+    def input_plotter(self, plot_title: str = '', title_size: float = 16,
                       x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
                       label_size: float = 16, pt_size: float = 1, pt_colour: str = 'b',
                       grid: bool = True, grid_style: str = '--', grid_size: float = 0.2,
