@@ -11,9 +11,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const FlatKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -29,9 +29,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const ExponentialKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -47,9 +47,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const GaussianKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -65,9 +65,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const FlatKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -83,9 +83,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const ExponentialKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -101,9 +101,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const GaussianKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -119,9 +119,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const FlatKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -137,9 +137,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const ExponentialKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -155,9 +155,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const GaussianKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -173,9 +173,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const FlatKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -191,9 +191,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const ExponentialKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -209,9 +209,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const GaussianKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -227,9 +227,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const FlatKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -245,9 +245,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const ExponentialKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -263,9 +263,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const GaussianKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -281,9 +281,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const FlatKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -299,9 +299,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const ExponentialKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -317,9 +317,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const GaussianKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -335,9 +335,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const FlatKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -353,9 +353,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const ExponentialKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -371,9 +371,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const GaussianKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -389,9 +389,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const FlatKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -407,9 +407,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const ExponentialKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -425,9 +425,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const GaussianKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -443,9 +443,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const FlatKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -461,9 +461,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const ExponentialKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const ExponentialKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -479,9 +479,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                      float rhoc,
                                      float outlier,
                                      int pPBin,
-                                     std::vector<std::vector<float>> const &coordinates,
-                                     std::vector<float> const &weight,
-                                     const GaussianKernel &kernel,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
+                                     const GaussianKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -497,9 +497,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                       float rhoc,
                                       float outlier,
                                       int pPBin,
-                                      std::vector<std::vector<float>> const &coordinates,
-                                      std::vector<float> const &weight,
-                                      const FlatKernel &kernel,
+                                      std::vector<std::vector<float>> const& coordinates,
+                                      std::vector<float> const& weight,
+                                      const FlatKernel& kernel,
                                       Queue queue_,
                                       size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -515,9 +515,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                       float rhoc,
                                       float outlier,
                                       int pPBin,
-                                      std::vector<std::vector<float>> const &coordinates,
-                                      std::vector<float> const &weight,
-                                      const ExponentialKernel &kernel,
+                                      std::vector<std::vector<float>> const& coordinates,
+                                      std::vector<float> const& weight,
+                                      const ExponentialKernel& kernel,
                                       Queue queue_,
                                       size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
@@ -533,9 +533,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                       float rhoc,
                                       float outlier,
                                       int pPBin,
-                                      std::vector<std::vector<float>> const &coordinates,
-                                      std::vector<float> const &weight,
-                                      const GaussianKernel &kernel,
+                                      std::vector<std::vector<float>> const& coordinates,
+                                      std::vector<float> const& weight,
+                                      const GaussianKernel& kernel,
                                       Queue queue_,
                                       size_t block_size) {
     CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);

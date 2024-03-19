@@ -21,7 +21,10 @@ public:
 
   // Overload call operator
   template <typename TAcc>
-  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const {
+  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc,
+                                      float dist_ij,
+                                      int point_id,
+                                      int j) const {
     if (point_id == j) {
       return 1.f;
     } else {
@@ -44,13 +47,17 @@ public:
 
   // Overload call operator
   template <typename TAcc>
-  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const {
+  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc,
+                                      float dist_ij,
+                                      int point_id,
+                                      int j) const {
     if (point_id == j) {
       return 1.f;
     } else {
       return (m_gaus_amplitude *
-              alpaka::math::exp(
-                  acc, -(dist_ij - m_gaus_avg) * (dist_ij - m_gaus_avg) / (2 * m_gaus_std * m_gaus_std)));
+              alpaka::math::exp(acc,
+                                -(dist_ij - m_gaus_avg) * (dist_ij - m_gaus_avg) /
+                                    (2 * m_gaus_std * m_gaus_std)));
     }
   }
 };
@@ -68,7 +75,10 @@ public:
 
   // Overload call operator
   template <typename TAcc>
-  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const {
+  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc,
+                                      float dist_ij,
+                                      int point_id,
+                                      int j) const {
     if (point_id == j) {
       return 1.f;
     } else {

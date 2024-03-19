@@ -26,16 +26,22 @@ namespace alpaka {
     struct Enqueue<QueueCudaRtNonBlocking, HostOnlyTask> {
       using TApi = ApiCudaRt;
 
-      static void CUDART_CB callback(cudaStream_t /*queue*/, cudaError_t /*status*/, void* arg) {
+      static void CUDART_CB callback(cudaStream_t /*queue*/,
+                                     cudaError_t /*status*/,
+                                     void* arg) {
         //ALPAKA_UNIFORM_CUDA_HIP_RT_CHECK(status);
         std::unique_ptr<HostOnlyTask> pTask(static_cast<HostOnlyTask*>(arg));
         (*pTask)();
       }
 
-      ALPAKA_FN_HOST static auto enqueue(QueueCudaRtNonBlocking& queue, HostOnlyTask task) -> void {
+      ALPAKA_FN_HOST static auto enqueue(QueueCudaRtNonBlocking& queue, HostOnlyTask task)
+          -> void {
         auto pTask = std::make_unique<HostOnlyTask>(std::move(task));
-        ALPAKA_UNIFORM_CUDA_HIP_RT_CHECK(cudaStreamAddCallback(
-            alpaka::getNativeHandle(queue), callback, static_cast<void*>(pTask.release()), 0u));
+        ALPAKA_UNIFORM_CUDA_HIP_RT_CHECK(
+            cudaStreamAddCallback(alpaka::getNativeHandle(queue),
+                                  callback,
+                                  static_cast<void*>(pTask.release()),
+                                  0u));
       }
     };
 #endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
@@ -52,10 +58,14 @@ namespace alpaka {
         (*pTask)();
       }
 
-      ALPAKA_FN_HOST static auto enqueue(QueueHipRtNonBlocking& queue, HostOnlyTask task) -> void {
+      ALPAKA_FN_HOST static auto enqueue(QueueHipRtNonBlocking& queue, HostOnlyTask task)
+          -> void {
         auto pTask = std::make_unique<HostOnlyTask>(std::move(task));
-        ALPAKA_UNIFORM_CUDA_HIP_RT_CHECK(hipStreamAddCallback(
-            alpaka::getNativeHandle(queue), callback, static_cast<void*>(pTask.release()), 0u));
+        ALPAKA_UNIFORM_CUDA_HIP_RT_CHECK(
+            hipStreamAddCallback(alpaka::getNativeHandle(queue),
+                                 callback,
+                                 static_cast<void*>(pTask.release()),
+                                 0u));
       }
     };
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED

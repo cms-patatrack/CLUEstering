@@ -4,7 +4,8 @@
 enum class Backend { SERIAL, TBB, CUDA, HIP };
 
 inline std::string const& name(Backend backend) {
-  static const std::string names[] = {"serial_sync", "tbb_async", "cuda_async", "rocm_async"};
+  static const std::string names[] = {
+      "serial_sync", "tbb_async", "cuda_async", "rocm_async"};
   return names[static_cast<int>(backend)];
 }
 

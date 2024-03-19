@@ -43,17 +43,18 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   };
 
   template <typename TAcc, uint8_t Ndim, uint8_t N_, typename KernelType>
-  ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
-                                        VecArray<uint32_t, Ndim>& base_vec,
-                                        const VecArray<VecArray<uint32_t, 2>, Ndim>& search_box,
-                                        TilesAlpaka<Ndim>* tiles,
-                                        PointsView<Ndim>* dev_points,
-                                        const KernelType& kernel,
-                                        /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
-                                        const VecArray<float, Ndim>& coords_i,
-                                        float* rho_i,
-                                        float dc,
-                                        uint32_t point_id) {
+  ALPAKA_FN_HOST_ACC void for_recursion(
+      const TAcc& acc,
+      VecArray<uint32_t, Ndim>& base_vec,
+      const VecArray<VecArray<uint32_t, 2>, Ndim>& search_box,
+      TilesAlpaka<Ndim>* tiles,
+      PointsView<Ndim>* dev_points,
+      const KernelType& kernel,
+      /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
+      const VecArray<float, Ndim>& coords_i,
+      float* rho_i,
+      float dc,
+      uint32_t point_id) {
     if constexpr (N_ == 0) {
       int binId{tiles->getGlobalBinByBin(acc, base_vec)};
       // get the size of this bin
@@ -71,7 +72,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         }
 
         if (dist_ij_sq <= dc * dc) {
-          *rho_i += kernel(acc, alpaka::math::sqrt(acc, dist_ij_sq), point_id, j) * dev_points->weight[j];
+          *rho_i += kernel(acc, alpaka::math::sqrt(acc, dist_ij_sq), point_id, j) *
+                    dev_points->weight[j];
         }
 
       }  // end of interate inside this bin
@@ -82,8 +84,16 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
            i <= search_box[search_box.capacity() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
-        for_recursion<TAcc, Ndim, N_ - 1>(
-            acc, base_vec, search_box, tiles, dev_points, kernel, coords_i, rho_i, dc, point_id);
+        for_recursion<TAcc, Ndim, N_ - 1>(acc,
+                                          base_vec,
+                                          search_box,
+                                          tiles,
+                                          dev_points,
+                                          kernel,
+                                          coords_i,
+                                          rho_i,
+                                          dc,
+                                          point_id);
       }
     }
   }
@@ -116,8 +126,16 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         dev_tiles->searchBox(acc, searchbox_extremes, &search_box);
 
         VecArray<uint32_t, Ndim> base_vec;
-        for_recursion<TAcc, Ndim, Ndim>(
-            acc, base_vec, search_box, dev_tiles, dev_points, kernel, coords_i, &rho_i, dc, i);
+        for_recursion<TAcc, Ndim, Ndim>(acc,
+                                        base_vec,
+                                        search_box,
+                                        dev_tiles,
+                                        dev_points,
+                                        kernel,
+                                        coords_i,
+                                        &rho_i,
+                                        dc,
+                                        i);
 
         dev_points->rho[i] = rho_i;
       });
@@ -150,7 +168,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         float rho_j{dev_points->rho[j]};
         bool found_higher{(rho_j > rho_i)};
         // in the rare case where rho is the same, use detid
-        found_higher = found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
+        found_higher =
+            found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
 
         // Calculate the distance between the two points
         VecArray<float, Ndim> coords_j{dev_points->coords[j]};
@@ -171,10 +190,21 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
       return;
     } else {
-      for (unsigned int i{s_box[s_box.capacity() - N_][0]}; i <= s_box[s_box.capacity() - N_][1]; ++i) {
+      for (unsigned int i{s_box[s_box.capacity() - N_][0]};
+           i <= s_box[s_box.capacity() - N_][1];
+           ++i) {
         base_vec[base_vec.capacity() - N_] = i;
-        for_recursion_nearest_higher<TAcc, Ndim, N_ - 1>(
-            acc, base_vec, s_box, tiles, dev_points, coords_i, rho_i, delta_i, nh_i, dm_sq, point_id);
+        for_recursion_nearest_higher<TAcc, Ndim, N_ - 1>(acc,
+                                                         base_vec,
+                                                         s_box,
+                                                         tiles,
+                                                         dev_points,
+                                                         coords_i,
+                                                         rho_i,
+                                                         delta_i,
+                                                         nh_i,
+                                                         dm_sq,
+                                                         point_id);
       }
     }
   }
