@@ -71,31 +71,37 @@ def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
     centers = []
     if n_dim == 2:
         data = {'x0': np.array([]), 'x1': np.array([]), 'weight': np.array([])}
-        centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
-        blob_data = make_blobs(n_samples=n_samples, centers=np.array(centers))[0]
+        centers = [[x_max * rnd.random(),
+                    y_max * rnd.random()] for _ in range(n_blobs)]
+        blob_data = make_blobs(n_samples=n_samples,
+                               centers=np.array(centers))[0]
 
         data['x0'] = blob_data.T[0]
         data['x1'] = blob_data.T[1]
         data['weight'] = np.full(shape=len(blob_data.T[0]), fill_value=1)
 
-
         return pd.DataFrame(data)
     if n_dim == 3:
         data = {'x0': [], 'x1': [], 'x2': [], 'weight': []}
         sqrt_samples = int(sqrt(n_samples))
-        z_values = np.random.normal(mean, sigma,sqrt_samples)
-        centers = [[x_max * rnd.random(), y_max * rnd.random()] for _ in range(n_blobs)]
+        z_values = np.random.normal(mean, sigma, sqrt_samples)
+        centers = [[x_max * rnd.random(),
+                    y_max * rnd.random()] for _ in range(n_blobs)]
 
-        for value in z_values: # for every z value, a layer is generated.
-            blob_data = make_blobs(n_samples=sqrt_samples, centers=np.array(centers))[0]
+        for value in z_values:  # for every z value, a layer is generated.
+            blob_data = make_blobs(n_samples=sqrt_samples,
+                                   centers=np.array(centers))[0]
             data['x0'] = np.concatenate([data['x0'], blob_data.T[0]])
             data['x1'] = np.concatenate([data['x1'], blob_data.T[1]])
-            data['x2'] = np.concatenate([data['x2'], np.full(shape=sqrt_samples,
-                                                             fill_value=value)])
-            data['weight'] = np.concatenate([data['weight'], np.full(shape=sqrt_samples,
-                                                                     fill_value=1)])
+            data['x2'] = np.concatenate([data['x2'],
+                                         np.full(shape=sqrt_samples,
+                                                 fill_value=value)])
+            data['weight'] = np.concatenate([data['weight'],
+                                             np.full(shape=sqrt_samples,
+                                                     fill_value=1)])
 
         return pd.DataFrame(data)
+
 
 @dataclass()
 class clustering_data:
@@ -223,7 +229,7 @@ class clusterer:
         self.outlier = kwargs.get('outlier_', self.outlier)
         self.ppbin = kwargs.get('ppbin', self.ppbin)
 
-    def _read_array(self, input_data: Union[list,np.ndarray]) -> None:
+    def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
         """
         Reads data provided with lists or np.ndarrays
 
@@ -287,7 +293,7 @@ class clusterer:
         df_ = pd.read_csv(input_data)
         return df_
 
-    def _read_dict_df(self, input_data: Union[dict,pd.DataFrame]) -> pd.DataFrame:
+    def _read_dict_df(self, input_data: Union[dict, pd.DataFrame]) -> pd.DataFrame:
         """
         Reads data provided using dictionaries or pandas dataframes
 
@@ -755,7 +761,7 @@ class clusterer:
         return self.clust_prop.output_df
 
 
-    def input_plotter(self, plot_title: str='', title_size: float = 16,
+    def input_plotter(self, plot_title: str = '', title_size: float = 16,
                       x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
                       label_size: float = 16, pt_size: float = 1, pt_colour: str = 'b',
                       grid: bool = True, grid_style: str = '--', grid_size: float = 0.2,
