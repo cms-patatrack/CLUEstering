@@ -362,7 +362,8 @@ class clusterer:
                     self.clust_data.coords.T[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
     def read_data(self,
-                  input_data: Union[pd.DataFrame,str,dict,list,np.ndarray]) -> None:
+                  input_data: Union[pd.DataFrame,str,dict,list,np.ndarray],
+                  rescale = True) -> None:
         """
         Reads the data in input and fills the class members containing the coordinates
         of the points, the weight, the number of dimensions and the number of points.
@@ -379,6 +380,9 @@ class clusterer:
         input_data : array_like
             The list or numpy array should contain a list of lists for the
             coordinates and a list for the weight.
+        rescale: bool, optional
+            If True, the coordinates are rescaled using a standard scaler.
+            By default it is set to True.
         kwargs : tuples
             Tuples corresponding to the domain of any periodic variables. The
             keyword should be the keyword of the corrispoding variable.
@@ -417,7 +421,8 @@ class clusterer:
             self._handle_dataframe(df)
 
         # Rescale the coordinates with a standard scaler
-        self._rescale()
+        if rescale:
+            self._rescale()
 
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
         """
