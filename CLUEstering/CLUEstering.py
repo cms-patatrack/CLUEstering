@@ -510,6 +510,27 @@ class clusterer:
             raise ValueError("Invalid kernel. The allowed choices for the"
                              + " kernels are: flat, exp, gaus and custom.")
 
+    # getters for the properties of the clustering data
+    @property
+    def coords(self) -> np.ndarray:
+        return self.clust_data.coords
+
+    @property
+    def original_coords(self) -> np.ndarray:
+        return self.clust_data.originalcoords
+
+    @property
+    def weight(self) -> np.ndarray:
+        return self.clust_data.weight
+
+    @property
+    def n_dim(self) -> int:
+        return self.clust_data.n_dim
+
+    @property
+    def n_points(self) -> int:
+        return self.clust_data.n_points
+
     def list_devices(self, backend: str = "all") -> None:
         """
         Lists the devices available for the chosen backend.
