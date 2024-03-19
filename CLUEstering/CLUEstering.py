@@ -513,22 +513,37 @@ class clusterer:
     # getters for the properties of the clustering data
     @property
     def coords(self) -> np.ndarray:
+        '''
+        Returns the coordinates of the points used for clustering.
+        '''
         return self.clust_data.coords
 
     @property
     def original_coords(self) -> np.ndarray:
+        '''
+        Returns the original, non-normalized coordinates.
+        '''
         return self.clust_data.originalcoords
 
     @property
     def weight(self) -> np.ndarray:
+        '''
+        Returns the weight of the points.
+        '''
         return self.clust_data.weight
 
     @property
     def n_dim(self) -> int:
+        '''
+        Returns the number of dimensions of the points.
+        '''
         return self.clust_data.n_dim
 
     @property
     def n_points(self) -> int:
+        '''
+        Returns the number of points in the dataset.
+        '''
         return self.clust_data.n_points
 
     def list_devices(self, backend: str = "all") -> None:
@@ -697,26 +712,46 @@ class clusterer:
     # getters for the properties of the clusters
     @property
     def n_clusters(self) -> int:
+        '''
+        Returns the number of clusters found.
+        '''
+
         return self.clust_prop.n_clusters
 
     @property
     def cluster_ids(self) -> np.ndarray:
+        '''
+        Returns the index of the cluster to which each point belongs.
+        '''
         return self.clust_prop.cluster_ids
 
     @property
     def is_seed(self) -> np.ndarray:
+        '''
+        Returns an array of integers containing '1' if a point is a seed
+        and '0' if it isn't.
+        '''
         return self.clust_prop.is_seed
 
     @property
     def cluster_points(self) -> np.ndarray:
+        '''
+        Returns an array containing, for each cluster, the list of its points.
+        '''
         return self.clust_prop.cluster_points
 
     @property
     def points_per_cluster(self) -> np.ndarray:
+        '''
+        Returns an array containing the number of points belonging to each cluster.
+        '''
         return self.clust_prop.points_per_cluster
 
     @property
     def output_df(self) -> pd.DataFrame:
+        '''
+        Returns a dafaframe containing the cluster_ids and the is_seed values.
+        '''
         return self.clust_prop.output_df
 
 
