@@ -280,7 +280,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   std::vector<std::vector<int>> run6(float dc,
                                      float rhoc,
                                      float outlier,
-                                     int pPBin, std::vector<std::vector<float>> const& coordinates, std::vector<float> const& weight,
+                                     int pPBin,
+                                     std::vector<std::vector<float>> const& coordinates,
+                                     std::vector<float> const& weight,
                                      const FlatKernel& kernel,
                                      Queue queue_,
                                      size_t block_size) {
