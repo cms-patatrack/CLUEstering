@@ -6,9 +6,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -g -O2")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
-# set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
-# set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
 
 # include alpaka extern subfolder
 include_directories(../extern/alpaka/include)
@@ -48,6 +45,9 @@ target_compile_options(
   PRIVATE -DALPAKA_HOST_ONLY -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_PRESENT
           -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
           -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND)
+if(NOT "${ANNOTATE}" STREQUAL "")
+	target_compile_options(serial.out PRIVATE -DANNOTATE)
+endif()
 target_compile_options(serial.out PRIVATE -pg)
 target_link_options(serial.out PRIVATE -pg)
 
@@ -65,6 +65,9 @@ if(TBB_FOUND)
             -DALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
             -DALPAKA_ACC_CPU_B_TBB_T_SEQ_ASYNC_BACKEND)
   target_link_libraries(tbb.out PRIVATE TBB::tbb)
+  if(NOT "${ANNOTATE}" STREQUAL "")
+	  target_compile_options(tbb.out PRIVATE -DANNOTATE)
+  endif()
   target_compile_options(serial.out PRIVATE -pg)
   target_link_options(serial.out PRIVATE -pg)
 endif()
@@ -106,8 +109,11 @@ if(CMAKE_CUDA_COMPILER)
   target_compile_options(
     cuda.out PRIVATE --expt-relaxed-constexpr -gencode
                           arch=compute_61,code=[sm_61,compute_61])
-  target_compile_options(cuda.out PRIVATE -pg -G)
-  target_link_options(cuda.out PRIVATE -pg -G)
+  if(NOT "${ANNOTATE}" STREQUAL "")
+	  target_compile_options(cuda.out PRIVATE -DANNOTATE)
+  endif()
+  target_compile_options(cuda.out PRIVATE -pg)
+  target_link_options(cuda.out PRIVATE -pg)
 endif()
 
 # # GPU HIP check if HIP is available
