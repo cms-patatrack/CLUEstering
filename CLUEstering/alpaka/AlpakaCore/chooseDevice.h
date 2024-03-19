@@ -3,7 +3,6 @@
 
 #include "alpakaConfig.h"
 #include "alpakaDevices.h"
-#include "Framework/Event.h"
 
 namespace cms::alpakatools {
 

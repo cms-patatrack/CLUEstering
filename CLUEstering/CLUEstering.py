@@ -23,10 +23,10 @@ import CLUE_CPU_Serial as cpu_serial
 tbb_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
 if tbb_found:
     import CLUE_CPU_TBB as cpu_tbb
-cuda_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_CUDA*.so'))))
+cuda_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))))
 if cuda_found:
     import CLUE_GPU_CUDA as gpu_cuda
-hip_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_HIP*.so'))))
+hip_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_HIP*.so'))))
 if hip_found:
     import CLUE_GPU_HIP as gpu_hip
 
