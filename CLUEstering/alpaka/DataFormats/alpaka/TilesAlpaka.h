@@ -28,8 +28,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <uint8_t Ndim>
   class TilesAlpaka {
   public:
-    TilesAlpaka()
-        : n_tiles{1000}, n_tiles_per_dim{static_cast<int>(std::pow(1000, 1. / Ndim))} {};
+    TilesAlpaka() = default;
 
     // Public member
     VecArray<VecArray<float, 2>, Ndim> min_max;
