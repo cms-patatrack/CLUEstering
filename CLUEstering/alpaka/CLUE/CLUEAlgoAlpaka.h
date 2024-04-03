@@ -76,12 +76,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                size_t block_size);
 
     // Construction of the tiles
-    void calculate_tile_size(TilesAlpaka<Ndim>& h_tiles, const Points<Ndim>& h_points);
+    void calculate_tile_size(TilesAlpaka<Ndim>* h_tiles, const Points<Ndim>& h_points);
   };
 
   // Private methods
   template <typename TAcc, uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(TilesAlpaka<Ndim>& h_tiles,
+  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(TilesAlpaka<Ndim>* h_tiles,
                                                        const Points<Ndim>& h_points) {
     for (size_t dim{}; dim != Ndim; ++dim) {
       float tileSize;
@@ -101,10 +101,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       VecArray<float, 2> temp;
       temp.push_back_unsafe(dimMin);
       temp.push_back_unsafe(dimMax);
-      h_tiles.min_max[dim] = temp;
-      tileSize = (dimMax - dimMin) / h_tiles.nPerDim();
+      h_tiles->min_max.push_back_unsafe(temp);
+      tileSize = (dimMax - dimMin) / h_tiles->nPerDim();
 
-      h_tiles.tile_size[dim] = tileSize;
+      h_tiles->tile_size.push_back_unsafe(tileSize);
     }
   }
 
@@ -127,11 +127,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                          Queue queue_,
                                          size_t block_size) {
     // Create temporary tiles object
-    TilesAlpaka<Ndim> temp;
-    calculate_tile_size(temp, h_points);
-    temp.resizeTiles();
+    auto temp = cms::alpakatools::make_host_buffer<TilesAlpaka<Ndim>>(queue_);
+	alpaka::memset(queue_, temp, 0x00);
+	temp->resizeTiles(std::ceil(h_points.n / static_cast<float>(max_tile_depth)));
+    calculate_tile_size(temp.data(), h_points);
 
-    alpaka::memcpy(queue_, *d_tiles, cms::alpakatools::make_host_view(temp));
+    alpaka::memcpy(queue_, *d_tiles, temp);
     m_tiles = (*d_tiles).data();
     alpaka::memcpy(
         queue_,
