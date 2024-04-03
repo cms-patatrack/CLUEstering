@@ -36,7 +36,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     VecArray<float, Ndim> tile_size;
 
     // Public methods
-    void resizeTiles() { m_tiles.resize(n_tiles); }
+    ALPAKA_FN_HOST void resizeTiles() { m_tiles.resize(n_tiles); }
+	ALPAKA_FN_HOST void resizeTiles(std::size_t n) {
+	  n_tiles = n;
+	  n_tiles_per_dim = static_cast<int>(std::pow(n, 1. / Ndim));
+	}
 
     // getter
     int nPerDim() const { return n_tiles_per_dim; }
