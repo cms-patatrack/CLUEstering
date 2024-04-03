@@ -37,10 +37,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Public methods
     ALPAKA_FN_HOST void resizeTiles() { m_tiles.resize(n_tiles); }
-	ALPAKA_FN_HOST void resizeTiles(std::size_t n) {
-	  n_tiles = n;
-	  n_tiles_per_dim = static_cast<int>(std::pow(n, 1. / Ndim));
-	}
+    ALPAKA_FN_HOST void resizeTiles(std::size_t n) {
+      n_tiles = n;
+      n_tiles_per_dim = static_cast<int>(std::pow(n, 1. / Ndim));
+    }
 
     // getter
     int nPerDim() const { return n_tiles_per_dim; }
@@ -113,7 +113,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
 
   private:
-	std::size_t n_tiles;
+    std::size_t n_tiles;
     int n_tiles_per_dim;
     VecArray<VecArray<uint32_t, max_tile_depth>, max_n_tiles> m_tiles;
   };
