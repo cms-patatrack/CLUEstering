@@ -113,7 +113,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
 
   private:
-    size_t n_tiles;
+	std::size_t n_tiles;
     int n_tiles_per_dim;
     VecArray<VecArray<uint32_t, max_tile_depth>, max_n_tiles> m_tiles;
   };
