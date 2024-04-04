@@ -1104,7 +1104,7 @@ class clusterer:
         df_.to_csv(out_path,index=False)
 
 if __name__ == "__main__":
-    c = clusterer(0.4,5,1.)
+    c = clusterer(0.8, 5, 1.)
     c.read_data('./blob.csv')
     c.input_plotter()
     c.run_clue(backend="cpu serial", verbose=True)
