@@ -101,10 +101,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       VecArray<float, 2> temp;
       temp.push_back_unsafe(dimMin);
       temp.push_back_unsafe(dimMax);
-      h_tiles->min_max.push_back_unsafe(temp);
+      h_tiles->minMax().push_back_unsafe(temp);
       tileSize = (dimMax - dimMin) / h_tiles->nPerDim();
 
-      h_tiles->tile_size.push_back_unsafe(tileSize);
+      h_tiles->tileSize().push_back_unsafe(tileSize);
     }
   }
 
