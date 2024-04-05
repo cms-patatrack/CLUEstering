@@ -30,18 +30,21 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   public:
     TilesAlpaka() = default;
 
-    // Public member
-    VecArray<VecArray<float, 2>, Ndim> min_max;
-    VecArray<float, Ndim> tile_size;
+	ALPAKA_FN_HOST_ACC const VecArray<VecArray<float, 2>, Ndim>& minMax() const { return min_max; }
+	ALPAKA_FN_HOST_ACC VecArray<VecArray<float, 2>, Ndim>& minMax() { return min_max; }
 
-    // Public methods
+	ALPAKA_FN_HOST_ACC const VecArray<float, 2>& minMax(std::size_t dim) const { return min_max[dim]; }
+
+	ALPAKA_FN_HOST_ACC const VecArray<float, Ndim>& tileSize() const { return tile_size; }
+	ALPAKA_FN_HOST_ACC VecArray<float, Ndim>& tileSize() { return tile_size; }
+
+	ALPAKA_FN_HOST_ACC float tileSize(std::size_t dim) const { return tile_size[dim]; }
+
     ALPAKA_FN_HOST void resizeTiles(std::size_t n) {
       n_tiles = n;
       n_tiles_per_dim = static_cast<int>(std::pow(n, 1. / Ndim));
     }
 
-    // getter
-    int nPerDim() const { return n_tiles_per_dim; }
 
     template <typename TAcc>
     ALPAKA_FN_HOST_ACC inline constexpr int getBin(const TAcc& acc,
@@ -99,6 +102,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     ALPAKA_FN_HOST_ACC inline constexpr auto size() { return n_tiles; }
 
+    ALPAKA_FN_HOST_ACC int nPerDim() const { return n_tiles_per_dim; }
+
     ALPAKA_FN_HOST_ACC inline constexpr void clear() {
       for (int i{}; i < n_tiles; ++i) {
         m_tiles[i].reset();
@@ -113,6 +118,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   private:
     std::size_t n_tiles;
     int n_tiles_per_dim;
+    VecArray<VecArray<float, 2>, Ndim> min_max;
+    VecArray<float, Ndim> tile_size;
     VecArray<VecArray<uint32_t, max_tile_depth>, max_n_tiles> m_tiles;
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
