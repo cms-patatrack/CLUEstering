@@ -20,8 +20,8 @@
 
 using cms::alpakatools::VecArray;
 
-constexpr uint32_t max_tile_depth{1 << 10};
-constexpr uint32_t max_n_tiles{1 << 10};
+constexpr uint32_t max_tile_depth{1 << 7};
+constexpr uint32_t max_n_tiles{1 << 20};
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
