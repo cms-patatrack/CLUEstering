@@ -97,7 +97,6 @@ foreach(CONV_MODULE ${CONV_MODULE})
                           ./CLUEstering/lib/CLUE_CPU_Serial.so)
 endforeach()
 
-message("SERIAL_ONLY: ${SERIAL_ONLY}")
 if(NOT ${SERIAL_ONLY})
   find_package(TBB)
 
