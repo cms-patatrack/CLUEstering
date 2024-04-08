@@ -52,7 +52,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                    int dim_) const {
       int coord_Bin{(int)((coord_ - min_max[dim_][0]) / tile_size[dim_])};
 
-      // Address the cases of underflow and overflow and underflow
+      // Address the cases of underflow and overflow
       coord_Bin = alpaka::math::min(acc, coord_Bin, n_tiles_per_dim - 1);
       coord_Bin = alpaka::math::max(acc, coord_Bin, 0);
 
