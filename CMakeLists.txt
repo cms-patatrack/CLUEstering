@@ -173,9 +173,7 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
                               ./CLUEstering/lib/CLUE_GPU_CUDA.so)
     endforeach()
   endif()
-endif()
 
-if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
   # GPU HIP check if HIP is available
   check_language(HIP)
   if(CMAKE_HIP_COMPILER)
