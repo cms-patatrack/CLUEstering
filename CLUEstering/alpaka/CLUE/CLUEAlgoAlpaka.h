@@ -129,7 +129,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     // Create temporary tiles object
     auto temp = cms::alpakatools::make_host_buffer<TilesAlpaka<Ndim>>(queue_);
     alpaka::memset(queue_, temp, 0x00);
-    temp->resizeTiles(std::ceil(h_points.n / static_cast<float>(max_tile_depth)));
+    temp->resizeTiles(std::ceil(h_points.n / static_cast<float>(pointsPerTile_)));
     calculate_tile_size(temp.data(), h_points);
 
     alpaka::memcpy(queue_, *d_tiles, temp);
