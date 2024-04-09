@@ -224,7 +224,7 @@ class clusterer:
         self.elapsed_time = 0.
 
     def set_params(self, dc: float, rhoc: float,
-                   outlier: float, ppbin: int = 10) -> None:
+                   outlier: float, ppbin: int = 128) -> None:
         self.dc_ = dc
         self.rhoc = rhoc
         self.outlier = outlier
