@@ -14,14 +14,15 @@
 #include <stdint.h>
 #include <type_traits>
 
+#include "../../AlpakaCore/alpakaWorkDiv.h"
 #include "../../AlpakaCore/alpakaConfig.h"
 #include "../../AlpakaCore/alpakaMemory.h"
 #include "AlpakaVecArray.h"
 
 using cms::alpakatools::VecArray;
 
-constexpr uint32_t max_tile_depth{1 << 7};
-constexpr uint32_t max_n_tiles{1 << 20};
+constexpr uint32_t max_tile_depth{1 << 10};
+constexpr uint32_t max_n_tiles{1 << 15};
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
@@ -30,31 +31,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   public:
     TilesAlpaka() = default;
 
-    ALPAKA_FN_HOST_ACC inline const VecArray<VecArray<float, 2>, Ndim>& minMax() const {
-      return min_max;
-    }
-    ALPAKA_FN_HOST_ACC inline VecArray<VecArray<float, 2>, Ndim>& minMax() {
-      return min_max;
-    }
+    VecArray<VecArray<float, 2>, Ndim> min_max;
+    VecArray<float, Ndim> tile_size;
 
-    ALPAKA_FN_HOST_ACC inline const VecArray<float, 2>& minMax(std::size_t dim) const {
-      return min_max[dim];
-    }
+    ALPAKA_FN_HOST_ACC void resizeTiles(std::size_t nTiles, int nPerDim) {
+      this->n_tiles = nTiles;
+      this->n_tiles_per_dim = nPerDim;
 
-    ALPAKA_FN_HOST_ACC inline const VecArray<float, Ndim>& tileSize() const {
-      return tile_size;
-    }
-    ALPAKA_FN_HOST_ACC inline VecArray<float, Ndim>& tileSize() { return tile_size; }
-
-    ALPAKA_FN_HOST_ACC inline float tileSize(std::size_t dim) const {
-      return tile_size[dim];
-    }
-
-    ALPAKA_FN_HOST void resizeTiles(std::size_t n) {
-      n_tiles = n;
-      n_tiles_per_dim = static_cast<int>(std::pow(n, 1. / Ndim));
-
-      m_tiles.resize(n);
+      this->m_tiles.resize(nTiles);
     }
 
     template <typename TAcc>
@@ -121,6 +105,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       }
     }
 
+    ALPAKA_FN_HOST_ACC inline constexpr void clear(uint32_t i) { m_tiles[i].reset(); }
+
     ALPAKA_FN_HOST_ACC inline constexpr VecArray<uint32_t, max_tile_depth>& operator[](
         int globalBinId) {
       return m_tiles[globalBinId];
@@ -129,8 +115,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   private:
     std::size_t n_tiles;
     int n_tiles_per_dim;
-    VecArray<VecArray<float, 2>, Ndim> min_max;
-    VecArray<float, Ndim> tile_size;
     VecArray<VecArray<uint32_t, max_tile_depth>, max_n_tiles> m_tiles;
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
