@@ -76,28 +76,19 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                std::size_t block_size);
 
     // Construction of the tiles
-<<<<<<< HEAD
-    void calculate_tile_size(TilesAlpaka<Ndim>* h_tiles, const Points<Ndim>& h_points);
-=======
     void calculate_tile_size(VecArray<VecArray<float, 2>, Ndim>& min_max,
                              VecArray<float, Ndim>& tile_sizes,
                              const Points<Ndim>& h_points,
                              uint32_t nPerDim);
->>>>>>> fix_alpakatiles_setup_ondevice
   };
 
   // Private methods
   template <typename TAcc, uint8_t Ndim>
-<<<<<<< HEAD
-  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(TilesAlpaka<Ndim>* h_tiles,
-                                                       const Points<Ndim>& h_points) {
-=======
   void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(
       VecArray<VecArray<float, 2>, Ndim>& min_max,
       VecArray<float, Ndim>& tile_sizes,
       const Points<Ndim>& h_points,
       uint32_t nPerDim) {
->>>>>>> fix_alpakatiles_setup_ondevice
     for (size_t dim{}; dim != Ndim; ++dim) {
       float tileSize;
       const float dimMax{
@@ -116,17 +107,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       VecArray<float, 2> temp;
       temp.push_back_unsafe(dimMin);
       temp.push_back_unsafe(dimMax);
-<<<<<<< HEAD
-      h_tiles->minMax().push_back_unsafe(temp);
-      tileSize = (dimMax - dimMin) / h_tiles->nPerDim();
-
-      h_tiles->tileSize().push_back_unsafe(tileSize);
-=======
       min_max[dim] = temp;
       tileSize = (dimMax - dimMin) / nPerDim;
 
       tile_sizes[dim] = tileSize;
->>>>>>> fix_alpakatiles_setup_ondevice
     }
   }
 
