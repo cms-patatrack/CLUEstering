@@ -361,6 +361,17 @@ namespace cms::alpakatools {
     }
   }
 
+  /* once_per_grid
+   *
+   * `once_per_grid(acc)` returns true for a single thread within the kernel execution grid.
+   *
+   * Usually the condition is true for block 0 and thread 0, but these indices should not be relied upon.
+   */
+  template <typename TAcc, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  ALPAKA_FN_ACC inline constexpr bool once_per_grid(TAcc const& acc) {
+    return alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc) == Vec<alpaka::Dim<TAcc>>::zeros();
+  }
+
   /*
    * Overload for elementIdxShift = 0
    */
