@@ -2,6 +2,7 @@
 #define CLUE_Alpaka_Kernels_h
 
 #include <alpaka/core/Common.hpp>
+#include <chrono>
 #include <cstdint>
 
 #include "../AlpakaCore/alpakaWorkDiv.h"
@@ -20,6 +21,22 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
   template <uint8_t Ndim>
   using PointsView = typename PointsAlpaka<Ndim>::PointsAlpakaView;
+
+  struct KernelResetTiles {
+    template <typename TAcc, uint8_t Ndim>
+    ALPAKA_FN_ACC void operator()(TAcc const& acc,
+                                  TilesAlpaka<Ndim>* tiles,
+                                  uint32_t nTiles,
+                                  uint32_t nPerDim) const {
+	  if (cms::alpakatools::once_per_grid(acc)) {
+		tiles->resizeTiles(nTiles, nPerDim);
+	  }
+      cms::alpakatools::for_each_element_in_grid(
+          acc, nTiles, [&](uint32_t i) -> void {
+			tiles->clear(i);
+		  });
+    }
+  };
 
   struct KernelResetFollowers {
     template <typename TAcc>
@@ -64,8 +81,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       for (int binIter{}; binIter < binSize; ++binIter) {
         uint32_t j{(*tiles)[binId][binIter]};
         // query N_{dc_}(i)
-
+		
         VecArray<float, Ndim> coords_j{dev_points->coords[j]};
+
         float dist_ij_sq{0.f};
         for (int dim{}; dim != Ndim; ++dim) {
           dist_ij_sq += (coords_j[dim] - coords_i[dim]) * (coords_j[dim] - coords_i[dim]);
