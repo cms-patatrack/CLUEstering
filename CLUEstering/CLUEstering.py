@@ -30,6 +30,31 @@ hip_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_HIP*.so'))))
 if hip_found:
     import CLUE_GPU_HIP as gpu_hip
 
+
+def is_tbb_available():
+    """
+    Returns True if the library is compiled with TBB support, False otherwise.
+    """
+
+    return tbb_found
+
+
+def is_cuda_available():
+    """
+    Returns True if the library is compiled with CUDA support, False otherwise.
+    """
+
+    return cuda_found
+
+
+def is_hip_available():
+    """
+    Returns True if the library is compiled with HIP support, False otherwise.
+    """
+
+    return hip_found
+
+
 def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
     """
