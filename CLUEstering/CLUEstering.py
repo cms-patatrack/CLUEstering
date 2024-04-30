@@ -823,6 +823,32 @@ class clusterer:
         '''
         return self.clust_prop.output_df
 
+    def cluster_centroid(self, cluster_id: int) -> np.ndarray:
+        '''
+        Returns the coordinates of the centroid of a cluster.
+
+        Parameters
+        ----------
+        cluster_id : int
+            The id of the cluster for which the centroid is calculated.
+
+        Returns
+        -------
+        np.ndarray : The coordinates of the centroid of the cluster.
+        '''
+        if cluster_id < 0 or cluster_id >= self.n_clusters:
+            raise ValueError("Invalid cluster id. The selected cluster id was"
+                             + " not found among the clusters.")
+
+        centroid = np.zeros(self.clust_data.n_dim)
+        counter = 0
+        for i in range(self.n_points):
+            if self.cluster_ids[i] == cluster_id:
+                centroid += self.clust_data.coords[i]
+                counter += 1
+        centroid /= counter
+
+        return centroid
 
     def input_plotter(self, plot_title: str = '', title_size: float = 16,
                       x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
