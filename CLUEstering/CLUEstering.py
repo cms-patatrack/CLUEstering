@@ -169,6 +169,10 @@ class cluster_properties:
     ----------
     n_clusters : int
         Number of clusters constructed.
+    n_seeds : int
+        Number of seeds found, which indicates the clusters excluding the group of outliers.
+    clusters : np.ndarray
+        Array containing the list of the clusters found.
     cluster_ids : np.ndarray
         Array containing the cluster_id of each point.
     is_seed : np.ndarray
@@ -183,6 +187,8 @@ class cluster_properties:
     """
 
     n_clusters : int
+    n_seeds : int
+    clusters : np.ndarray
     cluster_ids : np.ndarray
     is_seed : np.ndarray
     cluster_points : np.ndarray
@@ -723,7 +729,9 @@ class clusterer:
         finish = time.time_ns()
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])
-        n_clusters = len(np.unique(cluster_ids))
+        clusters = np.unique(cluster_ids)
+        n_seeds = np.sum([1 for i in clusters if i > -1])
+        n_clusters = len(clusters)
 
         cluster_points = [[] for _ in range(n_clusters)]
         for i in range(self.clust_data.n_points):
@@ -735,6 +743,8 @@ class clusterer:
         output_df = pd.DataFrame(data)
 
         self.clust_prop = cluster_properties(n_clusters,
+                                             n_seeds,
+                                             clusters,
                                              cluster_ids,
                                              is_seed,
                                              np.asarray(cluster_points, dtype=object),
