@@ -27,17 +27,18 @@ namespace alpaka_serial_sync {
     }
   }
 
+  template <typename Kernel>
   std::vector<std::vector<int>> mainRun(float dc,
                                         float rhoc,
                                         float outlier,
                                         int pPBin,
                                         const std::vector<std::vector<float>>& coords,
                                         const std::vector<float>& weights,
-                                        const FlatKernel& kernel,
+                                        const Kernel& kernel,
                                         int Ndim,
                                         size_t block_size,
                                         size_t device_id) {
-    auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
+    const auto dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);
@@ -45,140 +46,34 @@ namespace alpaka_serial_sync {
     // Running the clustering algorithm //
     switch (Ndim) {
       [[unlikely]] case (1):
-        return run1(
+        return run<1, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[likely]] case (2):
-        return run2(
+        return run<2, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[likely]] case (3):
-        return run3(
+        return run<3, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (4):
-        return run4(
+        return run<4, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (5):
-        return run5(
+        return run<5, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (6):
-        return run6(
+        return run<6, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (7):
-        return run7(
+        return run<7, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (8):
-        return run8(
+        return run<8, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (9):
-        return run9(
+        return run<9, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (10):
-        return run10(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] default:
-        std::cout << "This library only works up to 10 dimensions\n";
-        return {};
-    }
-  }
-
-  std::vector<std::vector<int>> mainRun(float dc,
-                                        float rhoc,
-                                        float outlier,
-                                        int pPBin,
-                                        const std::vector<std::vector<float>>& coords,
-                                        const std::vector<float>& weights,
-                                        const ExponentialKernel& kernel,
-                                        int Ndim,
-                                        size_t block_size,
-                                        size_t device_id) {
-    auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
-
-    // Create the queue
-    Queue queue_(dev_acc);
-
-    // Running the clustering algorithm //
-    switch (Ndim) {
-      [[unlikely]] case (1):
-        return run1(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[likely]] case (2):
-        return run2(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[likely]] case (3):
-        return run3(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (4):
-        return run4(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (5):
-        return run5(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (6):
-        return run6(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (7):
-        return run7(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (8):
-        return run8(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (9):
-        return run9(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (10):
-        return run10(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] default:
-        std::cout << "This library only works up to 10 dimensions\n";
-        return {};
-    }
-  }
-
-  std::vector<std::vector<int>> mainRun(float dc,
-                                        float rhoc,
-                                        float outlier,
-                                        int pPBin,
-                                        const std::vector<std::vector<float>>& coords,
-                                        const std::vector<float>& weights,
-                                        const GaussianKernel& kernel,
-                                        int Ndim,
-                                        size_t block_size,
-                                        size_t device_id) {
-    auto const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
-
-    // Create the queue
-    Queue queue_(dev_acc);
-
-    // Running the clustering algorithm //
-    switch (Ndim) {
-      [[unlikely]] case (1):
-        return run1(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[likely]] case (2):
-        return run2(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[likely]] case (3):
-        return run3(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (4):
-        return run4(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (5):
-        return run5(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (6):
-        return run6(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (7):
-        return run7(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (8):
-        return run8(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (9):
-        return run9(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
-      [[unlikely]] case (10):
-        return run10(
+        return run<10, Kernel>(
             dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";
@@ -202,7 +97,7 @@ namespace alpaka_serial_sync {
                                   const FlatKernel&,
                                   int,
                                   size_t,
-                                  size_t>(&mainRun),
+                                  size_t>(&mainRun<FlatKernel>),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -214,7 +109,7 @@ namespace alpaka_serial_sync {
                                   const ExponentialKernel&,
                                   int,
                                   size_t,
-                                  size_t>(&mainRun),
+                                  size_t>(&mainRun<ExponentialKernel>),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -226,7 +121,7 @@ namespace alpaka_serial_sync {
                                   const GaussianKernel&,
                                   int,
                                   size_t,
-                                  size_t>(&mainRun),
+                                  size_t>(&mainRun<GaussianKernel>),
           "mainRun");
   }
 };  // namespace alpaka_serial_sync
