@@ -762,11 +762,12 @@ class clusterer:
         return self.clust_prop.output_df
 
 
-    def input_plotter(self, plot_title: str = '', title_size: float = 16,
-                      x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
-                      label_size: float = 16, pt_size: float = 1, pt_colour: str = 'b',
-                      grid: bool = True, grid_style: str = '--', grid_size: float = 0.2,
-                      x_ticks=None, y_ticks=None, z_ticks=None, file_name=None, **kwargs) -> None:
+    def input_plotter(self, filepath: Union[str, None] = None, plot_title: str = '',
+                      title_size: float = 16, x_label: str = 'x', y_label: str = 'y',
+                      z_label: str = 'z', label_size: float = 16, pt_size: float = 1,
+                      pt_colour: str = 'b', grid: bool = True, grid_style: str = '--',
+                      grid_size: float = 0.2, x_ticks=None, y_ticks=None, z_ticks=None,
+                      **kwargs) -> None:
         """
         Plots the points in input.
 
@@ -841,8 +842,8 @@ class clusterer:
             if y_ticks is not None:
                 plt.yticks(y_ticks)
 
-            if file_name is not None:
-                plt.savefig(file_name)
+            if filepath is not None:
+                plt.savefig(filepath)
             else:
                 plt.show()
         elif self.clust_data.n_dim == 2:
@@ -868,8 +869,8 @@ class clusterer:
             if y_ticks is not None:
                 plt.yticks(y_ticks)
 
-            if file_name is not None:
-                plt.savefig(file_name)
+            if filepath is not None:
+                plt.savefig(filepath)
             else:
                 plt.show()
         else:
@@ -901,17 +902,17 @@ class clusterer:
             if z_ticks is not None:
                 ax_.set_zticks(z_ticks)
 
-            if file_name is not None:
-                plt.savefig(file_name)
+            if filepath is not None:
+                plt.savefig(filepath)
             else:
                 plt.show()
 
-    def cluster_plotter(self, plot_title: str = '', title_size: float = 16,
-                        x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
-                        label_size: float = 16, outl_size: float = 10, pt_size: float = 10,
-                        seed_size: float = 25, grid: bool = True, grid_style: str = '--',
-                        grid_size: float = 0.2, x_ticks=None, y_ticks=None, z_ticks=None,
-                        file_name=None, **kwargs) -> None:
+    def cluster_plotter(self, filepath: Union[str, None] = None, plot_title: str = '',
+                        title_size: float = 16, x_label: str = 'x', y_label: str = 'y',
+                        z_label: str = 'z', label_size: float = 16, outl_size: float = 10,
+                        pt_size: float = 10, seed_size: float = 25, grid: bool = True,
+                        grid_style: str = '--', grid_size: float = 0.2, x_ticks=None,
+                        y_ticks=None, z_ticks=None, **kwargs) -> None:
         """
         Plots the clusters with a different colour for every cluster.
 
@@ -1002,8 +1003,8 @@ class clusterer:
             if y_ticks is not None:
                 plt.yticks(y_ticks)
 
-            if file_name is not None:
-                plt.savefig(file_name)
+            if filepath is not None:
+                plt.savefig(filepath)
             else:
                 plt.show()
         elif self.clust_data.n_dim == 2:
@@ -1040,8 +1041,8 @@ class clusterer:
             if y_ticks is not None:
                 plt.yticks(y_ticks)
 
-            if file_name is not None:
-                plt.savefig(file_name)
+            if filepath is not None:
+                plt.savefig(filepath)
             else:
                 plt.show()
         else:
@@ -1085,8 +1086,8 @@ class clusterer:
             if z_ticks is not None:
                 ax_.set_zticks(z_ticks)
 
-            if file_name is not None:
-                plt.savefig(file_name)
+            if filepath is not None:
+                plt.savefig(filepath)
             else:
                 plt.show()
 
