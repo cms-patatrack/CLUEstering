@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "CLUEAlgoAlpaka.h"
-#include "ConvolutionalKernel.h"
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
