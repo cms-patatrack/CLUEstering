@@ -62,7 +62,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     ALPAKA_FN_HOST_ACC inline constexpr int getBin(const TAcc& acc,
                                                    float coord_,
                                                    int dim_) const {
-      int coord_Bin{(int)((coord_ - min_max[dim_][0]) / tile_size[dim_])};
+      int coord_Bin{(int)((coord_ - min_max.min(dim_)) / tile_size[dim_])};
 
       // Address the cases of underflow and overflow
       coord_Bin = alpaka::math::min(acc, coord_Bin, n_tiles_per_dim - 1);
