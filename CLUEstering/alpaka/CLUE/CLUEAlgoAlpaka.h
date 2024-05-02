@@ -76,21 +76,19 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                std::size_t block_size);
 
     // Construction of the tiles
-    void calculate_tile_size(VecArray<VecArray<float, 2>, Ndim>& min_max,
-                             VecArray<float, Ndim>& tile_sizes,
+    void calculate_tile_size(CoordinateExtremes<Ndim>& min_max,
+                             float* tile_sizes,
                              const Points<Ndim>& h_points,
                              uint32_t nPerDim);
   };
 
   // Private methods
   template <typename TAcc, uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(
-      VecArray<VecArray<float, 2>, Ndim>& min_max,
-      VecArray<float, Ndim>& tile_sizes,
-      const Points<Ndim>& h_points,
-      uint32_t nPerDim) {
+  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(CoordinateExtremes<Ndim>& min_max,
+                                                       float* tile_sizes,
+                                                       const Points<Ndim>& h_points,
+                                                       uint32_t nPerDim) {
     for (size_t dim{}; dim != Ndim; ++dim) {
-      float tileSize;
       const float dimMax{
           (*std::max_element(h_points.m_coords.begin(),
                              h_points.m_coords.end(),
@@ -104,12 +102,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                return vec1[dim] < vec2[dim];
                              }))[dim]};
 
-      VecArray<float, 2> temp;
-      temp.push_back_unsafe(dimMin);
-      temp.push_back_unsafe(dimMax);
-      min_max[dim] = temp;
-      tileSize = (dimMax - dimMin) / nPerDim;
+      min_max.min(dim) = dimMin;
+      min_max.max(dim) = dimMax;
 
+      const float tileSize{(dimMax - dimMin) / nPerDim};
       tile_sizes[dim] = tileSize;
     }
   }
@@ -137,15 +133,27 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     const auto nTiles{std::ceil(h_points.n / static_cast<float>(pointsPerTile_))};
     const auto nPerDim{std::ceil(std::pow(nTiles, 1. / Ndim))};
 
-    VecArray<VecArray<float, 2>, Ndim> min_max;
-    VecArray<float, Ndim> tile_size;
+    CoordinateExtremes<Ndim> min_max;
+    float tile_size[Ndim];
     calculate_tile_size(min_max, tile_size, h_points, nPerDim);
 
-    for (size_t dim{}; dim != Ndim; ++dim) {
-      (*d_tiles)->min_max[dim][0] = min_max[dim][0];
-      (*d_tiles)->min_max[dim][1] = min_max[dim][1];
-      (*d_tiles)->tile_size[dim] = tile_size[dim];
-    }
+    const auto device = alpaka::getDev(queue_);
+    alpaka::memcpy(
+        queue_,
+        cms::alpakatools::make_device_view(device, (*d_tiles)->min_max.data(), 2 * Ndim),
+        cms::alpakatools::make_host_view(min_max.data(), 2 * Ndim));
+    alpaka::wait(queue_);
+    alpaka::memcpy(
+        queue_,
+        cms::alpakatools::make_device_view(device, (*d_tiles)->tile_size, Ndim),
+        cms::alpakatools::make_host_view(tile_size, Ndim));
+    alpaka::wait(queue_);
+
+    /* for (size_t dim{}; dim != Ndim; ++dim) { */
+    /*   (*d_tiles)->min_max[dim][0] = min_max[dim][0]; */
+    /*   (*d_tiles)->min_max[dim][1] = min_max[dim][1]; */
+    /*   (*d_tiles)->tile_size[dim] = tile_size[dim]; */
+    /* } */
 
     const Idx tiles_grid_size = cms::alpakatools::divide_up_by(nTiles, block_size);
     const auto tiles_working_div =

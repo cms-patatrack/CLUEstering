@@ -28,13 +28,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   TilesAlpaka<Ndim>* tiles,
                                   uint32_t nTiles,
                                   uint32_t nPerDim) const {
-	  if (cms::alpakatools::once_per_grid(acc)) {
-		tiles->resizeTiles(nTiles, nPerDim);
-	  }
+      if (cms::alpakatools::once_per_grid(acc)) {
+        tiles->resizeTiles(nTiles, nPerDim);
+      }
       cms::alpakatools::for_each_element_in_grid(
-          acc, nTiles, [&](uint32_t i) -> void {
-			tiles->clear(i);
-		  });
+          acc, nTiles, [&](uint32_t i) -> void { tiles->clear(i); });
     }
   };
 
@@ -81,7 +79,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       for (int binIter{}; binIter < binSize; ++binIter) {
         uint32_t j{(*tiles)[binId][binIter]};
         // query N_{dc_}(i)
-		
+
         VecArray<float, Ndim> coords_j{dev_points->coords[j]};
 
         float dist_ij_sq{0.f};
