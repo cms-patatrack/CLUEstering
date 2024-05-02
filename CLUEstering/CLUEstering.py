@@ -850,6 +850,28 @@ class clusterer:
 
         return centroid
 
+    def cluster_centroids(self) -> np.ndarray:
+        '''
+        Returns the coordinates of the centroid of a cluster.
+
+        Parameters
+        ----------
+        cluster_id : int
+            The id of the cluster for which the centroid is calculated.
+
+        Returns
+        -------
+        np.ndarray : The coordinates of the centroid of the cluster.
+        '''
+        centroids = np.zeros((self.n_clusters-1, self.clust_data.n_dim))
+        for i in range(self.n_points):
+            if self.cluster_ids[i] != -1:
+                centroids[self.cluster_ids[i]] += self.clust_data.coords[i]
+        print(self.points_per_cluster[:-1].reshape(-1, 1))
+        centroids /= self.points_per_cluster[:-1].reshape(-1, 1)
+
+        return centroids
+
     def input_plotter(self, plot_title: str = '', title_size: float = 16,
                       x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
                       label_size: float = 16, pt_size: float = 1, pt_colour: str = 'b',
