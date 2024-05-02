@@ -773,6 +773,8 @@ class clusterer:
 
         Parameters
         ----------
+        filepath : string, optional
+            The path to the file where the plot should be saved.
         plot_title : string, optional
             Title of the plot.
         title_size : float, optional
@@ -921,30 +923,32 @@ class clusterer:
 
         Parameters
         ----------
+        filepath : string, optional
+            The path to the file where the plot should be saved.
         plot_title : string, optional
-            Title of the plot
+            Title of the plot.
         title_size : float, optional
-            Size of the plot title
+            Size of the plot title.
         x_label : string, optional
-            Label on x-axis
+            Label on x-axis.
         y_label : string, optional
-            Label on y-axis
+            Label on y-axis.
         z_label : string, optional
-            Label on z-axis
+            Label on z-axis.
         label_size : int, optional
-            Fontsize of the axis labels
+            Fontsize of the axis labels.
         outl_size : int, optional
-            Size of the outliers in the plot
+            Size of the outliers in the plot.
         pt_size : int, optional
-            Size of the points in the plot
+            Size of the points in the plot.
         seed_size : int, optional
-            Size of the seeds in the plot
+            Size of the seeds in the plot.
         grid : bool, optional
-            f true displays grids in the plot
+            f true displays grids in the plot.
         grid_style : string, optional
-            Style of the grid
+            Style of the grid.
         grid_size : float, optional
-            Linewidth of the plot grid
+            Linewidth of the plot grid.
         x_ticks : list, optional
             List of ticks for the x axis.
         y_ticks : list, optional
