@@ -27,12 +27,29 @@ constexpr uint32_t max_n_tiles{1 << 15};
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
   template <uint8_t Ndim>
+  class CoordinateExtremes {
+  private:
+    float m_data[2 * Ndim];
+
+  public:
+    CoordinateExtremes() = default;
+
+    ALPAKA_FN_HOST_ACC const float* data() const { return m_data; }
+    ALPAKA_FN_HOST_ACC float* data() { return m_data; }
+
+    ALPAKA_FN_HOST_ACC float min(int i) const { return m_data[2 * i]; }
+    ALPAKA_FN_HOST_ACC float& min(int i) { return m_data[2 * i]; }
+    ALPAKA_FN_HOST_ACC float max(int i) const { return m_data[2 * i + 1]; }
+    ALPAKA_FN_HOST_ACC float& max(int i) { return m_data[2 * i + 1]; }
+  };
+
+  template <uint8_t Ndim>
   class TilesAlpaka {
   public:
     TilesAlpaka() = default;
 
-    VecArray<VecArray<float, 2>, Ndim> min_max;
-    VecArray<float, Ndim> tile_size;
+    CoordinateExtremes<Ndim> min_max;
+    float tile_size[Ndim];
 
     ALPAKA_FN_HOST_ACC void resizeTiles(std::size_t nTiles, int nPerDim) {
       this->n_tiles = nTiles;
