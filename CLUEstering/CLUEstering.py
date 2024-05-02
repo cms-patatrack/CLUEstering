@@ -198,6 +198,8 @@ class cluster_properties:
     def __eq__(self, other):
         if self.n_clusters != other.n_clusters:
             return False
+        if self.n_seeds != other.n_seeds:
+            return False
         if not (self.cluster_ids == other.cluster_ids).all():
             return False
         if not (self.is_seed == other.is_seed).all():
