@@ -673,13 +673,17 @@ class clusterer:
 
         Modified attributes
         -------------------
+        n_clusters : int
+            Number of clusters reconstructed.
+        n_seeds : int
+            Number of seeds found, which indicates the clusters excluding the group of outliers.
+        clusters : ndarray
+            Array containing the list of the clusters found.
         cluster_ids : ndarray
             Contains the cluster_id corresponding to every point.
         is_seed : ndarray
             For every point the value is 1 if the point is a seed or an
             outlier and 0 if it isn't.
-        n_clusters : int
-            Number of clusters reconstructed.
         cluster_points : ndarray of lists
             Contains, for every cluster, the list of points associated to id.
         points_per_cluster : ndarray
