@@ -766,6 +766,22 @@ class clusterer:
         return self.clust_prop.n_clusters
 
     @property
+    def n_seeds(self) -> int:
+        '''
+        Returns the number of seeds found.
+        '''
+
+        return self.clust_prop.n_seeds
+
+    @property
+    def clusters(self) -> np.ndarray:
+        '''
+        Returns the list of clusters found.
+        '''
+
+        return self.clust_prop.clusters
+
+    @property
     def cluster_ids(self) -> np.ndarray:
         '''
         Returns the index of the cluster to which each point belongs.
