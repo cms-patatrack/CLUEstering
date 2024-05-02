@@ -740,6 +740,7 @@ class clusterer:
         n_clusters = len(clusters)
 
         cluster_points = [[] for _ in range(n_clusters)]
+        # note: the outlier set is always the last cluster
         for i in range(self.clust_data.n_points):
             cluster_points[cluster_ids[i]].append(i)
 
