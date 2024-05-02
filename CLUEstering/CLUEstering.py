@@ -20,15 +20,20 @@ path = dirname(__file__)
 sys.path.insert(1, join(path, 'lib'))
 import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
+
+backends = ["cpu serial"]
 tbb_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
 if tbb_found:
     import CLUE_CPU_TBB as cpu_tbb
+    backends.append("cpu tbb")
 cuda_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))))
 if cuda_found:
     import CLUE_GPU_CUDA as gpu_cuda
+    backends.append("gpu cuda")
 hip_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_HIP*.so'))))
 if hip_found:
     import CLUE_GPU_HIP as gpu_hip
+    backends.append("gpu hip")
 
 
 def is_tbb_available():
@@ -55,7 +60,7 @@ def is_hip_available():
     return hip_found
 
 
-def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
+def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
     """
     Returns a dataframe containing randomly generated 2-dimensional or 3-dimensional blobs.
