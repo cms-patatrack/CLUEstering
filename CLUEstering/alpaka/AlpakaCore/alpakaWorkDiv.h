@@ -369,7 +369,8 @@ namespace cms::alpakatools {
    */
   template <typename TAcc, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
   ALPAKA_FN_ACC inline constexpr bool once_per_grid(TAcc const& acc) {
-    return alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc) == Vec<alpaka::Dim<TAcc>>::zeros();
+    return alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc) ==
+           Vec<alpaka::Dim<TAcc>>::zeros();
   }
 
   /*
