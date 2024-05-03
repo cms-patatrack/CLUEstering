@@ -2,6 +2,7 @@
 #define run_h
 
 #include <vector>
+
 #include "CLUEAlgoAlpaka.h"
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {

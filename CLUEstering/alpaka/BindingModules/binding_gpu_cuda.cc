@@ -1,16 +1,11 @@
 #include <alpaka/alpaka.hpp>
 #include <vector>
 
-#include "../CLUE/CLUEAlgoAlpaka.h"
 #include "../CLUE/Run.h"
-#include "../DataFormats/Points.h"
-#include "../DataFormats/alpaka/PointsAlpaka.h"
-#include "../AlpakaCore/initialise.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
-#include <stdint.h>
 
 using cms::alpakatools::initialise;
 
@@ -40,9 +35,7 @@ namespace alpaka_cuda_async {
                                         int Ndim,
                                         size_t block_size,
                                         size_t device_id) {
-    const const dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
-
-    /* initialise<Platform>(); */
+    const auto dev_acc = alpaka::getDevByIdx<Acc1D>(device_id);
 
     // Create the queue
     Queue queue_(dev_acc);

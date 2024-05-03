@@ -1,16 +1,11 @@
 #include <alpaka/alpaka.hpp>
 #include <vector>
 
-#include "../CLUE/CLUEAlgoAlpaka.h"
 #include "../CLUE/Run.h"
-#include "../DataFormats/Points.h"
-#include "../DataFormats/alpaka/PointsAlpaka.h"
-#include "../AlpakaCore/initialise.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
-#include <stdint.h>
 
 namespace alpaka_rocm_async {
   void listDevices(const std::string& backend) {
