@@ -140,12 +140,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     const auto device = alpaka::getDev(queue_);
     alpaka::memcpy(
         queue_,
-        cms::alpakatools::make_device_view(device, (*d_tiles)->min_max.data(), 2 * Ndim),
+        cms::alpakatools::make_device_view(device, (*d_tiles)->minMax(), 2 * Ndim),
         cms::alpakatools::make_host_view(min_max.data(), 2 * Ndim));
     alpaka::wait(queue_);
     alpaka::memcpy(
         queue_,
-        cms::alpakatools::make_device_view(device, (*d_tiles)->tile_size, Ndim),
+        cms::alpakatools::make_device_view(device, (*d_tiles)->tileSize(), Ndim),
         cms::alpakatools::make_host_view(tile_size, Ndim));
     alpaka::wait(queue_);
 

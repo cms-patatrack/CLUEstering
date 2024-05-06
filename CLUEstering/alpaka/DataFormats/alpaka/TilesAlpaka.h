@@ -48,8 +48,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   public:
     TilesAlpaka() = default;
 
-    CoordinateExtremes<Ndim> min_max;
-    float tile_size[Ndim];
+    ALPAKA_FN_HOST_ACC inline constexpr const float* minMax() const {
+      return min_max.data();
+    }
+    ALPAKA_FN_HOST_ACC inline constexpr float* minMax() { return min_max.data(); }
+
+    ALPAKA_FN_HOST_ACC inline constexpr const float* tileSize() const {
+      return tile_size;
+    }
+    ALPAKA_FN_HOST_ACC inline constexpr float* tileSize() { return tile_size; }
 
     ALPAKA_FN_HOST_ACC void resizeTiles(std::size_t nTiles, int nPerDim) {
       this->n_tiles = nTiles;
@@ -132,6 +139,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   private:
     std::size_t n_tiles;
     int n_tiles_per_dim;
+    CoordinateExtremes<Ndim> min_max;
+    float tile_size[Ndim];
     VecArray<VecArray<uint32_t, max_tile_depth>, max_n_tiles> m_tiles;
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
