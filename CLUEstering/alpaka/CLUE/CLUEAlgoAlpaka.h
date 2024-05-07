@@ -149,12 +149,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         cms::alpakatools::make_host_view(tile_size, Ndim));
     alpaka::wait(queue_);
 
-    /* for (size_t dim{}; dim != Ndim; ++dim) { */
-    /*   (*d_tiles)->min_max[dim][0] = min_max[dim][0]; */
-    /*   (*d_tiles)->min_max[dim][1] = min_max[dim][1]; */
-    /*   (*d_tiles)->tile_size[dim] = tile_size[dim]; */
-    /* } */
-
     const Idx tiles_grid_size = cms::alpakatools::divide_up_by(nTiles, block_size);
     const auto tiles_working_div =
         cms::alpakatools::make_workdiv<Acc1D>(tiles_grid_size, block_size);
@@ -268,11 +262,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
-
-    /* std::cout << "rho\n"; */
-    /* for (int i{}; i < h_points.n; ++i) { */
-    /*   std::cout << h_points.m_rho[i] << std::endl; */
-    /* } */
 
     return {h_points.m_clusterIndex, h_points.m_isSeed};
   }
