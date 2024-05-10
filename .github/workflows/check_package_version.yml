@@ -36,8 +36,10 @@ jobs:
 
         if [ "$main_major" -le "$pr_major" ]; then
           if [ "$main_minor" -le "$pr_minor" ]; then
-            if [ "$main_patch" -le "$pr_patch" ]; then
-              exit 0	# all the three version counters are unchanged or increased
+            if [ "$main_patch" -lt "$pr_patch" ] ||
+               [ "$main_major" -lt "$pr_major" ] ||
+               [  "$main_minor" -lt "$pr_minor" ]; then
+              exit 0  # at least one version counters has been updated
             else
               echo -e "${RED}ERROR: Patch version is behind main. Update the version in setup.py"
               exit 1
