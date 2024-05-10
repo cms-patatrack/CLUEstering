@@ -1,0 +1,53 @@
+name: Compare the package version of the PR with the main branch
+
+# The workflow gets triggered by pushes and pull requests
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  compare-versions:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    # Checks out the code in the repository
+    - uses: actions/checkout@v3
+    - name: Compile CLUEstering modules
+      working-directory: ${{github.workspace}}
+      run: |
+        RED="\033[0;31m"
+
+        pr_version=$(cat setup.py | grep "__version__ " | awk -F '"' '{print $2}')
+        pr_major=$(echo "$pr_version" | awk -F '.' '{print $1}')
+        pr_minor=$(echo "$pr_version" | awk -F '.' '{print $2}')
+        pr_patch=$(echo "$pr_version" | awk -F '.' '{print $3}')
+
+        echo "Switching to 'main' branch"
+        git switch main
+        main_version=$(cat setup.py | grep "__version__ " | awk -F '"' '{print $2}')
+        main_major=$(echo "$main_version" | awk -F '.' '{print $1}')
+        main_minor=$(echo "$main_version" | awk -F '.' '{print $2}')
+        main_patch=$(echo "$main_version" | awk -F '.' '{print $3}')
+
+        if [ "$main_major" -le "$pr_major" ]; then
+          if [ "$main_minor" -le "$pr_minor" ]; then
+            if [ "$main_patch" -le "$pr_patch" ]; then
+              exit 0	# all the three version counters are unchanged or increased
+            else
+              echo -e "${RED}ERROR: Patch version is behind main. Update the version in setup.py"
+              exit 1
+            fi
+          else
+            echo -e "${RED}ERROR: Minor version is behind main. Update the version in setup.py"
+            exit 1
+          fi
+        else
+            echo -e "${RED}ERROR: Major version is behind main. Update the version in setup.py"
+            exit 1
+        fi
+
