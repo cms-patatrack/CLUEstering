@@ -2,8 +2,6 @@ name: Compare the package version of the PR with the main branch
 
 # The workflow gets triggered by pushes and pull requests
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
