@@ -41,20 +41,20 @@ jobs:
               exit 0  # at least one version counters has been updated
             else
               echo -e "${RED}ERROR: Patch version is behind main. Update the version in setup.py"
-              echo -e "main -> $main_version"
-              echo -e "pr -> $pr_version"
+              echo -e "${RED}main -> $main_version"
+              echo -e "${RED}pr -> $pr_version"
               exit 1
             fi
           else
             echo -e "${RED}ERROR: Minor version is behind main. Update the version in setup.py"
-            echo -e "main -> $main_version"
-            echo -e "pr -> $pr_version"
+            echo -e "${RED}main -> $main_version"
+            echo -e "${RED}pr -> $pr_version"
             exit 1
           fi
         else
             echo -e "${RED}ERROR: Major version is behind main. Update the version in setup.py"
-            echo -e "main -> $main_version"
-            echo -e "pr -> $pr_version"
+            echo -e "${RED}main -> $main_version"
+            echo -e "${RED}pr -> $pr_version"
             exit 1
         fi
 
