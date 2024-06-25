@@ -15,10 +15,11 @@
 
 namespace cms::alpakatools {
 
-  template <typename I,    // type stored in the container (usually an index in a vector of the input values)
-            int32_t ONES,  // number of "Ones"  +1. If -1 is initialized at runtime using external storage
-            int32_t SIZE   // max number of element. If -1 is initialized at runtime using external storage
-            >
+  template <
+      typename I,  // type stored in the container (usually an index in a vector of the input values)
+      int32_t ONES,  // number of "Ones"  +1. If -1 is initialized at runtime using external storage
+      int32_t SIZE  // max number of element. If -1 is initialized at runtime using external storage
+      >
   class OneToManyAssocBase {
   public:
     using Counter = uint32_t;
@@ -28,9 +29,9 @@ namespace cms::alpakatools {
     using index_type = I;
 
     struct View {
-      OneToManyAssocBase *assoc = nullptr;
-      Counter *offStorage = nullptr;
-      index_type *contentStorage = nullptr;
+      OneToManyAssocBase* assoc = nullptr;
+      Counter* offStorage = nullptr;
+      index_type* contentStorage = nullptr;
       int32_t offSize = -1;
       int32_t contentSize = -1;
     };
@@ -62,30 +63,32 @@ namespace cms::alpakatools {
     }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC ALPAKA_FN_INLINE void add(const TAcc &acc, CountersOnly const &co) {
+    ALPAKA_FN_ACC ALPAKA_FN_INLINE void add(const TAcc& acc, CountersOnly const& co) {
       for (uint32_t i = 0; static_cast<int>(i) < totOnes(); ++i) {
         alpaka::atomicAdd(acc, off.data() + i, co.off[i], alpaka::hierarchy::Blocks{});
       }
     }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC ALPAKA_FN_INLINE static uint32_t atomicIncrement(const TAcc &acc, Counter &x) {
+    ALPAKA_FN_ACC ALPAKA_FN_INLINE static uint32_t atomicIncrement(const TAcc& acc,
+                                                                   Counter& x) {
       return alpaka::atomicAdd(acc, &x, 1u, alpaka::hierarchy::Blocks{});
     }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC ALPAKA_FN_INLINE static uint32_t atomicDecrement(const TAcc &acc, Counter &x) {
+    ALPAKA_FN_ACC ALPAKA_FN_INLINE static uint32_t atomicDecrement(const TAcc& acc,
+                                                                   Counter& x) {
       return alpaka::atomicSub(acc, &x, 1u, alpaka::hierarchy::Blocks{});
     }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC ALPAKA_FN_INLINE void count(const TAcc &acc, I b) {
+    ALPAKA_FN_ACC ALPAKA_FN_INLINE void count(const TAcc& acc, I b) {
       ALPAKA_ASSERT_ACC(b < static_cast<uint32_t>(nOnes()));
       atomicIncrement(acc, off[b]);
     }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC ALPAKA_FN_INLINE void fill(const TAcc &acc, I b, index_type j) {
+    ALPAKA_FN_ACC ALPAKA_FN_INLINE void fill(const TAcc& acc, I b, index_type j) {
       ALPAKA_ASSERT_ACC(b < static_cast<uint32_t>(nOnes()));
       auto w = atomicDecrement(acc, off[b]);
       ALPAKA_ASSERT_ACC(w > 0);
@@ -95,8 +98,9 @@ namespace cms::alpakatools {
     // this MUST BE DONE in a single block (or in two kernels!)
     struct zeroAndInit {
       template <typename TAcc>
-      ALPAKA_FN_ACC void operator()(const TAcc &acc, View view) const {
-        ALPAKA_ASSERT_ACC((1 == alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc)[0]));
+      ALPAKA_FN_ACC void operator()(const TAcc& acc, View view) const {
+        ALPAKA_ASSERT_ACC(
+            (1 == alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc)[0]));
         ALPAKA_ASSERT_ACC((0 == alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc)[0]));
         auto h = view.assoc;
         if (cms::alpakatools::once_per_block(acc)) {
@@ -111,13 +115,13 @@ namespace cms::alpakatools {
     };
 
     template <typename TAcc, typename TQueue>
-    ALPAKA_FN_INLINE static void launchZero(OneToManyAssocBase *h, TQueue &queue) {
+    ALPAKA_FN_INLINE static void launchZero(OneToManyAssocBase* h, TQueue& queue) {
       View view = {h, nullptr, nullptr, -1, -1};
       launchZero<TAcc>(view, queue);
     }
 
     template <typename TAcc, typename TQueue>
-    ALPAKA_FN_INLINE static void launchZero(View view, TQueue &queue) {
+    ALPAKA_FN_INLINE static void launchZero(View view, TQueue& queue) {
       if constexpr (ctCapacity() < 0) {
         ALPAKA_ASSERT_ACC(view.contentStorage);
         ALPAKA_ASSERT_ACC(view.contentSize > 0);
@@ -128,7 +132,8 @@ namespace cms::alpakatools {
       }
       if constexpr (!requires_single_thread_per_block_v<TAcc>) {
         auto nthreads = 1024;
-        auto nblocks = 1;  // MUST BE ONE as memory is initialize in thread 0 (alternative is two kernels);
+        auto nblocks =
+            1;  // MUST BE ONE as memory is initialize in thread 0 (alternative is two kernels);
         auto workDiv = cms::alpakatools::make_workdiv<TAcc>(nblocks, nthreads);
         alpaka::exec<TAcc>(queue, workDiv, zeroAndInit{}, view);
       } else {
@@ -143,28 +148,33 @@ namespace cms::alpakatools {
     constexpr auto size() const { return uint32_t(off[totOnes() - 1]); }
     constexpr auto size(uint32_t b) const { return off[b + 1] - off[b]; }
 
-    constexpr index_type const *begin() const { return content.data(); }
-    constexpr index_type const *end() const { return begin() + size(); }
+    constexpr index_type const* begin() const { return content.data(); }
+    constexpr index_type const* end() const { return begin() + size(); }
 
-    constexpr index_type const *begin(uint32_t b) const { return content.data() + off[b]; }
-    constexpr index_type const *end(uint32_t b) const { return content.data() + off[b + 1]; }
+    constexpr index_type const* begin(uint32_t b) const {
+      return content.data() + off[b];
+    }
+    constexpr index_type const* end(uint32_t b) const {
+      return content.data() + off[b + 1];
+    }
 
     FlexiStorage<Counter, ONES> off;
     FlexiStorage<index_type, SIZE> content;
     int32_t psws;  // prefix-scan working space
   };
 
-  template <typename I,    // type stored in the container (usually an index in a vector of the input values)
-            int32_t ONES,  // number of "Ones"  +1. If -1 is initialized at runtime using external storage
-            int32_t SIZE   // max number of element. If -1 is initialized at runtime using external storage
-            >
+  template <
+      typename I,  // type stored in the container (usually an index in a vector of the input values)
+      int32_t ONES,  // number of "Ones"  +1. If -1 is initialized at runtime using external storage
+      int32_t SIZE  // max number of element. If -1 is initialized at runtime using external storage
+      >
   class OneToManyAssocSequential : public OneToManyAssocBase<I, ONES, SIZE> {
   public:
     using index_type = typename OneToManyAssocBase<I, ONES, SIZE>::index_type;
 
     template <typename TAcc>
     ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE int32_t
-    bulkFill(const TAcc &acc, AtomicPairCounter &apc, index_type const *v, uint32_t n) {
+    bulkFill(const TAcc& acc, AtomicPairCounter& apc, index_type const* v, uint32_t n) {
       auto c = apc.inc_add(acc, n);
       if (int(c.first) >= this->nOnes())
         return -int32_t(c.first);
@@ -174,12 +184,13 @@ namespace cms::alpakatools {
       return c.first;
     }
 
-    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE void bulkFinalize(AtomicPairCounter const &apc) {
+    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE void bulkFinalize(AtomicPairCounter const& apc) {
       this->off[apc.get().first] = apc.get().second;
     }
 
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE void bulkFinalizeFill(TAcc &acc, AtomicPairCounter const &apc) {
+    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE void bulkFinalizeFill(
+        TAcc& acc, AtomicPairCounter const& apc) {
       int f = apc.get().first;
       auto s = apc.get().second;
       if (f >= this->nOnes()) {  // overflow!
@@ -187,32 +198,34 @@ namespace cms::alpakatools {
         return;
       }
       auto first = f + alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
-      for (int i = first; i < this->totOnes(); i += alpaka::getWorkDiv<alpaka::Grid, alpaka::Threads>(acc)[0]) {
+      for (int i = first; i < this->totOnes();
+           i += alpaka::getWorkDiv<alpaka::Grid, alpaka::Threads>(acc)[0]) {
         this->off[i] = s;
       }
     }
 
     struct finalizeBulk {
       template <typename TAcc>
-      ALPAKA_FN_ACC void operator()(const TAcc &acc,
-                                    AtomicPairCounter const *apc,
-                                    OneToManyAssocSequential *__restrict__ assoc) const {
+      ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                    AtomicPairCounter const* apc,
+                                    OneToManyAssocSequential* __restrict__ assoc) const {
         assoc->bulkFinalizeFill(acc, *apc);
       }
     };
   };
 
-  template <typename I,    // type stored in the container (usually an index in a vector of the input values)
-            int32_t ONES,  // number of "Ones"  +1. If -1 is initialized at runtime using external storage
-            int32_t SIZE   // max number of element. If -1 is initialized at runtime using external storage
-            >
+  template <
+      typename I,  // type stored in the container (usually an index in a vector of the input values)
+      int32_t ONES,  // number of "Ones"  +1. If -1 is initialized at runtime using external storage
+      int32_t SIZE  // max number of element. If -1 is initialized at runtime using external storage
+      >
   class OneToManyAssocRandomAccess : public OneToManyAssocBase<I, ONES, SIZE> {
   public:
     using Counter = typename OneToManyAssocBase<I, ONES, SIZE>::Counter;
     using View = typename OneToManyAssocBase<I, ONES, SIZE>::View;
 
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE void finalize(TAcc &acc, Counter *ws = nullptr) {
+    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE void finalize(TAcc& acc, Counter* ws = nullptr) {
       ALPAKA_ASSERT_ACC(this->off[this->totOnes() - 1] == 0);
       blockPrefixScan(acc, this->off.data(), this->totOnes(), ws);
       ALPAKA_ASSERT_ACC(this->off[this->totOnes() - 1] == this->off[this->totOnes() - 2]);
@@ -225,18 +238,20 @@ namespace cms::alpakatools {
     }
 
     template <typename TAcc, typename TQueue>
-    ALPAKA_FN_INLINE static void launchFinalize(OneToManyAssocRandomAccess *h, TQueue &queue) {
+    ALPAKA_FN_INLINE static void launchFinalize(OneToManyAssocRandomAccess* h,
+                                                TQueue& queue) {
       View view = {h, nullptr, nullptr, -1, -1};
       launchFinalize<TAcc>(view, queue);
     }
 
     template <typename TAcc, typename TQueue>
-    ALPAKA_FN_INLINE static void launchFinalize(View view, TQueue &queue) {
+    ALPAKA_FN_INLINE static void launchFinalize(View view, TQueue& queue) {
       // View stores a base pointer, we need to upcast back...
-      auto h = static_cast<OneToManyAssocRandomAccess *>(view.assoc);
+      auto h = static_cast<OneToManyAssocRandomAccess*>(view.assoc);
       ALPAKA_ASSERT_ACC(h);
       if constexpr (!requires_single_thread_per_block_v<TAcc>) {
-        Counter *poff = (Counter *)((char *)(h) + offsetof(OneToManyAssocRandomAccess, off));
+        Counter* poff =
+            (Counter*)((char*)(h) + offsetof(OneToManyAssocRandomAccess, off));
         auto nOnes = OneToManyAssocRandomAccess::ctNOnes();
         if constexpr (OneToManyAssocRandomAccess::ctNOnes() < 0) {
           ALPAKA_ASSERT_ACC(view.offStorage);
@@ -245,7 +260,8 @@ namespace cms::alpakatools {
           poff = view.offStorage;
         }
         ALPAKA_ASSERT_ACC(nOnes > 0);
-        int32_t *ppsws = (int32_t *)((char *)(h) + offsetof(OneToManyAssocRandomAccess, psws));
+        int32_t* ppsws =
+            (int32_t*)((char*)(h) + offsetof(OneToManyAssocRandomAccess, psws));
         auto nthreads = 1024;
         auto nblocks = (nOnes + nthreads - 1) / nthreads;
         auto workDiv = cms::alpakatools::make_workdiv<TAcc>(nblocks, nthreads);

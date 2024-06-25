@@ -12,8 +12,10 @@ namespace cms::alpakatools {
     using DoubleWord = uint64_t;
 
     ALPAKA_FN_HOST_ACC constexpr AtomicPairCounter() : counter_{0} {}
-    ALPAKA_FN_HOST_ACC constexpr AtomicPairCounter(uint32_t first, uint32_t second) : counter_{pack(first, second)} {}
-    ALPAKA_FN_HOST_ACC constexpr AtomicPairCounter(DoubleWord values) : counter_{values} {}
+    ALPAKA_FN_HOST_ACC constexpr AtomicPairCounter(uint32_t first, uint32_t second)
+        : counter_{pack(first, second)} {}
+    ALPAKA_FN_HOST_ACC constexpr AtomicPairCounter(DoubleWord values)
+        : counter_{values} {}
 
     ALPAKA_FN_HOST_ACC constexpr AtomicPairCounter& operator=(DoubleWord values) {
       counter_.as_doubleword = values;
@@ -21,8 +23,9 @@ namespace cms::alpakatools {
     }
 
     struct Counters {
-      uint32_t first;   // in a "One to Many" association is the number of "One"
-      uint32_t second;  // in a "One to Many" association is the total number of associations
+      uint32_t first;  // in a "One to Many" association is the number of "One"
+      uint32_t
+          second;  // in a "One to Many" association is the total number of associations
     };
 
     ALPAKA_FN_HOST_ACC constexpr Counters get() const { return counter_.as_counters; }
@@ -32,14 +35,15 @@ namespace cms::alpakatools {
     ALPAKA_FN_ACC ALPAKA_FN_INLINE constexpr Counters add(const TAcc& acc, Counters c) {
       Packer value{pack(c.first, c.second)};
       Packer ret{0};
-      ret.as_doubleword =
-          alpaka::atomicAdd(acc, &counter_.as_doubleword, value.as_doubleword, alpaka::hierarchy::Blocks{});
+      ret.as_doubleword = alpaka::atomicAdd(
+          acc, &counter_.as_doubleword, value.as_doubleword, alpaka::hierarchy::Blocks{});
       return ret.as_counters;
     }
 
     // atomically increment first and add i to second, and return the previous value
     template <typename TAcc>
-    ALPAKA_FN_ACC ALPAKA_FN_INLINE Counters constexpr inc_add(const TAcc& acc, uint32_t i) {
+    ALPAKA_FN_ACC ALPAKA_FN_INLINE Counters constexpr inc_add(const TAcc& acc,
+                                                              uint32_t i) {
       return add(acc, {1u, i});
     }
 

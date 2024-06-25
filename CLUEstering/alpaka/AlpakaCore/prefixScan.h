@@ -19,9 +19,15 @@ namespace cms::alpakatools {
     return false;
   }
 
-  template <typename TAcc, typename T, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
-  ALPAKA_FN_ACC ALPAKA_FN_INLINE void warpPrefixScan(
-      const TAcc& acc, int32_t laneId, T const* ci, T* co, uint32_t i, bool active = true) {
+  template <typename TAcc,
+            typename T,
+            typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  ALPAKA_FN_ACC ALPAKA_FN_INLINE void warpPrefixScan(const TAcc& acc,
+                                                     int32_t laneId,
+                                                     T const* ci,
+                                                     T* co,
+                                                     uint32_t i,
+                                                     bool active = true) {
     // ci and co may be the same
     T x = active ? ci[i] : 0;
     CMS_UNROLL_LOOP
@@ -36,7 +42,9 @@ namespace cms::alpakatools {
       co[i] = x;
   }
 
-  template <typename TAcc, typename T, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  template <typename TAcc,
+            typename T,
+            typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
   ALPAKA_FN_ACC ALPAKA_FN_INLINE void warpPrefixScan(
       const TAcc& acc, int32_t laneId, T* c, uint32_t i, bool active = true) {
     warpPrefixScan(acc, laneId, c, c, i, active);
@@ -48,8 +56,10 @@ namespace cms::alpakatools {
       const TAcc& acc, T const* ci, T* co, int32_t size, T* ws = nullptr) {
     if constexpr (!requires_single_thread_per_block_v<TAcc>) {
       const auto warpSize = alpaka::warp::getSize(acc);
-      int32_t const blockDimension(alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc)[0u]);
-      int32_t const blockThreadIdx(alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0u]);
+      int32_t const blockDimension(
+          alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc)[0u]);
+      int32_t const blockThreadIdx(
+          alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0u]);
       ALPAKA_ASSERT_ACC(ws);
       ALPAKA_ASSERT_ACC(size <= warpSize * warpSize);
       ALPAKA_ASSERT_ACC(0 == blockDimension % warpSize);
@@ -95,8 +105,10 @@ namespace cms::alpakatools {
                                                            T* __restrict__ ws = nullptr) {
     if constexpr (!requires_single_thread_per_block_v<TAcc>) {
       const auto warpSize = alpaka::warp::getSize(acc);
-      int32_t const blockDimension(alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc)[0u]);
-      int32_t const blockThreadIdx(alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0u]);
+      int32_t const blockDimension(
+          alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc)[0u]);
+      int32_t const blockThreadIdx(
+          alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0u]);
       ALPAKA_ASSERT_ACC(ws);
       ALPAKA_ASSERT_ACC(size <= warpSize * warpSize);
       ALPAKA_ASSERT_ACC(0 == blockDimension % warpSize);
@@ -137,25 +149,35 @@ namespace cms::alpakatools {
   template <typename T>
   struct multiBlockPrefixScan {
     template <typename TAcc>
-    ALPAKA_FN_ACC void operator()(
-        const TAcc& acc, T const* ci, T* co, uint32_t size, int32_t numBlocks, int32_t* pc, std::size_t warpSize) const {
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  T const* ci,
+                                  T* co,
+                                  uint32_t size,
+                                  int32_t numBlocks,
+                                  int32_t* pc,
+                                  std::size_t warpSize) const {
       // Get shared variable. The workspace is needed only for multi-threaded accelerators.
       T* ws = nullptr;
       if constexpr (!requires_single_thread_per_block_v<TAcc>) {
         ws = alpaka::getDynSharedMem<T>(acc);
       }
       ALPAKA_ASSERT_ACC(warpSize == static_cast<std::size_t>(alpaka::warp::getSize(acc)));
-      [[maybe_unused]] const auto elementsPerGrid = alpaka::getWorkDiv<alpaka::Grid, alpaka::Elems>(acc)[0u];
-      const auto elementsPerBlock = alpaka::getWorkDiv<alpaka::Block, alpaka::Elems>(acc)[0u];
-      const auto threadsPerBlock = alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc)[0u];
-      const auto blocksPerGrid = alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc)[0u];
+      [[maybe_unused]] const auto elementsPerGrid =
+          alpaka::getWorkDiv<alpaka::Grid, alpaka::Elems>(acc)[0u];
+      const auto elementsPerBlock =
+          alpaka::getWorkDiv<alpaka::Block, alpaka::Elems>(acc)[0u];
+      const auto threadsPerBlock =
+          alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc)[0u];
+      const auto blocksPerGrid =
+          alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc)[0u];
       const auto blockIdx = alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc)[0u];
       const auto threadIdx = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0u];
       ALPAKA_ASSERT_ACC(elementsPerGrid >= size);
       // first each block does a scan
       [[maybe_unused]] int off = elementsPerBlock * blockIdx;
       if (size - off > 0) {
-        blockPrefixScan(acc, ci + off, co + off, std::min(elementsPerBlock, size - off), ws);
+        blockPrefixScan(
+            acc, ci + off, co + off, std::min(elementsPerBlock, size - off), ws);
       }
 
       // count blocks that finished
@@ -163,7 +185,8 @@ namespace cms::alpakatools {
       //__shared__ bool isLastBlockDone;
       if (0 == threadIdx) {
         alpaka::mem_fence(acc, alpaka::memory_scope::Device{});
-        auto value = alpaka::atomicAdd(acc, pc, 1, alpaka::hierarchy::Blocks{});  // block counter
+        auto value =
+            alpaka::atomicAdd(acc, pc, 1, alpaka::hierarchy::Blocks{});  // block counter
         isLastBlockDone = (value == (int(blocksPerGrid) - 1));
       }
 
@@ -195,7 +218,8 @@ namespace cms::alpakatools {
       // and a second for the one thread per block accelerator.
       if constexpr (!requires_single_thread_per_block_v<TAcc>) {
         //  Here threadsPerBlock == elementsPerBlock
-        for (uint32_t i = threadIdx + threadsPerBlock, k = 0; i < size; i += threadsPerBlock, ++k) {
+        for (uint32_t i = threadIdx + threadsPerBlock, k = 0; i < size;
+             i += threadsPerBlock, ++k) {
           co[i] += psum[k];
         }
       } else {

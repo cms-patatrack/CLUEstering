@@ -38,7 +38,8 @@
 // GCC host compiler
 
 #define CMS_UNROLL_LOOP _Pragma(EDM_STRINGIZE(GCC ivdep))
-#define CMS_UNROLL_LOOP_COUNT(N) _Pragma(EDM_STRINGIZE(GCC unroll N)) _Pragma(EDM_STRINGIZE(GCC ivdep))
+#define CMS_UNROLL_LOOP_COUNT(N) \
+  _Pragma(EDM_STRINGIZE(GCC unroll N)) _Pragma(EDM_STRINGIZE(GCC ivdep))
 #define CMS_UNROLL_LOOP_DISABLE _Pragma(EDM_STRINGIZE(GCC unroll 1))
 
 #else
