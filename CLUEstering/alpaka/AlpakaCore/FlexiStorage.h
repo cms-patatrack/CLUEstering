@@ -1,5 +1,5 @@
-#ifndef HeterogeneousCore_AlpakaInterface_interface_FlexiStorage_h
-#define HeterogeneousCore_AlpakaInterface_interface_FlexiStorage_h
+#ifndef FlexiStorage_h
+#define FlexiStorage_h
 
 #include <cstdint>
 

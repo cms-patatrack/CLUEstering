@@ -1,7 +1,7 @@
-#ifndef FWCore_Utilities_interface_CMSUnrollLoop_h
-#define FWCore_Utilities_interface_CMSUnrollLoop_h
+#ifndef CMSUnrollLoop_h
+#define CMsUnrollLoop_h
 
-#include "FWCore/Utilities/interface/stringize.h"
+#include "stringize.h"
 
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
 // CUDA or HIP device compiler

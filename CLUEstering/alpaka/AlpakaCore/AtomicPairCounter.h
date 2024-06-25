@@ -1,5 +1,5 @@
-#ifndef HeterogeneousCore_AlpakaInterface_interface_AtomicPairCounter_h
-#define HeterogeneousCore_AlpakaInterface_interface_AtomicPairCounter_h
+#ifndef AtomicPairCounter_h
+#define AtomicPairCounter_h
 
 #include <cstdint>
 

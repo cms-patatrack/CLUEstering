@@ -1,5 +1,5 @@
-#ifndef FWCore_Utilities_interface_stringize_h
-#define FWCore_Utilities_interface_stringize_h
+#ifndef stringize_h
+#define stringize_h
 
 // convert the macro argument to a null-terminated quoted string
 #define EDM_STRINGIZE_(token) #token

@@ -1,5 +1,5 @@
-#ifndef HeterogeneousCore_AlpakaInterface_interface_OneToManyAssoc_h
-#define HeterogeneousCore_AlpakaInterface_interface_OneToManyAssoc_h
+#ifndef OneToManyAssoc_h
+#define OneToManyAssoc_h
 
 #include <algorithm>
 #include <cstddef>
