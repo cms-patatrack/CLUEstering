@@ -15,11 +15,9 @@
 
 namespace cms::alpakatools {
 
-  template <
-      typename I,  // type stored in the container (usually an index in a vector of the input values)
-      int32_t ONES,  // number of "Ones"  +1. If -1 is initialized at runtime using external storage
-      int32_t SIZE  // max number of element. If -1 is initialized at runtime using external storage
-      >
+  template <typename I,    // type stored in the container
+            int32_t ONES,  // number of "Ones" +1. If -1 is initialized at runtime
+            int32_t SIZE>  // max number of element. If -1 is initialized at runtime
   class OneToManyAssocBase {
   public:
     using Counter = uint32_t;
@@ -163,11 +161,9 @@ namespace cms::alpakatools {
     int32_t psws;  // prefix-scan working space
   };
 
-  template <
-      typename I,  // type stored in the container (usually an index in a vector of the input values)
-      int32_t ONES,  // number of "Ones"  +1. If -1 is initialized at runtime using external storage
-      int32_t SIZE  // max number of element. If -1 is initialized at runtime using external storage
-      >
+  template <typename I,    // type stored in the container
+            int32_t ONES,  // number of "Ones" +1. If -1 is initialized at runtime
+            int32_t SIZE>  // max number of element. If -1 is initialized at runtime
   class OneToManyAssocSequential : public OneToManyAssocBase<I, ONES, SIZE> {
   public:
     using index_type = typename OneToManyAssocBase<I, ONES, SIZE>::index_type;
@@ -214,11 +210,9 @@ namespace cms::alpakatools {
     };
   };
 
-  template <
-      typename I,  // type stored in the container (usually an index in a vector of the input values)
-      int32_t ONES,  // number of "Ones"  +1. If -1 is initialized at runtime using external storage
-      int32_t SIZE  // max number of element. If -1 is initialized at runtime using external storage
-      >
+  template <typename I,    // type stored in the container
+            int32_t ONES,  // number of "Ones" +1. If -1 is initialized at runtime
+            int32_t SIZE>  // max number of element. If -1 is initialized at runtime
   class OneToManyAssocRandomAccess : public OneToManyAssocBase<I, ONES, SIZE> {
   public:
     using Counter = typename OneToManyAssocBase<I, ONES, SIZE>::Counter;

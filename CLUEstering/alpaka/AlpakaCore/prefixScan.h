@@ -6,6 +6,7 @@
 #include "CMSUnrollLoop.h"
 #include "alpakaConfig.h"
 #include "alpakaWorkDiv.h"
+
 namespace cms::alpakatools {
   template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
   constexpr bool isPowerOf2(T v) {
