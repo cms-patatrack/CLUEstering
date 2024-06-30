@@ -17,6 +17,7 @@
 #include "../../AlpakaCore/alpakaWorkDiv.h"
 #include "../../AlpakaCore/alpakaConfig.h"
 #include "../../AlpakaCore/alpakaMemory.h"
+#include "../../AlpakaCore/OneToManyAssoc.h"
 #include "AlpakaVecArray.h"
 
 using cms::alpakatools::VecArray;
@@ -75,11 +76,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
     ALPAKA_FN_HOST_ACC inline constexpr float* tileSize() { return tile_size; }
 
+    /* ALPAKA_FN_HOST_ACC void resizeTiles(std::size_t nTiles, int nPerDim) { */
+    /*   this->n_tiles = nTiles; */
+    /*   this->n_tiles_per_dim = nPerDim; */
+
+    /*   this->m_tiles.resize(nTiles); */
+    /* } */
     ALPAKA_FN_HOST_ACC void resizeTiles(std::size_t nTiles, int nPerDim) {
       this->n_tiles = nTiles;
       this->n_tiles_per_dim = nPerDim;
 
-      this->m_tiles.resize(nTiles);
+      /* this->m_tiles.resize(nTiles); */
     }
 
     template <typename TAcc>
@@ -121,6 +128,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                              int i) {
       m_tiles[getGlobalBin(acc, coords)].push_back(acc, i);
     }
+    template <typename TAcc>
+    ALPAKA_FN_ACC inline constexpr void fill(const TAcc& acc,
+                                             const VecArray<float, Ndim>& coords,
+                                             int i) {
+      m_tiles[getGlobalBin(acc, coords)].push_back(acc, i);
+    }
 
     template <typename TAcc>
     ALPAKA_FN_ACC inline void searchBox(
@@ -140,17 +153,21 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     ALPAKA_FN_HOST_ACC inline constexpr int nPerDim() const { return n_tiles_per_dim; }
 
-    ALPAKA_FN_HOST_ACC inline constexpr void clear() {
-      for (int i{}; i < n_tiles; ++i) {
-        m_tiles[i].reset();
-      }
-    }
+    /* ALPAKA_FN_HOST_ACC inline constexpr void clear() { */
+    /*   for (int i{}; i < n_tiles; ++i) { */
+    /*     m_tiles[i].reset(); */
+    /*   } */
+    /* } */
+    ALPAKA_FN_HOST_ACC inline constexpr void clear() { m_tiles.zero(); }
 
     ALPAKA_FN_HOST_ACC inline constexpr void clear(uint32_t i) { m_tiles[i].reset(); }
 
-    ALPAKA_FN_HOST_ACC inline constexpr VecArray<uint32_t, max_tile_depth>& operator[](
-        int globalBinId) {
-      return m_tiles[globalBinId];
+    /* ALPAKA_FN_HOST_ACC inline constexpr VecArray<uint32_t, max_tile_depth>& operator[]( */
+    /*     int globalBinId) { */
+    /*   return m_tiles[globalBinId]; */
+    /* } */
+    ALPAKA_FN_HOST_ACC inline constexpr span<uint32_t> operator[](int globalBinId) {
+      return span<uint32_t>{m_tiles.begin(globalBinId), m_tiles.off[globalBinId]};
     }
 
   private:
@@ -158,7 +175,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     int n_tiles_per_dim;
     CoordinateExtremes<Ndim> min_max;
     float tile_size[Ndim];
-    VecArray<VecArray<uint32_t, max_tile_depth>, max_n_tiles> m_tiles;
+    cms::alpakatools::OneToManyAssocSequential<uint32_t, max_tiles, max_points> m_tiles;
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 
