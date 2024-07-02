@@ -64,7 +64,7 @@ if __name__ == "__main__":
         plt.errorbar(x=threads, y=times.T[0], yerr=times.T[1], fmt=style)
     plt.title("Blob dataset")
     plt.grid(ls="--", lw=0.5, axis='y')
-    plt.legend()
+    plt.legend(clue.backends[1:])
     plt.xlabel("Number of threads per block")
     plt.ylabel("Execution time (ms)")
     if save:
