@@ -12,7 +12,7 @@ sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
 
-def fill_space(string: str) -> str:
+def _fill_space(string: str) -> str:
     '''
     Substitutes the spaces in a string with underscores
     '''
@@ -59,15 +59,15 @@ def test_blobs_clustering(blobs):
 
     for backend in clue.backends:
         # Check if the output file already exists and if it does, delete it
-        if os.path.isfile(f'./blobs_output_{fill_space(backend)}.csv'):
-            os.remove(f'./blobs_output_{fill_space(backend)}.csv')
+        if os.path.isfile(f'./blobs_output_{_fill_space(backend)}.csv'):
+            os.remove(f'./blobs_output_{_fill_space(backend)}.csv')
 
         c = clue.clusterer(0.8, 5, 1.5)
         c.read_data(blobs)
         c.run_clue()
-        c.to_csv('./', f'blobs_output_{fill_space(backend)}.csv')
+        c.to_csv('./', f'blobs_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./blobs_output_{fill_space(backend)}.csv',
+        check_result(f'./blobs_output_{_fill_space(backend)}.csv',
                      './test_datasets/truth_files/blobs_truth.csv')
 
 
@@ -78,15 +78,15 @@ def test_moons_clustering(moons):
 
     for backend in clue.backends:
         # Check if the output file already exists and if it does, delete it
-        if os.path.isfile(f'./moons_output_{fill_space(backend)}.csv'):
-            os.remove(f'./moons_output_{fill_space(backend)}.csv')
+        if os.path.isfile(f'./moons_output_{_fill_space(backend)}.csv'):
+            os.remove(f'./moons_output_{_fill_space(backend)}.csv')
 
         c = clue.clusterer(0.5, 5, 1.)
         c.read_data(moons)
         c.run_clue()
-        c.to_csv('./', f'moons_output_{fill_space(backend)}.csv')
+        c.to_csv('./', f'moons_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./moons_output_{fill_space(backend)}.csv',
+        check_result(f'./moons_output_{_fill_space(backend)}.csv',
                      './test_datasets/truth_files/moons_1000_truth.csv')
 
 
@@ -97,15 +97,15 @@ def test_sissa_clustering(sissa):
 
     for backend in clue.backends:
         # Check if the output file already exists and if it does, delete it
-        if os.path.isfile(f'./sissa_output_{fill_space(backend)}.csv'):
-            os.remove(f'./sissa_output_{fill_space(backend)}.csv')
+        if os.path.isfile(f'./sissa_output_{_fill_space(backend)}.csv'):
+            os.remove(f'./sissa_output_{_fill_space(backend)}.csv')
 
         c = clue.clusterer(0.4, 5, 1.)
         c.read_data(sissa)
         c.run_clue()
-        c.to_csv('./', f'sissa_output_{fill_space(backend)}.csv')
+        c.to_csv('./', f'sissa_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./sissa_output_{fill_space(backend)}.csv',
+        check_result(f'./sissa_output_{_fill_space(backend)}.csv',
                      './test_datasets/truth_files/sissa_1000_truth.csv')
 
 
@@ -116,15 +116,15 @@ def test_toydet_clustering(toy_det):
 
     for backend in clue.backends:
         # Check if the output file already exists and if it does, delete it
-        if os.path.isfile(f'./toy_det_output_{fill_space(backend)}.csv'):
-            os.remove(f'./toy_det_output_{fill_space(backend)}.csv')
+        if os.path.isfile(f'./toy_det_output_{_fill_space(backend)}.csv'):
+            os.remove(f'./toy_det_output_{_fill_space(backend)}.csv')
 
         c = clue.clusterer(0.06, 5, 1.)
         c.read_data(toy_det)
         c.run_clue()
-        c.to_csv('./', f'toy_det_output_{fill_space(backend)}.csv')
+        c.to_csv('./', f'toy_det_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./toy_det_output_{fill_space(backend)}.csv',
+        check_result(f'./toy_det_output_{_fill_space(backend)}.csv',
                      './test_datasets/truth_files/toy_det_1000_truth.csv')
 
 
