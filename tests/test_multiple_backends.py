@@ -54,7 +54,8 @@ def toy_det():
 
 def test_blobs_clustering(blobs):
     '''
-    Checks that the output of the clustering is the one given by the truth dataset
+    Checks that the output of the clustering is the one given by the truth
+    dataset
     '''
 
     for backend in clue.backends:
@@ -73,7 +74,8 @@ def test_blobs_clustering(blobs):
 
 def test_moons_clustering(moons):
     '''
-    Checks that the output of the clustering is the one given by the truth dataset
+    Checks that the output of the clustering is the one given by the truth
+    dataset
     '''
 
     for backend in clue.backends:
@@ -92,7 +94,8 @@ def test_moons_clustering(moons):
 
 def test_sissa_clustering(sissa):
     '''
-    Checks that the output of the clustering is the one given by the truth dataset
+    Checks that the output of the clustering is the one given by the truth
+    dataset
     '''
 
     for backend in clue.backends:
@@ -111,7 +114,8 @@ def test_sissa_clustering(sissa):
 
 def test_toydet_clustering(toy_det):
     '''
-    Checks that the output of the clustering is the one given by the truth dataset
+    Checks that the output of the clustering is the one given by the truth
+    dataset
     '''
 
     for backend in clue.backends:
