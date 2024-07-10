@@ -71,6 +71,7 @@ if __name__ == "__main__":
         # plt.plot(threads, times.T[0], style)
         plt.errorbar(x=threads, y=times.T[0], yerr=times.T[1], fmt=style)
         blobs_measures[backend] = times.T[0]
+        blobs_measures[*backend_std(backend)] = times.T[1]
     plt.title("Blob dataset")
     plt.grid(ls="--", lw=0.5, axis='y')
     plt.legend(clue.backends[1:])
@@ -78,6 +79,8 @@ if __name__ == "__main__":
     plt.ylabel("Execution time (ms)")
     if save:
         plt.savefig("blobs_threads_backends.png")
+        blobs_measures.drop(columns=["cpu serial", *backend_std("cpu serial")],
+                            inplace=True)
         blobs_measures.to_csv("blobs_threads_backends.csv", index=False)
     else:
         plt.show()
