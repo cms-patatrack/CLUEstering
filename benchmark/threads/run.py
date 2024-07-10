@@ -30,7 +30,6 @@ def benchmark(nruns: int, dataset: str, backend: str, threads: list) -> np.ndarr
         partial_times = np.zeros(nruns)
         for r in range(nruns):
             partial_times[r] = run(0.2, 5, 1., dataset, backend, bs)
-            sleep(.1)
         times[i] = np.array([np.mean(partial_times), np.std(partial_times)])
 
     return times
@@ -39,11 +38,11 @@ def benchmark(nruns: int, dataset: str, backend: str, threads: list) -> np.ndarr
 if __name__ == "__main__":
     nruns = 100
     threads = [2**i for i in range(0, 11)]
-    line_map = {'cpu serial': '|',
+    line_map = {'cpu serial': '-',
                 'cpu tbb': '--',
-                'gpu cuda': '.-',
+                'gpu cuda': '-.',
                 'gpu hip': ':'}
-    marker_map = {'cpu serial': 'O',
+    marker_map = {'cpu serial': 'o',
                   'cpu tbb': '*',
                   'gpu cuda': '^',
                   'gpu hip': 's'}
