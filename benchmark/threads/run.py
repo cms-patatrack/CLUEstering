@@ -78,6 +78,6 @@ if __name__ == "__main__":
     plt.ylabel("Execution time (ms)")
     if save:
         plt.savefig("blobs_threads_backends.png")
-        blobs_measures.to_csv("blobs_ppbins_backends.csv", index=False)
+        blobs_measures.to_csv("blobs_threads_backends.csv", index=False)
     else:
         plt.show()
