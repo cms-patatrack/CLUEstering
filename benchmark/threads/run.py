@@ -65,7 +65,7 @@ if __name__ == "__main__":
     for backend in clue.backends:
         if backend == "cpu serial":
             continue
-        times = benchmark(nruns, "blobs.csv", backend, threads)
+        times = benchmark(nruns, "blob.csv", backend, threads)
 
         style = line_map[backend] + marker_map[backend] + color_map[backend]
         # plt.plot(threads, times.T[0], style)
