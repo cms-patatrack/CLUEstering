@@ -2,7 +2,7 @@
 from time import sleep
 import matplotlib.pyplot as plt
 import numpy as np
-# import pandas as pd
+import pandas as pd
 import sys
 sys.path.insert(1, '../../CLUEstering/')
 import CLUEstering as clue
@@ -13,6 +13,11 @@ save = False
 if len(sys.argv) > 1:
     if sys.argv[1] == "save":
         save = True
+
+
+def backend_std(*args):
+    underscore = lambda x: x.replace(" ", "_")
+    return [f"{underscore(x)}_std" for x in args]
 
 
 def run(dc: float, rhoc: float, odf: float,
@@ -54,12 +59,17 @@ if __name__ == "__main__":
 
     #
     # blobs 2D dataset
+    blobs_measures = pd.DataFrame(columns=["ppbin",
+                                           *clue.backends,
+                                           *backend_std(*clue.backends)])
+    blobs_measures["ppbin"] = ppbins
     for backend in clue.backends:
         times = benchmark(nruns, "blob.csv", backend, ppbins)
 
         style = line_map[backend] + marker_map[backend] + color_map[backend]
         # plt.plot(ppbins, times.T[0], style)
         plt.errorbar(x=ppbins, y=times.T[0], yerr=times.T[1], fmt=style)
+        blobs_measures[backend] = times.T[0]
     plt.title("Blob dataset")
     plt.grid(ls="--", lw=0.5, axis='y')
     plt.legend(clue.backends)
@@ -67,5 +77,6 @@ if __name__ == "__main__":
     plt.ylabel("Execution time (ms)")
     if save:
         plt.savefig("blobs_ppbins_backends.png")
+        blobs_measures.to_csv("blobs_ppbins_backends.csv", index=False)
     else:
         plt.show()

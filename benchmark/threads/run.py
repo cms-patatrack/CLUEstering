@@ -2,7 +2,7 @@
 from time import sleep
 import matplotlib.pyplot as plt
 import numpy as np
-# import pandas as pd
+import pandas as pd
 import sys
 sys.path.insert(1, '../../CLUEstering/')
 import CLUEstering as clue
@@ -13,6 +13,11 @@ save = False
 if len(sys.argv) > 1:
     if sys.argv[1] == "save":
         save = True
+
+
+def backend_std(*args):
+    underscore = lambda x: x.replace(" ", "_")
+    return [f"{underscore(x)}_std" for x in args]
 
 
 def run(dc: float, rhoc: float, odf: float,
@@ -53,6 +58,10 @@ if __name__ == "__main__":
 
     #
     # blobs 2D dataset
+    blobs_measures = pd.DataFrame(columns=["threads",
+                                           *clue.backends,
+                                           *backend_std(*clue.backends)])
+    blobs_measures["threads"] = threads
     for backend in clue.backends:
         if backend == "cpu serial":
             continue
@@ -61,6 +70,7 @@ if __name__ == "__main__":
         style = line_map[backend] + marker_map[backend] + color_map[backend]
         # plt.plot(threads, times.T[0], style)
         plt.errorbar(x=threads, y=times.T[0], yerr=times.T[1], fmt=style)
+        blobs_measures[backend] = times.T[0]
     plt.title("Blob dataset")
     plt.grid(ls="--", lw=0.5, axis='y')
     plt.legend(clue.backends[1:])
@@ -68,5 +78,6 @@ if __name__ == "__main__":
     plt.ylabel("Execution time (ms)")
     if save:
         plt.savefig("blobs_threads_backends.png")
+        blobs_measures.to_csv("blobs_ppbins_backends.csv", index=False)
     else:
         plt.show()
