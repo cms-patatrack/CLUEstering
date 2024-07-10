@@ -55,7 +55,7 @@ if __name__ == "__main__":
     #
     # blobs 2D dataset
     for backend in clue.backends:
-        times = benchmark(nruns, "blobs.csv", backend, ppbins)
+        times = benchmark(nruns, "blob.csv", backend, ppbins)
 
         style = line_map[backend] + marker_map[backend] + color_map[backend]
         # plt.plot(ppbins, times.T[0], style)
