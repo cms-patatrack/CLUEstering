@@ -65,7 +65,7 @@ def test_blobs_clustering(blobs):
 
         c = clue.clusterer(0.8, 5, 1.5)
         c.read_data(blobs)
-        c.run_clue()
+        c.run_clue(backend=backend)
         c.to_csv('./', f'blobs_output_{_fill_space(backend)}.csv')
 
         check_result(f'./blobs_output_{_fill_space(backend)}.csv',
@@ -85,7 +85,7 @@ def test_moons_clustering(moons):
 
         c = clue.clusterer(0.5, 5, 1.)
         c.read_data(moons)
-        c.run_clue()
+        c.run_clue(backend=backend)
         c.to_csv('./', f'moons_output_{_fill_space(backend)}.csv')
 
         check_result(f'./moons_output_{_fill_space(backend)}.csv',
@@ -105,7 +105,7 @@ def test_sissa_clustering(sissa):
 
         c = clue.clusterer(0.4, 5, 1.)
         c.read_data(sissa)
-        c.run_clue()
+        c.run_clue(backend=backend)
         c.to_csv('./', f'sissa_output_{_fill_space(backend)}.csv')
 
         check_result(f'./sissa_output_{_fill_space(backend)}.csv',
@@ -125,7 +125,7 @@ def test_toydet_clustering(toy_det):
 
         c = clue.clusterer(0.06, 5, 1.)
         c.read_data(toy_det)
-        c.run_clue()
+        c.run_clue(backend=backend)
         c.to_csv('./', f'toy_det_output_{_fill_space(backend)}.csv')
 
         check_result(f'./toy_det_output_{_fill_space(backend)}.csv',
