@@ -71,7 +71,7 @@ if __name__ == "__main__":
         # plt.plot(threads, times.T[0], style)
         plt.errorbar(x=threads, y=times.T[0], yerr=times.T[1], fmt=style)
         blobs_measures[backend] = times.T[0]
-        blobs_measures[*backend_std(backend)] = times.T[1]
+        blobs_measures[backend_std(backend)[0]] = times.T[1]
     plt.title("Blob dataset")
     plt.grid(ls="--", lw=0.5, axis='y')
     plt.legend(clue.backends[1:])
