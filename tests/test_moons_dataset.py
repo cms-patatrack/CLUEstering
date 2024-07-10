@@ -20,9 +20,10 @@ def moons():
     return pd.read_csv("./test_datasets/moons.csv")
 
 
-def test_circles_clustering(moons):
+def test_clustering(moons):
     '''
-    Checks that the output of the clustering is the one given by the truth dataset
+    Checks that the output of the clustering is the one given by the truth
+    dataset.
     '''
 
     # Check if the output file already exists and if it does, delete it
@@ -36,6 +37,7 @@ def test_circles_clustering(moons):
 
     check_result('./moons_output.csv',
                  './test_datasets/truth_files/moons_1000_truth.csv')
+
 
 if __name__ == "__main__":
     c = clue.clusterer(0.8, 5, 1.5)
