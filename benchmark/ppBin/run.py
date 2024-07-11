@@ -32,10 +32,11 @@ def run(dc: float, rhoc: float, odf: float,
 def benchmark(nruns: int, dataset: str, backend: str, ppbins: list) -> np.ndarray:
     times = np.zeros((len(ppbins), 2))
     for i, ppbin in enumerate(ppbins):
-        partial_times = np.zeros(nruns)
-        for r in range(nruns):
+        partial_times = np.zeros(nruns+1)
+        for r in range(nruns+1):
             partial_times[r] = run(0.2, 5, 1., ppbin, dataset, backend)
             # sleep(.1)
+        partial_times = np.delete(partial_times, 0, 0)
         times[i] = np.array([np.mean(partial_times), np.std(partial_times)])
 
     return times
