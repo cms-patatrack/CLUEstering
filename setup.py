@@ -9,8 +9,13 @@ __version__ = "2.2.3"
 this_directory = Path(__file__).parent
 long_description = (this_directory/'README.md').read_text()
 
+status = None
 if sys.argv[1] != 'sdist':
-    os.system("cmake -B build && make -C build")
+    status = os.system("cmake -B build && make -C build")
+
+if status != 0:
+    print(f"Backend compilation failed with exit status {status}.")
+    sys.exit(1)
 
 setup(
     name="CLUEstering",
