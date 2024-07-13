@@ -23,19 +23,19 @@ setup(
     author="Simone Balducci",
     author_email="simone.balducci00@gmail.com",
     description='''A library that generalizes the original 2-dimensional CLUE
-				algorithm made at CERN.''',
+                   algorithm made at CERN.''',
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=['CLUEstering'],
-    install_requires=['scikit-learn','numpy','matplotlib','pandas'],
+    install_requires=['scikit-learn', 'numpy', 'matplotlib', 'pandas'],
     package_data={'': []},
-    keywords=['Python','Clustering','Binding'],
+    keywords=['Python', 'Clustering', 'Binding'],
     python_requires='>=3.7',
     classifiers=[
-		'Intended Audience :: Developers',
-		'Programming Language :: Python :: 3',
-		'Operating System :: Unix',
-		'Operating System :: MacOS :: MacOS X',
-		'Operating System :: Microsoft :: Windows',
+        'Intended Audience :: Developers',
+        'Programming Language :: Python :: 3',
+        'Operating System :: Unix',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows',
     ]
 )
