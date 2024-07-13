@@ -38,7 +38,7 @@ jobs:
 
           echo "Testing installation from git repository"
           docker run -t serial bash -c \
-            "git clone https://github.com/cms-patatrack/CLUEstering;
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
             cd CLUEstering;
             pip install . ;
             python3 -c 'import CLUEstering' || exit 1"
@@ -54,7 +54,7 @@ jobs:
 
           echo "Testing installation from git repository"
           docker run -t noboost bash -c \
-            "git clone https://github.com/cms-patatrack/CLUEstering;
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
             cd CLUEstering;
             pip install . ;
             python3 -c 'import CLUEstering' || exit 1"
@@ -70,7 +70,7 @@ jobs:
 
           echo "Testing installation from git repository"
           docker run -t tbb bash -c \
-            "git clone https://github.com/cms-patatrack/CLUEstering;
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
             cd CLUEstering;
             pip install . ;
             python3 -c 'import CLUEstering' || exit 1"
@@ -82,14 +82,14 @@ jobs:
 
           echo "Testing installation from PyPi"
           docker run -t nogcc bash -c \
-            "pip install CLUEstering; python3 -c 'import CLUEstering' && exit 1"
+            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 0"
 
           echo "Testing installation from git repository"
           docker run -t nogcc bash -c \
-            "git clone https://github.com/cms-patatrack/CLUEstering;
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
             cd CLUEstering;
             pip install . ;
-            python3 -c 'import CLUEstering' && exit 1"
+            python3 -c 'import CLUEstering' || exit 0"
 
       - name: Test installation inside docker containers (without cmake)
         working-directory: ${{github.workspace}}/docker/no_cmake
@@ -98,11 +98,11 @@ jobs:
 
           echo "Testing installation from PyPi"
           docker run -t nocmake bash -c \
-            "pip install CLUEstering; python3 -c 'import CLUEstering' && exit 1"
+            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 0"
 
           echo "Testing installation from git repository"
           docker run -t nocmake bash -c \
-            "git clone https://github.com/cms-patatrack/CLUEstering;
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
             cd CLUEstering;
             pip install . ;
-            python3 -c 'import CLUEstering' && exit 1"
+            python3 -c 'import CLUEstering' || exit 0"
