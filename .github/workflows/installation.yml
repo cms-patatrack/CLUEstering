@@ -15,9 +15,21 @@ jobs:
       fail-fast: false
 
     steps:
+      - uses: actions/checkout@v3
+
+      - name: Install docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install docker-ce
+
       - name: Test installation inside docker containers (serial)
         working-directory: ${{github.workspace}}/docker/serial
         run: |
+          ls
           docker build -t serial .
 
           echo "Testing installation from PyPi"
