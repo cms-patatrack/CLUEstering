@@ -1,5 +1,4 @@
 
-# import os
 import sys
 from pathlib import Path
 from setuptools import setup
@@ -10,22 +9,6 @@ __version__ = "2.2.4"
 this_directory = Path(__file__).parent
 long_description = (this_directory/'README.md').read_text()
 
-# os.environ['PIP_VERBOSE'] = '1'
-# os.environ['VERBOSE'] = '1'
-
-# status = None
-# if sys.argv[1] != 'sdist':
-#     status = os.system("cmake -B build && make -C build")
-
-# if status != 0:
-#     print(f"\nBackend compilation failed with exit status {status}.")
-#     print("Check that CMake and a C++ compiler are installed.")
-#     print("If you are installing from the git repository, ",
-#           "make sure that it was cloned recursively.")
-#     sys.exit(1)
-
-
-# Run cmake and make commands
 cmake_command = ['cmake', '-B', 'build']
 make_command = ['make', '-C', 'build']
 
