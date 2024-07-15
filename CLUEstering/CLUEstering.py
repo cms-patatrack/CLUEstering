@@ -244,10 +244,12 @@ class clusterer:
         Execution time of the algorithm, expressed in nanoseconds.
     """
 
-    def __init__(self, dc_: float, rhoc_: float, dm_: float, ppbin: int = 10):
+    def __init__(self, dc_: float, rhoc_: float, dm_: [float, None] = None, ppbin: int = 10):
         self.dc_ = dc_
         self.rhoc = rhoc_
         self.dm = dm_
+        if dm_ is None:
+            self.dm = dc_
         self.ppbin = ppbin
 
         # Initialize attributes
@@ -263,10 +265,13 @@ class clusterer:
         self.elapsed_time = 0.
 
     def set_params(self, dc: float, rhoc: float,
-                   dm: float, ppbin: int = 10) -> None:
+                   dm: [float, None], ppbin: int = 128) -> None:
         self.dc_ = dc
         self.rhoc = rhoc
-        self.dm = dm
+        if dm is not None:
+            self.dm = dm
+        else:
+            self.dm = dc
         self.ppbin = ppbin
 
     def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
