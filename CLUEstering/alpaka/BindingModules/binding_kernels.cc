@@ -1,12 +1,9 @@
 
-#include <vector>
-
 #include "../CLUE/ConvolutionalKernel.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
-#include <stdint.h>
 
 PYBIND11_MODULE(CLUE_Convolutional_Kernels, m) {
   m.doc() = "Binding of the convolutional kernels used in the CLUE algorithm.";
