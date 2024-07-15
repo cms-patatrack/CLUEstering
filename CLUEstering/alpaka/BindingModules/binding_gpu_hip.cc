@@ -25,7 +25,7 @@ namespace alpaka_rocm_async {
   template <typename Kernel>
   std::vector<std::vector<int>> mainRun(float dc,
                                         float rhoc,
-                                        float outlier,
+                                        float dm,
                                         int pPBin,
                                         const std::vector<std::vector<float>>& coords,
                                         const std::vector<float>& weights,
@@ -42,34 +42,34 @@ namespace alpaka_rocm_async {
     switch (Ndim) {
       [[unlikely]] case (1):
         return run<1, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[likely]] case (2):
         return run<2, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[likely]] case (3):
         return run<3, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (4):
         return run<4, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (5):
         return run<5, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (6):
         return run<6, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (7):
         return run<7, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (8):
         return run<8, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (9):
         return run<9, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] case (10):
         return run<10, Kernel>(
-            dc, rhoc, outlier, pPBin, coords, weights, kernel, queue_, block_size);
+            dc, rhoc, dm, pPBin, coords, weights, kernel, queue_, block_size);
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";
         return {};
