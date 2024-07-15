@@ -15,7 +15,7 @@ def test_read_array_except():
     Test the exception raised when passing incorrect arrays
     '''
     arr = np.array([[1, 4, 5]])
-    clust = clue.clusterer(0.4, 5., 1.2)
+    clust = clue.clusterer(0.4, 5., 0.4)
 
     with pytest.raises(ValueError):
         clust.read_data(arr)
@@ -25,7 +25,7 @@ def test_read_string_except():
     '''
     Test the exception raised when passing incorrect data files
     '''
-    clust = clue.clusterer(0.4, 5., 1.2)
+    clust = clue.clusterer(0.4, 5., 0.4)
 
     with pytest.raises(ValueError):
         clust.read_data('./test_datasets/blob.dat')
@@ -156,7 +156,7 @@ def test_csv(file):
     Test that CLUE works when the data is written in a csv file.
     """
 
-    clust = clue.clusterer(1, 5, 1.6)
+    clust = clue.clusterer(1, 5, 1)
     clust.read_data(file)
     clust.run_clue()
 
@@ -166,7 +166,7 @@ def test_dict(dictionary):
     Test that CLUE works when the data is contained in a dictionary.
     """
 
-    clust = clue.clusterer(1, 5, 1.6)
+    clust = clue.clusterer(1, 5, 1)
     clust.read_data(dictionary)
     clust.run_clue()
 
@@ -176,7 +176,7 @@ def test_pddf(dataframe):
     Test that CLUE works when the data is contained in a pandas dataframe.
     """
 
-    clust = clue.clusterer(1, 5, 1.6)
+    clust = clue.clusterer(1, 5, 1)
     clust.read_data(dataframe)
     clust.run_clue()
 
@@ -186,7 +186,7 @@ def test_list(lists):
     Test that CLUE works when the data is contained in lists.
     """
 
-    clust = clue.clusterer(1, 5, 1.6)
+    clust = clue.clusterer(1, 5, 1)
     clust.read_data(lists)
     clust.run_clue()
 
@@ -196,7 +196,7 @@ def test_ndarray(arrays):
     Test that CLUE works when the data is contained in numpy ndarrays.
     """
 
-    clust = clue.clusterer(1, 5, 1.6)
+    clust = clue.clusterer(1, 5, 1)
     clust.read_data(arrays)
     clust.run_clue()
 
@@ -207,19 +207,19 @@ def test_same_result(file, dictionary, dataframe, lists, arrays):
     for all of them.
     """
 
-    clust_file = clue.clusterer(1, 5, 1.6)
+    clust_file = clue.clusterer(1, 5, 1)
     clust_file.read_data(file)
     clust_file.run_clue()
 
-    clust_dict = clue.clusterer(1, 5, 1.6)
+    clust_dict = clue.clusterer(1, 5, 1)
     clust_dict.read_data(dictionary)
     clust_dict.run_clue()
 
-    clust_df = clue.clusterer(1, 5, 1.6)
+    clust_df = clue.clusterer(1, 5, 1)
     clust_df.read_data(dataframe)
     clust_df.run_clue()
 
-    clust_list = clue.clusterer(1, 5, 1.6)
+    clust_list = clue.clusterer(1, 5, 1)
     clust_list.read_data(lists)
     clust_list.run_clue()
 

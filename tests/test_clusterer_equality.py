@@ -30,22 +30,22 @@ def test_clusterer_equality(moons, circles):
     Test the equality operator for clusterer objects
     '''
     # Moons dataset
-    clust1 = clue.clusterer(0.5, 5, 1.)
+    clust1 = clue.clusterer(0.5, 5, 0.5)
     clust1.read_data(moons)
     clust1.run_clue()
 
     # Create a copy of the moons clusterer to check the equality of clusterers
-    clust1_copy = clue.clusterer(0.5, 5, 1.)
+    clust1_copy = clue.clusterer(0.5, 5, 0.5)
     clust1_copy.read_data(moons)
     clust1_copy.run_clue()
 
     # Circles dataset
-    clust2 = clue.clusterer(0.9, 5, 1.5)
+    clust2 = clue.clusterer(0.9, 5, 0.9)
     clust2.read_data(circles)
     clust2.run_clue()
 
     # Create a copy of the circles clusterer to check the equality of clusterers
-    clust2_copy = clue.clusterer(0.9, 5, 1.5)
+    clust2_copy = clue.clusterer(0.9, 5, 0.9)
     clust2_copy.read_data(circles)
     clust2_copy.run_clue()
 
