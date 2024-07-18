@@ -29,7 +29,7 @@ def test_clustering(blobs):
     if os.path.isfile('./blobs_output.csv'):
         os.remove('./blobs_output.csv')
 
-    c = clue.clusterer(0.8, 5, 1.5)
+    c = clue.clusterer(0.8, 5, 0.8)
     c.read_data(blobs)
     c.run_clue()
     c.to_csv('./', 'blobs_output.csv')
@@ -39,7 +39,7 @@ def test_clustering(blobs):
 
 
 if __name__ == "__main__":
-    c = clue.clusterer(0.8, 5, 1.5)
+    c = clue.clusterer(0.8, 5, 0.8)
     c.read_data("./test_datasets/blob.csv")
     c.run_clue()
     c.cluster_plotter()

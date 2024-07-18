@@ -2,12 +2,6 @@
 #define convolutional_kernels_h
 
 #include <alpaka/core/Common.hpp>
-#include <alpaka/core/Debug.hpp>
-#include <cstdint>
-#include <functional>
-#include <iostream>
-#include <vector>
-
 #include <alpaka/alpaka.hpp>
 
 class FlatKernel {

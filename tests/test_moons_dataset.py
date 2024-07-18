@@ -40,7 +40,7 @@ def test_clustering(moons):
 
 
 if __name__ == "__main__":
-    c = clue.clusterer(0.8, 5, 1.5)
+    c = clue.clusterer(0.5, 5, 0.5)
     c.read_data("./test_datasets/moons.csv")
     c.run_clue()
     c.cluster_plotter()
