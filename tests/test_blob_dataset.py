@@ -20,7 +20,7 @@ def blobs():
     return pd.read_csv("./test_datasets/blob.csv")
 
 
-def test_blobs_clustering(blobs):
+def test_clustering(blobs):
     '''
     Checks that the output of the clustering is the one given by the truth dataset
     '''
@@ -36,6 +36,7 @@ def test_blobs_clustering(blobs):
 
     check_result('./blobs_output.csv',
                  './test_datasets/truth_files/blobs_truth.csv')
+
 
 if __name__ == "__main__":
     c = clue.clusterer(0.8, 5, 0.8)

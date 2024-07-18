@@ -20,9 +20,10 @@ def toy_det():
     return pd.read_csv("./test_datasets/toyDetector.csv")
 
 
-def test_circles_clustering(toy_det):
+def test_clustering(toy_det):
     '''
-    Checks that the output of the clustering is the one given by the truth dataset
+    Checks that the output of the clustering is the one given by the truth
+    dataset
     '''
 
     # Check if the output file already exists and if it does, delete it
@@ -36,6 +37,7 @@ def test_circles_clustering(toy_det):
 
     check_result('./toy_det_output.csv',
                  './test_datasets/truth_files/toy_det_1000_truth.csv')
+
 
 if __name__ == "__main__":
     c = clue.clusterer(0.06, 5, 0.06)

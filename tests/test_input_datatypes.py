@@ -203,8 +203,8 @@ def test_ndarray(arrays):
 
 def test_same_result(file, dictionary, dataframe, lists, arrays):
     """
-    Run CLUE for all the supported data types and assert that the output is the same
-    for all of them.
+    Run CLUE for all the supported data types and assert that the output is the
+    same for all of them.
     """
 
     clust_file = clue.clusterer(1, 5, 1)
