@@ -20,17 +20,47 @@ path = dirname(__file__)
 sys.path.insert(1, join(path, 'lib'))
 import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
+
+backends = ["cpu serial"]
 tbb_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
 if tbb_found:
     import CLUE_CPU_TBB as cpu_tbb
+    backends.append("cpu tbb")
 cuda_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))))
 if cuda_found:
     import CLUE_GPU_CUDA as gpu_cuda
+    backends.append("gpu cuda")
 hip_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_HIP*.so'))))
 if hip_found:
     import CLUE_GPU_HIP as gpu_hip
+    backends.append("gpu hip")
 
-def test_blobs(n_samples: int, n_dim: int , n_blobs: int = 4, mean: float = 0,
+
+def is_tbb_available():
+    """
+    Returns True if the library is compiled with TBB support, False otherwise.
+    """
+
+    return tbb_found
+
+
+def is_cuda_available():
+    """
+    Returns True if the library is compiled with CUDA support, False otherwise.
+    """
+
+    return cuda_found
+
+
+def is_hip_available():
+    """
+    Returns True if the library is compiled with HIP support, False otherwise.
+    """
+
+    return hip_found
+
+
+def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
     """
     Returns a dataframe containing randomly generated 2-dimensional or 3-dimensional blobs.
@@ -139,6 +169,10 @@ class cluster_properties:
     ----------
     n_clusters : int
         Number of clusters constructed.
+    n_seeds : int
+        Number of seeds found, which indicates the clusters excluding the group of outliers.
+    clusters : np.ndarray
+        Array containing the list of the clusters found.
     cluster_ids : np.ndarray
         Array containing the cluster_id of each point.
     is_seed : np.ndarray
@@ -153,6 +187,8 @@ class cluster_properties:
     """
 
     n_clusters : int
+    n_seeds : int
+    clusters : np.ndarray
     cluster_ids : np.ndarray
     is_seed : np.ndarray
     cluster_points : np.ndarray
@@ -161,6 +197,8 @@ class cluster_properties:
 
     def __eq__(self, other):
         if self.n_clusters != other.n_clusters:
+            return False
+        if self.n_seeds != other.n_seeds:
             return False
         if not (self.cluster_ids == other.cluster_ids).all():
             return False
@@ -637,13 +675,17 @@ class clusterer:
 
         Modified attributes
         -------------------
+        n_clusters : int
+            Number of clusters reconstructed.
+        n_seeds : int
+            Number of seeds found, which indicates the clusters excluding the group of outliers.
+        clusters : ndarray
+            Array containing the list of the clusters found.
         cluster_ids : ndarray
             Contains the cluster_id corresponding to every point.
         is_seed : ndarray
             For every point the value is 1 if the point is a seed or an
             outlier and 0 if it isn't.
-        n_clusters : int
-            Number of clusters reconstructed.
         cluster_points : ndarray of lists
             Contains, for every cluster, the list of points associated to id.
         points_per_cluster : ndarray
@@ -693,9 +735,12 @@ class clusterer:
         finish = time.time_ns()
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])
-        n_clusters = len(np.unique(cluster_ids))
+        clusters = np.unique(cluster_ids)
+        n_seeds = np.sum([1 for i in clusters if i > -1])
+        n_clusters = len(clusters)
 
         cluster_points = [[] for _ in range(n_clusters)]
+        # note: the outlier set is always the last cluster
         for i in range(self.clust_data.n_points):
             cluster_points[cluster_ids[i]].append(i)
 
@@ -705,6 +750,8 @@ class clusterer:
         output_df = pd.DataFrame(data)
 
         self.clust_prop = cluster_properties(n_clusters,
+                                             n_seeds,
+                                             clusters,
                                              cluster_ids,
                                              is_seed,
                                              np.asarray(cluster_points, dtype=object),
@@ -724,6 +771,22 @@ class clusterer:
         '''
 
         return self.clust_prop.n_clusters
+
+    @property
+    def n_seeds(self) -> int:
+        '''
+        Returns the number of seeds found.
+        '''
+
+        return self.clust_prop.n_seeds
+
+    @property
+    def clusters(self) -> np.ndarray:
+        '''
+        Returns the list of clusters found.
+        '''
+
+        return self.clust_prop.clusters
 
     @property
     def cluster_ids(self) -> np.ndarray:
@@ -761,6 +824,54 @@ class clusterer:
         '''
         return self.clust_prop.output_df
 
+    def cluster_centroid(self, cluster_id: int) -> np.ndarray:
+        '''
+        Returns the coordinates of the centroid of a cluster.
+
+        Parameters
+        ----------
+        cluster_id : int
+            The id of the cluster for which the centroid is calculated.
+
+        Returns
+        -------
+        np.ndarray : The coordinates of the centroid of the cluster.
+        '''
+        if cluster_id < 0 or cluster_id >= self.n_clusters:
+            raise ValueError("Invalid cluster id. The selected cluster id was"
+                             + " not found among the clusters.")
+
+        centroid = np.zeros(self.clust_data.n_dim)
+        counter = 0
+        for i in range(self.n_points):
+            if self.cluster_ids[i] == cluster_id:
+                centroid += self.clust_data.coords[i]
+                counter += 1
+        centroid /= counter
+
+        return centroid
+
+    def cluster_centroids(self) -> np.ndarray:
+        '''
+        Returns the coordinates of the centroid of a cluster.
+
+        Parameters
+        ----------
+        cluster_id : int
+            The id of the cluster for which the centroid is calculated.
+
+        Returns
+        -------
+        np.ndarray : The coordinates of the centroid of the cluster.
+        '''
+        centroids = np.zeros((self.n_clusters-1, self.clust_data.n_dim))
+        for i in range(self.n_points):
+            if self.cluster_ids[i] != -1:
+                centroids[self.cluster_ids[i]] += self.clust_data.coords[i]
+        print(self.points_per_cluster[:-1].reshape(-1, 1))
+        centroids /= self.points_per_cluster[:-1].reshape(-1, 1)
+
+        return centroids
 
     def input_plotter(self, plot_title: str = '', title_size: float = 16,
                       x_label: str = 'x', y_label: str = 'y', z_label: str = 'z',
