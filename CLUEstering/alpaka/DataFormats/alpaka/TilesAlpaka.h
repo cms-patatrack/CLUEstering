@@ -5,14 +5,7 @@
 #include <alpaka/alpaka.hpp>
 #include <cstddef>
 #include <cstdint>
-#include <vector>
-#include <iostream>
-#include <functional>
-#include <cmath>
-#include <algorithm>
-#include <numeric>
 #include <stdint.h>
-#include <type_traits>
 
 #include "../../AlpakaCore/alpakaConfig.h"
 #include "../../AlpakaCore/alpakaMemory.h"

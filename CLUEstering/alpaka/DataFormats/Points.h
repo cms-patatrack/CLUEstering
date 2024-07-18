@@ -2,12 +2,6 @@
 #define points_h
 
 #include "alpaka/AlpakaVecArray.h"
-#include "alpaka/PointsAlpaka.h"
-#include <algorithm>
-#include <array>
-#include <cmath>
-#include <functional>
-#include <iostream>
 #include <vector>
 
 using cms::alpakatools::VecArray;
