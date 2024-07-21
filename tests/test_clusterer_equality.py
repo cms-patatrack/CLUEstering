@@ -44,7 +44,7 @@ def test_clusterer_equality(moons, circles):
     clust2.read_data(circles)
     clust2.run_clue()
 
-    # Create a copy of the circles clusterer to check the equality of clusterers
+    # Create a copy to check the equality of clusterers
     clust2_copy = clue.clusterer(0.9, 5, 1.5)
     clust2_copy.read_data(circles)
     clust2_copy.run_clue()

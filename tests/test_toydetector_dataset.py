@@ -20,7 +20,7 @@ def toy_det():
     return pd.read_csv("./test_datasets/toyDetector.csv")
 
 
-def test_circles_clustering(toy_det):
+def test_clustering(toy_det):
     '''
     Checks that the output of the clustering is the one given by the
     truth dataset.

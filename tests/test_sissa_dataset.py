@@ -20,7 +20,7 @@ def sissa():
     return pd.read_csv("./test_datasets/sissa.csv")
 
 
-def test_sissa_clustering(sissa):
+def test_clustering(sissa):
     '''
     Checks that the output of the clustering is the one given by the
     truth dataset.
