@@ -12,6 +12,7 @@
 #include "FlexiStorage.h"
 #include "prefixScan.h"
 #include "alpakaWorkDiv.h"
+#include "DataFormats/alpaka/span.h"
 
 namespace cms::alpakatools {
 
@@ -169,13 +170,14 @@ namespace cms::alpakatools {
     using index_type = typename OneToManyAssocBase<I, ONES, SIZE>::index_type;
 
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE int32_t
-    bulkFill(const TAcc& acc, AtomicPairCounter& apc, index_type const* v, uint32_t n) {
-      auto c = apc.inc_add(acc, n);
+    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE int32_t bulkFill(const TAcc& acc,
+                                                         AtomicPairCounter& apc,
+                                                         clue::span<index_type> v) {
+      auto c = apc.inc_add(acc, v.size());
       if (int(c.first) >= this->nOnes())
         return -int32_t(c.first);
       this->off[c.first] = c.second;
-      for (uint32_t j = 0; j < n; ++j)
+      for (uint32_t j = 0; j < v.size(); ++j)
         this->content[c.second + j] = v[j];
       return c.first;
     }
@@ -208,70 +210,6 @@ namespace cms::alpakatools {
         assoc->bulkFinalizeFill(acc, *apc);
       }
     };
-  };
-
-  template <typename I,    // type stored in the container
-            int32_t ONES,  // number of "Ones" +1. If -1 is initialized at runtime
-            int32_t SIZE>  // max number of element. If -1 is initialized at runtime
-  class OneToManyAssocRandomAccess : public OneToManyAssocBase<I, ONES, SIZE> {
-  public:
-    using Counter = typename OneToManyAssocBase<I, ONES, SIZE>::Counter;
-    using View = typename OneToManyAssocBase<I, ONES, SIZE>::View;
-
-    template <typename TAcc>
-    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE void finalize(TAcc& acc, Counter* ws = nullptr) {
-      ALPAKA_ASSERT_ACC(this->off[this->totOnes() - 1] == 0);
-      blockPrefixScan(acc, this->off.data(), this->totOnes(), ws);
-      ALPAKA_ASSERT_ACC(this->off[this->totOnes() - 1] == this->off[this->totOnes() - 2]);
-    }
-
-    ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE void finalize() {
-      // Single thread finalize.
-      for (uint32_t i = 1; static_cast<int>(i) < this->totOnes(); ++i)
-        this->off[i] += this->off[i - 1];
-    }
-
-    template <typename TAcc, typename TQueue>
-    ALPAKA_FN_INLINE static void launchFinalize(OneToManyAssocRandomAccess* h,
-                                                TQueue& queue) {
-      View view = {h, nullptr, nullptr, -1, -1};
-      launchFinalize<TAcc>(view, queue);
-    }
-
-    template <typename TAcc, typename TQueue>
-    ALPAKA_FN_INLINE static void launchFinalize(View view, TQueue& queue) {
-      // View stores a base pointer, we need to upcast back...
-      auto h = static_cast<OneToManyAssocRandomAccess*>(view.assoc);
-      ALPAKA_ASSERT_ACC(h);
-      if constexpr (!requires_single_thread_per_block_v<TAcc>) {
-        Counter* poff =
-            (Counter*)((char*)(h) + offsetof(OneToManyAssocRandomAccess, off));
-        auto nOnes = OneToManyAssocRandomAccess::ctNOnes();
-        if constexpr (OneToManyAssocRandomAccess::ctNOnes() < 0) {
-          ALPAKA_ASSERT_ACC(view.offStorage);
-          ALPAKA_ASSERT_ACC(view.offSize > 0);
-          nOnes = view.offSize;
-          poff = view.offStorage;
-        }
-        ALPAKA_ASSERT_ACC(nOnes > 0);
-        int32_t* ppsws =
-            (int32_t*)((char*)(h) + offsetof(OneToManyAssocRandomAccess, psws));
-        auto nthreads = 1024;
-        auto nblocks = (nOnes + nthreads - 1) / nthreads;
-        auto workDiv = cms::alpakatools::make_workdiv<TAcc>(nblocks, nthreads);
-        alpaka::exec<TAcc>(queue,
-                           workDiv,
-                           multiBlockPrefixScan<Counter>(),
-                           poff,
-                           poff,
-                           nOnes,
-                           nblocks,
-                           ppsws,
-                           alpaka::getPreferredWarpSize(alpaka::getDev(queue)));
-      } else {
-        h->finalize();
-      }
-    }
   };
 
 }  // namespace cms::alpakatools
