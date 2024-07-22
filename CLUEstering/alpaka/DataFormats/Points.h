@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <cstdint>
 #include <functional>
 #include <iostream>
 #include <vector>
@@ -17,7 +18,7 @@ struct Points {
   Points() = default;
   Points(const std::vector<VecArray<float, Ndim>>& coords,
          const std::vector<float>& weight)
-      : m_coords{coords}, m_weight{weight}, n{weight.size()} {
+      : m_coords{coords}, m_weight{weight}, n{static_cast<uint32_t>(weight.size())} {
     m_rho.resize(n);
     m_delta.resize(n);
     m_nearestHigher.resize(n);
@@ -25,7 +26,7 @@ struct Points {
     m_isSeed.resize(n);
   }
   Points(const std::vector<std::vector<float>>& coords, const std::vector<float>& weight)
-      : m_weight{weight}, n{weight.size()} {
+      : m_weight{weight}, n{static_cast<uint32_t>(weight.size())} {
     for (const auto& x : coords) {
       VecArray<float, Ndim> temp_vecarray;
       for (auto value : x) {
@@ -49,7 +50,7 @@ struct Points {
   std::vector<int> m_clusterIndex;
   std::vector<int> m_isSeed;
 
-  size_t n;
+  uint32_t n;
 };
 
 #endif

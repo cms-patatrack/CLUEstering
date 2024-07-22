@@ -23,8 +23,8 @@ namespace clue {
 
     ALPAKA_FN_HOST_ACC inline uint32_t size() const { return m_size; }
 
-	ALPAKA_FN_HOST_ACC inline T& operator[](uint32_t i) { return m_data[i]; }
-	ALPAKA_FN_HOST_ACC inline const T& operator[](uint32_t i) const { return m_data[i]; }
+    ALPAKA_FN_HOST_ACC inline T& operator[](uint32_t i) { return m_data[i]; }
+    ALPAKA_FN_HOST_ACC inline const T& operator[](uint32_t i) const { return m_data[i]; }
   };
 
 };  // namespace clue
