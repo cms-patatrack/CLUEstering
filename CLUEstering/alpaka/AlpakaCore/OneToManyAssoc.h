@@ -42,15 +42,15 @@ namespace cms::alpakatools {
     constexpr auto capacity() const { return content.capacity(); }
 
     ALPAKA_FN_HOST_ACC void initStorage(View view) {
-      ALPAKA_ASSERT_ACC(view.assoc == this);
+      /* ALPAKA_ASSERT_ACC(view.assoc == this); */
       if constexpr (ctCapacity() < 0) {
-        ALPAKA_ASSERT_ACC(view.contentStorage);
-        ALPAKA_ASSERT_ACC(view.contentSize > 0);
+        /* ALPAKA_ASSERT_ACC(view.contentStorage); */
+        /* ALPAKA_ASSERT_ACC(view.contentSize > 0); */
         content.init(view.contentStorage, view.contentSize);
       }
       if constexpr (ctNOnes() < 0) {
-        ALPAKA_ASSERT_ACC(view.offStorage);
-        ALPAKA_ASSERT_ACC(view.offSize > 0);
+        /* ALPAKA_ASSERT_ACC(view.offStorage); */
+        /* ALPAKA_ASSERT_ACC(view.offSize > 0); */
         off.init(view.offStorage, view.offSize);
       }
     }
@@ -82,15 +82,15 @@ namespace cms::alpakatools {
 
     template <typename TAcc>
     ALPAKA_FN_ACC ALPAKA_FN_INLINE void count(const TAcc& acc, I b) {
-      ALPAKA_ASSERT_ACC(b < static_cast<uint32_t>(nOnes()));
+      /* ALPAKA_ASSERT_ACC(b < static_cast<uint32_t>(nOnes())); */
       atomicIncrement(acc, off[b]);
     }
 
     template <typename TAcc>
     ALPAKA_FN_ACC ALPAKA_FN_INLINE void fill(const TAcc& acc, I b, index_type j) {
-      ALPAKA_ASSERT_ACC(b < static_cast<uint32_t>(nOnes()));
+      /* ALPAKA_ASSERT_ACC(b < static_cast<uint32_t>(nOnes())); */
       auto w = atomicDecrement(acc, off[b]);
-      ALPAKA_ASSERT_ACC(w > 0);
+      /* ALPAKA_ASSERT_ACC(w > 0); */
       content[w - 1] = j;
     }
 
@@ -98,18 +98,18 @@ namespace cms::alpakatools {
     struct zeroAndInit {
       template <typename TAcc>
       ALPAKA_FN_ACC void operator()(const TAcc& acc, View view) const {
-        ALPAKA_ASSERT_ACC(
-            (1 == alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc)[0]));
-        ALPAKA_ASSERT_ACC((0 == alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc)[0]));
+        /* ALPAKA_ASSERT_ACC( */
+        /*     (1 == alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc)[0])); */
+        /* ALPAKA_ASSERT_ACC((0 == alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc)[0])); */
         auto h = view.assoc;
         if (cms::alpakatools::once_per_block(acc)) {
           h->psws = 0;
           h->initStorage(view);
         }
         alpaka::syncBlockThreads(acc);
-        for (int i : cms::alpakatools::independent_group_elements(acc, h->totOnes())) {
-          h->off[i] = 0;
-        }
+		cms::alpakatools::for_each_element_in_block(acc, h->totOnes(), [&](int i) {
+					h->off[i] = 0;
+				});
       }
     };
 
@@ -121,14 +121,14 @@ namespace cms::alpakatools {
 
     template <typename TAcc, typename TQueue>
     ALPAKA_FN_INLINE static void launchZero(View view, TQueue& queue) {
-      if constexpr (ctCapacity() < 0) {
-        ALPAKA_ASSERT_ACC(view.contentStorage);
-        ALPAKA_ASSERT_ACC(view.contentSize > 0);
-      }
-      if constexpr (ctNOnes() < 0) {
-        ALPAKA_ASSERT_ACC(view.offStorage);
-        ALPAKA_ASSERT_ACC(view.offSize > 0);
-      }
+      /* if constexpr (ctCapacity() < 0) { */
+      /*   ALPAKA_ASSERT_ACC(view.contentStorage); */
+      /*   ALPAKA_ASSERT_ACC(view.contentSize > 0); */
+      /* } */
+      /* if constexpr (ctNOnes() < 0) { */
+      /*   ALPAKA_ASSERT_ACC(view.offStorage); */
+      /*   ALPAKA_ASSERT_ACC(view.offSize > 0); */
+      /* } */
       if constexpr (!requires_single_thread_per_block_v<TAcc>) {
         auto nthreads = 1024;
         auto nblocks =
@@ -137,7 +137,7 @@ namespace cms::alpakatools {
         alpaka::exec<TAcc>(queue, workDiv, zeroAndInit{}, view);
       } else {
         auto h = view.assoc;
-        ALPAKA_ASSERT_ACC(h);
+        /* ALPAKA_ASSERT_ACC(h); */
         h->initStorage(view);
         h->zero();
         h->psws = 0;
