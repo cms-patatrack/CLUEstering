@@ -44,23 +44,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     ALPAKA_FN_HOST_ACC float& max(int i) { return m_data[2 * i + 1]; }
   };
 
-  template <typename T>
-  class span {
-  private:
-    T* m_data;
-    std::size_t m_size;
-
-  public:
-    span() = delete;
-    template <typename E, typename = std::enable_if_t<std::is_convertible<E, T>::value>>
-    span(E* data, std::size_t size) : m_data{data}, m_size{size} {}
-
-	ALPAKA_FN_HOST_ACC inline T* data() { return m_data; }
-	ALPAKA_FN_HOST_ACC inline const T* data() const { return m_data; }
-
-	ALPAKA_FN_HOST_ACC inline std::size_t size() const { return m_size; }
-  };
-
   template <uint8_t Ndim>
   class TilesAlpaka {
   public:
