@@ -135,7 +135,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     CoordinateExtremes<Ndim> min_max;
     float tile_size[Ndim];
-    calculate_tile_size(min_max, tile_size, h_points, nPerDim);
+    calculate_tile_size(min_max, tile_size, h_points, nPerDim);  // so far, so good
 
     const auto device = alpaka::getDev(queue_);
     alpaka::memcpy(
@@ -164,14 +164,44 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         queue_,
         d_points.weight,
         cms::alpakatools::make_host_view(h_points.m_weight.data(), h_points.n));
-    alpaka::memset(queue_, (*d_seeds), 0x00);
 
-    // Define the working division
+    auto tileIds = cms::alpakatools::make_device_buffer<uint32_t[]>(queue_, h_points.n);
+    // now we scan the dataset and calculate the tile of each point
+    // we can do it on the GPU
     const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
-    const auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
+    const auto work_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
+    alpaka::enqueue(
+        queue_,
+        alpaka::createTaskKernel<Acc1D>(work_div,
+                                        KernelScanDatasetTileId{},
+                                        m_tiles,
+                                        d_points.view(),
+                                        tileIds.data(),
+                                        h_points.n));
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(work_div,
+                                                    KernelCalculateOffset{},
+                                                    tileIds.data(),
+                                                    m_tiles->offset(),
+                                                    h_points.n));
+    auto temp = cms::alpakatools::make_device_buffer<uint32_t[]>(queue_, h_points.n);
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
-                        working_div, KernelResetFollowers{}, m_followers, h_points.n));
+                        work_div, KernelZeroBuffer{}, temp.data(), h_points.n));
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(work_div,
+                                                    KernelFillAssociator{},
+                                                    tileIds.data(),
+                                                    m_tiles->offset(),
+                                                    temp.data(),
+                                                    m_tiles->content(),
+                                                    h_points.n));
+
+    alpaka::memset(queue_, (*d_seeds), 0x00);
+
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(
+                        work_div, KernelResetFollowers{}, m_followers, h_points.n));
   }
 
   // Public methods
@@ -187,10 +217,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
-    alpaka::enqueue(
-        queue_,
-        alpaka::createTaskKernel<Acc1D>(
-            working_div, KernelFillTiles{}, d_points.view(), m_tiles, h_points.n));
+    /* alpaka::enqueue( */
+    /*     queue_, */
+    /*     alpaka::createTaskKernel<Acc1D>( */
+    /*         working_div, KernelFillTiles{}, d_points.view(), m_tiles, h_points.n)); */
 
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
