@@ -30,6 +30,33 @@ namespace cms::alpakatools {
     return (value + divisor - 1) / divisor;
   }
 
+  // Trait describing whether or not the accelerator expects the threads-per-block and elements-per-thread to be swapped
+  template <typename TAcc, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  struct requires_single_thread_per_block : public std::true_type {};
+
+#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
+  template <typename TDim>
+  struct requires_single_thread_per_block<alpaka::AccGpuCudaRt<TDim, Idx>>
+      : public std::false_type {};
+#endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
+
+#ifdef ALPAKA_ACC_GPU_HIP_ENABLED
+  template <typename TDim>
+  struct requires_single_thread_per_block<alpaka::AccGpuHipRt<TDim, Idx>>
+      : public std::false_type {};
+#endif  // ALPAKA_ACC_GPU_HIP_ENABLED
+
+#ifdef ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
+  template <typename TDim>
+  struct requires_single_thread_per_block<alpaka::AccCpuThreads<TDim, Idx>>
+      : public std::false_type {};
+#endif  // ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
+
+  // Whether or not the accelerator expects the threads-per-block and elements-per-thread to be swapped
+  template <typename TAcc, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  inline constexpr bool requires_single_thread_per_block_v =
+      requires_single_thread_per_block<TAcc>::value;
+
   /*
    * Creates the accelerator-dependent workdiv for 1-dimensional operations.
    */
@@ -371,6 +398,18 @@ namespace cms::alpakatools {
   ALPAKA_FN_ACC inline constexpr bool once_per_grid(TAcc const& acc) {
     return alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc) ==
            Vec<alpaka::Dim<TAcc>>::zeros();
+  }
+
+  /* once_per_block
+   *
+   * `once_per_block(acc)` returns true for a single thread within the block.
+   *
+   * Usually the condition is true for thread 0, but this index should not be relied upon.
+   */
+
+  template <typename TAcc, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  ALPAKA_FN_ACC inline constexpr bool once_per_block(TAcc const& acc) {
+    return alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc) == Vec<alpaka::Dim<TAcc>>::zeros();
   }
 
   /*
