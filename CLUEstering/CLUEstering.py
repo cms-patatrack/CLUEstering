@@ -393,25 +393,6 @@ class clusterer:
                                           n_dim,
                                           n_points)
 
-    # def _rescale(self) -> None:
-    #     """
-    #     Normalizes the input data using a standard scaler
-
-    #     Modified attributes
-    #     -------------------
-    #     clust_data.coords : np.ndarray
-    #         Array containing the coordinates and weight values of the data points
-
-    #     Returns
-    #     -------
-    #     None
-    #     """
-
-    #     for dim in range(self.clust_data.n_dim):
-    #         self.clust_data.coords.T[dim] = \
-    #         self.scaler.fit_transform(
-    #                 self.clust_data.coords.T[dim].reshape(-1, 1)).reshape(1, -1)[0]
-
     def read_data(self,
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray]) -> None:
         """
@@ -467,9 +448,6 @@ class clusterer:
             df = self._read_dict_df(input_data)
             self._handle_dataframe(df)
 
-        # Rescale the coordinates with a standard scaler
-        # self._rescale()
-
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
         """
         Change the coordinate system
@@ -493,12 +471,6 @@ class clusterer:
         # Change the coordinate system
         for coord, func in kwargs.items():
             self.clust_data.coords[int(coord[1])] = func(self.clust_data.original_coords)
-
-            # Normalize the coordinate with a standard scaler
-            # self.clust_data.coords[int(coord[1])] = \
-            #     self.scaler.fit_transform(
-            #         self.clust_data.coords[int(coord[1])].reshape(-1, 1)
-            #     ).reshape(1, -1)[0]
 
     def choose_kernel(self,
                       choice: str,
