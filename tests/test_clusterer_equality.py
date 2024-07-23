@@ -10,43 +10,43 @@ import CLUEstering as clue
 
 
 @pytest.fixture
-def moons():
+def sissa():
     '''
-    Returns the dataframe containing the moon dataset
+    Returns the dataframe containing the sissa ataset
     '''
-    return pd.read_csv("./test_datasets/moons.csv")
+    return pd.read_csv("./test_datasets/sissa.csv")
 
 
 @pytest.fixture
-def circles():
+def toyDet():
     '''
-    Returns the dataframe containing the circle dataset
+    Returns the dataframe containing the toy detector dataset
     '''
-    return pd.read_csv("./test_datasets/circles.csv")
+    return pd.read_csv("./test_datasets/toyDetector.csv")
 
 
-def test_clusterer_equality(moons, circles):
+def test_clusterer_equality(sissa, toyDet):
     '''
     Test the equality operator for clusterer objects
     '''
-    # Moons dataset
-    clust1 = clue.clusterer(0.5, 5, 1.)
-    clust1.read_data(moons)
+    # Sissa dataset
+    clust1 = clue.clusterer(20., 10., 1.)
+    clust1.read_data(sissa)
     clust1.run_clue()
 
-    # Create a copy of the moons clusterer to check the equality of clusterers
-    clust1_copy = clue.clusterer(0.5, 5, 1.)
-    clust1_copy.read_data(moons)
+    # Create a copy of the sissa lusterer to check the equality of clusterers
+    clust1_copy = clue.clusterer(20., 10., 1.)
+    clust1_copy.read_data(sissa)
     clust1_copy.run_clue()
 
-    # Circles dataset
-    clust2 = clue.clusterer(0.9, 5, 1.5)
-    clust2.read_data(circles)
+    # toyDet dataset
+    clust2 = clue.clusterer(5., 2.5, 1.)
+    clust2.read_data(toyDet)
     clust2.run_clue()
 
     # Create a copy to check the equality of clusterers
-    clust2_copy = clue.clusterer(0.9, 5, 1.5)
-    clust2_copy.read_data(circles)
+    clust2_copy = clue.clusterer(5., 2.5, 1.)
+    clust2_copy.read_data(toyDet)
     clust2_copy.run_clue()
 
     # Check equality
