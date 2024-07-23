@@ -252,7 +252,6 @@ class clusterer:
         # Initialize attributes
         ## Data containers
         self.clust_data = None
-        # self.scaler = StandardScaler()
 
         ## Kernel for calculation of local density
         self.kernel = clue_kernels.FlatKernel(0.5)
