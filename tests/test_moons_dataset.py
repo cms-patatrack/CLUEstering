@@ -35,7 +35,7 @@ def test_clustering(moons):
     c.run_clue()
     c.to_csv('./', 'moons_output.csv')
 
-    check_result('./moons_output.csv',
+    assert check_result('./moons_output.csv',
                  './test_datasets/truth_files/moons_1000_truth.csv')
 
 

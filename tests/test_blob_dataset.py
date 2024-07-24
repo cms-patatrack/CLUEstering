@@ -34,7 +34,7 @@ def test_clustering(blobs):
     c.run_clue()
     c.to_csv('./', 'blobs_output.csv')
 
-    check_result('./blobs_output.csv',
+    assert check_result('./blobs_output.csv',
                  './test_datasets/truth_files/blobs_truth.csv')
 
 

@@ -68,7 +68,7 @@ def test_blobs_clustering(blobs):
         c.run_clue(backend=backend)
         c.to_csv('./', f'blobs_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./blobs_output_{_fill_space(backend)}.csv',
+        assert check_result(f'./blobs_output_{_fill_space(backend)}.csv',
                      './test_datasets/truth_files/blobs_truth.csv')
 
 
@@ -88,7 +88,7 @@ def test_moons_clustering(moons):
         c.run_clue(backend=backend)
         c.to_csv('./', f'moons_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./moons_output_{_fill_space(backend)}.csv',
+        assert check_result(f'./moons_output_{_fill_space(backend)}.csv',
                      './test_datasets/truth_files/moons_1000_truth.csv')
 
 
@@ -108,7 +108,7 @@ def test_sissa_clustering(sissa):
         c.run_clue(backend=backend)
         c.to_csv('./', f'sissa_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./sissa_output_{_fill_space(backend)}.csv',
+        assert check_result(f'./sissa_output_{_fill_space(backend)}.csv',
                      './test_datasets/truth_files/sissa_1000_truth.csv')
 
 
@@ -128,8 +128,8 @@ def test_toydet_clustering(toy_det):
         c.run_clue(backend=backend)
         c.to_csv('./', f'toy_det_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./toy_det_output_{_fill_space(backend)}.csv',
-                     './test_datasets/truth_files/toy_det_1000_truth.csv')
+        assert check_result(f'./toy_det_output_{_fill_space(backend)}.csv',
+                            './test_datasets/truth_files/toy_det_1000_truth.csv')
 
 
 if __name__ == "__main__":
