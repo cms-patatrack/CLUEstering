@@ -146,7 +146,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         queue_,
         cms::alpakatools::make_device_view(device, (*d_tiles)->tileSize(), Ndim),
         cms::alpakatools::make_host_view(tile_size, Ndim));
-	alpaka::wait(queue_);
+    alpaka::wait(queue_);
 
     const Idx tiles_grid_size = cms::alpakatools::divide_up_by(nTiles, block_size);
     const auto tiles_working_div =
