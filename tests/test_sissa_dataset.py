@@ -36,7 +36,7 @@ def test_clustering(sissa):
     c.to_csv('./', 'sissa_output.csv')
 
     assert check_result('./sissa_output.csv',
-                 './test_datasets/truth_files/sissa_1000_truth.csv')
+                        './test_datasets/truth_files/sissa_1000_truth.csv')
 
 
 if __name__ == "__main__":

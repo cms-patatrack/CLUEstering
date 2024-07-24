@@ -30,17 +30,17 @@ def test_clustering(toy_det):
     if os.path.isfile('./toy_det_output.csv'):
         os.remove('./toy_det_output.csv')
 
-    c = clue.clusterer(5., 2.5, 1.)
+    c = clue.clusterer(4.5, 2.5, 1.)
     c.read_data(toy_det)
     c.run_clue()
     c.to_csv('./', 'toy_det_output.csv')
 
     assert check_result('./toy_det_output.csv',
-                 './test_datasets/truth_files/toy_det_1000_truth.csv')
+                        './test_datasets/truth_files/toy_det_1000_truth.csv')
 
 
 if __name__ == "__main__":
-    c = clue.clusterer(5., 2.5, 1.)
+    c = clue.clusterer(4.5, 2.5, 1.)
     c.read_data("./test_datasets/toyDetector.csv")
     c.run_clue()
     c.cluster_plotter()
