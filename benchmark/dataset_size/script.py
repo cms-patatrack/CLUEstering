@@ -8,8 +8,9 @@ sys.path.insert(1, '../../CLUEstering/')
 import CLUEstering as clue
 
 nruns = 10
+# nruns = 1
 
-point_values = [2**i for i in range(10, 18)]
+point_values = [2**i for i in range(10, 20)]
 
 line_map = {'cpu serial': '-',
             'cpu tbb': '--',
@@ -29,36 +30,41 @@ c = clue.clusterer(2., 10, 1.)
 parameters = {i: (0., 0., 0.) for i in point_values}
 parameters[point_values[0]] = (2., 10., 1.)
 parameters[point_values[1]] = (2., 10., 1.)
-parameters[point_values[2]] = (2., 10., 1.)
-parameters[point_values[3]] = (2., 10., 1.)
-parameters[point_values[4]] = (2., 10., 1.)
-parameters[point_values[5]] = (2., 10., 1.)
+parameters[point_values[2]] = (1.4, 10., 1.)
+parameters[point_values[3]] = (1.4, 10., 1.)
+parameters[point_values[4]] = (1.4, 10., 1.)
+parameters[point_values[5]] = (1.4, 10., 1.)
+parameters[point_values[6]] = (1., 10., 1.)
+parameters[point_values[7]] = (1., 20., 1.)
+parameters[point_values[8]] = (1., 10., 1.5)
+parameters[point_values[9]] = (1.5, 30., 1.2)
 
+df = pd.DataFrame({'points': point_values})
 for backend in clue.backends:
     times = []
     stds = []
     for val in point_values:
         c.set_params(*parameters[val])
-        data = gen(val, 2, 20, (-50., 50.))
+        data = gen(val, 2, 20, (-100., 100.), 1.)
         c.read_data(data)
         runs = []
         for _ in range(nruns):
+            if backend == 'gpu cuda':
+                c.run_clue(backend)
             c.run_clue(backend)
             runs.append(c.elapsed_time)
         times.append(np.mean(runs))
         stds.append(np.std(runs))
         # c.cluster_plotter()
+    df = pd.concat((df,
+                    pd.DataFrame({backend: times,
+                                  str(backend + ' std'): stds})),
+                   axis=1)
     style = f"{line_map[backend]}{marker_map[backend]}{color_map[backend]}"
     if sys.argv[1] == 'show':
         plt.errorbar(x=point_values, y=times, yerr=stds, fmt=style)
 
-pd.DataFrame({'points': point_values,
-              'cpu serial': times[0],
-              'cpu tbb': times[1],
-              'gpu cuda': times[2],
-              'cpu serial std': stds[0],
-              'cpu tbb std': stds[1],
-              'gpu cuda std': stds[2]}).to_csv('dset_size.csv', index=False)
+df.to_csv('dset_size.csv', index=False)
 
 if sys.argv[1] == 'show':
     plt.grid(lw=0.5, ls='--', alpha=0.5)
