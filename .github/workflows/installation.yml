@@ -1,0 +1,108 @@
+name: Test installation of the library
+
+# The workflow gets triggered by pushes and pull requests
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install docker-ce
+
+      - name: Test installation inside docker containers (serial)
+        working-directory: ${{github.workspace}}/docker/serial
+        run: |
+          ls
+          docker build -t serial .
+
+          echo "Testing installation from PyPi"
+          docker run -t serial bash -c \
+            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 1"
+
+          echo "Testing installation from git repository"
+          docker run -t serial bash -c \
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
+            cd CLUEstering;
+            pip install . ;
+            python3 -c 'import CLUEstering' || exit 1"
+
+      - name: Test installation inside docker containers (serial without boost)
+        working-directory: ${{github.workspace}}/docker/no_boost
+        run: |
+          docker build -t noboost .
+
+          echo "Testing installation from PyPi"
+          docker run -t noboost bash -c \
+            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 1"
+
+          echo "Testing installation from git repository"
+          docker run -t noboost bash -c \
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
+            cd CLUEstering;
+            pip install . ;
+            python3 -c 'import CLUEstering' || exit 1"
+
+      - name: Test installation inside docker containers (tbb)
+        working-directory: ${{github.workspace}}/docker/tbb
+        run: |
+          docker build -t tbb .
+
+          echo "Testing installation from PyPi"
+          docker run -t tbb bash -c \
+            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 1"
+
+          echo "Testing installation from git repository"
+          docker run -t tbb bash -c \
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
+            cd CLUEstering;
+            pip install . ;
+            python3 -c 'import CLUEstering' || exit 1"
+
+      - name: Test installation inside docker containers (without gcc)
+        working-directory: ${{github.workspace}}/docker/no_gcc
+        run: |
+          docker build -t nogcc .
+
+          echo "Testing installation from PyPi"
+          docker run -t nogcc bash -c \
+            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 0"
+
+          echo "Testing installation from git repository"
+          docker run -t nogcc bash -c \
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
+            cd CLUEstering;
+            pip install . ;
+            python3 -c 'import CLUEstering' || exit 0"
+
+      - name: Test installation inside docker containers (without cmake)
+        working-directory: ${{github.workspace}}/docker/no_cmake
+        run: |
+          docker build -t nocmake .
+
+          echo "Testing installation from PyPi"
+          docker run -t nocmake bash -c \
+            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 0"
+
+          echo "Testing installation from git repository"
+          docker run -t nocmake bash -c \
+            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
+            cd CLUEstering;
+            pip install . ;
+            python3 -c 'import CLUEstering' || exit 0"

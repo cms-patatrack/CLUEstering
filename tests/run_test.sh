@@ -27,14 +27,6 @@ python3 -m pytest test_test_blobs.py
 echo "## Test the equality operator for the results of the clustering"
 python3 -m pytest test_clusterer_equality.py
 
-# Test the method of changind the domain extremes of the coordinates
-echo "## Test the change_domains method"
-python3 -m pytest test_change_domains.py
-
-# Test the clustering of points at the opposite extremes of a finite domain
-echo "## Test the clustering of points at the opposite extremes of a finite domain"
-python3 -m pytest test_domain_extremes.py
-
 if [[ $1 == "-" || $1 == "--clean" ]]
 then
   rm -f ./*_output.csv

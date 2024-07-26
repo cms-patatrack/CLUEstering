@@ -150,7 +150,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         queue_,
         cms::alpakatools::make_device_view(device, (*d_tiles)->minMax(), 2 * Ndim),
         cms::alpakatools::make_host_view(min_max.data(), 2 * Ndim));
-    alpaka::wait(queue_);
     alpaka::memcpy(
         queue_,
         cms::alpakatools::make_device_view(device, (*d_tiles)->tileSize(), Ndim),
