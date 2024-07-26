@@ -7,6 +7,7 @@ def generate_data(n_points: int,
                   n_dim: int,
                   n_clusters: int,
                   domain: tuple,
+                  std: float = 1.,
                   seed: int = 0):
     # Generate random data
     np.random.seed(seed)
@@ -15,7 +16,7 @@ def generate_data(n_points: int,
     clusters = []
     for cl in range(n_clusters):
         clusters.append(np.random.normal(centers[cl],
-                        [1. for _ in range(n_dim)],
+                        [std for _ in range(n_dim)],
                         size=(points_per_cluster, n_dim)))
 
     # concatenate clusters data
