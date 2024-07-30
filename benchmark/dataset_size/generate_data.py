@@ -1,4 +1,5 @@
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -33,4 +34,16 @@ def generate_data(n_points: int,
 
 
 if __name__ == '__main__':
-    generate_data(1000, 2, 10, (-20, 20))
+    df = generate_data(1000, 3, 10, (-20, 20))
+    plt.scatter(df['x0'], df['x1'], c='black', s=1)
+    plt.show()
+    plt.scatter(df['x1'], df['x2'], c='black', s=1)
+    plt.show()
+    plt.scatter(df['x0'], df['x2'], c='black', s=1)
+    plt.show()
+    # 3D scatter plot
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(df['x0'], df['x1'], df['x2'], c='black', s=1)
+    plt.show()
+    generate_data(524288, 2, 20, (-100, 100), 1., 0).to_csv('break_cuda.csv', index=False)
