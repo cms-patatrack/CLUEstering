@@ -130,8 +130,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                          Queue queue_,
                                          std::size_t block_size) {
     // calculate the number of tiles and their size
-    const auto nTiles{std::ceil(h_points.n / static_cast<float>(pointsPerTile_))};
+    auto nTiles{std::ceil(h_points.n / static_cast<float>(pointsPerTile_))};
     const auto nPerDim{std::ceil(std::pow(nTiles, 1. / Ndim))};
+    nTiles = std::pow(nPerDim, Ndim);
 
     CoordinateExtremes<Ndim> min_max;
     float tile_size[Ndim];
@@ -184,10 +185,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     m_tiles->offset(),
                                                     h_points.n));
     auto temp = cms::alpakatools::make_device_buffer<uint32_t[]>(queue_, h_points.n);
-    alpaka::enqueue(
-        queue_,
-        alpaka::createTaskKernel<Acc1D>(
-            tiles_working_div, KernelOffsetAccumulate{}, m_tiles->offset(), temp.data(), nTiles+1));
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(tiles_working_div,
+                                                    KernelOffsetAccumulate{},
+                                                    m_tiles->offset(),
+                                                    temp.data(),
+                                                    nTiles + 1));
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         work_div, KernelZeroBuffer{}, temp.data(), h_points.n));
@@ -199,7 +202,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     temp.data(),
                                                     m_tiles->content(),
                                                     h_points.n));
-
     alpaka::memset(queue_, (*d_seeds), 0x00);
 
     alpaka::enqueue(queue_,

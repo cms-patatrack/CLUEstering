@@ -65,6 +65,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       return m_tiles.off.data();
     }
     ALPAKA_FN_HOST_ACC inline constexpr uint32_t* offset() { return m_tiles.off.data(); }
+    ALPAKA_FN_HOST_ACC inline constexpr const uint32_t* offset(uint32_t i) const {
+      return m_tiles.off.data() + i;
+    }
+    ALPAKA_FN_HOST_ACC inline constexpr uint32_t* offset(uint32_t i) {
+      return m_tiles.off.data() + i;
+    }
 
     // get content from associator
     ALPAKA_FN_HOST_ACC inline constexpr const uint32_t* content() const {
@@ -73,12 +79,16 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     ALPAKA_FN_HOST_ACC inline constexpr uint32_t* content() {
       return m_tiles.content.data();
     }
+    ALPAKA_FN_HOST_ACC inline constexpr const uint32_t* content(uint32_t i) const {
+      return m_tiles.content.data() + i;
+    }
+    ALPAKA_FN_HOST_ACC inline constexpr uint32_t* content(uint32_t i) {
+      return m_tiles.content.data() + i;
+    }
 
     ALPAKA_FN_HOST_ACC void resizeTiles(std::size_t nTiles, int nPerDim) {
       this->n_tiles = nTiles;
       this->n_tiles_per_dim = nPerDim;
-
-      /* this->m_tiles.resize(nTiles); */
     }
 
     template <typename TAcc>
@@ -115,14 +125,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC inline constexpr void fill(const TAcc& acc,
-                                             const VecArray<float, Ndim>& coords,
-                                             int i) {
-      /* m_tiles[getGlobalBin(acc, coords)].push_back(acc, i); */
-      ;
-    }
-
-    template <typename TAcc>
     ALPAKA_FN_ACC inline void searchBox(
         const TAcc& acc,
         const VecArray<VecArray<float, 2>, Ndim>& sb_extremes,
@@ -137,14 +139,18 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
 
     ALPAKA_FN_HOST_ACC inline constexpr auto size() { return n_tiles; }
-	ALPAKA_FN_HOST_ACC inline constexpr auto size(uint32_t tile) const { return m_tiles.size(tile); }
+    ALPAKA_FN_HOST_ACC inline constexpr auto size(uint32_t tile) const {
+      return m_tiles.size(tile);
+    }
 
     ALPAKA_FN_HOST_ACC inline constexpr int nPerDim() const { return n_tiles_per_dim; }
 
     ALPAKA_FN_HOST_ACC inline constexpr void clear() { m_tiles.zero(); }
 
     ALPAKA_FN_HOST_ACC inline constexpr clue::span<uint32_t> operator[](int globalBinId) {
-      return clue::span<uint32_t>{m_tiles.begin(globalBinId), m_tiles.off[globalBinId]};
+      return clue::span<uint32_t>{
+          m_tiles.begin(globalBinId),
+          m_tiles.off[globalBinId + 1] - m_tiles.off[globalBinId]};
     }
 
   private:
