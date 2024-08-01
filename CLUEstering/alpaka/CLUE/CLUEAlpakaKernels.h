@@ -41,9 +41,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   uint32_t* tileIds,
                                   uint32_t* offsets,
                                   uint32_t n_points) const {
-      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) -> void {
-        alpaka::atomicAdd(acc, &offsets[tileIds[i]], 1u);
-      });
+      if (cms::alpakatools::once_per_grid(acc)) {
+        offsets[0] = 0;
+      }
+      cms::alpakatools::for_each_element_in_grid(
+          acc, n_points - 1, [&](uint32_t i) -> void {
+            alpaka::atomicAdd(acc, &offsets[tileIds[i] + 1], 1u);
+          });
     }
   };
 
