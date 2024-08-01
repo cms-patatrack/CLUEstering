@@ -25,6 +25,12 @@ namespace clue {
 
     ALPAKA_FN_HOST_ACC inline T& operator[](uint32_t i) { return m_data[i]; }
     ALPAKA_FN_HOST_ACC inline const T& operator[](uint32_t i) const { return m_data[i]; }
+
+    ALPAKA_FN_HOST_ACC inline T* begin() { return m_data; }
+    ALPAKA_FN_HOST_ACC inline const T* begin() const { return m_data; }
+
+    ALPAKA_FN_HOST_ACC inline T* end() { return m_data + m_size; }
+    ALPAKA_FN_HOST_ACC inline const T* end() const { return m_data + m_size; }
   };
 
 };  // namespace clue
