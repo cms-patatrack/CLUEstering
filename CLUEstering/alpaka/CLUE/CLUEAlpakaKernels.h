@@ -67,14 +67,21 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   uint32_t* temp,
                                   uint32_t* content,
                                   uint32_t n_points) const {
+      auto accumulate = ALPAKA_FN_ACC[](const uint32_t* buf, uint32_t size)->uint32_t {
+        uint32_t sum{0};
+        for (uint32_t i{}; i <= size; ++i) {
+          sum += buf[i];
+        }
+
+        return sum;
+      };
       cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) -> void {
         const auto tileId{tileIds[i]};
         const auto contentPosition{alpaka::atomicAdd(acc, &temp[tileId], 1u)};
-        content[offsets[tileId] + contentPosition] = i;
+        content[accumulate(offsets, tileId) + contentPosition] = i;
       });
     }
   };
-
 
   struct KernelResetTiles {
     template <typename TAcc, uint8_t Ndim>
