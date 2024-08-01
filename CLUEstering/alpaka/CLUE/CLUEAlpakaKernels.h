@@ -44,10 +44,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       if (cms::alpakatools::once_per_grid(acc)) {
         offsets[0] = 0;
       }
-      cms::alpakatools::for_each_element_in_grid(
-          acc, n_points - 1, [&](uint32_t i) -> void {
-            alpaka::atomicAdd(acc, &offsets[tileIds[i] + 1], 1u);
-          });
+      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) -> void {
+        alpaka::atomicAdd(acc, &offsets[tileIds[i] + 1], 1u);
+      });
     }
   };
 
@@ -59,6 +58,31 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
   };
 
+  template <typename TAcc>
+  ALPAKA_FN_ACC uint32_t accumulate(const TAcc& acc, const uint32_t* buf, uint32_t size) {
+    uint32_t sum{0};
+    for (uint32_t i{}; i <= size; ++i) {
+      sum += buf[i];
+    }
+
+    return sum;
+  };
+
+  struct KernelOffsetAccumulate {
+    template <typename TAcc>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  uint32_t* offset,
+                                  uint32_t* temp,
+                                  uint32_t n_tiles) const {
+      cms::alpakatools::for_each_element_in_grid(
+          acc, n_tiles, [&](uint32_t tile) -> void {
+            temp[tile] = accumulate(acc, offset, tile);
+          });
+      cms::alpakatools::for_each_element_in_grid(
+          acc, n_tiles, [&](uint32_t tile) -> void { offset[tile] = temp[tile]; });
+    }
+  };
+
   struct KernelFillAssociator {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
@@ -67,18 +91,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   uint32_t* temp,
                                   uint32_t* content,
                                   uint32_t n_points) const {
-      auto accumulate = ALPAKA_FN_ACC[](const uint32_t* buf, uint32_t size)->uint32_t {
-        uint32_t sum{0};
-        for (uint32_t i{}; i <= size; ++i) {
-          sum += buf[i];
-        }
-
-        return sum;
-      };
       cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) -> void {
         const auto tileId{tileIds[i]};
         const auto contentPosition{alpaka::atomicAdd(acc, &temp[tileId], 1u)};
-        content[accumulate(offsets, tileId) + contentPosition] = i;
+        content[offsets[tileId] + contentPosition] = i;
       });
     }
   };

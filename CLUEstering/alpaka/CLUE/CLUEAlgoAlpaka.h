@@ -170,14 +170,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     // we can do it on the GPU
     const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
     const auto work_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
-    alpaka::enqueue(
-        queue_,
-        alpaka::createTaskKernel<Acc1D>(work_div,
-                                        KernelScanDatasetTileId{},
-                                        m_tiles,
-                                        d_points.view(),
-                                        tileIds.data(),
-                                        h_points.n));
+    alpaka::enqueue(queue_,
+                    alpaka::createTaskKernel<Acc1D>(work_div,
+                                                    KernelScanDatasetTileId{},
+                                                    m_tiles,
+                                                    d_points.view(),
+                                                    tileIds.data(),
+                                                    h_points.n));
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(work_div,
                                                     KernelCalculateOffset{},
@@ -185,6 +184,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     m_tiles->offset(),
                                                     h_points.n));
     auto temp = cms::alpakatools::make_device_buffer<uint32_t[]>(queue_, h_points.n);
+    alpaka::enqueue(
+        queue_,
+        alpaka::createTaskKernel<Acc1D>(
+            tiles_working_div, KernelOffsetAccumulate{}, m_tiles->offset(), temp.data(), nTiles+1));
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         work_div, KernelZeroBuffer{}, temp.data(), h_points.n));
@@ -217,10 +220,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
     auto working_div = cms::alpakatools::make_workdiv<Acc1D>(grid_size, block_size);
-    /* alpaka::enqueue( */
-    /*     queue_, */
-    /*     alpaka::createTaskKernel<Acc1D>( */
-    /*         working_div, KernelFillTiles{}, d_points.view(), m_tiles, h_points.n)); */
 
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
