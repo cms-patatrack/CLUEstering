@@ -78,8 +78,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
           acc, n_tiles, [&](uint32_t tile) -> void {
             temp[tile] = accumulate(acc, offset, tile);
           });
-      cms::alpakatools::for_each_element_in_grid(
-          acc, n_tiles, [&](uint32_t tile) -> void { offset[tile] = temp[tile]; });
     }
   };
 
