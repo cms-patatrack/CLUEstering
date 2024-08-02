@@ -8,12 +8,14 @@ import sys
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
+
 @pytest.fixture
 def moons():
     '''
     Returns the dataframe containing the moon dataset
     '''
     return pd.read_csv("./test_datasets/moons.csv")
+
 
 @pytest.fixture
 def blobs():
@@ -22,6 +24,7 @@ def blobs():
     '''
     return pd.read_csv("./test_datasets/blob.csv")
 
+
 @pytest.fixture
 def square():
     '''
@@ -29,12 +32,14 @@ def square():
     '''
     return pd.read_csv("./test_datasets/square.csv")
 
+
 @pytest.fixture
 def box():
     '''
     Retuns a dataframe where the points are distributed in a 3D box
     '''
     return pd.read_csv("./test_datasets/box.csv")
+
 
 def test_one_out_of_two(moons):
     '''
@@ -47,7 +52,7 @@ def test_one_out_of_two(moons):
     assert len(c.clust_data.coords[0]) == 2
     coords_x0 = c._partial_dimension_dataset([0])
     coords_x1 = c._partial_dimension_dataset([1])
-    
+
     for i in range(c.clust_data.n_points):
         # check that the coordinates are the same
         assert coords_x0[i] == c.clust_data.coords[i][0]
@@ -58,6 +63,7 @@ def test_one_out_of_two(moons):
     # check that the number of points is correct
     assert len(coords_x0) == c.clust_data.n_points
     assert len(coords_x1) == c.clust_data.n_points
+
 
 def test_one_out_of_three(blobs):
     '''
@@ -85,6 +91,7 @@ def test_one_out_of_three(blobs):
     assert len(coords_x0) == c.clust_data.n_points
     assert len(coords_x1) == c.clust_data.n_points
     assert len(coords_x2) == c.clust_data.n_points
+
 
 def test_two_out_of_three(blobs):
     '''
@@ -115,6 +122,7 @@ def test_two_out_of_three(blobs):
     assert len(coords_x0x1) == c.clust_data.n_points
     assert len(coords_x0x2) == c.clust_data.n_points
     assert len(coords_x1x2) == c.clust_data.n_points
+
 
 def test_square_box(square, box):
     '''

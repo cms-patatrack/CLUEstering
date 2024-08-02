@@ -8,7 +8,6 @@ sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
 
-
 def test_except_1():
     '''
     Test exception of test_blobs for negative number of blobs

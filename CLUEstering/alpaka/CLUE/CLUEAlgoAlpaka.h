@@ -136,19 +136,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     CoordinateExtremes<Ndim> min_max;
     float tile_size[Ndim];
-    calculate_tile_size(min_max, tile_size, h_points, nPerDim);  // so far, so good
+    calculate_tile_size(min_max, tile_size, h_points, nPerDim);
 
     const auto device = alpaka::getDev(queue_);
     alpaka::memcpy(
         queue_,
         cms::alpakatools::make_device_view(device, (*d_tiles)->minMax(), 2 * Ndim),
         cms::alpakatools::make_host_view(min_max.data(), 2 * Ndim));
-    alpaka::wait(queue_);
     alpaka::memcpy(
         queue_,
         cms::alpakatools::make_device_view(device, (*d_tiles)->tileSize(), Ndim),
         cms::alpakatools::make_host_view(tile_size, Ndim));
-    alpaka::wait(queue_);
 
     const Idx tiles_grid_size = cms::alpakatools::divide_up_by(nTiles, block_size);
     const auto tiles_working_div =
