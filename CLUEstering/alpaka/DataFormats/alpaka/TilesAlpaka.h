@@ -17,7 +17,7 @@
 #include "../../AlpakaCore/alpakaWorkDiv.h"
 #include "../../AlpakaCore/alpakaConfig.h"
 #include "../../AlpakaCore/alpakaMemory.h"
-#include "../../AlpakaCore/OneToManyAssoc.h"
+#include "OneToManyAssociator.h"
 #include "AlpakaVecArray.h"
 #include "span.h"
 
@@ -145,7 +145,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     ALPAKA_FN_HOST_ACC inline constexpr int nPerDim() const { return n_tiles_per_dim; }
 
-    ALPAKA_FN_HOST_ACC inline constexpr void clear() { m_tiles.zero(); }
+    /* ALPAKA_FN_HOST_ACC inline constexpr void clear() { m_tiles.zero(); } */
 
     ALPAKA_FN_HOST_ACC inline constexpr clue::span<uint32_t> operator[](int globalBinId) {
       return clue::span<uint32_t>{
@@ -158,7 +158,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     int n_tiles_per_dim;
     CoordinateExtremes<Ndim> min_max;
     float tile_size[Ndim];
-    cms::alpakatools::OneToManyAssocSequential<uint32_t, max_tiles, max_points> m_tiles;
+    OneToManyAssociator<uint32_t, max_tiles, max_points> m_tiles;
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 
