@@ -22,6 +22,81 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <uint8_t Ndim>
   using PointsView = typename PointsAlpaka<Ndim>::PointsAlpakaView;
 
+  struct KernelScanDatasetTileId {
+    template <typename TAcc, uint8_t Ndim>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  TilesAlpaka<Ndim>* d_tiles,
+                                  PointsView<Ndim>* d_points,
+                                  uint32_t* tileIds,
+                                  uint32_t n_points) const {
+      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) -> void {
+        tileIds[i] = d_tiles->getGlobalBin(acc, d_points->coords[i]);
+      });
+    }
+  };
+
+  struct KernelCalculateOffset {
+    template <typename TAcc>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  uint32_t* tileIds,
+                                  uint32_t* offsets,
+                                  uint32_t n_points) const {
+      if (cms::alpakatools::once_per_grid(acc)) {
+        offsets[0] = 0;
+      }
+      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) -> void {
+        alpaka::atomicAdd(acc, &offsets[tileIds[i] + 1], 1u);
+      });
+    }
+  };
+
+  struct KernelZeroBuffer {
+    template <typename TAcc, typename T>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, T* buffer, uint32_t size) const {
+      cms::alpakatools::for_each_element_in_grid(
+          acc, size, [&](uint32_t i) -> void { buffer[i] = 0; });
+    }
+  };
+
+  template <typename TAcc>
+  ALPAKA_FN_ACC uint32_t accumulate(const TAcc& acc, const uint32_t* buf, uint32_t size) {
+    uint32_t sum{0};
+    for (uint32_t i{}; i <= size; ++i) {
+      sum += buf[i];
+    }
+
+    return sum;
+  };
+
+  struct KernelOffsetAccumulate {
+    template <typename TAcc>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  uint32_t* offset,
+                                  uint32_t* temp,
+                                  uint32_t n_tiles) const {
+      cms::alpakatools::for_each_element_in_grid(
+          acc, n_tiles, [&](uint32_t tile) -> void {
+            temp[tile] = accumulate(acc, offset, tile);
+          });
+    }
+  };
+
+  struct KernelFillAssociator {
+    template <typename TAcc>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  const uint32_t* tileIds,
+                                  const uint32_t* offsets,
+                                  uint32_t* temp,
+                                  uint32_t* content,
+                                  uint32_t n_points) const {
+      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) -> void {
+        const auto tileId{tileIds[i]};
+        const auto contentPosition{alpaka::atomicAdd(acc, &temp[tileId], 1u)};
+        content[offsets[tileId] + contentPosition] = i;
+      });
+    }
+  };
+
   struct KernelResetTiles {
     template <typename TAcc, uint8_t Ndim>
     ALPAKA_FN_ACC void operator()(TAcc const& acc,
@@ -32,7 +107,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         tiles->resizeTiles(nTiles, nPerDim);
       }
       cms::alpakatools::for_each_element_in_grid(
-          acc, nTiles, [&](uint32_t i) -> void { tiles->clear(i); });
+          acc, nTiles, [&](uint32_t i) -> void { /*tiles->clear(i);*/
+                                                 ;
+          });
     }
   };
 
@@ -43,17 +120,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   uint32_t n_points) const {
       cms::alpakatools::for_each_element_in_grid(
           acc, n_points, [&](uint32_t i) { d_followers[i].reset(); });
-    }
-  };
-
-  struct KernelFillTiles {
-    template <typename TAcc, uint8_t Ndim>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  PointsView<Ndim>* points,
-                                  TilesAlpaka<Ndim>* tiles,
-                                  uint32_t n_points) const {
-      cms::alpakatools::for_each_element_in_grid(
-          acc, n_points, [&](uint32_t i) { tiles->fill(acc, points->coords[i], i); });
     }
   };
 
@@ -71,9 +137,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       float dc,
       uint32_t point_id) {
     if constexpr (N_ == 0) {
-      int binId{tiles->getGlobalBinByBin(acc, base_vec)};
+      auto binId{tiles->getGlobalBinByBin(acc, base_vec)};
       // get the size of this bin
-      int binSize{static_cast<int>((*tiles)[binId].size())};
+      auto binSize{static_cast<int>((*tiles)[binId].size())};
 
       // iterate inside this bin
       for (int binIter{}; binIter < binSize; ++binIter) {
@@ -173,9 +239,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       float dm_sq,
       uint32_t point_id) {
     if constexpr (N_ == 0) {
-      int binId{tiles->getGlobalBinByBin(acc, base_vec)};
+      auto binId{tiles->getGlobalBinByBin(acc, base_vec)};
       // get the size of this bin
-      int binSize{(*tiles)[binId].size()};
+      auto binSize{(*tiles)[binId].size()};
 
       // iterate inside this bin
       for (int binIter{}; binIter < binSize; ++binIter) {

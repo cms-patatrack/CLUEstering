@@ -48,6 +48,8 @@ if(NOT DEFINED SERIAL_ONLY)
   set(SERIAL_ONLY OFF)
 endif()
 
+include_directories(CLUEstering/alpaka/)
+
 # create lib directory in CLUEstering folder
 execute_process(COMMAND mkdir -p ./CLUEstering/lib)
 
