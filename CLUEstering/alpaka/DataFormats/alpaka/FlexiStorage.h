@@ -4,13 +4,13 @@
 template <typename I, int S>
 class FlexiStorage {
 public:
-  constexpr int capacity() const { return S; }
+  ALPAKA_FN_HOST_ACC constexpr int capacity() const { return S; }
 
-  constexpr I& operator[](int i) { return m_v[i]; }
-  constexpr const I& operator[](int i) const { return m_v[i]; }
+  ALPAKA_FN_HOST_ACC constexpr I& operator[](int i) { return m_v[i]; }
+  ALPAKA_FN_HOST_ACC constexpr const I& operator[](int i) const { return m_v[i]; }
 
-  constexpr I* data() { return m_v; }
-  constexpr I const* data() const { return m_v; }
+  ALPAKA_FN_HOST_ACC constexpr I* data() { return m_v; }
+  ALPAKA_FN_HOST_ACC constexpr I const* data() const { return m_v; }
 
 private:
   I m_v[S];
@@ -24,13 +24,13 @@ public:
     m_capacity = s;
   }
 
-  constexpr int capacity() const { return m_capacity; }
+  ALPAKA_FN_HOST_ACC constexpr int capacity() const { return m_capacity; }
 
-  constexpr I& operator[](int i) { return m_v[i]; }
-  constexpr const I& operator[](int i) const { return m_v[i]; }
+  ALPAKA_FN_HOST_ACC constexpr I& operator[](int i) { return m_v[i]; }
+  ALPAKA_FN_HOST_ACC constexpr const I& operator[](int i) const { return m_v[i]; }
 
-  constexpr I* data() { return m_v; }
-  constexpr I const* data() const { return m_v; }
+  ALPAKA_FN_HOST_ACC constexpr I* data() { return m_v; }
+  ALPAKA_FN_HOST_ACC constexpr I const* data() const { return m_v; }
 
 private:
   I* m_v;

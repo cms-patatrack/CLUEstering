@@ -16,7 +16,7 @@ namespace clue {
   public:
     span() = delete;
     template <typename E, typename = std::enable_if_t<std::is_convertible<E, T>::value>>
-    span(E* data, uint32_t size) : m_data{data}, m_size{size} {}
+    ALPAKA_FN_HOST_ACC span(E* data, uint32_t size) : m_data{data}, m_size{size} {}
 
     ALPAKA_FN_HOST_ACC inline T* data() { return m_data; }
     ALPAKA_FN_HOST_ACC inline const T* data() const { return m_data; }
