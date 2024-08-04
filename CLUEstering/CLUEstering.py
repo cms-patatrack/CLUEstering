@@ -262,7 +262,7 @@ class clusterer:
         self.elapsed_time = 0.
 
     def set_params(self, dc: float, rhoc: float,
-                   outlier: float, ppbin: int = 10) -> None:
+                   outlier: float, ppbin: int = 128) -> None:
         self.dc_ = dc
         self.rhoc = rhoc
         self.outlier = outlier
@@ -292,9 +292,9 @@ class clusterer:
             if len(input_data) < 2 or len(input_data) > 11:
                 raise ValueError("Inadequate data. The supported dimensions are between" +
                                  "1 and 10.")
-            self.clust_data = clustering_data(np.asarray(input_data[:-1]).T,
-                                              np.copy(np.asarray(input_data[:-1]).T),
-                                              np.asarray(input_data[-1]),
+            self.clust_data = clustering_data(np.asarray(input_data[:-1], dtype=float).T,
+                                              np.copy(np.asarray(input_data[:-1], dtype=float).T),
+                                              np.asarray(input_data[-1], dtype=float),
                                               len(input_data[:-1]),
                                               len(input_data[-1]))
         # [[[x0, y0, z0, ...], [x1, y1, z1, ...], ...], [weights]]
@@ -302,9 +302,9 @@ class clusterer:
             if len(input_data) != 2:
                 raise ValueError("Inadequate data. The data must contain a weight value" +
                                  "for each point.")
-            self.clust_data = clustering_data(np.asarray(input_data[0]),
-                                              np.copy(np.asarray(input_data[0])),
-                                              np.asarray(input_data[-1]),
+            self.clust_data = clustering_data(np.asarray(input_data[0], dtype=float),
+                                              np.copy(np.asarray(input_data[0], dtype=float)),
+                                              np.asarray(input_data[-1], dtype=float),
                                               len(input_data[0][0]),
                                               len(input_data[-1]))
 
@@ -329,7 +329,7 @@ class clusterer:
 
         if not input_data.endswith('.csv'):
             raise ValueError('Wrong type of file. The file is not a csv file.')
-        df_ = pd.read_csv(input_data)
+        df_ = pd.read_csv(input_data, dtype=float)
         return df_
 
     def _read_dict_df(self, input_data: Union[dict, pd.DataFrame]) -> pd.DataFrame:
@@ -351,7 +351,7 @@ class clusterer:
             Dataframe containing the input data
         """
 
-        df_ = pd.DataFrame(input_data, copy=False)
+        df_ = pd.DataFrame(input_data, copy=False, dtype=float)
         return df_
 
     def _handle_dataframe(self, df_: pd.DataFrame) -> None:
@@ -1215,7 +1215,7 @@ class clusterer:
         df_.to_csv(out_path,index=False)
 
 if __name__ == "__main__":
-    c = clusterer(0.4,5,1.)
+    c = clusterer(0.8, 5, 1.)
     c.read_data('./blob.csv')
     c.input_plotter()
     c.run_clue(backend="cpu serial", verbose=True)
