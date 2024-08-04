@@ -7,12 +7,12 @@ namespace cms::alpakatools {
 
   // generic interface, for DevOacc and DevOmp5
   template <typename Device>
-  inline int getDeviceIndex(Device const& device) {
+  inline int getDeviceIndex(const Device& device) {
     return device.iDevice();
   }
 
   // overload for DevCpu
-  inline int getDeviceIndex(alpaka::DevCpu const& device) { return 0; }
+  inline int getDeviceIndex(const alpaka::DevCpu&) { return 0; }
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
   // overload for DevCudaRt
