@@ -63,13 +63,13 @@ def test_blobs_clustering(blobs):
         if os.path.isfile(f'./blobs_output_{_fill_space(backend)}.csv'):
             os.remove(f'./blobs_output_{_fill_space(backend)}.csv')
 
-        c = clue.clusterer(0.8, 5, 1.5)
+        c = clue.clusterer(1., 5, 2.)
         c.read_data(blobs)
         c.run_clue(backend=backend)
         c.to_csv('./', f'blobs_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./blobs_output_{_fill_space(backend)}.csv',
-                     './test_datasets/truth_files/blobs_truth.csv')
+        assert check_result(f'./blobs_output_{_fill_space(backend)}.csv',
+                            './test_datasets/truth_files/blobs_truth.csv')
 
 
 def test_moons_clustering(moons):
@@ -83,13 +83,13 @@ def test_moons_clustering(moons):
         if os.path.isfile(f'./moons_output_{_fill_space(backend)}.csv'):
             os.remove(f'./moons_output_{_fill_space(backend)}.csv')
 
-        c = clue.clusterer(0.5, 5, 1.)
+        c = clue.clusterer(70., 5., 2.5)
         c.read_data(moons)
         c.run_clue(backend=backend)
         c.to_csv('./', f'moons_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./moons_output_{_fill_space(backend)}.csv',
-                     './test_datasets/truth_files/moons_1000_truth.csv')
+        assert check_result(f'./moons_output_{_fill_space(backend)}.csv',
+                            './test_datasets/truth_files/moons_1000_truth.csv')
 
 
 def test_sissa_clustering(sissa):
@@ -103,13 +103,13 @@ def test_sissa_clustering(sissa):
         if os.path.isfile(f'./sissa_output_{_fill_space(backend)}.csv'):
             os.remove(f'./sissa_output_{_fill_space(backend)}.csv')
 
-        c = clue.clusterer(0.4, 5, 1.)
+        c = clue.clusterer(20., 10., 1.)
         c.read_data(sissa)
         c.run_clue(backend=backend)
         c.to_csv('./', f'sissa_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./sissa_output_{_fill_space(backend)}.csv',
-                     './test_datasets/truth_files/sissa_1000_truth.csv')
+        assert check_result(f'./sissa_output_{_fill_space(backend)}.csv',
+                            './test_datasets/truth_files/sissa_1000_truth.csv')
 
 
 def test_toydet_clustering(toy_det):
@@ -123,32 +123,32 @@ def test_toydet_clustering(toy_det):
         if os.path.isfile(f'./toy_det_output_{_fill_space(backend)}.csv'):
             os.remove(f'./toy_det_output_{_fill_space(backend)}.csv')
 
-        c = clue.clusterer(0.06, 5, 1.)
+        c = clue.clusterer(4.5, 2.5, 1.)
         c.read_data(toy_det)
         c.run_clue(backend=backend)
         c.to_csv('./', f'toy_det_output_{_fill_space(backend)}.csv')
 
-        check_result(f'./toy_det_output_{_fill_space(backend)}.csv',
-                     './test_datasets/truth_files/toy_det_1000_truth.csv')
+        assert check_result(f'./toy_det_output_{_fill_space(backend)}.csv',
+                            './test_datasets/truth_files/toy_det_1000_truth.csv')
 
 
 if __name__ == "__main__":
-    c = clue.clusterer(0.8, 5, 1.5)
+    c = clue.clusterer(1., 5, 2.)
     c.read_data("./test_datasets/blob.csv")
     c.run_clue()
     c.cluster_plotter()
 
-    c = clue.clusterer(0.5, 5., 1.)
+    c = clue.clusterer(70., 5., 2.5)
     c.read_data("./test_datasets/moons.csv")
     c.run_clue()
     c.cluster_plotter()
 
-    c = clue.clusterer(0.4, 5., 1.)
+    c = clue.clusterer(20., 10., 1.)
     c.read_data("./test_datasets/sissa.csv")
     c.run_clue()
     c.cluster_plotter()
 
-    c = clue.clusterer(0.06, 5., 1.)
+    c = clue.clusterer(4.5, 2.5, 1.)
     c.read_data("./test_datasets/toyDetector.csv")
     c.run_clue()
     c.cluster_plotter()
