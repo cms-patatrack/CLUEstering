@@ -13,7 +13,7 @@ namespace clue {
   private:
     T* m_data;
     uint32_t m_size;
-	uint32_t m_capacity;
+    uint32_t m_capacity;
 
   public:
     Vec() = default;
@@ -63,14 +63,19 @@ namespace clue {
     inline constexpr bool full() const { return m_capacity == m_size; }
 
     inline constexpr void reset() { m_size = 0; }
+    inline constexpr void resize(T* data, int size) {
+      m_data = data;
+      m_size = size;
+      data = nullptr;
+    }
     inline constexpr void resize(int size) { m_size = size; }
-	inline constexpr void reserve(uint32_t size) {
-	  m_capacity = size;
+    inline constexpr void reserve(uint32_t size) {
+      m_capacity = size;
 
-	  // move data to new location
-	  T* new_data = new T[size];
-	  m_data = new_data;
-	  new_data = nullptr;
-	}
+      // move data to new location
+      T* new_data = new T[size];
+      m_data = new_data;
+      new_data = nullptr;
+    }
   };
 };  // namespace clue
