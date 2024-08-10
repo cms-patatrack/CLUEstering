@@ -17,6 +17,7 @@
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
+#include "../DataFormats/alpaka/Vector.h"
 #include "CLUEAlpakaKernels.h"
 #include "ConvolutionalKernel.h"
 
@@ -38,7 +39,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
 
     TilesAlpaka<Ndim>* m_tiles;
-    VecArray<int32_t, max_seeds>* m_seeds;
+    clue::Vector<int32_t>* m_seeds;
     VecArray<int32_t, max_followers>* m_followers;
 
     template <typename KernelType>
@@ -59,10 +60,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Buffers
     std::optional<cms::alpakatools::device_buffer<Device, TilesAlpaka<Ndim>>> d_tiles;
-    std::optional<
-        cms::alpakatools::device_buffer<Device,
-                                        cms::alpakatools::VecArray<int32_t, max_seeds>>>
-        d_seeds;
+    std::optional<cms::alpakatools::device_buffer<Device, clue::Vector<int32_t>>> d_seeds;
     std::optional<cms::alpakatools::device_buffer<
         Device,
         cms::alpakatools::VecArray<int32_t, max_followers>[]>>
@@ -113,10 +111,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <typename TAcc, uint8_t Ndim>
   void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
     d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
-    d_seeds = cms::alpakatools::make_device_buffer<
-        cms::alpakatools::VecArray<int32_t, max_seeds>>(queue_);
+    d_seeds = cms::alpakatools::make_device_buffer<clue::Vector<int32_t>>(queue_);
     d_followers = cms::alpakatools::make_device_buffer<
         cms::alpakatools::VecArray<int32_t, max_followers>[]>(queue_, reserve);
+
+    // allocate seeds vector
+    auto seeds = cms::alpakatools::make_device_buffer<int32_t[]>(queue_, reserve);
+    (*d_seeds)->resize(seeds.data(), reserve);
 
     // Copy to the public pointers
     m_tiles = (*d_tiles).data();
@@ -223,7 +224,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     h_points.n));
 
     // We change the working division when assigning the clusters
-    const Idx grid_size_seeds = cms::alpakatools::divide_up_by(max_seeds, block_size);
+    const Idx grid_size_seeds = cms::alpakatools::divide_up_by(reserve, block_size);
     auto working_div_seeds =
         cms::alpakatools::make_workdiv<Acc1D>(grid_size_seeds, block_size);
     alpaka::enqueue(queue_,

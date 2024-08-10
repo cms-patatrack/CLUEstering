@@ -9,15 +9,15 @@
 namespace clue {
 
   template <typename T>
-  class Vec {
+  class Vector {
   private:
     T* m_data;
     uint32_t m_size;
     uint32_t m_capacity;
 
   public:
-    Vec() = default;
-    Vec(uint32_t size) : m_data(new T[size]), m_size{0}, m_capacity{size} {}
+    Vector() = default;
+    Vector(uint32_t size) : m_data(new T[size]), m_size{0}, m_capacity{size} {}
 
     inline constexpr int push_back_unsafe(const T& element) {
       auto previousSize = m_size;
@@ -34,12 +34,13 @@ namespace clue {
     // thread-safe version of the vector, when used in a CUDA kernel
     template <typename TAcc>
     ALPAKA_FN_ACC int push_back(const TAcc& acc, const T& element) {
-      auto previousSize = alpaka::atomicAdd(acc, &m_size, 1, alpaka::hierarchy::Blocks{});
+      auto previousSize =
+          alpaka::atomicAdd(acc, &m_size, 1u, alpaka::hierarchy::Blocks{});
       if (previousSize < m_capacity) {
         m_data[previousSize] = element;
         return previousSize;
       } else {
-        atomicSub(acc, &m_size, 1, alpaka::hierarchy::Blocks{});
+        alpaka::atomicSub(acc, &m_size, 1u, alpaka::hierarchy::Blocks{});
         assert(("Too few elemets reserved"));
         return -1;
       }

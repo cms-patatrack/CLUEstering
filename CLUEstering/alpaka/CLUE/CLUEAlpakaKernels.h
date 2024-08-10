@@ -9,6 +9,7 @@
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
 #include "../DataFormats/alpaka/AlpakaVecArray.h"
+#include "../DataFormats/alpaka/Vector.h"
 #include "ConvolutionalKernel.h"
 
 using cms::alpakatools::VecArray;
@@ -16,7 +17,6 @@ using cms::alpakatools::VecArray;
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
   constexpr int32_t max_followers{100};
-  constexpr int32_t max_seeds{100};
   constexpr int32_t reserve{1000000};
 
   template <uint8_t Ndim>
@@ -279,7 +279,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   struct KernelFindClusters {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  VecArray<int32_t, max_seeds>* seeds,
+                                  clue::Vector<int32_t>* seeds,
                                   VecArray<int32_t, max_followers>* followers,
                                   PointsView<Ndim>* dev_points,
                                   float outlier_delta_factor,
@@ -299,7 +299,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
         if (is_seed) {
           dev_points->is_seed[i] = 1;
-          seeds[0].push_back(acc, i);
+          seeds->push_back(acc, i);
         } else {
           if (!is_outlier) {
             followers[dev_points->nearest_higher[i]].push_back(acc, i);
@@ -314,10 +314,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   struct KernelAssignClusters {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  VecArray<int, max_seeds>* seeds,
+                                  clue::Vector<int32_t>* seeds,
                                   VecArray<int, max_followers>* followers,
                                   PointsView<Ndim>* dev_points) const {
-      const auto& seeds_0{seeds[0]};
+      const auto& seeds_0{*seeds};
       const auto n_seeds{seeds_0.size()};
       cms::alpakatools::for_each_element_in_grid(acc, n_seeds, [&](uint32_t idx_cls) {
         int local_stack[256] = {-1};
