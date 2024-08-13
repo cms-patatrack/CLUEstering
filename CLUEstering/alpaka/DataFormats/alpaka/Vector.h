@@ -18,6 +18,7 @@ namespace clue {
   public:
     Vector() = default;
     Vector(uint32_t size) : m_data(new T[size]), m_size{0}, m_capacity{size} {}
+    Vector(T* data, uint32_t size) : m_data(data), m_size{0}, m_capacity{size} {}
 
     inline constexpr int push_back_unsafe(const T& element) {
       auto previousSize = m_size;
@@ -66,12 +67,13 @@ namespace clue {
     inline constexpr void reset() { m_size = 0; }
     inline constexpr void resize(T* data, int size) {
       m_data = data;
-      m_size = size;
-      data = nullptr;
+      m_size = 0;
+      m_capacity = size;
     }
     inline constexpr void resize(int size) { m_size = size; }
     inline constexpr void reserve(uint32_t size) {
       m_capacity = size;
+      m_size = 0;
 
       // move data to new location
       T* new_data = new T[size];
