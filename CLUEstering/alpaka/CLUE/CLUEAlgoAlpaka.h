@@ -60,7 +60,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Buffers
     std::optional<cms::alpakatools::device_buffer<Device, TilesAlpaka<Ndim>>> d_tiles;
-    std::optional<cms::alpakatools::device_buffer<Device, clue::Vector<int32_t>>> d_seeds;
+    std::optional<cms::alpakatools::device_buffer<Device, int32_t[]>> d_seeds;
+    std::optional<cms::alpakatools::device_buffer<Device, clue::Vector<int32_t>>> seeds;
     std::optional<cms::alpakatools::device_buffer<
         Device,
         cms::alpakatools::VecArray<int32_t, max_followers>[]>>
@@ -111,17 +112,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <typename TAcc, uint8_t Ndim>
   void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
     d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
-    d_seeds = cms::alpakatools::make_device_buffer<clue::Vector<int32_t>>(queue_);
+    d_seeds = cms::alpakatools::make_device_buffer<int32_t[]>(queue_, reserve);
     d_followers = cms::alpakatools::make_device_buffer<
         cms::alpakatools::VecArray<int32_t, max_followers>[]>(queue_, reserve);
 
-    // allocate seeds vector
-    auto seeds = cms::alpakatools::make_device_buffer<int32_t[]>(queue_, reserve);
-    (*d_seeds)->resize(seeds.data(), reserve);
+    seeds = cms::alpakatools::make_device_buffer<clue::Vector<int32_t>>(queue_);
+    // resize the seeds vector
+    (*seeds)->resize((*d_seeds).data(), reserve);
 
     // Copy to the public pointers
     m_tiles = (*d_tiles).data();
-    m_seeds = (*d_seeds).data();
+    m_seeds = (*seeds).data();
     m_followers = (*d_followers).data();
   }
 
@@ -164,7 +165,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         queue_,
         d_points.weight,
         cms::alpakatools::make_host_view(h_points.m_weight.data(), h_points.n));
-    alpaka::memset(queue_, (*d_seeds), 0x00);
+    alpaka::memset(queue_, *d_seeds, 0x00);
 
     // Define the working division
     const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
