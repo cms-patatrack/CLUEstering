@@ -28,12 +28,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   class CLUEAlgoAlpaka {
   public:
     CLUEAlgoAlpaka() = delete;
-    explicit CLUEAlgoAlpaka(
-        float dc, float rhoc, float dm, int pPBin, Queue queue_)
-        : dc_{dc},
-          rhoc_{rhoc},
-          dm_{dm},
-          pointsPerTile_{pPBin} {
+    explicit CLUEAlgoAlpaka(float dc, float rhoc, float dm, int pPBin, Queue queue_)
+        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin} {
       init_device(queue_);
     }
 

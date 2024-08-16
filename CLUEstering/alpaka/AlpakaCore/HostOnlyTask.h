@@ -34,8 +34,8 @@ namespace alpaka {
         (*pTask)();
       }
 
-      ALPAKA_FN_HOST static auto enqueue(QueueCudaRtNonBlocking& queue, HostOnlyTask task)
-          -> void {
+      ALPAKA_FN_HOST static auto enqueue(QueueCudaRtNonBlocking& queue,
+                                         HostOnlyTask task) -> void {
         auto pTask = std::make_unique<HostOnlyTask>(std::move(task));
         ALPAKA_UNIFORM_CUDA_HIP_RT_CHECK(
             cudaStreamAddCallback(alpaka::getNativeHandle(queue),
@@ -58,8 +58,8 @@ namespace alpaka {
         (*pTask)();
       }
 
-      ALPAKA_FN_HOST static auto enqueue(QueueHipRtNonBlocking& queue, HostOnlyTask task)
-          -> void {
+      ALPAKA_FN_HOST static auto enqueue(QueueHipRtNonBlocking& queue,
+                                         HostOnlyTask task) -> void {
         auto pTask = std::make_unique<HostOnlyTask>(std::move(task));
         ALPAKA_UNIFORM_CUDA_HIP_RT_CHECK(
             hipStreamAddCallback(alpaka::getNativeHandle(queue),
