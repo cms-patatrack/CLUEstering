@@ -225,7 +225,7 @@ class clusterer:
         Points with a density lower than rhoc can't be seeds, can only be followers
         or outliers.
     dm: float
-        Similar to dm, it's a spatial parameter that determines the region over
+        Similar to dc, it's a spatial parameter that determines the region over
         which the followers of a point are searched.
 
         While dc_ determines the size of the search box in which the neighbors
@@ -255,7 +255,6 @@ class clusterer:
         # Initialize attributes
         ## Data containers
         self.clust_data = None
-        self.scaler = StandardScaler()
 
         ## Kernel for calculation of local density
         self.kernel = clue_kernels.FlatKernel(0.5)
@@ -298,9 +297,9 @@ class clusterer:
             if len(input_data) < 2 or len(input_data) > 11:
                 raise ValueError("Inadequate data. The supported dimensions are between" +
                                  "1 and 10.")
-            self.clust_data = clustering_data(np.asarray(input_data[:-1]).T,
-                                              np.copy(np.asarray(input_data[:-1]).T),
-                                              np.asarray(input_data[-1]),
+            self.clust_data = clustering_data(np.asarray(input_data[:-1], dtype=float).T,
+                                              np.copy(np.asarray(input_data[:-1], dtype=float).T),
+                                              np.asarray(input_data[-1], dtype=float),
                                               len(input_data[:-1]),
                                               len(input_data[-1]))
         # [[[x0, y0, z0, ...], [x1, y1, z1, ...], ...], [weights]]
@@ -308,9 +307,9 @@ class clusterer:
             if len(input_data) != 2:
                 raise ValueError("Inadequate data. The data must contain a weight value" +
                                  "for each point.")
-            self.clust_data = clustering_data(np.asarray(input_data[0]),
-                                              np.copy(np.asarray(input_data[0])),
-                                              np.asarray(input_data[-1]),
+            self.clust_data = clustering_data(np.asarray(input_data[0], dtype=float),
+                                              np.copy(np.asarray(input_data[0], dtype=float)),
+                                              np.asarray(input_data[-1], dtype=float),
                                               len(input_data[0][0]),
                                               len(input_data[-1]))
 
@@ -335,7 +334,7 @@ class clusterer:
 
         if not input_data.endswith('.csv'):
             raise ValueError('Wrong type of file. The file is not a csv file.')
-        df_ = pd.read_csv(input_data)
+        df_ = pd.read_csv(input_data, dtype=float)
         return df_
 
     def _read_dict_df(self, input_data: Union[dict, pd.DataFrame]) -> pd.DataFrame:
@@ -357,7 +356,7 @@ class clusterer:
             Dataframe containing the input data
         """
 
-        df_ = pd.DataFrame(input_data, copy=False)
+        df_ = pd.DataFrame(input_data, copy=False, dtype=float)
         return df_
 
     def _handle_dataframe(self, df_: pd.DataFrame) -> None:
@@ -398,25 +397,6 @@ class clusterer:
                                           np.asarray(df_['weight']),
                                           n_dim,
                                           n_points)
-
-    def _rescale(self) -> None:
-        """
-        Normalizes the input data using a standard scaler
-
-        Modified attributes
-        -------------------
-        clust_data.coords : np.ndarray
-            Array containing the coordinates and weight values of the data points
-
-        Returns
-        -------
-        None
-        """
-
-        for dim in range(self.clust_data.n_dim):
-            self.clust_data.coords.T[dim] = \
-            self.scaler.fit_transform(
-                    self.clust_data.coords.T[dim].reshape(-1, 1)).reshape(1, -1)[0]
 
     def read_data(self,
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray]) -> None:
@@ -473,9 +453,6 @@ class clusterer:
             df = self._read_dict_df(input_data)
             self._handle_dataframe(df)
 
-        # Rescale the coordinates with a standard scaler
-        self._rescale()
-
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
         """
         Change the coordinate system
@@ -499,12 +476,6 @@ class clusterer:
         # Change the coordinate system
         for coord, func in kwargs.items():
             self.clust_data.coords[int(coord[1])] = func(self.clust_data.original_coords)
-
-            # Normalize the coordinate with a standard scaler
-            self.clust_data.coords[int(coord[1])] = \
-                self.scaler.fit_transform(
-                    self.clust_data.coords[int(coord[1])].reshape(-1, 1)
-                ).reshape(1, -1)[0]
 
     def choose_kernel(self,
                       choice: str,
@@ -1221,7 +1192,7 @@ class clusterer:
         df_.to_csv(out_path,index=False)
 
 if __name__ == "__main__":
-    c = clusterer(0.4,5,1.)
+    c = clusterer(0.8, 5, 1.)
     c.read_data('./blob.csv')
     c.input_plotter()
     c.run_clue(backend="cpu serial", verbose=True)

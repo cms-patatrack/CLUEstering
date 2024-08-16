@@ -128,11 +128,11 @@ def test_square_box(square, box):
     Compare the clustering of a 2D square with that of a 3D box
     clustered using only two dimensions
     '''
-    c1 = clue.clusterer(0.4, 2., 0.4)
+    c1 = clue.clusterer(1., 2., 1.6)
     c1.read_data(square)
     c1.run_clue()
 
-    c2 = clue.clusterer(0.4, 2., 0.4)
+    c2 = clue.clusterer(1., 2., 1.6)
     c2.read_data(box)
     c2.run_clue(dimensions=[0, 1])
 
