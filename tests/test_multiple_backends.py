@@ -148,7 +148,7 @@ if __name__ == "__main__":
     c.run_clue()
     c.cluster_plotter()
 
-    c = clue.clusterer(4.5, 2.5, 4.5.)
+    c = clue.clusterer(4.5, 2.5, 4.5)
     c.read_data("./test_datasets/toyDetector.csv")
     c.run_clue()
     c.cluster_plotter()
