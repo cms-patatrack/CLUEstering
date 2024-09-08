@@ -223,7 +223,7 @@ def test_same_result(file, dictionary, dataframe, lists, arrays):
     clust_list.read_data(lists)
     clust_list.run_clue()
 
-    clust_arr = clue.clusterer(1, 5, 1.6)
+    clust_arr = clue.clusterer(1, 5, 1)
     clust_arr.read_data(arrays)
     clust_arr.run_clue()
 
