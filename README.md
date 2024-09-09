@@ -5,9 +5,9 @@ The original algorithm was designed to work in 2 dimensions, with the data distr
 Unlike other clustering algorithms, CLUE takes the coordinates of the points and also their weight, which represents their energy, and calculates the energy density of each point.
 This energy density is used to find the seeds for each cluster, their followers and the outliers, which are dismissed as noise.
 CLUE takes 4 parameters in input: 
-* `dc_`, which is the side of the box inside of which the density of a point is calculated;
+* `dc`, which is the side of the box inside of which the density of a point is calculated;
 * `rhoc`, which is the minimum energy density that a point must have to not be considered an outlier,
-* `outlierDeltaFactor`, that multiplied by dc_ gives dm_, the side of the box inside of which the followers of a point are searched;
+* `dm`, which is the side of the box inside of which the followers of a point are searched;
 * `pointsPerBin`, which is the average number of points that are to be found inside a bin. This value allows to control the size of the bins.
 
 This library generalizes the original algorithm, making it N-dimensional, and turns it into a general purpose algorithm, usable by any user and applicaple to a wider range of applications, in particular outside particle physics.
@@ -62,8 +62,8 @@ c.list_devices('gpu hip')
 
 ## The `clusterer` class
 The `clusterer` class represents a wrapper class around the method `mainRun`, which is binded from `C++` and that is the method that runs the CLUE algorithm.  
-When an instance of this class is created, it requires at least three parameters: `dc`, `rhoc` and `outlierDeltaFactor`. There is a fourth parameter, `pPBin`, which represents the desired average number of points found in each of the bins that the clustering space is divided into. This parameter has a default value of `10`.  
-The parameters `dc`, `rhoc` and `outlierDeltaFactor` must be `floats` or a type convertible to a `float`. `ppBin`, on the other hand, is an `integer`.
+When an instance of this class is created, it requires at least three parameters: `dc`, `rhoc` and `dm`. There is a fourth parameter, `pPBin`, which represents the desired average number of points found in each of the bins that the clustering space is divided into. This parameter has a default value of `10`.  
+The parameters `dc`, `rhoc` and `dm` must be `floats` or a type convertible to a `float`. `ppBin`, on the other hand, is an `integer`.
 
 The class has several methods:
 * `read_data`, which takes the data in input and inizializes the class members. The data can be in the form of list, numpy array, dictionary, string containing the path to a csv file or pandas DataFrame;
