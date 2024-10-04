@@ -35,7 +35,9 @@ clust.cluster_plotter()
 To install the library, first clone the repository recursively:
 ```shell
 git clone --recursive https://github.com/cms-patatrack/CLUEstering.git
-# alternatively, update the submodules manually after cloning
+```
+alternatively, clone and update the submodules manually:
+```shell
 git clone https://github.com/cms-patatrack/CLUEstering.git
 git submodule update --init --recursive
 ```
