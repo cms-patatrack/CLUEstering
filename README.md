@@ -31,6 +31,25 @@ clust.cluster_plotter()
   <img width="380" height="380" src="https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/blobwithnoise.png">
 </p>
 
+## Installation
+To install the library, first clone the repository recursively:
+```shell
+git clone --recursive https://github.com/cms-patatrack/CLUEstering.git
+# alternatively, update the submodules manually after cloning
+git clone https://github.com/cms-patatrack/CLUEstering.git
+git submodule update --init --recursive
+```
+Then, inside the root directory install the library with pip:
+```shell
+pip install -v .
+```
+where the `-v` flag is optional but suggested because provides more details during the compilation process.
+
+Alternatively, the library can be installed directly from the PyPi repository:
+```shell
+pip install -v CLUEstering
+```
+
 ## Heterogeneous backend support with `Alpaka`
 Since version `2.0.0` the pybind module is compiled for all the supported backends using the `Alpaka` portability library (https://github.com/alpaka-group/alpaka).  
 Currently the supported backends include:
