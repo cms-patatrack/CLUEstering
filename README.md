@@ -32,6 +32,7 @@ clust.cluster_plotter()
 </p>
 
 ## Installation
+### From source
 To install the library, first clone the repository recursively:
 ```shell
 git clone --recursive https://github.com/cms-patatrack/CLUEstering.git
@@ -47,7 +48,8 @@ pip install -v .
 ```
 where the `-v` flag is optional but suggested because provides more details during the compilation process.
 
-Alternatively, the library can be installed directly from the PyPi repository:
+### From PyPi
+The library is also available on the PyPi repository, and can be installed with:
 ```shell
 pip install -v CLUEstering
 ```
