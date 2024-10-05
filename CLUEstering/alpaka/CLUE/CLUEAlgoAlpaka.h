@@ -28,12 +28,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   class CLUEAlgoAlpaka {
   public:
     CLUEAlgoAlpaka() = delete;
-    explicit CLUEAlgoAlpaka(
-        float dc, float rhoc, float outlierDeltaFactor, int pPBin, Queue queue_)
-        : dc_{dc},
-          rhoc_{rhoc},
-          outlierDeltaFactor_{outlierDeltaFactor},
-          pointsPerTile_{pPBin} {
+    explicit CLUEAlgoAlpaka(float dc, float rhoc, float dm, int pPBin, Queue queue_)
+        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin} {
       init_device(queue_);
     }
 
@@ -51,7 +47,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   private:
     float dc_;
     float rhoc_;
-    float outlierDeltaFactor_;
+    float dm_;
     // average number of points found in a tile
     int pointsPerTile_;
 
@@ -147,6 +143,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         queue_,
         cms::alpakatools::make_device_view(device, (*d_tiles)->tileSize(), Ndim),
         cms::alpakatools::make_host_view(tile_size, Ndim));
+    alpaka::wait(queue_);
 
     const Idx tiles_grid_size = cms::alpakatools::divide_up_by(nTiles, block_size);
     const auto tiles_working_div =
@@ -242,7 +239,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     m_tiles,
                                                     d_points.view(),
                                                     /* m_domains.data(), */
-                                                    outlierDeltaFactor_,
+                                                    dm_,
                                                     dc_,
                                                     h_points.n));
 
@@ -252,7 +249,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     m_seeds,
                                                     m_followers,
                                                     d_points.view(),
-                                                    outlierDeltaFactor_,
+                                                    dm_,
                                                     dc_,
                                                     rhoc_,
                                                     h_points.n));

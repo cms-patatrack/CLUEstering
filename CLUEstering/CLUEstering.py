@@ -224,13 +224,14 @@ class clusterer:
 
         Points with a density lower than rhoc can't be seeds, can only be followers
         or outliers.
-    outlier : float
-        Multiplicative increment of dc_ for getting the region over which the followers of a
-        point are searched.
+    dm: float
+        Similar to dc, it's a spatial parameter that determines the region over
+        which the followers of a point are searched.
 
-        While dc_ determines the size of the search box in which the neighbors of a point are
-        searched when calculating its local density, when looking for followers while trying
-        to find potential seeds the size of the search box is given by dm = dc_ * outlier.
+        While dc_ determines the size of the search box in which the neighbors
+        of a point are searched when calculating its local density, when
+        looking for followers while trying to find potential seeds the size of
+        the search box is given by dm.
     ppbin : int
         Average number of points to be found in each tile.
     kernel : Algo.kernel
@@ -243,16 +244,17 @@ class clusterer:
         Execution time of the algorithm, expressed in nanoseconds.
     """
 
-    def __init__(self, dc_: float, rhoc_: float, outlier_: float, ppbin: int = 10):
+    def __init__(self, dc_: float, rhoc_: float, dm_: [float, None] = None, ppbin: int = 10):
         self.dc_ = dc_
         self.rhoc = rhoc_
-        self.outlier = outlier_
+        self.dm = dm_
+        if dm_ is None:
+            self.dm = dc_
         self.ppbin = ppbin
 
         # Initialize attributes
         ## Data containers
         self.clust_data = None
-        self.scaler = StandardScaler()
 
         ## Kernel for calculation of local density
         self.kernel = clue_kernels.FlatKernel(0.5)
@@ -262,10 +264,13 @@ class clusterer:
         self.elapsed_time = 0.
 
     def set_params(self, dc: float, rhoc: float,
-                   outlier: float, ppbin: int = 128) -> None:
+                   dm: [float, None], ppbin: int = 128) -> None:
         self.dc_ = dc
         self.rhoc = rhoc
-        self.outlier = outlier
+        if dm is not None:
+            self.dm = dm
+        else:
+            self.dm = dc
         self.ppbin = ppbin
 
     def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
@@ -393,25 +398,6 @@ class clusterer:
                                           n_dim,
                                           n_points)
 
-    def _rescale(self) -> None:
-        """
-        Normalizes the input data using a standard scaler
-
-        Modified attributes
-        -------------------
-        clust_data.coords : np.ndarray
-            Array containing the coordinates and weight values of the data points
-
-        Returns
-        -------
-        None
-        """
-
-        for dim in range(self.clust_data.n_dim):
-            self.clust_data.coords.T[dim] = \
-            self.scaler.fit_transform(
-                    self.clust_data.coords.T[dim].reshape(-1, 1)).reshape(1, -1)[0]
-
     def read_data(self,
                   input_data: Union[pd.DataFrame,str,dict,list,np.ndarray]) -> None:
         """
@@ -467,9 +453,6 @@ class clusterer:
             df = self._read_dict_df(input_data)
             self._handle_dataframe(df)
 
-        # Rescale the coordinates with a standard scaler
-        self._rescale()
-
     def change_coordinates(self, **kwargs: types.FunctionType) -> None:
         """
         Change the coordinate system
@@ -493,12 +476,6 @@ class clusterer:
         # Change the coordinate system
         for coord, func in kwargs.items():
             self.clust_data.coords[int(coord[1])] = func(self.clust_data.original_coords)
-
-            # Normalize the coordinate with a standard scaler
-            self.clust_data.coords[int(coord[1])] = \
-                self.scaler.fit_transform(
-                    self.clust_data.coords[int(coord[1])].reshape(-1, 1)
-                ).reshape(1, -1)[0]
 
     def choose_kernel(self,
                       choice: str,
@@ -702,12 +679,12 @@ class clusterer:
             data = self._partial_dimension_dataset(dimensions)
         start = time.time_ns()
         if backend == "cpu serial":
-            cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+            cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.dm, self.ppbin,
                                                     data, self.clust_data.weight, self.kernel,
                                                     self.clust_data.n_dim, block_size, device_id)
         elif backend == "cpu tbb":
             if tbb_found:
-                cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier,
+                cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.dm,
                                                      self.ppbin, data, self.clust_data.weight,
                                                      self.kernel, self.clust_data.n_dim, block_size,
                                                      device_id)
@@ -716,7 +693,7 @@ class clusterer:
 
         elif backend == "gpu cuda":
             if cuda_found:
-                cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.outlier,
+                cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.dm,
                                                       self.ppbin, data, self.clust_data.weight,
                                                       self.kernel, self.clust_data.n_dim, block_size,
                                                       device_id)
@@ -725,7 +702,7 @@ class clusterer:
 
         elif backend == "gpu hip":
             if hip_found:
-                cluster_id_is_seed = gpu_hip.mainRun(self.dc_, self.rhoc, self.outlier,
+                cluster_id_is_seed = gpu_hip.mainRun(self.dc_, self.rhoc, self.dm,
                                                      self.ppbin, data, self.clust_data.weight,
                                                      self.kernel, self.clust_data.n_dim, block_size,
                                                      device_id)

@@ -11,7 +11,7 @@ def check_result(output_file, truth_file):
     truth = pd.read_csv(truth_file)
 
     # Check if the number of clusters is the same
-    n_clusters_o = len(truth['cluster_ids'].unique())
+    n_clusters_o = len(output['cluster_ids'].unique())
     n_clusters_t = len(truth['cluster_ids'].unique())
     if n_clusters_o != n_clusters_t:
         return False
