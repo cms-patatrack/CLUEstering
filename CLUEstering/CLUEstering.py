@@ -510,18 +510,18 @@ class clusterer:
             if len(parameters) != 1:
                 raise ValueError("Wrong number of parameters. The flat kernel"
                                  + " requires 1 parameter.")
-            self.kernel = CLUE_Convolutional_Kernels.FlatKernel(parameters[0])
+            self.kernel = clue_kernels.FlatKernel(parameters[0])
         elif choice == "exp":
             if len(parameters) != 2:
                 raise ValueError("Wrong number of parameters. The exponential"
                                  + " kernel requires 2 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.ExponentialKernel(parameters[0],
+            self.kernel = clue_kernels.ExponentialKernel(parameters[0],
                                                                        parameters[1])
         elif choice == "gaus":
             if len(parameters) != 3:
                 raise ValueError("Wrong number of parameters. The gaussian" +
                                  " kernel requires 3 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.GaussinKernel(parameters[0],
+            self.kernel = clue_kernels.GaussianKernel(parameters[0],
                                                                    parameters[1],
                                                                    parameters[2])
         elif choice == "custom":
