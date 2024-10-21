@@ -232,6 +232,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
 
+#ifdef DEBUG
     alpaka::memcpy(queue_,
                    cms::alpakatools::make_host_view(h_points.m_rho.data(), h_points.n),
                    d_points.rho,
@@ -245,6 +246,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         cms::alpakatools::make_host_view(h_points.m_nearestHigher.data(), h_points.n),
         d_points.nearest_higher,
         static_cast<uint32_t>(h_points.n));
+#endif
     alpaka::memcpy(
         queue_,
         cms::alpakatools::make_host_view(h_points.m_clusterIndex.data(), h_points.n),
