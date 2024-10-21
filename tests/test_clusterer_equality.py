@@ -30,22 +30,22 @@ def test_clusterer_equality(sissa, toyDet):
     Test the equality operator for clusterer objects
     '''
     # Sissa dataset
-    clust1 = clue.clusterer(20., 10., 1.)
+    clust1 = clue.clusterer(20., 10., 20.)
     clust1.read_data(sissa)
     clust1.run_clue()
 
     # Create a copy of the sissa lusterer to check the equality of clusterers
-    clust1_copy = clue.clusterer(20., 10., 1.)
+    clust1_copy = clue.clusterer(20., 10., 20.)
     clust1_copy.read_data(sissa)
     clust1_copy.run_clue()
 
     # toyDet dataset
-    clust2 = clue.clusterer(5., 2.5, 1.)
+    clust2 = clue.clusterer(5., 2.5, 5.)
     clust2.read_data(toyDet)
     clust2.run_clue()
 
     # Create a copy to check the equality of clusterers
-    clust2_copy = clue.clusterer(5., 2.5, 1.)
+    clust2_copy = clue.clusterer(5., 2.5, 5.)
     clust2_copy.read_data(toyDet)
     clust2_copy.run_clue()
 
