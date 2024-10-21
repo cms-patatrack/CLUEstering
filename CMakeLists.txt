@@ -10,6 +10,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+  add_compile_definitions(DEBUG)
   set(CMAKE_CXX_FLAGS "-Wall -Wextra -g -O0")
 elseif(${CMAKE_BUILD_TYPE} STREQUAL "Release")
   set(CMAKE_CXX_FLAGS "-O2")
