@@ -3,11 +3,12 @@
 
 //
 // Author: Simone Balducci
-// Note: Based on Felice Pantaleo's VecArray
+// Note: Based on Felice's VecArray
 //
 
 namespace clue {
 
+  // TODO: Use a caching allocator to improve dynamic allocation
   template <typename T>
   class Vector {
   private:
