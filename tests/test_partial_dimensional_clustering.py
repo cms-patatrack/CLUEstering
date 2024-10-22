@@ -1,7 +1,6 @@
 '''
 '''
 
-import numpy as np
 import pandas as pd
 import pytest
 import sys
@@ -46,7 +45,7 @@ def test_one_out_of_two(moons):
     Test the dimension reduction from 2D to 1D
     '''
 
-    c = clue.clusterer(.4, 2., 1.6)
+    c = clue.clusterer(0.4, 2., 0.4)
     c.read_data(moons)
     # check the initial number of dimensions
     assert len(c.clust_data.coords[0]) == 2
@@ -70,7 +69,7 @@ def test_one_out_of_three(blobs):
     Test the dimension reduction from 3D to 1D
     '''
 
-    c = clue.clusterer(.4, 2., 1.6)
+    c = clue.clusterer(0.4, 2., 0.4)
     c.read_data(blobs)
     # check the initial number of dimensions
     assert len(c.clust_data.coords[0]) == 3
@@ -98,7 +97,7 @@ def test_two_out_of_three(blobs):
     Test the dimension reduction from 3D to 2D
     '''
 
-    c = clue.clusterer(.4, 2., 1.6)
+    c = clue.clusterer(0.4, 2., 0.4)
     c.read_data(blobs)
     # check the initial number of dimensions
     assert len(c.clust_data.coords[0]) == 3
@@ -126,7 +125,7 @@ def test_two_out_of_three(blobs):
 
 def test_square_box(square, box):
     '''
-    Compare the clustering of a 2D square with that of a 3D box 
+    Compare the clustering of a 2D square with that of a 3D box
     clustered using only two dimensions
     '''
     c1 = clue.clusterer(1., 2., 1.6)

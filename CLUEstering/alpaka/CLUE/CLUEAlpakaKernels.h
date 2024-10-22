@@ -231,10 +231,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   TilesAlpaka<Ndim>* dev_tiles,
                                   PointsView<Ndim>* dev_points,
                                   /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
-                                  float outlier_delta_factor,
+                                  float dm,
                                   float dc,
                                   uint32_t n_points) const {
-      float dm{outlier_delta_factor * dc};
       float dm_squared{dm * dm};
       cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         float delta_i{std::numeric_limits<float>::max()};
@@ -282,7 +281,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   clue::Vector<int32_t>* seeds,
                                   VecArray<int32_t, max_followers>* followers,
                                   PointsView<Ndim>* dev_points,
-                                  float outlier_delta_factor,
+                                  float dm,
                                   float d_c,
                                   float rho_c,
                                   uint32_t n_points) const {
@@ -295,7 +294,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
         // Determine whether the point is a seed or an outlier
         bool is_seed{(delta_i > d_c) && (rho_i >= rho_c)};
-        bool is_outlier{(delta_i > outlier_delta_factor * d_c) && (rho_i < rho_c)};
+        bool is_outlier{(delta_i > dm) && (rho_i < rho_c)};
 
         if (is_seed) {
           dev_points->is_seed[i] = 1;

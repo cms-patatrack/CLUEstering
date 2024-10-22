@@ -30,7 +30,7 @@ def test_clustering(sissa):
     if os.path.isfile('./sissa_output.csv'):
         os.remove('./sissa_output.csv')
 
-    c = clue.clusterer(20., 10., 1.)
+    c = clue.clusterer(20., 10., 20.)
     c.read_data(sissa)
     c.run_clue()
     c.to_csv('./', 'sissa_output.csv')
@@ -40,7 +40,7 @@ def test_clustering(sissa):
 
 
 if __name__ == "__main__":
-    c = clue.clusterer(20., 10., 1.)
+    c = clue.clusterer(20., 10., 20.)
     c.read_data("./test_datasets/sissa.csv")
     c.run_clue()
     c.cluster_plotter()

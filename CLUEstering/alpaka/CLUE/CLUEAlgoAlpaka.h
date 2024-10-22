@@ -29,12 +29,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   class CLUEAlgoAlpaka {
   public:
     CLUEAlgoAlpaka() = delete;
-    explicit CLUEAlgoAlpaka(
-        float dc, float rhoc, float outlierDeltaFactor, int pPBin, Queue queue_)
-        : dc_{dc},
-          rhoc_{rhoc},
-          outlierDeltaFactor_{outlierDeltaFactor},
-          pointsPerTile_{pPBin} {
+    explicit CLUEAlgoAlpaka(float dc, float rhoc, float dm, int pPBin, Queue queue_)
+        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin} {
       init_device(queue_);
     }
 
@@ -52,7 +48,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   private:
     float dc_;
     float rhoc_;
-    float outlierDeltaFactor_;
+    float dm_;
     // average number of points found in a tile
     int pointsPerTile_;
 
@@ -209,7 +205,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     m_tiles,
                                                     d_points.view(),
                                                     /* m_domains.data(), */
-                                                    outlierDeltaFactor_,
+                                                    dm_,
                                                     dc_,
                                                     h_points.n));
 
@@ -219,7 +215,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     m_seeds,
                                                     m_followers,
                                                     d_points.view(),
-                                                    outlierDeltaFactor_,
+                                                    dm_,
                                                     dc_,
                                                     rhoc_,
                                                     h_points.n));
@@ -238,6 +234,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
 
+#ifdef DEBUG
     alpaka::memcpy(queue_,
                    cms::alpakatools::make_host_view(h_points.m_rho.data(), h_points.n),
                    d_points.rho,
@@ -251,6 +248,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         cms::alpakatools::make_host_view(h_points.m_nearestHigher.data(), h_points.n),
         d_points.nearest_higher,
         static_cast<uint32_t>(h_points.n));
+#endif
     alpaka::memcpy(
         queue_,
         cms::alpakatools::make_host_view(h_points.m_clusterIndex.data(), h_points.n),
