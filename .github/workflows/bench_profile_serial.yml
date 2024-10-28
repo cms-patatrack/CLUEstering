@@ -22,24 +22,22 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y libboost-all-dev
         python -m pip install --upgrade pip
         pip install matplotlib
 
     - name: Compile and run benchmark
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
       run: |
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build -- -j 2
         ./build/serial.out 10 18
 
     - name: Compile and run profiling
       working-directory: ${{ github.workspace }}/benchmark/profiling
       run: |
-        cmake -S . -B build/Debug -DCMAKE_BUILD_TYPE=Debug
+        cmake -B build/Debug -DCMAKE_BUILD_TYPE=Debug
         cmake --build build/Debug -- -j 2
-        cmake -S . -B build/Release -DCMAKE_BUILD_TYPE=Release
+        cmake -B build/Release -DCMAKE_BUILD_TYPE=Release
         cmake --build build/Release -- -j 2
         ./build/Debug/serial.out ../../data/data_32768.csv
         gprof ./build/Debug/serial.out ../../data/data_32768.csv
