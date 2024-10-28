@@ -20,8 +20,10 @@ jobs:
       with:
         submodules: true
 
-    - name: Install matplotlib
+    - name: Install dependencies
       run: |
+        sudo apt-get update && apt upgrade -y
+        sudo apt-get install -y libboost-all-dev
         python -m pip install --upgrade pip
         pip install matplotlib
 
