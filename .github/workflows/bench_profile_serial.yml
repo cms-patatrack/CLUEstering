@@ -20,6 +20,11 @@ jobs:
       with:
         submodules: true
 
+    - name: Install matplotlib
+      run: |
+        python -m pip install --upgrade pip
+        pip install matplotlib
+
     - name: Compile and run benchmark
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
       run: |
