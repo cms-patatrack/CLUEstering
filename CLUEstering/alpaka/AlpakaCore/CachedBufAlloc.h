@@ -26,7 +26,7 @@ namespace cms::alpakatools {
     template <typename TElem, typename TDim, typename TIdx, typename TQueue>
     struct CachedBufAlloc<TElem, TDim, TIdx, alpaka::DevCpu, TQueue, void> {
       template <typename TExtent>
-      ALPAKA_FN_HOST static auto allocCachedBuf(alpaka::DevCpu const& dev,
+      ALPAKA_FN_HOST static auto allocCachedBuf(alpaka::DevCpu const&,
                                                 TQueue queue,
                                                 TExtent const& extent)
           -> alpaka::BufCpu<TElem, TDim, TIdx> {

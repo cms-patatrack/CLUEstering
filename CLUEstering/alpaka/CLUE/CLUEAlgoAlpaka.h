@@ -17,6 +17,7 @@
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
+#include "../DataFormats/alpaka/Vector.h"
 #include "CLUEAlpakaKernels.h"
 #include "ConvolutionalKernel.h"
 
@@ -28,17 +29,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   class CLUEAlgoAlpaka {
   public:
     CLUEAlgoAlpaka() = delete;
-    explicit CLUEAlgoAlpaka(
-        float dc, float rhoc, float outlierDeltaFactor, int pPBin, Queue queue_)
-        : dc_{dc},
-          rhoc_{rhoc},
-          outlierDeltaFactor_{outlierDeltaFactor},
-          pointsPerTile_{pPBin} {
+    explicit CLUEAlgoAlpaka(float dc, float rhoc, float dm, int pPBin, Queue queue_)
+        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin} {
       init_device(queue_);
     }
 
     TilesAlpaka<Ndim>* m_tiles;
-    VecArray<int32_t, max_seeds>* m_seeds;
+    clue::Vector<int32_t>* m_seeds;
     VecArray<int32_t, max_followers>* m_followers;
 
     template <typename KernelType>
@@ -51,7 +48,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   private:
     float dc_;
     float rhoc_;
-    float outlierDeltaFactor_;
+    float dm_;
     // average number of points found in a tile
     int pointsPerTile_;
 
@@ -59,10 +56,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Buffers
     std::optional<cms::alpakatools::device_buffer<Device, TilesAlpaka<Ndim>>> d_tiles;
-    std::optional<
-        cms::alpakatools::device_buffer<Device,
-                                        cms::alpakatools::VecArray<int32_t, max_seeds>>>
-        d_seeds;
+    std::optional<cms::alpakatools::device_buffer<Device, int32_t[]>> d_seeds;
+    std::optional<cms::alpakatools::device_buffer<Device, clue::Vector<int32_t>>> seeds;
     std::optional<cms::alpakatools::device_buffer<
         Device,
         cms::alpakatools::VecArray<int32_t, max_followers>[]>>
@@ -113,14 +108,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <typename TAcc, uint8_t Ndim>
   void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
     d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
-    d_seeds = cms::alpakatools::make_device_buffer<
-        cms::alpakatools::VecArray<int32_t, max_seeds>>(queue_);
+    d_seeds = cms::alpakatools::make_device_buffer<int32_t[]>(queue_, reserve);
     d_followers = cms::alpakatools::make_device_buffer<
         cms::alpakatools::VecArray<int32_t, max_followers>[]>(queue_, reserve);
 
+    seeds = cms::alpakatools::make_device_buffer<clue::Vector<int32_t>>(queue_);
+    // resize the seeds vector
+    (*seeds)->resize((*d_seeds).data(), reserve);
+
     // Copy to the public pointers
     m_tiles = (*d_tiles).data();
-    m_seeds = (*d_seeds).data();
+    m_seeds = (*seeds).data();
     m_followers = (*d_followers).data();
   }
 
@@ -130,14 +128,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                          Queue queue_,
                                          std::size_t block_size) {
     // calculate the number of tiles and their size
-#ifdef TRACING
-	auto start = std::chrono::high_resolution_clock::now();
-	auto end = std::chrono::high_resolution_clock::now();
-#endif
-
-#ifdef TRACING
-	start = std::chrono::high_resolution_clock::now();
-#endif
     const auto nTiles{std::ceil(h_points.n / static_cast<float>(pointsPerTile_))};
     const auto nPerDim{std::ceil(std::pow(nTiles, 1. / Ndim))};
 
@@ -162,11 +152,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         tiles_working_div, KernelResetTiles{}, m_tiles, nTiles, nPerDim));
-#ifdef TRACING
-	end = std::chrono::high_resolution_clock::now();
-	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << ',';
-	start = std::chrono::high_resolution_clock::now();
-#endif
     alpaka::memcpy(
         queue_,
         d_points.coords,
@@ -175,11 +160,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         queue_,
         d_points.weight,
         cms::alpakatools::make_host_view(h_points.m_weight.data(), h_points.n));
-    alpaka::memset(queue_, (*d_seeds), 0x00);
-#ifdef TRACING
-	end = std::chrono::high_resolution_clock::now();
-	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << ',';
-#endif
+    alpaka::memset(queue_, *d_seeds, 0x00);
 
     // Define the working division
     const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
@@ -198,10 +179,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       const KernelType& kernel,
       Queue queue_,
       std::size_t block_size) {
-#ifdef TRACING
-	auto start = std::chrono::high_resolution_clock::now();
-	auto end = std::chrono::high_resolution_clock::now();
-#endif
     setup(h_points, d_points, queue_, block_size);
 
     const Idx grid_size = cms::alpakatools::divide_up_by(h_points.n, block_size);
@@ -211,9 +188,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         alpaka::createTaskKernel<Acc1D>(
             working_div, KernelFillTiles{}, d_points.view(), m_tiles, h_points.n));
 
-#ifdef TRACING
-	start = std::chrono::high_resolution_clock::now();
-#endif
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelCalculateLocalDensity{},
@@ -223,67 +197,42 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     /* m_domains.data(), */
                                                     dc_,
                                                     h_points.n));
-#ifdef TRACING
-	end = std::chrono::high_resolution_clock::now();
-	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << ',';
-
-	start = std::chrono::high_resolution_clock::now();
-#endif
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelCalculateNearestHigher{},
                                                     m_tiles,
                                                     d_points.view(),
                                                     /* m_domains.data(), */
-                                                    outlierDeltaFactor_,
+                                                    dm_,
                                                     dc_,
                                                     h_points.n));
-#ifdef TRACING
-	end = std::chrono::high_resolution_clock::now();
-	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << ',';
-
-	start = std::chrono::high_resolution_clock::now();
-#endif
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelFindClusters<Ndim>{},
                                                     m_seeds,
                                                     m_followers,
                                                     d_points.view(),
-                                                    outlierDeltaFactor_,
+                                                    dm_,
                                                     dc_,
                                                     rhoc_,
                                                     h_points.n));
-#ifdef TRACING
-	end = std::chrono::high_resolution_clock::now();
-	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << ',';
-#endif
 
     // We change the working division when assigning the clusters
-    const Idx grid_size_seeds = cms::alpakatools::divide_up_by(max_seeds, block_size);
+    const Idx grid_size_seeds = cms::alpakatools::divide_up_by(reserve, block_size);
     auto working_div_seeds =
         cms::alpakatools::make_workdiv<Acc1D>(grid_size_seeds, block_size);
 	
-#ifdef TRACING
-	start = std::chrono::high_resolution_clock::now();
-#endif
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div_seeds,
                                                     KernelAssignClusters<Ndim>{},
                                                     m_seeds,
                                                     m_followers,
                                                     d_points.view()));
-#ifdef TRACING
-	end = std::chrono::high_resolution_clock::now();
-	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << ',';
-#endif
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
 
-#ifdef TRACING
-	start = std::chrono::high_resolution_clock::now();
-#endif
+#ifdef DEBUG
     alpaka::memcpy(queue_,
                    cms::alpakatools::make_host_view(h_points.m_rho.data(), h_points.n),
                    d_points.rho,
@@ -297,6 +246,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         cms::alpakatools::make_host_view(h_points.m_nearestHigher.data(), h_points.n),
         d_points.nearest_higher,
         static_cast<uint32_t>(h_points.n));
+#endif
+
     alpaka::memcpy(
         queue_,
         cms::alpakatools::make_host_view(h_points.m_clusterIndex.data(), h_points.n),
@@ -309,10 +260,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
-#ifdef TRACING
-	end = std::chrono::high_resolution_clock::now();
-	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << '\n';
-#endif
 
     return {h_points.m_clusterIndex, h_points.m_isSeed};
   }

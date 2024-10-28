@@ -83,7 +83,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     template <typename TAcc>
     ALPAKA_FN_HOST_ACC inline constexpr int getGlobalBinByBin(
-        const TAcc& acc, const VecArray<uint32_t, Ndim>& Bins) const {
+        const TAcc&, const VecArray<uint32_t, Ndim>& Bins) const {
       uint32_t globalBin{Bins[0]};
       for (int i{1}; i != Ndim; ++i) {
         globalBin += n_tiles_per_dim * Bins[i];

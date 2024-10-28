@@ -39,7 +39,6 @@ def test_clustering(blobs):
                         './test_datasets/truth_files/blobs_truth.csv')
 
 
-
 if __name__ == "__main__":
     c = clue.clusterer(1., 5, 2.)
     c.read_data("./test_datasets/blob.csv")

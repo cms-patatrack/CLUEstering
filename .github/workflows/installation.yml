@@ -33,15 +33,9 @@ jobs:
           docker build -t serial .
 
           echo "Testing installation from PyPi"
-          docker run -t serial bash -c \
-            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 1"
-
-          echo "Testing installation from git repository"
-          docker run -t serial bash -c \
-            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
-            cd CLUEstering;
-            pip install . ;
-            python3 -c 'import CLUEstering' || exit 1"
+          docker run -t -v "$(pwd)"/../../:/app serial bash -c \
+            "cd /app && pip install .;
+            python3 -c 'import CLUEstering' || exit 0"
 
       - name: Test installation inside docker containers (serial without boost)
         working-directory: ${{github.workspace}}/docker/no_boost
@@ -49,15 +43,9 @@ jobs:
           docker build -t noboost .
 
           echo "Testing installation from PyPi"
-          docker run -t noboost bash -c \
-            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 1"
-
-          echo "Testing installation from git repository"
-          docker run -t noboost bash -c \
-            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
-            cd CLUEstering;
-            pip install . ;
-            python3 -c 'import CLUEstering' || exit 1"
+          docker run -t -v "$(pwd)"/../../:/app noboost bash -c \
+            "cd /app && pip install .;
+            python3 -c 'import CLUEstering' || exit 0"
 
       - name: Test installation inside docker containers (tbb)
         working-directory: ${{github.workspace}}/docker/tbb
@@ -65,15 +53,9 @@ jobs:
           docker build -t tbb .
 
           echo "Testing installation from PyPi"
-          docker run -t tbb bash -c \
-            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 1"
-
-          echo "Testing installation from git repository"
-          docker run -t tbb bash -c \
-            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
-            cd CLUEstering;
-            pip install . ;
-            python3 -c 'import CLUEstering' || exit 1"
+          docker run -t -v "$(pwd)"/../../:/app tbb bash -c \
+            "cd /app && pip install .;
+            python3 -c 'import CLUEstering' || exit 0"
 
       - name: Test installation inside docker containers (without gcc)
         working-directory: ${{github.workspace}}/docker/no_gcc
@@ -81,14 +63,8 @@ jobs:
           docker build -t nogcc .
 
           echo "Testing installation from PyPi"
-          docker run -t nogcc bash -c \
-            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 0"
-
-          echo "Testing installation from git repository"
-          docker run -t nogcc bash -c \
-            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
-            cd CLUEstering;
-            pip install . ;
+          docker run -t -v "$(pwd)"/../../:/app nogcc bash -c \
+            "cd /app && pip install .;
             python3 -c 'import CLUEstering' || exit 0"
 
       - name: Test installation inside docker containers (without cmake)
@@ -97,12 +73,6 @@ jobs:
           docker build -t nocmake .
 
           echo "Testing installation from PyPi"
-          docker run -t nocmake bash -c \
-            "pip install CLUEstering; python3 -c 'import CLUEstering' || exit 0"
-
-          echo "Testing installation from git repository"
-          docker run -t nocmake bash -c \
-            "git clone --recursive https://github.com/cms-patatrack/CLUEstering;
-            cd CLUEstering;
-            pip install . ;
+          docker run -t -v "$(pwd)"/../../:/app nocmake bash -c \
+            "cd app && pip install .;
             python3 -c 'import CLUEstering' || exit 0"

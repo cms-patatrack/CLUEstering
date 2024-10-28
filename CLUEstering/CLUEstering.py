@@ -224,13 +224,14 @@ class clusterer:
 
         Points with a density lower than rhoc can't be seeds, can only be followers
         or outliers.
-    outlier : float
-        Multiplicative increment of dc_ for getting the region over which the followers of a
-        point are searched.
+    dm: float
+        Similar to dc, it's a spatial parameter that determines the region over
+        which the followers of a point are searched.
 
-        While dc_ determines the size of the search box in which the neighbors of a point are
-        searched when calculating its local density, when looking for followers while trying
-        to find potential seeds the size of the search box is given by dm = dc_ * outlier.
+        While dc_ determines the size of the search box in which the neighbors
+        of a point are searched when calculating its local density, when
+        looking for followers while trying to find potential seeds the size of
+        the search box is given by dm.
     ppbin : int
         Average number of points to be found in each tile.
     kernel : Algo.kernel
@@ -243,10 +244,12 @@ class clusterer:
         Execution time of the algorithm, expressed in nanoseconds.
     """
 
-    def __init__(self, dc_: float, rhoc_: float, outlier_: float, ppbin: int = 10):
+    def __init__(self, dc_: float, rhoc_: float, dm_: [float, None] = None, ppbin: int = 10):
         self.dc_ = dc_
         self.rhoc = rhoc_
-        self.outlier = outlier_
+        self.dm = dm_
+        if dm_ is None:
+            self.dm = dc_
         self.ppbin = ppbin
 
         # Initialize attributes
@@ -261,10 +264,13 @@ class clusterer:
         self.elapsed_time = 0.
 
     def set_params(self, dc: float, rhoc: float,
-                   outlier: float, ppbin: int = 128) -> None:
+                   dm: [float, None], ppbin: int = 128) -> None:
         self.dc_ = dc
         self.rhoc = rhoc
-        self.outlier = outlier
+        if dm is not None:
+            self.dm = dm
+        else:
+            self.dm = dc
         self.ppbin = ppbin
 
     def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
@@ -504,18 +510,18 @@ class clusterer:
             if len(parameters) != 1:
                 raise ValueError("Wrong number of parameters. The flat kernel"
                                  + " requires 1 parameter.")
-            self.kernel = CLUE_Convolutional_Kernels.FlatKernel(parameters[0])
+            self.kernel = clue_kernels.FlatKernel(parameters[0])
         elif choice == "exp":
             if len(parameters) != 2:
                 raise ValueError("Wrong number of parameters. The exponential"
                                  + " kernel requires 2 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.ExponentialKernel(parameters[0],
+            self.kernel = clue_kernels.ExponentialKernel(parameters[0],
                                                                        parameters[1])
         elif choice == "gaus":
             if len(parameters) != 3:
                 raise ValueError("Wrong number of parameters. The gaussian" +
                                  " kernel requires 3 parameters.")
-            self.kernel = CLUE_Convolutional_Kernels.GaussinKernel(parameters[0],
+            self.kernel = clue_kernels.GaussianKernel(parameters[0],
                                                                    parameters[1],
                                                                    parameters[2])
         elif choice == "custom":
@@ -673,12 +679,12 @@ class clusterer:
             data = self._partial_dimension_dataset(dimensions)
         start = time.time_ns()
         if backend == "cpu serial":
-            cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.outlier, self.ppbin,
+            cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.dm, self.ppbin,
                                                     data, self.clust_data.weight, self.kernel,
                                                     self.clust_data.n_dim, block_size, device_id)
         elif backend == "cpu tbb":
             if tbb_found:
-                cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.outlier,
+                cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.dm,
                                                      self.ppbin, data, self.clust_data.weight,
                                                      self.kernel, self.clust_data.n_dim, block_size,
                                                      device_id)
@@ -687,7 +693,7 @@ class clusterer:
 
         elif backend == "gpu cuda":
             if cuda_found:
-                cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.outlier,
+                cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.dm,
                                                       self.ppbin, data, self.clust_data.weight,
                                                       self.kernel, self.clust_data.n_dim, block_size,
                                                       device_id)
@@ -696,7 +702,7 @@ class clusterer:
 
         elif backend == "gpu hip":
             if hip_found:
-                cluster_id_is_seed = gpu_hip.mainRun(self.dc_, self.rhoc, self.outlier,
+                cluster_id_is_seed = gpu_hip.mainRun(self.dc_, self.rhoc, self.dm,
                                                      self.ppbin, data, self.clust_data.weight,
                                                      self.kernel, self.clust_data.n_dim, block_size,
                                                      device_id)
