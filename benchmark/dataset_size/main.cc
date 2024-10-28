@@ -101,7 +101,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   }
 };  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 
-namespace clue = ALPAKA_ACCELERATOR_NAMESPACE;
+namespace cluetest = ALPAKA_ACCELERATOR_NAMESPACE;
 
 int main(int argc, char* argv[]) {
   auto min = std::stoi(argv[1]);
@@ -135,7 +135,7 @@ int main(int argc, char* argv[]) {
         std::vector<float> times(nruns);
         for (auto i = 0; i < nruns; ++i) {
           start = std::chrono::high_resolution_clock::now();
-          clue::run(file);
+          cluetest::run(file);
           end = std::chrono::high_resolution_clock::now();
           auto duration =
               std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
