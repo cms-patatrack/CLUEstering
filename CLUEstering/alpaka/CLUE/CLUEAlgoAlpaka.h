@@ -152,7 +152,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         tiles_working_div, KernelResetTiles{}, m_tiles, nTiles, nPerDim));
-
     alpaka::memcpy(
         queue_,
         d_points.coords,
@@ -198,7 +197,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     /* m_domains.data(), */
                                                     dc_,
                                                     h_points.n));
-
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelCalculateNearestHigher{},
@@ -208,7 +206,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     dm_,
                                                     dc_,
                                                     h_points.n));
-
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelFindClusters<Ndim>{},
@@ -224,6 +221,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     const Idx grid_size_seeds = cms::alpakatools::divide_up_by(reserve, block_size);
     auto working_div_seeds =
         cms::alpakatools::make_workdiv<Acc1D>(grid_size_seeds, block_size);
+	
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div_seeds,
                                                     KernelAssignClusters<Ndim>{},
@@ -249,6 +247,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         d_points.nearest_higher,
         static_cast<uint32_t>(h_points.n));
 #endif
+
     alpaka::memcpy(
         queue_,
         cms::alpakatools::make_host_view(h_points.m_clusterIndex.data(), h_points.n),
@@ -265,4 +264,5 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     return {h_points.m_clusterIndex, h_points.m_isSeed};
   }
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+
 #endif
