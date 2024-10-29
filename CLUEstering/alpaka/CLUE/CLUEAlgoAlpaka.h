@@ -17,6 +17,7 @@
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
+#include "../DataFormats/alpaka/Vector.h"
 #include "CLUEAlpakaKernels.h"
 #include "ConvolutionalKernel.h"
 
@@ -34,7 +35,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
 
     TilesAlpaka<Ndim>* m_tiles;
-    VecArray<int32_t, max_seeds>* m_seeds;
+    clue::Vector<int32_t>* m_seeds;
     VecArray<int32_t, max_followers>* m_followers;
 
     template <typename KernelType>
@@ -55,10 +56,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Buffers
     std::optional<cms::alpakatools::device_buffer<Device, TilesAlpaka<Ndim>>> d_tiles;
-    std::optional<
-        cms::alpakatools::device_buffer<Device,
-                                        cms::alpakatools::VecArray<int32_t, max_seeds>>>
-        d_seeds;
+    std::optional<cms::alpakatools::device_buffer<Device, int32_t[]>> d_seeds;
+    std::optional<cms::alpakatools::device_buffer<Device, clue::Vector<int32_t>>> seeds;
     std::optional<cms::alpakatools::device_buffer<
         Device,
         cms::alpakatools::VecArray<int32_t, max_followers>[]>>
@@ -109,14 +108,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <typename TAcc, uint8_t Ndim>
   void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
     d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
-    d_seeds = cms::alpakatools::make_device_buffer<
-        cms::alpakatools::VecArray<int32_t, max_seeds>>(queue_);
+    d_seeds = cms::alpakatools::make_device_buffer<int32_t[]>(queue_, reserve);
     d_followers = cms::alpakatools::make_device_buffer<
         cms::alpakatools::VecArray<int32_t, max_followers>[]>(queue_, reserve);
 
+    seeds = cms::alpakatools::make_device_buffer<clue::Vector<int32_t>>(queue_);
+    // resize the seeds vector
+    (*seeds)->resize((*d_seeds).data(), reserve);
+
     // Copy to the public pointers
     m_tiles = (*d_tiles).data();
-    m_seeds = (*d_seeds).data();
+    m_seeds = (*seeds).data();
     m_followers = (*d_followers).data();
   }
 
@@ -151,7 +153,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         tiles_working_div, KernelResetTiles{}, m_tiles, nTiles, nPerDim));
-
     alpaka::memcpy(
         queue_,
         d_points.coords,
@@ -160,6 +161,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         queue_,
         d_points.weight,
         cms::alpakatools::make_host_view(h_points.m_weight.data(), h_points.n));
+    alpaka::memset(queue_, *d_seeds, 0x00);
 
     auto tileIds = cms::alpakatools::make_device_buffer<uint32_t[]>(queue_, h_points.n);
     // now we scan the dataset and calculate the tile of each point
@@ -232,7 +234,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     /* m_domains.data(), */
                                                     dc_,
                                                     h_points.n));
-
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelCalculateNearestHigher{},
@@ -242,7 +243,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     dm_,
                                                     dc_,
                                                     h_points.n));
-
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelFindClusters<Ndim>{},
@@ -255,9 +255,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     h_points.n));
 
     // We change the working division when assigning the clusters
-    const Idx grid_size_seeds = cms::alpakatools::divide_up_by(max_seeds, block_size);
+    const Idx grid_size_seeds = cms::alpakatools::divide_up_by(reserve, block_size);
     auto working_div_seeds =
         cms::alpakatools::make_workdiv<Acc1D>(grid_size_seeds, block_size);
+
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div_seeds,
                                                     KernelAssignClusters<Ndim>{},
@@ -268,6 +269,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
 
+#ifdef DEBUG
     alpaka::memcpy(queue_,
                    cms::alpakatools::make_host_view(h_points.m_rho.data(), h_points.n),
                    d_points.rho,
@@ -281,6 +283,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
         cms::alpakatools::make_host_view(h_points.m_nearestHigher.data(), h_points.n),
         d_points.nearest_higher,
         static_cast<uint32_t>(h_points.n));
+#endif
+
     alpaka::memcpy(
         queue_,
         cms::alpakatools::make_host_view(h_points.m_clusterIndex.data(), h_points.n),
@@ -297,4 +301,5 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     return {h_points.m_clusterIndex, h_points.m_isSeed};
   }
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+
 #endif
