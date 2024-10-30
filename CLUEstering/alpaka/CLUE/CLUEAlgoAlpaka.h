@@ -183,8 +183,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                                     h_points.n));
     auto temp = cms::alpakatools::make_device_buffer<uint32_t[]>(queue_, h_points.n);
     ++nTiles;
+	auto test_grid_size = cms::alpakatools::divide_up_by(nTiles, 32);
+	auto test_work_div = cms::alpakatools::make_workdiv<Acc1D>(test_grid_size, 32);
     alpaka::enqueue(queue_,
-                    alpaka::createTaskKernel<Acc1D>(tiles_working_div,
+                    alpaka::createTaskKernel<Acc1D>(test_work_div,
                                                     KernelOffsetAccumulate{},
                                                     m_tiles->offset(),
                                                     temp.data(),
@@ -196,6 +198,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         work_div, KernelZeroBuffer{}, temp.data(), h_points.n));
+
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(work_div,
                                                     KernelFillAssociator{},
