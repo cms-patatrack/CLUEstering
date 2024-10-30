@@ -71,14 +71,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   struct KernelOffsetAccumulate {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  uint32_t* offset,
+                                  const uint32_t* offset,
                                   uint32_t* temp,
                                   uint32_t n_tiles) const {
       cms::alpakatools::for_each_element_in_grid(
           acc, n_tiles, [&](uint32_t tile) -> void {
             temp[tile] = accumulate(acc, offset, tile);
           });
-    }
+	}
   };
 
   struct KernelFillAssociator {
