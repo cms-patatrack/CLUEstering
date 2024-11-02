@@ -17,7 +17,6 @@
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
-#include "../DataFormats/alpaka/Vector.h"
 #include "CLUEAlpakaKernels.h"
 #include "ConvolutionalKernel.h"
 
@@ -35,7 +34,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
 
     TilesAlpaka<Ndim>* m_tiles;
-    clue::Vector<int32_t>* m_seeds;
+    VecArray<int32_t, reserve>* m_seeds;
     VecArray<int32_t, max_followers>* m_followers;
 
     template <typename KernelType>
@@ -56,8 +55,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Buffers
     std::optional<cms::alpakatools::device_buffer<Device, TilesAlpaka<Ndim>>> d_tiles;
-    std::optional<cms::alpakatools::device_buffer<Device, int32_t[]>> d_seeds;
-    std::optional<cms::alpakatools::device_buffer<Device, clue::Vector<int32_t>>> seeds;
+    std::optional<cms::alpakatools::device_buffer<Device, VecArray<int32_t, reserve>>>
+        d_seeds;
     std::optional<cms::alpakatools::device_buffer<
         Device,
         cms::alpakatools::VecArray<int32_t, max_followers>[]>>
@@ -108,17 +107,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   template <typename TAcc, uint8_t Ndim>
   void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
     d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
-    d_seeds = cms::alpakatools::make_device_buffer<int32_t[]>(queue_, reserve);
-    d_followers = cms::alpakatools::make_device_buffer<
-        cms::alpakatools::VecArray<int32_t, max_followers>[]>(queue_, reserve);
-
-    seeds = cms::alpakatools::make_device_buffer<clue::Vector<int32_t>>(queue_);
-    // resize the seeds vector
-    (*seeds)->resize((*d_seeds).data(), reserve);
+    d_seeds = cms::alpakatools::make_device_buffer<VecArray<int32_t, reserve>>(queue_);
+    d_followers =
+        cms::alpakatools::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue_,
+                                                                                 reserve);
 
     // Copy to the public pointers
     m_tiles = (*d_tiles).data();
-    m_seeds = (*seeds).data();
+    m_seeds = (*d_seeds).data();
     m_followers = (*d_followers).data();
   }
 

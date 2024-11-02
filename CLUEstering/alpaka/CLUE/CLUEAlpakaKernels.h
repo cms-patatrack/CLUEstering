@@ -9,7 +9,6 @@
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
 #include "../DataFormats/alpaka/AlpakaVecArray.h"
-#include "../DataFormats/alpaka/Vector.h"
 #include "ConvolutionalKernel.h"
 
 using cms::alpakatools::VecArray;
@@ -344,7 +343,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   struct KernelFindClusters {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  clue::Vector<int32_t>* seeds,
+                                  VecArray<int32_t, reserve>* seeds,
                                   VecArray<int32_t, max_followers>* followers,
                                   PointsView<Ndim>* dev_points,
                                   float dm,
@@ -379,7 +378,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   struct KernelAssignClusters {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  clue::Vector<int32_t>* seeds,
+                                  VecArray<int32_t, reserve>* seeds,
                                   VecArray<int, max_followers>* followers,
                                   PointsView<Ndim>* dev_points) const {
       const auto& seeds_0{*seeds};
