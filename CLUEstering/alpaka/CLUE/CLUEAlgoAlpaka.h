@@ -17,7 +17,6 @@
 #include "../DataFormats/Points.h"
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
-#include "../DataFormats/alpaka/Vector.h"
 #include "CLUEAlpakaKernels.h"
 #include "ConvolutionalKernel.h"
 
