@@ -9,7 +9,6 @@
 #include "../DataFormats/alpaka/PointsAlpaka.h"
 #include "../DataFormats/alpaka/TilesAlpaka.h"
 #include "../DataFormats/alpaka/AlpakaVecArray.h"
-#include "../DataFormats/alpaka/Vector.h"
 #include "ConvolutionalKernel.h"
 
 using cms::alpakatools::VecArray;
