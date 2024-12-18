@@ -11,14 +11,14 @@
 #include "alpakaFwd.h"
 #include "getDeviceIndex.h"
 
-namespace cms::alpakatools {
+namespace clue {
 
   namespace detail {
 
     template <typename TDevice, typename TQueue>
     auto allocate_device_allocators() {
       using Allocator = CachingAllocator<TDevice, TQueue>;
-      auto const& devices = cms::alpakatools::enumerate<alpaka::Pltf<TDevice>>();
+      auto const& devices = clue::enumerate<alpaka::Pltf<TDevice>>();
       auto const size = devices.size();
 
       // allocate the storage for the objects
@@ -59,12 +59,12 @@ namespace cms::alpakatools {
 
     std::vector<TDevice> devs = alpaka::getDevs<alpaka::Pltf<TDevice>>();
 
-    assert(index < cms::alpakatools::enumerate<alpaka::Pltf<TDevice>>().size());
+    assert(index < clue::enumerate<alpaka::Pltf<TDevice>>().size());
 
     // the public interface is thread safe
     return allocators[index];
   }
 
-}  // namespace cms::alpakatools
+}  // namespace clue
 
 #endif  // AlpakaCore_getDeviceCachingAllocator_h

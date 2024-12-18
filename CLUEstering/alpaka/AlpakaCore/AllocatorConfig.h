@@ -3,7 +3,7 @@
 
 #include <limits>
 
-namespace cms::alpakatools {
+namespace clue {
 
   namespace config {
 
@@ -26,6 +26,6 @@ namespace cms::alpakatools {
 
   }  // namespace config
 
-}  // namespace cms::alpakatools
+}  // namespace clue
 
 #endif  // AlpakaCore_AllocatorConfig_h

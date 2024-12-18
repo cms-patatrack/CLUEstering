@@ -9,7 +9,7 @@
 #include "alpakaConfig.h"
 #include "getDeviceIndex.h"
 
-namespace cms::alpakatools {
+namespace clue {
 
   // alpaka host device
   inline const alpaka_common::DevHost host =
@@ -36,6 +36,6 @@ namespace cms::alpakatools {
     return devices;
   }
 
-}  // namespace cms::alpakatools
+}  // namespace clue
 
 #endif  // AlpakaCore_alpakaDevices_h

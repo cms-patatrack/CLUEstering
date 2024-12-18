@@ -7,7 +7,7 @@
 #include "../initialise.h"
 #include "../demangle.h"
 
-namespace cms::alpakatools {
+namespace clue {
 
   template <typename TPlatform>
   void initialise() {
@@ -29,4 +29,4 @@ namespace cms::alpakatools {
   // explicit template instantiation definition
   template void initialise<ALPAKA_ACCELERATOR_NAMESPACE::Platform>();
 
-}  // namespace cms::alpakatools
+}  // namespace clue

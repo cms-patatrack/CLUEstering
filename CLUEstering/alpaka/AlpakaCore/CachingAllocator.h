@@ -20,7 +20,7 @@
 
 // Inspired by cub::CachingDeviceAllocator
 
-namespace cms::alpakatools {
+namespace clue {
 
   namespace detail {
 
@@ -439,6 +439,6 @@ namespace cms::alpakatools {
     const bool debug_;
   };
 
-}  // namespace cms::alpakatools
+}  // namespace clue
 
 #endif  // AlpakaCore_CachingAllocator_h

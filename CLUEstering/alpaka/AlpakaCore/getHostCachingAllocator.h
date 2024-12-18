@@ -5,7 +5,7 @@
 #include "CachingAllocator.h"
 #include "alpakaDevices.h"
 
-namespace cms::alpakatools {
+namespace clue {
 
   template <typename TQueue>
   inline CachingAllocator<alpaka_common::DevHost, TQueue>& getHostCachingAllocator() {
@@ -24,6 +24,6 @@ namespace cms::alpakatools {
     return allocator;
   }
 
-}  // namespace cms::alpakatools
+}  // namespace clue
 
 #endif  // AlpakaCore_getHostCachingAllocator_h

@@ -3,7 +3,7 @@
 
 #include "alpakaConfig.h"
 
-namespace cms::alpakatools {
+namespace clue {
 
   template <typename TPlatform>
   void initialise();
@@ -22,6 +22,6 @@ namespace cms::alpakatools {
   extern template void initialise<alpaka_rocm_async::Platform>();
 #endif
 
-}  // namespace cms::alpakatools
+}  // namespace clue
 
 #endif  // AlpakaCore_initialise_h
