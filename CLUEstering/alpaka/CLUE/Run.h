@@ -17,7 +17,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                     const Kernel& kernel,
                                     Queue queue_,
                                     size_t block_size) {
-    CLUEAlgoAlpaka<Acc1D, Ndim> algo(dc, rhoc, dm, pPBin, queue_);
+    CLUEAlgoAlpaka<Ndim> algo(dc, rhoc, dm, pPBin, queue_);
 
     // Create the host and device points
     Points<Ndim> h_points(coordinates, weight);
