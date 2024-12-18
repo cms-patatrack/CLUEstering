@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_alpakaWorkDiv_h
-#define AlpakaCore_alpakaWorkDiv_h
+
+#pragma once
 
 #include <algorithm>
 #include <utility>
@@ -420,4 +420,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_alpakaWorkDiv_h

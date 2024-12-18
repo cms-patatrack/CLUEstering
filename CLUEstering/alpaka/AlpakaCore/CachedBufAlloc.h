@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_CachedBufAlloc_h
-#define AlpakaCore_CachedBufAlloc_h
+
+#pragma once
 
 #include <alpaka/alpaka.hpp>
 
@@ -171,4 +171,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_CachedBufAlloc_h

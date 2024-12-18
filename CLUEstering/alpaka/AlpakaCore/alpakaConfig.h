@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_alpakaConfig_h
-#define AlpakaCore_alpakaConfig_h
+
+#pragma once
 
 #include "alpakaFwd.h"
 
@@ -149,4 +149,3 @@ namespace alpaka_omp2_async {
 #define ALPAKA_ACCELERATOR_NAMESPACE alpaka_omp2_async
 #endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ASYNC_BACKEND
 
-#endif  // AlpakaCore_alpakaConfig_h

@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_alpakaDevices_h
-#define AlpakaCore_alpakaDevices_h
+
+#pragma once
 
 #include <cassert>
 #include <vector>
@@ -38,4 +38,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_alpakaDevices_h

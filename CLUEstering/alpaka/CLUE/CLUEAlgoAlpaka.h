@@ -1,5 +1,5 @@
-#ifndef CLUE_Algo_Alpaka_h
-#define CLUE_Algo_Alpaka_h
+
+#pragma once
 
 #include <algorithm>
 #include <alpaka/mem/view/Traits.hpp>
@@ -261,4 +261,3 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   }
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 
-#endif

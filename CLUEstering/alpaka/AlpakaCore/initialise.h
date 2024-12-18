@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_initialise_h
-#define AlpakaCore_initialise_h
+
+#pragma once
 
 #include "alpakaConfig.h"
 
@@ -24,4 +24,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_initialise_h

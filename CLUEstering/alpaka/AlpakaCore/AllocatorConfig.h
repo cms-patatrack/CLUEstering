@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_AllocatorConfig_h
-#define AlpakaCore_AllocatorConfig_h
+
+#pragma once
 
 #include <limits>
 
@@ -27,5 +27,3 @@ namespace clue {
   }  // namespace config
 
 }  // namespace clue
-
-#endif  // AlpakaCore_AllocatorConfig_h

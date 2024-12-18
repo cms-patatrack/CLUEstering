@@ -1,5 +1,5 @@
-#ifndef Tiles_Alpaka_h
-#define Tiles_Alpaka_h
+
+#pragma once
 
 #include <alpaka/core/Common.hpp>
 #include <alpaka/alpaka.hpp>
@@ -138,4 +138,3 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 
-#endif

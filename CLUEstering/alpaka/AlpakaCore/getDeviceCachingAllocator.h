@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_getDeviceCachingAllocator_h
-#define AlpakaCore_getDeviceCachingAllocator_h
+
+#pragma once
 
 #include <optional>
 #include <mutex>
@@ -67,4 +67,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_getDeviceCachingAllocator_h

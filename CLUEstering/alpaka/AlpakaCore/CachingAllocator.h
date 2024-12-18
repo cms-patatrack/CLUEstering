@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_CachingAllocator_h
-#define AlpakaCore_CachingAllocator_h
+
+#pragma once
 
 #include <cassert>
 #include <exception>
@@ -441,4 +441,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_CachingAllocator_h

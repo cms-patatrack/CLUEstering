@@ -1,5 +1,5 @@
-#ifndef points_h
-#define points_h
+
+#pragma once
 
 #include "alpaka/AlpakaVecArray.h"
 #include <vector>
@@ -46,4 +46,3 @@ struct Points {
   size_t n;
 };
 
-#endif

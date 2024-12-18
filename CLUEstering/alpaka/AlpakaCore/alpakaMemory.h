@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_alpakaMemory_h
-#define AlpakaCore_alpakaMemory_h
+
+#pragma once
 
 #include <type_traits>
 #include "initialise.h"

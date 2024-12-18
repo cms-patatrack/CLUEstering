@@ -1,5 +1,5 @@
-#ifndef AlpakaVecArray_h
-#define AlpakaVecArray_h
+
+#pragma once
 
 //
 // Author: Felice Pantaleo, CERN
@@ -98,4 +98,3 @@ namespace clue {
 
 }  // end namespace clue
 
-#endif  // AlpakaVecArray_h

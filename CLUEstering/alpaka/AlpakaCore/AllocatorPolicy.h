@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_AllocatorPolicy_h
-#define AlpakaCore_AllocatorPolicy_h
+
+#pragma once
 
 #include <alpaka/alpaka.hpp>
 
@@ -49,4 +49,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_AllocatorPolicy_h

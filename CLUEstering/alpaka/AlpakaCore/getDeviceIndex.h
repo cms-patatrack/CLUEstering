@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_getDeviceIndex_h
-#define AlpakaCore_getDeviceIndex_h
+
+#pragma once
 
 #include <alpaka/alpaka.hpp>
 
@@ -30,4 +30,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_getDeviceIndex_h

@@ -1,5 +1,5 @@
-#ifndef HeterogeneousCore_AlpakaCore_chooseDevice_h
-#define HeterogeneousCore_AlpakaCore_chooseDevice_h
+
+#pragma once
 
 #include "alpakaConfig.h"
 #include "alpakaDevices.h"
@@ -20,4 +20,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // HeterogeneousCore_AlpakaCore_chooseDevice_h

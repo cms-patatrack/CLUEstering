@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_getHostCachingAllocator_h
-#define AlpakaCore_getHostCachingAllocator_h
+
+#pragma once
 
 #include "AllocatorConfig.h"
 #include "CachingAllocator.h"
@@ -26,4 +26,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_getHostCachingAllocator_h

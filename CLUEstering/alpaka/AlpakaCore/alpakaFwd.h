@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_alpakaFwd_h
-#define AlpakaCore_alpakaFwd_h
+
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -97,4 +97,3 @@ namespace alpaka {
 
 }  // namespace alpaka
 
-#endif  // AlpakaCore_alpakaFwd_h

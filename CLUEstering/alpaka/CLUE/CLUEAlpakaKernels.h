@@ -1,5 +1,5 @@
-#ifndef CLUE_Alpaka_Kernels_h
-#define CLUE_Alpaka_Kernels_h
+
+#pragma once
 
 #include <alpaka/core/Common.hpp>
 #include <chrono>
@@ -351,4 +351,3 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 
-#endif

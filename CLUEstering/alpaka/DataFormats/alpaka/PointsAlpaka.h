@@ -1,5 +1,5 @@
-#ifndef Points_Alpaka_h
-#define Points_Alpaka_h
+
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -74,4 +74,3 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
 
-#endif
