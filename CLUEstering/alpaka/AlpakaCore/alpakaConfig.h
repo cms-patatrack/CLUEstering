@@ -34,15 +34,6 @@ namespace alpaka_common {
 
 }  // namespace alpaka_common
 
-// trick to force expanding ALPAKA_ACCELERATOR_NAMESPACE before stringification inside DEFINE_FWK_MODULE
-#define DEFINE_FWK_ALPAKA_MODULE2(name) DEFINE_FWK_MODULE(name)
-#define DEFINE_FWK_ALPAKA_MODULE(name) \
-  DEFINE_FWK_ALPAKA_MODULE2(ALPAKA_ACCELERATOR_NAMESPACE::name)
-
-#define DEFINE_FWK_ALPAKA_EVENTSETUP_MODULE2(name) DEFINE_FWK_EVENTSETUP_MODULE(name)
-#define DEFINE_FWK_ALPAKA_EVENTSETUP_MODULE(name) \
-  DEFINE_FWK_ALPAKA_EVENTSETUP_MODULE2(ALPAKA_ACCELERATOR_NAMESPACE::name)
-
 #ifdef ALPAKA_ACC_GPU_CUDA_PRESENT
 namespace alpaka_cuda_async {
   using namespace alpaka_common;
