@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_alpakaDevices_h
-#define AlpakaCore_alpakaDevices_h
+
+#pragma once
 
 #include <cassert>
 #include <vector>
@@ -9,7 +9,7 @@
 #include "alpakaConfig.h"
 #include "getDeviceIndex.h"
 
-namespace cms::alpakatools {
+namespace clue {
 
   // alpaka host device
   inline const alpaka_common::DevHost host =
@@ -36,6 +36,4 @@ namespace cms::alpakatools {
     return devices;
   }
 
-}  // namespace cms::alpakatools
-
-#endif  // AlpakaCore_alpakaDevices_h
+}  // namespace clue

@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_alpakaConfig_h
-#define AlpakaCore_alpakaConfig_h
+
+#pragma once
 
 #include "alpakaFwd.h"
 
@@ -33,15 +33,6 @@ namespace alpaka_common {
   using PltfHost = alpaka::PltfCpu;
 
 }  // namespace alpaka_common
-
-// trick to force expanding ALPAKA_ACCELERATOR_NAMESPACE before stringification inside DEFINE_FWK_MODULE
-#define DEFINE_FWK_ALPAKA_MODULE2(name) DEFINE_FWK_MODULE(name)
-#define DEFINE_FWK_ALPAKA_MODULE(name) \
-  DEFINE_FWK_ALPAKA_MODULE2(ALPAKA_ACCELERATOR_NAMESPACE::name)
-
-#define DEFINE_FWK_ALPAKA_EVENTSETUP_MODULE2(name) DEFINE_FWK_EVENTSETUP_MODULE(name)
-#define DEFINE_FWK_ALPAKA_EVENTSETUP_MODULE(name) \
-  DEFINE_FWK_ALPAKA_EVENTSETUP_MODULE2(ALPAKA_ACCELERATOR_NAMESPACE::name)
 
 #ifdef ALPAKA_ACC_GPU_CUDA_PRESENT
 namespace alpaka_cuda_async {
@@ -157,5 +148,3 @@ namespace alpaka_omp2_async {
 #ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ASYNC_BACKEND
 #define ALPAKA_ACCELERATOR_NAMESPACE alpaka_omp2_async
 #endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ASYNC_BACKEND
-
-#endif  // AlpakaCore_alpakaConfig_h

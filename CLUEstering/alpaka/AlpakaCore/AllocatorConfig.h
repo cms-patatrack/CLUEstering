@@ -1,9 +1,9 @@
-#ifndef AlpakaCore_AllocatorConfig_h
-#define AlpakaCore_AllocatorConfig_h
+
+#pragma once
 
 #include <limits>
 
-namespace cms::alpakatools {
+namespace clue {
 
   namespace config {
 
@@ -26,6 +26,4 @@ namespace cms::alpakatools {
 
   }  // namespace config
 
-}  // namespace cms::alpakatools
-
-#endif  // AlpakaCore_AllocatorConfig_h
+}  // namespace clue

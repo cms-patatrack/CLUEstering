@@ -1,9 +1,9 @@
-#ifndef AlpakaCore_getDeviceIndex_h
-#define AlpakaCore_getDeviceIndex_h
+
+#pragma once
 
 #include <alpaka/alpaka.hpp>
 
-namespace cms::alpakatools {
+namespace clue {
 
   // generic interface, for DevOacc and DevOmp5
   template <typename Device>
@@ -28,6 +28,4 @@ namespace cms::alpakatools {
   }
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED
 
-}  // namespace cms::alpakatools
-
-#endif  // AlpakaCore_getDeviceIndex_h
+}  // namespace clue

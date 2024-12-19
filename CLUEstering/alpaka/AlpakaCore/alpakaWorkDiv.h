@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_alpakaWorkDiv_h
-#define AlpakaCore_alpakaWorkDiv_h
+
+#pragma once
 
 #include <algorithm>
 #include <utility>
@@ -10,7 +10,7 @@
 
 using namespace alpaka_common;
 
-namespace cms::alpakatools {
+namespace clue {
 
   /*********************************************
    *              WORKDIV CREATION
@@ -418,6 +418,4 @@ namespace cms::alpakatools {
     return isNextStrideElementValid;
   }
 
-}  // namespace cms::alpakatools
-
-#endif  // AlpakaCore_alpakaWorkDiv_h
+}  // namespace clue

@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_CachingAllocator_h
-#define AlpakaCore_CachingAllocator_h
+
+#pragma once
 
 #include <cassert>
 #include <exception>
@@ -20,7 +20,7 @@
 
 // Inspired by cub::CachingDeviceAllocator
 
-namespace cms::alpakatools {
+namespace clue {
 
   namespace detail {
 
@@ -439,6 +439,4 @@ namespace cms::alpakatools {
     const bool debug_;
   };
 
-}  // namespace cms::alpakatools
-
-#endif  // AlpakaCore_CachingAllocator_h
+}  // namespace clue

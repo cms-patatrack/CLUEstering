@@ -1,5 +1,5 @@
-#ifndef AlpakaCore_alpakaFwd_h
-#define AlpakaCore_alpakaFwd_h
+
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -96,5 +96,3 @@ namespace alpaka {
   class AccCpuOmp2Blocks;
 
 }  // namespace alpaka
-
-#endif  // AlpakaCore_alpakaFwd_h
