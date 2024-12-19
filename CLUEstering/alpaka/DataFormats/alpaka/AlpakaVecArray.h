@@ -5,7 +5,7 @@
 // Author: Felice Pantaleo, CERN
 //
 
-namespace cms::alpakatools {
+namespace clue {
 
   template <class T, int maxSize>
   struct VecArray {
@@ -96,6 +96,6 @@ namespace cms::alpakatools {
     T m_data[maxSize];
   };
 
-}  // end namespace cms::alpakatools
+}  // end namespace clue
 
 #endif  // AlpakaVecArray_h

@@ -12,7 +12,7 @@
 #include "../../AlpakaCore/alpakaMemory.h"
 #include "AlpakaVecArray.h"
 
-using cms::alpakatools::VecArray;
+using clue::VecArray;
 
 constexpr uint32_t max_tile_depth{1 << 10};
 constexpr uint32_t max_n_tiles{1 << 15};

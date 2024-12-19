@@ -11,7 +11,7 @@
 #include "../DataFormats/alpaka/AlpakaVecArray.h"
 #include "ConvolutionalKernel.h"
 
-using cms::alpakatools::VecArray;
+using clue::VecArray;
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
@@ -27,10 +27,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   TilesAlpaka<Ndim>* tiles,
                                   uint32_t nTiles,
                                   uint32_t nPerDim) const {
-      if (cms::alpakatools::once_per_grid(acc)) {
+      if (clue::once_per_grid(acc)) {
         tiles->resizeTiles(nTiles, nPerDim);
       }
-      cms::alpakatools::for_each_element_in_grid(
+      clue::for_each_element_in_grid(
           acc, nTiles, [&](uint32_t i) -> void { tiles->clear(i); });
     }
   };
@@ -40,7 +40,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int, max_followers>* d_followers,
                                   uint32_t n_points) const {
-      cms::alpakatools::for_each_element_in_grid(
+      clue::for_each_element_in_grid(
           acc, n_points, [&](uint32_t i) { d_followers[i].reset(); });
     }
   };
@@ -51,7 +51,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   PointsView<Ndim>* points,
                                   TilesAlpaka<Ndim>* tiles,
                                   uint32_t n_points) const {
-      cms::alpakatools::for_each_element_in_grid(
+      clue::for_each_element_in_grid(
           acc, n_points, [&](uint32_t i) { tiles->fill(acc, points->coords[i], i); });
     }
   };
@@ -122,7 +122,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
                                   float dc,
                                   uint32_t n_points) const {
-      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
+      clue::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         float rho_i{0.f};
         VecArray<float, Ndim> coords_i{dev_points->coords[i]};
 
@@ -234,7 +234,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   float dc,
                                   uint32_t n_points) const {
       float dm_squared{dm * dm};
-      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
+      clue::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         float delta_i{std::numeric_limits<float>::max()};
         int nh_i{-1};
         VecArray<float, Ndim> coords_i{dev_points->coords[i]};
@@ -284,7 +284,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   float d_c,
                                   float rho_c,
                                   uint32_t n_points) const {
-      cms::alpakatools::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
+      clue::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         // initialize cluster_index
         dev_points->cluster_index[i] = -1;
 
@@ -317,7 +317,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                                   PointsView<Ndim>* dev_points) const {
       const auto& seeds_0{*seeds};
       const auto n_seeds{seeds_0.size()};
-      cms::alpakatools::for_each_element_in_grid(acc, n_seeds, [&](uint32_t idx_cls) {
+      clue::for_each_element_in_grid(acc, n_seeds, [&](uint32_t idx_cls) {
         int local_stack[256] = {-1};
         int local_stack_size{};
 
