@@ -93,7 +93,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     const auto dc{1.5f}, rhoc{10.f}, outlier{1.5f};
     const auto pPBin{128};
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<2> algo(dc, rhoc, outlier, pPBin, queue_);
 
     const auto block_size{256};
     auto result =

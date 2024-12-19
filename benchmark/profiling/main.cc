@@ -21,7 +21,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
     const int pPBin{128};
-    CLUEAlgoAlpaka<Acc1D, 2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<2> algo(dc, rhoc, outlier, pPBin, queue_);
 
     const std::size_t block_size{256};
 	auto result = algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue_, block_size);
