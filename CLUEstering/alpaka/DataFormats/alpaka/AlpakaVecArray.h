@@ -97,4 +97,3 @@ namespace clue {
   };
 
 }  // end namespace clue
-

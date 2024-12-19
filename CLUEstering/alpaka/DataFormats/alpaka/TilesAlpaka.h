@@ -137,4 +137,3 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     VecArray<VecArray<uint32_t, max_tile_depth>, max_n_tiles> m_tiles;
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
-

@@ -45,4 +45,3 @@ struct Points {
 
   size_t n;
 };
-

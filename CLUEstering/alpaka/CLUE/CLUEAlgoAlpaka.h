@@ -55,11 +55,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // Buffers
     std::optional<clue::device_buffer<Device, TilesAlpaka<Ndim>>> d_tiles;
-    std::optional<clue::device_buffer<Device, VecArray<int32_t, reserve>>>
-        d_seeds;
-    std::optional<clue::device_buffer<
-        Device,
-        clue::VecArray<int32_t, max_followers>[]>>
+    std::optional<clue::device_buffer<Device, VecArray<int32_t, reserve>>> d_seeds;
+    std::optional<clue::device_buffer<Device, clue::VecArray<int32_t, max_followers>[]>>
         d_followers;
 
     // Private methods
@@ -109,8 +106,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     d_tiles = clue::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
     d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue_);
     d_followers =
-        clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue_,
-                                                                                 reserve);
+        clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue_, reserve);
 
     // Copy to the public pointers
     m_tiles = (*d_tiles).data();
@@ -132,30 +128,25 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     calculate_tile_size(min_max, tile_size, h_points, nPerDim);
 
     const auto device = alpaka::getDev(queue_);
-    alpaka::memcpy(
-        queue_,
-        clue::make_device_view(device, (*d_tiles)->minMax(), 2 * Ndim),
-        clue::make_host_view(min_max.data(), 2 * Ndim));
-    alpaka::memcpy(
-        queue_,
-        clue::make_device_view(device, (*d_tiles)->tileSize(), Ndim),
-        clue::make_host_view(tile_size, Ndim));
+    alpaka::memcpy(queue_,
+                   clue::make_device_view(device, (*d_tiles)->minMax(), 2 * Ndim),
+                   clue::make_host_view(min_max.data(), 2 * Ndim));
+    alpaka::memcpy(queue_,
+                   clue::make_device_view(device, (*d_tiles)->tileSize(), Ndim),
+                   clue::make_host_view(tile_size, Ndim));
     alpaka::wait(queue_);
 
     const Idx tiles_grid_size = clue::divide_up_by(nTiles, block_size);
-    const auto tiles_working_div =
-        clue::make_workdiv<Acc1D>(tiles_grid_size, block_size);
+    const auto tiles_working_div = clue::make_workdiv<Acc1D>(tiles_grid_size, block_size);
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(
                         tiles_working_div, KernelResetTiles{}, m_tiles, nTiles, nPerDim));
-    alpaka::memcpy(
-        queue_,
-        d_points.coords,
-        clue::make_host_view(h_points.m_coords.data(), h_points.n));
-    alpaka::memcpy(
-        queue_,
-        d_points.weight,
-        clue::make_host_view(h_points.m_weight.data(), h_points.n));
+    alpaka::memcpy(queue_,
+                   d_points.coords,
+                   clue::make_host_view(h_points.m_coords.data(), h_points.n));
+    alpaka::memcpy(queue_,
+                   d_points.weight,
+                   clue::make_host_view(h_points.m_weight.data(), h_points.n));
     alpaka::memset(queue_, *d_seeds, 0x00);
 
     // Define the working division
@@ -215,8 +206,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     // We change the working division when assigning the clusters
     const Idx grid_size_seeds = clue::divide_up_by(reserve, block_size);
-    auto working_div_seeds =
-        clue::make_workdiv<Acc1D>(grid_size_seeds, block_size);
+    auto working_div_seeds = clue::make_workdiv<Acc1D>(grid_size_seeds, block_size);
 
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div_seeds,
@@ -237,18 +227,16 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
                    clue::make_host_view(h_points.m_delta.data(), h_points.n),
                    d_points.delta,
                    static_cast<uint32_t>(h_points.n));
-    alpaka::memcpy(
-        queue_,
-        clue::make_host_view(h_points.m_nearestHigher.data(), h_points.n),
-        d_points.nearest_higher,
-        static_cast<uint32_t>(h_points.n));
+    alpaka::memcpy(queue_,
+                   clue::make_host_view(h_points.m_nearestHigher.data(), h_points.n),
+                   d_points.nearest_higher,
+                   static_cast<uint32_t>(h_points.n));
 #endif
 
-    alpaka::memcpy(
-        queue_,
-        clue::make_host_view(h_points.m_clusterIndex.data(), h_points.n),
-        d_points.cluster_index,
-        static_cast<uint32_t>(h_points.n));
+    alpaka::memcpy(queue_,
+                   clue::make_host_view(h_points.m_clusterIndex.data(), h_points.n),
+                   d_points.cluster_index,
+                   static_cast<uint32_t>(h_points.n));
     alpaka::memcpy(queue_,
                    clue::make_host_view(h_points.m_isSeed.data(), h_points.n),
                    d_points.is_seed,
@@ -260,4 +248,3 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     return {h_points.m_clusterIndex, h_points.m_isSeed};
   }
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
-

@@ -18,8 +18,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   public:
     PointsAlpaka() = delete;
     explicit PointsAlpaka(Queue stream, int n_points)
-        : coords{clue::make_device_buffer<VecArray<float, Ndim>[]>(stream,
-                                                                               n_points)},
+        : coords{clue::make_device_buffer<VecArray<float, Ndim>[]>(stream, n_points)},
           weight{clue::make_device_buffer<float[]>(stream, n_points)},
           rho{clue::make_device_buffer<float[]>(stream, n_points)},
           delta{clue::make_device_buffer<float[]>(stream, n_points)},
@@ -73,4 +72,3 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     clue::device_buffer<Device, PointsAlpakaView> view_dev;
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
-
