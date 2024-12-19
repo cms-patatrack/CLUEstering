@@ -269,4 +269,3 @@ namespace clue {
 
 }  // namespace clue
 
-#endif  // AlpakaCore_alpakaMemory_h

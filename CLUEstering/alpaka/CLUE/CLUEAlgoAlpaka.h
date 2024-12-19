@@ -105,7 +105,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   }
 
   template <uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
+  void CLUEAlgoAlpaka<Ndim>::init_device(Queue queue_) {
     d_tiles = clue::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
     d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue_);
     d_followers =
