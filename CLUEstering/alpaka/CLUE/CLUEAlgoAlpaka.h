@@ -24,7 +24,7 @@ using cms::alpakatools::VecArray;
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
-  template <typename TAcc, uint8_t Ndim>
+  template <uint8_t Ndim>
   class CLUEAlgoAlpaka {
   public:
     CLUEAlgoAlpaka() = delete;
@@ -77,11 +77,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   };
 
   // Private methods
-  template <typename TAcc, uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::calculate_tile_size(CoordinateExtremes<Ndim>& min_max,
-                                                       float* tile_sizes,
-                                                       const Points<Ndim>& h_points,
-                                                       uint32_t nPerDim) {
+  template <uint8_t Ndim>
+  void CLUEAlgoAlpaka<Ndim>::calculate_tile_size(CoordinateExtremes<Ndim>& min_max,
+                                                 float* tile_sizes,
+                                                 const Points<Ndim>& h_points,
+                                                 uint32_t nPerDim) {
     for (size_t dim{}; dim != Ndim; ++dim) {
       const float dimMax{
           (*std::max_element(h_points.m_coords.begin(),
@@ -104,8 +104,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     }
   }
 
-  template <typename TAcc, uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::init_device(Queue queue_) {
+  template <uint8_t Ndim>
+  void CLUEAlgoAlpaka<Ndim>::init_device(Queue queue_) {
     d_tiles = cms::alpakatools::make_device_buffer<TilesAlpaka<Ndim>>(queue_);
     d_seeds = cms::alpakatools::make_device_buffer<VecArray<int32_t, reserve>>(queue_);
     d_followers =
@@ -118,11 +118,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     m_followers = (*d_followers).data();
   }
 
-  template <typename TAcc, uint8_t Ndim>
-  void CLUEAlgoAlpaka<TAcc, Ndim>::setup(const Points<Ndim>& h_points,
-                                         PointsAlpaka<Ndim>& d_points,
-                                         Queue queue_,
-                                         std::size_t block_size) {
+  template <uint8_t Ndim>
+  void CLUEAlgoAlpaka<Ndim>::setup(const Points<Ndim>& h_points,
+                                   PointsAlpaka<Ndim>& d_points,
+                                   Queue queue_,
+                                   std::size_t block_size) {
     // calculate the number of tiles and their size
     const auto nTiles{std::ceil(h_points.n / static_cast<float>(pointsPerTile_))};
     const auto nPerDim{std::ceil(std::pow(nTiles, 1. / Ndim))};
@@ -167,9 +167,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   }
 
   // Public methods
-  template <typename TAcc, uint8_t Ndim>
+  template <uint8_t Ndim>
   template <typename KernelType>
-  std::vector<std::vector<int>> CLUEAlgoAlpaka<TAcc, Ndim>::make_clusters(
+  std::vector<std::vector<int>> CLUEAlgoAlpaka<Ndim>::make_clusters(
       Points<Ndim>& h_points,
       PointsAlpaka<Ndim>& d_points,
       const KernelType& kernel,
