@@ -16,18 +16,33 @@ elseif(${CMAKE_BUILD_TYPE} STREQUAL "Release")
   set(CMAKE_CXX_FLAGS "-O2")
 endif()
 
-# include alpaka extern subfolder
-include_directories(extern/alpaka/include)
 # include pybind11 extern subfolder
 set(PYBIND11_FINDPYTHON ON)
 set(PYBIND11_PYTHON_VERSION ">=3.8")
 add_subdirectory(extern/pybind11)
 
-find_package(Boost 1.75.0)
+include(FetchContent)
 
+find_package(alpaka)
+if (NOT alpaka_FOUND)
+	FetchContent_Declare(
+		alpaka
+		GIT_REPOSITORY https://github.com/alpaka-group/alpaka.git
+		GIT_TAG develop
+	)
+
+	FetchContent_GetProperties(alpaka)
+	if(NOT alpaka_POPULATED)
+		FetchContent_Populate(alpaka)
+	endif()
+	set(alpaka_PATH ./build/_deps/alpaka-src/include)
+else()
+	set(alpaka_PATH ${alpaka_INCLUDE_DIRS})
+endif()
+
+find_package(Boost 1.75.0)
 # if boost is not found, it's fetched from the official boost repository
 if(NOT Boost_FOUND)
-  include(FetchContent)
   FetchContent_Declare(
     boost
     URL https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz
@@ -55,6 +70,7 @@ execute_process(COMMAND mkdir -p ./CLUEstering/lib)
 # Convolutional Kernels compile convolutional kernel module
 pybind11_add_module(CLUE_Convolutional_Kernels SHARED
                     ./CLUEstering/alpaka/BindingModules/binding_kernels.cc)
+target_include_directories(CLUE_Convolutional_Kernels PRIVATE ${alpaka_PATH})
 # link boost
 target_link_libraries(CLUE_Convolutional_Kernels PRIVATE ${Boost_LIBRARIES})
 target_include_directories(CLUE_Convolutional_Kernels PRIVATE ${Boost_PATH})
@@ -79,6 +95,7 @@ endforeach()
 # CPU Serial compile cpu serial module
 pybind11_add_module(CLUE_CPU_Serial SHARED
                     ./CLUEstering/alpaka/BindingModules/binding_cpu.cc)
+target_include_directories(CLUE_CPU_Serial PRIVATE ${alpaka_PATH})
 # link boost
 target_link_libraries(CLUE_CPU_Serial PRIVATE ${Boost_LIBRARIES})
 target_include_directories(CLUE_CPU_Serial PRIVATE ${Boost_PATH})
@@ -106,6 +123,7 @@ if(NOT ${SERIAL_ONLY})
     # compile cpu tbb module
     pybind11_add_module(CLUE_CPU_TBB SHARED
                         ./CLUEstering/alpaka/BindingModules/binding_cpu_tbb.cc)
+	target_include_directories(CLUE_CPU_TBB PRIVATE ${alpaka_PATH})
     target_link_libraries(CLUE_CPU_TBB PRIVATE ${Boost_LIBRARIES})
     target_include_directories(CLUE_CPU_TBB PRIVATE ${Boost_PATH})
     target_compile_options(
@@ -149,6 +167,7 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
     # compile gpu cuda module
     pybind11_add_module(CLUE_GPU_CUDA SHARED
                         ./CLUEstering/alpaka/BindingModules/binding_gpu_cuda.cc)
+	target_include_directories(CLUE_GPU_CUDA PRIVATE ${alpaka_PATH})
     # link boost
     target_link_libraries(CLUE_GPU_CUDA PRIVATE ${Boost_LIBRARIES})
     target_include_directories(CLUE_GPU_CUDA PRIVATE ${Boost_PATH})
@@ -191,6 +210,7 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
     # compile gpu hip module
     pybind11_add_module(CLUE_GPU_HIP SHARED
                         ./CLUEstering/alpaka/BindingModules/binding_gpu_hip.cc)
+	target_include_directories(CLUE_GPU_HIP PRIVATE ${alpaka_PATH})
     # link boost
     target_link_libraries(CLUE_GPU_HIP PRIVATE ${Boost_LIBRARIES})
     target_include_directories(CLUE_GPU_HIP PRIVATE ${Boost_PATH})
