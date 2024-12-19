@@ -48,4 +48,3 @@ namespace clue {
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED
 
 }  // namespace clue
-

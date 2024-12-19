@@ -37,4 +37,3 @@ namespace clue {
   }
 
 }  // namespace clue
-

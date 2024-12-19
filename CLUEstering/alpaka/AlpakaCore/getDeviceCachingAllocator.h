@@ -66,4 +66,3 @@ namespace clue {
   }
 
 }  // namespace clue
-

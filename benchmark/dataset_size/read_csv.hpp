@@ -13,7 +13,8 @@
 using clue::VecArray;
 
 template <typename T, size_t NDim>
-std::pair<std::vector<VecArray<T, NDim>>, std::vector<T>> read_csv(const std::string& file_path) {
+std::pair<std::vector<VecArray<T, NDim>>, std::vector<T>> read_csv(
+    const std::string& file_path) {
   std::vector<VecArray<T, NDim>> coords;
   std::vector<T> weights;
 

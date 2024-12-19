@@ -268,4 +268,3 @@ namespace clue {
   }
 
 }  // namespace clue
-

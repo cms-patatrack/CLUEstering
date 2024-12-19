@@ -170,4 +170,3 @@ namespace clue {
   }
 
 }  // namespace clue
-

@@ -96,4 +96,3 @@ namespace alpaka {
   class AccCpuOmp2Blocks;
 
 }  // namespace alpaka
-

@@ -23,4 +23,3 @@ namespace clue {
 #endif
 
 }  // namespace clue
-

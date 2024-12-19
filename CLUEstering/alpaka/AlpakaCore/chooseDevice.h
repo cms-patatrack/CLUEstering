@@ -19,4 +19,3 @@ namespace clue {
   }
 
 }  // namespace clue
-

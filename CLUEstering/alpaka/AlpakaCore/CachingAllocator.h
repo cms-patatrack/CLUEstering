@@ -440,4 +440,3 @@ namespace clue {
   };
 
 }  // namespace clue
-
