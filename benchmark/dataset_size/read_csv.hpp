@@ -10,7 +10,7 @@
 
 #include "DataFormats/alpaka/AlpakaVecArray.h"
 
-using cms::alpakatools::VecArray;
+using clue::VecArray;
 
 template <typename T, size_t NDim>
 std::pair<std::vector<VecArray<T, NDim>>, std::vector<T>> read_csv(const std::string& file_path) {
