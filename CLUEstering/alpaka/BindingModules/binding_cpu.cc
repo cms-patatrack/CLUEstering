@@ -34,7 +34,6 @@ namespace alpaka_serial_sync {
                                         int Ndim,
                                         size_t block_size,
                                         size_t device_id) {
-	const auto platformAcc = alpaka::Platform<Acc1D>{};
     const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, device_id);
 
     // Create the queue
