@@ -1,5 +1,5 @@
-#ifndef convolutional_kernels_h
-#define convolutional_kernels_h
+
+#pragma once
 
 #include <alpaka/core/Common.hpp>
 #include <alpaka/alpaka.hpp>
@@ -80,5 +80,3 @@ public:
     }
   }
 };
-
-#endif

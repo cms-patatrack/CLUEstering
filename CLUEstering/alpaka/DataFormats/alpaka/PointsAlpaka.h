@@ -1,5 +1,5 @@
-#ifndef Points_Alpaka_h
-#define Points_Alpaka_h
+
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -9,7 +9,7 @@
 #include "AlpakaVecArray.h"
 #include "../Points.h"
 
-using cms::alpakatools::VecArray;
+using clue::VecArray;
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
@@ -18,16 +18,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   public:
     PointsAlpaka() = delete;
     explicit PointsAlpaka(Queue stream, int n_points)
-        : coords{cms::alpakatools::make_device_buffer<VecArray<float, Ndim>[]>(stream,
-                                                                               n_points)},
-          weight{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
-          rho{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
-          delta{cms::alpakatools::make_device_buffer<float[]>(stream, n_points)},
-          nearest_higher{cms::alpakatools::make_device_buffer<int[]>(stream, n_points)},
-          cluster_index{cms::alpakatools::make_device_buffer<int[]>(stream, n_points)},
-          is_seed{cms::alpakatools::make_device_buffer<int[]>(stream, n_points)},
-          view_dev{cms::alpakatools::make_device_buffer<PointsAlpakaView>(stream)} {
-      auto view_host = cms::alpakatools::make_host_buffer<PointsAlpakaView>(stream);
+        : coords{clue::make_device_buffer<VecArray<float, Ndim>[]>(stream, n_points)},
+          weight{clue::make_device_buffer<float[]>(stream, n_points)},
+          rho{clue::make_device_buffer<float[]>(stream, n_points)},
+          delta{clue::make_device_buffer<float[]>(stream, n_points)},
+          nearest_higher{clue::make_device_buffer<int[]>(stream, n_points)},
+          cluster_index{clue::make_device_buffer<int[]>(stream, n_points)},
+          is_seed{clue::make_device_buffer<int[]>(stream, n_points)},
+          view_dev{clue::make_device_buffer<PointsAlpakaView>(stream)} {
+      auto view_host = clue::make_host_buffer<PointsAlpakaView>(stream);
       view_host->coords = coords.data();
       view_host->weight = weight.data();
       view_host->rho = rho.data();
@@ -48,13 +47,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     // Destructor
     ~PointsAlpaka() = default;
 
-    cms::alpakatools::device_buffer<Device, VecArray<float, Ndim>[]> coords;
-    cms::alpakatools::device_buffer<Device, float[]> weight;
-    cms::alpakatools::device_buffer<Device, float[]> rho;
-    cms::alpakatools::device_buffer<Device, float[]> delta;
-    cms::alpakatools::device_buffer<Device, int[]> nearest_higher;
-    cms::alpakatools::device_buffer<Device, int[]> cluster_index;
-    cms::alpakatools::device_buffer<Device, int[]> is_seed;
+    clue::device_buffer<Device, VecArray<float, Ndim>[]> coords;
+    clue::device_buffer<Device, float[]> weight;
+    clue::device_buffer<Device, float[]> rho;
+    clue::device_buffer<Device, float[]> delta;
+    clue::device_buffer<Device, int[]> nearest_higher;
+    clue::device_buffer<Device, int[]> cluster_index;
+    clue::device_buffer<Device, int[]> is_seed;
 
     class PointsAlpakaView {
     public:
@@ -70,8 +69,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     PointsAlpakaView* view() { return view_dev.data(); }
 
   private:
-    cms::alpakatools::device_buffer<Device, PointsAlpakaView> view_dev;
+    clue::device_buffer<Device, PointsAlpakaView> view_dev;
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE
-
-#endif

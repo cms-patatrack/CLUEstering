@@ -1,9 +1,9 @@
-#ifndef AlpakaCore_initialise_h
-#define AlpakaCore_initialise_h
+
+#pragma once
 
 #include "alpakaConfig.h"
 
-namespace cms::alpakatools {
+namespace clue {
 
   template <typename TPlatform>
   void initialise();
@@ -22,6 +22,4 @@ namespace cms::alpakatools {
   extern template void initialise<alpaka_rocm_async::Platform>();
 #endif
 
-}  // namespace cms::alpakatools
-
-#endif  // AlpakaCore_initialise_h
+}  // namespace clue

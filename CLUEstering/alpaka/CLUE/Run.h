@@ -1,5 +1,5 @@
-#ifndef run_h
-#define run_h
+
+#pragma once
 
 #include <vector>
 
@@ -27,5 +27,3 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   }
 
 };  // namespace ALPAKA_ACCELERATOR_NAMESPACE
-
-#endif

@@ -1,12 +1,12 @@
-#ifndef AlpakaCore_CachedBufAlloc_h
-#define AlpakaCore_CachedBufAlloc_h
+
+#pragma once
 
 #include <alpaka/alpaka.hpp>
 
 #include "getDeviceCachingAllocator.h"
 #include "getHostCachingAllocator.h"
 
-namespace cms::alpakatools {
+namespace clue {
 
   namespace traits {
 
@@ -169,6 +169,4 @@ namespace cms::alpakatools {
         allocCachedBuf(dev, queue, extent);
   }
 
-}  // namespace cms::alpakatools
-
-#endif  // AlpakaCore_CachedBufAlloc_h
+}  // namespace clue

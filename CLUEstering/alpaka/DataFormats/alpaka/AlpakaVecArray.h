@@ -1,11 +1,11 @@
-#ifndef AlpakaVecArray_h
-#define AlpakaVecArray_h
+
+#pragma once
 
 //
 // Author: Felice Pantaleo, CERN
 //
 
-namespace cms::alpakatools {
+namespace clue {
 
   template <class T, int maxSize>
   struct VecArray {
@@ -96,6 +96,4 @@ namespace cms::alpakatools {
     T m_data[maxSize];
   };
 
-}  // end namespace cms::alpakatools
-
-#endif  // AlpakaVecArray_h
+}  // end namespace clue
