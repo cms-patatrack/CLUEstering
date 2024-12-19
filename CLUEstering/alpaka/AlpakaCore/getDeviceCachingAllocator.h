@@ -18,7 +18,7 @@ namespace clue {
     template <typename TDevice, typename TQueue>
     auto allocate_device_allocators() {
       using Allocator = CachingAllocator<TDevice, TQueue>;
-      auto const& devices = clue::enumerate<alpaka::Pltf<TDevice>>();
+      auto const& devices = clue::enumerate<alpaka::Platform<TDevice>>();
       auto const size = devices.size();
 
       // allocate the storage for the objects
@@ -57,9 +57,9 @@ namespace clue {
 
     size_t const index = getDeviceIndex(device);
 
-    std::vector<TDevice> devs = alpaka::getDevs<alpaka::Pltf<TDevice>>();
+    std::vector<TDevice> devs = alpaka::getDevs<alpaka::Platform<TDevice>>();
 
-    assert(index < clue::enumerate<alpaka::Pltf<TDevice>>().size());
+    assert(index < clue::enumerate<alpaka::Platform<TDevice>>().size());
 
     // the public interface is thread safe
     return allocators[index];
