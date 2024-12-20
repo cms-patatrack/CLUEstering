@@ -13,7 +13,7 @@
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE {
   void run(const std::string& input_file) {
-    const auto dev_acc = alpaka::getDevByIdx<Acc1D>(0u);
+    const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
     Queue queue_(dev_acc);
     const auto data{read_csv<float, 2>(input_file)};
     Points<2> h_points(data.first, data.second);
