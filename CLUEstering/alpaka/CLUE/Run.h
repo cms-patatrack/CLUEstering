@@ -5,7 +5,7 @@
 
 #include "CLUEAlgoAlpaka.h"
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE {
+namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <uint8_t Ndim, typename Kernel>
   std::vector<std::vector<int>> run(float dc,
@@ -26,4 +26,4 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     return algo.make_clusters(h_points, d_points, kernel, queue_, block_size);
   }
 
-};  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+};  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
