@@ -34,7 +34,7 @@ namespace alpaka_common {
 
 }  // namespace alpaka_common
 
-#ifdef ALPAKA_ACC_GPU_CUDA_PRESENT
+#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
 namespace alpaka_cuda_async {
   using namespace alpaka_common;
 
@@ -51,13 +51,13 @@ namespace alpaka_cuda_async {
 
 }  // namespace alpaka_cuda_async
 
-#endif  // ALPAKA_ACC_GPU_CUDA_PRESENT
+#endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
 
-#ifdef ALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND
+#ifndef ALPAKA_ACCELERATOR_NAMESPACE
 #define ALPAKA_ACCELERATOR_NAMESPACE alpaka_cuda_async
 #endif  // ALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND
 
-#ifdef ALPAKA_ACC_GPU_HIP_PRESENT
+#ifdef ALPAKA_ACC_GPU_HIP_ENABLED
 namespace alpaka_rocm_async {
   using namespace alpaka_common;
 
@@ -74,13 +74,13 @@ namespace alpaka_rocm_async {
 
 }  // namespace alpaka_rocm_async
 
-#endif  // ALPAKA_ACC_GPU_HIP_PRESENT
+#endif  // ALPAKA_ACC_GPU_HIP_ENABLED
 
 #ifdef ALPAKA_ACC_GPU_HIP_ASYNC_BACKEND
 #define ALPAKA_ACCELERATOR_NAMESPACE alpaka_rocm_async
 #endif  // ALPAKA_ACC_GPU_HIP_ASYNC_BACKEND
 
-#ifdef ALPAKA_ACC_CPU_B_SEQ_T_SEQ_PRESENT
+#ifdef ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
 namespace alpaka_serial_sync {
   using namespace alpaka_common;
 
@@ -97,13 +97,13 @@ namespace alpaka_serial_sync {
 
 }  // namespace alpaka_serial_sync
 
-#endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_PRESENT
+#endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
 
 #ifdef ALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND
 #define ALPAKA_ACCELERATOR_NAMESPACE alpaka_serial_sync
 #endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND
 
-#ifdef ALPAKA_ACC_CPU_B_TBB_T_SEQ_PRESENT
+#ifdef ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
 namespace alpaka_tbb_async {
   using namespace alpaka_common;
 
@@ -120,13 +120,13 @@ namespace alpaka_tbb_async {
 
 }  // namespace alpaka_tbb_async
 
-#endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_PRESENT
+#endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
 
 #ifdef ALPAKA_ACC_CPU_B_TBB_T_SEQ_ASYNC_BACKEND
 #define ALPAKA_ACCELERATOR_NAMESPACE alpaka_tbb_async
 #endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_ASYNC_BACKEND
 
-#ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_PRESENT
+#ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
 namespace alpaka_omp2_async {
   using namespace alpaka_common;
 
@@ -143,7 +143,7 @@ namespace alpaka_omp2_async {
 
 }  // namespace alpaka_omp2_async
 
-#endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_PRESENT
+#endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
 
 #ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ASYNC_BACKEND
 #define ALPAKA_ACCELERATOR_NAMESPACE alpaka_omp2_async
