@@ -30,7 +30,7 @@ namespace alpaka_common {
 
   // host types
   using DevHost = alpaka::DevCpu;
-  using PlatformHost = alpaka::PltfCpu;
+  using PlatformHost = alpaka::PlatformCpu;
 
 }  // namespace alpaka_common
 
@@ -49,12 +49,9 @@ namespace alpaka_cuda_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_cuda_async
 }  // namespace alpaka_cuda_async
 
-#endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
-
-#ifndef ALPAKA_ACCELERATOR_NAMESPACE_CLUE
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_cuda_async
 #endif  // ALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND
 
 #ifdef ALPAKA_ACC_GPU_HIP_ENABLED
@@ -72,13 +69,10 @@ namespace alpaka_rocm_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_rocm_async
 }  // namespace alpaka_rocm_async
 
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED
-
-#ifdef ALPAKA_ACC_GPU_HIP_ASYNC_BACKEND
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_rocm_async
-#endif  // ALPAKA_ACC_GPU_HIP_ASYNC_BACKEND
 
 #ifdef ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
 namespace alpaka_serial_sync {
@@ -95,13 +89,10 @@ namespace alpaka_serial_sync {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_serial_sync
 }  // namespace alpaka_serial_sync
 
 #endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
-
-#ifdef ALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_serial_sync
-#endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND
 
 #ifdef ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
 namespace alpaka_tbb_async {
@@ -118,13 +109,10 @@ namespace alpaka_tbb_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_tbb_async
 }  // namespace alpaka_tbb_async
 
 #endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
-
-#ifdef ALPAKA_ACC_CPU_B_TBB_T_SEQ_ASYNC_BACKEND
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_tbb_async
-#endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_ASYNC_BACKEND
 
 #ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
 namespace alpaka_omp2_async {
@@ -141,10 +129,7 @@ namespace alpaka_omp2_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_omp2_async
 }  // namespace alpaka_omp2_async
 
 #endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
-
-#ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ASYNC_BACKEND
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_omp2_async
-#endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ASYNC_BACKEND
