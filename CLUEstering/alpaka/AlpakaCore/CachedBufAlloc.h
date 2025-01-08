@@ -91,7 +91,7 @@ namespace clue {
         auto deleter = [alloc = &allocator](TElem* ptr) { alloc->free(ptr); };
 
         return alpaka::BufCudaRt<TElem, TDim, TIdx>(
-            dev, reinterpret_cast<TElem*>(memPtr), std::move(deleter), pitchBytes, extent);
+            dev, reinterpret_cast<TElem*>(memPtr), std::move(deleter), extent, pitchBytes);
       }
     };
 

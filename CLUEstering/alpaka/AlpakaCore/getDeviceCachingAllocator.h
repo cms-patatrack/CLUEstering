@@ -57,7 +57,7 @@ namespace clue {
 
     size_t const index = getDeviceIndex(device);
 
-    std::vector<TDevice> devs = alpaka::getDevs<alpaka::Platform<TDevice>>();
+    std::vector<TDevice> devs = alpaka::getDevs(alpaka::Platform<TDevice>{});
 
     assert(index < clue::enumerate<alpaka::Platform<TDevice>>().size());
 
