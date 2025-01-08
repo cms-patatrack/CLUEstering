@@ -32,6 +32,10 @@ clust.cluster_plotter()
 </p>
 
 ## Installation
+### Dependencies
+The main dependencies of CLUEstering are [Boost](https://www.boost.org/) (version 1.75.0+) and [Alpaka](https://github.com/alpaka-group/alpaka).
+If alpaka is not found, it will be automatically fetched from the official repository, so it's not mandatory to install it manually.
+
 ### From source
 To install the library, first clone the repository recursively:
 ```shell
