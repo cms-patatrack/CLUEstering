@@ -22,7 +22,7 @@
 
 using clue::VecArray;
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE {
+namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <uint8_t Ndim>
   class CLUEAlgoAlpaka {
@@ -247,4 +247,4 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
 
     return {h_points.m_clusterIndex, h_points.m_isSeed};
   }
-}  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+}  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE

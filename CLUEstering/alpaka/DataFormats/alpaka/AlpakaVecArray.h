@@ -5,6 +5,8 @@
 // Author: Felice Pantaleo, CERN
 //
 
+#include <alpaka/alpaka.hpp>
+
 namespace clue {
 
   template <class T, int maxSize>

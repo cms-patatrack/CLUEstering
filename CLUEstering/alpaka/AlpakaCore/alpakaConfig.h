@@ -2,6 +2,7 @@
 #pragma once
 
 #include "alpakaFwd.h"
+#include <alpaka/alpaka.hpp>
 
 namespace alpaka_common {
 
@@ -30,15 +31,15 @@ namespace alpaka_common {
 
   // host types
   using DevHost = alpaka::DevCpu;
-  using PltfHost = alpaka::PltfCpu;
+  using PlatformHost = alpaka::PlatformCpu;
 
 }  // namespace alpaka_common
 
-#ifdef ALPAKA_ACC_GPU_CUDA_PRESENT
+#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
 namespace alpaka_cuda_async {
   using namespace alpaka_common;
 
-  using Platform = alpaka::PltfCudaRt;
+  using Platform = alpaka::PlatformCudaRt;
   using Device = alpaka::DevCudaRt;
   using Queue = alpaka::QueueCudaRtNonBlocking;
   using Event = alpaka::EventCudaRt;
@@ -49,19 +50,16 @@ namespace alpaka_cuda_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_cuda_async
 }  // namespace alpaka_cuda_async
 
-#endif  // ALPAKA_ACC_GPU_CUDA_PRESENT
-
-#ifdef ALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND
-#define ALPAKA_ACCELERATOR_NAMESPACE alpaka_cuda_async
 #endif  // ALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND
 
-#ifdef ALPAKA_ACC_GPU_HIP_PRESENT
+#ifdef ALPAKA_ACC_GPU_HIP_ENABLED
 namespace alpaka_rocm_async {
   using namespace alpaka_common;
 
-  using Platform = alpaka::PltfHipRt;
+  using Platform = alpaka::PlatformHipRt;
   using Device = alpaka::DevHipRt;
   using Queue = alpaka::QueueHipRtNonBlocking;
   using Event = alpaka::EventHipRt;
@@ -72,19 +70,16 @@ namespace alpaka_rocm_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_rocm_async
 }  // namespace alpaka_rocm_async
 
-#endif  // ALPAKA_ACC_GPU_HIP_PRESENT
+#endif  // ALPAKA_ACC_GPU_HIP_ENABLED
 
-#ifdef ALPAKA_ACC_GPU_HIP_ASYNC_BACKEND
-#define ALPAKA_ACCELERATOR_NAMESPACE alpaka_rocm_async
-#endif  // ALPAKA_ACC_GPU_HIP_ASYNC_BACKEND
-
-#ifdef ALPAKA_ACC_CPU_B_SEQ_T_SEQ_PRESENT
+#ifdef ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
 namespace alpaka_serial_sync {
   using namespace alpaka_common;
 
-  using Platform = alpaka::PltfCpu;
+  using Platform = alpaka::PlatformCpu;
   using Device = alpaka::DevCpu;
   using Queue = alpaka::QueueCpuBlocking;
   using Event = alpaka::EventCpu;
@@ -95,19 +90,16 @@ namespace alpaka_serial_sync {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_serial_sync
 }  // namespace alpaka_serial_sync
 
-#endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_PRESENT
+#endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
 
-#ifdef ALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND
-#define ALPAKA_ACCELERATOR_NAMESPACE alpaka_serial_sync
-#endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_SYNC_BACKEND
-
-#ifdef ALPAKA_ACC_CPU_B_TBB_T_SEQ_PRESENT
+#ifdef ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
 namespace alpaka_tbb_async {
   using namespace alpaka_common;
 
-  using Platform = alpaka::PltfCpu;
+  using Platform = alpaka::PlatformCpu;
   using Device = alpaka::DevCpu;
   using Queue = alpaka::QueueCpuNonBlocking;
   using Event = alpaka::EventCpu;
@@ -118,19 +110,16 @@ namespace alpaka_tbb_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_tbb_async
 }  // namespace alpaka_tbb_async
 
-#endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_PRESENT
+#endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
 
-#ifdef ALPAKA_ACC_CPU_B_TBB_T_SEQ_ASYNC_BACKEND
-#define ALPAKA_ACCELERATOR_NAMESPACE alpaka_tbb_async
-#endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_ASYNC_BACKEND
-
-#ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_PRESENT
+#ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
 namespace alpaka_omp2_async {
   using namespace alpaka_common;
 
-  using Platform = alpaka::PltfCpu;
+  using Platform = alpaka::PlatformCpu;
   using Device = alpaka::DevCpu;
   using Queue = alpaka::QueueCpuBlocking;
   using Event = alpaka::EventCpu;
@@ -141,10 +130,7 @@ namespace alpaka_omp2_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
+#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_omp2_async
 }  // namespace alpaka_omp2_async
 
-#endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_PRESENT
-
-#ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ASYNC_BACKEND
-#define ALPAKA_ACCELERATOR_NAMESPACE alpaka_omp2_async
-#endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ASYNC_BACKEND
+#endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED

@@ -83,7 +83,7 @@ void to_csv(const TimeMeasures& measures, const std::string& filename) {
   file.close();
 }
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE {
+namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   void run(const std::string& input_file) {
     const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
     Queue queue_(dev_acc);
@@ -99,9 +99,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     auto result =
         algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue_, block_size);
   }
-};  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+};  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
 
-namespace cluetest = ALPAKA_ACCELERATOR_NAMESPACE;
+namespace cluetest = ALPAKA_ACCELERATOR_NAMESPACE_CLUE;
 
 int main(int argc, char* argv[]) {
   auto min = std::stoi(argv[1]);
