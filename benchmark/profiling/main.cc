@@ -11,7 +11,7 @@
 
 #include "read_csv.hpp"
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE {
+namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   void run(const std::string& input_file) {
     const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
     Queue queue_(dev_acc);
@@ -24,11 +24,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     CLUEAlgoAlpaka<2> algo(dc, rhoc, outlier, pPBin, queue_);
 
     const std::size_t block_size{256};
-	auto result = algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue_, block_size);
+    auto result =
+        algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue_, block_size);
   }
-};  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+};  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
 
 int main(int argc, char* argv[]) {
   auto input_file{std::string(argv[1])};
-  ALPAKA_ACCELERATOR_NAMESPACE::run(input_file);
+  using ALPAKA_ACCELERATOR_NAMESPACE_CLUE;
+  run(input_file);
 }

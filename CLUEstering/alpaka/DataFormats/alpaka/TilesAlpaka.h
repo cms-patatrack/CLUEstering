@@ -17,7 +17,7 @@ using clue::VecArray;
 constexpr uint32_t max_tile_depth{1 << 10};
 constexpr uint32_t max_n_tiles{1 << 15};
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE {
+namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <uint8_t Ndim>
   class CoordinateExtremes {
@@ -136,4 +136,4 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
     float tile_size[Ndim];
     VecArray<VecArray<uint32_t, max_tile_depth>, max_n_tiles> m_tiles;
   };
-}  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+}  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE

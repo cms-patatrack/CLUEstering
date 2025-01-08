@@ -13,7 +13,7 @@
 
 using clue::VecArray;
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE {
+namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   constexpr int32_t max_followers{100};
   constexpr int32_t reserve{1000000};
@@ -349,4 +349,4 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
       });
     }
   };
-}  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+}  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE

@@ -11,7 +11,7 @@
 
 using clue::VecArray;
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE {
+namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <uint8_t Ndim>
   class PointsAlpaka {
@@ -71,4 +71,4 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE {
   private:
     clue::device_buffer<Device, PointsAlpakaView> view_dev;
   };
-}  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+}  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
