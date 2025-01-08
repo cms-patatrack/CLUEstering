@@ -34,7 +34,7 @@ jobs:
         python -m pip install scikit-learn 
         python -m pip install pandas
         python -m pip install matplotlib
-        apt install libboost-dev
+        apt install -y libboost-dev
     - name: Compile CLUEstering modules
       working-directory: ${{github.workspace}}
       run: |
