@@ -6,11 +6,7 @@
 #include <alpaka/vec/Vec.hpp>
 #include <cmath>
 #include <cstdint>
-#include <functional>
 #include <iostream>
-#include <sstream>
-#include <stdint.h>
-#include <string>
 #include <utility>
 #include <vector>
 

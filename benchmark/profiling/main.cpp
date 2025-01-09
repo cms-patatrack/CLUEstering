@@ -4,10 +4,10 @@
 #include <chrono>
 #include <vector>
 
-#include "CLUE/CLUEAlgoAlpaka.h"
-#include "CLUE/Run.h"
-#include "DataFormats/Points.h"
-#include "DataFormats/alpaka/PointsAlpaka.h"
+#include "CLUEstering/CLUEstering.hpp"
+#include "CLUEstering/CLUE/Run.hpp"
+#include "CLUEstering/DataFormats/Points.hpp"
+#include "CLUEstering/DataFormats/alpaka/PointsAlpaka.hpp"
 
 #include "read_csv.hpp"
 
