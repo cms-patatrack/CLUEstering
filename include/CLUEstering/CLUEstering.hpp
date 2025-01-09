@@ -14,11 +14,11 @@
 #include <utility>
 #include <vector>
 
-#include "../DataFormats/Points.h"
-#include "../DataFormats/alpaka/PointsAlpaka.h"
-#include "../DataFormats/alpaka/TilesAlpaka.h"
-#include "CLUEAlpakaKernels.h"
-#include "ConvolutionalKernel.h"
+#include "DataFormats/Points.h"
+#include "DataFormats/alpaka/PointsAlpaka.h"
+#include "DataFormats/alpaka/TilesAlpaka.h"
+#include "CLUE/CLUEAlpakaKernels.h"
+#include "CLUE/ConvolutionalKernel.h"
 
 using clue::VecArray;
 
