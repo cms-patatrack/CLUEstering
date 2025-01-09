@@ -4,10 +4,10 @@
 #include <cstdint>
 #include <memory>
 
-#include "../../AlpakaCore/alpakaConfig.h"
-#include "../../AlpakaCore/alpakaMemory.h"
-#include "AlpakaVecArray.h"
-#include "../Points.h"
+#include "../../AlpakaCore/alpakaConfig.hpp"
+#include "../../AlpakaCore/alpakaMemory.hpp"
+#include "AlpakaVecArray.hpp"
+#include "../Points.hpp"
 
 using clue::VecArray;
 

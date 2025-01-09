@@ -7,10 +7,10 @@
 #include <cstdint>
 #include <stdint.h>
 
-#include "../../AlpakaCore/alpakaWorkDiv.h"
-#include "../../AlpakaCore/alpakaConfig.h"
-#include "../../AlpakaCore/alpakaMemory.h"
-#include "AlpakaVecArray.h"
+#include "../../AlpakaCore/alpakaWorkDiv.hpp"
+#include "../../AlpakaCore/alpakaConfig.hpp"
+#include "../../AlpakaCore/alpakaMemory.hpp"
+#include "AlpakaVecArray.hpp"
 
 using clue::VecArray;
 

@@ -2,8 +2,7 @@
 #pragma once
 
 #include <vector>
-
-#include "CLUEAlgoAlpaka.h"
+#include "CLUEstering/CLUEstering.hpp"
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 

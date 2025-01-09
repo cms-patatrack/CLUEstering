@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16.0)
 project(Profiling LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -61,10 +61,10 @@ if(NOT DEFINED SERIAL_ONLY)
 endif()
 
 # include source directories
-include_directories(../../CLUEstering/alpaka/)
+include_directories(../../include/)
 
 # CPU Serial
-add_executable(serial.out main.cc)
+add_executable(serial.out main.cpp)
 target_include_directories(serial.out PRIVATE ${alpaka_PATH})
 # link boost
 target_link_libraries(serial.out PRIVATE ${Boost_LIBRARIES})
@@ -87,7 +87,7 @@ if(NOT ${SERIAL_ONLY})
   # CPU TBB
   if(TBB_FOUND)
     # compile cpu tbb module
-    add_executable(tbb.out main.cc)
+    add_executable(tbb.out main.cpp)
 	target_include_directories(tbb.out PRIVATE ${alpaka_PATH})
     target_link_libraries(tbb.out PRIVATE ${Boost_LIBRARIES})
     target_include_directories(tbb.out PRIVATE ${Boost_PATH})
@@ -118,16 +118,16 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
 
     # set the CUDA standard
     if(NOT DEFINED CMAKE_CUDA_STANDARD)
-      set(CMAKE_CUDA_STANDARD 17)
+      set(CMAKE_CUDA_STANDARD 20)
       set(CMAKE_CUDA_STANDARD_REQUIRED ON)
     endif()
 
     set(CMAKE_CUDA_FLAGS "-Wall -Wextra -g -O2")
 
     # compile the file with .cc extension using nvcc
-    set_source_files_properties(main.cc PROPERTIES LANGUAGE CUDA)
+    set_source_files_properties(main.cpp PROPERTIES LANGUAGE CUDA)
     # compile gpu cuda module
-    add_executable(cuda.out main.cc)
+    add_executable(cuda.out main.cpp)
 	target_include_directories(cuda.out PRIVATE ${alpaka_PATH})
     # link boost
     target_link_libraries(cuda.out PRIVATE ${Boost_LIBRARIES})
@@ -159,7 +159,7 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
 
   # set(hip_BASE "${hip_INCLUDE_DIRS}/..") # set the hipcc compiler
   # set(CMAKE_CXX_COMPILER "${hip_BASE}/bin/hipcc") # compile gpu hip module
-  # add_executable(hip.out main.cc) # link boost target_link_libraries(hip.out
+  # add_executable(hip.out main.cpp) # link boost target_link_libraries(hip.out
   # PRIVATE ${Boost_LIBRARIES}) target_include_directories(hip.out PRIVATE
   # ${Boost_PATH}) # alpaka build flags target_compile_options( hip.out PRIVATE
   # -DALPAKA_ACC_GPU_HIP_PRESENT -DALPAKA_ACC_GPU_HIP_ENABLED

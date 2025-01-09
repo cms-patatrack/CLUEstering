@@ -5,11 +5,11 @@
 #include <mutex>
 #include <vector>
 
-#include "AllocatorConfig.h"
-#include "CachingAllocator.h"
-#include "alpakaDevices.h"
-#include "alpakaFwd.h"
-#include "getDeviceIndex.h"
+#include "AllocatorConfig.hpp"
+#include "CachingAllocator.hpp"
+#include "alpakaDevices.hpp"
+#include "alpakaFwd.hpp"
+#include "getDeviceIndex.hpp"
 
 namespace clue {
 

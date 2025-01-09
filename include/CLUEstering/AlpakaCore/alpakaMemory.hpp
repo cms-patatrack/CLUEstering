@@ -2,7 +2,7 @@
 #pragma once
 
 #include <type_traits>
-#include "initialise.h"
+#include "initialise.hpp"
 
 #if __cplusplus >= 202002L
 namespace cms {
@@ -28,10 +28,10 @@ namespace cms {
 
 #include <alpaka/alpaka.hpp>
 
-#include "AllocatorPolicy.h"
-#include "CachedBufAlloc.h"
-#include "alpakaConfig.h"
-#include "alpakaDevices.h"
+#include "AllocatorPolicy.hpp"
+#include "CachedBufAlloc.hpp"
+#include "alpakaConfig.hpp"
+#include "alpakaDevices.hpp"
 
 namespace clue {
 
