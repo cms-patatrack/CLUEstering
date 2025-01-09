@@ -16,7 +16,7 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "alpakaDevices.h"
+#include "alpakaDevices.hpp"
 
 // Inspired by cub::CachingDeviceAllocator
 

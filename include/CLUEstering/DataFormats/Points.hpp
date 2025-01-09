@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "alpaka/AlpakaVecArray.h"
+#include "alpaka/AlpakaVecArray.hpp"
 #include <vector>
 
 using clue::VecArray;

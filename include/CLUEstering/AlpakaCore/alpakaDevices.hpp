@@ -6,8 +6,8 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "alpakaConfig.h"
-#include "getDeviceIndex.h"
+#include "alpakaConfig.hpp"
+#include "getDeviceIndex.hpp"
 
 namespace clue {
   // returns the alpaka accelerator platform

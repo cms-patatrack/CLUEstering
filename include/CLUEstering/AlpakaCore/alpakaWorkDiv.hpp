@@ -6,7 +6,7 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "alpakaConfig.h"
+#include "alpakaConfig.hpp"
 
 using namespace alpaka_common;
 

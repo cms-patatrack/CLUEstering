@@ -2,7 +2,7 @@
 #pragma once
 
 #include <vector>
-#include "CLUEstering/CLUEstering.h"
+#include "CLUEstering/CLUEstering.hpp"
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 

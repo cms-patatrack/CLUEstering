@@ -40,12 +40,14 @@ if(NOT DEFINED SERIAL_ONLY)
   set(SERIAL_ONLY OFF)
 endif()
 
+include_directories(include)
+
 # create lib directory in CLUEstering folder
 execute_process(COMMAND mkdir -p ./CLUEstering/lib)
 
 # Convolutional Kernels compile convolutional kernel module
 pybind11_add_module(CLUE_Convolutional_Kernels SHARED
-                    ./CLUEstering/alpaka/BindingModules/binding_kernels.cc)
+                    CLUEstering/BindingModules/binding_kernels.cpp)
 target_include_directories(
   CLUE_Convolutional_Kernels PRIVATE ${alpaka_SOURCE_DIR}/include
                                      ${Boost_SOURCE_DIR})
@@ -69,7 +71,7 @@ endforeach()
 
 # CPU Serial compile cpu serial module
 pybind11_add_module(CLUE_CPU_Serial SHARED
-                    ./CLUEstering/alpaka/BindingModules/binding_cpu.cc)
+                    CLUEstering/BindingModules/binding_cpu.cpp)
 target_include_directories(CLUE_CPU_Serial PRIVATE ${alpaka_SOURCE_DIR}/include
                                                    ${Boost_SOURCE_DIR})
 # alpaka build flags
@@ -95,7 +97,7 @@ if(NOT ${SERIAL_ONLY})
   if(TBB_FOUND)
     # compile cpu tbb module
     pybind11_add_module(CLUE_CPU_TBB SHARED
-                        ./CLUEstering/alpaka/BindingModules/binding_cpu_tbb.cc)
+                        CLUEstering/BindingModules/binding_cpu_tbb.cpp)
     target_include_directories(CLUE_CPU_TBB PRIVATE ${alpaka_SOURCE_DIR}/include
                                                     ${Boost_SOURCE_DIR})
     target_compile_options(
@@ -138,7 +140,7 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
       PROPERTIES LANGUAGE CUDA)
     # compile gpu cuda module
     pybind11_add_module(CLUE_GPU_CUDA SHARED
-                        ./CLUEstering/alpaka/BindingModules/binding_gpu_cuda.cc)
+                        CLUEstering/BindingModules/binding_gpu_cuda.cpp)
     target_include_directories(
       CLUE_GPU_CUDA PRIVATE ${alpaka_SOURCE_DIR}/include ${Boost_SOURCE_DIR})
     # set the cuda architectures
@@ -179,7 +181,7 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
     set(CMAKE_CXX_COMPILER "${hip_BASE}/bin/hipcc")
     # compile gpu hip module
     pybind11_add_module(CLUE_GPU_HIP SHARED
-                        ./CLUEstering/alpaka/BindingModules/binding_gpu_hip.cc)
+                        CLUEstering/BindingModules/binding_gpu_hip.cpp)
     target_include_directories(CLUE_GPU_HIP PRIVATE ${alpaka_SOURCE_DIR}/include
                                                     ${Boost_SOURCE_DIR})
     # alpaka build flags

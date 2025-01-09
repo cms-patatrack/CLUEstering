@@ -2,10 +2,10 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "../alpakaConfig.h"
-#include "../alpakaDevices.h"
-#include "../initialise.h"
-#include "../demangle.h"
+#include "../alpakaConfig.hpp"
+#include "../alpakaDevices.hpp"
+#include "../initialise.hpp"
+#include "../demangle.hpp"
 
 namespace clue {
 
