@@ -13,36 +13,34 @@
 using clue::VecArray;
 
 template <typename T, size_t NDim>
-std::pair<std::vector<VecArray<T, NDim>>, std::vector<T>> read_csv(
-    const std::string& file_path) {
-  std::vector<VecArray<T, NDim>> coords;
-  std::vector<T> weights;
-
+std::vector<T> read_csv(const std::string& file_path) {
   std::fstream file(file_path);
   if (!file.is_open()) {
     throw std::runtime_error("Could not open file: " + file_path);
   }
+  auto n_points = std::count(
+      std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n');
+
+  std::vector<float> coords((NDim + 1) * n_points);
 
   // discard the header
   std::string buffer;
   getline(file, buffer);
+  auto point_id = 0;
   while (getline(file, buffer)) {
     std::stringstream buffer_stream(buffer);
     std::string value;
 
-    VecArray<T, NDim> point;
-    for (size_t i{}; i < NDim; ++i) {
+    for (size_t dim = 0; dim <= NDim; ++dim) {
       getline(buffer_stream, value, ',');
-      point.push_back_unsafe(static_cast<T>(std::stod(value)));
+      coords[point_id + dim * n_points] = static_cast<T>(std::stod(value));
     }
-    coords.push_back(point);
-    getline(buffer_stream, value);
-    weights.push_back(static_cast<T>(std::stod(value)));
+    ++point_id;
   }
 
   file.close();
 
-  return std::make_pair(coords, weights);
+  return coords;
 }
 
 #endif

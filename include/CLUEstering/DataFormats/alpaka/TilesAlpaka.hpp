@@ -72,8 +72,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     }
 
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC inline constexpr int getGlobalBin(
-        const TAcc& acc, const VecArray<float, Ndim>& coords) const {
+    ALPAKA_FN_HOST_ACC inline constexpr int getGlobalBin(const TAcc& acc,
+                                                         const float* coords) const {
       int globalBin{getBin(acc, coords[0], 0)};
       for (int i{1}; i != Ndim; ++i) {
         globalBin += n_tiles_per_dim * getBin(acc, coords[i], i);
@@ -93,7 +93,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     template <typename TAcc>
     ALPAKA_FN_ACC inline constexpr void fill(const TAcc& acc,
-                                             const VecArray<float, Ndim>& coords,
+                                             const float* coords,
                                              int i) {
       m_tiles[getGlobalBin(acc, coords)].push_back(acc, i);
     }
