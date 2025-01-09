@@ -5,11 +5,11 @@
 #include <chrono>
 #include <cstdint>
 
-#include "../AlpakaCore/alpakaWorkDiv.h"
-#include "../DataFormats/alpaka/PointsAlpaka.h"
-#include "../DataFormats/alpaka/TilesAlpaka.h"
-#include "../DataFormats/alpaka/AlpakaVecArray.h"
-#include "ConvolutionalKernel.h"
+#include "../AlpakaCore/alpakaWorkDiv.hpp"
+#include "../DataFormats/alpaka/PointsAlpaka.hpp"
+#include "../DataFormats/alpaka/TilesAlpaka.hpp"
+#include "../DataFormats/alpaka/AlpakaVecArray.hpp"
+#include "ConvolutionalKernel.hpp"
 
 using clue::VecArray;
 

@@ -6,19 +6,15 @@
 #include <alpaka/vec/Vec.hpp>
 #include <cmath>
 #include <cstdint>
-#include <functional>
 #include <iostream>
-#include <sstream>
-#include <stdint.h>
-#include <string>
 #include <utility>
 #include <vector>
 
-#include "../DataFormats/Points.h"
-#include "../DataFormats/alpaka/PointsAlpaka.h"
-#include "../DataFormats/alpaka/TilesAlpaka.h"
-#include "CLUEAlpakaKernels.h"
-#include "ConvolutionalKernel.h"
+#include "DataFormats/Points.hpp"
+#include "DataFormats/alpaka/PointsAlpaka.hpp"
+#include "DataFormats/alpaka/TilesAlpaka.hpp"
+#include "CLUE/CLUEAlpakaKernels.hpp"
+#include "CLUE/ConvolutionalKernel.hpp"
 
 using clue::VecArray;
 

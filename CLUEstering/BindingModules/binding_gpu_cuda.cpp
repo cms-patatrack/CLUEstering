@@ -2,13 +2,13 @@
 #include <alpaka/alpaka.hpp>
 #include <vector>
 
-#include "../CLUE/Run.h"
+#include "Run.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
 
-namespace alpaka_tbb_async {
+namespace alpaka_cuda_async {
   void listDevices(const std::string& backend) {
     const char tab = '\t';
     const std::vector<Device> devices = alpaka::getDevs(alpaka::Platform<Acc1D>());
@@ -18,7 +18,7 @@ namespace alpaka_tbb_async {
     } else {
       std::cout << backend << " devices found: \n";
       for (size_t i{}; i < devices.size(); ++i) {
-        std::cout << tab << "Device " << i << ": " << alpaka::getName(devices[i]) << '\n';
+        std::cout << tab << "device " << i << ": " << alpaka::getName(devices[i]) << '\n';
       }
     }
   }
@@ -77,10 +77,10 @@ namespace alpaka_tbb_async {
     }
   }
 
-  PYBIND11_MODULE(CLUE_CPU_TBB, m) {
-    m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
+  PYBIND11_MODULE(CLUE_GPU_CUDA, m) {
+    m.doc() = "Binding of the CLUE algorithm running on CUDA GPUs";
 
-    m.def("listDevices", &listDevices, "List the available devices for the TBB backend");
+    m.def("listDevices", &listDevices, "List the available devices for the CUDA backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,
@@ -118,4 +118,4 @@ namespace alpaka_tbb_async {
                                   size_t>(&mainRun<GaussianKernel>),
           "mainRun");
   }
-};  // namespace alpaka_tbb_async
+};  // namespace alpaka_cuda_async

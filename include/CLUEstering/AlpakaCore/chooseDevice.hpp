@@ -1,8 +1,8 @@
 
 #pragma once
 
-#include "alpakaConfig.h"
-#include "alpakaDevices.h"
+#include "alpakaConfig.hpp"
+#include "alpakaDevices.hpp"
 
 namespace clue {
 

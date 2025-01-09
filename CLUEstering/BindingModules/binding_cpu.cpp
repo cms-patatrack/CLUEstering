@@ -2,7 +2,7 @@
 #include <alpaka/alpaka.hpp>
 #include <vector>
 
-#include "../CLUE/Run.h"
+#include "Run.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>

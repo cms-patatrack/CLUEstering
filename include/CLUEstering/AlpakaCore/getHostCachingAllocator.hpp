@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "AllocatorConfig.h"
-#include "CachingAllocator.h"
-#include "alpakaDevices.h"
+#include "AllocatorConfig.hpp"
+#include "CachingAllocator.hpp"
+#include "alpakaDevices.hpp"
 
 namespace clue {
 
