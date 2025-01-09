@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "CLUEstering/CLUEstering.hpp"
-#include "CLUEstering/CLUE/Run.hpp"
 #include "CLUEstering/DataFormats/Points.hpp"
 #include "CLUEstering/DataFormats/alpaka/PointsAlpaka.hpp"
 
@@ -31,6 +30,5 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
 int main(int argc, char* argv[]) {
   auto input_file{std::string(argv[1])};
-  using ALPAKA_ACCELERATOR_NAMESPACE_CLUE;
-  run(input_file);
+  ALPAKA_ACCELERATOR_NAMESPACE_CLUE::run(input_file);
 }

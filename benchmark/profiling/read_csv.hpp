@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include "DataFormats/alpaka/AlpakaVecArray.h"
+#include "CLUEstering/DataFormats/alpaka/AlpakaVecArray.hpp"
 
 using clue::VecArray;
 

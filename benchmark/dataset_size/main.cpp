@@ -9,7 +9,6 @@
 #include <vector>
 
 #include "CLUEstering/CLUEstering.hpp"
-#include "CLUEstering/CLUE/Run.hpp"
 #include "CLUEstering/DataFormats/Points.hpp"
 #include "CLUEstering/DataFormats/alpaka/PointsAlpaka.hpp"
 

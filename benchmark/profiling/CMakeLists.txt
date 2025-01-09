@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16.0)
 project(Profiling LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -61,7 +61,7 @@ if(NOT DEFINED SERIAL_ONLY)
 endif()
 
 # include source directories
-include_directories(../../inlcude/)
+include_directories(../../include/)
 
 # CPU Serial
 add_executable(serial.out main.cpp)
@@ -118,7 +118,7 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
 
     # set the CUDA standard
     if(NOT DEFINED CMAKE_CUDA_STANDARD)
-      set(CMAKE_CUDA_STANDARD 17)
+      set(CMAKE_CUDA_STANDARD 20)
       set(CMAKE_CUDA_STANDARD_REQUIRED ON)
     endif()
 
