@@ -76,7 +76,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         const TAcc& acc, const VecArray<float, Ndim>& coords) const {
       int globalBin{getBin(acc, coords[0], 0)};
       for (int dim{1}; dim != Ndim; ++dim) {
-        globalBin += alpaka::math::pow(acc, n_tiles_per_dim, Ndim - dim) * getBin(acc, coords[dim], dim);
+        globalBin += alpaka::math::pow(acc, n_tiles_per_dim, Ndim - dim) *
+                     getBin(acc, coords[dim], dim);
       }
       return globalBin;
     }
