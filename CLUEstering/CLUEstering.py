@@ -713,7 +713,7 @@ class clusterer:
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])
         clusters = np.unique(cluster_ids)
-        n_seeds = np.sum([1 for i in clusters if i > -1])
+        n_seeds = np.sum(is_seed)
         n_clusters = len(clusters)
 
         cluster_points = [[] for _ in range(n_clusters)]
@@ -1217,14 +1217,13 @@ class clusterer:
 
         in_path = input_folder + file_name
         df_ = pd.read_csv(in_path, dtype=float)
-        df_['cluster_ids'] = df_['cluster_ids'].astype(int)
-        df_['is_seed'] = df_['is_seed'].astype(int)
+        cluster_ids = np.asarray(df_["cluster_ids"], dtype=int)
+        is_seed = np.array(df_["is_seed"], dtype=int)
 
         self._handle_dataframe(df_.iloc[:, :-2])
 
-        cluster_ids = np.array(df_["cluster_ids"])
         clusters = np.unique(cluster_ids)
-        n_seeds = np.sum([1 for i in clusters if i > -1])
+        n_seeds = np.sum(is_seed)
         n_clusters = len(clusters)
 
         cluster_points = [[] for _ in range(n_clusters)]
@@ -1236,7 +1235,7 @@ class clusterer:
                                              n_seeds,
                                              clusters,
                                              cluster_ids,
-                                             np.asarray(df_["is_seed"]),
+                                             is_seed,
                                              np.asarray(cluster_points, dtype=object),
                                              points_per_cluster,
                                              df_)
