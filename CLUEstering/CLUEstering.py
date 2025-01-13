@@ -1232,10 +1232,10 @@ class clusterer:
             cluster_points[cluster_ids[i]].append(i)
 
         points_per_cluster = np.array([len(clust) for clust in cluster_points])
-        self.clust_prop = cluster_properties(int(max(df_["cluster_ids"])+1),
-                                             int(max(df_["is_seed"])+1),
-                                             np.unique(df_["cluster_ids"]),
-                                             np.asarray(df_["cluster_ids"]),
+        self.clust_prop = cluster_properties(n_clusters,
+                                             n_seeds,
+                                             clusters,
+                                             cluster_ids,
                                              np.asarray(df_["is_seed"]),
                                              np.asarray(cluster_points, dtype=object),
                                              points_per_cluster,
