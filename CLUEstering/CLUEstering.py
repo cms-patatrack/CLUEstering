@@ -713,7 +713,7 @@ class clusterer:
         cluster_ids = np.array(cluster_id_is_seed[0])
         is_seed = np.array(cluster_id_is_seed[1])
         clusters = np.unique(cluster_ids)
-        n_seeds = np.sum([1 for i in clusters if i > -1])
+        n_seeds = np.sum(is_seed)
         n_clusters = len(clusters)
 
         cluster_points = [[] for _ in range(n_clusters)]
@@ -1185,24 +1185,67 @@ class clusterer:
         data = {}
         for i in range(self.clust_data.n_dim):
             data['x' + str(i)] = self.clust_data.coords.T[i]
+        data['weight'] = self.clust_data.weight
         data['cluster_ids'] = self.clust_prop.cluster_ids
         data['is_seed'] = self.clust_prop.is_seed
 
         df_ = pd.DataFrame(data)
         df_.to_csv(out_path,index=False)
 
+    def import_clusterer(self, input_folder: str, file_name: str) -> None:
+        """
+        Imports the results of a previous clustering.
+
+        Parameters
+        ----------
+        input_folder : string
+            Full path to the folder containing the file.
+        file_name : string
+            Name of the file, with the '.csv' suffix.
+
+        Modified attributes
+        -------------------
+        clust_data : clustering_data
+            Properties of the input data.
+        clust_prop : cluster_properties
+            Properties of the clusters found.
+
+        Returns
+        -------
+        None
+        """
+
+        in_path = input_folder + file_name
+        df_ = pd.read_csv(in_path, dtype=float)
+        cluster_ids = np.asarray(df_["cluster_ids"], dtype=int)
+        is_seed = np.array(df_["is_seed"], dtype=int)
+
+        self._handle_dataframe(df_.iloc[:, :-2])
+
+        clusters = np.unique(cluster_ids)
+        n_seeds = np.sum(is_seed)
+        n_clusters = len(clusters)
+
+        cluster_points = [[] for _ in range(n_clusters)]
+        for i in range(self.clust_data.n_points):
+            cluster_points[cluster_ids[i]].append(i)
+
+        points_per_cluster = np.array([len(clust) for clust in cluster_points])
+        self.clust_prop = cluster_properties(n_clusters,
+                                             n_seeds,
+                                             clusters,
+                                             cluster_ids,
+                                             is_seed,
+                                             np.asarray(cluster_points, dtype=object),
+                                             points_per_cluster,
+                                             df_)
+
 if __name__ == "__main__":
-    c = clusterer(0.8, 5, 1.)
-    c.read_data('./blob.csv')
+    c = clusterer(20., 10., 20.)
+    c.read_data('./sissa.csv')
     c.input_plotter()
     c.run_clue(backend="cpu serial", verbose=True)
-    # c.run_clue(backend="cpu tbb", verbose=True)
+    c.run_clue(backend="cpu tbb", verbose=True)
     # c.run_clue(backend="gpu cuda", verbose=True)
     # c.run_clue(backend="gpu hip", verbose=True)
     c.cluster_plotter()
-    # c.to_csv('./','sissa_output_tbb.csv')
-    c.list_devices('cpu serial')
-    c.list_devices('cpu tbb')
-    c.list_devices('gpu cuda')
-    c.list_devices('gpu hip')
-    c.list_devices()
