@@ -1,4 +1,5 @@
 '''
+Test the import of a clusterer from csv file
 '''
 
 from check_result import check_result
