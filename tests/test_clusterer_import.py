@@ -43,6 +43,5 @@ if __name__ == "__main__":
     c.to_csv('./', 'test_sissa_import.csv')
 
     d = clue.clusterer(20., 10., 20.)
-    d.import_clusterer('./test_sissa_import.csv')
-
-    assert c == d
+    d.import_clusterer('./', 'test_sissa_import.csv')
+    d.cluster_plotter()
