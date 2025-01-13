@@ -1192,7 +1192,7 @@ class clusterer:
         df_ = pd.DataFrame(data)
         df_.to_csv(out_path,index=False)
 
-    def import_results(self, input_folder: str, file_name: str) -> None:
+    def import(self, input_folder: str, file_name: str) -> None:
         """
         Imports the results of a previous clustering.
 
