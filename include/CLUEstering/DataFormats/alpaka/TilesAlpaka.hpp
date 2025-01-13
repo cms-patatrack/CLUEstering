@@ -74,21 +74,23 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     template <typename TAcc>
     ALPAKA_FN_HOST_ACC inline constexpr int getGlobalBin(
         const TAcc& acc, const VecArray<float, Ndim>& coords) const {
-      int globalBin{getBin(acc, coords[0], 0)};
-      for (int dim{1}; dim != Ndim; ++dim) {
-        globalBin += alpaka::math::pow(acc, n_tiles_per_dim, Ndim - dim) *
+      int globalBin = 0;
+      for (int dim = 0; dim != Ndim - 1; ++dim) {
+        globalBin += alpaka::math::pow(acc, n_tiles_per_dim, Ndim - dim - 1) *
                      getBin(acc, coords[dim], dim);
       }
+      globalBin += getBin(acc, coords[Ndim - 1], Ndim - 1);
       return globalBin;
     }
 
     template <typename TAcc>
     ALPAKA_FN_HOST_ACC inline constexpr int getGlobalBinByBin(
         const TAcc& acc, const VecArray<uint32_t, Ndim>& Bins) const {
-      uint32_t globalBin{Bins[0]};
-      for (int dim{1}; dim != Ndim; ++dim) {
-        globalBin += alpaka::math::pow(acc, n_tiles_per_dim, Ndim - dim) * Bins[dim];
+      uint32_t globalBin = 0;
+      for (int dim = 0; dim != Ndim - 1; ++dim) {
+        globalBin += alpaka::math::pow(acc, n_tiles_per_dim, Ndim - dim - 1) * Bins[dim];
       }
+      globalBin += Bins[Ndim - 1];
       return globalBin;
     }
 
