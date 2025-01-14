@@ -1,47 +1,75 @@
 
 #pragma once
 
-#include "alpaka/AlpakaVecArray.hpp"
+#include <memory>
 #include <vector>
 
-using clue::VecArray;
+template <uint8_t Ndim>
+struct PointShape {
+  uint32_t nPoints;
+  static constexpr auto nDim = Ndim;
+};
 
 template <uint8_t Ndim>
-struct Points {
-  Points() = default;
-  Points(const std::vector<VecArray<float, Ndim>>& coords,
-         const std::vector<float>& weight)
-      : m_coords{coords}, m_weight{weight}, n{weight.size()} {
-    m_rho.resize(n);
-    m_delta.resize(n);
-    m_nearestHigher.resize(n);
-    m_clusterIndex.resize(n);
-    m_isSeed.resize(n);
+struct PointsSoA {
+public:
+  struct View {
+    float* coords;
+    float* weights;
+    int* clusterIndexes;
+    int* isSeed;
+  };
+
+  struct DebugInfo {
+#ifdef DEBUG
+    std::vector<float> rho;
+    std::vector<float> delta;
+    std::vector<int> nearestHigher;
+#endif
+
+#ifdef Debug
+    DebugInfo(uint32_t n) : rho(n), delta(n), nearestHigher(n) {}
+#else
+    DebugInfo(uint32_t) {}
+#endif
+  };
+
+  PointsSoA(float* floatBuffer, int* intBuffer, const PointShape<Ndim>& shape)
+      : m_coordsBuffer{floatBuffer},
+        m_resultsBuffer{intBuffer},
+        m_view{std::make_unique<View>()},
+        m_shape{shape},
+        m_debugInfo{shape.nPoints} {
+    m_view->coords = floatBuffer;
+    m_view->weights = floatBuffer + m_shape.nPoints * m_shape.nDim;
+    m_view->clusterIndexes = intBuffer;
+    m_view->isSeed = intBuffer + m_shape.nPoints;
   }
-  Points(const std::vector<std::vector<float>>& coords, const std::vector<float>& weight)
-      : m_weight{weight}, n{weight.size()} {
-    for (const auto& x : coords) {
-      VecArray<float, Ndim> temp_vecarray;
-      for (auto value : x) {
-        temp_vecarray.push_back_unsafe(value);
-      }
-      m_coords.push_back(temp_vecarray);
-    }
 
-    m_rho.resize(n);
-    m_delta.resize(n);
-    m_nearestHigher.resize(n);
-    m_clusterIndex.resize(n);
-    m_isSeed.resize(n);
-  }
+  PointsSoA(const PointsSoA&) = delete;
+  PointsSoA& operator=(const PointsSoA&) = delete;
+  PointsSoA(PointsSoA&&) = default;
+  PointsSoA& operator=(PointsSoA&&) = default;
+  ~PointsSoA() = default;
 
-  std::vector<VecArray<float, Ndim>> m_coords;
-  std::vector<float> m_weight;
-  std::vector<float> m_rho;
-  std::vector<float> m_delta;
-  std::vector<int> m_nearestHigher;
-  std::vector<int> m_clusterIndex;
-  std::vector<int> m_isSeed;
+  uint32_t nPoints() const { return m_shape.nPoints; }
 
-  size_t n;
+  const float* coords() const { return m_view->coords; }
+  const float* weights() const { return m_view->weights; }
+
+  int* clusterIndexes() { return m_view->clusterIndexes; }
+  const int* clusterIndexes() const { return m_view->clusterIndexes; }
+  int* isSeed() { return m_view->isSeed; }
+  const int* isSeed() const { return m_view->isSeed; }
+
+  const View* view() const { return m_view.get(); }
+
+  DebugInfo& debugInfo() { return m_debugInfo; }
+
+private:
+  float* m_coordsBuffer;
+  int* m_resultsBuffer;
+  std::unique_ptr<View> m_view;
+  PointShape<Ndim> m_shape;
+  DebugInfo m_debugInfo;
 };
