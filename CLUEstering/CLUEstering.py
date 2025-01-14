@@ -1236,7 +1236,6 @@ class clusterer:
 if __name__ == "__main__":
     c = clusterer(20., 10., 20.)
     c.read_data('./sissa.csv')
-    # c.input_plotter()
     c.run_clue(backend="cpu serial", verbose=True)
     c.run_clue(backend="cpu tbb", verbose=True)
     # c.run_clue(backend="gpu cuda", verbose=True)
