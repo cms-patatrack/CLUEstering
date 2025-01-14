@@ -136,12 +136,22 @@ def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
 @dataclass()
 class ClusteringDataSoA:
     """
+    Container of the input data coordinates and the results of the clustering.
+
+    SoA data structure containing two buffers: one for the input coordinates (floats) and one
+    for the results of the clustering (ints).
     """
 
     coords: np.ndarray
     results: np.ndarray
     n_dim : int
     n_points : int
+
+    def __init__(self, coords = None, results = None, n_dim = None, n_points = None):
+        self.coords = coords
+        self.results = results
+        self.n_dim = n_dim
+        self.n_points = n_points
 
 
 @dataclass(eq=False)
@@ -463,30 +473,6 @@ class clusterer:
             df = self._read_dict_df(input_data)
             self._handle_dataframe(df)
 
-    # def change_coordinates(self, **kwargs: types.FunctionType) -> None:
-    #     """
-    #     Change the coordinate system
-
-    #     Parameters
-    #     ----------
-    #     kwargs : function objects
-    #         The functions for the change of coordinates.
-    #         The keywords of the arguments are the coordinates names (x0, x1, ...).
-
-    #     Modifies attributes
-    #     -------------------
-    #     coords : ndarray
-    #         Coordinates used for clustering converted in the chosen coordinate system.
-
-    #     Returns
-    #     -------
-    #     None
-    #     """
-
-    #     # Change the coordinate system
-    #     for coord, func in kwargs.items():
-    #         self.clust_data.coords[int(coord[1])] = func(self.clust_data.original_coords)
-
     def choose_kernel(self,
                       choice: str,
                       parameters: Union[list,None] = None,
@@ -636,7 +622,9 @@ class clusterer:
 
         """
 
-        return np.array([self.clust_data.coords.T[dim] for dim in dimensions]).T
+        coords = [np.copy(self.clust_data.coords[dim]) for dim in dimensions]
+        coords.append(np.copy(self.clust_data.coords[-1]))
+        return np.ascontiguousarray(coords, dtype=np.float32)
 
     def run_clue(self,
                  backend: str = "cpu serial",
@@ -676,46 +664,51 @@ class clusterer:
         None
         """
 
-        # if dimensions is None:
-        #     data = self.clust_data.coords
-        # else:
-        #     data = self._partial_dimension_dataset(dimensions)
+        if dimensions is None:
+            data = self.clust_data
+        else:
+            data = ClusteringDataSoA()
+            data.coords = self._partial_dimension_dataset(dimensions)
+            data.results = np.copy(self.clust_data.results)
+            data.n_dim = len(dimensions)
+            data.n_points = self.clust_data.n_points
+
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(self.dc_, self.rhoc, self.dm, self.ppbin,
-                                                    self.clust_data.coords, self.clust_data.results,
-                                                    self.kernel, self.clust_data.n_dim,
-                                                    self.clust_data.n_points, block_size, device_id)
+                                                    data.coords, data.results,
+                                                    self.kernel, data.n_dim,
+                                                    data.n_points, block_size, device_id)
         elif backend == "cpu tbb":
             if tbb_found:
                 cluster_id_is_seed = cpu_tbb.mainRun(self.dc_, self.rhoc, self.dm, self.ppbin,
-                                                     self.clust_data.coords, self.clust_data.results,
-                                                     self.kernel, self.clust_data.n_dim,
-                                                     self.clust_data.n_points, block_size, device_id)
+                                                     data.coords, data.results,
+                                                     self.kernel, data.n_dim,
+                                                     data.n_points, block_size, device_id)
             else:
                 print("TBB module not found. Please re-compile the library and try again.")
 
         elif backend == "gpu cuda":
             if cuda_found:
                 cluster_id_is_seed = gpu_cuda.mainRun(self.dc_, self.rhoc, self.dm, self.ppbin,
-                                                      self.clust_data.coords, self.clust_data.results,
-                                                      self.kernel, self.clust_data.n_dim,
-                                                      self.clust_data.n_points, block_size, device_id)
+                                                      data.coords, data.results,
+                                                      self.kernel, data.n_dim,
+                                                      data.n_points, block_size, device_id)
             else:
                 print("CUDA module not found. Please re-compile the library and try again.")
 
         elif backend == "gpu hip":
             if hip_found:
                 cluster_id_is_seed = gpu_hip.mainRun(self.dc_, self.rhoc, self.dm, self.ppbin,
-                                                     self.clust_data.coords, self.clust_data.results,
-                                                     self.kernel, self.clust_data.n_dim,
-                                                     self.clust_data.n_points, block_size, device_id)
+                                                     data.coords, data.results,
+                                                     self.kernel, data.n_dim,
+                                                     data.n_points, block_size, device_id)
             else:
                 print("HIP module not found. Please re-compile the library and try again.")
 
         finish = time.time_ns()
-        cluster_ids = self.clust_data.results[0]
-        is_seed = self.clust_data.results[1]
+        cluster_ids = data.results[0]
+        is_seed = data.results[1]
         clusters = np.unique(cluster_ids)
         n_seeds = np.sum(is_seed)
         n_clusters = len(clusters)
@@ -1048,11 +1041,6 @@ class clusterer:
         None
         """
 
-        # Convert the used coordinates to cartesian coordiantes
-        # cartesian_coords = np.copy(self.clust_data.original_coords.T)
-        # for coord, func in kwargs.items():
-        #     cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords.T)
-
         if self.clust_data.n_dim == 1:
             data = {'x0': cartesian_coords[0],
                     'x1': np.zeros(self.clust_data.n_points),
@@ -1124,9 +1112,9 @@ class clusterer:
 
             plt.show()
         else:
-            data = {'x0': cartesian_coords[0],
-                    'x1': cartesian_coords[1],
-                    'x2': cartesian_coords[2],
+            data = {'x0': self.coords[0],
+                    'x1': self.coords[1],
+                    'x2': self.coords[2],
                     'cluster_ids': self.clust_prop.cluster_ids,
                     'isSeed': self.clust_prop.is_seed}
             df_ = pd.DataFrame(data)
@@ -1190,7 +1178,7 @@ class clusterer:
         data = {}
         for i in range(self.clust_data.n_dim):
             data['x' + str(i)] = self.clust_data.coords[i]
-        data['weight'] = self.clust_data.weight
+        data['weight'] = self.clust_data.coords[-1]
         data['cluster_ids'] = self.clust_prop.cluster_ids
         data['is_seed'] = self.clust_prop.is_seed
 
@@ -1248,7 +1236,7 @@ class clusterer:
 if __name__ == "__main__":
     c = clusterer(20., 10., 20.)
     c.read_data('./sissa.csv')
-    c.input_plotter()
+    # c.input_plotter()
     c.run_clue(backend="cpu serial", verbose=True)
     c.run_clue(backend="cpu tbb", verbose=True)
     # c.run_clue(backend="gpu cuda", verbose=True)

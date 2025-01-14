@@ -15,18 +15,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   public:
     PointsAlpaka() = delete;
     explicit PointsAlpaka(Queue stream, int n_points)
-        : buffer{clue::make_device_buffer<float[]>(stream, (Ndim + 6) * n_points)},
+        : input_buffer{clue::make_device_buffer<float[]>(stream, (Ndim + 3) * n_points)},
+          result_buffer{clue::make_device_buffer<int[]>(stream, 3 * n_points)},
           view_dev{clue::make_device_buffer<PointsAlpakaView>(stream)} {
       auto view_host = clue::make_host_buffer<PointsAlpakaView>(stream);
-      view_host->coords = buffer.data();
-      view_host->weight = buffer.data() + Ndim * n_points;
-      view_host->rho = buffer.data() + (Ndim + 1) * n_points;
-      view_host->delta = buffer.data() + (Ndim + 2) * n_points;
-      view_host->nearest_higher =
-          reinterpret_cast<int*>(buffer.data() + (Ndim + 3) * n_points);
-      view_host->cluster_index =
-          reinterpret_cast<int*>(buffer.data() + (Ndim + 4) * n_points);
-      view_host->is_seed = reinterpret_cast<int*>(buffer.data() + (Ndim + 5) * n_points);
+      view_host->coords = input_buffer.data();
+      view_host->weight = input_buffer.data() + Ndim * n_points;
+      view_host->rho = input_buffer.data() + (Ndim + 1) * n_points;
+      view_host->delta = input_buffer.data() + (Ndim + 2) * n_points;
+      view_host->nearest_higher = result_buffer.data();
+      view_host->cluster_index = result_buffer.data() + n_points;
+      view_host->is_seed = result_buffer.data() + 2 * n_points;
       view_host->n = n_points;
 
       alpaka::memcpy(stream, view_dev, view_host);
@@ -38,7 +37,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     PointsAlpaka& operator=(PointsAlpaka&&) = default;
     ~PointsAlpaka() = default;
 
-    clue::device_buffer<Device, float[]> buffer;
+    clue::device_buffer<Device, float[]> input_buffer;
+    clue::device_buffer<Device, int[]> result_buffer;
 
     class PointsAlpakaView {
     public:

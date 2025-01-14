@@ -102,7 +102,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue_, block_size);
   }
 
-};  // namespace ALPAKA_ACCELERATOR_NAMESPACE
+};  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
 
 namespace cluetest = ALPAKA_ACCELERATOR_NAMESPACE_CLUE;
 

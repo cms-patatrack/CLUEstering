@@ -133,7 +133,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     const auto copyExtent = (Ndim + 1) * h_points.nPoints();
     alpaka::memcpy(queue_,
-                   d_points.buffer,
+                   d_points.input_buffer,
                    clue::make_host_view(h_points.coords(), copyExtent),
                    copyExtent);
     alpaka::memset(queue_, *d_seeds, 0x00);
@@ -223,11 +223,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         clue::make_device_view(device, d_points.view()->nearest_higher, nPoints));
 #endif
 
-    alpaka::memcpy(
-        queue_,
-        clue::make_host_view(h_points.clusterIndexes(), 2 * nPoints),
-        clue::make_device_view(device, d_points.buffer.data() + nPoints, 2 * nPoints),
-        2 * nPoints);
+    alpaka::memcpy(queue_,
+                   clue::make_host_view(h_points.clusterIndexes(), 2 * nPoints),
+                   clue::make_device_view(
+                       device, d_points.result_buffer.data() + nPoints, 2 * nPoints),
+                   2 * nPoints);
+    std::cout << std::accumulate(h_points.isSeed(), h_points.isSeed() + nPoints, 0)
+              << std::endl;
+    std::cout << std::accumulate(d_points.result_buffer.data() + nPoints,
+                                 d_points.result_buffer.data() + 3 * nPoints,
+                                 0)
+              << std::endl;
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);

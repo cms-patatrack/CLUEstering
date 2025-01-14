@@ -179,7 +179,7 @@ namespace alpaka_tbb_async {
                                   py::array_t<int>,
                                   const FlatKernel&,
                                   int,
-								  uint32_t,
+                                  uint32_t,
                                   size_t,
                                   size_t>(&mainRun<FlatKernel>),
           "mainRun");
@@ -192,7 +192,7 @@ namespace alpaka_tbb_async {
                                   py::array_t<int>,
                                   const ExponentialKernel&,
                                   int,
-								  uint32_t,
+                                  uint32_t,
                                   size_t,
                                   size_t>(&mainRun<ExponentialKernel>),
           "mainRun");
@@ -205,7 +205,7 @@ namespace alpaka_tbb_async {
                                   py::array_t<int>,
                                   const GaussianKernel&,
                                   int,
-								  uint32_t,
+                                  uint32_t,
                                   size_t,
                                   size_t>(&mainRun<GaussianKernel>),
           "mainRun");
