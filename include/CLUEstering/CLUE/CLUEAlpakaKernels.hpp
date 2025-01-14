@@ -21,6 +21,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   template <uint8_t Ndim>
   using PointsView = typename PointsAlpaka<Ndim>::PointsAlpakaView;
 
+  template <uint8_t Ndim>
+  ALPAKA_FN_ACC void getCoords(float* coords, PointsView<Ndim>* d_points, uint32_t i) {
+    for (auto dim = 0; dim < Ndim; ++dim) {
+      coords[dim] = d_points->coords[i + dim * d_points->n];
+    }
+  }
+
   struct KernelResetTiles {
     template <typename TAcc, uint8_t Ndim>
     ALPAKA_FN_ACC void operator()(TAcc const& acc,
@@ -51,8 +58,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                   PointsView<Ndim>* points,
                                   TilesAlpaka<Ndim>* tiles,
                                   uint32_t n_points) const {
-      clue::for_each_element_in_grid(
-          acc, n_points, [&](uint32_t i) { tiles->fill(acc, points->coords[i], i); });
+      clue::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
+        float coords[Ndim];
+        getCoords<Ndim>(coords, points, i);
+        tiles->fill(acc, coords, i);
+      });
     }
   };
 
@@ -65,7 +75,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       PointsView<Ndim>* dev_points,
       const KernelType& kernel,
       /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
-      const VecArray<float, Ndim>& coords_i,
+      const float* coords_i,
       float* rho_i,
       float dc,
       uint32_t point_id) {
@@ -79,7 +89,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         uint32_t j{(*tiles)[binId][binIter]};
         // query N_{dc_}(i)
 
-        VecArray<float, Ndim> coords_j{dev_points->coords[j]};
+        float coords_j[Ndim];
+        getCoords<Ndim>(coords_j, dev_points, j);
 
         float dist_ij_sq{0.f};
         for (int dim{}; dim != Ndim; ++dim) {
@@ -124,7 +135,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                   uint32_t n_points) const {
       clue::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         float rho_i{0.f};
-        VecArray<float, Ndim> coords_i{dev_points->coords[i]};
+        float coords_i[Ndim];
+        getCoords<Ndim>(coords_i, dev_points, i);
 
         // Get the extremes of the search box
         VecArray<VecArray<float, 2>, Ndim> searchbox_extremes;
@@ -165,7 +177,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       TilesAlpaka<Ndim>* tiles,
       PointsView<Ndim>* dev_points,
       /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
-      const VecArray<float, Ndim>& coords_i,
+      const float* coords_i,
       float rho_i,
       float* delta_i,
       int* nh_i,
@@ -187,7 +199,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
             found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
 
         // Calculate the distance between the two points
-        VecArray<float, Ndim> coords_j{dev_points->coords[j]};
+        float coords_j[Ndim];
+        getCoords<Ndim>(coords_j, dev_points, j);
+
         float dist_ij_sq{0.f};
         for (int dim{}; dim != Ndim; ++dim) {
           dist_ij_sq += (coords_j[dim] - coords_i[dim]) * (coords_j[dim] - coords_i[dim]);
@@ -231,13 +245,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                   PointsView<Ndim>* dev_points,
                                   /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
                                   float dm,
-                                  float dc,
+                                  float,
                                   uint32_t n_points) const {
       float dm_squared{dm * dm};
       clue::for_each_element_in_grid(acc, n_points, [&](uint32_t i) {
         float delta_i{std::numeric_limits<float>::max()};
         int nh_i{-1};
-        VecArray<float, Ndim> coords_i{dev_points->coords[i]};
+        float coords_i[Ndim];
+        getCoords<Ndim>(coords_i, dev_points, i);
         float rho_i{dev_points->rho[i]};
 
         // Get the extremes of the search box
