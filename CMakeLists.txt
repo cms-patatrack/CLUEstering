@@ -69,8 +69,6 @@ foreach(CONV_MODULE ${CONV_MODULE})
                           ./CLUEstering/lib/CLUE_Convolutional_Kernels.so)
 endforeach()
 
-execute_process(COMMAND ls ${Boost_INCLUDE_DIR})
-execute_process(COMMAND ls ${Boost_INCLUDE_DIR}/boost)
 # CPU Serial compile cpu serial module
 pybind11_add_module(CLUE_CPU_Serial SHARED
                     CLUEstering/BindingModules/binding_cpu.cpp)
