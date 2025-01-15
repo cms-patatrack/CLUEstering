@@ -144,7 +144,7 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
     pybind11_add_module(CLUE_GPU_CUDA SHARED
                         CLUEstering/BindingModules/binding_gpu_cuda.cpp)
     target_include_directories(
-      CLUE_GPU_CUDA PRIVATE ${alpaka_SOURCE_DIR}/include ${Boost_SOURCE_DIR})
+      CLUE_GPU_CUDA PRIVATE ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
     # set the cuda architectures
     set_target_properties(CLUE_GPU_CUDA PROPERTIES CUDA_ARCHITECTURES
                                                    "50;60;61;62;70")
@@ -185,7 +185,7 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
     pybind11_add_module(CLUE_GPU_HIP SHARED
                         CLUEstering/BindingModules/binding_gpu_hip.cpp)
     target_include_directories(CLUE_GPU_HIP PRIVATE ${alpaka_SOURCE_DIR}/include
-                                                    ${Boost_SOURCE_DIR})
+                                                    ${Boost_INCLUDE_DIR})
     # alpaka build flags
     target_compile_options(
       CLUE_GPU_HIP
