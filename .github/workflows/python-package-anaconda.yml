@@ -36,4 +36,6 @@ jobs:
     - name: Test with pytest
       working-directory: ${{github.workspace}}/tests
       run: |
+        conda install -c conda-forge gcc_linux-64 gxx_linux-64
+        strings $(conda info --base)/lib/libstdc++.so.6 | grep GLIBCXX
         python3 -m pytest ./*.py
