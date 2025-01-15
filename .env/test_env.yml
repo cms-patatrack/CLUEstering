@@ -8,5 +8,4 @@ dependencies:
   - matplotlib
   - scikit-learn
   - pandas
-  - pytest
   - boost-cpp
