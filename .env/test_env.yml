@@ -6,3 +6,4 @@ dependencies:
   - scikit-learn
   - pandas
   - pytest
+  - boost-cpp
