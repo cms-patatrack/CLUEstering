@@ -50,7 +50,7 @@ pybind11_add_module(CLUE_Convolutional_Kernels SHARED
                     CLUEstering/BindingModules/binding_kernels.cpp)
 target_include_directories(
   CLUE_Convolutional_Kernels PRIVATE ${alpaka_SOURCE_DIR}/include
-									 ${Boost_INCLUDE_DIR})
+                                     ${Boost_INCLUDE_DIR})
 # alpaka build flags
 target_compile_options(
   CLUE_Convolutional_Kernels
@@ -73,7 +73,7 @@ endforeach()
 pybind11_add_module(CLUE_CPU_Serial SHARED
                     CLUEstering/BindingModules/binding_cpu.cpp)
 target_include_directories(CLUE_CPU_Serial PRIVATE ${alpaka_SOURCE_DIR}/include
-												   ${Boost_INCLUDE_DIR})
+                                                   ${Boost_INCLUDE_DIR})
 # alpaka build flags
 target_compile_options(
   CLUE_CPU_Serial
