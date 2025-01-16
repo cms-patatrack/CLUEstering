@@ -1,9 +1,11 @@
 name: test-with-conda
 dependencies:
-  - python>=3.10
+  # - gcc_linux-64
+  # - gxx_linux-64
+  - libgcc
+  - python>=3.11
   - numpy
   - matplotlib
   - scikit-learn
-  - pybind11
   - pandas
-  - pytest
+  - boost-cpp

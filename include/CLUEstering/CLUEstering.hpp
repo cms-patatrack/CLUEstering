@@ -228,12 +228,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                    clue::make_device_view(
                        device, d_points.result_buffer.data() + nPoints, 2 * nPoints),
                    2 * nPoints);
-    std::cout << std::accumulate(h_points.isSeed(), h_points.isSeed() + nPoints, 0)
-              << std::endl;
-    std::cout << std::accumulate(d_points.result_buffer.data() + nPoints,
-                                 d_points.result_buffer.data() + 3 * nPoints,
-                                 0)
-              << std::endl;
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
