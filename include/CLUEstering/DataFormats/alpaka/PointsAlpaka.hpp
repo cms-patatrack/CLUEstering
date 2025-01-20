@@ -10,6 +10,18 @@
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
+  class PointsAlpakaView {
+  public:
+    float* coords;
+    float* weight;
+    float* rho;
+    float* delta;
+    int* nearest_higher;
+    int* cluster_index;
+    int* is_seed;
+    int n;
+  };
+
   template <uint8_t Ndim>
   class PointsAlpaka {
   public:
@@ -39,18 +51,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     clue::device_buffer<Device, float[]> input_buffer;
     clue::device_buffer<Device, int[]> result_buffer;
-
-    class PointsAlpakaView {
-    public:
-      float* coords;
-      float* weight;
-      float* rho;
-      float* delta;
-      int* nearest_higher;
-      int* cluster_index;
-      int* is_seed;
-      int n;
-    };
 
     PointsAlpakaView* view() { return view_dev.data(); }
 
