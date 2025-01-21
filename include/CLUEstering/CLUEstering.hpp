@@ -39,6 +39,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                        Queue queue_,
                        std::size_t block_size);
 
+    std::map<int, std::vector<int>> getClusters(const PointsSoA<Ndim>& h_points);
+
   private:
     float dc_;
     float rhoc_;
@@ -232,4 +234,16 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
   }
+
+  template <uint8_t Ndim>
+  std::map<int, std::vector<int>> CLUEAlgoAlpaka<Ndim>::getClusters(
+                                                 const PointsSoA<Ndim>& h_points) {
+    // cluster all points with same clusterId
+    std::map<int, std::vector<int>> clusters;
+    for (size_t i = 0; i < h_points.nPoints(); i++) {
+      clusters[h_points.clusterIndexes()[i]].push_back(i);
+    }
+    return clusters;
+  }
+
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
