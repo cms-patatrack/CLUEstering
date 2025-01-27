@@ -11,6 +11,7 @@
 #include "../../AlpakaCore/alpakaConfig.hpp"
 #include "../../AlpakaCore/alpakaMemory.hpp"
 #include "AlpakaVecArray.hpp"
+#include "AssociationMap.hpp"
 
 using clue::VecArray;
 
@@ -95,13 +96,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC inline constexpr void fill(const TAcc& acc,
-                                             const float* coords,
-                                             int i) {
-      m_tiles[getGlobalBin(acc, coords)].push_back(acc, i);
-    }
-
-    template <typename TAcc>
     ALPAKA_FN_ACC inline void searchBox(
         const TAcc& acc,
         const VecArray<VecArray<float, 2>, Ndim>& sb_extremes,
@@ -115,6 +109,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       }
     }
 
+	ALPAKA_FN_HOST void fill(Queue& queue, const int* indexes) {
+	  auto dev = alpaka::getDevs(queue);
+	  m_tiles.fill(indexes, n_tiles, getGlobalBin, dev);
+	}
+
     ALPAKA_FN_HOST_ACC inline constexpr auto size() { return n_tiles; }
 
     ALPAKA_FN_HOST_ACC inline constexpr int nPerDim() const { return n_tiles_per_dim; }
@@ -127,8 +126,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     ALPAKA_FN_HOST_ACC inline constexpr void clear(uint32_t i) { m_tiles[i].reset(); }
 
-    ALPAKA_FN_HOST_ACC inline constexpr VecArray<uint32_t, max_tile_depth>& operator[](
-        int globalBinId) {
+    ALPAKA_FN_HOST_ACC inline constexpr clue::Span<int> operator[](int globalBinId) {
       return m_tiles[globalBinId];
     }
 
@@ -137,6 +135,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     int n_tiles_per_dim;
     CoordinateExtremes<Ndim> min_max;
     float tile_size[Ndim];
-    VecArray<VecArray<uint32_t, max_tile_depth>, max_n_tiles> m_tiles;
+	clue::AssociationMap<Device> m_tiles;
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
