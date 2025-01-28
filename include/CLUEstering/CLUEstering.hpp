@@ -163,7 +163,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                            const KernelType& kernel,
                                            Queue queue_,
                                            std::size_t block_size) {
-    d_points = PointsAlpaka<Ndim>(queue_, h_points.nPoints());
+    d_points = std::make_optional<PointsAlpaka<Ndim>>(queue_, h_points.nPoints());
     auto& dev_points = *d_points;
     make_clusters(h_points, dev_points, kernel, queue_, block_size);
   }
