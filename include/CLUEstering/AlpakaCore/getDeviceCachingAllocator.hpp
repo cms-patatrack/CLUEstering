@@ -37,11 +37,11 @@ namespace clue {
       }
 
       // use a custom deleter to destroy all objects and deallocate the memory
-      auto deleter = [size](Allocator* ptr) {
+      auto deleter = [size](Allocator* pointer) {
         for (size_t i = size; i > 0; --i) {
-          (ptr + i - 1)->~Allocator();
+          (pointer + i - 1)->~Allocator();
         }
-        std::allocator<Allocator>().deallocate(ptr, size);
+        std::allocator<Allocator>().deallocate(pointer, size);
       };
 
       return std::unique_ptr<Allocator[], decltype(deleter)>(ptr, deleter);
