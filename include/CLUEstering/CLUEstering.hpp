@@ -35,10 +35,18 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     template <typename KernelType>
     void make_clusters(PointsSoA<Ndim>& h_points,
-                       PointsAlpaka<Ndim>& d_points,
                        const KernelType& kernel,
                        Queue queue_,
                        std::size_t block_size);
+
+    template <typename KernelType>
+    void make_clusters(PointsSoA<Ndim>& h_points,
+                       PointsAlpaka<Ndim>& dev_points,
+                       const KernelType& kernel,
+                       Queue queue_,
+                       std::size_t block_size);
+
+    std::map<int, std::vector<int>> getClusters(const PointsSoA<Ndim>& h_points);
 
   private:
     float dc_;
@@ -54,11 +62,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     std::optional<clue::device_buffer<Device, VecArray<int32_t, reserve>>> d_seeds;
     std::optional<clue::device_buffer<Device, clue::VecArray<int32_t, max_followers>[]>>
         d_followers;
+    std::optional<PointsAlpaka<Ndim>> d_points;
 
     // Private methods
     void init_device(Queue queue_);
     void setup(const PointsSoA<Ndim>& h_points,
-               PointsAlpaka<Ndim>& d_points,
+               PointsAlpaka<Ndim>& dev_points,
                Queue queue_,
                std::size_t block_size);
 
@@ -105,7 +114,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <uint8_t Ndim>
   void CLUEAlgoAlpaka<Ndim>::setup(const PointsSoA<Ndim>& h_points,
-                                   PointsAlpaka<Ndim>& d_points,
+                                   PointsAlpaka<Ndim>& dev_points,
                                    Queue queue_,
                                    std::size_t block_size) {
     // calculate the number of tiles and their size
@@ -133,7 +142,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     const auto copyExtent = (Ndim + 1) * h_points.nPoints();
     alpaka::memcpy(queue_,
-                   d_points.input_buffer,
+                   dev_points.input_buffer,
                    clue::make_host_view(h_points.coords(), copyExtent),
                    copyExtent);
     alpaka::memset(queue_, *d_seeds, 0x00);
@@ -151,11 +160,22 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   template <uint8_t Ndim>
   template <typename KernelType>
   void CLUEAlgoAlpaka<Ndim>::make_clusters(PointsSoA<Ndim>& h_points,
-                                           PointsAlpaka<Ndim>& d_points,
                                            const KernelType& kernel,
                                            Queue queue_,
                                            std::size_t block_size) {
-    setup(h_points, d_points, queue_, block_size);
+    d_points = PointsAlpaka<Ndim>(queue_, h_points.nPoints());
+    auto& dev_points = *d_points;
+    make_clusters(h_points, dev_points, kernel, queue_, block_size);
+  }
+
+  template <uint8_t Ndim>
+  template <typename KernelType>
+  void CLUEAlgoAlpaka<Ndim>::make_clusters(PointsSoA<Ndim>& h_points,
+                                           PointsAlpaka<Ndim>& dev_points,
+                                           const KernelType& kernel,
+                                           Queue queue_,
+                                           std::size_t block_size) {
+    setup(h_points, dev_points, queue_, block_size);
 
     const auto nPoints = h_points.nPoints();
 
@@ -164,13 +184,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     alpaka::enqueue(
         queue_,
         alpaka::createTaskKernel<Acc1D>(
-            working_div, KernelFillTiles{}, d_points.view(), m_tiles, nPoints));
+            working_div, KernelFillTiles{}, dev_points.view(), m_tiles, nPoints));
 
     alpaka::enqueue(queue_,
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelCalculateLocalDensity{},
                                                     m_tiles,
-                                                    d_points.view(),
+                                                    dev_points.view(),
                                                     kernel,
                                                     /* m_domains.data(), */
                                                     dc_,
@@ -179,7 +199,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                     alpaka::createTaskKernel<Acc1D>(working_div,
                                                     KernelCalculateNearestHigher{},
                                                     m_tiles,
-                                                    d_points.view(),
+                                                    dev_points.view(),
                                                     /* m_domains.data(), */
                                                     dm_,
                                                     dc_,
@@ -189,7 +209,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                                     KernelFindClusters<Ndim>{},
                                                     m_seeds,
                                                     m_followers,
-                                                    d_points.view(),
+                                                    dev_points.view(),
                                                     dm_,
                                                     dc_,
                                                     rhoc_,
@@ -204,7 +224,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                                     KernelAssignClusters<Ndim>{},
                                                     m_seeds,
                                                     m_followers,
-                                                    d_points.view()));
+                                                    dev_points.view()));
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
@@ -213,23 +233,35 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 #ifdef DEBUG
     alpaka::memcpy(queue_,
                    clue::make_host_view(h_points.debugInfo().rho.data(), nPoints),
-                   clue::make_device_view(device, d_points.view()->rho, nPoints));
+                   clue::make_device_view(device, dev_points.view()->rho, nPoints));
     alpaka::memcpy(queue_,
                    clue::make_host_view(h_points.debugInfo().rho.data(), nPoints),
-                   clue::make_device_view(device, d_points.view()->delta, nPoints));
+                   clue::make_device_view(device, dev_points.view()->delta, nPoints));
     alpaka::memcpy(
         queue_,
         clue::make_host_view(h_points.debugInfo().nearestHigher.data(), nPoints),
-        clue::make_device_view(device, d_points.view()->nearest_higher, nPoints));
+        clue::make_device_view(device, dev_points.view()->nearest_higher, nPoints));
 #endif
 
     alpaka::memcpy(queue_,
                    clue::make_host_view(h_points.clusterIndexes(), 2 * nPoints),
                    clue::make_device_view(
-                       device, d_points.result_buffer.data() + nPoints, 2 * nPoints),
+                       device, dev_points.result_buffer.data() + nPoints, 2 * nPoints),
                    2 * nPoints);
 
     // Wait for all the operations in the queue to finish
     alpaka::wait(queue_);
   }
+
+  template <uint8_t Ndim>
+  std::map<int, std::vector<int>> CLUEAlgoAlpaka<Ndim>::getClusters(
+      const PointsSoA<Ndim>& h_points) {
+    // cluster all points with same clusterId
+    std::map<int, std::vector<int>> clusters;
+    for (size_t i = 0; i < h_points.nPoints(); i++) {
+      clusters[h_points.clusterIndexes()[i]].push_back(i);
+    }
+    return clusters;
+  }
+
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
