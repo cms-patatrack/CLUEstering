@@ -5,9 +5,9 @@
 #include <vector>
 
 template <uint8_t Ndim>
-struct PointShape {
+struct PointInfo {
   uint32_t nPoints;
-  static constexpr auto nDim = Ndim;
+  int wrapping[Ndim];
 };
 
 template <uint8_t Ndim>
@@ -34,16 +34,16 @@ public:
 #endif
   };
 
-  PointsSoA(float* floatBuffer, int* intBuffer, const PointShape<Ndim>& shape)
+  PointsSoA(float* floatBuffer, int* intBuffer, const PointInfo<Ndim>& info)
       : m_coordsBuffer{floatBuffer},
         m_resultsBuffer{intBuffer},
         m_view{std::make_unique<View>()},
-        m_shape{shape},
-        m_debugInfo{shape.nPoints} {
+        m_info{info},
+        m_debugInfo{info.nPoints} {
     m_view->coords = floatBuffer;
-    m_view->weights = floatBuffer + m_shape.nPoints * m_shape.nDim;
+    m_view->weights = floatBuffer + m_info.nPoints * Ndim;
     m_view->clusterIndexes = intBuffer;
-    m_view->isSeed = intBuffer + m_shape.nPoints;
+    m_view->isSeed = intBuffer + m_info.nPoints;
   }
 
   PointsSoA(const PointsSoA&) = delete;
@@ -52,10 +52,12 @@ public:
   PointsSoA& operator=(PointsSoA&&) = default;
   ~PointsSoA() = default;
 
-  uint32_t nPoints() const { return m_shape.nPoints; }
+  uint32_t nPoints() const { return m_info.nPoints; }
 
   const float* coords() const { return m_view->coords; }
   const float* weights() const { return m_view->weights; }
+
+  const int* wrapped() const { return m_info.wrapping; }
 
   int* clusterIndexes() { return m_view->clusterIndexes; }
   const int* clusterIndexes() const { return m_view->clusterIndexes; }
@@ -70,6 +72,6 @@ private:
   float* m_coordsBuffer;
   int* m_resultsBuffer;
   std::unique_ptr<View> m_view;
-  PointShape<Ndim> m_shape;
+  PointInfo<Ndim> m_info;
   DebugInfo m_debugInfo;
 };
