@@ -25,20 +25,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     }
   }
 
-  struct KernelResetTiles {
-    template <typename TAcc, uint8_t Ndim>
-    ALPAKA_FN_ACC void operator()(TAcc const& acc,
-                                  TilesAlpaka<Ndim>* tiles,
-                                  uint32_t nTiles,
-                                  uint32_t nPerDim) const {
-      if (alpaka::oncePerGrid(acc)) {
-        tiles->resizeTiles(nTiles, nPerDim);
-      }
-      for (auto index : alpaka::uniformElements(acc, nTiles))
-        tiles->clear(index);
-    }
-  };
-
   struct KernelResetFollowers {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
@@ -49,37 +35,22 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     }
   };
 
-  struct KernelFillTiles {
-    template <typename TAcc, uint8_t Ndim>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  PointsAlpakaView* points,
-                                  TilesAlpaka<Ndim>* tiles,
-                                  uint32_t n_points) const {
-      for (auto index : alpaka::uniformElements(acc, n_points)) {
-        float coords[Ndim];
-        getCoords<Ndim>(coords, points, index);
-        tiles->fill(acc, coords, index);
-      }
-    }
-  };
-
   template <typename TAcc, uint8_t Ndim, uint8_t N_, typename KernelType>
   ALPAKA_FN_HOST_ACC void for_recursion(
       const TAcc& acc,
       VecArray<uint32_t, Ndim>& base_vec,
       const VecArray<VecArray<uint32_t, 2>, Ndim>& search_box,
-      TilesAlpaka<Ndim>* tiles,
+      TilesAlpakaView<Ndim>* tiles,
       PointsAlpakaView* dev_points,
       const KernelType& kernel,
-      /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
       const float* coords_i,
       float* rho_i,
       float dc,
       uint32_t point_id) {
     if constexpr (N_ == 0) {
-      int binId{tiles->getGlobalBinByBin(acc, base_vec)};
+      auto binId = tiles->getGlobalBinByBin(acc, base_vec);
       // get the size of this bin
-      int binSize{static_cast<int>((*tiles)[binId].size())};
+      auto binSize = (*tiles)[binId].size();
 
       // iterate inside this bin
       for (int binIter{}; binIter < binSize; ++binIter) {
@@ -100,7 +71,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         }
 
       }  // end of interate inside this bin
-
       return;
     } else {
       for (unsigned int i{search_box[search_box.capacity() - N_][0]};
@@ -124,10 +94,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   struct KernelCalculateLocalDensity {
     template <typename TAcc, uint8_t Ndim, typename KernelType>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  TilesAlpaka<Ndim>* dev_tiles,
+                                  TilesAlpakaView<Ndim>* dev_tiles,
                                   PointsAlpakaView* dev_points,
                                   const KernelType& kernel,
-                                  /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
                                   float dc,
                                   uint32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
@@ -171,9 +140,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       const TAcc& acc,
       VecArray<uint32_t, Ndim>& base_vec,
       const VecArray<VecArray<uint32_t, 2>, Ndim>& s_box,
-      TilesAlpaka<Ndim>* tiles,
+      TilesAlpakaView<Ndim>* tiles,
       PointsAlpakaView* dev_points,
-      /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
       const float* coords_i,
       float rho_i,
       float* delta_i,
@@ -238,9 +206,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   struct KernelCalculateNearestHigher {
     template <typename TAcc, uint8_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  TilesAlpaka<Ndim>* dev_tiles,
+                                  TilesAlpakaView<Ndim>* dev_tiles,
                                   PointsAlpakaView* dev_points,
-                                  /* const VecArray<VecArray<float, 2>, Ndim>& domains, */
                                   float dm,
                                   float,
                                   uint32_t n_points) const {
@@ -358,7 +325,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
             ++local_stack_size;
           }
         }
-      };
+      }
     }
   };
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE

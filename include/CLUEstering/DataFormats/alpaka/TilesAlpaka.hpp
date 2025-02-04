@@ -15,9 +15,6 @@
 
 using clue::VecArray;
 
-constexpr uint32_t max_tile_depth{1 << 10};
-constexpr uint32_t max_n_tiles{1 << 15};
-
 namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <uint8_t Ndim>
@@ -38,61 +35,55 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   };
 
   template <uint8_t Ndim>
-  class TilesAlpaka {
-  public:
-    TilesAlpaka() = default;
+  struct TilesAlpakaView {
+    uint32_t* indexes;
+    uint32_t* offsets;
+    CoordinateExtremes<Ndim>* minmax;
+    float* tilesizes;
+    size_t npoints;
+    int32_t ntiles;
+    int32_t nperdim;
 
-    ALPAKA_FN_HOST_ACC inline constexpr const float* minMax() const {
-      return min_max.data();
-    }
-    ALPAKA_FN_HOST_ACC inline constexpr float* minMax() { return min_max.data(); }
+    ALPAKA_FN_ACC inline constexpr const float* minMax() const { return minmax; }
+    ALPAKA_FN_ACC inline constexpr float* minMax() { return minmax; }
 
-    ALPAKA_FN_HOST_ACC inline constexpr const float* tileSize() const {
-      return tile_size;
-    }
-    ALPAKA_FN_HOST_ACC inline constexpr float* tileSize() { return tile_size; }
-
-    ALPAKA_FN_HOST_ACC void resizeTiles(std::size_t nTiles, int nPerDim) {
-      this->n_tiles = nTiles;
-      this->n_tiles_per_dim = nPerDim;
-
-      this->m_tiles.resize(nTiles);
-    }
+    ALPAKA_FN_ACC inline constexpr const float* tileSize() const { return tilesizes; }
+    ALPAKA_FN_ACC inline constexpr float* tileSize() { return tilesizes; }
 
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC inline constexpr int getBin(const TAcc& acc,
-                                                   float coord_,
-                                                   int dim_) const {
-      int coord_Bin{(int)((coord_ - min_max.min(dim_)) / tile_size[dim_])};
+    ALPAKA_FN_ACC inline constexpr int getBin(const TAcc& acc,
+                                              float coord,
+                                              int dim) const {
+      int coord_bin{(int)((coord - minmax->min(dim)) / tilesizes[dim])};
 
       // Address the cases of underflow and overflow
-      coord_Bin = alpaka::math::min(acc, coord_Bin, n_tiles_per_dim - 1);
-      coord_Bin = alpaka::math::max(acc, coord_Bin, 0);
+      coord_bin = alpaka::math::min(acc, coord_bin, nperdim - 1);
+      coord_bin = alpaka::math::max(acc, coord_bin, 0);
 
-      return coord_Bin;
+      return coord_bin;
     }
 
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC inline constexpr int getGlobalBin(const TAcc& acc,
-                                                         const float* coords) const {
-      int globalBin = 0;
+    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const TAcc& acc,
+                                                    const float* coords) const {
+      int global_bin = 0;
       for (int dim = 0; dim != Ndim - 1; ++dim) {
-        globalBin += alpaka::math::pow(acc, n_tiles_per_dim, Ndim - dim - 1) *
-                     getBin(acc, coords[dim], dim);
+        global_bin += alpaka::math::pow(acc, nperdim, Ndim - dim - 1) *
+                      getBin(acc, coords[dim], dim);
       }
-      globalBin += getBin(acc, coords[Ndim - 1], Ndim - 1);
-      return globalBin;
+      global_bin += getBin(acc, coords[Ndim - 1], Ndim - 1);
+      return global_bin;
     }
 
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC inline constexpr int getGlobalBinByBin(
+    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(
         const TAcc& acc, const VecArray<uint32_t, Ndim>& Bins) const {
-      uint32_t globalBin = 0;
+      uint32_t global_bin = 0;
       for (int dim = 0; dim != Ndim - 1; ++dim) {
-        globalBin += alpaka::math::pow(acc, n_tiles_per_dim, Ndim - dim - 1) * Bins[dim];
+        global_bin += alpaka::math::pow(acc, nperdim, Ndim - dim - 1) * Bins[dim];
       }
-      globalBin += Bins[Ndim - 1];
-      return globalBin;
+      global_bin += Bins[Ndim - 1];
+      return global_bin;
     }
 
     template <typename TAcc>
@@ -109,32 +100,91 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       }
     }
 
-	ALPAKA_FN_HOST void fill(Queue& queue, const int* indexes) {
-	  auto dev = alpaka::getDevs(queue);
-	  m_tiles.fill(indexes, n_tiles, getGlobalBin, dev);
-	}
+    ALPAKA_FN_ACC inline constexpr clue::Span<uint32_t> operator[](uint32_t globalBinId) {
+      const auto size = offsets[globalBinId + 1] - offsets[globalBinId];
+      const auto offset = offsets[globalBinId];
+      uint32_t* buf_ptr = indexes + offset;
+      return clue::Span<uint32_t>{buf_ptr, size};
+    }
+  };
 
-    ALPAKA_FN_HOST_ACC inline constexpr auto size() { return n_tiles; }
+  template <uint8_t Ndim>
+  class TilesAlpaka {
+  public:
+    TilesAlpaka(Queue queue, uint32_t n_points, int32_t n_perdim, int32_t n_tiles)
+        : m_assoc{clue::AssociationMap<Device>(n_points, n_tiles, queue)},
+          m_minmax{clue::make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
+          m_tilesizes{clue::make_device_buffer<float[Ndim]>(queue)},
+          m_ntiles{n_tiles},
+          m_nperdim{n_perdim},
+          m_view{clue::make_device_buffer<TilesAlpakaView<Ndim>>(queue)} {
+      auto host_view = clue::make_host_buffer<TilesAlpakaView<Ndim>>(queue);
+      host_view->indexes = m_assoc.indexes().data();
+      host_view->offsets = m_assoc.offsets().data();
+      host_view->minmax = m_minmax.data();
+      host_view->tilesizes = m_tilesizes.data();
+      host_view->npoints = n_points;
+      host_view->ntiles = n_tiles;
+      host_view->nperdim = n_perdim;
 
-    ALPAKA_FN_HOST_ACC inline constexpr int nPerDim() const { return n_tiles_per_dim; }
-
-    ALPAKA_FN_HOST_ACC inline constexpr void clear() {
-      for (int i{}; i < n_tiles; ++i) {
-        m_tiles[i].reset();
-      }
+      alpaka::memcpy(queue, m_view, host_view);
     }
 
-    ALPAKA_FN_HOST_ACC inline constexpr void clear(uint32_t i) { m_tiles[i].reset(); }
+    TilesAlpakaView<Ndim>* view() { return m_view.data(); }
 
-    ALPAKA_FN_HOST_ACC inline constexpr clue::Span<int> operator[](int globalBinId) {
-      return m_tiles[globalBinId];
+    template <typename TQueue, typename = std::enable_if_t<alpaka::isQueue<TQueue>>>
+    ALPAKA_FN_HOST void initialize(uint32_t size, uint32_t nbins, const TQueue& queue) {
+      m_assoc.initialize(size, nbins, queue);
+    }
+
+    struct GetGlobalBin {
+      PointsAlpakaView* pointsView;
+      TilesAlpakaView<Ndim>* tilesView;
+
+      template <typename TAcc>
+      ALPAKA_FN_ACC uint32_t operator()(const TAcc& acc, uint32_t index) const {
+        float coords[Ndim];
+        for (auto dim = 0; dim < Ndim; ++dim) {
+          coords[dim] = pointsView->coords[index + dim * pointsView->n];
+        }
+
+        auto bin = tilesView->getGlobalBin(acc, coords);
+        return bin;
+      }
+    };
+
+    ALPAKA_FN_HOST void fill(Queue queue, PointsAlpaka<Ndim>& d_points, size_t size) {
+      auto dev = alpaka::getDev(queue);
+      auto pointsView = d_points.view();
+      m_assoc.fill<Acc1D>(size, GetGlobalBin{pointsView, m_view.data()}, queue);
+    }
+
+    ALPAKA_FN_HOST inline clue::device_buffer<Device, CoordinateExtremes<Ndim>> minMax()
+        const {
+      return m_minmax;
+    }
+    ALPAKA_FN_HOST inline clue::device_buffer<Device, float[Ndim]> tileSize() const {
+      return m_tilesizes;
+    }
+
+    ALPAKA_FN_HOST inline constexpr auto size() { return m_ntiles; }
+
+    ALPAKA_FN_HOST inline constexpr auto nPerDim() const { return m_nperdim; }
+
+    ALPAKA_FN_HOST inline constexpr void clear(const Queue& queue) {}
+
+    ALPAKA_FN_HOST clue::device_view<Device, uint32_t[]> indexes(const Device& dev,
+                                                                 size_t assoc_id) {
+      return m_assoc.indexes(dev, assoc_id);
     }
 
   private:
-    std::size_t n_tiles;
-    int n_tiles_per_dim;
-    CoordinateExtremes<Ndim> min_max;
-    float tile_size[Ndim];
-	clue::AssociationMap<Device> m_tiles;
+    clue::AssociationMap<Device> m_assoc;
+    clue::device_buffer<Device, CoordinateExtremes<Ndim>> m_minmax;
+    clue::device_buffer<Device, float[Ndim]> m_tilesizes;
+    int32_t m_ntiles;
+    int32_t m_nperdim;
+    clue::device_buffer<Device, TilesAlpakaView<Ndim>> m_view;
   };
+
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
