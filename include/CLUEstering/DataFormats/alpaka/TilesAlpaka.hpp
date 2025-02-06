@@ -42,7 +42,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     CoordinateExtremes<Ndim>* minmax;
     float* tilesizes;
     int32_t* wrapped;
-    size_t npoints;
+    uint32_t npoints;
     int32_t ntiles;
     int32_t nperdim;
 

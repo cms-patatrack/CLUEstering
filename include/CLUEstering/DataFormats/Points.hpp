@@ -1,13 +1,14 @@
 
 #pragma once
 
+#include <array>
 #include <memory>
 #include <vector>
 
 template <uint8_t Ndim>
 struct PointInfo {
   uint32_t nPoints;
-  int wrapping[Ndim];
+  std::array<uint8_t, Ndim> wrapping{};
 };
 
 template <uint8_t Ndim>
@@ -57,7 +58,7 @@ public:
   const float* coords() const { return m_view->coords; }
   const float* weights() const { return m_view->weights; }
 
-  const int* wrapped() const { return m_info.wrapping; }
+  const std::array<uint8_t, Ndim> wrapped() const { return m_info.wrapping; }
 
   int* clusterIndexes() { return m_view->clusterIndexes; }
   const int* clusterIndexes() const { return m_view->clusterIndexes; }
