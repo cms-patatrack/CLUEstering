@@ -335,9 +335,8 @@ namespace clue {
       } else if constexpr (std::is_same_v<Device, alpaka::DevCpu>) {
         // allocate pinned host memory accessible by the queue's platform
         using Platform = alpaka::Platform<alpaka::Dev<Queue>>;
-        return alpaka::
-            allocMappedBuf<alpaka::Platform<alpaka::Dev<Queue>>, std::byte, size_t>(
-                device_, ::clue::platform<Platform>(), bytes);
+        return alpaka::allocMappedBuf<std::byte, size_t>(
+            device_, ::clue::platform<Platform>(), bytes);
       } else {
         // unsupported combination
         static_assert(std::is_same_v<Device, alpaka::Dev<Queue>> or
