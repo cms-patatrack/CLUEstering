@@ -12,7 +12,7 @@
 #include "CLUEstering/DataFormats/Points.hpp"
 #include "CLUEstering/DataFormats/alpaka/PointsAlpaka.hpp"
 
-#include "read_csv.hpp"
+#include "CLUEstering/utility/read_csv.hpp"
 
 #include <pybind11/embed.h>
 #include <pybind11/stl_bind.h>

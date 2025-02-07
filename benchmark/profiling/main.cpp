@@ -8,7 +8,7 @@
 #include "CLUEstering/DataFormats/Points.hpp"
 #include "CLUEstering/DataFormats/alpaka/PointsAlpaka.hpp"
 
-#include "read_csv.hpp"
+#include "CLUEstering/utility/read_csv.hpp"
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   void run(const std::string& input_file) {

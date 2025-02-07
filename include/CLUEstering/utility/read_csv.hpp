@@ -36,4 +36,3 @@ std::vector<T> read_csv(const std::string& file_path) {
 
   return coords;
 }
-
