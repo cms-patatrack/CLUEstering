@@ -25,11 +25,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   template <uint8_t Ndim>
   class CLUEAlgoAlpaka {
   public:
-    CLUEAlgoAlpaka() = delete;
     explicit CLUEAlgoAlpaka(float dc, float rhoc, float dm, int pPBin, Queue queue)
         : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin} {
       init_device(queue);
     }
+    explicit CLUEAlgoAlpaka(float dc, float rhoc, float dm, int pPBin, Queue queue_)
+        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin} {}
 
     TilesAlpakaView<Ndim>* m_tiles;
     VecArray<int32_t, reserve>* m_seeds;
@@ -39,6 +40,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     void make_clusters(PointsSoA<Ndim>& h_points,
                        const KernelType& kernel,
                        Queue queue,
+                       std::size_t block_size);
+    template <typename KernelType>
+    void make_clusters(PointsSoA<Ndim>& h_points,
+                       PointsAlpaka<Ndim>& d_points,
+					   TilesAlpaka<Ndim>* tile_buffer,
+                       const KernelType& kernel,
+                       Queue queue_,
                        std::size_t block_size);
 
     template <typename KernelType>
@@ -64,15 +72,15 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         d_followers;
     std::optional<PointsAlpaka<Ndim>> d_points;
 
-    // Private methods
-    void init_device(Queue queue);
+    void init_device(Queue queue_);
+    void init_device(Queue queue_, TilesAlpaka<Ndim>* tile_buffer);
+
     void setupTiles(Queue queue, const PointsSoA<Ndim>& h_points);
     void setupPoints(const PointsSoA<Ndim>& h_points,
                      PointsAlpaka<Ndim>& dev_points,
                      Queue queue,
                      std::size_t block_size);
 
-    // Construction of the tiles
     void calculate_tile_size(CoordinateExtremes<Ndim>* min_max,
                              float* tile_sizes,
                              const PointsSoA<Ndim>& h_points,
@@ -109,6 +117,18 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     m_seeds = (*d_seeds).data();
     m_followers = (*d_followers).data();
   }
+
+  void CLUEAlgoAlpaka<Ndim>::init_device(Queue queue_, TilesAlpaka<Ndim>* tile_buffer) {
+    d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue_);
+    d_followers =
+        clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue_, reserve);
+
+    // Copy to the public pointers
+    m_tiles = tile_buffer;
+    m_seeds = (*d_seeds).data();
+    m_followers = (*d_followers).data();
+  }
+
 
   template <uint8_t Ndim>
   void CLUEAlgoAlpaka<Ndim>::setupTiles(Queue queue, const PointsSoA<Ndim>& h_points) {
