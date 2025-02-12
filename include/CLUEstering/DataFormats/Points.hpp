@@ -47,6 +47,19 @@ public:
     m_view->isSeed = intBuffer + m_info.nPoints;
   }
 
+  PointsSoA(float* floatBuffer, int* intBuffer, const uint32_t nPoints)
+      : m_coordsBuffer{floatBuffer},
+        m_resultsBuffer{intBuffer},
+        m_view{std::make_unique<View>()},
+        m_info{},
+        m_debugInfo{nPoints} {
+    m_info.nPoints = nPoints;
+    m_view->coords = floatBuffer;
+    m_view->weights = floatBuffer + m_info.nPoints * Ndim;
+    m_view->clusterIndexes = intBuffer;
+    m_view->isSeed = intBuffer + m_info.nPoints;
+  }
+
   PointsSoA(const PointsSoA&) = delete;
   PointsSoA& operator=(const PointsSoA&) = delete;
   PointsSoA(PointsSoA&&) = default;

@@ -41,7 +41,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     uint32_t* offsets;
     CoordinateExtremes<Ndim>* minmax;
     float* tilesizes;
-    int32_t* wrapped;
+    uint8_t* wrapping;
     uint32_t npoints;
     int32_t ntiles;
     int32_t nperdim;
@@ -52,19 +52,19 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     ALPAKA_FN_ACC inline constexpr const float* tileSize() const { return tilesizes; }
     ALPAKA_FN_ACC inline constexpr float* tileSize() { return tilesizes; }
 
-    ALPAKA_FN_ACC inline constexpr const int* wrapped() const { return wrapped; }
-    ALPAKA_FN_ACC inline constexpr int* wrapped() { return wrapped; }
+    ALPAKA_FN_ACC inline constexpr const uint8_t* wrapped() const { return wrapping; }
+    ALPAKA_FN_ACC inline constexpr uint8_t* wrapped() { return wrapping; }
 
     template <typename TAcc>
     ALPAKA_FN_ACC inline constexpr int getBin(const TAcc& acc,
                                               float coord,
                                               int dim) const {
       int coord_bin;
-      if (m_wrapped[dim]) {
+      if (wrapping[dim]) {
         coord_bin = static_cast<int>(
-            (normalizeCoordinate(coord, dim) - minmax->min(dim)) / tile_size[dim]);
+            (normalizeCoordinate(coord, dim) - minmax->min(dim)) / tilesizes[dim]);
       } else {
-        coord_bin = static_cast<int>((coord - minmax->min(dim)) / tile_size[dim]);
+        coord_bin = static_cast<int>((coord - minmax->min(dim)) / tilesizes[dim]);
       }
 
       // Address the cases of underflow and overflow
@@ -89,9 +89,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     template <typename TAcc>
     ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(
         const TAcc& acc, const VecArray<uint32_t, Ndim>& Bins) const {
-      uint32_t global_bin = 0;
+      uint32_t globalBin = 0;
       for (int dim = 0; dim != Ndim; ++dim) {
-        auto bin_i = m_wrapped[dim] ? (Bins[dim] % nperdim) : Bins[dim];
+        auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
         globalBin += alpaka::math::pow(acc, nperdim, Ndim - dim - 1) * bin_i;
       }
       return globalBin;
@@ -106,7 +106,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         VecArray<uint32_t, 2> dim_sb;
         auto infBin = getBin(acc, sb_extremes[dim][0], dim);
         auto supBin = getBin(acc, sb_extremes[dim][1], dim);
-        if (m_wrapped[dim] and infBin > supBin)
+        if (wrapping[dim] and infBin > supBin)
           supBin += nperdim;
         dim_sb.push_back_unsafe(infBin);
         dim_sb.push_back_unsafe(supBin);
@@ -136,7 +136,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     ALPAKA_FN_ACC inline float distance(const float* coord_i, const float* coord_j) {
       float dist_sq = 0.f;
       for (int dim = 0; dim != Ndim; ++dim) {
-        if (m_wrapped[dim])
+        if (wrapping[dim])
           dist_sq += normalizeCoordinate(coord_i[dim] - coord_j[dim], dim) *
                      normalizeCoordinate(coord_i[dim] - coord_j[dim], dim);
         else
@@ -153,7 +153,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         : m_assoc{clue::AssociationMap<Device>(n_points, n_tiles, queue)},
           m_minmax{clue::make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
           m_tilesizes{clue::make_device_buffer<float[Ndim]>(queue)},
-          m_wrapped{clue::make_device_buffer<int[Ndim]>(queue)},
+          m_wrapped{clue::make_device_buffer<uint8_t[Ndim]>(queue)},
           m_ntiles{n_tiles},
           m_nperdim{n_perdim},
           m_view{clue::make_device_buffer<TilesAlpakaView<Ndim>>(queue)} {
@@ -162,7 +162,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       host_view->offsets = m_assoc.offsets().data();
       host_view->minmax = m_minmax.data();
       host_view->tilesizes = m_tilesizes.data();
-      host_view->wrapped = m_wrapped.data();
+      host_view->wrapping = m_wrapped.data();
       host_view->npoints = n_points;
       host_view->ntiles = n_tiles;
       host_view->nperdim = n_perdim;
@@ -206,7 +206,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     ALPAKA_FN_HOST inline clue::device_buffer<Device, float[Ndim]> tileSize() const {
       return m_tilesizes;
     }
-    ALPAKA_FN_HOST inline clue::device_buffer<Device, int32_t[Ndim]> wrapped() const {
+    ALPAKA_FN_HOST inline clue::device_buffer<Device, uint8_t[Ndim]> wrapped() const {
       return m_wrapped;
     }
 
@@ -225,7 +225,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     clue::AssociationMap<Device> m_assoc;
     clue::device_buffer<Device, CoordinateExtremes<Ndim>> m_minmax;
     clue::device_buffer<Device, float[Ndim]> m_tilesizes;
-    clue::device_buffer<Device, int32_t[Ndim]> m_wrapped;
+    clue::device_buffer<Device, uint8_t[Ndim]> m_wrapped;
     int32_t m_ntiles;
     int32_t m_nperdim;
     clue::device_buffer<Device, TilesAlpakaView<Ndim>> m_view;
