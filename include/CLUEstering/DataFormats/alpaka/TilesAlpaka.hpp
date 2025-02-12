@@ -222,7 +222,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     }
 
   private:
-
     clue::AssociationMap<Device> m_assoc;
     clue::device_buffer<Device, CoordinateExtremes<Ndim>> m_minmax;
     clue::device_buffer<Device, float[Ndim]> m_tilesizes;
