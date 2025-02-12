@@ -56,7 +56,6 @@ namespace clue {
                                   size_t size) const {
       for (auto i : alpaka::uniformElements(acc, size)) {
         const auto binId = bin_buffer[i];
-        const auto position = temp_offsets[binId];
         auto prev = alpaka::atomicAdd(acc, &temp_offsets[binId], 1u);
         indexes[prev] = i;
       }

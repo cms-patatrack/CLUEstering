@@ -152,7 +152,7 @@ namespace clue {
                                   T const* ci,
                                   T* co,
                                   uint32_t size,
-                                  int32_t numBlocks,
+                                  int32_t /* numBlocks */,
                                   int32_t* pc,
                                   std::size_t warpSize) const {
       // Get shared variable. The workspace is needed only for multi-threaded accelerators.
