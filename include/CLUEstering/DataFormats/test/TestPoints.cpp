@@ -12,7 +12,7 @@ TEST_CASE("Test implementation of Points SoA") {
   const auto ndim = 2;
   std::vector<float> floatBuffer(3 * n);
   std::vector<int> intBuffer(2 * n);
-  PointsSoA<2> points(floatBuffer.data(), intBuffer.data(), PointShape<2>{n});
+  PointsSoA<2> points(floatBuffer.data(), intBuffer.data(), PointInfo<2>{n});
 
   SUBCASE("Check that the content of the SoA is the same as the buffer") {
     CHECK(std::equal(floatBuffer.begin(), floatBuffer.end(), points.coords()));

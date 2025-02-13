@@ -12,7 +12,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
            float dm,
            int pPBin,
            std::tuple<float*, int*>&& pData,
-           const PointShape<Ndim>& shape,
+           const PointInfo<Ndim>& shape,
            const Kernel& kernel,
            Queue queue_,
            size_t block_size) {

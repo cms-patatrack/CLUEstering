@@ -57,7 +57,7 @@ namespace alpaka_tbb_async {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointShape<1>{n_points},
+                       PointInfo<1>{n_points},
                        kernel,
                        queue_,
                        block_size);
@@ -68,7 +68,7 @@ namespace alpaka_tbb_async {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointShape<2>{n_points},
+                       PointInfo<2>{n_points},
                        kernel,
                        queue_,
                        block_size);
@@ -79,7 +79,7 @@ namespace alpaka_tbb_async {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointShape<3>{n_points},
+                       PointInfo<3>{n_points},
                        kernel,
                        queue_,
                        block_size);
@@ -90,7 +90,7 @@ namespace alpaka_tbb_async {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointShape<4>{n_points},
+                       PointInfo<4>{n_points},
                        kernel,
                        queue_,
                        block_size);
@@ -101,7 +101,7 @@ namespace alpaka_tbb_async {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointShape<5>{n_points},
+                       PointInfo<5>{n_points},
                        kernel,
                        queue_,
                        block_size);
@@ -112,7 +112,7 @@ namespace alpaka_tbb_async {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointShape<6>{n_points},
+                       PointInfo<6>{n_points},
                        kernel,
                        queue_,
                        block_size);
@@ -123,7 +123,7 @@ namespace alpaka_tbb_async {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointShape<7>{n_points},
+                       PointInfo<7>{n_points},
                        kernel,
                        queue_,
                        block_size);
@@ -134,7 +134,7 @@ namespace alpaka_tbb_async {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointShape<8>{n_points},
+                       PointInfo<8>{n_points},
                        kernel,
                        queue_,
                        block_size);
@@ -145,7 +145,7 @@ namespace alpaka_tbb_async {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointShape<9>{n_points},
+                       PointInfo<9>{n_points},
                        kernel,
                        queue_,
                        block_size);
@@ -156,7 +156,7 @@ namespace alpaka_tbb_async {
                         dm,
                         pPBin,
                         std::make_tuple(pData, pResults),
-                        PointShape<10>{n_points},
+                        PointInfo<10>{n_points},
                         kernel,
                         queue_,
                         block_size);

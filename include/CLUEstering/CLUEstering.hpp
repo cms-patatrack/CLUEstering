@@ -131,6 +131,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     const auto device = alpaka::getDev(queue);
     alpaka::memcpy(queue, d_tiles->minMax(), min_max);
     alpaka::memcpy(queue, d_tiles->tileSize(), tile_sizes);
+    alpaka::memcpy(
+        queue, d_tiles->wrapped(), clue::make_host_view(h_points.wrapped().data(), Ndim));
     alpaka::wait(queue);
   }
 

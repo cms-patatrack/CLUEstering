@@ -60,10 +60,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         float coords_j[Ndim];
         getCoords<Ndim>(coords_j, dev_points, j);
 
-        float dist_ij_sq{0.f};
-        for (int dim{}; dim != Ndim; ++dim) {
-          dist_ij_sq += (coords_j[dim] - coords_i[dim]) * (coords_j[dim] - coords_i[dim]);
-        }
+        float dist_ij_sq = tiles->distance(coords_i, coords_j);
 
         if (dist_ij_sq <= dc * dc) {
           *rho_i += kernel(acc, alpaka::math::sqrt(acc, dist_ij_sq), point_id, j) *
