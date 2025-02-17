@@ -59,10 +59,10 @@ std::vector<int> read_output(const std::string& file_path) {
     for (size_t dim = 0; dim < NDim; ++dim) {
       getline(buffer_stream, value, ',');
     }
-	getline(buffer_stream, value, ',');
-	results[point_id] = std::stoi(value);
-	getline(buffer_stream, value);
-	results[point_id + n_points] = std::stoi(value);
+    getline(buffer_stream, value, ',');
+    results[point_id] = std::stoi(value);
+    getline(buffer_stream, value);
+    results[point_id + n_points] = std::stoi(value);
 
     ++point_id;
   }

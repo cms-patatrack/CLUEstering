@@ -9,15 +9,14 @@ namespace clue {
     return *std::ranges::max_element(cluster_ids) + 1;
   }
 
-  std::vector<std::vector<int>> compute_clusters_points(
-      std::span<int> cluster_ids) {
+  std::vector<std::vector<int>> compute_clusters_points(std::span<int> cluster_ids) {
     const auto nclusters = compute_nclusters(cluster_ids);
     std::vector<std::vector<int>> clusters_points(nclusters);
 
     std::for_each(
         cluster_ids.begin(), cluster_ids.end(), [&, i = 0](auto cluster_id) mutable {
-		  if (cluster_id > -1)
-			clusters_points[cluster_id].push_back(i++);
+          if (cluster_id > -1)
+            clusters_points[cluster_id].push_back(i++);
         });
     return clusters_points;
   }
@@ -33,10 +32,14 @@ namespace clue {
     return clusters;
   }
 
-  bool validate_results(const std::span<int> cluster_ids, const std::span<int> truth) {
+  bool validate_results(std::span<int> cluster_ids, std::span<int> truth) {
+    auto result_clusters_sizes = compute_clusters_size(cluster_ids);
+    auto truth_clusters_sizes = compute_clusters_size(truth);
+    std::ranges::sort(result_clusters_sizes);
+    std::ranges::sort(truth_clusters_sizes);
+
     bool compare_nclusters = compute_nclusters(cluster_ids) == compute_nclusters(truth);
-    bool compare_clusters_size =
-        compute_clusters_size(cluster_ids) == compute_clusters_size(truth);
+    bool compare_clusters_size = result_clusters_sizes == truth_clusters_sizes;
     return compare_nclusters && compare_clusters_size;
   }
 

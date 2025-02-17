@@ -13,7 +13,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
   set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic -g -O0")
 endif()
 
-include_directories(..)
+include_directories(../..)
 
 include(FetchContent)
 # Get doctest
