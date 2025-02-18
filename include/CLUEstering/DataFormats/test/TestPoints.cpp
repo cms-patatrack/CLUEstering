@@ -1,5 +1,5 @@
 
-#include "Points.h"
+#include "DataFormats/Points.hpp"
 
 #include <random>
 #include <vector>

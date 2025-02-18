@@ -149,14 +149,20 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   template <uint8_t Ndim>
   class TilesAlpaka {
   public:
-    TilesAlpaka(Queue queue, uint32_t n_points, int32_t n_perdim, int32_t n_tiles)
-        : m_assoc{clue::AssociationMap<Device>(n_points, n_tiles, queue)},
-          m_minmax{clue::make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
-          m_tilesizes{clue::make_device_buffer<float[Ndim]>(queue)},
-          m_wrapped{clue::make_device_buffer<uint8_t[Ndim]>(queue)},
-          m_ntiles{n_tiles},
-          m_nperdim{n_perdim},
-          m_view{clue::make_device_buffer<TilesAlpakaView<Ndim>>(queue)} {
+    TilesAlpaka(Queue queue, uint32_t n_points, uint32_t pointsPerTile) {
+      auto n_tiles =
+          static_cast<int32_t>(std::ceil(n_points / static_cast<float>(pointsPerTile)));
+      const auto n_perdim = static_cast<int32_t>(std::ceil(std::pow(n_tiles, 1. / Ndim)));
+      n_tiles = static_cast<int32_t>(std::pow(n_perdim, Ndim));
+
+      m_assoc = clue::AssociationMap<Device>(n_points, n_tiles, queue);
+      m_minmax = clue::make_device_buffer<CoordinateExtremes<Ndim>>(queue);
+      m_tilesizes = clue::make_device_buffer<float[Ndim]>(queue);
+      m_wrapped = clue::make_device_buffer<uint8_t[Ndim]>(queue);
+      m_ntiles = n_tiles;
+      m_nperdim = n_perdim;
+      m_view = clue::make_device_buffer<TilesAlpakaView<Ndim>>(queue);
+
       auto host_view = clue::make_host_buffer<TilesAlpakaView<Ndim>>(queue);
       host_view->indexes = m_assoc.indexes().data();
       host_view->offsets = m_assoc.offsets().data();
@@ -169,12 +175,67 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
       alpaka::memcpy(queue, m_view, host_view);
     }
+    TilesAlpaka(Queue queue, uint32_t n_points, int32_t n_tiles)
+        : m_assoc{clue::AssociationMap<Device>(n_points, n_tiles, queue)},
+          m_minmax{clue::make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
+          m_tilesizes{clue::make_device_buffer<float[Ndim]>(queue)},
+          m_wrapped{clue::make_device_buffer<uint8_t[Ndim]>(queue)},
+          m_ntiles{n_tiles},
+          m_nperdim{static_cast<int32_t>(std::pow(n_tiles, 1.f / Ndim))},
+          m_view{clue::make_device_buffer<TilesAlpakaView<Ndim>>(queue)} {
+      auto host_view = clue::make_host_buffer<TilesAlpakaView<Ndim>>(queue);
+      host_view->indexes = m_assoc.indexes().data();
+      host_view->offsets = m_assoc.offsets().data();
+      host_view->minmax = m_minmax.data();
+      host_view->tilesizes = m_tilesizes.data();
+      host_view->wrapping = m_wrapped.data();
+      host_view->npoints = n_points;
+      host_view->ntiles = m_ntiles;
+      host_view->nperdim = m_nperdim;
+
+      alpaka::memcpy(queue, m_view, host_view);
+    }
 
     TilesAlpakaView<Ndim>* view() { return m_view.data(); }
 
     template <typename TQueue, typename = std::enable_if_t<alpaka::isQueue<TQueue>>>
-    ALPAKA_FN_HOST void initialize(uint32_t size, uint32_t nbins, const TQueue& queue) {
-      m_assoc.initialize(size, nbins, queue);
+    ALPAKA_FN_HOST void initialize(uint32_t npoints,
+                                   int32_t ntiles,
+                                   int32_t nperdim,
+                                   TQueue queue) {
+      m_assoc.initialize(npoints, ntiles, queue);
+      m_ntiles = ntiles;
+      m_nperdim = nperdim;
+      auto host_view = clue::make_host_buffer<TilesAlpakaView<Ndim>>(queue);
+      host_view->indexes = m_assoc.indexes().data();
+      host_view->offsets = m_assoc.offsets().data();
+      host_view->minmax = m_minmax.data();
+      host_view->tilesizes = m_tilesizes.data();
+      host_view->npoints = npoints;
+      host_view->ntiles = ntiles;
+      host_view->nperdim = nperdim;
+
+      alpaka::memcpy(queue, m_view, host_view);
+    }
+
+    template <typename TQueue, typename = std::enable_if_t<alpaka::isQueue<TQueue>>>
+    ALPAKA_FN_HOST void reset(uint32_t npoints,
+                              int32_t ntiles,
+                              int32_t nperdim,
+                              TQueue queue) {
+      m_assoc.reset(queue, npoints, ntiles);
+
+      m_ntiles = ntiles;
+      m_nperdim = nperdim;
+      auto host_view = clue::make_host_buffer<TilesAlpakaView<Ndim>>(queue);
+      host_view->indexes = m_assoc.indexes().data();
+      host_view->offsets = m_assoc.offsets().data();
+      host_view->minmax = m_minmax.data();
+      host_view->tilesizes = m_tilesizes.data();
+      host_view->npoints = npoints;
+      host_view->ntiles = ntiles;
+      host_view->nperdim = nperdim;
+      alpaka::memcpy(queue, m_view, host_view);
     }
 
     struct GetGlobalBin {
@@ -215,6 +276,19 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     ALPAKA_FN_HOST inline constexpr auto nPerDim() const { return m_nperdim; }
 
     ALPAKA_FN_HOST inline constexpr void clear(const Queue& queue) {}
+
+    ALPAKA_FN_HOST const clue::device_buffer<Device, uint32_t[]>& indexes() const {
+      return m_assoc.indexes();
+    }
+    ALPAKA_FN_HOST clue::device_buffer<Device, uint32_t[]>& indexes() {
+      return m_assoc.indexes();
+    }
+    ALPAKA_FN_HOST const clue::device_buffer<Device, uint32_t[]>& offsets() const {
+      return m_assoc.offsets();
+    }
+    ALPAKA_FN_HOST clue::device_buffer<Device, uint32_t[]>& offsets() {
+      return m_assoc.offsets();
+    }
 
     ALPAKA_FN_HOST clue::device_view<Device, uint32_t[]> indexes(const Device& dev,
                                                                  size_t assoc_id) {
