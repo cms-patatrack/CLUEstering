@@ -7,7 +7,6 @@
 #include <cmath>
 #include <cstdint>
 #include <iostream>
-#include <map>
 #include <utility>
 #include <vector>
 
@@ -16,6 +15,7 @@
 #include "DataFormats/alpaka/TilesAlpaka.hpp"
 #include "CLUE/CLUEAlpakaKernels.hpp"
 #include "CLUE/ConvolutionalKernel.hpp"
+#include "utility/validation.hpp"
 
 using clue::VecArray;
 
@@ -54,7 +54,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                        Queue queue_,
                        std::size_t block_size);
 
-    std::map<int, std::vector<int>> getClusters(const PointsSoA<Ndim>& h_points);
+    std::vector<std::vector<int>> getClusters(const PointsSoA<Ndim>& h_points);
 
   private:
     float dc_;
@@ -273,14 +273,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   }
 
   template <uint8_t Ndim>
-  std::map<int, std::vector<int>> CLUEAlgoAlpaka<Ndim>::getClusters(
+  std::vector<std::vector<int>> CLUEAlgoAlpaka<Ndim>::getClusters(
       const PointsSoA<Ndim>& h_points) {
-    // cluster all points with same clusterId
-    std::map<int, std::vector<int>> clusters;
-    for (size_t i = 0; i < h_points.nPoints(); ++i) {
-      clusters[h_points.clusterIndexes()[i]].push_back(i);
-    }
-    return clusters;
+    std::span<int> cluster_ids{h_points.clusterIndexes(), h_points.nPoints()};
+    return clue::compute_clusters_points(cluster_ids);
   }
 
 }  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
