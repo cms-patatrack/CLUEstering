@@ -15,7 +15,7 @@
 #include "DataFormats/alpaka/TilesAlpaka.hpp"
 #include "CLUE/CLUEAlpakaKernels.hpp"
 #include "CLUE/ConvolutionalKernel.hpp"
-#include <utility/validation.hpp>
+#include "utility/validation.hpp"
 
 using clue::VecArray;
 
