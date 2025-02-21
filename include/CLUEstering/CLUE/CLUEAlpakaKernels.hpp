@@ -208,7 +208,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                   TilesAlpakaView<Ndim>* dev_tiles,
                                   PointsView* dev_points,
                                   float dm,
-                                  float,
                                   uint32_t n_points) const {
       float dm_squared{dm * dm};
       for (auto i : alpaka::uniformElements(acc, n_points)) {
@@ -258,8 +257,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                   VecArray<int32_t, max_followers>* followers,
                                   PointsView* dev_points,
                                   float dm,
-                                  float d_c,
-                                  float rho_c,
+                                  float seed_dc,
+                                  float rhoc,
                                   uint32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         // initialize cluster_index
@@ -269,8 +268,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         float rho_i{dev_points->rho[i]};
 
         // Determine whether the point is a seed or an outlier
-        bool is_seed{(delta_i > d_c) && (rho_i >= rho_c)};
-        bool is_outlier{(delta_i > dm) && (rho_i < rho_c)};
+        bool is_seed{(delta_i > seed_dc) && (rho_i >= rhoc)};
+        bool is_outlier{(delta_i > dm) && (rho_i < rhoc)};
 
         if (is_seed) {
           dev_points->is_seed[i] = 1;
