@@ -43,7 +43,7 @@ endif()
 include_directories(include)
 
 # create lib directory in CLUEstering folder
-execute_process(COMMAND mkdir -p ./CLUEstering/lib)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/CLUEstering/lib)
 
 # Convolutional Kernels compile convolutional kernel module
 pybind11_add_module(CLUE_Convolutional_Kernels SHARED
@@ -60,13 +60,11 @@ target_compile_options(
 set_target_properties(
   CLUE_Convolutional_Kernels PROPERTIES LIBRARY_OUTPUT_DIRECTORY
                                         ./lib/CLUEstering/lib/)
-# create link of shared object to lib folder inside CLUEstering directory
-file(GLOB CONV_MODULE
-     ./build/lib/CLUEstering/lib/CLUE_Convolutional_Kernels*.so)
-foreach(CONV_MODULE ${CONV_MODULE})
-  execute_process(COMMAND ln -sf ${CONV_MODULE}
-                          ./CLUEstering/lib/CLUE_Convolutional_Kernels.so)
-endforeach()
+# copy shared library for local testing
+add_custom_command(TARGET CLUE_Convolutional_Kernels POST_BUILD
+				   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/CLUE_Convolutional_Kernels.* ${CMAKE_SOURCE_DIR}/CLUEstering/lib/
+				   COMMENT "Copying module to ${CMAKE_SOURCE_DIR}/CLUEstering/lib"
+)
 
 # CPU Serial compile cpu serial module
 pybind11_add_module(CLUE_CPU_Serial SHARED
@@ -81,12 +79,11 @@ target_compile_options(
 # set output directory
 set_target_properties(CLUE_CPU_Serial PROPERTIES LIBRARY_OUTPUT_DIRECTORY
                                                  ./lib/CLUEstering/lib/)
-# create link of shared object to lib folder inside CLUEstering directory
-file(GLOB CONV_MODULE ./build/lib/CLUEstering/lib/CLUE_CPU_Serial*.so)
-foreach(CONV_MODULE ${CONV_MODULE})
-  execute_process(COMMAND ln -sf ${CONV_MODULE}
-                          ./CLUEstering/lib/CLUE_CPU_Serial.so)
-endforeach()
+# copy shared library for local testing
+add_custom_command(TARGET CLUE_CPU_Serial POST_BUILD
+				   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/CLUE_CPU_Serial.* ${CMAKE_SOURCE_DIR}/CLUEstering/lib/
+				   COMMENT "Copying module to ${CMAKE_SOURCE_DIR}/CLUEstering/lib"
+)
 
 if(NOT ${SERIAL_ONLY})
   find_package(TBB)
@@ -106,12 +103,11 @@ if(NOT ${SERIAL_ONLY})
     target_link_libraries(CLUE_CPU_TBB PRIVATE TBB::tbb)
     set_target_properties(CLUE_CPU_TBB PROPERTIES LIBRARY_OUTPUT_DIRECTORY
                                                   ./lib/CLUEstering/lib/)
-    # create link of shared object to lib folder inside CLUEstering directory
-    file(GLOB CONV_MODULE ./build/lib/CLUEstering/lib/CLUE_CPU_TBB*.so)
-    foreach(CONV_MODULE ${CONV_MODULE})
-      execute_process(COMMAND ln -sf ${CONV_MODULE}
-                              ./CLUEstering/lib/CLUE_CPU_TBB.so)
-    endforeach()
+	# copy shared library for local testing
+	add_custom_command(TARGET CLUE_CPU_TBB POST_BUILD
+					   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/CLUE_CPU_TBB.* ${CMAKE_SOURCE_DIR}/CLUEstering/lib/
+					   COMMENT "Copying module to ${CMAKE_SOURCE_DIR}/CLUEstering/lib"
+	)
   endif()
 endif()
 
@@ -156,12 +152,11 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
     # set output directory
     set_target_properties(CLUE_GPU_CUDA PROPERTIES LIBRARY_OUTPUT_DIRECTORY
                                                    ./lib/CLUEstering/lib/)
-    # create link of shared object to lib folder inside CLUEstering directory
-    file(GLOB CONV_MODULE ./build/lib/CLUEstering/lib/CLUE_GPU_CUDA*.so)
-    foreach(CONV_MODULE ${CONV_MODULE})
-      execute_process(COMMAND ln -sf ${CONV_MODULE}
-                              ./CLUEstering/lib/CLUE_GPU_CUDA.so)
-    endforeach()
+	# copy shared library for local testing
+	add_custom_command(TARGET CLUE_GPU_CUDA POST_BUILD
+					   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/CLUE_GPU_CUDA.* ${CMAKE_SOURCE_DIR}/CLUEstering/lib/
+					   COMMENT "Copying module to ${CMAKE_SOURCE_DIR}/CLUEstering/lib"
+	)
   endif()
 
   # GPU HIP check if HIP is available
@@ -194,10 +189,9 @@ if((NOT ${CPU_ONLY}) AND (NOT ${SERIAL_ONLY}))
     set_target_properties(CLUE_GPU_HIP PROPERTIES LIBRARY_OUTPUT_DIRECTORY
                                                   ./lib/CLUEstering/lib/)
     # create link of shared object to lib folder inside CLUEstering directory
-    file(GLOB CONV_MODULE ./build/lib/CLUEstering/lib/CLUE_GPU_HIP*.so)
-    foreach(CONV_MODULE ${CONV_MODULE})
-      execute_process(COMMAND ln -sf ${CONV_MODULE}
-                              ./CLUEstering/lib/CLUE_GPU_HIP.so)
-    endforeach()
+	add_custom_command(TARGET CLUE_GPU_HIP POST_BUILD
+					   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/CLUE_GPU_HIP.* ${CMAKE_SOURCE_DIR}/CLUEstering/lib/
+					   COMMENT "Copying module to ${CMAKE_SOURCE_DIR}/CLUEstering/lib"
+	)
   endif()
 endif()
