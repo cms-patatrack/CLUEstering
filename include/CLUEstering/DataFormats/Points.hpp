@@ -22,7 +22,7 @@ public:
   };
 
   struct DebugInfo {
-#ifdef DEBUG
+#ifdef CLUE_DEBUG
     std::vector<float> rho;
     std::vector<float> delta;
     std::vector<int> nearestHigher;

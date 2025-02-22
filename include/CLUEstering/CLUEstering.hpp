@@ -251,7 +251,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                         dev_points.view());
     alpaka::wait(queue);
 
-#ifdef DEBUG
+#ifdef CLUE_DEBUG
     alpaka::memcpy(queue,
                    clue::make_host_view(h_points.debugInfo().rho.data(), nPoints),
                    clue::make_device_view(device, dev_points.view()->rho, nPoints));
