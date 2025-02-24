@@ -26,13 +26,9 @@ add_subdirectory(extern/pybind11)
 find_package(Boost 1.75.0 REQUIRED)
 
 include(FetchContent)
-
 FetchContent_Declare(
   alpaka
-  GIT_REPOSITORY https://github.com/alpaka-group/alpaka.git
-  GIT_TAG develop
-  GIT_SHALLOW TRUE
-  FIND_PACKAGE_ARGS)
+  URL https://github.com/alpaka-group/alpaka/archive/refs/tags/1.2.0.tar.gz)
 FetchContent_MakeAvailable(alpaka)
 
 # create lib directory in CLUEstering folder
@@ -46,9 +42,9 @@ target_include_directories(
   CLUE_Convolutional_Kernels
   PRIVATE ${CMAKE_SOURCE_DIR}/include ${alpaka_SOURCE_DIR}/include
           ${Boost_INCLUDE_DIR})
-target_compile_options(
-  CLUE_Convolutional_Kernels PRIVATE -DALPAKA_HOST_ONLY
-                                     -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+target_compile_definitions(
+  CLUE_Convolutional_Kernels PRIVATE ALPAKA_HOST_ONLY
+                                     ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 set_target_properties(
   CLUE_Convolutional_Kernels
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/)
@@ -69,9 +65,8 @@ pybind11_add_module(
 target_include_directories(
   CLUE_CPU_Serial PRIVATE ${CMAKE_SOURCE_DIR}/include
                           ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
-target_compile_options(
-  CLUE_CPU_Serial PRIVATE -DALPAKA_HOST_ONLY
-                          -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+target_compile_definitions(
+  CLUE_CPU_Serial PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 set_target_properties(
   CLUE_CPU_Serial PROPERTIES LIBRARY_OUTPUT_DIRECTORY
                              ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/)
@@ -94,9 +89,8 @@ if(TBB_FOUND)
   target_include_directories(
     CLUE_CPU_TBB PRIVATE ${CMAKE_SOURCE_DIR}/include
                          ${alpaka_SOURCE_DIR}/include ${Boost_SOURCE_DIR})
-  target_compile_options(
-    CLUE_CPU_TBB PRIVATE -DALPAKA_HOST_ONLY
-                         -DALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
+  target_compile_definitions(
+    CLUE_CPU_TBB PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
   target_link_libraries(CLUE_CPU_TBB PRIVATE TBB::tbb)
   set_target_properties(
     CLUE_CPU_TBB PROPERTIES LIBRARY_OUTPUT_DIRECTORY
@@ -136,13 +130,12 @@ if(CMAKE_CUDA_COMPILER)
   target_include_directories(
     CLUE_GPU_CUDA PRIVATE ${CMAKE_SOURCE_DIR}/include
                           ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
-  set_target_properties(CLUE_GPU_CUDA PROPERTIES CUDA_ARCHITECTURES
-                                                 "50;60;61;62;70")
-  target_compile_options(CLUE_GPU_CUDA PRIVATE -DALPAKA_ACC_GPU_CUDA_ENABLED
-                                               --expt-relaxed-constexpr)
+  target_compile_definitions(CLUE_GPU_CUDA PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
+  target_compile_options(CLUE_GPU_CUDA PRIVATE --expt-relaxed-constexpr)
   set_target_properties(
-    CLUE_GPU_CUDA PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-                             ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/)
+    CLUE_GPU_CUDA
+    PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/
+               CUDA_ARCHITECTURES "50;60;61;62;70")
   # copy shared library for local testing
   add_custom_command(
     TARGET CLUE_GPU_CUDA
