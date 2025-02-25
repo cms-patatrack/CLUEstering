@@ -25,6 +25,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install matplotlib
         sudo apt install -y libboost-dev
+        sudo apt install -y libtbb-dev
 
     - name: Compile and run benchmark
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
@@ -32,6 +33,7 @@ jobs:
         cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build -- -j 2
         ./build/serial.out 10 18
+        ./build/tbb.out 10 18
 
     # TODO: this works on local but not on github actions
     # - name: Compile and run profiling

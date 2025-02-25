@@ -35,11 +35,11 @@ jobs:
         python -m pip install pandas
         python -m pip install matplotlib
         sudo apt install -y libboost-dev
+        sudo apt install -y libtbb-dev
     - name: Compile CLUEstering modules
       working-directory: ${{github.workspace}}
       run: |
         cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build
-        cmake -B build
     - name: Run tests of the Python library
       working-directory: ${{github.workspace}}/tests
       run: |
