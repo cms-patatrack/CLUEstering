@@ -13,7 +13,7 @@ endif()
 string(
   APPEND
   CMAKE_CXX_FLAGS_DEBUG
-  "-DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wpedantic -Werror -pg"
+  " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg"
 )
 string(APPEND CMAKE_CXX_FLAGS "-O2")
 

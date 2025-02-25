@@ -28,7 +28,7 @@ public:
     std::vector<int> nearestHigher;
 #endif
 
-#ifdef Debug
+#ifdef CLUE_DEBUG
     DebugInfo(uint32_t n) : rho(n), delta(n), nearestHigher(n) {}
 #else
     DebugInfo(uint32_t) {}
