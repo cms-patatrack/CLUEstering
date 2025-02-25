@@ -31,3 +31,5 @@ check_language(CUDA)
 if(CMAKE_CUDA_COMPILER)
   add_subdirectory(cuda)
 endif()
+
+add_subdirectory(sycl)
