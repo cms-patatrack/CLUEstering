@@ -211,6 +211,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       host_view->offsets = m_assoc.offsets().data();
       host_view->minmax = m_minmax.data();
       host_view->tilesizes = m_tilesizes.data();
+      host_view->wrapping = m_wrapped.data();
       host_view->npoints = npoints;
       host_view->ntiles = ntiles;
       host_view->nperdim = nperdim;
@@ -232,6 +233,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       host_view->offsets = m_assoc.offsets().data();
       host_view->minmax = m_minmax.data();
       host_view->tilesizes = m_tilesizes.data();
+      host_view->wrapping = m_wrapped.data();
       host_view->npoints = npoints;
       host_view->ntiles = ntiles;
       host_view->nperdim = nperdim;
