@@ -32,7 +32,9 @@ jobs:
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build -- -j 2
+        echo "Running serial backend"
         ./build/serial.out 10 18
+        echo "Running TBB backend"
         ./build/tbb.out 10 18
 
     # TODO: this works on local but not on github actions
