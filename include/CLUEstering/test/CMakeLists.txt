@@ -9,9 +9,9 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-  set(CMAKE_CXX_FLAGS "-Wall -Wextra -g -O0")
-endif()
+string(APPEND CMAKE_CXX_FLAGS_DEBUG
+       " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg")
+string(APPEND CMAKE_CXX_FLAGS "-O2")
 
 find_package(Boost 1.75.0 REQUIRED)
 
@@ -25,8 +25,6 @@ FetchContent_Declare(
   FIND_PACKAGE_ARGS)
 FetchContent_MakeAvailable(alpaka)
 
-include_directories(../../../CLUEstering)
-
 include(FetchContent)
 # Get doctest
 FetchContent_Declare(
@@ -39,28 +37,50 @@ if(NOT doctest_POPULATED)
 endif()
 
 add_executable(serial.out TestTilesExternal.cpp)
-target_include_directories(serial.out SYSTEM
-                           PRIVATE ${doctest_SOURCE_DIR}/doctest)
-target_include_directories(serial.out PRIVATE ${alpaka_SOURCE_DIR}/include
-                                              ${Boost_INCLUDE_DIR})
-target_compile_options(serial.out PRIVATE -DALPAKA_HOST_ONLY
-                                          -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+target_include_directories(
+  serial.out
+  PRIVATE ${CMAKE_SURCE_DIR}../../../CLUEstering ${doctest_SOURCE_DIR}/doctest
+          ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+target_compile_definitions(
+  serial.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 
-add_executable(tbb.out TestTilesExternal.cpp)
-target_include_directories(tbb.out SYSTEM PRIVATE ${doctest_SOURCE_DIR}/doctest)
-target_include_directories(tbb.out PRIVATE ${alpaka_SOURCE_DIR}/include
-                                           ${Boost_INCLUDE_DIR})
-target_compile_options(tbb.out PRIVATE -DALPAKA_HOST_ONLY
-                                       -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+find_package(TBB)
+if(TBB_FOUND)
+  add_executable(tbb.out TestTilesExternal.cpp)
+  target_include_directories(
+    tbb.out
+    PRIVATE ${CMAKE_SURCE_DIR}../../../CLUEstering
+            ${doctest_SOURCE_DIR}/doctest ${alpaka_SOURCE_DIR}/include
+            ${Boost_INCLUDE_DIR})
+  target_link_libraries(tbb.out PRIVATE TBB::tbb)
+  target_compile_definitions(tbb.out PRIVATE ALPAKA_HOST_ONLY
+                                             ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+endif()
+
+find_package(OpenMP)
+# CPU OpenMP
+if(OpenMP_CXX_FOUND)
+  add_executable(openmp.out TestTilesExternal.cpp)
+  target_include_directories(
+    openmp.out
+    PRIVATE ${CMAKE_SURCE_DIR}../../../CLUEstering
+            ${doctest_SOURCE_DIR}/doctest ${alpaka_SOURCE_DIR}/include
+            ${Boost_INCLUDE_DIR})
+  target_link_libraries(openmp.out PRIVATE OpenMP::OpenMP_CXX)
+  target_compile_definitions(
+    openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
+endif()
 
 include(CheckLanguage)
 check_language(CUDA)
 
-if (CMAKE_CUDA_COMPILER)
-add_executable(cuda.out TestTilesExternal.cpp)
-target_include_directories(cuda.out SYSTEM PRIVATE ${doctest_SOURCE_DIR}/doctest)
-target_include_directories(cuda.out PRIVATE ${alpaka_SOURCE_DIR}/include
-                                           ${Boost_INCLUDE_DIR})
-target_compile_options(cuda.out PRIVATE -DALPAKA_HOST_ONLY
-										-DALPAKA_ACC_GPU_CUDA_ENABLED)
+if(CMAKE_CUDA_COMPILER)
+  add_executable(cuda.out TestTilesExternal.cpp)
+  target_include_directories(
+    cuda.out
+    PRIVATE ${CMAKE_SURCE_DIR}../../../CLUEstering
+            ${doctest_SOURCE_DIR}/doctest ${alpaka_SOURCE_DIR}/include
+            ${Boost_INCLUDE_DIR})
+  target_compile_options(cuda.out PRIVATE -DALPAKA_HOST_ONLY
+                                          -DALPAKA_ACC_GPU_CUDA_ENABLED)
 endif()
