@@ -166,7 +166,7 @@ namespace alpaka_omp2_async {
     }
   }
 
-  PYBIND11_MODULE(CLUE_CPU_TBB, m) {
+  PYBIND11_MODULE(CLUE_CPU_OMP, m) {
     m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
 
     m.def("listDevices", &listDevices, "List the available devices for the TBB backend");

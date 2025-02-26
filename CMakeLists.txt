@@ -107,6 +107,7 @@ if(TBB_FOUND)
 endif()
 
 find_package(OpenMP)
+# CPU OpenMP
 if(OpenMP_CXX_FOUND)
   pybind11_add_module(
     CLUE_CPU_OMP SHARED
@@ -116,7 +117,7 @@ if(OpenMP_CXX_FOUND)
                          ${alpaka_SOURCE_DIR}/include ${Boost_SOURCE_DIR})
   target_compile_definitions(
     CLUE_CPU_OMP PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
-  target_link_libraries(CLUE_CPU_TBB PRIVATE OpenMP::OpenMP_CXX)
+  target_link_libraries(CLUE_CPU_OMP PRIVATE OpenMP::OpenMP_CXX)
   set_target_properties(
     CLUE_CPU_OMP PROPERTIES LIBRARY_OUTPUT_DIRECTORY
                             ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/)
