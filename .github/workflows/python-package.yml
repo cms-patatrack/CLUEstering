@@ -36,6 +36,7 @@ jobs:
         python -m pip install matplotlib
         sudo apt install -y libboost-dev
         sudo apt install -y libtbb-dev
+        sudo apt install libomp-dev
     - name: Compile CLUEstering modules
       working-directory: ${{github.workspace}}
       run: |
