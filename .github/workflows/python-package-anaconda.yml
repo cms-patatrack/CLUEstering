@@ -37,6 +37,5 @@ jobs:
       working-directory: ${{github.workspace}}/tests
       run: |
         conda install -c conda-forge gcc_linux-64 gxx_linux-64
-        # strings $(conda info --base)/lib/libstdc++.so.6 | grep GLIBCXX
         python3.10 -m pip install pytest numpy matplotlib scikit-learn pandas
         python3.10 -m pytest ./*.py

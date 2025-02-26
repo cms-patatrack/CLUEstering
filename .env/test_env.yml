@@ -1,7 +1,5 @@
 name: test-with-conda
 dependencies:
-  # - gcc_linux-64
-  # - gxx_linux-64
   - libgcc
   - python>=3.11
   - numpy
