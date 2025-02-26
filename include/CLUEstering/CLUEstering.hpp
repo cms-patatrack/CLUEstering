@@ -275,7 +275,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   template <uint8_t Ndim>
   std::vector<std::vector<int>> CLUEAlgoAlpaka<Ndim>::getClusters(
       const PointsSoA<Ndim>& h_points) {
-    std::span<int> cluster_ids{h_points.clusterIndexes(), h_points.nPoints()};
+    std::span<const int> cluster_ids{h_points.clusterIndexes(), h_points.nPoints()};
     return clue::compute_clusters_points(cluster_ids);
   }
 
