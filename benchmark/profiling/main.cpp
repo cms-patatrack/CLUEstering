@@ -28,6 +28,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     const std::size_t block_size{256};
     algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue_, block_size);
+    auto clusters = algo.getClusters(h_points);
   }
 };  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
 
