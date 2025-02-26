@@ -26,6 +26,7 @@ jobs:
         pip install matplotlib
         sudo apt install -y libboost-dev
         sudo apt install -y libtbb-dev
+        sudo apt install libomp-dev
 
     - name: Compile and run benchmark
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
@@ -36,6 +37,8 @@ jobs:
         ./build/serial.out 10 18
         echo "Running TBB backend"
         ./build/tbb.out 10 18
+        echo "Running OpenMP backend"
+        ./build/openmp.out 10 18
 
     # TODO: this works on local but not on github actions
     # - name: Compile and run profiling

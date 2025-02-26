@@ -10,11 +10,8 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-string(
-  APPEND
-  CMAKE_CXX_FLAGS_DEBUG
-  " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg"
-)
+string(APPEND CMAKE_CXX_FLAGS_DEBUG
+       " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg")
 string(APPEND CMAKE_CXX_FLAGS "-O2")
 
 find_package(Boost 1.75.0 REQUIRED)
@@ -43,6 +40,18 @@ if(TBB_FOUND)
   target_link_libraries(tbb.out PRIVATE TBB::tbb)
   target_compile_definitions(tbb.out PRIVATE ALPAKA_HOST_ONLY
                                              ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
+endif()
+
+find_package(OpenMP)
+# CPU OpenMP
+if(OpenMP_CXX_FOUND)
+  add_executable(openmp.out main.cpp)
+  target_include_directories(
+    openmp.out PRIVATE ${CMAKE_SOURCE_DIR}/../../include
+                       ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+  target_link_libraries(openmp.out PRIVATE OpenMP::OpenMP_CXX)
+  target_compile_definitions(
+    openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
 endif()
 
 include(CheckLanguage)

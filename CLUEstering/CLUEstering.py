@@ -26,6 +26,10 @@ tbb_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
 if tbb_found:
     import CLUE_CPU_TBB as cpu_tbb
     backends.append("cpu tbb")
+omp_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_OMP*.so'))))
+if omp_found:
+    import CLUE_CPU_OMP as cpu_omp
+    backends.append("cpu openmp")
 cuda_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))))
 if cuda_found:
     import CLUE_GPU_CUDA as gpu_cuda
@@ -42,6 +46,14 @@ def is_tbb_available():
     """
 
     return tbb_found
+
+
+def is_openmp_available():
+    """
+    Returns True if the library is compiled with OpenMP support, False otherwise.
+    """
+
+    return omp_found
 
 
 def is_cuda_available():
@@ -577,6 +589,8 @@ class clusterer:
             cpu_serial.listDevices('cpu serial')
             if tbb_found:
                 cpu_tbb.listDevices('cpu tbb')
+            if omp_found:
+                cpu_omp.listDevices('cpu openmp')
             if cuda_found:
                 gpu_cuda.listDevices('gpu cuda')
             if hip_found:
@@ -588,6 +602,11 @@ class clusterer:
                 cpu_tbb.listDevices(backend)
             else:
                 print("TBB module not found. Please re-compile the library and try again.")
+        elif backend == "cpu openmp":
+            if omp_found:
+                cpu_omp.listDevices(backend)
+            else:
+                print("OpenMP module not found. Please re-compile the library and try again.")
         elif backend == "gpu cuda":
             if cuda_found:
                 gpu_cuda.listDevices(backend)
@@ -600,7 +619,7 @@ class clusterer:
                 print("HIP module not found. Please re-compile the library and try again.")
         else:
             raise ValueError("Invalid backend. The allowed choices for the"
-                             + " backend are: all, cpu serial, cpu tbb and gpu cuda.")
+                             + " backend are: all, cpu serial, cpu tbb, cpu openmp, gpu cuda and gpu hip.")
 
     def _partial_dimension_dataset(self, dimensions: list):
         """
@@ -687,6 +706,15 @@ class clusterer:
                                                      data.n_points, block_size, device_id)
             else:
                 print("TBB module not found. Please re-compile the library and try again.")
+
+        elif backend == "cpu openmp":
+            if omp_found:
+                cluster_id_is_seed = cpu_omp.mainRun(self.dc_, self.rhoc, self.dm, self.ppbin,
+                                                     data.coords, data.results,
+                                                     self.kernel, data.n_dim,
+                                                     data.n_points, block_size, device_id)
+            else:
+                print("OpenMP module not found. Please re-compile the library and try again.")
 
         elif backend == "gpu cuda":
             if cuda_found:
@@ -1238,6 +1266,7 @@ if __name__ == "__main__":
     c.read_data('./sissa.csv')
     c.run_clue(backend="cpu serial", verbose=True)
     c.run_clue(backend="cpu tbb", verbose=True)
+    c.run_clue(backend="cpu openmp", verbose=True)
     # c.run_clue(backend="gpu cuda", verbose=True)
     # c.run_clue(backend="gpu hip", verbose=True)
     c.cluster_plotter()

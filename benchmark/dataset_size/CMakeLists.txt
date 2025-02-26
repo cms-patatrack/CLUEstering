@@ -49,6 +49,18 @@ if(TBB_FOUND)
                                              ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 endif()
 
+find_package(OpenMP)
+# CPU OpenMP
+if(OpenMP_CXX_FOUND)
+  add_executable(openmp.out main.cpp)
+  target_include_directories(
+    openmp.out PRIVATE ${CMAKE_SOURCE_DIR}/../../include
+                       ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+  target_link_libraries(openmp.out PRIVATE pybind11::embed OpenMP::OpenMP_CXX)
+  target_compile_definitions(
+    openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
+endif()
+
 # check if CUDA is available
 include(CheckLanguage)
 check_language(CUDA)
