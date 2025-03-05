@@ -16,7 +16,7 @@ string(
   CMAKE_CXX_FLAGS_DEBUG
   " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wpedantic -Werror"
 )
-string(APPEND CMAKE_CXX_FLAGS "-O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native")
+string(APPEND CMAKE_CXX_FLAGS "-O2 -funroll-loops -ffast-math -funsafe-math-optimizations -ftree-vectorize -march=native")
 
 # include pybind11 extern subfolder
 set(PYBIND11_FINDPYTHON ON)
