@@ -17,7 +17,7 @@ string(
   CMAKE_CXX_FLAGS_DEBUG
   " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wpedantic -Werror"
 )
-string(APPEND CMAKE_CXX_FLAGS "-O2")
+string(APPEND CMAKE_CXX_FLAGS "-O2 -funroll-loops -ffast-math -funsafe-math-optimizations -ftree-vectorize -march=native")
 
 add_subdirectory(pybind11)
 
