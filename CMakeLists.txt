@@ -148,7 +148,7 @@ if(CMAKE_CUDA_COMPILER)
   endif()
 
   set_source_files_properties(
-    ${CMAKE_SOURCE_DIR}/CLUEstering/BindingModules/binding_gpu_cuda.cc
+    ${CMAKE_SOURCE_DIR}/CLUEstering/BindingModules/binding_gpu_cuda.cpp
     PROPERTIES LANGUAGE CUDA)
   pybind11_add_module(
     CLUE_GPU_CUDA SHARED
