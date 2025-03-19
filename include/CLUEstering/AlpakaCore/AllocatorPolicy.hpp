@@ -54,7 +54,7 @@ namespace clue {
 
 #if defined ALPAKA_SYCL_ONEAPI_GPU
   template <>
-  constexpr inline AllocatorPolicy allocator_policy<alpaka::DevGpuSyclIntel> = AllocatorPolicy::Asynchronous;
+  constexpr inline AllocatorPolicy allocator_policy<alpaka::DevGpuSyclIntel> = AllocatorPolicy::Synchronous;
 #endif
 
 }  // namespace clue
