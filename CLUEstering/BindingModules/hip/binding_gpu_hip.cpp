@@ -2,11 +2,14 @@
 #include <alpaka/alpaka.hpp>
 #include <vector>
 
-#include "Run.hpp"
+#include "../Run.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
+#include <pybind11/numpy.h>
+
+namespace py = pybind11;
 
 namespace alpaka_rocm_async {
 

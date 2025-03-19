@@ -3,7 +3,7 @@
 #include <tuple>
 #include <vector>
 
-#include "Run.hpp"
+#include "../Run.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -13,6 +13,7 @@
 namespace py = pybind11;
 
 namespace alpaka_serial_sync {
+
   void listDevices(const std::string& backend) {
     const char tab = '\t';
     const std::vector<Device> devices = alpaka::getDevs(alpaka::Platform<Acc1D>());

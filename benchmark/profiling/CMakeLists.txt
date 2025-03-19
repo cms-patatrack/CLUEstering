@@ -32,4 +32,21 @@ if(CMAKE_CUDA_COMPILER)
   add_subdirectory(cuda)
 endif()
 
-add_subdirectory(sycl)
+set(_sycl_search_dirs ${SYCL_ROOT_DIR} /usr/lib /usr/local/lib /opt/intel/oneapi/compiler/latest/linux)
+find_program(SYCL_COMPILER
+			NAMES icpx
+			HINTS ${_sycl_search_dirs}
+			PATH_SUFFIXES bin)
+find_path(SYCL_INCLUDE_DIR
+		 NAMES sycl/sycl.hpp
+		 HINTS ${_sycl_search_dirs}
+		 PATH_SUFFIXES include)
+find_path(SYCL_LIB_DIR
+		 NAMES libsycl.so
+		 HINTS ${_sycl_search_dirs}
+		 PATH_SUFFIXES lib)
+find_package(oneDPL)
+
+if (oneDPL_FOUND AND SYCL_COMPILER AND SYCL_INCLUDE_DIR AND SYCL_LIB_DIR)
+  add_subdirectory(sycl)
+endif()
