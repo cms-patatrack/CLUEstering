@@ -25,6 +25,10 @@ nameflag = next((arg for arg in sys.argv if '--name=' in arg), None)
 if nameflag is not None:
     file_name = nameflag.split('=')[1]
     sys.argv.remove(nameflag)
+log = False
+if '--log' in sys.argv:
+    log = True
+    sys.argv.remove('--log')
 
 linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':']
 markers = ['o', 's', 'v', '^', 'h', 'D', '<', '>']
@@ -38,7 +42,8 @@ for arg in sys.argv[1:]:
 plt.xlabel('Dataset size', fontsize=14)
 plt.ylabel('Execution time (ms)', fontsize=14)
 plt.xscale('log', base=2)
-plt.yscale('log')
+if log:
+    plt.yscale('log')
 plt.legend(fontsize=14)
 if plot_title is not None:
     plt.title(plot_title, fontsize=16)
