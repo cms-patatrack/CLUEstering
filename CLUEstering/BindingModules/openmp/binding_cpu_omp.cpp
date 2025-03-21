@@ -1,9 +1,8 @@
 
 #include <alpaka/alpaka.hpp>
-#include <tuple>
 #include <vector>
 
-#include "Run.hpp"
+#include "../Run.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -12,7 +11,8 @@
 
 namespace py = pybind11;
 
-namespace alpaka_serial_sync {
+namespace alpaka_omp2_async {
+
   void listDevices(const std::string& backend) {
     const char tab = '\t';
     const std::vector<Device> devices = alpaka::getDevs(alpaka::Platform<Acc1D>());
@@ -22,7 +22,7 @@ namespace alpaka_serial_sync {
     } else {
       std::cout << backend << " devices found: \n";
       for (size_t i{}; i < devices.size(); ++i) {
-        std::cout << tab << "device " << i << ": " << alpaka::getName(devices[i]) << '\n';
+        std::cout << tab << "Device " << i << ": " << alpaka::getName(devices[i]) << '\n';
       }
     }
   }
@@ -166,12 +166,10 @@ namespace alpaka_serial_sync {
     }
   }
 
-  PYBIND11_MODULE(CLUE_CPU_Serial, m) {
-    m.doc() = "Binding of the CLUE algorithm running serially on CPU";
+  PYBIND11_MODULE(CLUE_CPU_OMP, m) {
+    m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
 
-    m.def("listDevices",
-          &listDevices,
-          "List the available devices for the CPU serial backend");
+    m.def("listDevices", &listDevices, "List the available devices for the TBB backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,
@@ -212,4 +210,4 @@ namespace alpaka_serial_sync {
                                   size_t>(&mainRun<GaussianKernel>),
           "mainRun");
   }
-};  // namespace alpaka_serial_sync
+};  // namespace alpaka_omp2_async

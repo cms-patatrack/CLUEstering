@@ -1,8 +1,9 @@
 
 #include <alpaka/alpaka.hpp>
+#include <tuple>
 #include <vector>
 
-#include "Run.hpp"
+#include "../Run.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -11,7 +12,8 @@
 
 namespace py = pybind11;
 
-namespace alpaka_cuda_async {
+namespace alpaka_serial_sync {
+
   void listDevices(const std::string& backend) {
     const char tab = '\t';
     const std::vector<Device> devices = alpaka::getDevs(alpaka::Platform<Acc1D>());
@@ -48,7 +50,7 @@ namespace alpaka_cuda_async {
     // Create the queue
     Queue queue_(dev_acc);
 
-    // Running the clustering algorithm //
+    // Running the clustering algorithm
     switch (Ndim) {
       [[unlikely]] case (1):
         run<1, Kernel>(dc,
@@ -165,10 +167,12 @@ namespace alpaka_cuda_async {
     }
   }
 
-  PYBIND11_MODULE(CLUE_GPU_CUDA, m) {
-    m.doc() = "Binding of the CLUE algorithm running on CUDA GPUs";
+  PYBIND11_MODULE(CLUE_CPU_Serial, m) {
+    m.doc() = "Binding of the CLUE algorithm running serially on CPU";
 
-    m.def("listDevices", &listDevices, "List the available devices for the CUDA backend");
+    m.def("listDevices",
+          &listDevices,
+          "List the available devices for the CPU serial backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,
@@ -209,4 +213,4 @@ namespace alpaka_cuda_async {
                                   size_t>(&mainRun<GaussianKernel>),
           "mainRun");
   }
-};  // namespace alpaka_cuda_async
+};  // namespace alpaka_serial_sync

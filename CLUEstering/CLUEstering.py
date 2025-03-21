@@ -1267,6 +1267,4 @@ if __name__ == "__main__":
     c.run_clue(backend="cpu serial", verbose=True)
     c.run_clue(backend="cpu tbb", verbose=True)
     c.run_clue(backend="cpu openmp", verbose=True)
-    # c.run_clue(backend="gpu cuda", verbose=True)
-    # c.run_clue(backend="gpu hip", verbose=True)
     c.cluster_plotter()

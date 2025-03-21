@@ -2,7 +2,7 @@
 #include <alpaka/alpaka.hpp>
 #include <vector>
 
-#include "Run.hpp"
+#include "../Run.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -11,7 +11,7 @@
 
 namespace py = pybind11;
 
-namespace alpaka_omp2_async {
+namespace alpaka_rocm_async {
 
   void listDevices(const std::string& backend) {
     const char tab = '\t';
@@ -22,7 +22,7 @@ namespace alpaka_omp2_async {
     } else {
       std::cout << backend << " devices found: \n";
       for (size_t i{}; i < devices.size(); ++i) {
-        std::cout << tab << "Device " << i << ": " << alpaka::getName(devices[i]) << '\n';
+        std::cout << tab << "device " << i << ": " << alpaka::getName(devices[i]) << '\n';
       }
     }
   }
@@ -166,10 +166,12 @@ namespace alpaka_omp2_async {
     }
   }
 
-  PYBIND11_MODULE(CLUE_CPU_OMP, m) {
-    m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
+  PYBIND11_MODULE(CLUE_GPU_HIP, m) {
+    m.doc() = "Binding of the CLUE algorithm running on AMD GPUs";
 
-    m.def("listDevices", &listDevices, "List the available devices for the TBB backend");
+    m.def("listDevices",
+          &listDevices,
+          "List the available devices for the HIP/ROCm backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,
@@ -210,4 +212,4 @@ namespace alpaka_omp2_async {
                                   size_t>(&mainRun<GaussianKernel>),
           "mainRun");
   }
-};  // namespace alpaka_omp2_async
+};  // namespace alpaka_rocm_async
