@@ -14,7 +14,7 @@ endif()
 
 string(APPEND CMAKE_CXX_FLAGS_DEBUG
        " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg")
-string(APPEND CMAKE_CXX_FLAGS "-O2 -funroll-loops -ffast-math -funsafe-math-optimizations -fopt-info-vec -ftree-vectorize -march=native")
+string(APPEND CMAKE_CXX_FLAGS "-O2 -funroll-loops -funsafe-math-optimizations -fopt-info-vec -ftree-vectorize -march=native")
 
 find_package(Boost 1.75.0 REQUIRED)
 
