@@ -146,7 +146,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     if (!(alpaka::trait::GetExtents<clue::device_buffer<Device, uint32_t[]>>{}(
               d_tiles->indexes())[0u] >= h_points.nPoints()) or
         !(alpaka::trait::GetExtents<clue::device_buffer<Device, uint32_t[]>>{}(
-              d_tiles->offsets())[0u] >= nTiles)) {
+              d_tiles->offsets())[0u] >= static_cast<uint32_t>(nTiles))) {
       d_tiles->initialize(h_points.nPoints(), nTiles, nPerDim, queue);
     } else {
       d_tiles->reset(h_points.nPoints(), nTiles, nPerDim, queue);
