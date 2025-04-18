@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <stdint.h>
+#include "xtd/math.h"
 
 #include "../../AlpakaCore/alpakaWorkDiv.hpp"
 #include "../../AlpakaCore/alpakaConfig.hpp"
@@ -68,8 +69,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       }
 
       // Address the cases of underflow and overflow
-      coord_bin = alpaka::math::min(acc, coord_bin, nperdim - 1);
-      coord_bin = alpaka::math::max(acc, coord_bin, 0);
+      coord_bin = xtd::min(coord_bin, nperdim - 1);
+      coord_bin = xtd::max(coord_bin, 0);
 
       return coord_bin;
     }
@@ -79,8 +80,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                                     const float* coords) const {
       int global_bin = 0;
       for (int dim = 0; dim != Ndim - 1; ++dim) {
-        global_bin += alpaka::math::pow(acc, nperdim, Ndim - dim - 1) *
-                      getBin(acc, coords[dim], dim);
+        global_bin +=
+            xtd::pow(acc, nperdim, Ndim - dim - 1) * getBin(acc, coords[dim], dim);
       }
       global_bin += getBin(acc, coords[Ndim - 1], Ndim - 1);
       return global_bin;
@@ -92,7 +93,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       uint32_t globalBin = 0;
       for (int dim = 0; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
-        globalBin += alpaka::math::pow(acc, nperdim, Ndim - dim - 1) * bin_i;
+        globalBin += xtd::pow(nperdim, Ndim - dim - 1) * bin_i;
       }
       return globalBin;
     }
