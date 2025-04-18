@@ -4,6 +4,7 @@
 #include <alpaka/core/Common.hpp>
 #include <chrono>
 #include <cstdint>
+#include "xtd/math.h"
 
 #include "../AlpakaCore/alpakaWorkDiv.hpp"
 #include "../DataFormats/alpaka/PointsAlpaka.hpp"
@@ -63,8 +64,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         float dist_ij_sq = tiles->distance(coords_i, coords_j);
 
         if (dist_ij_sq <= dc * dc) {
-          *rho_i += kernel(acc, alpaka::math::sqrt(acc, dist_ij_sq), point_id, j) *
-                    dev_points->weight[j];
+          *rho_i +=
+              kernel(acc, xtd::sqrt(dist_ij_sq), point_id, j) * dev_points->weight[j];
         }
 
       }  // end of interate inside this bin
@@ -243,7 +244,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                                        dm_squared,
                                                        i);
 
-        dev_points->delta[i] = alpaka::math::sqrt(acc, delta_i);
+        dev_points->delta[i] = xtd::sqrt(delta_i);
         dev_points->nearest_higher[i] = nh_i;
       }
     }
