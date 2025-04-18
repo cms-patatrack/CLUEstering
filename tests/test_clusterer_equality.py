@@ -18,14 +18,14 @@ def sissa():
 
 
 @pytest.fixture
-def toyDet():
+def toy_det():
     '''
     Returns the dataframe containing the toy detector dataset
     '''
     return pd.read_csv("./test_datasets/toyDetector.csv")
 
 
-def test_clusterer_equality(sissa, toyDet):
+def test_clusterer_equality(sissa, toy_det):
     '''
     Test the equality operator for clusterer objects
     '''
@@ -41,12 +41,12 @@ def test_clusterer_equality(sissa, toyDet):
 
     # toyDet dataset
     clust2 = clue.clusterer(5., 2.5, 5.)
-    clust2.read_data(toyDet)
+    clust2.read_data(toy_det)
     clust2.run_clue()
 
     # Create a copy to check the equality of clusterers
     clust2_copy = clue.clusterer(5., 2.5, 5.)
-    clust2_copy.read_data(toyDet)
+    clust2_copy.read_data(toy_det)
     clust2_copy.run_clue()
 
     # Check equality

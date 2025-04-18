@@ -2,11 +2,11 @@
 Test the import of a clusterer from csv file
 '''
 
-from check_result import check_result
 import os
 import sys
 import pandas as pd
 import pytest
+from check_result import check_result
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 

@@ -18,11 +18,13 @@ for value in z:
 
     blob_file.write('x0,x1,x2,weight\n')
     for i in range(len(blob_data)):
-        blob_file.write(str(blob_data[i][0]) + ',' + str(blob_data[i][1]) + ',' + str(value) + ',1\n')
+        blob_file.write(str(blob_data[i][0]) + ','
+                        + str(blob_data[i][1]) + ','
+                        + str(value) + ',1\n')
 
 n_noise = 100
 for i in range(n_noise):
-	x_noise = random.uniform(-15,10) 
+	x_noise = random.uniform(-15,10)
 	y_noise = random.uniform(-13,12)
 	z_noise = random.uniform(-4,4)
 

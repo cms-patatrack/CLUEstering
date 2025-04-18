@@ -1,19 +1,23 @@
 #!/bin/python3
+'''
+Script for cloning a specific version of CLUEstering for comparing benchmarks.
+'''
 
 import os
 import subprocess
 import sys
 
 def parse_args() -> tuple:
-    path = sys.argv[2]
-    flags = []
-    values = []
+    '''Parse command line arguments'''
+    # path = sys.argv[2]
+    _flags = []
+    _values = []
     for arg in sys.argv[2:]:
-        parsed = arg.split('=')
-        flags.append(parsed[0])
-        values.append(parsed[1])
+        _parsed = arg.split('=')
+        _flags.append(_parsed[0])
+        _values.append(_parsed[1])
 
-    return (flags, values)
+    return (_flags, _values)
 
 if sys.argv[1] == "-h" or sys.argv[1] == "--help" or len(sys.argv) < 3:
     print("Usage: $0 <path> <version> <fork>")
@@ -32,6 +36,8 @@ elif '--branch' in flags:
     is_commit = False
     is_branch = True
     version = values[flags.index('--branch')]
+else:
+    raise ValueError("Need to specify either the commit or the branch to clone.")
 
 clue_version = f"CLUEstering_{fork}_{version}"
 
@@ -49,7 +55,7 @@ clone = subprocess.run(["git",
                         repo_url,
                         f"{clue_version}/Debug",
                         "--recursive",
-                        "--depth=1"], capture_output=True, text=True)
+                        "--depth=1"], capture_output=True, text=True, check=True)
 if clone.returncode != 0:
     print(f"Error: {clone.stderr}")
     print((f"Failed to clone the repo {repo_url}. Check that the insersted repository,"
@@ -68,7 +74,8 @@ compile_debug = subprocess.run(["cmake",
                                 "build",
                                 "-DCMAKE_BUILD_TYPE=Debug"],
                                 capture_output=True,
-                                text=True)
+                                text=True,
+                                check=True)
 if compile_debug.returncode != 0:
     print(f"Error: {compile_debug.stderr}")
     print("Failed to compile the debug version of the project")
@@ -80,12 +87,14 @@ compile_debug = subprocess.run(["cmake",
                                 "-j",
                                 "2"],
                                 capture_output=True,
-                                text=True)
+                                text=True,
+                                check=True)
 compile_debug = subprocess.run(["cmake",
                                 "-B",
                                 "build"],
                                 capture_output=True,
-                                text=True)
+                                text=True,
+                                check=True)
 if compile_debug.returncode != 0:
     print(f"Error: {compile_debug.stderr}")
     print("Failed to compile the debug version of the project")
@@ -100,7 +109,8 @@ compile_release = subprocess.run(["cmake",
                                   "build",
                                   "-DCMAKE_BUILD_TYPE=Release"],
                                   capture_output=True,
-                                  text=True)
+                                  text=True,
+                                  check=True)
 if compile_release.returncode != 0:
     print(f"Error: {compile_release.stderr}")
     print("Failed to compile the release version of the project")
@@ -112,13 +122,15 @@ compile_release = subprocess.run(["cmake",
                                   "-j",
                                   "2"],
                                   capture_output=True,
-                                  text=True)
+                                  text=True,
+                                  check=True)
 compile_release = subprocess.run(["cmake",
                                   "-B",
                                   "build",
                                   "-DCMAKE_BUILD_TYPE=Release"],
                                   capture_output=True,
-                                  text=True)
+                                  text=True,
+                                  check=True)
 if compile_release.returncode != 0:
     print(f"Error: {compile_release.stderr}")
     print("Failed to compile the release version of the project")
