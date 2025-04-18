@@ -12,6 +12,7 @@ set_source_files_properties(binding_gpu_cuda.cpp PROPERTIES LANGUAGE CUDA)
 pybind11_add_module(CLUE_GPU_CUDA SHARED binding_gpu_cuda.cpp)
 target_include_directories(
   CLUE_GPU_CUDA PRIVATE ${CMAKE_SOURCE_DIR}/include
+					    ${CMAKE_SOURCE_DIR}/extern/xtd/include
 						${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
 target_compile_definitions(CLUE_GPU_CUDA PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
 target_compile_options(CLUE_GPU_CUDA PRIVATE --expt-relaxed-constexpr)
