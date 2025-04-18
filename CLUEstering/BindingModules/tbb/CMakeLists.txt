@@ -1,7 +1,8 @@
 pybind11_add_module(CLUE_CPU_TBB SHARED binding_cpu_tbb.cpp)
 target_include_directories(
   CLUE_CPU_TBB PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
-                       ${alpaka_SOURCE_DIR}/include ${Boost_SOURCE_DIR})
+					   ${CMAKE_SOURCE_DIR}/extern/xtd/include
+					   ${alpaka_SOURCE_DIR}/include ${Boost_SOURCE_DIR})
 target_compile_definitions(
   CLUE_CPU_TBB PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 target_link_libraries(CLUE_CPU_TBB PRIVATE TBB::tbb)

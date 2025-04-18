@@ -8,7 +8,8 @@ set(CMAKE_CXX_COMPILER "${hip_BASE}/bin/hipcc")
 pybind11_add_module(CLUE_GPU_HIP SHARED binding_gpu_hip.cpp)
 target_include_directories(
   CLUE_GPU_HIP PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
-                       ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+					   ${CMAKE_SOURCE_DIR}/extern/xtd/include
+					   ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
 target_compile_options(CLUE_GPU_HIP PRIVATE -DALPAKA_ACC_GPU_HIP_ENABLED)
 target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_INCLUDE_DIRS})
 target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_BASE}/hiprand/include)

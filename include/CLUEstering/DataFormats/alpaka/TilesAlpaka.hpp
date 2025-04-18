@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdint>
+#include "xtd/math.h"
 
 namespace clue {
 
@@ -69,8 +70,8 @@ namespace clue {
       }
 
       // Address the cases of underflow and overflow
-      coord_bin = alpaka::math::min(acc, coord_bin, nperdim - 1);
-      coord_bin = alpaka::math::max(acc, coord_bin, 0);
+      coord_bin = xtd::min(coord_bin, nperdim - 1);
+      coord_bin = xtd::max(coord_bin, 0);
 
       return coord_bin;
     }
@@ -80,7 +81,7 @@ namespace clue {
       int global_bin = 0;
       for (int dim = 0; dim != Ndim - 1; ++dim) {
         global_bin +=
-            alpaka::math::pow(acc, nperdim, Ndim - dim - 1) * getBin(acc, coords[dim], dim);
+            xtd::pow(acc, nperdim, Ndim - dim - 1) * getBin(acc, coords[dim], dim);
       }
       global_bin += getBin(acc, coords[Ndim - 1], Ndim - 1);
       return global_bin;
@@ -92,7 +93,7 @@ namespace clue {
       uint32_t globalBin = 0;
       for (int dim = 0; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
-        globalBin += alpaka::math::pow(acc, nperdim, Ndim - dim - 1) * bin_i;
+        globalBin += xtd::pow(nperdim, Ndim - dim - 1) * bin_i;
       }
       return globalBin;
     }
