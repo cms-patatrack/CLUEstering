@@ -11,6 +11,8 @@
 #include "../DataFormats/alpaka/AlpakaVecArray.hpp"
 #include "ConvolutionalKernel.hpp"
 
+using clue::PointsAlpakaView;
+using clue::TilesAlpakaView;
 using clue::VecArray;
 
 namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
