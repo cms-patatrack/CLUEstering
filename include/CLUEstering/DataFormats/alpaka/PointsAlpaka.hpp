@@ -23,10 +23,10 @@ namespace clue {
   };
 
   template <uint8_t Ndim, typename TDev>
-	requires alpaka::isDevice<TDev>
+    requires alpaka::isDevice<TDev>
   class PointsAlpaka {
   public:
-	template <typename TQueue>
+    template <typename TQueue>
     explicit PointsAlpaka(TQueue stream, int n_points)
         : input_buffer{clue::make_device_buffer<float[]>(stream, (Ndim + 3) * n_points)},
           result_buffer{clue::make_device_buffer<int[]>(stream, 3 * n_points)},
@@ -58,6 +58,6 @@ namespace clue {
   private:
     clue::device_buffer<TDev, PointsAlpakaView> view_dev;
   };
-}  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
+}  // namespace clue
 
 #endif
