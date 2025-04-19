@@ -21,7 +21,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     PointsSoA<2> h_points(
         coords.data(), results.data(), PointInfo<2>{static_cast<uint32_t>(n_points)});
-    PointsAlpaka<2> d_points(queue_, n_points);
+    clue::PointsAlpaka<2, Device> d_points(queue_, n_points);
 
     const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
     const int pPBin{128};

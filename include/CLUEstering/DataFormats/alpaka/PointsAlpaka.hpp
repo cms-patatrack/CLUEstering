@@ -8,7 +8,7 @@
 #include "../../AlpakaCore/alpakaMemory.hpp"
 #include "../Points.hpp"
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
+namespace clue {
 
   class PointsAlpakaView {
   public:
@@ -22,11 +22,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     int n;
   };
 
-  template <uint8_t Ndim>
+  template <uint8_t Ndim, typename TDev>
+    requires alpaka::isDevice<TDev>
   class PointsAlpaka {
   public:
-    PointsAlpaka() = delete;
-    explicit PointsAlpaka(Queue stream, int n_points)
+    template <typename TQueue>
+    explicit PointsAlpaka(TQueue stream, int n_points)
         : input_buffer{clue::make_device_buffer<float[]>(stream, (Ndim + 3) * n_points)},
           result_buffer{clue::make_device_buffer<int[]>(stream, 3 * n_points)},
           view_dev{clue::make_device_buffer<PointsAlpakaView>(stream)} {
@@ -49,14 +50,14 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     PointsAlpaka& operator=(PointsAlpaka&&) = default;
     ~PointsAlpaka() = default;
 
-    clue::device_buffer<Device, float[]> input_buffer;
-    clue::device_buffer<Device, int[]> result_buffer;
+    clue::device_buffer<TDev, float[]> input_buffer;
+    clue::device_buffer<TDev, int[]> result_buffer;
 
     PointsAlpakaView* view() { return view_dev.data(); }
 
   private:
-    clue::device_buffer<Device, PointsAlpakaView> view_dev;
+    clue::device_buffer<TDev, PointsAlpakaView> view_dev;
   };
-}  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
+}  // namespace clue
 
 #endif
