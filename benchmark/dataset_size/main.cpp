@@ -14,6 +14,7 @@
 
 #include "CLUEstering/utility/read_csv.hpp"
 
+#ifdef PYBIND11
 #include <pybind11/embed.h>
 #include <pybind11/stl_bind.h>
 
@@ -22,6 +23,7 @@ using namespace pybind11::literals;
 
 PYBIND11_MAKE_OPAQUE(std::vector<int>);
 PYBIND11_MAKE_OPAQUE(std::vector<float>);
+#endif
 
 struct TimeMeasures {
   std::vector<int> sizes;
@@ -54,6 +56,7 @@ std::vector<std::string> GetFiles(int min, int max) {
   return files;
 }
 
+#ifdef PYBIND11
 void plot(const TimeMeasures& measures, const std::string& filename) {
   py::scoped_interpreter guard{};
   py::module plt = py::module::import("matplotlib.pyplot");
@@ -66,6 +69,7 @@ void plot(const TimeMeasures& measures, const std::string& filename) {
   plt.attr("grid")("ls"_a = "--", "lw"_a = .5);
   plt.attr("savefig")(filename);
 }
+#endif
 
 void to_csv(const TimeMeasures& measures, const std::string& filename) {
   std::ofstream file{filename};
@@ -150,6 +154,8 @@ int main(int argc, char* argv[]) {
       });
 
   auto figname = oFilename.substr(0, oFilename.find_last_of('.')) + ".pdf";
+#ifdef PYBIND11
   plot(measures, figname);
+#endif
   to_csv(measures, oFilename);
 }

@@ -19,9 +19,15 @@ string(
 )
 string(APPEND CMAKE_CXX_FLAGS "-O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native")
 
-add_subdirectory(pybind11)
-
 find_package(Boost 1.75.0 REQUIRED)
+find_package(pybind11)
+
+if (pybind11_FOUND)
+  set(pybind_link pybind11::embed)
+  add_definitions(-DPYBIND11)
+else()
+  set(pybind_link "")
+endif()
 
 include(FetchContent)
 FetchContent_Declare(
