@@ -27,6 +27,7 @@ if (pybind11_FOUND)
   add_definitions(-DPYBIND11)
 else()
   set(pybind_link "")
+  message(STATUS "pybind11 not found, so no plots will be generated.")
 endif()
 
 include(FetchContent)
