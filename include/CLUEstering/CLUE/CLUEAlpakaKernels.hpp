@@ -6,12 +6,12 @@
 #include <cstdint>
 
 #include "../AlpakaCore/alpakaWorkDiv.hpp"
-#include "../DataFormats/alpaka/PointsAlpaka.hpp"
+#include "../DataFormats/PointsDevice.hpp"
 #include "../DataFormats/alpaka/TilesAlpaka.hpp"
 #include "../DataFormats/alpaka/AlpakaVecArray.hpp"
 #include "ConvolutionalKernel.hpp"
 
-using clue::PointsAlpakaView;
+using clue::PointsView;
 using clue::TilesAlpakaView;
 using clue::VecArray;
 
@@ -21,7 +21,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   constexpr int32_t reserve{1000000};
 
   template <uint8_t Ndim>
-  ALPAKA_FN_ACC void getCoords(float* coords, PointsAlpakaView* d_points, uint32_t i) {
+  ALPAKA_FN_ACC void getCoords(float* coords, PointsView* d_points, uint32_t i) {
     for (auto dim = 0; dim < Ndim; ++dim) {
       coords[dim] = d_points->coords[i + dim * d_points->n];
     }
@@ -43,7 +43,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       VecArray<uint32_t, Ndim>& base_vec,
       const VecArray<VecArray<uint32_t, 2>, Ndim>& search_box,
       TilesAlpakaView<Ndim>* tiles,
-      PointsAlpakaView* dev_points,
+      PointsView* dev_points,
       const KernelType& kernel,
       const float* coords_i,
       float* rho_i,
@@ -94,7 +94,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     template <typename TAcc, uint8_t Ndim, typename KernelType>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   TilesAlpakaView<Ndim>* dev_tiles,
-                                  PointsAlpakaView* dev_points,
+                                  PointsView* dev_points,
                                   const KernelType& kernel,
                                   float dc,
                                   uint32_t n_points) const {
@@ -140,7 +140,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       VecArray<uint32_t, Ndim>& base_vec,
       const VecArray<VecArray<uint32_t, 2>, Ndim>& s_box,
       TilesAlpakaView<Ndim>* tiles,
-      PointsAlpakaView* dev_points,
+      PointsView* dev_points,
       const float* coords_i,
       float rho_i,
       float* delta_i,
@@ -206,7 +206,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     template <typename TAcc, uint8_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   TilesAlpakaView<Ndim>* dev_tiles,
-                                  PointsAlpakaView* dev_points,
+                                  PointsView* dev_points,
                                   float dm,
                                   float,
                                   uint32_t n_points) const {
@@ -257,7 +257,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
                                   VecArray<int32_t, max_followers>* followers,
-                                  PointsAlpakaView* dev_points,
+                                  PointsView* dev_points,
                                   float dm,
                                   float d_c,
                                   float rho_c,
@@ -292,7 +292,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
                                   VecArray<int, max_followers>* followers,
-                                  PointsAlpakaView* dev_points) const {
+                                  PointsView* dev_points) const {
       const auto& seeds_0{*seeds};
       const auto n_seeds{seeds_0.size()};
       for (auto idx_cls : alpaka::uniformElements(acc, n_seeds)) {
