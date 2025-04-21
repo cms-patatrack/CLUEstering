@@ -246,7 +246,7 @@ namespace clue {
     }
 
     struct GetGlobalBin {
-      PointsAlpakaView* pointsView;
+      PointsView* pointsView;
       TilesAlpakaView<Ndim>* tilesView;
 
       template <typename TAcc>
@@ -264,7 +264,7 @@ namespace clue {
     template <typename TAcc, typename TQueue>
       requires alpaka::isAccelerator<TAcc> && alpaka::isQueue<TQueue>
     ALPAKA_FN_HOST void fill(TQueue queue,
-                             PointsAlpaka<Ndim, TDev>& d_points,
+                             PointsDevice<Ndim, TDev>& d_points,
                              size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
