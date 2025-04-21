@@ -32,7 +32,7 @@ namespace clue {
     return clusters;
   }
 
-  bool validate_results(std::span<int> cluster_ids, std::span<const int> truth) {
+  bool validate_results(std::span<const int> cluster_ids, std::span<const int> truth) {
     auto result_clusters_sizes = compute_clusters_size(cluster_ids);
     auto truth_clusters_sizes = compute_clusters_size(truth);
     std::ranges::sort(result_clusters_sizes);
