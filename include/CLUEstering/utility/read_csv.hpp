@@ -12,8 +12,10 @@ std::vector<T> read_csv(const std::string& file_path) {
   if (!file.is_open()) {
     throw std::runtime_error("Could not open file: " + file_path);
   }
-  auto n_points = std::count(
-      std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') - 1;
+  auto n_points =
+      std::count(
+          std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') -
+      1;
   std::vector<T> coords((NDim + 1) * n_points);
 
   file = std::fstream(file_path);
@@ -43,8 +45,10 @@ std::vector<int> read_output(const std::string& file_path) {
   if (!file.is_open()) {
     throw std::runtime_error("Could not open file: " + file_path);
   }
-  auto n_points = std::count(
-      std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') - 1;
+  auto n_points =
+      std::count(
+          std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') -
+      1;
   std::vector<int> results(2 * n_points);
 
   file = std::fstream(file_path);

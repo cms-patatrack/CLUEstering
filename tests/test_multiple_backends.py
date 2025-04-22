@@ -25,7 +25,7 @@ def blobs():
     '''
     Returns the dataframe containing the blob dataset
     '''
-    return pd.read_csv("./test_datasets/blob.csv")
+    return pd.read_csv("../data/blob.csv")
 
 
 @pytest.fixture
@@ -33,7 +33,7 @@ def moons():
     '''
     Returns the dataframe containing the moon dataset
     '''
-    return pd.read_csv("./test_datasets/moons.csv")
+    return pd.read_csv("../data/moons.csv")
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ def sissa():
     '''
     Returns the dataframe containing the sissa dataset
     '''
-    return pd.read_csv("./test_datasets/sissa.csv")
+    return pd.read_csv("../data/sissa.csv")
 
 
 @pytest.fixture
@@ -49,7 +49,7 @@ def toy_det():
     '''
     Returns the dataframe containing the toy-detector dataset
     '''
-    return pd.read_csv("./test_datasets/toyDetector.csv")
+    return pd.read_csv("../data/toyDetector.csv")
 
 
 def test_blobs_clustering(blobs):
@@ -69,7 +69,7 @@ def test_blobs_clustering(blobs):
         c.to_csv('./', f'blobs_output_{_fill_space(backend)}.csv')
 
         assert check_result(f'./blobs_output_{_fill_space(backend)}.csv',
-                            './test_datasets/truth_files/blobs_truth.csv')
+                            '../data/truth_files/blobs_truth.csv')
 
 
 def test_moons_clustering(moons):
@@ -89,7 +89,7 @@ def test_moons_clustering(moons):
         c.to_csv('./', f'moons_output_{_fill_space(backend)}.csv')
 
         assert check_result(f'./moons_output_{_fill_space(backend)}.csv',
-                            './test_datasets/truth_files/moons_1000_truth.csv')
+                            '../data/truth_files/moons_1000_truth.csv')
 
 
 def test_sissa_clustering(sissa):
@@ -109,7 +109,7 @@ def test_sissa_clustering(sissa):
         c.to_csv('./', f'sissa_output_{_fill_space(backend)}.csv')
 
         assert check_result(f'./sissa_output_{_fill_space(backend)}.csv',
-                            './test_datasets/truth_files/sissa_1000_truth.csv')
+                            '../data/truth_files/sissa_1000_truth.csv')
 
 
 def test_toydet_clustering(toy_det):
@@ -129,26 +129,26 @@ def test_toydet_clustering(toy_det):
         c.to_csv('./', f'toy_det_output_{_fill_space(backend)}.csv')
 
         assert check_result(f'./toy_det_output_{_fill_space(backend)}.csv',
-                            './test_datasets/truth_files/toy_det_1000_truth.csv')
+                            '../data/truth_files/toy_det_1000_truth.csv')
 
 
 if __name__ == "__main__":
     c = clue.clusterer(1., 5, 2.)
-    c.read_data("./test_datasets/blob.csv")
+    c.read_data("../data/blob.csv")
     c.run_clue()
     c.cluster_plotter()
 
     c = clue.clusterer(70., 5., 175.)
-    c.read_data("./test_datasets/moons.csv")
+    c.read_data("../data/moons.csv")
     c.run_clue()
     c.cluster_plotter()
 
     c = clue.clusterer(20., 10., 20.)
-    c.read_data("./test_datasets/sissa.csv")
+    c.read_data("../data/sissa.csv")
     c.run_clue()
     c.cluster_plotter()
 
     c = clue.clusterer(4.5, 2.5, 4.5)
-    c.read_data("./test_datasets/toyDetector.csv")
+    c.read_data("../data/toyDetector.csv")
     c.run_clue()
     c.cluster_plotter()

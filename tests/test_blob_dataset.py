@@ -17,7 +17,7 @@ def blobs():
     '''
     Returns the dataframe containing the blob dataset
     '''
-    return pd.read_csv("./test_datasets/blob.csv")
+    return pd.read_csv("../data/blob.csv")
 
 
 def test_clustering(blobs):
@@ -36,11 +36,11 @@ def test_clustering(blobs):
     c.to_csv('./', 'blobs_output.csv')
 
     assert check_result('./blobs_output.csv',
-                        './test_datasets/truth_files/blobs_truth.csv')
+                        '../data/truth_files/blobs_truth.csv')
 
 
 if __name__ == "__main__":
     c = clue.clusterer(1., 5, 2.)
-    c.read_data("./test_datasets/blob.csv")
+    c.read_data("../data/blob.csv")
     c.run_clue()
     c.cluster_plotter()

@@ -28,7 +28,7 @@ def test_read_string_except():
     clust = clue.clusterer(0.4, 5., 0.4)
 
     with pytest.raises(ValueError):
-        clust.read_data('./test_datasets/blob.dat')
+        clust.read_data('../data/blob.dat')
 
 
 @pytest.fixture
@@ -99,7 +99,7 @@ def file():
     '''
     Returns the path to a test csv file
     '''
-    csv_file = './test_datasets/blob.csv'
+    csv_file = '../data/blob.csv'
     return csv_file
 
 
@@ -108,7 +108,7 @@ def dataframe():
     '''
     Returns the dataframe of a test dataset
     '''
-    csv_file = './test_datasets/blob.csv'
+    csv_file = '../data/blob.csv'
     df_ = pd.read_csv(csv_file)
     return df_
 

@@ -17,7 +17,7 @@ def moons():
     '''
     Returns the dataframe containing the moon dataset
     '''
-    return pd.read_csv("./test_datasets/moons.csv")
+    return pd.read_csv("../data/moons.csv")
 
 
 def test_clustering(moons):
@@ -36,7 +36,7 @@ def test_clustering(moons):
     c.to_csv('./', 'moons_output.csv')
 
     assert check_result('./moons_output.csv',
-                        './test_datasets/truth_files/moons_1000_truth.csv')
+                        '../data/truth_files/moons_1000_truth.csv')
 
 
 if __name__ == "__main__":
