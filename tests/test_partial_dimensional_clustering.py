@@ -13,7 +13,7 @@ def moons():
     '''
     Returns the dataframe containing the moon dataset
     '''
-    return pd.read_csv("./test_datasets/moons.csv")
+    return pd.read_csv("../data/moons.csv")
 
 
 @pytest.fixture
@@ -21,7 +21,7 @@ def blobs():
     '''
     Returns the dataframe containing the blob dataset
     '''
-    return pd.read_csv("./test_datasets/blob.csv")
+    return pd.read_csv("../data/blob.csv")
 
 
 @pytest.fixture
@@ -29,7 +29,7 @@ def square():
     '''
     Retuns a dataframe where the points are distributed in a square
     '''
-    return pd.read_csv("./test_datasets/square.csv")
+    return pd.read_csv("../data/square.csv")
 
 
 @pytest.fixture
@@ -37,7 +37,7 @@ def box():
     '''
     Retuns a dataframe where the points are distributed in a 3D box
     '''
-    return pd.read_csv("./test_datasets/box.csv")
+    return pd.read_csv("../data/box.csv")
 
 
 def test_one_out_of_two(moons):
@@ -133,6 +133,6 @@ def test_square_box(square, box):
 
 if __name__ == "__main__":
     c = clue.clusterer(1., 2., 1.6)
-    c.read_data(pd.read_csv("./test_datasets/box.csv"))
+    c.read_data(pd.read_csv("../data/box.csv"))
     c.run_clue(dimensions=[0, 1])
     c.cluster_plotter()
