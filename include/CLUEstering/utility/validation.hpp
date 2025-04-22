@@ -1,5 +1,8 @@
 
+#pragma once
+
 #include <algorithm>
+#include <ranges>
 #include <span>
 #include <vector>
 
@@ -18,6 +21,7 @@ namespace clue {
           if (cluster_id > -1)
             clusters_points[cluster_id].push_back(i++);
         });
+
     return clusters_points;
   }
 
@@ -27,7 +31,7 @@ namespace clue {
 
     std::vector<int> clusters(nclusters);
     std::ranges::transform(clusters_points, clusters.begin(), [&](const auto& cluster) {
-      return std::accumulate(cluster.begin(), cluster.end(), 0u);
+      return cluster.size();
     });
     return clusters;
   }
@@ -39,7 +43,9 @@ namespace clue {
     std::ranges::sort(truth_clusters_sizes);
 
     bool compare_nclusters = compute_nclusters(cluster_ids) == compute_nclusters(truth);
-    bool compare_clusters_size = result_clusters_sizes == truth_clusters_sizes;
+    bool compare_clusters_size =
+        std::ranges::equal(result_clusters_sizes, truth_clusters_sizes);
+
     return compare_nclusters && compare_clusters_size;
   }
 

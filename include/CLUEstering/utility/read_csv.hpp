@@ -13,7 +13,7 @@ std::vector<T> read_csv(const std::string& file_path) {
     throw std::runtime_error("Could not open file: " + file_path);
   }
   auto n_points = std::count(
-      std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n');
+      std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') - 1;
   std::vector<T> coords((NDim + 1) * n_points);
 
   file = std::fstream(file_path);
@@ -44,7 +44,7 @@ std::vector<int> read_output(const std::string& file_path) {
     throw std::runtime_error("Could not open file: " + file_path);
   }
   auto n_points = std::count(
-      std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n');
+      std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') - 1;
   std::vector<int> results(2 * n_points);
 
   file = std::fstream(file_path);
@@ -59,6 +59,7 @@ std::vector<int> read_output(const std::string& file_path) {
     for (size_t dim = 0; dim < NDim; ++dim) {
       getline(buffer_stream, value, ',');
     }
+    getline(buffer_stream, value, ',');  // discard the weight value
     getline(buffer_stream, value, ',');
     results[point_id] = std::stoi(value);
     getline(buffer_stream, value);
