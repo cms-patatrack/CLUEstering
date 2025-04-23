@@ -8,7 +8,6 @@ namespace clue {
     float* weight;
     int* cluster_index;
     int* is_seed;
-    // uint8_t* wrapping;
     float* rho;
     float* delta;
     int* nearest_higher;

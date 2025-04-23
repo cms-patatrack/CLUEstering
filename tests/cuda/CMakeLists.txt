@@ -8,7 +8,8 @@ endif()
 
 set_source_files_properties(../test_clustering.cpp PROPERTIES LANGUAGE CUDA)
 set_source_files_properties(../test_host_points.cpp PROPERTIES LANGUAGE CUDA)
-add_executable(cuda.out ../test_clustering.cpp ../test_host_points.cpp)
+set_source_files_properties(../test_device_points.cpp PROPERTIES LANGUAGE CUDA)
+add_executable(cuda.out ../test_clustering.cpp ../test_host_points.cpp ../test_device_points.cpp)
 target_include_directories(
   cuda.out
   PRIVATE ${CMAKE_SURCE_DIR}../../include/CLUEstering

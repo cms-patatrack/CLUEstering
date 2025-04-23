@@ -9,7 +9,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 string(APPEND CMAKE_CXX_FLAGS_DEBUG
-       " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg")
+       " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg -fsanitize=address")
 string(APPEND CMAKE_CXX_FLAGS "-O2")
 
 find_package(Boost 1.75.0 REQUIRED)

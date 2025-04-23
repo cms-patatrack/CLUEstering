@@ -1,4 +1,4 @@
-add_executable(serial.out ../test_clustering.cpp ../test_host_points.cpp)
+add_executable(serial.out ../test_clustering.cpp ../test_host_points.cpp ../test_device_points.cpp)
 target_include_directories(
   serial.out
   PRIVATE ${CMAKE_SURCE_DIR}../../include/CLUEstering
@@ -9,7 +9,7 @@ target_compile_definitions(
 
 find_package(TBB)
 if(TBB_FOUND)
-  add_executable(tbb.out ../test_clustering.cpp ../test_host_points.cpp)
+  add_executable(tbb.out ../test_clustering.cpp ../test_host_points.cpp ../test_device_points.cpp)
   target_include_directories(
     tbb.out
     PRIVATE ${CMAKE_SURCE_DIR}../../include/CLUEstering
@@ -23,7 +23,7 @@ endif()
 find_package(OpenMP)
 # CPU OpenMP
 if(OpenMP_CXX_FOUND)
-  add_executable(openmp.out ../test_clustering.cpp ../test_host_points.cpp)
+  add_executable(openmp.out ../test_clustering.cpp ../test_host_points.cpp ../test_device_points.cpp)
   target_include_directories(
     openmp.out
     PRIVATE ${CMAKE_SURCE_DIR}../../include/CLUEstering
