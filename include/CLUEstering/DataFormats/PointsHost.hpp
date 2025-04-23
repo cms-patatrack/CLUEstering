@@ -8,7 +8,7 @@
 #include <optional>
 #include <ranges>
 #include <span>
-#include <utility>
+#include <tuple>
 
 namespace clue {
 
@@ -56,7 +56,7 @@ namespace clue {
     template <uint8_t Ndim, detail::ContiguousRange... TBuffers>
       requires(sizeof...(TBuffers) == 4)
     void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers&&... buffers) {
-      auto buffers_tuple = std::make_tuple(buffers...);
+      auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data());
       view->weight = reinterpret_cast<float*>(std::get<1>(buffers_tuple).data());
@@ -67,7 +67,7 @@ namespace clue {
     template <uint8_t Ndim, detail::ContiguousRange... TBuffers>
       requires(sizeof...(TBuffers) == 2)
     void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers&&... buffers) {
-      auto buffers_tuple = std::make_tuple(buffers...);
+      auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data());
       view->weight =
@@ -132,7 +132,7 @@ namespace clue {
     PointsHost& operator=(PointsHost&&) = default;
     ~PointsHost() = default;
 
-    ALPAKA_FN_HOST uint32_t size() const { return m_view->n; }
+    ALPAKA_FN_HOST uint32_t size() const { return m_size; }
 
     ALPAKA_FN_HOST std::span<const float> coords() const {
       return std::span<const float>(m_view->coords,
@@ -172,10 +172,6 @@ namespace clue {
     ALPAKA_FN_HOST std::span<int> isSeed() {
       return std::span<int>(m_view->is_seed, static_cast<std::size_t>(m_view->n));
     }
-    // ALPAKA_FN_HOST std::span<const uint8_t, Ndim> wrapping() const {
-    //   return std::span<const uint8_t, Ndim>(m_view->wrapping,
-    //                                         static_cast<std::size_t>(m_view->n));
-    // }
 
     ALPAKA_FN_HOST PointsView* view() { return m_view.data(); }
     ALPAKA_FN_HOST const PointsView* view() const { return m_view.data(); }
