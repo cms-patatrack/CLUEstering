@@ -16,8 +16,7 @@ namespace clue {
     // No need to allocate temporary buffers on the host
     template <uint8_t Ndim>
     uint32_t computeSoASize(uint32_t n_points) {
-      return (Ndim + 1) * n_points * sizeof(float) + 2 * n_points * sizeof(int) +
-             n_points * sizeof(uint8_t);
+      return ((Ndim + 1) * sizeof(float) + 2 * sizeof(int)) * n_points;
     }
 
     template <uint8_t Ndim>
@@ -45,6 +44,7 @@ namespace clue {
       requires(sizeof...(TBuffers) == 2)
     void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
+
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
       view->weight =
@@ -89,41 +89,32 @@ namespace clue {
               queue, soa::host::computeSoASize<Ndim>(n_points))},
           m_view{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
-      auto h_view = make_host_buffer<PointsView>(queue);
-      soa::host::partitionSoAView<Ndim>(h_view.data(), m_buffer->data(), n_points);
-      alpaka::memcpy(queue, m_view, h_view);
+      soa::host::partitionSoAView<Ndim>(m_view.data(), m_buffer->data(), n_points);
     }
+
     template <typename TQueue>
       requires alpaka::isQueue<TQueue>
     PointsHost(TQueue queue, uint32_t n_points, std::span<std::byte> buffer)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       assert(buffer.size() == soa::host::computeSoASize<Ndim>(n_points));
 
-      auto h_view = make_host_buffer<PointsView>(queue);
-      soa::host::partitionSoAView<Ndim>(h_view.data(), buffer.data(), n_points);
-      alpaka::memcpy(queue, m_view, h_view);
+      soa::host::partitionSoAView<Ndim>(m_view.data(), buffer.data(), n_points);
     }
+
     template <typename TQueue, detail::ContiguousRange... TBuffers>
       requires alpaka::isQueue<TQueue> &&
                    (sizeof...(TBuffers) == 4 || sizeof...(TBuffers) == 2)
     PointsHost(TQueue queue, uint32_t n_points, TBuffers&&... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
-      // assert(buffer.size() == soa::host::computeSoASize<Ndim>(n_points));
-
-      auto h_view = make_host_buffer<PointsView>(queue);
       soa::host::partitionSoAView<Ndim>(
-          h_view.data(), n_points, std::forward<TBuffers>(buffers)...);
-      alpaka::memcpy(queue, m_view, h_view);
+          m_view.data(), n_points, std::forward<TBuffers>(buffers)...);
     }
+
     template <typename TQueue, detail::ArrayOrPtr... TBuffers>
       requires alpaka::isQueue<TQueue>
     PointsHost(TQueue queue, uint32_t n_points, TBuffers... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
-      // assert(buffer.size() == soa::host::computeSoASizeHost<Ndim>(n_points));
-
-      auto h_view = make_host_buffer<PointsView>(queue);
-      soa::host::partitionSoAView<Ndim>(h_view.data(), n_points, buffers...);
-      alpaka::memcpy(queue, m_view, h_view);
+      soa::host::partitionSoAView<Ndim>(m_view.data(), n_points, buffers...);
     }
 
     PointsHost(const PointsHost&) = delete;
@@ -144,11 +135,11 @@ namespace clue {
 
     ALPAKA_FN_HOST std::span<const float> coords(size_t dim) const {
       return std::span<const float>(m_view->coords + dim * m_view->n,
-                                    static_cast<std::size_t>(m_view->n * Ndim));
+                                    static_cast<std::size_t>(m_view->n));
     }
     ALPAKA_FN_HOST std::span<float> coords(size_t dim) {
       return std::span<float>(m_view->coords + dim * m_view->n,
-                              static_cast<std::size_t>(m_view->n * Ndim));
+                              static_cast<std::size_t>(m_view->n));
     }
 
     ALPAKA_FN_HOST std::span<const float> weights() const {
