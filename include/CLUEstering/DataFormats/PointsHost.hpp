@@ -144,11 +144,11 @@ namespace clue {
 
     ALPAKA_FN_HOST std::span<const float> coords(size_t dim) const {
       return std::span<const float>(m_view->coords + dim * m_view->n,
-                                    static_cast<std::size_t>(m_view->n * Ndim));
+                                    static_cast<std::size_t>(m_view->n));
     }
     ALPAKA_FN_HOST std::span<float> coords(size_t dim) {
       return std::span<float>(m_view->coords + dim * m_view->n,
-                              static_cast<std::size_t>(m_view->n * Ndim));
+                              static_cast<std::size_t>(m_view->n));
     }
 
     ALPAKA_FN_HOST std::span<const float> weights() const {
