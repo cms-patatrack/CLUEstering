@@ -18,7 +18,7 @@ void run(float dc,
          const Kernel& kernel,
          Queue queue,
          size_t block_size) {
-  Clusterer<Ndim> algo(dc, rhoc, dm, pPBin, queue);
+  clue::Clusterer<Ndim> algo(dc, rhoc, dm, pPBin, queue);
 
   // Create the host and device points
   clue::PointsHost<Ndim> h_points(
