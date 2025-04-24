@@ -23,8 +23,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
     Queue queue_(dev_acc);
 
-    PointsSoA<2> h_points(
-        coords.data(), results.data(), PointInfo<2>{static_cast<uint32_t>(n_points)});
+    PointsSoA<2> h_points(coords.data(), results.data(), static_cast<uint32_t>(n_points));
     clue::PointsAlpaka<2, Device> d_points(queue_, n_points);
 
     const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
@@ -53,8 +52,7 @@ TEST_CASE("Test clustering on sissa") {
   const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
   Queue queue_(dev_acc);
 
-  PointsSoA<2> h_points(
-      coords.data(), results.data(), PointInfo<2>{static_cast<uint32_t>(n_points)});
+  PointsSoA<2> h_points(coords.data(), results.data(), static_cast<uint32_t>(n_points));
   clue::PointsAlpaka<2, Device> d_points(queue_, n_points);
 
   const float dc{20.f}, rhoc{10.f}, outlier{20.f};
@@ -81,8 +79,7 @@ TEST_CASE("Test clustering on toy detector dataset") {
   const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
   Queue queue_(dev_acc);
 
-  PointsSoA<2> h_points(
-      coords.data(), results.data(), PointInfo<2>{static_cast<uint32_t>(n_points)});
+  PointsSoA<2> h_points(coords.data(), results.data(), static_cast<uint32_t>(n_points));
   clue::PointsAlpaka<2, Device> d_points(queue_, n_points);
 
   const float dc{4.5f}, rhoc{2.5f}, outlier{4.5f};
@@ -109,8 +106,7 @@ TEST_CASE("Test clustering on blob dataset") {
   const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
   Queue queue_(dev_acc);
 
-  PointsSoA<3> h_points(
-      coords.data(), results.data(), PointInfo<3>{static_cast<uint32_t>(n_points)});
+  PointsSoA<3> h_points(coords.data(), results.data(), static_cast<uint32_t>(n_points));
   clue::PointsAlpaka<3, Device> d_points(queue_, n_points);
 
   const float dc{1.f}, rhoc{5.f}, outlier{2.f};

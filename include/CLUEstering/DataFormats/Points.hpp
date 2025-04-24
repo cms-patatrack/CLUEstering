@@ -6,12 +6,6 @@
 #include <vector>
 
 template <uint8_t Ndim>
-struct PointInfo {
-  uint32_t nPoints;
-  std::array<uint8_t, Ndim> wrapping{};
-};
-
-template <uint8_t Ndim>
 struct PointsSoA {
 public:
   struct View {
@@ -35,29 +29,16 @@ public:
 #endif
   };
 
-  PointsSoA(float* floatBuffer, int* intBuffer, const PointInfo<Ndim>& info)
-      : m_coordsBuffer{floatBuffer},
-        m_resultsBuffer{intBuffer},
-        m_view{std::make_unique<View>()},
-        m_info{info},
-        m_debugInfo{info.nPoints} {
-    m_view->coords = floatBuffer;
-    m_view->weights = floatBuffer + m_info.nPoints * Ndim;
-    m_view->clusterIndexes = intBuffer;
-    m_view->isSeed = intBuffer + m_info.nPoints;
-  }
-
   PointsSoA(float* floatBuffer, int* intBuffer, const uint32_t nPoints)
       : m_coordsBuffer{floatBuffer},
         m_resultsBuffer{intBuffer},
         m_view{std::make_unique<View>()},
-        m_info{},
-        m_debugInfo{nPoints} {
-    m_info.nPoints = nPoints;
+        m_debugInfo{nPoints},
+        m_nPoints{nPoints} {
     m_view->coords = floatBuffer;
-    m_view->weights = floatBuffer + m_info.nPoints * Ndim;
+    m_view->weights = floatBuffer + nPoints * Ndim;
     m_view->clusterIndexes = intBuffer;
-    m_view->isSeed = intBuffer + m_info.nPoints;
+    m_view->isSeed = intBuffer + nPoints;
   }
 
   PointsSoA(const PointsSoA&) = delete;
@@ -66,12 +47,10 @@ public:
   PointsSoA& operator=(PointsSoA&&) = default;
   ~PointsSoA() = default;
 
-  uint32_t nPoints() const { return m_info.nPoints; }
+  uint32_t nPoints() const { return m_nPoints; }
 
   const float* coords() const { return m_view->coords; }
   const float* weights() const { return m_view->weights; }
-
-  const std::array<uint8_t, Ndim> wrapped() const { return m_info.wrapping; }
 
   int* clusterIndexes() { return m_view->clusterIndexes; }
   const int* clusterIndexes() const { return m_view->clusterIndexes; }
@@ -80,12 +59,10 @@ public:
 
   const View* view() const { return m_view.get(); }
 
-  DebugInfo& debugInfo() { return m_debugInfo; }
-
 private:
   float* m_coordsBuffer;
   int* m_resultsBuffer;
   std::unique_ptr<View> m_view;
-  PointInfo<Ndim> m_info;
   DebugInfo m_debugInfo;
+  uint32_t m_nPoints;
 };
