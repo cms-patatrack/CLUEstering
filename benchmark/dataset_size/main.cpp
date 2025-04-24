@@ -86,30 +86,29 @@ void to_csv(const TimeMeasures& measures, const std::string& filename) {
   file.close();
 }
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
-  void run(const std::string& input_file) {
-    auto coords = read_csv<float, 2>(input_file);
-    const auto n_points = coords.size() / 3;
-    std::vector<int> results(2 * n_points);
+using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Acc1D;
+using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Device;
+using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Queue;
 
-    const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-    Queue queue(dev_acc);
+void run(const std::string& input_file) {
+  auto coords = read_csv<float, 2>(input_file);
+  const auto n_points = coords.size() / 3;
+  std::vector<int> results(2 * n_points);
 
-    // Create the points host and device objects
-    clue::PointsHost<2> h_points(queue, n_points, coords.data(), results.data());
-    clue::PointsDevice<2, Device> d_points(queue, n_points);
+  const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
+  Queue queue(dev_acc);
 
-    const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
-    const int pPBin{128};
-	clue::Clusterer<2> algo(dc, rhoc, outlier, pPBin, queue);
+  // Create the points host and device objects
+  clue::PointsHost<2> h_points(queue, n_points, coords.data(), results.data());
+  clue::PointsDevice<2, Device> d_points(queue, n_points);
 
-    const std::size_t block_size{256};
-    algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
-  }
+  const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
+  const int pPBin{128};
+  clue::Clusterer<2> algo(dc, rhoc, outlier, pPBin, queue);
 
-};  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
-
-namespace cluetest = ALPAKA_ACCELERATOR_NAMESPACE_CLUE;
+  const std::size_t block_size{256};
+  algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
+}
 
 int main(int argc, char* argv[]) {
   auto min = std::stoi(argv[1]);
@@ -143,7 +142,7 @@ int main(int argc, char* argv[]) {
         std::vector<float> times(nruns);
         for (auto i = 0; i < nruns; ++i) {
           start = std::chrono::high_resolution_clock::now();
-          cluetest::run(file);
+          run(file);
           end = std::chrono::high_resolution_clock::now();
           auto duration =
               std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();

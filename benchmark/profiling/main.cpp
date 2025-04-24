@@ -11,29 +11,31 @@
 
 #include "CLUEstering/utility/read_csv.hpp"
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
-  void run(const std::string& input_file) {
-    auto coords = read_csv<float, 2>(input_file);
-    const auto n_points = coords.size() / 3;
-    std::vector<int> results(2 * n_points);
+using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Acc1D;
+using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Device;
+using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Queue;
 
-    const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-    Queue queue(dev_acc);
+void run(const std::string& input_file) {
+  auto coords = read_csv<float, 2>(input_file);
+  const auto n_points = coords.size() / 3;
+  std::vector<int> results(2 * n_points);
 
-    clue::PointsHost<2> h_points(queue, n_points, coords.data(), results.data());
-    clue::PointsDevice<2, Device> d_points(queue, n_points);
+  const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
+  Queue queue(dev_acc);
 
-    const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
-    const int pPBin{128};
-	clue::Clusterer<2> algo(dc, rhoc, outlier, pPBin, queue);
+  clue::PointsHost<2> h_points(queue, n_points, coords.data(), results.data());
+  clue::PointsDevice<2, Device> d_points(queue, n_points);
 
-    const std::size_t block_size{256};
-    algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
-    // auto clusters = algo.getClusters(h_points);
-  }
-};  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
+  const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
+  const int pPBin{128};
+  clue::Clusterer<2> algo(dc, rhoc, outlier, pPBin, queue);
+
+  const std::size_t block_size{256};
+  algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
+  // auto clusters = algo.getClusters(h_points);
+}
 
 int main(int, char* argv[]) {
   auto input_file{std::string(argv[1])};
-  ALPAKA_ACCELERATOR_NAMESPACE_CLUE::run(input_file);
+  run(input_file);
 }
