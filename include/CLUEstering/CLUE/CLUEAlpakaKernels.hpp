@@ -251,7 +251,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     }
   };
 
-  template <uint8_t Ndim>
   struct KernelFindClusters {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
@@ -286,7 +285,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     }
   };
 
-  template <uint8_t Ndim>
   struct KernelAssignClusters {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
