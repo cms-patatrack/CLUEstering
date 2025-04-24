@@ -27,12 +27,12 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     using TilesDevice = clue::TilesAlpaka<Ndim, Device>;
 
     explicit CLUEAlgoAlpaka(float dc, float rhoc, float dm, int pPBin, Queue queue)
-        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin} {
+        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin}, m_wrappedCoordinates{} {
       init_device(queue);
     }
     explicit CLUEAlgoAlpaka(
         float dc, float rhoc, float dm, int pPBin, Queue queue, TilesDevice* tile_buffer)
-        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin} {
+        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin}, m_wrappedCoordinates{} {
       init_device(queue, tile_buffer);
     }
 
@@ -52,6 +52,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                        Queue queue_,
                        std::size_t block_size);
 
+    void setWrappedCoordinates(const std::array<uint8_t, Ndim>& wrappedCoordinates) {
+      m_wrappedCoordinates = wrappedCoordinates;
+    }
+    void setWrappedCoordinates(std::array<uint8_t, Ndim>&& wrappedCoordinates) {
+      m_wrappedCoordinates = std::move(wrappedCoordinates);
+    }
+    template <typename... TArgs>
+    void setWrappedCoordinates(TArgs... wrappedCoordinates) {
+      m_wrappedCoordinates = {wrappedCoordinates...};
+    }
+
     std::vector<std::vector<int>> getClusters(const PointsSoA<Ndim>& h_points);
 
   private:
@@ -60,6 +71,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     float dm_;
     // average number of points found in a tile
     int pointsPerTile_;
+    std::array<uint8_t, Ndim> m_wrappedCoordinates;
 
     // internal buffers
     std::optional<TilesDevice> d_tiles;
@@ -157,8 +169,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     const auto device = alpaka::getDev(queue);
     alpaka::memcpy(queue, d_tiles->minMax(), min_max);
     alpaka::memcpy(queue, d_tiles->tileSize(), tile_sizes);
-    alpaka::memcpy(
-        queue, d_tiles->wrapped(), clue::make_host_view(h_points.wrapped().data(), Ndim));
+    alpaka::memcpy(queue,
+                   d_tiles->wrapped(),
+                   clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
     alpaka::wait(queue);
   }
 

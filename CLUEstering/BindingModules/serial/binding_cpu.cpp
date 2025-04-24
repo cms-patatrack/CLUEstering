@@ -58,7 +58,7 @@ namespace alpaka_serial_sync {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointInfo<1>{n_points},
+                       n_points,
                        kernel,
                        queue_,
                        block_size);
@@ -69,7 +69,7 @@ namespace alpaka_serial_sync {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointInfo<2>{n_points},
+                       n_points,
                        kernel,
                        queue_,
                        block_size);
@@ -80,7 +80,7 @@ namespace alpaka_serial_sync {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointInfo<3>{n_points},
+                       n_points,
                        kernel,
                        queue_,
                        block_size);
@@ -91,7 +91,7 @@ namespace alpaka_serial_sync {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointInfo<4>{n_points},
+                       n_points,
                        kernel,
                        queue_,
                        block_size);
@@ -102,7 +102,7 @@ namespace alpaka_serial_sync {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointInfo<5>{n_points},
+                       n_points,
                        kernel,
                        queue_,
                        block_size);
@@ -113,7 +113,7 @@ namespace alpaka_serial_sync {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointInfo<6>{n_points},
+                       n_points,
                        kernel,
                        queue_,
                        block_size);
@@ -124,7 +124,7 @@ namespace alpaka_serial_sync {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointInfo<7>{n_points},
+                       n_points,
                        kernel,
                        queue_,
                        block_size);
@@ -135,7 +135,7 @@ namespace alpaka_serial_sync {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointInfo<8>{n_points},
+                       n_points,
                        kernel,
                        queue_,
                        block_size);
@@ -146,7 +146,7 @@ namespace alpaka_serial_sync {
                        dm,
                        pPBin,
                        std::make_tuple(pData, pResults),
-                       PointInfo<9>{n_points},
+                       n_points,
                        kernel,
                        queue_,
                        block_size);
@@ -157,7 +157,7 @@ namespace alpaka_serial_sync {
                         dm,
                         pPBin,
                         std::make_tuple(pData, pResults),
-                        PointInfo<10>{n_points},
+                        n_points,
                         kernel,
                         queue_,
                         block_size);

@@ -34,7 +34,7 @@ public:
         m_resultsBuffer{intBuffer},
         m_view{std::make_unique<View>()},
         m_debugInfo{nPoints},
-		m_nPoints{nPoints} {
+        m_nPoints{nPoints} {
     m_view->coords = floatBuffer;
     m_view->weights = floatBuffer + nPoints * Ndim;
     m_view->clusterIndexes = intBuffer;
