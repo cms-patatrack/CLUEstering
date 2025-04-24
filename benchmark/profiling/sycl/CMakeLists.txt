@@ -1,4 +1,5 @@
 
+set(CMAKE_CXX_FLAGS "-O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native")
 
 set(CMAKE_CXX_COMPILER ${SYCL_COMPILER})
 add_executable(sycl_cpu.out ../main.cpp)
