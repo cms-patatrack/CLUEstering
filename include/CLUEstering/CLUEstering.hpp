@@ -18,21 +18,36 @@
 #include <utility>
 #include <vector>
 
-namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
+namespace clue {
 
   template <uint8_t Ndim>
-  class CLUEAlgoAlpaka {
+  class Clusterer {
   public:
+    using Device = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Device;
+    using Queue = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Queue;
+    using Acc1D = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Acc1D;
+    using KernelCalculateLocalDensity =
+        ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelCalculateLocalDensity;
+    using KernelCalculateNearestHigher =
+        ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelCalculateNearestHigher;
+    using KernelFindClusters = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelFindClusters;
+    using KernelAssignClusters = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelAssignClusters;
+    using KernelResetFollowers = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelResetFollowers;
+
     using CoordinateExtremes = clue::CoordinateExtremes<Ndim>;
     using PointsHost = clue::PointsHost<Ndim>;
     using PointsDevice = clue::PointsDevice<Ndim, Device>;
     using TilesDevice = clue::TilesAlpaka<Ndim, Device>;
 
-    explicit CLUEAlgoAlpaka(float dc, float rhoc, float dm, int pPBin, Queue queue)
+    inline static constexpr auto max_followers =
+        ALPAKA_ACCELERATOR_NAMESPACE_CLUE::max_followers;
+    inline static constexpr auto reserve = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::reserve;
+
+    explicit Clusterer(float dc, float rhoc, float dm, int pPBin, Queue queue)
         : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin}, m_wrappedCoordinates{} {
       init_device(queue);
     }
-    explicit CLUEAlgoAlpaka(
+    explicit Clusterer(
         float dc, float rhoc, float dm, int pPBin, Queue queue, TilesDevice* tile_buffer)
         : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin}, m_wrappedCoordinates{} {
       init_device(queue, tile_buffer);
@@ -98,10 +113,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   };
 
   template <uint8_t Ndim>
-  void CLUEAlgoAlpaka<Ndim>::calculate_tile_size(CoordinateExtremes* min_max,
-                                                 float* tile_sizes,
-                                                 const PointsHost& h_points,
-                                                 uint32_t nPerDim) {
+  void Clusterer<Ndim>::calculate_tile_size(CoordinateExtremes* min_max,
+                                            float* tile_sizes,
+                                            const PointsHost& h_points,
+                                            uint32_t nPerDim) {
     for (size_t dim{}; dim != Ndim; ++dim) {
       const float dimMax = *std::ranges::max_element(h_points.coords(dim));
       const float dimMin = *std::ranges::min_element(h_points.coords(dim));
@@ -115,7 +130,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   }
 
   template <uint8_t Ndim>
-  void CLUEAlgoAlpaka<Ndim>::init_device(Queue queue) {
+  void Clusterer<Ndim>::init_device(Queue queue) {
     d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
     d_followers =
         clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue, reserve);
@@ -125,7 +140,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   }
 
   template <uint8_t Ndim>
-  void CLUEAlgoAlpaka<Ndim>::init_device(Queue queue_, TilesDevice* tile_buffer) {
+  void Clusterer<Ndim>::init_device(Queue queue_, TilesDevice* tile_buffer) {
     d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue_);
     d_followers =
         clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue_, reserve);
@@ -139,7 +154,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   }
 
   template <uint8_t Ndim>
-  void CLUEAlgoAlpaka<Ndim>::setupTiles(Queue queue, const PointsHost& h_points) {
+  void Clusterer<Ndim>::setupTiles(Queue queue, const PointsHost& h_points) {
     // TODO: reconsider the way that we compute the number of tiles
     auto nTiles = static_cast<int32_t>(
         std::ceil(h_points.size() / static_cast<float>(pointsPerTile_)));
@@ -174,10 +189,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   }
 
   template <uint8_t Ndim>
-  void CLUEAlgoAlpaka<Ndim>::setupPoints(const PointsHost& h_points,
-                                         PointsDevice& dev_points,
-                                         Queue queue,
-                                         std::size_t block_size) {
+  void Clusterer<Ndim>::setupPoints(const PointsHost& h_points,
+                                    PointsDevice& dev_points,
+                                    Queue queue,
+                                    std::size_t block_size) {
     const auto copyExtent = (Ndim + 1) * h_points.size();
     alpaka::memcpy(queue,
                    clue::make_device_view(
@@ -196,10 +211,10 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <uint8_t Ndim>
   template <typename KernelType>
-  void CLUEAlgoAlpaka<Ndim>::make_clusters(PointsHost& h_points,
-                                           const KernelType& kernel,
-                                           Queue queue,
-                                           std::size_t block_size) {
+  void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
+                                      const KernelType& kernel,
+                                      Queue queue,
+                                      std::size_t block_size) {
     d_points = std::make_optional<PointsDevice>(queue, h_points.size());
     auto& dev_points = *d_points;
     make_clusters(h_points, dev_points, kernel, queue, block_size);
@@ -207,11 +222,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <uint8_t Ndim>
   template <typename KernelType>
-  void CLUEAlgoAlpaka<Ndim>::make_clusters(PointsHost& h_points,
-                                           PointsDevice& dev_points,
-                                           const KernelType& kernel,
-                                           Queue queue,
-                                           std::size_t block_size) {
+  void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
+                                      PointsDevice& dev_points,
+                                      const KernelType& kernel,
+                                      Queue queue,
+                                      std::size_t block_size) {
     const auto device = alpaka::getDev(queue);
     setupTiles(queue, h_points);
     setupPoints(h_points, dev_points, queue, block_size);
@@ -240,7 +255,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                         nPoints);
     alpaka::exec<Acc1D>(queue,
                         working_div,
-                        KernelFindClusters<Ndim>{},
+                        KernelFindClusters{},
                         m_seeds,
                         m_followers,
                         dev_points.view(),
@@ -255,7 +270,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     alpaka::exec<Acc1D>(queue,
                         working_div_seeds,
-                        KernelAssignClusters<Ndim>{},
+                        KernelAssignClusters{},
                         m_seeds,
                         m_followers,
                         dev_points.view());
@@ -275,4 +290,4 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     return clue::compute_clusters_points(h_points.clusterIndexes());
   }
 
-}  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
+}  // namespace clue
