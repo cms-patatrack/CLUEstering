@@ -45,6 +45,7 @@ namespace clue {
       requires(sizeof...(TBuffers) == 2)
     void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
+
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
       view->weight =
@@ -89,20 +90,18 @@ namespace clue {
               queue, soa::host::computeSoASize<Ndim>(n_points))},
           m_view{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
-      auto h_view = make_host_buffer<PointsView>(queue);
-      soa::host::partitionSoAView<Ndim>(h_view.data(), m_buffer->data(), n_points);
-      alpaka::memcpy(queue, m_view, h_view);
+      soa::host::partitionSoAView<Ndim>(m_view.data(), m_buffer->data(), n_points);
     }
+
     template <typename TQueue>
       requires alpaka::isQueue<TQueue>
     PointsHost(TQueue queue, uint32_t n_points, std::span<std::byte> buffer)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       assert(buffer.size() == soa::host::computeSoASize<Ndim>(n_points));
 
-      auto h_view = make_host_buffer<PointsView>(queue);
-      soa::host::partitionSoAView<Ndim>(h_view.data(), buffer.data(), n_points);
-      alpaka::memcpy(queue, m_view, h_view);
+      soa::host::partitionSoAView<Ndim>(m_view.data(), buffer.data(), n_points);
     }
+
     template <typename TQueue, detail::ContiguousRange... TBuffers>
       requires alpaka::isQueue<TQueue> &&
                    (sizeof...(TBuffers) == 4 || sizeof...(TBuffers) == 2)
@@ -110,20 +109,17 @@ namespace clue {
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       // assert(buffer.size() == soa::host::computeSoASize<Ndim>(n_points));
 
-      auto h_view = make_host_buffer<PointsView>(queue);
       soa::host::partitionSoAView<Ndim>(
-          h_view.data(), n_points, std::forward<TBuffers>(buffers)...);
-      alpaka::memcpy(queue, m_view, h_view);
+          m_view.data(), n_points, std::forward<TBuffers>(buffers)...);
     }
+
     template <typename TQueue, detail::ArrayOrPtr... TBuffers>
       requires alpaka::isQueue<TQueue>
     PointsHost(TQueue queue, uint32_t n_points, TBuffers... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       // assert(buffer.size() == soa::host::computeSoASizeHost<Ndim>(n_points));
 
-      auto h_view = make_host_buffer<PointsView>(queue);
-      soa::host::partitionSoAView<Ndim>(h_view.data(), n_points, buffers...);
-      alpaka::memcpy(queue, m_view, h_view);
+      soa::host::partitionSoAView<Ndim>(m_view.data(), n_points, buffers...);
     }
 
     PointsHost(const PointsHost&) = delete;
