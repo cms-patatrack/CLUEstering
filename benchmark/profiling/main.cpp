@@ -25,7 +25,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
     const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
     const int pPBin{128};
-    Clusterer<2> algo(dc, rhoc, outlier, pPBin, queue);
+	clue::Clusterer<2> algo(dc, rhoc, outlier, pPBin, queue);
 
     const std::size_t block_size{256};
     algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
