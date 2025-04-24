@@ -27,4 +27,3 @@ void run(float dc,
 
   algo.make_clusters(h_points, d_points, kernel, queue, block_size);
 }
-
