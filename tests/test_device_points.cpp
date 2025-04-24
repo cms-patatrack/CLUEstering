@@ -123,8 +123,7 @@ TEST_CASE(
   auto input = clue::make_device_buffer<float[]>(queue, 3 * size);
   auto output = clue::make_device_buffer<int[]>(queue, 2 * size);
 
-  clue::PointsHost<2> h_points(
-      queue, size, input.data(), output.data());
+  clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
   auto view = h_points.view();
 
   CHECK(view->n == size);

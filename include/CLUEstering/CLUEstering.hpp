@@ -102,13 +102,9 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                                  float* tile_sizes,
                                                  const PointsHost& h_points,
                                                  uint32_t nPerDim) {
-    auto n = h_points.size();
     for (size_t dim{}; dim != Ndim; ++dim) {
-      const auto offset = dim * n;
-      const float dimMax =
-          *std::ranges::max_element(h_points.coords(dim));
-      const float dimMin =
-          *std::ranges::min_element(h_points.coords(dim));
+      const float dimMax = *std::ranges::max_element(h_points.coords(dim));
+      const float dimMin = *std::ranges::min_element(h_points.coords(dim));
 
       min_max->min(dim) = dimMin;
       min_max->max(dim) = dimMax;
@@ -184,7 +180,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                          std::size_t block_size) {
     const auto copyExtent = (Ndim + 1) * h_points.size();
     alpaka::memcpy(queue,
-                   clue::make_device_view(alpaka::getDev(queue), dev_points.view()->coords, copyExtent),
+                   clue::make_device_view(
+                       alpaka::getDev(queue), dev_points.view()->coords, copyExtent),
                    clue::make_host_view(h_points.view()->coords, copyExtent),
                    copyExtent);
 
@@ -264,24 +261,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                         dev_points.view());
     alpaka::wait(queue);
 
-#ifdef CLUE_DEBUG
-    alpaka::memcpy(queue,
-                   clue::make_host_view(h_points.debugInfo().rho.data(), nPoints),
-                   clue::make_device_view(device, dev_points.view()->rho, nPoints));
-    alpaka::memcpy(queue,
-                   clue::make_host_view(h_points.debugInfo().rho.data(), nPoints),
-                   clue::make_device_view(device, dev_points.view()->delta, nPoints));
     alpaka::memcpy(
         queue,
-        clue::make_host_view(h_points.debugInfo().nearestHigher.data(), nPoints),
-        clue::make_device_view(device, dev_points.view()->nearest_higher, nPoints));
-#endif
-
-    alpaka::memcpy(queue,
-                   clue::make_host_view(h_points.view()->cluster_index, 2 * nPoints),
-                   clue::make_device_view(
-                       device, dev_points.view()->cluster_index, 2 * nPoints),
-                   2 * nPoints);
+        clue::make_host_view(h_points.view()->cluster_index, 2 * nPoints),
+        clue::make_device_view(device, dev_points.view()->cluster_index, 2 * nPoints),
+        2 * nPoints);
     alpaka::wait(queue);
   }
 
