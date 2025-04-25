@@ -285,8 +285,7 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  std::vector<std::vector<int>> Clusterer<Ndim>::getClusters(
-      const PointsHost& h_points) {
+  std::vector<std::vector<int>> Clusterer<Ndim>::getClusters(const PointsHost& h_points) {
     return clue::compute_clusters_points(h_points.clusterIndexes());
   }
 
