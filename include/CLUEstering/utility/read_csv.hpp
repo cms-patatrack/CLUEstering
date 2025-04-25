@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+// TODO: implement overload that takes pre-allocated Points
 template <typename T, size_t NDim>
 std::vector<T> read_csv(const std::string& file_path) {
   std::fstream file(file_path);

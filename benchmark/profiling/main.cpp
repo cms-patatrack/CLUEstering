@@ -1,12 +1,13 @@
 
+
 #include <alpaka/alpaka.hpp>
 #include <algorithm>
 #include <chrono>
 #include <vector>
 
 #include "CLUEstering/CLUEstering.hpp"
-#include "CLUEstering/DataFormats/Points.hpp"
-#include "CLUEstering/DataFormats/alpaka/PointsAlpaka.hpp"
+#include "CLUEstering/DataFormats/PointsHost.hpp"
+#include "CLUEstering/DataFormats/PointsDevice.hpp"
 
 #include "CLUEstering/utility/read_csv.hpp"
 
@@ -17,17 +18,17 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     std::vector<int> results(2 * n_points);
 
     const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-    Queue queue_(dev_acc);
+    Queue queue(dev_acc);
 
-    PointsSoA<2> h_points(coords.data(), results.data(), static_cast<uint32_t>(n_points));
-    clue::PointsAlpaka<2, Device> d_points(queue_, n_points);
+    clue::PointsHost<2> h_points(queue, n_points, coords.data(), results.data());
+    clue::PointsDevice<2, Device> d_points(queue, n_points);
 
     const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
     const int pPBin{128};
-    CLUEAlgoAlpaka<2> algo(dc, rhoc, outlier, pPBin, queue_);
+    CLUEAlgoAlpaka<2> algo(dc, rhoc, outlier, pPBin, queue);
 
     const std::size_t block_size{256};
-    algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue_, block_size);
+    algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
     auto clusters = algo.getClusters(h_points);
   }
 };  // namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE
