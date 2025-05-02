@@ -32,6 +32,7 @@ namespace alpaka_serial_sync {
   void mainRun(float dc,
                float rhoc,
                float dm,
+               float seed_dc,
                int pPBin,
                py::array_t<float> data,
                py::array_t<int> results,
@@ -48,7 +49,7 @@ namespace alpaka_serial_sync {
     const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, device_id);
 
     // Create the queue
-    Queue queue_(dev_acc);
+    Queue queue(dev_acc);
 
     // Running the clustering algorithm
     switch (Ndim) {
@@ -56,110 +57,120 @@ namespace alpaka_serial_sync {
         run<1, Kernel>(dc,
                        rhoc,
                        dm,
+                       seed_dc,
                        pPBin,
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
-                       queue_,
+                       queue,
                        block_size);
         return;
       [[likely]] case (2):
         run<2, Kernel>(dc,
                        rhoc,
                        dm,
+                       seed_dc,
                        pPBin,
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
-                       queue_,
+                       queue,
                        block_size);
         return;
       [[likely]] case (3):
         run<3, Kernel>(dc,
                        rhoc,
                        dm,
+                       seed_dc,
                        pPBin,
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
-                       queue_,
+                       queue,
                        block_size);
         return;
       [[unlikely]] case (4):
         run<4, Kernel>(dc,
                        rhoc,
                        dm,
+                       seed_dc,
                        pPBin,
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
-                       queue_,
+                       queue,
                        block_size);
         return;
       [[unlikely]] case (5):
         run<5, Kernel>(dc,
                        rhoc,
                        dm,
+                       seed_dc,
                        pPBin,
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
-                       queue_,
+                       queue,
                        block_size);
         return;
       [[unlikely]] case (6):
         run<6, Kernel>(dc,
                        rhoc,
                        dm,
+                       seed_dc,
                        pPBin,
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
-                       queue_,
+                       queue,
                        block_size);
         return;
       [[unlikely]] case (7):
         run<7, Kernel>(dc,
                        rhoc,
                        dm,
+                       seed_dc,
                        pPBin,
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
-                       queue_,
+                       queue,
                        block_size);
         return;
       [[unlikely]] case (8):
         run<8, Kernel>(dc,
                        rhoc,
                        dm,
+                       seed_dc,
                        pPBin,
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
-                       queue_,
+                       queue,
                        block_size);
         return;
       [[unlikely]] case (9):
         run<9, Kernel>(dc,
                        rhoc,
                        dm,
+                       seed_dc,
                        pPBin,
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
-                       queue_,
+                       queue,
                        block_size);
         return;
       [[unlikely]] case (10):
         run<10, Kernel>(dc,
                         rhoc,
                         dm,
+                        seed_dc,
                         pPBin,
                         std::make_tuple(pData, pResults),
                         n_points,
                         kernel,
-                        queue_,
+                        queue,
                         block_size);
         return;
       [[unlikely]] default:
@@ -177,6 +188,7 @@ namespace alpaka_serial_sync {
           pybind11::overload_cast<float,
                                   float,
                                   float,
+                                  float,
                                   int,
                                   py::array_t<float>,
                                   py::array_t<int>,
@@ -190,6 +202,7 @@ namespace alpaka_serial_sync {
           pybind11::overload_cast<float,
                                   float,
                                   float,
+                                  float,
                                   int,
                                   py::array_t<float>,
                                   py::array_t<int>,
@@ -201,6 +214,7 @@ namespace alpaka_serial_sync {
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
+                                  float,
                                   float,
                                   float,
                                   int,

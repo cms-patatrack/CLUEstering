@@ -12,13 +12,14 @@ template <uint8_t Ndim, typename Kernel>
 void run(float dc,
          float rhoc,
          float dm,
+         float seed_dc,
          int pPBin,
          std::tuple<float*, int*>&& pData,
          uint32_t n_points,
          const Kernel& kernel,
          Queue queue,
          size_t block_size) {
-  clue::Clusterer<Ndim> algo(dc, rhoc, dm, pPBin, queue);
+  clue::Clusterer<Ndim> algo(queue, dc, rhoc, dm, seed_dc, pPBin);
 
   // Create the host and device points
   clue::PointsHost<Ndim> h_points(

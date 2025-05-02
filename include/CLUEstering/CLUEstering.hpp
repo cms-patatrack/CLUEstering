@@ -43,13 +43,39 @@ namespace clue {
         ALPAKA_ACCELERATOR_NAMESPACE_CLUE::max_followers;
     inline static constexpr auto reserve = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::reserve;
 
-    explicit Clusterer(float dc, float rhoc, float dm, int pPBin, Queue queue)
-        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin}, m_wrappedCoordinates{} {
+    explicit Clusterer(Queue queue,
+                       float dc,
+                       float rhoc,
+                       float dm,
+                       float seed_dc = -1.f,
+                       int pPBin = 128)
+        : m_dc{dc},
+          m_seed_dc{seed_dc},
+          m_rhoc{rhoc},
+          m_dm{dm},
+          m_pointsPerTile{pPBin},
+          m_wrappedCoordinates{} {
+      if (seed_dc < 0.f) {
+        m_seed_dc = dc;
+      }
       init_device(queue);
     }
-    explicit Clusterer(
-        float dc, float rhoc, float dm, int pPBin, Queue queue, TilesDevice* tile_buffer)
-        : dc_{dc}, rhoc_{rhoc}, dm_{dm}, pointsPerTile_{pPBin}, m_wrappedCoordinates{} {
+    explicit Clusterer(Queue queue,
+                       TilesDevice* tile_buffer,
+                       float dc,
+                       float rhoc,
+                       float dm,
+                       float seed_dc = -1.f,
+                       int pPBin = 128)
+        : m_dc{dc},
+          m_seed_dc{seed_dc},
+          m_rhoc{rhoc},
+          m_dm{dm},
+          m_pointsPerTile{pPBin},
+          m_wrappedCoordinates{} {
+      if (seed_dc < 0.f) {
+        m_seed_dc = dc;
+      }
       init_device(queue, tile_buffer);
     }
 
@@ -66,7 +92,7 @@ namespace clue {
     void make_clusters(PointsHost& h_points,
                        PointsDevice& d_points,
                        const KernelType& kernel,
-                       Queue queue_,
+                       Queue queue,
                        std::size_t block_size);
 
     void setWrappedCoordinates(const std::array<uint8_t, Ndim>& wrappedCoordinates) {
@@ -83,11 +109,11 @@ namespace clue {
     std::vector<std::vector<int>> getClusters(const PointsHost& h_points);
 
   private:
-    float dc_;
-    float rhoc_;
-    float dm_;
-    // average number of points found in a tile
-    int pointsPerTile_;
+    float m_dc;
+    float m_seed_dc;
+    float m_rhoc;
+    float m_dm;
+    int m_pointsPerTile;  // average number of points found in a tile
     std::array<uint8_t, Ndim> m_wrappedCoordinates;
 
     // internal buffers
@@ -97,8 +123,8 @@ namespace clue {
         d_followers;
     std::optional<PointsDevice> d_points;
 
-    void init_device(Queue queue_);
-    void init_device(Queue queue_, TilesDevice* tile_buffer);
+    void init_device(Queue queue);
+    void init_device(Queue queue, TilesDevice* tile_buffer);
 
     void setupTiles(Queue queue, const PointsHost& h_points);
     void setupPoints(const PointsHost& h_points,
@@ -140,10 +166,10 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  void Clusterer<Ndim>::init_device(Queue queue_, TilesDevice* tile_buffer) {
-    d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue_);
+  void Clusterer<Ndim>::init_device(Queue queue, TilesDevice* tile_buffer) {
+    d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
     d_followers =
-        clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue_, reserve);
+        clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue, reserve);
 
     m_seeds = (*d_seeds).data();
     m_followers = (*d_followers).data();
@@ -157,7 +183,7 @@ namespace clue {
   void Clusterer<Ndim>::setupTiles(Queue queue, const PointsHost& h_points) {
     // TODO: reconsider the way that we compute the number of tiles
     auto nTiles = static_cast<int32_t>(
-        std::ceil(h_points.size() / static_cast<float>(pointsPerTile_)));
+        std::ceil(h_points.size() / static_cast<float>(m_pointsPerTile)));
     const auto nPerDim = static_cast<int32_t>(std::ceil(std::pow(nTiles, 1. / Ndim)));
     nTiles = static_cast<int32_t>(std::pow(nPerDim, Ndim));
 
@@ -243,15 +269,14 @@ namespace clue {
                         m_tiles,
                         dev_points.view(),
                         kernel,
-                        dc_,
+                        m_dc,
                         nPoints);
     alpaka::exec<Acc1D>(queue,
                         working_div,
                         KernelCalculateNearestHigher{},
                         m_tiles,
                         dev_points.view(),
-                        dm_,
-                        dc_,
+                        m_dm,
                         nPoints);
     alpaka::exec<Acc1D>(queue,
                         working_div,
@@ -259,9 +284,9 @@ namespace clue {
                         m_seeds,
                         m_followers,
                         dev_points.view(),
-                        dm_,
-                        dc_,
-                        rhoc_,
+                        m_dm,
+                        m_seed_dc,
+                        m_rhoc,
                         nPoints);
 
     // We change the working division when assigning the clusters

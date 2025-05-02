@@ -27,8 +27,7 @@ void run(const std::string& input_file) {
   clue::PointsDevice<2, Device> d_points(queue, n_points);
 
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
-  const int pPBin{128};
-  clue::Clusterer<2> algo(dc, rhoc, outlier, pPBin, queue);
+  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
   const std::size_t block_size{256};
   algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
