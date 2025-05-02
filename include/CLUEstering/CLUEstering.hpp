@@ -43,8 +43,12 @@ namespace clue {
         ALPAKA_ACCELERATOR_NAMESPACE_CLUE::max_followers;
     inline static constexpr auto reserve = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::reserve;
 
-    explicit Clusterer(
-        float dc, float rhoc, float dm, int pPBin, Queue queue, float seed_dc = -1.f)
+    explicit Clusterer(Queue queue,
+                       float dc,
+                       float rhoc,
+                       float dm,
+                       float seed_dc = -1.f,
+                       int pPBin = 128)
         : m_dc{dc},
           m_seed_dc{seed_dc},
           m_rhoc{rhoc},
@@ -56,13 +60,13 @@ namespace clue {
       }
       init_device(queue);
     }
-    explicit Clusterer(float dc,
+    explicit Clusterer(Queue queue,
+                       TilesDevice* tile_buffer,
+                       float dc,
                        float rhoc,
                        float dm,
-                       int pPBin,
-                       Queue queue,
-                       TilesDevice* tile_buffer,
-                       float seed_dc = -1.f)
+                       float seed_dc = -1.f,
+                       int pPBin = 128)
         : m_dc{dc},
           m_seed_dc{seed_dc},
           m_rhoc{rhoc},
