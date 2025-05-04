@@ -131,7 +131,8 @@ namespace clue {
       return remainder;
     }
 
-    ALPAKA_FN_ACC inline float distance(const float* coord_i, const float* coord_j) {
+    ALPAKA_FN_ACC inline float distance(const std::array<float, Ndim>& coord_i,
+                                        const std::array<float, Ndim>& coord_j) {
       float dist_sq = 0.f;
       for (int dim = 0; dim != Ndim; ++dim) {
         if (wrapping[dim])

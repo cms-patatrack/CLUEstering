@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <array>
 #include <alpaka/core/Common.hpp>
 #include <chrono>
 #include <cstdint>
@@ -21,10 +22,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   constexpr int32_t reserve{1000000};
 
   template <uint8_t Ndim>
-  ALPAKA_FN_ACC void getCoords(float* coords, PointsView* d_points, uint32_t i) {
+  ALPAKA_FN_ACC std::array<float, Ndim> getCoords(PointsView* d_points, uint32_t i) {
+    std::array<float, Ndim> coords;
     for (auto dim = 0; dim < Ndim; ++dim) {
       coords[dim] = d_points->coords[i + dim * d_points->n];
     }
+
+    return coords;
   }
 
   struct KernelResetFollowers {
@@ -45,7 +49,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       TilesAlpakaView<Ndim>* tiles,
       PointsView* dev_points,
       const KernelType& kernel,
-      const float* coords_i,
+      const std::array<float, Ndim>& coords_i,
       float* rho_i,
       float dc,
       uint32_t point_id) {
@@ -59,8 +63,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         uint32_t j{(*tiles)[binId][binIter]};
         // query N_{dc_}(i)
 
-        float coords_j[Ndim];
-        getCoords<Ndim>(coords_j, dev_points, j);
+        auto coords_j = getCoords<Ndim>(dev_points, j);
 
         float dist_ij_sq = tiles->distance(coords_i, coords_j);
 
@@ -98,8 +101,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                   uint32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         float rho_i{0.f};
-        float coords_i[Ndim];
-        getCoords<Ndim>(coords_i, dev_points, i);
+        auto coords_i = getCoords<Ndim>(dev_points, i);
 
         // Get the extremes of the search box
         VecArray<VecArray<float, 2>, Ndim> searchbox_extremes;
@@ -139,7 +141,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       const VecArray<VecArray<uint32_t, 2>, Ndim>& s_box,
       TilesAlpakaView<Ndim>* tiles,
       PointsView* dev_points,
-      const float* coords_i,
+      const std::array<float, Ndim>& coords_i,
       float rho_i,
       float* delta_i,
       int* nh_i,
@@ -161,8 +163,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
             found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
 
         // Calculate the distance between the two points
-        float coords_j[Ndim];
-        getCoords<Ndim>(coords_j, dev_points, j);
+        auto coords_j = getCoords<Ndim>(dev_points, j);
 
         float dist_ij_sq{0.f};
         for (int dim{}; dim != Ndim; ++dim) {
@@ -211,8 +212,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         float delta_i{std::numeric_limits<float>::max()};
         int nh_i{-1};
-        float coords_i[Ndim];
-        getCoords<Ndim>(coords_i, dev_points, i);
+        auto coords_i = getCoords<Ndim>(dev_points, i);
         float rho_i{dev_points->rho[i]};
 
         // Get the extremes of the search box
