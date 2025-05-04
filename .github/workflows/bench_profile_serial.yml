@@ -32,7 +32,7 @@ jobs:
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build -- -j 2
+        cmake --build build -- -j
         echo "Running serial backend"
         ./build/serial.out 10 18
         echo "Running TBB backend"
@@ -40,19 +40,19 @@ jobs:
         echo "Running OpenMP backend"
         ./build/openmp.out 10 18
 
-    # TODO: this works on local but not on github actions
-    # - name: Compile and run profiling
-    #   working-directory: ${{ github.workspace }}/benchmark/profiling
-    #   run: |
-    #     cmake -B build/Debug -DCMAKE_BUILD_TYPE=Debug
-    #     cmake --build build/Debug -- -j 2
-    #     cmake -B build/Release -DCMAKE_BUILD_TYPE=Release
-    #     cmake --build build/Release -- -j 2
-    #     ./build/Debug/serial.out ../../data/data_32768.csv
+    - name: Compile and run profiling
+      working-directory: ${{ github.workspace }}/benchmark/profiling
+      run: |
+        cmake -B build/Debug -DCMAKE_BUILD_TYPE=Debug
+        cmake -B build/Release -DCMAKE_BUILD_TYPE=Release
+        cmake --build build/Debug -- -j
+        cmake --build build/Release -- -j
+        ./build/Debug/serial.out ../../data/data_32768.csv
+        ./build/Release/serial.out ../../data/data_32768.csv
     #     gprof ./build/Debug/serial.out ../../data/data_32768.csv
-    #     ./build/Release/serial.out ../../data/data_32768.csv
     #     gprof ./build/Release/serial.out ../../data/data_32768.csv
 
+    # TODO: this works on local but not on github actions
     # - name: Check cache misses with perf
     #   working-directory: ${{ github.workspace }}/benchmark/profiling
     #   run: |

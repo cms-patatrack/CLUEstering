@@ -32,7 +32,6 @@ void run(const std::string& input_file) {
   const std::size_t block_size{256};
   algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
   auto clusters = algo.getClusters(h_points);
-  auto clusters = algo.getClusters(h_points);
 }
 
 int main(int, char* argv[]) {
