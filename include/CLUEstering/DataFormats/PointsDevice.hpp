@@ -100,10 +100,10 @@ namespace clue {
         : m_buffer{make_device_buffer<std::byte[]>(
               queue, soa::device::computeSoASize<Ndim>(n_points))},
           m_view{make_device_buffer<PointsView>(queue)},
+		  m_hostView{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
-      auto h_view = make_host_buffer<PointsView>(queue);
-      soa::device::partitionSoAView<Ndim>(h_view.data(), m_buffer.data(), n_points);
-      alpaka::memcpy(queue, m_view, h_view);
+      soa::device::partitionSoAView<Ndim>(m_hostView.data(), m_buffer.data(), n_points);
+      alpaka::memcpy(queue, m_view, m_hostView);
     }
 
     template <typename TQueue>
@@ -111,13 +111,13 @@ namespace clue {
     PointsDevice(TQueue queue, uint32_t n_points, std::span<std::byte> buffer)
         : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(float))},
           m_view{make_device_buffer<PointsView>(queue)},
+		  m_hostView{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
       assert(buffer.size() == soa::device::computeSoASize<Ndim>(n_points));
 
-      auto h_view = make_host_buffer<PointsView>(queue);
       soa::device::partitionSoAView<Ndim>(
-          h_view.data(), m_buffer.data(), buffer.data(), n_points);
-      alpaka::memcpy(queue, m_view, h_view);
+          m_hostView.data(), m_buffer.data(), buffer.data(), n_points);
+      alpaka::memcpy(queue, m_view, m_hostView);
     }
 
     template <typename TQueue, detail::ArrayOrPtr... TBuffers>
@@ -126,11 +126,11 @@ namespace clue {
     PointsDevice(TQueue queue, uint32_t n_points, TBuffers... buffers)
         : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(float))},
           m_view{make_device_buffer<PointsView>(queue)},
+		  m_hostView{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
-      auto h_view = make_host_buffer<PointsView>(queue);
       soa::device::partitionSoAView<Ndim>(
-          h_view.data(), m_buffer.data(), buffers..., n_points);
-      alpaka::memcpy(queue, m_view, h_view);
+          m_hostView.data(), m_buffer.data(), buffers..., n_points);
+      alpaka::memcpy(queue, m_view, m_hostView);
     }
 
     PointsDevice(const PointsDevice&) = delete;
@@ -144,9 +144,17 @@ namespace clue {
     ALPAKA_FN_HOST PointsView* view() { return m_view.data(); }
     ALPAKA_FN_HOST const PointsView* view() const { return m_view.data(); }
 
+  template <typename _TQueue, uint8_t _Ndim, typename _TDev>
+	requires alpaka::isQueue<_TQueue> && alpaka::isDevice<_TDev>
+  friend void copyToHost(_TQueue queue, PointsHost<_Ndim>& h_points, const PointsDevice<_Ndim, _TDev>& d_points);
+  template <typename _TQueue, uint8_t _Ndim, typename _TDev>
+	requires alpaka::isQueue<_TQueue> && alpaka::isDevice<_TDev>
+  friend void copyToDevice(_TQueue queue, PointsDevice<_Ndim, _TDev>& d_points, const PointsHost<_Ndim>& h_points);
+
   private:
     device_buffer<TDev, std::byte[]> m_buffer;
     device_buffer<TDev, PointsView> m_view;
+	host_buffer<PointsView> m_hostView;
     uint32_t m_size;
   };
 

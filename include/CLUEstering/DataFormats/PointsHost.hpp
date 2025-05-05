@@ -167,6 +167,13 @@ namespace clue {
     ALPAKA_FN_HOST PointsView* view() { return m_view.data(); }
     ALPAKA_FN_HOST const PointsView* view() const { return m_view.data(); }
 
+  template <typename _TQueue, uint8_t _Ndim, typename _TDev>
+	requires alpaka::isQueue<_TQueue> && alpaka::isDevice<_TDev>
+  friend void copyToHost(_TQueue queue, PointsHost<_Ndim>& h_points, const PointsDevice<_Ndim, _TDev>& d_points);
+  template <typename _TQueue, uint8_t _Ndim, typename _TDev>
+	requires alpaka::isQueue<_TQueue> && alpaka::isDevice<_TDev>
+  friend void copyToDevice(_TQueue queue, PointsDevice<_Ndim, _TDev>& d_points, const PointsHost<_Ndim>& h_points);
+
   private:
     std::optional<host_buffer<std::byte[]>> m_buffer;
     host_buffer<PointsView> m_view;
