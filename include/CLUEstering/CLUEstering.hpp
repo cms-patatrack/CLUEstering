@@ -219,7 +219,7 @@ namespace clue {
                                     PointsDevice& dev_points,
                                     Queue queue,
                                     std::size_t block_size) {
-	clue::copyToDevice(queue, dev_points, h_points);
+    clue::copyToDevice(queue, dev_points, h_points);
 
     // TODO: when reworking the followers with the association map, this piece of
     // code will need to be moved
@@ -296,7 +296,7 @@ namespace clue {
                         dev_points.view());
     alpaka::wait(queue);
 
-	clue::copyToHost(queue, h_points, dev_points);
+    clue::copyToHost(queue, h_points, dev_points);
     alpaka::wait(queue);
   }
 
