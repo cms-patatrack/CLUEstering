@@ -219,12 +219,7 @@ namespace clue {
                                     PointsDevice& dev_points,
                                     Queue queue,
                                     std::size_t block_size) {
-    const auto copyExtent = (Ndim + 1) * h_points.size();
-    alpaka::memcpy(queue,
-                   clue::make_device_view(
-                       alpaka::getDev(queue), dev_points.view()->coords, copyExtent),
-                   clue::make_host_view(h_points.view()->coords, copyExtent),
-                   copyExtent);
+    clue::copyToDevice(queue, dev_points, h_points);
 
     // TODO: when reworking the followers with the association map, this piece of
     // code will need to be moved
@@ -301,11 +296,7 @@ namespace clue {
                         dev_points.view());
     alpaka::wait(queue);
 
-    alpaka::memcpy(
-        queue,
-        clue::make_host_view(h_points.view()->cluster_index, 2 * nPoints),
-        clue::make_device_view(device, dev_points.view()->cluster_index, 2 * nPoints),
-        2 * nPoints);
+    clue::copyToHost(queue, h_points, dev_points);
     alpaka::wait(queue);
   }
 
