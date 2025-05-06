@@ -18,7 +18,7 @@ target_compile_options(CLUE_GPU_CUDA PRIVATE --expt-relaxed-constexpr)
 set_target_properties(
   CLUE_GPU_CUDA
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/CLUEstering/lib/
-			 CUDA_ARCHITECTURES "50;60;61;62;70")
+			 CUDA_ARCHITECTURES "50;60;61;62;70;80;90")
 # copy shared library for local testing
 add_custom_command(
   TARGET CLUE_GPU_CUDA

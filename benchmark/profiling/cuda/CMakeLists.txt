@@ -15,4 +15,4 @@ target_include_directories(
 target_compile_definitions(cuda.out PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
 target_compile_options(cuda.out PRIVATE --expt-relaxed-constexpr)
 set_target_properties(cuda.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON
-										  CUDA_ARCHITECTURES "50;60;61;62;70")
+										  CUDA_ARCHITECTURES "50;60;61;62;70;80;90")
