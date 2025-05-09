@@ -10,6 +10,7 @@
 #include "../DataFormats/PointsDevice.hpp"
 #include "../DataFormats/alpaka/TilesAlpaka.hpp"
 #include "../DataFormats/alpaka/AlpakaVecArray.hpp"
+#include "../DataFormats/alpaka/SearchBox.hpp"
 #include "ConvolutionalKernel.hpp"
 
 using clue::PointsView;
@@ -42,17 +43,16 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   };
 
   template <typename TAcc, uint8_t Ndim, uint8_t N_, typename KernelType>
-  ALPAKA_FN_HOST_ACC void for_recursion(
-      const TAcc& acc,
-      VecArray<uint32_t, Ndim>& base_vec,
-      const VecArray<VecArray<uint32_t, 2>, Ndim>& search_box,
-      TilesAlpakaView<Ndim>* tiles,
-      PointsView* dev_points,
-      const KernelType& kernel,
-      const std::array<float, Ndim>& coords_i,
-      float* rho_i,
-      float dc,
-      uint32_t point_id) {
+  ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
+                                        VecArray<uint32_t, Ndim>& base_vec,
+                                        const clue::SearchBoxBins<Ndim>& search_box,
+                                        TilesAlpakaView<Ndim>* tiles,
+                                        PointsView* dev_points,
+                                        const KernelType& kernel,
+                                        const std::array<float, Ndim>& coords_i,
+                                        float* rho_i,
+                                        float dc,
+                                        uint32_t point_id) {
     if constexpr (N_ == 0) {
       auto binId = tiles->getGlobalBinByBin(acc, base_vec);
       // get the size of this bin
@@ -73,8 +73,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       }  // end of interate inside this bin
       return;
     } else {
-      for (unsigned int i{search_box[search_box.capacity() - N_][0]};
-           i <= search_box[search_box.capacity() - N_][1];
+      for (unsigned int i{search_box[search_box.size() - N_][0]};
+           i <= search_box[search_box.size() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
         for_recursion<TAcc, Ndim, N_ - 1>(acc,
@@ -104,23 +104,19 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         auto coords_i = getCoords<Ndim>(dev_points, i);
 
         // Get the extremes of the search box
-        VecArray<VecArray<float, 2>, Ndim> searchbox_extremes;
+        clue::SearchBoxExtremes<Ndim> searchbox_extremes;
         for (int dim{}; dim != Ndim; ++dim) {
-          VecArray<float, 2> dim_extremes;
-          dim_extremes.push_back_unsafe(coords_i[dim] - dc);
-          dim_extremes.push_back_unsafe(coords_i[dim] + dc);
-
-          searchbox_extremes.push_back_unsafe(dim_extremes);
+          searchbox_extremes[dim] = {coords_i[dim] - dc, coords_i[dim] + dc};
         }
 
         // Calculate the search box
-        VecArray<VecArray<uint32_t, 2>, Ndim> search_box;
-        dev_tiles->searchBox(acc, searchbox_extremes, &search_box);
+        clue::SearchBoxBins<Ndim> searchbox_bins;
+        dev_tiles->searchBox(acc, searchbox_extremes, searchbox_bins);
 
         VecArray<uint32_t, Ndim> base_vec;
         for_recursion<TAcc, Ndim, Ndim>(acc,
                                         base_vec,
-                                        search_box,
+                                        searchbox_bins,
                                         dev_tiles,
                                         dev_points,
                                         kernel,
@@ -138,7 +134,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   ALPAKA_FN_HOST_ACC void for_recursion_nearest_higher(
       const TAcc& acc,
       VecArray<uint32_t, Ndim>& base_vec,
-      const VecArray<VecArray<uint32_t, 2>, Ndim>& s_box,
+      const clue::SearchBoxBins<Ndim>& search_box,
       TilesAlpakaView<Ndim>* tiles,
       PointsView* dev_points,
       const std::array<float, Ndim>& coords_i,
@@ -182,13 +178,13 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
       return;
     } else {
-      for (unsigned int i{s_box[s_box.capacity() - N_][0]};
-           i <= s_box[s_box.capacity() - N_][1];
+      for (unsigned int i{search_box[search_box.size() - N_][0]};
+           i <= search_box[search_box.size() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
         for_recursion_nearest_higher<TAcc, Ndim, N_ - 1>(acc,
                                                          base_vec,
-                                                         s_box,
+                                                         search_box,
                                                          tiles,
                                                          dev_points,
                                                          coords_i,
@@ -216,23 +212,19 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         float rho_i{dev_points->rho[i]};
 
         // Get the extremes of the search box
-        VecArray<VecArray<float, 2>, Ndim> searchbox_extremes;
+        clue::SearchBoxExtremes<Ndim> searchbox_extremes;
         for (int dim{}; dim != Ndim; ++dim) {
-          VecArray<float, 2> dim_extremes;
-          dim_extremes.push_back_unsafe(coords_i[dim] - dm);
-          dim_extremes.push_back_unsafe(coords_i[dim] + dm);
-
-          searchbox_extremes.push_back_unsafe(dim_extremes);
+          searchbox_extremes[dim] = {coords_i[dim] - dm, coords_i[dim] + dm};
         }
 
         // Calculate the search box
-        VecArray<VecArray<uint32_t, 2>, Ndim> search_box;
-        dev_tiles->searchBox(acc, searchbox_extremes, &search_box);
+        clue::SearchBoxBins<Ndim> searchbox_bins;
+        dev_tiles->searchBox(acc, searchbox_extremes, searchbox_bins);
 
         VecArray<uint32_t, Ndim> base_vec{};
         for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
                                                        base_vec,
-                                                       search_box,
+                                                       searchbox_bins,
                                                        dev_tiles,
                                                        dev_points,
                                                        coords_i,
