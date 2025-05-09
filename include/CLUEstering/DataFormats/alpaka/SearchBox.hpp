@@ -9,8 +9,10 @@ namespace clue {
   template <uint8_t Ndim, typename T>
   class SearchBox {
   public:
-    auto& operator[](int dim) { return m_extremes[dim]; }
-    const auto& operator[](int dim) const { return m_extremes[dim]; }
+    constexpr auto& operator[](int dim) { return m_extremes[dim]; }
+    constexpr const auto& operator[](int dim) const { return m_extremes[dim]; }
+
+    constexpr auto size() const { return Ndim; }
 
   private:
     std::array<std::array<T, 2>, Ndim> m_extremes;
