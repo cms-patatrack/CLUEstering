@@ -16,6 +16,7 @@ find_package(Boost 1.75.0 REQUIRED)
 
 include(FetchContent)
 
+# alpaka
 FetchContent_Declare(
   alpaka
   GIT_REPOSITORY https://github.com/alpaka-group/alpaka.git
@@ -24,8 +25,7 @@ FetchContent_Declare(
   FIND_PACKAGE_ARGS)
 FetchContent_MakeAvailable(alpaka)
 
-include(FetchContent)
-# Get doctest
+# doctest
 FetchContent_Declare(
   doctest
   GIT_REPOSITORY https://github.com/doctest/doctest.git
@@ -34,6 +34,14 @@ FetchContent_GetProperties(doctest)
 if(NOT doctest_POPULATED)
   FetchContent_MakeAvailable(doctest)
 endif()
+
+# fmt
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG        10.2.1  # or another stable version
+)
+FetchContent_MakeAvailable(fmt)
 
 add_subdirectory(cpu)
 
