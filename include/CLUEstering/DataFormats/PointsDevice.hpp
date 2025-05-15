@@ -22,16 +22,11 @@ namespace clue {
     void partitionSoAView(PointsView* view, std::byte* buffer, uint32_t n_points) {
       view->coords = reinterpret_cast<float*>(buffer);
       view->weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
-      view->cluster_index =
-          reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
-      view->is_seed =
-          reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
-      view->rho =
-          reinterpret_cast<float*>(buffer + (Ndim + 3) * n_points * sizeof(float));
-      view->delta =
-          reinterpret_cast<float*>(buffer + (Ndim + 4) * n_points * sizeof(float));
-      view->nearest_higher =
-          reinterpret_cast<int*>(buffer + (Ndim + 5) * n_points * sizeof(float));
+      view->cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
+      view->is_seed = reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
+      view->rho = reinterpret_cast<float*>(buffer + (Ndim + 3) * n_points * sizeof(float));
+      view->delta = reinterpret_cast<float*>(buffer + (Ndim + 4) * n_points * sizeof(float));
+      view->nearest_higher = reinterpret_cast<int*>(buffer + (Ndim + 5) * n_points * sizeof(float));
       view->n = n_points;
     }
     template <uint8_t Ndim>
@@ -41,14 +36,11 @@ namespace clue {
                           uint32_t n_points) {
       view->coords = reinterpret_cast<float*>(buffer);
       view->weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
-      view->cluster_index =
-          reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
-      view->is_seed =
-          reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
+      view->cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
+      view->is_seed = reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
       view->rho = reinterpret_cast<float*>(alloc_buffer);
       view->delta = reinterpret_cast<float*>(alloc_buffer + n_points * sizeof(float));
-      view->nearest_higher =
-          reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(float));
+      view->nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(float));
       view->n = n_points;
     }
     template <uint8_t Ndim, detail::ArrayOrPtr... TBuffers>
@@ -65,8 +57,7 @@ namespace clue {
       view->is_seed = reinterpret_cast<int*>(std::get<3>(buffers_tuple));
       view->rho = reinterpret_cast<float*>(alloc_buffer);
       view->delta = reinterpret_cast<float*>(alloc_buffer + sizeof(float) * n_points);
-      view->nearest_higher =
-          reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
+      view->nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
       view->n = n_points;
     }
     template <uint8_t Ndim, detail::ArrayOrPtr... TBuffers>
@@ -78,14 +69,12 @@ namespace clue {
       auto buffers_tuple = std::make_tuple(buffers...);
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
-      view->weight =
-          reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Ndim * n_points);
+      view->weight = reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Ndim * n_points);
       view->cluster_index = reinterpret_cast<int*>(std::get<1>(buffers_tuple));
       view->is_seed = reinterpret_cast<int*>(std::get<1>(buffers_tuple) + n_points);
       view->rho = reinterpret_cast<float*>(alloc_buffer);
       view->delta = reinterpret_cast<float*>(alloc_buffer + sizeof(float) * n_points);
-      view->nearest_higher =
-          reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
+      view->nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
       view->n = n_points;
     }
   }  // namespace soa::device
@@ -97,8 +86,8 @@ namespace clue {
     template <typename TQueue>
       requires alpaka::isQueue<TQueue>
     PointsDevice(TQueue queue, uint32_t n_points)
-        : m_buffer{make_device_buffer<std::byte[]>(
-              queue, soa::device::computeSoASize<Ndim>(n_points))},
+        : m_buffer{make_device_buffer<std::byte[]>(queue,
+                                                   soa::device::computeSoASize<Ndim>(n_points))},
           m_view{make_device_buffer<PointsView>(queue)},
           m_hostView{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
@@ -121,15 +110,13 @@ namespace clue {
     }
 
     template <typename TQueue, detail::ArrayOrPtr... TBuffers>
-      requires alpaka::isQueue<TQueue> &&
-                   (sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+      requires alpaka::isQueue<TQueue> && (sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
     PointsDevice(TQueue queue, uint32_t n_points, TBuffers... buffers)
         : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(float))},
           m_view{make_device_buffer<PointsView>(queue)},
           m_hostView{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
-      soa::device::partitionSoAView<Ndim>(
-          m_hostView.data(), m_buffer.data(), buffers..., n_points);
+      soa::device::partitionSoAView<Ndim>(m_hostView.data(), m_buffer.data(), buffers..., n_points);
       alpaka::memcpy(queue, m_view, m_hostView);
     }
 

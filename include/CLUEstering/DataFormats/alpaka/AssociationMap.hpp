@@ -158,9 +158,7 @@ namespace clue {
 
     auto size() const { return m_nbins; }
 
-    ALPAKA_FN_HOST const device_buffer<TDev, uint32_t[]>& indexes() const {
-      return m_indexes;
-    }
+    ALPAKA_FN_HOST const device_buffer<TDev, uint32_t[]>& indexes() const { return m_indexes; }
     ALPAKA_FN_HOST device_buffer<TDev, uint32_t[]>& indexes() { return m_indexes; }
 
     ALPAKA_FN_ACC Span<uint32_t> indexes(size_t bin_id) {
@@ -179,9 +177,7 @@ namespace clue {
       return Span<uint32_t>{buf_ptr, size};
     }
 
-    ALPAKA_FN_HOST const device_buffer<TDev, uint32_t[]>& offsets() const {
-      return m_offsets;
-    }
+    ALPAKA_FN_HOST const device_buffer<TDev, uint32_t[]>& offsets() const { return m_offsets; }
     ALPAKA_FN_HOST device_buffer<TDev, uint32_t[]>& offsets() { return m_offsets; }
 
     ALPAKA_FN_ACC uint32_t offsets(size_t bin_id) const { return m_offsets[bin_id]; }
@@ -198,12 +194,8 @@ namespace clue {
       const auto blocksize = 512;
       const auto gridsize = divide_up_by(size, blocksize);
       const auto workdiv = make_workdiv<TAcc>(gridsize, blocksize);
-      alpaka::exec<TAcc>(queue,
-                         workdiv,
-                         KernelComputeAssociations<TFunc>{},
-                         size,
-                         bin_buffer.data(),
-                         func);
+      alpaka::exec<TAcc>(
+          queue, workdiv, KernelComputeAssociations<TFunc>{}, size, bin_buffer.data(), func);
 
       auto sizes_buffer = make_device_buffer<uint32_t[]>(queue, m_nbins);
       alpaka::memset(queue, sizes_buffer, 0);
@@ -236,10 +228,9 @@ namespace clue {
 
       // fill associator
       auto temp_offsets = make_device_buffer<uint32_t[]>(queue, m_nbins + 1);
-      alpaka::memcpy(
-          queue,
-          temp_offsets,
-          make_device_view(alpaka::getDev(queue), m_offsets.data(), m_nbins + 1));
+      alpaka::memcpy(queue,
+                     temp_offsets,
+                     make_device_view(alpaka::getDev(queue), m_offsets.data(), m_nbins + 1));
       alpaka::exec<TAcc>(queue,
                          workdiv,
                          KernelFillAssociator{},

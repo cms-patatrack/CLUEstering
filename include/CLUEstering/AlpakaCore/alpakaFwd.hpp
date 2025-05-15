@@ -57,14 +57,10 @@ namespace alpaka {
     template <typename TApi, bool TBlocking>
     class QueueUniformCudaHipRt;
   }
-  using QueueCudaRtBlocking =
-      uniform_cuda_hip::detail::QueueUniformCudaHipRt<ApiCudaRt, true>;
-  using QueueCudaRtNonBlocking =
-      uniform_cuda_hip::detail::QueueUniformCudaHipRt<ApiCudaRt, false>;
-  using QueueHipRtBlocking =
-      uniform_cuda_hip::detail::QueueUniformCudaHipRt<ApiHipRt, true>;
-  using QueueHipRtNonBlocking =
-      uniform_cuda_hip::detail::QueueUniformCudaHipRt<ApiHipRt, false>;
+  using QueueCudaRtBlocking = uniform_cuda_hip::detail::QueueUniformCudaHipRt<ApiCudaRt, true>;
+  using QueueCudaRtNonBlocking = uniform_cuda_hip::detail::QueueUniformCudaHipRt<ApiCudaRt, false>;
+  using QueueHipRtBlocking = uniform_cuda_hip::detail::QueueUniformCudaHipRt<ApiHipRt, true>;
+  using QueueHipRtNonBlocking = uniform_cuda_hip::detail::QueueUniformCudaHipRt<ApiHipRt, false>;
 
   // Events
   template <typename TDev>

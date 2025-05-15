@@ -23,10 +23,8 @@ namespace clue {
     void partitionSoAView(PointsView* view, std::byte* buffer, uint32_t n_points) {
       view->coords = reinterpret_cast<float*>(buffer);
       view->weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
-      view->cluster_index =
-          reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
-      view->is_seed =
-          reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
+      view->cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
+      view->is_seed = reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
       view->n = n_points;
     }
     template <uint8_t Ndim, detail::ArrayOrPtr... TBuffers>
@@ -47,8 +45,7 @@ namespace clue {
 
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
-      view->weight =
-          reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Ndim * n_points);
+      view->weight = reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Ndim * n_points);
       view->cluster_index = reinterpret_cast<int*>(std::get<1>(buffers_tuple));
       view->is_seed = reinterpret_cast<int*>(std::get<1>(buffers_tuple) + n_points);
       view->n = n_points;
@@ -70,11 +67,9 @@ namespace clue {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data());
-      view->weight =
-          reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Ndim * n_points);
+      view->weight = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Ndim * n_points);
       view->cluster_index = reinterpret_cast<int*>(std::get<1>(buffers_tuple).data());
-      view->is_seed =
-          reinterpret_cast<int*>(std::get<1>(buffers_tuple).data() + n_points);
+      view->is_seed = reinterpret_cast<int*>(std::get<1>(buffers_tuple).data() + n_points);
       view->n = n_points;
     }
   }  // namespace soa::host
@@ -85,8 +80,7 @@ namespace clue {
     template <typename TQueue>
       requires alpaka::isQueue<TQueue>
     PointsHost(TQueue queue, uint32_t n_points)
-        : m_buffer{make_host_buffer<std::byte[]>(
-              queue, soa::host::computeSoASize<Ndim>(n_points))},
+        : m_buffer{make_host_buffer<std::byte[]>(queue, soa::host::computeSoASize<Ndim>(n_points))},
           m_view{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(m_view.data(), m_buffer->data(), n_points);
@@ -102,8 +96,7 @@ namespace clue {
     }
 
     template <typename TQueue, detail::ContiguousRange... TBuffers>
-      requires alpaka::isQueue<TQueue> &&
-                   (sizeof...(TBuffers) == 4 || sizeof...(TBuffers) == 2)
+      requires alpaka::isQueue<TQueue> && (sizeof...(TBuffers) == 4 || sizeof...(TBuffers) == 2)
     PointsHost(TQueue queue, uint32_t n_points, TBuffers&&... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(
@@ -126,8 +119,7 @@ namespace clue {
     ALPAKA_FN_HOST uint32_t size() const { return m_size; }
 
     ALPAKA_FN_HOST std::span<const float> coords() const {
-      return std::span<const float>(m_view->coords,
-                                    static_cast<std::size_t>(m_view->n * Ndim));
+      return std::span<const float>(m_view->coords, static_cast<std::size_t>(m_view->n * Ndim));
     }
     ALPAKA_FN_HOST std::span<float> coords() {
       return std::span<float>(m_view->coords, static_cast<std::size_t>(m_view->n * Ndim));
@@ -150,8 +142,7 @@ namespace clue {
     }
 
     ALPAKA_FN_HOST std::span<const int> clusterIndexes() const {
-      return std::span<const int>(m_view->cluster_index,
-                                  static_cast<std::size_t>(m_view->n));
+      return std::span<const int>(m_view->cluster_index, static_cast<std::size_t>(m_view->n));
     }
     ALPAKA_FN_HOST std::span<int> clusterIndexes() {
       return std::span<int>(m_view->cluster_index, static_cast<std::size_t>(m_view->n));

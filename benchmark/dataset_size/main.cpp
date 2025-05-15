@@ -39,8 +39,8 @@ float mean(const std::vector<float>& values) {
 
 float stddev(const std::vector<float>& values) {
   auto mean_ = mean(values);
-  auto view{values | std::views::transform(
-                         [mean_](auto x) -> float { return (x - mean_) * (x - mean_); })};
+  auto view{values |
+            std::views::transform([mean_](auto x) -> float { return (x - mean_) * (x - mean_); })};
   auto sqSize = values.size() * (values.size() - 1);
   return std::sqrt(std::accumulate(view.begin(), view.end(), 0.f) / sqSize);
 }
@@ -48,8 +48,7 @@ float stddev(const std::vector<float>& values) {
 std::vector<std::string> GetFiles(int min, int max) {
   std::vector<std::string> files(max - min + 1);
   std::generate(files.begin(), files.end(), [n = min]() mutable -> std::string {
-    auto filename =
-        "../../data/data_" + std::to_string(static_cast<int>(std::pow(2, n))) + ".csv";
+    auto filename = "../../data/data_" + std::to_string(static_cast<int>(std::pow(2, n))) + ".csv";
     ++n;
     return filename;
   });
@@ -80,8 +79,8 @@ void to_csv(const TimeMeasures& measures, const std::string& filename) {
 
   file << "size,avg,std\n";
   for (auto i = 0ul; i < measures.sizes.size(); ++i) {
-    file << measures.sizes[i] << "," << measures.time_averages[i] << ","
-         << measures.time_stddevs[i] << "\n";
+    file << measures.sizes[i] << "," << measures.time_averages[i] << "," << measures.time_stddevs[i]
+         << "\n";
   }
   file.close();
 }
@@ -134,22 +133,20 @@ int main(int argc, char* argv[]) {
 
   auto avgIt = time_averages.begin();
   auto stdIt = time_stddevs.begin();
-  std::for_each(
-      files.begin(), files.end(), [nruns, &avgIt, &stdIt](const auto& file) -> void {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto end = std::chrono::high_resolution_clock::now();
-        std::vector<float> times(nruns);
-        for (auto i = 0; i < nruns; ++i) {
-          start = std::chrono::high_resolution_clock::now();
-          run(file);
-          end = std::chrono::high_resolution_clock::now();
-          auto duration =
-              std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-          times[i] = duration;
-        }
-        *avgIt++ = mean(times);
-        *stdIt++ = stddev(times);
-      });
+  std::for_each(files.begin(), files.end(), [nruns, &avgIt, &stdIt](const auto& file) -> void {
+    auto start = std::chrono::high_resolution_clock::now();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::vector<float> times(nruns);
+    for (auto i = 0; i < nruns; ++i) {
+      start = std::chrono::high_resolution_clock::now();
+      run(file);
+      end = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+      times[i] = duration;
+    }
+    *avgIt++ = mean(times);
+    *stdIt++ = stddev(times);
+  });
 
   auto figname = oFilename.substr(0, oFilename.find_last_of('.')) + ".pdf";
 #ifdef PYBIND11

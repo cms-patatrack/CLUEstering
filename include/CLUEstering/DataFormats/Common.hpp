@@ -46,8 +46,7 @@ namespace clue {
     alpaka::memcpy(
         queue,
         make_host_view(h_points.m_view->cluster_index, copyExtent),
-        make_device_view(
-            alpaka::getDev(queue), d_points.m_hostView->cluster_index, copyExtent));
+        make_device_view(alpaka::getDev(queue), d_points.m_hostView->cluster_index, copyExtent));
   }
   template <typename TQueue, uint8_t Ndim, typename TDev>
     requires alpaka::isQueue<TQueue> && alpaka::isDevice<TDev>
@@ -55,10 +54,9 @@ namespace clue {
                     PointsDevice<Ndim, TDev>& d_points,
                     const PointsHost<Ndim>& h_points) {
     const auto copyExtent = (Ndim + 1) * h_points.size();
-    alpaka::memcpy(
-        queue,
-        make_device_view(alpaka::getDev(queue), d_points.m_hostView->coords, copyExtent),
-        make_host_view(h_points.m_view->coords, copyExtent));
+    alpaka::memcpy(queue,
+                   make_device_view(alpaka::getDev(queue), d_points.m_hostView->coords, copyExtent),
+                   make_host_view(h_points.m_view->coords, copyExtent));
   }
 
 }  // namespace clue

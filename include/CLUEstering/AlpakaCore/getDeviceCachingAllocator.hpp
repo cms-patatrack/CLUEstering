@@ -50,8 +50,7 @@ namespace clue {
   }  // namespace detail
 
   template <typename TDevice, typename TQueue>
-  inline CachingAllocator<TDevice, TQueue>& getDeviceCachingAllocator(
-      TDevice const& device) {
+  inline CachingAllocator<TDevice, TQueue>& getDeviceCachingAllocator(TDevice const& device) {
     // initialise all allocators, one per device
     static auto allocators = detail::allocate_device_allocators<TDevice, TQueue>();
 

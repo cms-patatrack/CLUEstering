@@ -27,8 +27,7 @@ namespace clue {
   }
 
   // alpaka host device
-  inline const alpaka_common::DevHost host =
-      alpaka::getDevByIdx(alpaka::PlatformCpu{}, 0u);
+  inline const alpaka_common::DevHost host = alpaka::getDevByIdx(alpaka::PlatformCpu{}, 0u);
 
   // alpaka accelerator devices
   /* template <typename TPlatform> */
