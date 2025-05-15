@@ -34,8 +34,8 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     auto clusters = std::span<const int>{results.data(), n_points};
     auto isSeed = std::span<const int>(results.data() + n_points, n_points);
 
-    const auto truth_data = read_output<2>(
-        std::format("../data/truth_files/data_{}_truth.csv", std::pow(2, i)));
+    const auto truth_data =
+        read_output<2>(std::format("../data/truth_files/data_{}_truth.csv", std::pow(2, i)));
     auto truth_ids = std::span<const int>{truth_data.data(), n_points};
     auto truth_isSeed = std::span<const int>{truth_data.data() + n_points, n_points};
     CHECK(clue::validate_results(clusters, truth_ids));

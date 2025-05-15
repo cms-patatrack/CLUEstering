@@ -42,17 +42,16 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   };
 
   template <typename TAcc, uint8_t Ndim, uint8_t N_, typename KernelType>
-  ALPAKA_FN_HOST_ACC void for_recursion(
-      const TAcc& acc,
-      VecArray<uint32_t, Ndim>& base_vec,
-      const VecArray<VecArray<uint32_t, 2>, Ndim>& search_box,
-      TilesAlpakaView<Ndim>* tiles,
-      PointsView* dev_points,
-      const KernelType& kernel,
-      const std::array<float, Ndim>& coords_i,
-      float* rho_i,
-      float dc,
-      uint32_t point_id) {
+  ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
+                                        VecArray<uint32_t, Ndim>& base_vec,
+                                        const VecArray<VecArray<uint32_t, 2>, Ndim>& search_box,
+                                        TilesAlpakaView<Ndim>* tiles,
+                                        PointsView* dev_points,
+                                        const KernelType& kernel,
+                                        const std::array<float, Ndim>& coords_i,
+                                        float* rho_i,
+                                        float dc,
+                                        uint32_t point_id) {
     if constexpr (N_ == 0) {
       auto binId = tiles->getGlobalBinByBin(acc, base_vec);
       // get the size of this bin
@@ -77,16 +76,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
            i <= search_box[search_box.capacity() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
-        for_recursion<TAcc, Ndim, N_ - 1>(acc,
-                                          base_vec,
-                                          search_box,
-                                          tiles,
-                                          dev_points,
-                                          kernel,
-                                          coords_i,
-                                          rho_i,
-                                          dc,
-                                          point_id);
+        for_recursion<TAcc, Ndim, N_ - 1>(
+            acc, base_vec, search_box, tiles, dev_points, kernel, coords_i, rho_i, dc, point_id);
       }
     }
   }
@@ -118,16 +109,8 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         dev_tiles->searchBox(acc, searchbox_extremes, &search_box);
 
         VecArray<uint32_t, Ndim> base_vec;
-        for_recursion<TAcc, Ndim, Ndim>(acc,
-                                        base_vec,
-                                        search_box,
-                                        dev_tiles,
-                                        dev_points,
-                                        kernel,
-                                        coords_i,
-                                        &rho_i,
-                                        dc,
-                                        i);
+        for_recursion<TAcc, Ndim, Ndim>(
+            acc, base_vec, search_box, dev_tiles, dev_points, kernel, coords_i, &rho_i, dc, i);
 
         dev_points->rho[i] = rho_i;
       }
@@ -159,8 +142,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         float rho_j{dev_points->rho[j]};
         bool found_higher{(rho_j > rho_i)};
         // in the rare case where rho is the same, use detid
-        found_higher =
-            found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
+        found_higher = found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
 
         // Calculate the distance between the two points
         auto coords_j = getCoords<Ndim>(dev_points, j);
@@ -182,21 +164,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
       return;
     } else {
-      for (unsigned int i{s_box[s_box.capacity() - N_][0]};
-           i <= s_box[s_box.capacity() - N_][1];
+      for (unsigned int i{s_box[s_box.capacity() - N_][0]}; i <= s_box[s_box.capacity() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
-        for_recursion_nearest_higher<TAcc, Ndim, N_ - 1>(acc,
-                                                         base_vec,
-                                                         s_box,
-                                                         tiles,
-                                                         dev_points,
-                                                         coords_i,
-                                                         rho_i,
-                                                         delta_i,
-                                                         nh_i,
-                                                         dm_sq,
-                                                         point_id);
+        for_recursion_nearest_higher<TAcc, Ndim, N_ - 1>(
+            acc, base_vec, s_box, tiles, dev_points, coords_i, rho_i, delta_i, nh_i, dm_sq, point_id);
       }
     }
   }

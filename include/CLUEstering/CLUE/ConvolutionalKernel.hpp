@@ -15,10 +15,7 @@ public:
 
   // Overload call operator
   template <typename TAcc>
-  ALPAKA_FN_HOST_ACC float operator()(const TAcc&,
-                                      float /*dist_ij*/,
-                                      int point_id,
-                                      int j) const {
+  ALPAKA_FN_HOST_ACC float operator()(const TAcc&, float /*dist_ij*/, int point_id, int j) const {
     if (point_id == j) {
       return 1.f;
     } else {
@@ -41,10 +38,7 @@ public:
 
   // Overload call operator
   template <typename TAcc>
-  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc,
-                                      float dist_ij,
-                                      int point_id,
-                                      int j) const {
+  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const {
     if (point_id == j) {
       return 1.f;
     } else {
@@ -69,10 +63,7 @@ public:
 
   // Overload call operator
   template <typename TAcc>
-  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc,
-                                      float dist_ij,
-                                      int point_id,
-                                      int j) const {
+  ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const {
     if (point_id == j) {
       return 1.f;
     } else {

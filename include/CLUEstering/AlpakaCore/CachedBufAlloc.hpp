@@ -39,12 +39,7 @@ namespace clue {
 
     //! The caching memory allocator implementation for the pinned host memory
     template <typename TElem, typename TDim, typename TIdx>
-    struct CachedBufAlloc<TElem,
-                          TDim,
-                          TIdx,
-                          alpaka::DevCpu,
-                          alpaka::QueueCudaRtNonBlocking,
-                          void> {
+    struct CachedBufAlloc<TElem, TDim, TIdx, alpaka::DevCpu, alpaka::QueueCudaRtNonBlocking, void> {
       template <typename TExtent>
       ALPAKA_FN_HOST static auto allocCachedBuf(alpaka::DevCpu const& dev,
                                                 alpaka::QueueCudaRtNonBlocking queue,
@@ -101,12 +96,7 @@ namespace clue {
 
     //! The caching memory allocator implementation for the pinned host memory
     template <typename TElem, typename TDim, typename TIdx>
-    struct CachedBufAlloc<TElem,
-                          TDim,
-                          TIdx,
-                          alpaka::DevCpu,
-                          alpaka::QueueHipRtNonBlocking,
-                          void> {
+    struct CachedBufAlloc<TElem, TDim, TIdx, alpaka::DevCpu, alpaka::QueueHipRtNonBlocking, void> {
       template <typename TExtent>
       ALPAKA_FN_HOST static auto allocCachedBuf(alpaka::DevCpu const& dev,
                                                 alpaka::QueueHipRtNonBlocking queue,
@@ -165,8 +155,8 @@ namespace clue {
   ALPAKA_FN_HOST auto allocCachedBuf(TDev const& dev,
                                      TQueue queue,
                                      TExtent const& extent = TExtent()) {
-    return traits::CachedBufAlloc<TElem, alpaka::Dim<TExtent>, TIdx, TDev, TQueue>::
-        allocCachedBuf(dev, queue, extent);
+    return traits::CachedBufAlloc<TElem, alpaka::Dim<TExtent>, TIdx, TDev, TQueue>::allocCachedBuf(
+        dev, queue, extent);
   }
 
 }  // namespace clue

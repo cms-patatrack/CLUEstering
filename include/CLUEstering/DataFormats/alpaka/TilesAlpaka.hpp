@@ -54,13 +54,11 @@ namespace clue {
     ALPAKA_FN_ACC inline constexpr uint8_t* wrapped() { return wrapping; }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC inline constexpr int getBin(const TAcc& acc,
-                                              float coord,
-                                              int dim) const {
+    ALPAKA_FN_ACC inline constexpr int getBin(const TAcc& acc, float coord, int dim) const {
       int coord_bin;
       if (wrapping[dim]) {
-        coord_bin = static_cast<int>(
-            (normalizeCoordinate(coord, dim) - minmax->min(dim)) / tilesizes[dim]);
+        coord_bin =
+            static_cast<int>((normalizeCoordinate(coord, dim) - minmax->min(dim)) / tilesizes[dim]);
       } else {
         coord_bin = static_cast<int>((coord - minmax->min(dim)) / tilesizes[dim]);
       }
@@ -73,12 +71,11 @@ namespace clue {
     }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const TAcc& acc,
-                                                    const float* coords) const {
+    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const TAcc& acc, const float* coords) const {
       int global_bin = 0;
       for (int dim = 0; dim != Ndim - 1; ++dim) {
-        global_bin += alpaka::math::pow(acc, nperdim, Ndim - dim - 1) *
-                      getBin(acc, coords[dim], dim);
+        global_bin +=
+            alpaka::math::pow(acc, nperdim, Ndim - dim - 1) * getBin(acc, coords[dim], dim);
       }
       global_bin += getBin(acc, coords[Ndim - 1], Ndim - 1);
       return global_bin;
@@ -96,10 +93,9 @@ namespace clue {
     }
 
     template <typename TAcc>
-    ALPAKA_FN_ACC inline void searchBox(
-        const TAcc& acc,
-        const VecArray<VecArray<float, 2>, Ndim>& sb_extremes,
-        VecArray<VecArray<uint32_t, 2>, Ndim>* search_box) {
+    ALPAKA_FN_ACC inline void searchBox(const TAcc& acc,
+                                        const VecArray<VecArray<float, 2>, Ndim>& sb_extremes,
+                                        VecArray<VecArray<uint32_t, 2>, Ndim>* search_box) {
       for (int dim{}; dim != Ndim; ++dim) {
         VecArray<uint32_t, 2> dim_sb;
         auto infBin = getBin(acc, sb_extremes[dim][0], dim);
@@ -120,8 +116,7 @@ namespace clue {
       return clue::Span<uint32_t>{buf_ptr, size};
     }
 
-    ALPAKA_FN_HOST_ACC inline constexpr float normalizeCoordinate(float coord,
-                                                                  int dim) const {
+    ALPAKA_FN_HOST_ACC inline constexpr float normalizeCoordinate(float coord, int dim) const {
       const float range = minmax->range(dim);
       float remainder = coord - static_cast<int>(coord / range) * range;
       if (remainder >= minmax->max(dim))
@@ -152,8 +147,7 @@ namespace clue {
     template <typename TQueue>
       requires alpaka::isQueue<TQueue>
     TilesAlpaka(TQueue queue, uint32_t n_points, uint32_t pointsPerTile) {
-      auto n_tiles =
-          static_cast<int32_t>(std::ceil(n_points / static_cast<float>(pointsPerTile)));
+      auto n_tiles = static_cast<int32_t>(std::ceil(n_points / static_cast<float>(pointsPerTile)));
       const auto n_perdim = static_cast<int32_t>(std::ceil(std::pow(n_tiles, 1. / Ndim)));
       n_tiles = static_cast<int32_t>(std::pow(n_perdim, Ndim));
 
@@ -204,10 +198,7 @@ namespace clue {
 
     template <typename TQueue>
       requires alpaka::isQueue<TQueue>
-    ALPAKA_FN_HOST void initialize(uint32_t npoints,
-                                   int32_t ntiles,
-                                   int32_t nperdim,
-                                   TQueue queue) {
+    ALPAKA_FN_HOST void initialize(uint32_t npoints, int32_t ntiles, int32_t nperdim, TQueue queue) {
       m_assoc.initialize(npoints, ntiles, queue);
       m_ntiles = ntiles;
       m_nperdim = nperdim;
@@ -226,10 +217,7 @@ namespace clue {
 
     template <typename TQueue>
       requires alpaka::isQueue<TQueue>
-    ALPAKA_FN_HOST void reset(uint32_t npoints,
-                              int32_t ntiles,
-                              int32_t nperdim,
-                              TQueue queue) {
+    ALPAKA_FN_HOST void reset(uint32_t npoints, int32_t ntiles, int32_t nperdim, TQueue queue) {
       m_assoc.reset(queue, npoints, ntiles);
 
       m_ntiles = ntiles;
@@ -264,16 +252,13 @@ namespace clue {
 
     template <typename TAcc, typename TQueue>
       requires alpaka::isAccelerator<TAcc> && alpaka::isQueue<TQueue>
-    ALPAKA_FN_HOST void fill(TQueue queue,
-                             PointsDevice<Ndim, TDev>& d_points,
-                             size_t size) {
+    ALPAKA_FN_HOST void fill(TQueue queue, PointsDevice<Ndim, TDev>& d_points, size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
       m_assoc.template fill<TAcc>(size, GetGlobalBin{pointsView, m_view.data()}, queue);
     }
 
-    ALPAKA_FN_HOST inline clue::device_buffer<TDev, CoordinateExtremes<Ndim>> minMax()
-        const {
+    ALPAKA_FN_HOST inline clue::device_buffer<TDev, CoordinateExtremes<Ndim>> minMax() const {
       return m_minmax;
     }
     ALPAKA_FN_HOST inline clue::device_buffer<TDev, float[Ndim]> tileSize() const {
@@ -294,18 +279,13 @@ namespace clue {
     ALPAKA_FN_HOST const clue::device_buffer<TDev, uint32_t[]>& indexes() const {
       return m_assoc.indexes();
     }
-    ALPAKA_FN_HOST clue::device_buffer<TDev, uint32_t[]>& indexes() {
-      return m_assoc.indexes();
-    }
+    ALPAKA_FN_HOST clue::device_buffer<TDev, uint32_t[]>& indexes() { return m_assoc.indexes(); }
     ALPAKA_FN_HOST const clue::device_buffer<TDev, uint32_t[]>& offsets() const {
       return m_assoc.offsets();
     }
-    ALPAKA_FN_HOST clue::device_buffer<TDev, uint32_t[]>& offsets() {
-      return m_assoc.offsets();
-    }
+    ALPAKA_FN_HOST clue::device_buffer<TDev, uint32_t[]>& offsets() { return m_assoc.offsets(); }
 
-    ALPAKA_FN_HOST clue::device_view<TDev, uint32_t[]> indexes(const TDev& dev,
-                                                               size_t assoc_id) {
+    ALPAKA_FN_HOST clue::device_view<TDev, uint32_t[]> indexes(const TDev& dev, size_t assoc_id) {
       return m_assoc.indexes(dev, assoc_id);
     }
 

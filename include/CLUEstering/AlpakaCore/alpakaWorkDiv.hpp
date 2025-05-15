@@ -24,8 +24,8 @@ namespace clue {
 
 #ifdef ALPAKA_ACC_GPU_HIP_ENABLED
   template <typename TDim>
-  struct requires_single_thread_per_block<alpaka::AccGpuHipRt<TDim, Idx>>
-      : public std::false_type {};
+  struct requires_single_thread_per_block<alpaka::AccGpuHipRt<TDim, Idx>> : public std::false_type {
+  };
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED
 
 #ifdef ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
@@ -61,16 +61,14 @@ namespace clue {
    * Creates the accelerator-dependent workdiv for 1-dimensional operations.
    */
   template <typename TAcc>
-  inline WorkDiv<Dim1D> make_workdiv(Idx blocksPerGrid,
-                                     Idx threadsPerBlockOrElementsPerThread) {
+  inline WorkDiv<Dim1D> make_workdiv(Idx blocksPerGrid, Idx threadsPerBlockOrElementsPerThread) {
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
     if constexpr (std::is_same_v<TAcc, alpaka::AccGpuCudaRt<Dim1D, Idx>>) {
       // On GPU backends, each thread is looking at a single element:
       //   - threadsPerBlockOrElementsPerThread is the number of threads per block;
       //   - elementsPerThread is always 1.
       const auto elementsPerThread = Idx{1};
-      return WorkDiv<Dim1D>(
-          blocksPerGrid, threadsPerBlockOrElementsPerThread, elementsPerThread);
+      return WorkDiv<Dim1D>(blocksPerGrid, threadsPerBlockOrElementsPerThread, elementsPerThread);
     } else
 #endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
 #if ALPAKA_ACC_GPU_HIP_ENABLED
@@ -79,8 +77,7 @@ namespace clue {
       //   - threadsPerBlockOrElementsPerThread is the number of threads per block;
       //   - elementsPerThread is always 1.
       const auto elementsPerThread = Idx{1};
-      return WorkDiv<Dim1D>(
-          blocksPerGrid, threadsPerBlockOrElementsPerThread, elementsPerThread);
+      return WorkDiv<Dim1D>(blocksPerGrid, threadsPerBlockOrElementsPerThread, elementsPerThread);
     } else
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED
     {
@@ -88,8 +85,7 @@ namespace clue {
       //   - threadsPerBlock is always 1;
       //   - threadsPerBlockOrElementsPerThread is the number of elements per thread.
       const auto threadsPerBlock = Idx{1};
-      return WorkDiv<Dim1D>(
-          blocksPerGrid, threadsPerBlock, threadsPerBlockOrElementsPerThread);
+      return WorkDiv<Dim1D>(blocksPerGrid, threadsPerBlock, threadsPerBlockOrElementsPerThread);
     }
   }
 
@@ -107,8 +103,7 @@ namespace clue {
       //   - threadsPerBlockOrElementsPerThread is the number of threads per block;
       //   - elementsPerThread is always 1.
       const auto elementsPerThread = Vec<Dim>::ones();
-      return WorkDiv<Dim>(
-          blocksPerGrid, threadsPerBlockOrElementsPerThread, elementsPerThread);
+      return WorkDiv<Dim>(blocksPerGrid, threadsPerBlockOrElementsPerThread, elementsPerThread);
     } else
 #endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
 #ifdef ALPAKA_ACC_GPU_HIP_ENABLED
@@ -117,8 +112,7 @@ namespace clue {
       //   - threadsPerBlockOrElementsPerThread is the number of threads per block;
       //   - elementsPerThread is always 1.
       const auto elementsPerThread = Vec<Dim>::ones();
-      return WorkDiv<Dim>(
-          blocksPerGrid, threadsPerBlockOrElementsPerThread, elementsPerThread);
+      return WorkDiv<Dim>(blocksPerGrid, threadsPerBlockOrElementsPerThread, elementsPerThread);
     } else
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED
     {
@@ -126,8 +120,7 @@ namespace clue {
       //   - threadsPerBlock is always 1;
       //   - threadsPerBlockOrElementsPerThread is the number of elements per thread.
       const auto threadsPerBlock = Vec<Dim>::ones();
-      return WorkDiv<Dim>(
-          blocksPerGrid, threadsPerBlock, threadsPerBlockOrElementsPerThread);
+      return WorkDiv<Dim>(blocksPerGrid, threadsPerBlock, threadsPerBlockOrElementsPerThread);
     }
   }
 
@@ -140,13 +133,12 @@ namespace clue {
    * Warning: the max index is not truncated by the max number of elements of interest.
    */
   template <typename TAcc>
-  ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_block(
-      const TAcc& acc, const Idx elementIdxShift, const unsigned int dimIndex = 0u) {
+  ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_block(const TAcc& acc,
+                                                                 const Idx elementIdxShift,
+                                                                 const unsigned int dimIndex = 0u) {
     // Take into account the thread index in block.
-    const Idx threadIdxLocal(
-        alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[dimIndex]);
-    const Idx threadDimension(
-        alpaka::getWorkDiv<alpaka::Thread, alpaka::Elems>(acc)[dimIndex]);
+    const Idx threadIdxLocal(alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[dimIndex]);
+    const Idx threadDimension(alpaka::getWorkDiv<alpaka::Thread, alpaka::Elems>(acc)[dimIndex]);
 
     // Compute the elements indexes in block.
     // Obviously relevant for CPU only.
@@ -187,12 +179,12 @@ namespace clue {
    * Warning: the max index is not truncated by the max number of elements of interest.
    */
   template <typename TAcc>
-  ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_grid(
-      const TAcc& acc, Idx elementIdxShift, const unsigned int dimIndex = 0u) {
+  ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_grid(const TAcc& acc,
+                                                                Idx elementIdxShift,
+                                                                const unsigned int dimIndex = 0u) {
     // Take into account the block index in grid.
     const Idx blockIdxInGrid(alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc)[dimIndex]);
-    const Idx blockDimension(
-        alpaka::getWorkDiv<alpaka::Block, alpaka::Elems>(acc)[dimIndex]);
+    const Idx blockDimension(alpaka::getWorkDiv<alpaka::Block, alpaka::Elems>(acc)[dimIndex]);
 
     // Shift to get global indices in grid (instead of local to the block)
     elementIdxShift += blockIdxInGrid * blockDimension;

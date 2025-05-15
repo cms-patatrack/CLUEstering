@@ -85,8 +85,8 @@ namespace clue {
   template <typename TDevice, typename TQueue>
   class CachingAllocator {
   public:
-    using Device = TDevice;  // the "memory device", where the memory will be allocated
-    using Queue = TQueue;    // the queue used to submit the memory operations
+    using Device = TDevice;              // the "memory device", where the memory will be allocated
+    using Queue = TQueue;                // the queue used to submit the memory operations
     using Event = alpaka::Event<Queue>;  // the events used to synchronise the operations
     using Buffer = alpaka::Buf<Device, std::byte, alpaka::DimInt<1u>, size_t>;
 
@@ -137,8 +137,7 @@ namespace clue {
             << "  resulting bins:\n";
         for (auto bin = minBin_; bin <= maxBin_; ++bin) {
           auto binSize = detail::power(binGrowth, bin);
-          out << "    " << std::right << std::setw(12) << detail::as_bytes(binSize)
-              << '\n';
+          out << "    " << std::right << std::setw(12) << detail::as_bytes(binSize) << '\n';
         }
         out << "  maximum amount of cached memory: " << detail::as_bytes(maxCachedBytes_);
         std::cout << out.str() << std::endl;
@@ -206,24 +205,22 @@ namespace clue {
           std::ostringstream out;
           out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " returned "
               << block.bytes << " bytes at " << ptr << " from associated queue "
-              << block.queue->m_spQueueImpl.get() << " , event "
-              << block.event->m_spEventImpl.get() << " .\n\t\t " << cachedBlocks_.size()
-              << " available blocks cached (" << cachedBytes_.free << " bytes), "
-              << liveBlocks_.size() << " live blocks (" << cachedBytes_.live
-              << " bytes) outstanding." << std::endl;
+              << block.queue->m_spQueueImpl.get() << " , event " << block.event->m_spEventImpl.get()
+              << " .\n\t\t " << cachedBlocks_.size() << " available blocks cached ("
+              << cachedBytes_.free << " bytes), " << liveBlocks_.size() << " live blocks ("
+              << cachedBytes_.live << " bytes) outstanding." << std::endl;
           std::cout << out.str() << std::endl;
         }
       } else {
         // if the buffer is not recached, it is automatically freed when block goes out of scope
         if (debug_) {
           std::ostringstream out;
-          out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " freed "
-              << block.bytes << " bytes at " << ptr << " from associated queue "
-              << block.queue->m_spQueueImpl.get() << ", event "
-              << block.event->m_spEventImpl.get() << " .\n\t\t " << cachedBlocks_.size()
-              << " available blocks cached (" << cachedBytes_.free << " bytes), "
-              << liveBlocks_.size() << " live blocks (" << cachedBytes_.live
-              << " bytes) outstanding." << std::endl;
+          out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " freed " << block.bytes
+              << " bytes at " << ptr << " from associated queue "
+              << block.queue->m_spQueueImpl.get() << ", event " << block.event->m_spEventImpl.get()
+              << " .\n\t\t " << cachedBlocks_.size() << " available blocks cached ("
+              << cachedBytes_.free << " bytes), " << liveBlocks_.size() << " live blocks ("
+              << cachedBytes_.live << " bytes) outstanding." << std::endl;
           std::cout << out.str() << std::endl;
         }
       }
@@ -264,11 +261,10 @@ namespace clue {
         return std::make_tuple(minBin_, minBinBytes_);
       }
       if (bytes > maxBinBytes_) {
-        throw std::runtime_error(
-            "Requested allocation size " + std::to_string(bytes) +
-            " bytes is too large for the caching detail with maximum bin " +
-            std::to_string(maxBinBytes_) +
-            " bytes. You might want to increase the maximum bin size");
+        throw std::runtime_error("Requested allocation size " + std::to_string(bytes) +
+                                 " bytes is too large for the caching detail with maximum bin " +
+                                 std::to_string(maxBinBytes_) +
+                                 " bytes. You might want to increase the maximum bin size");
       }
       unsigned int bin = minBin_;
       size_t binBytes = minBinBytes_;
@@ -310,10 +306,9 @@ namespace clue {
           if (debug_) {
             std::ostringstream out;
             out << "\t" << deviceType_ << " " << alpaka::getName(device_)
-                << " reused cached block at " << block.buffer->data() << " ("
-                << block.bytes << " bytes) for queue " << block.queue->m_spQueueImpl.get()
-                << ", event " << block.event->m_spEventImpl.get()
-                << " (previously associated with stream "
+                << " reused cached block at " << block.buffer->data() << " (" << block.bytes
+                << " bytes) for queue " << block.queue->m_spQueueImpl.get() << ", event "
+                << block.event->m_spEventImpl.get() << " (previously associated with stream "
                 << iBlock->second.queue->m_spQueueImpl.get() << " , event "
                 << iBlock->second.event->m_spEventImpl.get() << ")." << std::endl;
             std::cout << out.str() << std::endl;
@@ -339,12 +334,12 @@ namespace clue {
             device_, ::clue::platform<Platform>(), bytes);
       } else {
         // unsupported combination
-        static_assert(std::is_same_v<Device, alpaka::Dev<Queue>> or
-                          std::is_same_v<Device, alpaka::DevCpu>,
-                      "The \"memory device\" type can either be the same as the "
-                      "\"synchronisation device\" "
-                      "type, or be "
-                      "the host CPU.");
+        static_assert(
+            std::is_same_v<Device, alpaka::Dev<Queue>> or std::is_same_v<Device, alpaka::DevCpu>,
+            "The \"memory device\" type can either be the same as the "
+            "\"synchronisation device\" "
+            "type, or be "
+            "the host CPU.");
       }
     }
 
@@ -355,9 +350,8 @@ namespace clue {
         // the allocation attempt failed: free all cached blocks on the device and retry
         if (debug_) {
           std::ostringstream out;
-          out << "\t" << deviceType_ << " " << alpaka::getName(device_)
-              << " failed to allocate " << block.bytes << " bytes for queue "
-              << block.queue->m_spQueueImpl.get()
+          out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " failed to allocate "
+              << block.bytes << " bytes for queue " << block.queue->m_spQueueImpl.get()
               << ", retrying after freeing cached allocations" << std::endl;
           std::cout << out.str() << std::endl;
         }
@@ -381,10 +375,10 @@ namespace clue {
 
       if (debug_) {
         std::ostringstream out;
-        out << "\t" << deviceType_ << " " << alpaka::getName(device_)
-            << " allocated new block at " << block.buffer->data() << " (" << block.bytes
-            << " bytes associated with queue " << block.queue->m_spQueueImpl.get()
-            << ", event " << block.event->m_spEventImpl.get() << "." << std::endl;
+        out << "\t" << deviceType_ << " " << alpaka::getName(device_) << " allocated new block at "
+            << block.buffer->data() << " (" << block.bytes << " bytes associated with queue "
+            << block.queue->m_spQueueImpl.get() << ", event " << block.event->m_spEventImpl.get()
+            << "." << std::endl;
         std::cout << out.str() << std::endl;
       }
     }
@@ -417,16 +411,14 @@ namespace clue {
     using BusyBlocks =
         std::map<void*, BlockDescriptor>;  // ordered by the address of the allocated memory
 
-    inline static const std::string deviceType_ =
-        boost::core::demangle(typeid(Device).name());
+    inline static const std::string deviceType_ = boost::core::demangle(typeid(Device).name());
 
     mutable std::mutex mutex_;
     Device device_;  // the device where the memory is allocated
 
     CachedBytes cachedBytes_;
     CachedBlocks cachedBlocks_;  // Set of cached device allocations available for reuse
-    BusyBlocks
-        liveBlocks_;  // map of pointers to the live device allocations currently in use
+    BusyBlocks liveBlocks_;      // map of pointers to the live device allocations currently in use
 
     const unsigned int binGrowth_;  // Geometric growth factor for bin-sizes
     const unsigned int minBin_;

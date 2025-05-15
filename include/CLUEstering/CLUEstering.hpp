@@ -26,6 +26,7 @@ namespace clue {
     using Device = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Device;
     using Queue = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Queue;
     using Acc1D = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Acc1D;
+    using Platform = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Platform;
     using KernelCalculateLocalDensity =
         ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelCalculateLocalDensity;
     using KernelCalculateNearestHigher =
@@ -39,16 +40,22 @@ namespace clue {
     using PointsDevice = clue::PointsDevice<Ndim, Device>;
     using TilesDevice = clue::TilesAlpaka<Ndim, Device>;
 
-    inline static constexpr auto max_followers =
-        ALPAKA_ACCELERATOR_NAMESPACE_CLUE::max_followers;
+    inline static constexpr auto max_followers = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::max_followers;
     inline static constexpr auto reserve = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::reserve;
 
-    explicit Clusterer(Queue queue,
-                       float dc,
-                       float rhoc,
-                       float dm,
-                       float seed_dc = -1.f,
-                       int pPBin = 128)
+    explicit Clusterer(float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128)
+        : m_dc{dc},
+          m_seed_dc{seed_dc},
+          m_rhoc{rhoc},
+          m_dm{dm},
+          m_pointsPerTile{pPBin},
+          m_wrappedCoordinates{} {
+      if (seed_dc < 0.f) {
+        m_seed_dc = dc;
+      }
+    }
+    explicit Clusterer(
+        Queue queue, float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128)
         : m_dc{dc},
           m_seed_dc{seed_dc},
           m_rhoc{rhoc},
@@ -87,13 +94,52 @@ namespace clue {
     void make_clusters(PointsHost& h_points,
                        const KernelType& kernel,
                        Queue queue,
-                       std::size_t block_size);
+                       std::size_t block_size) {
+      d_points = std::make_optional<PointsDevice>(queue, h_points.size());
+      auto& dev_points = *d_points;
+
+      setupTiles(queue, h_points);
+      setupPoints(h_points, dev_points, queue, block_size);
+      make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+    }
+    template <typename KernelType>
+    void make_clusters(PointsHost& h_points, const KernelType& kernel, std::size_t block_size) {
+      auto device = alpaka::getDevByIdx(Platform{}, 0u);
+      Queue queue(device);
+      init_device(queue);
+
+      d_points = std::make_optional<PointsDevice>(queue, h_points.size());
+      auto& dev_points = *d_points;
+
+      setupTiles(queue, h_points);
+      setupPoints(h_points, dev_points, queue, block_size);
+      make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+    }
     template <typename KernelType>
     void make_clusters(PointsHost& h_points,
-                       PointsDevice& d_points,
+                       PointsDevice& dev_points,
                        const KernelType& kernel,
                        Queue queue,
-                       std::size_t block_size);
+                       std::size_t block_size) {
+      setupTiles(queue, h_points);
+      setupPoints(h_points, dev_points, queue, block_size);
+
+      make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+    }
+    template <typename KernelType>
+    void make_clusters(PointsHost& h_points,
+                       PointsDevice& dev_points,
+                       const KernelType& kernel,
+                       std::size_t block_size) {
+      auto device = alpaka::getDevByIdx(Platform{}, 0u);
+      Queue queue(device);
+      init_device(queue);
+
+      setupTiles(queue, h_points);
+      setupPoints(h_points, dev_points, queue, block_size);
+
+      make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+    }
 
     void setWrappedCoordinates(const std::array<uint8_t, Ndim>& wrappedCoordinates) {
       m_wrappedCoordinates = wrappedCoordinates;
@@ -119,8 +165,7 @@ namespace clue {
     // internal buffers
     std::optional<TilesDevice> d_tiles;
     std::optional<clue::device_buffer<Device, VecArray<int32_t, reserve>>> d_seeds;
-    std::optional<clue::device_buffer<Device, clue::VecArray<int32_t, max_followers>[]>>
-        d_followers;
+    std::optional<clue::device_buffer<Device, clue::VecArray<int32_t, max_followers>[]>> d_followers;
     std::optional<PointsDevice> d_points;
 
     void init_device(Queue queue);
@@ -136,6 +181,13 @@ namespace clue {
                              float* tile_sizes,
                              const PointsHost& h_points,
                              uint32_t nPerDim);
+
+    template <typename KernelType>
+    void make_clusters_impl(PointsHost& h_points,
+                            PointsDevice& dev_points,
+                            const KernelType& kernel,
+                            Queue queue,
+                            std::size_t block_size);
   };
 
   template <uint8_t Ndim>
@@ -158,8 +210,7 @@ namespace clue {
   template <uint8_t Ndim>
   void Clusterer<Ndim>::init_device(Queue queue) {
     d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
-    d_followers =
-        clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue, reserve);
+    d_followers = clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue, reserve);
 
     m_seeds = (*d_seeds).data();
     m_followers = (*d_followers).data();
@@ -168,8 +219,7 @@ namespace clue {
   template <uint8_t Ndim>
   void Clusterer<Ndim>::init_device(Queue queue, TilesDevice* tile_buffer) {
     d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
-    d_followers =
-        clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue, reserve);
+    d_followers = clue::make_device_buffer<VecArray<int32_t, max_followers>[]>(queue, reserve);
 
     m_seeds = (*d_seeds).data();
     m_followers = (*d_followers).data();
@@ -182,8 +232,8 @@ namespace clue {
   template <uint8_t Ndim>
   void Clusterer<Ndim>::setupTiles(Queue queue, const PointsHost& h_points) {
     // TODO: reconsider the way that we compute the number of tiles
-    auto nTiles = static_cast<int32_t>(
-        std::ceil(h_points.size() / static_cast<float>(m_pointsPerTile)));
+    auto nTiles =
+        static_cast<int32_t>(std::ceil(h_points.size() / static_cast<float>(m_pointsPerTile)));
     const auto nPerDim = static_cast<int32_t>(std::ceil(std::pow(nTiles, 1. / Ndim)));
     nTiles = static_cast<int32_t>(std::pow(nPerDim, Ndim));
 
@@ -208,9 +258,8 @@ namespace clue {
     const auto device = alpaka::getDev(queue);
     alpaka::memcpy(queue, d_tiles->minMax(), min_max);
     alpaka::memcpy(queue, d_tiles->tileSize(), tile_sizes);
-    alpaka::memcpy(queue,
-                   d_tiles->wrapped(),
-                   clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
+    alpaka::memcpy(
+        queue, d_tiles->wrapped(), clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
     alpaka::wait(queue);
   }
 
@@ -226,33 +275,17 @@ namespace clue {
     alpaka::memset(queue, *d_seeds, 0x00);
     const Idx grid_size = clue::divide_up_by(h_points.size(), block_size);
     const auto working_div = clue::make_workdiv<Acc1D>(grid_size, block_size);
-    alpaka::exec<Acc1D>(
-        queue, working_div, KernelResetFollowers{}, m_followers, h_points.size());
+    alpaka::exec<Acc1D>(queue, working_div, KernelResetFollowers{}, m_followers, h_points.size());
   }
 
   template <uint8_t Ndim>
   template <typename KernelType>
-  void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
-                                      const KernelType& kernel,
-                                      Queue queue,
-                                      std::size_t block_size) {
-    d_points = std::make_optional<PointsDevice>(queue, h_points.size());
-    auto& dev_points = *d_points;
-    make_clusters(h_points, dev_points, kernel, queue, block_size);
-  }
-
-  template <uint8_t Ndim>
-  template <typename KernelType>
-  void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
-                                      PointsDevice& dev_points,
-                                      const KernelType& kernel,
-                                      Queue queue,
-                                      std::size_t block_size) {
-    const auto device = alpaka::getDev(queue);
-    setupTiles(queue, h_points);
-    setupPoints(h_points, dev_points, queue, block_size);
+  void Clusterer<Ndim>::make_clusters_impl(PointsHost& h_points,
+                                           PointsDevice& dev_points,
+                                           const KernelType& kernel,
+                                           Queue queue,
+                                           std::size_t block_size) {
     const auto nPoints = h_points.size();
-
     // fill the tiles
     d_tiles->template fill<Acc1D>(queue, dev_points, nPoints);
 
@@ -288,12 +321,8 @@ namespace clue {
     const Idx grid_size_seeds = clue::divide_up_by(reserve, block_size);
     auto working_div_seeds = clue::make_workdiv<Acc1D>(grid_size_seeds, block_size);
 
-    alpaka::exec<Acc1D>(queue,
-                        working_div_seeds,
-                        KernelAssignClusters{},
-                        m_seeds,
-                        m_followers,
-                        dev_points.view());
+    alpaka::exec<Acc1D>(
+        queue, working_div_seeds, KernelAssignClusters{}, m_seeds, m_followers, dev_points.view());
     alpaka::wait(queue);
 
     clue::copyToHost(queue, h_points, dev_points);

@@ -24,20 +24,17 @@ TEST_CASE("Test implementation of Points SoA") {
   SUBCASE("Update point data through view and compare with buffer") {
     auto view = points.view();
     // set the first coordinate
-    std::generate(
-        view->coords, view->coords + n, [&]() -> float { return distfloat(gen); });
+    std::generate(view->coords, view->coords + n, [&]() -> float { return distfloat(gen); });
     // set the second coordinate
-    std::generate(view->coords + n, view->coords + ndim * n, [&]() -> float {
-      return distfloat(gen);
-    });
+    std::generate(
+        view->coords + n, view->coords + ndim * n, [&]() -> float { return distfloat(gen); });
     // set the weights (third row)
     std::generate(view->coords + ndim * n, view->coords + (ndim + 1) * n, [&]() -> float {
       return distfloat(gen);
     });
     // set the two integer rows
-    std::generate(view->clusterIndexes, view->clusterIndexes + 2 * n, [&]() -> int {
-      return distint(gen);
-    });
+    std::generate(
+        view->clusterIndexes, view->clusterIndexes + 2 * n, [&]() -> int { return distint(gen); });
 
     // check content
     CHECK(std::equal(floatBuffer.begin(), floatBuffer.end(), points.coords()));

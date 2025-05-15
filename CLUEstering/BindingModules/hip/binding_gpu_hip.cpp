@@ -180,9 +180,7 @@ namespace alpaka_rocm_async {
   PYBIND11_MODULE(CLUE_GPU_HIP, m) {
     m.doc() = "Binding of the CLUE algorithm running on AMD GPUs";
 
-    m.def("listDevices",
-          &listDevices,
-          "List the available devices for the HIP/ROCm backend");
+    m.def("listDevices", &listDevices, "List the available devices for the HIP/ROCm backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,

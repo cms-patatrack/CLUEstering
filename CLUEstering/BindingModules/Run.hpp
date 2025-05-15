@@ -22,8 +22,7 @@ void run(float dc,
   clue::Clusterer<Ndim> algo(queue, dc, rhoc, dm, seed_dc, pPBin);
 
   // Create the host and device points
-  clue::PointsHost<Ndim> h_points(
-      queue, n_points, std::get<0>(pData), std::get<1>(pData));
+  clue::PointsHost<Ndim> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
   clue::PointsDevice<Ndim, Device> d_points(queue, n_points);
 
   algo.make_clusters(h_points, d_points, kernel, queue, block_size);
