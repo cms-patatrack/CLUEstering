@@ -6,12 +6,13 @@
 #include "../../AlpakaCore/alpakaMemory.hpp"
 #include "AlpakaVecArray.hpp"
 #include "AssociationMap.hpp"
+#include "SearchBox.hpp"
 
 #include <alpaka/core/Common.hpp>
 #include <alpaka/alpaka.hpp>
 #include <cstddef>
 #include <cstdint>
-#include <stdint.h>
+#include <cstdint>
 
 namespace clue {
 
@@ -94,18 +95,15 @@ namespace clue {
 
     template <typename TAcc>
     ALPAKA_FN_ACC inline void searchBox(const TAcc& acc,
-                                        const VecArray<VecArray<float, 2>, Ndim>& sb_extremes,
-                                        VecArray<VecArray<uint32_t, 2>, Ndim>* search_box) {
+                                        const SearchBoxExtremes<Ndim>& searchbox_extremes,
+                                        SearchBoxBins<Ndim>& searchbox_bins) {
       for (int dim{}; dim != Ndim; ++dim) {
-        VecArray<uint32_t, 2> dim_sb;
-        auto infBin = getBin(acc, sb_extremes[dim][0], dim);
-        auto supBin = getBin(acc, sb_extremes[dim][1], dim);
+        auto infBin = getBin(acc, searchbox_extremes[dim][0], dim);
+        auto supBin = getBin(acc, searchbox_extremes[dim][1], dim);
         if (wrapping[dim] and infBin > supBin)
           supBin += nperdim;
-        dim_sb.push_back_unsafe(infBin);
-        dim_sb.push_back_unsafe(supBin);
 
-        search_box->push_back_unsafe(dim_sb);
+        searchbox_bins[dim] = {static_cast<uint32_t>(infBin), static_cast<uint32_t>(supBin)};
       }
     }
 
