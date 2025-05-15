@@ -4,7 +4,6 @@
 #include "utility/validation.hpp"
 
 #include <cmath>
-#include <format>
 #include <ranges>
 #include <span>
 #include <vector>

@@ -1,6 +1,7 @@
 file(GLOB sources ../*.cpp)
 
 add_executable(serial.out ${sources})
+target_link_libraries(serial.out PRIVATE fmt::fmt)
 target_include_directories(
   serial.out
   PRIVATE ${CMAKE_SURCE_DIR}../../include/CLUEstering
@@ -17,7 +18,7 @@ if(TBB_FOUND)
     PRIVATE ${CMAKE_SURCE_DIR}../../include/CLUEstering
             ${doctest_SOURCE_DIR}/doctest ${alpaka_SOURCE_DIR}/include
             ${Boost_INCLUDE_DIR})
-  target_link_libraries(tbb.out PRIVATE TBB::tbb)
+  target_link_libraries(tbb.out PRIVATE TBB::tbb fmt::fmt)
   target_compile_definitions(tbb.out PRIVATE ALPAKA_HOST_ONLY
                                              ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 endif()
@@ -31,7 +32,7 @@ if(OpenMP_CXX_FOUND)
     PRIVATE ${CMAKE_SURCE_DIR}../../include/CLUEstering
             ${doctest_SOURCE_DIR}/doctest ${alpaka_SOURCE_DIR}/include
             ${Boost_INCLUDE_DIR})
-  target_link_libraries(openmp.out PRIVATE OpenMP::OpenMP_CXX)
+  target_link_libraries(openmp.out PRIVATE OpenMP::OpenMP_CXX fmt::fmt)
   target_compile_definitions(
     openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
 endif()
