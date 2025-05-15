@@ -8,7 +8,7 @@
 
 // TODO: implement overload that takes pre-allocated Points
 template <typename T, size_t NDim>
-std::vector<T> read_csv(const std::string& file_path) {
+inline std::vector<T> read_csv(const std::string& file_path) {
   std::fstream file(file_path);
   if (!file.is_open()) {
     throw std::runtime_error("Could not open file: " + file_path);
@@ -41,7 +41,7 @@ std::vector<T> read_csv(const std::string& file_path) {
 }
 
 template <size_t NDim>
-std::vector<int> read_output(const std::string& file_path) {
+inline std::vector<int> read_output(const std::string& file_path) {
   std::fstream file(file_path);
   if (!file.is_open()) {
     throw std::runtime_error("Could not open file: " + file_path);
