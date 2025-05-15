@@ -96,7 +96,7 @@ namespace clue {
     }
 
     template <typename TQueue, detail::ContiguousRange... TBuffers>
-      requires alpaka::isQueue<TQueue> && (sizeof...(TBuffers) == 4 || sizeof...(TBuffers) == 2)
+      requires alpaka::isQueue<TQueue> && (sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
     PointsHost(TQueue queue, uint32_t n_points, TBuffers&&... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(
@@ -104,7 +104,7 @@ namespace clue {
     }
 
     template <typename TQueue, detail::ArrayOrPtr... TBuffers>
-      requires alpaka::isQueue<TQueue>
+      requires alpaka::isQueue<TQueue> && (sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
     PointsHost(TQueue queue, uint32_t n_points, TBuffers... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(m_view.data(), n_points, buffers...);
