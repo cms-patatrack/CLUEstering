@@ -50,8 +50,8 @@ namespace clue {
     template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 4)
     void partitionSoAView(PointsView* view,
-                          uint32_t n_points,
                           std::byte* alloc_buffer,
+                          uint32_t n_points,
                           TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
       // TODO: is reinterpret_cast necessary?
@@ -67,8 +67,8 @@ namespace clue {
     template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2)
     void partitionSoAView(PointsView* view,
-                          uint32_t n_points,
                           std::byte* alloc_buffer,
+                          uint32_t n_points,
                           TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
       // TODO: is reinterpret_cast necessary?
