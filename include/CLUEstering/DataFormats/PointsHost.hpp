@@ -12,7 +12,10 @@
 
 namespace clue {
 
+  namespace concepts = detail::concepts;
+
   namespace soa::host {
+
     // No need to allocate temporary buffers on the host
     template <uint8_t Ndim>
     uint32_t computeSoASize(uint32_t n_points) {
@@ -27,7 +30,7 @@ namespace clue {
       view->is_seed = reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
       view->n = n_points;
     }
-    template <uint8_t Ndim, detail::ArrayOrPtr... TBuffers>
+    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 4)
     void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
@@ -38,7 +41,7 @@ namespace clue {
       view->is_seed = reinterpret_cast<int*>(std::get<3>(buffers_tuple));
       view->n = n_points;
     }
-    template <uint8_t Ndim, detail::ArrayOrPtr... TBuffers>
+    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2)
     void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
@@ -50,7 +53,7 @@ namespace clue {
       view->is_seed = reinterpret_cast<int*>(std::get<1>(buffers_tuple) + n_points);
       view->n = n_points;
     }
-    template <uint8_t Ndim, detail::ContiguousRange... TBuffers>
+    template <uint8_t Ndim, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 4)
     void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
@@ -61,7 +64,7 @@ namespace clue {
       view->is_seed = reinterpret_cast<int*>(std::get<3>(buffers_tuple).data());
       view->n = n_points;
     }
-    template <uint8_t Ndim, detail::ContiguousRange... TBuffers>
+    template <uint8_t Ndim, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 2)
     void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
@@ -72,13 +75,13 @@ namespace clue {
       view->is_seed = reinterpret_cast<int*>(std::get<1>(buffers_tuple).data() + n_points);
       view->n = n_points;
     }
+
   }  // namespace soa::host
 
   template <uint8_t Ndim>
   class PointsHost {
   public:
-    template <typename TQueue>
-      requires alpaka::isQueue<TQueue>
+    template <concepts::queue TQueue>
     PointsHost(TQueue queue, uint32_t n_points)
         : m_buffer{make_host_buffer<std::byte[]>(queue, soa::host::computeSoASize<Ndim>(n_points))},
           m_view{make_host_buffer<PointsView>(queue)},
@@ -86,8 +89,7 @@ namespace clue {
       soa::host::partitionSoAView<Ndim>(m_view.data(), m_buffer->data(), n_points);
     }
 
-    template <typename TQueue>
-      requires alpaka::isQueue<TQueue>
+    template <concepts::queue TQueue>
     PointsHost(TQueue queue, uint32_t n_points, std::span<std::byte> buffer)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       assert(buffer.size() == soa::host::computeSoASize<Ndim>(n_points));
@@ -95,16 +97,16 @@ namespace clue {
       soa::host::partitionSoAView<Ndim>(m_view.data(), buffer.data(), n_points);
     }
 
-    template <typename TQueue, detail::ContiguousRange... TBuffers>
-      requires alpaka::isQueue<TQueue> && (sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+    template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
     PointsHost(TQueue queue, uint32_t n_points, TBuffers&&... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(
           m_view.data(), n_points, std::forward<TBuffers>(buffers)...);
     }
 
-    template <typename TQueue, detail::ArrayOrPtr... TBuffers>
-      requires alpaka::isQueue<TQueue> && (sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+    template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
     PointsHost(TQueue queue, uint32_t n_points, TBuffers... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(m_view.data(), n_points, buffers...);
@@ -158,13 +160,11 @@ namespace clue {
     ALPAKA_FN_HOST PointsView* view() { return m_view.data(); }
     ALPAKA_FN_HOST const PointsView* view() const { return m_view.data(); }
 
-    template <typename _TQueue, uint8_t _Ndim, typename _TDev>
-      requires alpaka::isQueue<_TQueue> && alpaka::isDevice<_TDev>
+    template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue queue,
                            PointsHost<_Ndim>& h_points,
                            const PointsDevice<_Ndim, _TDev>& d_points);
-    template <typename _TQueue, uint8_t _Ndim, typename _TDev>
-      requires alpaka::isQueue<_TQueue> && alpaka::isDevice<_TDev>
+    template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
     friend void copyToDevice(_TQueue queue,
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);
@@ -174,15 +174,5 @@ namespace clue {
     host_buffer<PointsView> m_view;
     uint32_t m_size;
   };
-
-  // deduction guide for deducing device type from queue
-  // template <uint8_t Ndim, typename TQueue>
-  //   requires alpaka::isDevice<TDev>
-  // PointsDevice(const TQueue& queue, uint32_t n_points)
-  //     -> Points<Ndim, decltype(alpaka::getDev(queue))>;
-
-  // template <uint8_t Ndim, typename TDev>
-  //   requires alpaka::isDevice<TDev>
-  // void copyToHost(PointsHost<Ndim>& h_points, Points<Ndim, TDev>& d_points) {}
 
 }  // namespace clue

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "../AlpakaCore/alpakaMemory.hpp"
+#include "../detail/concepts.hpp"
 #include "Common.hpp"
 
 #include <alpaka/alpaka.hpp>
@@ -12,7 +13,10 @@
 
 namespace clue {
 
+  namespace concepts = detail::concepts;
+
   namespace soa::device {
+
     template <uint8_t Ndim>
     uint32_t computeSoASize(uint32_t n_points) {
       return ((Ndim + 3) * sizeof(float) + 3 * sizeof(int)) * n_points;
@@ -43,7 +47,7 @@ namespace clue {
       view->nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(float));
       view->n = n_points;
     }
-    template <uint8_t Ndim, detail::ArrayOrPtr... TBuffers>
+    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 4)
     void partitionSoAView(PointsView* view,
                           std::byte* alloc_buffer,
@@ -60,7 +64,7 @@ namespace clue {
       view->nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
       view->n = n_points;
     }
-    template <uint8_t Ndim, detail::ArrayOrPtr... TBuffers>
+    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2)
     void partitionSoAView(PointsView* view,
                           std::byte* alloc_buffer,
@@ -77,14 +81,13 @@ namespace clue {
       view->nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
       view->n = n_points;
     }
+
   }  // namespace soa::device
 
-  template <uint8_t Ndim, typename TDev>
-    requires alpaka::isDevice<TDev>
+  template <uint8_t Ndim, concepts::device TDev>
   class PointsDevice {
   public:
-    template <typename TQueue>
-      requires alpaka::isQueue<TQueue>
+    template <concepts::queue TQueue>
     PointsDevice(TQueue queue, uint32_t n_points)
         : m_buffer{make_device_buffer<std::byte[]>(queue,
                                                    soa::device::computeSoASize<Ndim>(n_points))},
@@ -95,8 +98,7 @@ namespace clue {
       alpaka::memcpy(queue, m_view, m_hostView);
     }
 
-    template <typename TQueue>
-      requires alpaka::isQueue<TQueue>
+    template <concepts::queue TQueue>
     PointsDevice(TQueue queue, uint32_t n_points, std::span<std::byte> buffer)
         : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(float))},
           m_view{make_device_buffer<PointsView>(queue)},
@@ -109,8 +111,8 @@ namespace clue {
       alpaka::memcpy(queue, m_view, m_hostView);
     }
 
-    template <typename TQueue, detail::ArrayOrPtr... TBuffers>
-      requires alpaka::isQueue<TQueue> && (sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+    template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
     PointsDevice(TQueue queue, uint32_t n_points, TBuffers... buffers)
         : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(float))},
           m_view{make_device_buffer<PointsView>(queue)},
@@ -131,13 +133,11 @@ namespace clue {
     ALPAKA_FN_HOST PointsView* view() { return m_view.data(); }
     ALPAKA_FN_HOST const PointsView* view() const { return m_view.data(); }
 
-    template <typename _TQueue, uint8_t _Ndim, typename _TDev>
-      requires alpaka::isQueue<_TQueue> && alpaka::isDevice<_TDev>
+    template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue queue,
                            PointsHost<_Ndim>& h_points,
                            const PointsDevice<_Ndim, _TDev>& d_points);
-    template <typename _TQueue, uint8_t _Ndim, typename _TDev>
-      requires alpaka::isQueue<_TQueue> && alpaka::isDevice<_TDev>
+    template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
     friend void copyToDevice(_TQueue queue,
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);
@@ -148,15 +148,5 @@ namespace clue {
     host_buffer<PointsView> m_hostView;
     uint32_t m_size;
   };
-
-  // deduction guide for deducing device type from queue
-  // template <uint8_t Ndim, typename TQueue>
-  //   requires alpaka::isDevice<TDev>
-  // PointsDevice(const TQueue& queue, uint32_t n_points)
-  //     -> Points<Ndim, decltype(alpaka::getDev(queue))>;
-
-  // template <uint8_t Ndim, typename TDev>
-  //   requires alpaka::isDevice<TDev>
-  // void copyToHost(PointsHost<Ndim>& h_points, Points<Ndim, TDev>& d_points) {}
 
 }  // namespace clue

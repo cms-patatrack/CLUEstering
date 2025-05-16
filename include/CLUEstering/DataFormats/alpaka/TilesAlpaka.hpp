@@ -4,6 +4,7 @@
 #include "../../AlpakaCore/alpakaWorkDiv.hpp"
 #include "../../AlpakaCore/alpakaConfig.hpp"
 #include "../../AlpakaCore/alpakaMemory.hpp"
+#include "../../detail/concepts.hpp"
 #include "AlpakaVecArray.hpp"
 #include "AssociationMap.hpp"
 #include "SearchBox.hpp"
@@ -15,6 +16,8 @@
 #include <cstdint>
 
 namespace clue {
+
+  namespace concepts = detail::concepts;
 
   template <uint8_t Ndim>
   class CoordinateExtremes {
@@ -138,12 +141,10 @@ namespace clue {
     }
   };
 
-  template <uint8_t Ndim, typename TDev>
-    requires alpaka::isDevice<TDev>
+  template <uint8_t Ndim, concepts::device TDev>
   class TilesAlpaka {
   public:
-    template <typename TQueue>
-      requires alpaka::isQueue<TQueue>
+    template <concepts::queue TQueue>
     TilesAlpaka(TQueue queue, uint32_t n_points, uint32_t pointsPerTile) {
       auto n_tiles = static_cast<int32_t>(std::ceil(n_points / static_cast<float>(pointsPerTile)));
       const auto n_perdim = static_cast<int32_t>(std::ceil(std::pow(n_tiles, 1. / Ndim)));
@@ -169,8 +170,7 @@ namespace clue {
 
       alpaka::memcpy(queue, m_view, host_view);
     }
-    template <typename TQueue>
-      requires alpaka::isQueue<TQueue>
+    template <concepts::queue TQueue>
     TilesAlpaka(TQueue queue, uint32_t n_points, int32_t n_tiles)
         : m_assoc{clue::AssociationMap<TDev>(n_points, n_tiles, queue)},
           m_minmax{clue::make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
@@ -194,8 +194,7 @@ namespace clue {
 
     TilesAlpakaView<Ndim>* view() { return m_view.data(); }
 
-    template <typename TQueue>
-      requires alpaka::isQueue<TQueue>
+    template <concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(uint32_t npoints, int32_t ntiles, int32_t nperdim, TQueue queue) {
       m_assoc.initialize(npoints, ntiles, queue);
       m_ntiles = ntiles;
@@ -213,8 +212,7 @@ namespace clue {
       alpaka::memcpy(queue, m_view, host_view);
     }
 
-    template <typename TQueue>
-      requires alpaka::isQueue<TQueue>
+    template <concepts::queue TQueue>
     ALPAKA_FN_HOST void reset(uint32_t npoints, int32_t ntiles, int32_t nperdim, TQueue queue) {
       m_assoc.reset(queue, npoints, ntiles);
 
@@ -248,8 +246,7 @@ namespace clue {
       }
     };
 
-    template <typename TAcc, typename TQueue>
-      requires alpaka::isAccelerator<TAcc> && alpaka::isQueue<TQueue>
+    template <concepts::accelerator TAcc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(TQueue queue, PointsDevice<Ndim, TDev>& d_points, size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
@@ -270,8 +267,7 @@ namespace clue {
 
     ALPAKA_FN_HOST inline constexpr auto nPerDim() const { return m_nperdim; }
 
-    template <typename TQueue>
-      requires alpaka::isQueue<TQueue>
+    template <concepts::queue TQueue>
     ALPAKA_FN_HOST inline constexpr void clear(const TQueue& queue) {}
 
     ALPAKA_FN_HOST const clue::device_buffer<TDev, uint32_t[]>& indexes() const {

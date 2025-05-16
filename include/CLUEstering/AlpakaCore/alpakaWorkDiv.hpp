@@ -7,13 +7,16 @@
 #include <alpaka/alpaka.hpp>
 
 #include "alpakaConfig.hpp"
+#include "../detail/concepts.hpp"
 
 using namespace alpaka_common;
 
 namespace clue {
 
+  namespace concepts = detail::concepts;
+
   // Trait describing whether or not the accelerator expects the threads-per-block and elements-per-thread to be swapped
-  template <typename TAcc, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  template <concepts::accelerator TAcc>
   struct requires_single_thread_per_block : public std::true_type {};
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
@@ -35,7 +38,7 @@ namespace clue {
 #endif  // ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
 
   // Whether or not the accelerator expects the threads-per-block and elements-per-thread to be swapped
-  template <typename TAcc, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  template <concepts::accelerator TAcc>
   inline constexpr bool requires_single_thread_per_block_v =
       requires_single_thread_per_block<TAcc>::value;
 
@@ -60,7 +63,7 @@ namespace clue {
   /*
    * Creates the accelerator-dependent workdiv for 1-dimensional operations.
    */
-  template <typename TAcc>
+  template <concepts::accelerator TAcc>
   inline WorkDiv<Dim1D> make_workdiv(Idx blocksPerGrid, Idx threadsPerBlockOrElementsPerThread) {
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
     if constexpr (std::is_same_v<TAcc, alpaka::AccGpuCudaRt<Dim1D, Idx>>) {
@@ -92,7 +95,7 @@ namespace clue {
   /*
    * Creates the accelerator-dependent workdiv for N-dimensional operations.
    */
-  template <typename TAcc>
+  template <concepts::accelerator TAcc>
   inline WorkDiv<alpaka::Dim<TAcc>> make_workdiv(
       const Vec<alpaka::Dim<TAcc>>& blocksPerGrid,
       const Vec<alpaka::Dim<TAcc>>& threadsPerBlockOrElementsPerThread) {
@@ -132,7 +135,7 @@ namespace clue {
    * Computes the range of the elements indexes, local to the block.
    * Warning: the max index is not truncated by the max number of elements of interest.
    */
-  template <typename TAcc>
+  template <concepts::accelerator TAcc>
   ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_block(const TAcc& acc,
                                                                  const Idx elementIdxShift,
                                                                  const unsigned int dimIndex = 0u) {
@@ -155,7 +158,7 @@ namespace clue {
    * Computes the range of the elements indexes, local to the block.
    * Truncated by the max number of elements of interest.
    */
-  template <typename TAcc>
+  template <concepts::accelerator TAcc>
   ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_block_truncated(
       const TAcc& acc,
       const Idx maxNumberOfElements,
@@ -178,7 +181,7 @@ namespace clue {
    * Computes the range of the elements indexes in grid.
    * Warning: the max index is not truncated by the max number of elements of interest.
    */
-  template <typename TAcc>
+  template <concepts::accelerator TAcc>
   ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_grid(const TAcc& acc,
                                                                 Idx elementIdxShift,
                                                                 const unsigned int dimIndex = 0u) {
@@ -197,7 +200,7 @@ namespace clue {
    * Computes the range of the elements indexes in grid.
    * Truncated by the max number of elements of interest.
    */
-  template <typename TAcc>
+  template <concepts::accelerator TAcc>
   ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_grid_truncated(
       const TAcc& acc,
       const Idx maxNumberOfElements,
@@ -220,7 +223,7 @@ namespace clue {
    * Computes the range of the element(s) index(es) in grid.
    * Truncated by the max number of elements of interest.
    */
-  template <typename TAcc>
+  template <concepts::accelerator TAcc>
   ALPAKA_FN_ACC std::pair<Idx, Idx> element_index_range_in_grid_truncated(
       const TAcc& acc, const Idx maxNumberOfElements, const unsigned int dimIndex = 0u) {
     Idx elementIdxShift = 0u;
