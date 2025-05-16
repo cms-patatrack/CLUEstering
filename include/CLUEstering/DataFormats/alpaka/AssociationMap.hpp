@@ -17,9 +17,12 @@
 #include "../../AlpakaCore/alpakaMemory.hpp"
 #include "../../AlpakaCore/alpakaWorkDiv.hpp"
 #include "../../AlpakaCore/prefixScan.hpp"
+#include "../../detail/concepts.hpp"
 #include "Span.hpp"
 
 namespace clue {
+
+  namespace concepts = detail::concepts;
 
   template <typename TFunc>
   struct KernelComputeAssociations {
@@ -81,7 +84,7 @@ namespace clue {
     }
   };
 
-  template <typename TDev, typename = std::enable_if_t<alpaka::isDevice<TDev>>>
+  template <concepts::device TDev>
   class AssociationMap {
   private:
     device_buffer<TDev, uint32_t[]> m_indexes;
@@ -110,7 +113,7 @@ namespace clue {
       alpaka::memset(queue, m_offsets, 0);
     }
 
-    template <typename TQueue, typename = std::enable_if_t<alpaka::isQueue<TQueue>>>
+    template <concepts::queue TQueue>
     AssociationMap(size_t nelements, size_t nbins, TQueue queue)
         : m_indexes{make_device_buffer<uint32_t[]>(queue, nelements)},
           m_offsets{make_device_buffer<uint32_t[]>(queue, nbins + 1)},
@@ -129,7 +132,7 @@ namespace clue {
 
     AssociationMapView* view() { return m_view.data(); }
 
-    template <typename TQueue, typename = std::enable_if_t<alpaka::isQueue<TQueue>>>
+    template <concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(size_t nelements, size_t nbins, TQueue queue) {
       m_indexes = make_device_buffer<uint32_t[]>(queue, nelements);
       m_offsets = make_device_buffer<uint32_t[]>(queue, nbins);
@@ -143,7 +146,7 @@ namespace clue {
       alpaka::memcpy(queue, m_view, m_hview);
     }
 
-    template <typename TQueue, typename = std::enable_if_t<alpaka::isQueue<TQueue>>>
+    template <concepts::queue TQueue>
     ALPAKA_FN_HOST void reset(TQueue queue, uint32_t nelements, int32_t nbins) {
       alpaka::memset(queue, m_indexes, 0);
       alpaka::memset(queue, m_offsets, 0);
@@ -182,11 +185,7 @@ namespace clue {
 
     ALPAKA_FN_ACC uint32_t offsets(size_t bin_id) const { return m_offsets[bin_id]; }
 
-    template <typename TAcc,
-              typename TFunc,
-              typename TQueue,
-              typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>,
-              typename = std::enable_if_t<alpaka::isQueue<TQueue>>>
+    template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_t size, TFunc func, TQueue queue) {
       auto bin_buffer = make_device_buffer<uint32_t[]>(queue, size);
 

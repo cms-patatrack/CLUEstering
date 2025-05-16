@@ -8,10 +8,14 @@
 
 #include "alpakaConfig.hpp"
 #include "getDeviceIndex.hpp"
+#include "../detail/concepts.hpp"
 
 namespace clue {
+
+  namespace concepts = detail::concepts;
+
   // returns the alpaka accelerator platform
-  template <typename TPlatform, typename = std::enable_if_t<alpaka::isPlatform<TPlatform>>>
+  template <concepts::platform TPlatform>
   inline TPlatform const& platform() {
     // initialise the platform the first time that this function is called
     static const auto platform = TPlatform{};
@@ -19,7 +23,7 @@ namespace clue {
   }
 
   // return the alpaka accelerator devices for the given platform
-  template <typename TPlatform, typename = std::enable_if_t<alpaka::isPlatform<TPlatform>>>
+  template <concepts::platform TPlatform>
   inline std::vector<alpaka::Dev<TPlatform>> const& devices() {
     // enumerate all devices the first time that this function is called
     static const auto devices = alpaka::getDevs(platform<TPlatform>());
@@ -33,7 +37,7 @@ namespace clue {
   /* template <typename TPlatform> */
   /* inline std::vector<alpaka::Dev<TPlatform>> devices; */
 
-  template <typename TPlatform>
+  template <concepts::platform TPlatform>
   std::vector<alpaka::Dev<TPlatform>> enumerate() {
     assert(getDeviceIndex(host) == 0u);
 

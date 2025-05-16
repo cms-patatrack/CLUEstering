@@ -5,9 +5,13 @@
 
 #include "alpakaConfig.hpp"
 #include "alpakaWorkDiv.hpp"
+#include "../detail/concepts.hpp"
 
 namespace clue {
-  template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+
+  namespace concepts = detail::concepts;
+
+  template <std::integral T>
   constexpr bool isPowerOf2(T v) {
     // returns true iif v has only one bit set.
     while (v) {
@@ -19,7 +23,7 @@ namespace clue {
     return false;
   }
 
-  template <typename TAcc, typename T, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  template <concepts::accelerator TAcc, typename T>
   ALPAKA_FN_ACC ALPAKA_FN_INLINE void warpPrefixScan(
       const TAcc& acc, int32_t laneId, T const* ci, T* co, uint32_t i, bool active = true) {
     // ci and co may be the same
@@ -35,14 +39,14 @@ namespace clue {
       co[i] = x;
   }
 
-  template <typename TAcc, typename T, typename = std::enable_if_t<alpaka::isAccelerator<TAcc>>>
+  template <concepts::accelerator TAcc, typename T>
   ALPAKA_FN_ACC ALPAKA_FN_INLINE void warpPrefixScan(
       const TAcc& acc, int32_t laneId, T* c, uint32_t i, bool active = true) {
     warpPrefixScan(acc, laneId, c, c, i, active);
   }
 
   // limited to warpSize² elements
-  template <typename TAcc, typename T>
+  template <concepts::accelerator TAcc, typename T>
   ALPAKA_FN_ACC ALPAKA_FN_INLINE void blockPrefixScan(
       const TAcc& acc, T const* ci, T* co, int32_t size, T* ws = nullptr) {
     if constexpr (!requires_single_thread_per_block_v<TAcc>) {
@@ -87,7 +91,7 @@ namespace clue {
     }
   }
 
-  template <typename TAcc, typename T>
+  template <concepts::accelerator TAcc, typename T>
   ALPAKA_FN_HOST_ACC ALPAKA_FN_INLINE void blockPrefixScan(const TAcc& acc,
                                                            T* __restrict__ c,
                                                            int32_t size,
@@ -215,8 +219,11 @@ namespace clue {
 
 // declare the amount of block shared memory used by the multiBlockPrefixScan kernel
 namespace alpaka::trait {
+
+  namespace concepts = clue::detail::concepts;
+
   // Variable size shared mem
-  template <typename TAcc, typename T>
+  template <concepts::accelerator TAcc, typename T>
   struct BlockSharedMemDynSizeBytes<clue::multiBlockPrefixScan<T>, TAcc> {
     template <typename TVec>
     ALPAKA_FN_HOST_ACC static std::size_t getBlockSharedMemDynSizeBytes(
