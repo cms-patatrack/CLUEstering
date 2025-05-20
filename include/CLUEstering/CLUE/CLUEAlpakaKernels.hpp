@@ -143,10 +143,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         // Calculate the distance between the two points
         auto coords_j = getCoords<Ndim>(dev_points, j);
 
-        float dist_ij_sq{0.f};
-        for (int dim{}; dim != Ndim; ++dim) {
-          dist_ij_sq += (coords_j[dim] - coords_i[dim]) * (coords_j[dim] - coords_i[dim]);
-        }
+        float dist_ij_sq = tiles->distance(coords_i, coords_j);
 
         if (found_higher && dist_ij_sq <= dm_sq) {
           // find the nearest point within N'_{dm}(i)
