@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "../detail/concepts.hpp"
+#include "CLUEstering/detail/concepts.hpp"
 
 namespace clue {
 

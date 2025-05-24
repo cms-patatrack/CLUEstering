@@ -6,11 +6,11 @@
 #include <chrono>
 #include <cstdint>
 
-#include "../AlpakaCore/alpakaWorkDiv.hpp"
-#include "../DataFormats/PointsDevice.hpp"
-#include "../DataFormats/alpaka/TilesAlpaka.hpp"
-#include "../DataFormats/alpaka/AlpakaVecArray.hpp"
-#include "../DataFormats/alpaka/SearchBox.hpp"
+#include "CLUEstering/AlpakaCore/alpakaWorkDiv.hpp"
+#include "CLUEstering/DataFormats/PointsDevice.hpp"
+#include "CLUEstering/DataFormats/alpaka/TilesAlpaka.hpp"
+#include "CLUEstering/DataFormats/alpaka/AlpakaVecArray.hpp"
+#include "CLUEstering/DataFormats/alpaka/SearchBox.hpp"
 #include "ConvolutionalKernel.hpp"
 
 using clue::PointsView;

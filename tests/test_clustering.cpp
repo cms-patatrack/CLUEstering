@@ -1,7 +1,7 @@
 
-#include "CLUEstering.hpp"
-#include "utility/read_csv.hpp"
-#include "utility/validation.hpp"
+#include "CLUEstering/CLUEstering.hpp"
+#include "CLUEstering/utility/read_csv.hpp"
+#include "CLUEstering/utility/validation.hpp"
 
 #include <cmath>
 #include <ranges>

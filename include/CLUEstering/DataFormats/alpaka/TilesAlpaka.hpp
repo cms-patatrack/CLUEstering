@@ -1,13 +1,13 @@
 
 #pragma once
 
-#include "../../AlpakaCore/alpakaWorkDiv.hpp"
-#include "../../AlpakaCore/alpakaConfig.hpp"
-#include "../../AlpakaCore/alpakaMemory.hpp"
-#include "../../detail/concepts.hpp"
-#include "AlpakaVecArray.hpp"
-#include "AssociationMap.hpp"
-#include "SearchBox.hpp"
+#include "CLUEstering/AlpakaCore/alpakaWorkDiv.hpp"
+#include "CLUEstering/AlpakaCore/alpakaConfig.hpp"
+#include "CLUEstering/AlpakaCore/alpakaMemory.hpp"
+#include "CLUEstering/detail/concepts.hpp"
+#include "CLUEstering/DataFormats/alpaka/AlpakaVecArray.hpp"
+#include "CLUEstering/DataFormats/alpaka/AssociationMap.hpp"
+#include "CLUEstering/DataFormats/alpaka/SearchBox.hpp"
 
 #include <alpaka/core/Common.hpp>
 #include <alpaka/alpaka.hpp>

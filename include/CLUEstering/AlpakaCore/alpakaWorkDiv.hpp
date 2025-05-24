@@ -7,7 +7,7 @@
 #include <alpaka/alpaka.hpp>
 
 #include "alpakaConfig.hpp"
-#include "../detail/concepts.hpp"
+#include "CLUEstering/detail/concepts.hpp"
 
 using namespace alpaka_common;
 

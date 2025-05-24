@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "../AlpakaCore/alpakaMemory.hpp"
-#include "../detail/concepts.hpp"
-#include "Common.hpp"
+#include "CLUEstering/AlpakaCore/alpakaMemory.hpp"
+#include "CLUEstering/detail/concepts.hpp"
+#include "CLUEstering/DataFormats/Common.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <optional>

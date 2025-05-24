@@ -5,7 +5,7 @@
 
 #include "alpakaConfig.hpp"
 #include "alpakaWorkDiv.hpp"
-#include "../detail/concepts.hpp"
+#include "CLUEstering/detail/concepts.hpp"
 
 namespace clue {
 

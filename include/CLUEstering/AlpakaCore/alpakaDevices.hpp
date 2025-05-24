@@ -8,7 +8,7 @@
 
 #include "alpakaConfig.hpp"
 #include "getDeviceIndex.hpp"
-#include "../detail/concepts.hpp"
+#include "CLUEstering/detail/concepts.hpp"
 
 namespace clue {
 

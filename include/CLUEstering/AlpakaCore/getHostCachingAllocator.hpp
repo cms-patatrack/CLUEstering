@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "AllocatorConfig.hpp"
-#include "CachingAllocator.hpp"
-#include "alpakaDevices.hpp"
+#include "CLUEstering/AlpakaCore/AllocatorConfig.hpp"
+#include "CLUEstering/AlpakaCore/CachingAllocator.hpp"
+#include "CLUEstering/AlpakaCore/alpakaDevices.hpp"
 
 namespace clue {
 

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "alpakaConfig.hpp"
+#include "CLUEstering/AlpakaCore/alpakaConfig.hpp"
 
 namespace clue {
 

@@ -6,12 +6,11 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "AllocatorPolicy.hpp"
-#include "CachedBufAlloc.hpp"
-#include "alpakaConfig.hpp"
-#include "alpakaDevices.hpp"
-
-#include "../detail/concepts.hpp"
+#include "CLUEstering/AlpakaCore/AllocatorPolicy.hpp"
+#include "CLUEstering/AlpakaCore/CachedBufAlloc.hpp"
+#include "CLUEstering/AlpakaCore/alpakaConfig.hpp"
+#include "CLUEstering/AlpakaCore/alpakaDevices.hpp"
+#include "CLUEstering/detail/concepts.hpp"
 
 namespace clue {
 

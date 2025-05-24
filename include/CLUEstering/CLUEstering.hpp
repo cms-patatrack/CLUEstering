@@ -1,12 +1,12 @@
 
 #pragma once
 
-#include "DataFormats/PointsHost.hpp"
-#include "DataFormats/PointsDevice.hpp"
-#include "DataFormats/alpaka/TilesAlpaka.hpp"
-#include "CLUE/CLUEAlpakaKernels.hpp"
-#include "CLUE/ConvolutionalKernel.hpp"
-#include "utility/validation.hpp"
+#include "CLUEstering/DataFormats/PointsHost.hpp"
+#include "CLUEstering/DataFormats/PointsDevice.hpp"
+#include "CLUEstering/DataFormats/alpaka/TilesAlpaka.hpp"
+#include "CLUEstering/CLUE/CLUEAlpakaKernels.hpp"
+#include "CLUEstering/CLUE/ConvolutionalKernel.hpp"
+#include "CLUEstering/utility/validation.hpp"
 
 #include <algorithm>
 #include <alpaka/mem/view/Traits.hpp>

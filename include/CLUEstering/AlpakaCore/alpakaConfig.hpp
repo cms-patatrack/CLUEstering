@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "alpakaFwd.hpp"
+#include "CLUEstering/AlpakaCore/alpakaFwd.hpp"
 #include <alpaka/alpaka.hpp>
 
 namespace alpaka_common {
