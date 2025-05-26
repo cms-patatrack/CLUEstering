@@ -40,7 +40,7 @@ jobs:
     - name: Compile CLUEstering modules
       working-directory: ${{github.workspace}}
       run: |
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -- -j 4
     - name: Run tests of the Python library
       working-directory: ${{github.workspace}}/tests
       run: |
