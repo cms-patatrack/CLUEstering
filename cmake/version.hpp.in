@@ -1,0 +1,16 @@
+
+#pragma once
+
+#define CLUESTERING_VERSION_MAJOR @PROJECT_VERSION_MAJOR @
+#define CLUESTERING_VERSION_MINOR @PROJECT_VERSION_MINOR @
+#define CLUESTERING_VERSION_PATCH @PROJECT_VERSION_PATCH @
+
+#define CLUESTERING_VERSION_STR "@PROJECT_VERSION@"
+
+namespace clue {
+  constexpr int version_major = CLUESTERING_VERSION_MAJOR;
+  constexpr int version_minor = CLUESTERING_VERSION_MINOR;
+  constexpr int version_patch = CLUESTERING_VERSION_PATCH;
+
+  inline const char* version_string() { return CLUESTERING_VERSION_STR; }
+}  // namespace clue

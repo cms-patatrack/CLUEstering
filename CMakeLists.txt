@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.16.0)
-project(CLUEstering LANGUAGES CXX VERSION 2.6.4.3)
+project(
+  CLUEstering
+  LANGUAGES CXX
+  VERSION 2.6.4.3)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -40,13 +43,22 @@ file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/CLUEstering/lib)
 
 add_subdirectory(CLUEstering/BindingModules)
 
+# generate version header
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.hpp.in
+               ${CMAKE_CURRENT_BINARY_DIR}/CLUEstering/version.hpp @ONLY)
+
+set(CLUE_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/CLUEstering")
+
 add_library(CLUEstering INTERFACE)
 target_include_directories(
   CLUEstering
   INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/CLUEstering/include>
+            $<BUILD_INTERFACE:${CLUE_GENERATED_INCLUDE_DIR}>
             $<INSTALL_INTERFACE:include>)
 
 install(DIRECTORY include/ DESTINATION include)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CLUEstering/version.hpp
+        DESTINATION include/CLUEstering)
 install(TARGETS CLUEstering EXPORT CLUEsteringTargets)
 install(
   EXPORT CLUEsteringTargets
@@ -60,17 +72,13 @@ set(CLUEstering_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfigVersion.cmake"
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY AnyNewerVersion
-)
+  "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfigVersion.cmake"
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY AnyNewerVersion)
 configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CLUEsteringConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfig.cmake"
-    INSTALL_DESTINATION lib/cmake/CLUEstering
-)
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfigVersion.cmake"
-    DESTINATION lib/cmake/CLUEstering
-)
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CLUEsteringConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfig.cmake"
+  INSTALL_DESTINATION lib/cmake/CLUEstering)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfig.cmake"
+              "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfigVersion.cmake"
+        DESTINATION lib/cmake/CLUEstering)
