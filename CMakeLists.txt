@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16.0)
-project(CLUEstering LANGUAGES CXX)
+project(CLUEstering LANGUAGES CXX VERSION 2.6.4.3)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -16,7 +16,11 @@ string(
   CMAKE_CXX_FLAGS_DEBUG
   " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wpedantic -Werror"
 )
-string(APPEND CMAKE_CXX_FLAGS "-O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native")
+string(
+  APPEND
+  CMAKE_CXX_FLAGS
+  "-O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
+)
 
 # include pybind11 extern subfolder
 set(PYBIND11_FINDPYTHON ON)
@@ -36,3 +40,37 @@ file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/CLUEstering/lib)
 
 add_subdirectory(CLUEstering/BindingModules)
 
+add_library(CLUEstering INTERFACE)
+target_include_directories(
+  CLUEstering
+  INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/CLUEstering/include>
+            $<INSTALL_INTERFACE:include>)
+
+install(DIRECTORY include/ DESTINATION include)
+install(TARGETS CLUEstering EXPORT CLUEsteringTargets)
+install(
+  EXPORT CLUEsteringTargets
+  FILE CLUEsteringTargets.cmake
+  NAMESPACE clue::
+  DESTINATION lib/cmake/CLUEstering)
+
+set(CLUEstering_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CLUEstering_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CLUEstering_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CLUEsteringConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfig.cmake"
+    INSTALL_DESTINATION lib/cmake/CLUEstering
+)
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfigVersion.cmake"
+    DESTINATION lib/cmake/CLUEstering
+)
