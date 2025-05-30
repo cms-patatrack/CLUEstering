@@ -2,7 +2,6 @@
 #pragma once
 
 #include <type_traits>
-#include "initialise.hpp"
 
 #include <alpaka/alpaka.hpp>
 
