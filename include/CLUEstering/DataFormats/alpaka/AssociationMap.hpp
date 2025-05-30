@@ -36,6 +36,15 @@ namespace clue {
         associations[i] = func(acc, i);
       }
     }
+    template <typename TAcc>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  size_t size,
+                                  uint32_t* associations,
+                                  TFunc func) const {
+      for (auto i : alpaka::uniformElements(acc, size)) {
+        associations[i] = func(i);
+      }
+    }
   };
 
   struct KernelComputeAssociationSizes {
