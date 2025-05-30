@@ -4,4 +4,5 @@
 	branch = master
 [submodule "extern/xtd"]
 	path = extern/xtd
-	url = https://github.com/cms-patatrack/xtd
+	url = https://github.com/sbaldu/xtd
+	branch = develop
