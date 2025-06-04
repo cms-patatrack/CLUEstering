@@ -935,13 +935,8 @@ class clusterer:
         None
         """
 
-        # Convert the used coordinates to cartesian coordiantes
-        cartesian_coords = np.copy(self.clust_data.original_coords.T)
-        for coord, func in kwargs.items():
-            cartesian_coords[int(coord[1])] = func(self.clust_data.original_coords.T)
-
         if self.clust_data.n_dim == 1:
-            plt.scatter(cartesian_coords[0],
+            plt.scatter(self.coords[0],
                         np.zeros(self.clust_data.n_points),
                         s=pt_size,
                         color=pt_colour)
@@ -965,8 +960,8 @@ class clusterer:
 
             plt.show()
         elif self.clust_data.n_dim == 2:
-            plt.scatter(cartesian_coords[0],
-                        cartesian_coords[1],
+            plt.scatter(self.coords[0],
+                        self.coords[1],
                         s=pt_size,
                         color=pt_colour)
 
@@ -991,11 +986,11 @@ class clusterer:
         else:
             fig = plt.figure()
             ax_ = fig.add_subplot(projection='3d')
-            ax_.scatter(cartesian_coords[0],
-                       cartesian_coords[1],
-                       cartesian_coords[2],
-                       s=pt_size,
-                       color=pt_colour)
+            ax_.scatter(self.coords[0],
+                        self.coords[1],
+                        self.coords[2],
+                        s=pt_size,
+                        color=pt_colour)
 
             # Customization of the plot title
             ax_.set_title(plot_title, fontsize=title_size)
@@ -1077,7 +1072,7 @@ class clusterer:
         """
 
         if self.clust_data.n_dim == 1:
-            data = {'x0': cartesian_coords[0],
+            data = {'x0': self.coords[0],
                     'x1': np.zeros(self.clust_data.n_points),
                     'cluster_ids': self.clust_prop.cluster_ids,
                     'isSeed': self.clust_prop.is_seed}
@@ -1271,6 +1266,7 @@ class clusterer:
 if __name__ == "__main__":
     c = clusterer(20., 10., 20.)
     c.read_data('./sissa.csv')
+    c.input_plotter()
     c.run_clue(backend="cpu serial", verbose=True)
     c.run_clue(backend="cpu tbb", verbose=True)
     c.run_clue(backend="cpu openmp", verbose=True)
