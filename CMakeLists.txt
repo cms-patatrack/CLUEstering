@@ -39,7 +39,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(alpaka)
 
 # create lib directory in CLUEstering folder
-file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/CLUEstering/lib)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/CLUEstering/lib)
 
 add_subdirectory(CLUEstering/BindingModules)
 
@@ -52,7 +52,7 @@ set(CLUE_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/CLUEstering")
 add_library(CLUEstering INTERFACE)
 target_include_directories(
   CLUEstering
-  INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/CLUEstering/include>
+  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/CLUEstering/include>
             $<BUILD_INTERFACE:${CLUE_GENERATED_INCLUDE_DIR}>
             $<INSTALL_INTERFACE:include>)
 
