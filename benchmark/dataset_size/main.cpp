@@ -2,6 +2,7 @@
 #include <alpaka/alpaka.hpp>
 #include <algorithm>
 #include <chrono>
+#include <execution>
 #include <fstream>
 #include <ranges>
 #include <sstream>
@@ -34,15 +35,20 @@ struct TimeMeasures {
 };
 
 float mean(const std::vector<float>& values) {
-  return std::accumulate(values.begin(), values.end(), 0.f) / values.size();
+  return std::reduce(std::execution::unseq, values.begin(), values.end(), 0.f) / values.size();
 }
 
 float stddev(const std::vector<float>& values) {
   auto mean_ = mean(values);
-  auto view = values |
-              std::views::transform([mean_](auto x) -> float { return (x - mean_) * (x - mean_); });
   auto sqSize = values.size() * (values.size() - 1);
-  return std::sqrt(std::accumulate(view.begin(), view.end(), 0.f) / sqSize);
+  return std::sqrt(
+      std::transform_reduce(std::execution::unseq,
+                            values.begin(),
+                            values.end(),
+                            0.f,
+                            std::plus{},
+                            [mean_](auto x) -> float { return (x - mean_) * (x - mean_); }) /
+      sqSize);
 }
 
 #ifdef PYBIND11
