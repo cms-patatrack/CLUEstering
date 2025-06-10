@@ -12,7 +12,7 @@
 #include "CLUEstering/DataFormats/PointsHost.hpp"
 #include "CLUEstering/DataFormats/PointsDevice.hpp"
 
-#include "CLUEstering/utility/read_csv.hpp"
+#include "utils/generation.hpp"
 
 #ifdef PYBIND11
 #include <pybind11/embed.h>
@@ -39,20 +39,10 @@ float mean(const std::vector<float>& values) {
 
 float stddev(const std::vector<float>& values) {
   auto mean_ = mean(values);
-  auto view{values |
-            std::views::transform([mean_](auto x) -> float { return (x - mean_) * (x - mean_); })};
+  auto view = values |
+              std::views::transform([mean_](auto x) -> float { return (x - mean_) * (x - mean_); });
   auto sqSize = values.size() * (values.size() - 1);
   return std::sqrt(std::accumulate(view.begin(), view.end(), 0.f) / sqSize);
-}
-
-std::vector<std::string> GetFiles(int min, int max) {
-  std::vector<std::string> files(max - min + 1);
-  std::generate(files.begin(), files.end(), [n = min]() mutable -> std::string {
-    auto filename = "../../data/data_" + std::to_string(static_cast<int>(std::pow(2, n))) + ".csv";
-    ++n;
-    return filename;
-  });
-  return files;
 }
 
 #ifdef PYBIND11
@@ -89,18 +79,7 @@ using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Acc1D;
 using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Device;
 using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Queue;
 
-void run(const std::string& input_file) {
-  auto coords = read_csv<float, 2>(input_file);
-  const auto n_points = coords.size() / 3;
-  std::vector<int> results(2 * n_points);
-
-  const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(dev_acc);
-
-  // Create the points host and device objects
-  clue::PointsHost<2> h_points(queue, n_points, coords.data(), results.data());
-  clue::PointsDevice<2, Device> d_points(queue, n_points);
-
+void run(clue::PointsHost<2>& h_points, clue::PointsDevice<2, Device>& d_points, Queue& queue) {
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
@@ -112,7 +91,6 @@ int main(int argc, char* argv[]) {
   auto min = std::stoi(argv[1]);
   auto max = std::stoi(argv[2]);
   auto range = max - min + 1;
-  auto files = GetFiles(min, max);
 
   std::string oFilename{"measures.csv"};
   if (argc == 4) {
@@ -124,32 +102,41 @@ int main(int argc, char* argv[]) {
   auto& time_averages = measures.time_averages;
   auto& time_stddevs = measures.time_stddevs;
   auto nruns{10};
-  std::transform(files.begin(), files.end(), sizes.begin(), [](auto file) {
-    auto first_it = std::find(file.begin(), file.end(), '_') + 1;
-    auto first = std::distance(file.begin(), first_it);
-    auto len = std::distance(first_it, std::find(file.begin(), file.end(), '.') - 1);
-    return std::stoi(file.substr(first, len));
-  });
 
   auto avgIt = time_averages.begin();
   auto stdIt = time_stddevs.begin();
-  std::for_each(files.begin(), files.end(), [nruns, &avgIt, &stdIt](const auto& file) -> void {
-    auto start = std::chrono::high_resolution_clock::now();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::vector<float> times(nruns);
-    for (auto i = 0; i < nruns; ++i) {
-      start = std::chrono::high_resolution_clock::now();
-      run(file);
-      end = std::chrono::high_resolution_clock::now();
-      auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-      times[i] = duration;
-    }
-    *avgIt++ = mean(times);
-    *stdIt++ = stddev(times);
-  });
+  auto sizeIt = sizes.begin();
+  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
+  std::ranges::for_each(
+      std::views::iota(min) | std::views::take(range),
+      [nruns, &device, &sizeIt, &avgIt, &stdIt](auto i) -> void {
+        Queue queue(device);
 
-  auto figname = oFilename.substr(0, oFilename.find_last_of('.')) + ".pdf";
+        const auto n_points = static_cast<std::size_t>(std::pow(2, i));
+
+        // Create the points host and device objects
+        clue::PointsHost<2> h_points(queue, n_points);
+        clue::PointsDevice<2, Device> d_points(queue, n_points);
+        clue::utils::generateRandomData<2>(h_points, 20, std::make_pair(-100.f, 100.f), 1.f);
+
+        auto start = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::high_resolution_clock::now();
+        std::vector<float> times(nruns);
+        for (auto i = 0; i < nruns; ++i) {
+          start = std::chrono::high_resolution_clock::now();
+          run(h_points, d_points, queue);
+          end = std::chrono::high_resolution_clock::now();
+          auto duration =
+              std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+          times[i] = duration;
+        }
+        *sizeIt++ = n_points;
+        *avgIt++ = mean(times);
+        *stdIt++ = stddev(times);
+      });
+
 #ifdef PYBIND11
+  auto figname = oFilename.substr(0, oFilename.find_last_of('.')) + ".pdf";
   plot(measures, figname);
 #endif
   to_csv(measures, oFilename);
