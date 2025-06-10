@@ -8,6 +8,7 @@
 #include "CLUEstering/DataFormats/alpaka/AlpakaVecArray.hpp"
 #include "CLUEstering/DataFormats/alpaka/AssociationMap.hpp"
 #include "CLUEstering/DataFormats/alpaka/SearchBox.hpp"
+#include "CLUEstering/detail/make_array.hpp"
 
 #include <alpaka/core/Common.hpp>
 #include <alpaka/alpaka.hpp>
@@ -106,7 +107,8 @@ namespace clue {
         if (wrapping[dim] and infBin > supBin)
           supBin += nperdim;
 
-        searchbox_bins[dim] = {static_cast<uint32_t>(infBin), static_cast<uint32_t>(supBin)};
+        searchbox_bins[dim] =
+            nostd::make_array(static_cast<uint32_t>(infBin), static_cast<uint32_t>(supBin));
       }
     }
 

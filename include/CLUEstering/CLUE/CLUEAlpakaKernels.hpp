@@ -11,6 +11,7 @@
 #include "CLUEstering/DataFormats/alpaka/TilesAlpaka.hpp"
 #include "CLUEstering/DataFormats/alpaka/AlpakaVecArray.hpp"
 #include "CLUEstering/DataFormats/alpaka/SearchBox.hpp"
+#include "CLUEstering/detail/make_array.hpp"
 #include "ConvolutionalKernel.hpp"
 
 using clue::PointsView;
@@ -98,7 +99,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         // Get the extremes of the search box
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
         for (int dim{}; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] = {coords_i[dim] - dc, coords_i[dim] + dc};
+          searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - dc, coords_i[dim] + dc);
         }
 
         // Calculate the search box
@@ -193,7 +194,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         // Get the extremes of the search box
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
         for (int dim{}; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] = {coords_i[dim] - dm, coords_i[dim] + dm};
+          searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - dm, coords_i[dim] + dm);
         }
 
         // Calculate the search box
