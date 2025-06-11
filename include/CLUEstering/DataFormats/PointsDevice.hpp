@@ -118,7 +118,8 @@ namespace clue {
           m_view{make_device_buffer<PointsView>(queue)},
           m_hostView{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
-      soa::device::partitionSoAView<Ndim>(m_hostView.data(), m_buffer.data(), n_points, buffers...);
+      soa::device::partitionSoAView<Ndim>(
+          m_hostView.data(), m_buffer.data(), n_points, buffers...);
       alpaka::memcpy(queue, m_view, m_hostView);
     }
 
