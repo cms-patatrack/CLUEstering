@@ -51,8 +51,8 @@ namespace clue {
       requires(sizeof...(TBuffers) == 4)
     void partitionSoAView(PointsView* view,
                           std::byte* alloc_buffer,
-                          TBuffers... buffer,
-                          uint32_t n_points) {
+                          uint32_t n_points,
+                          TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
@@ -68,8 +68,8 @@ namespace clue {
       requires(sizeof...(TBuffers) == 2)
     void partitionSoAView(PointsView* view,
                           std::byte* alloc_buffer,
-                          TBuffers... buffers,
-                          uint32_t n_points) {
+                          uint32_t n_points,
+                          TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
@@ -118,7 +118,7 @@ namespace clue {
           m_view{make_device_buffer<PointsView>(queue)},
           m_hostView{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
-      soa::device::partitionSoAView<Ndim>(m_hostView.data(), m_buffer.data(), buffers..., n_points);
+      soa::device::partitionSoAView<Ndim>(m_hostView.data(), m_buffer.data(), n_points, buffers...);
       alpaka::memcpy(queue, m_view, m_hostView);
     }
 
