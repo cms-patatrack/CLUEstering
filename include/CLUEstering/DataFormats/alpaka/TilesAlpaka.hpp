@@ -81,7 +81,7 @@ namespace clue {
       int global_bin = 0;
       for (int dim = 0; dim != Ndim - 1; ++dim) {
         global_bin +=
-            xtd::pow(acc, nperdim, Ndim - dim - 1) * getBin(acc, coords[dim], dim);
+            xtd::pow(static_cast<float>(nperdim), Ndim - dim - 1) * getBin(acc, coords[dim], dim);
       }
       global_bin += getBin(acc, coords[Ndim - 1], Ndim - 1);
       return global_bin;
@@ -93,7 +93,7 @@ namespace clue {
       uint32_t globalBin = 0;
       for (int dim = 0; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
-        globalBin += xtd::pow(nperdim, Ndim - dim - 1) * bin_i;
+        globalBin += xtd::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
       }
       return globalBin;
     }

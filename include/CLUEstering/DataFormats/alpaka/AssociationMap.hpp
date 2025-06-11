@@ -26,8 +26,8 @@ namespace clue {
 
   template <typename TFunc>
   struct KernelComputeAssociations {
-    // TODO: implement overloads for other use-cases
     template <typename TAcc>
+      requires std::is_invocable_r_v<uint32_t, TFunc, const TAcc&, size_t>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   size_t size,
                                   uint32_t* associations,
@@ -37,6 +37,7 @@ namespace clue {
       }
     }
     template <typename TAcc>
+      requires std::is_invocable_r_v<uint32_t, TFunc, size_t>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   size_t size,
                                   uint32_t* associations,
