@@ -5,6 +5,8 @@
 #include "CLUEstering/AlpakaCore/alpakaMemory.hpp"
 #include "CLUEstering/AlpakaCore/alpakaWorkDiv.hpp"
 
+#include "xtd/xtd.h"
+
 #include <numeric>
 #include <ranges>
 #include <span>
@@ -134,4 +136,44 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
                             std::views::iota(0, (int)(size)) | std::views::transform(to_float),
                             d_points,
                             size));
+}
+
+TEST_CASE("Test extrema functions on device points column") {
+  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
+  Queue queue(device);
+
+  const uint32_t size = 1000;
+  std::vector<float> data(size);
+  std::iota(data.begin(), data.end(), 0.0f);
+
+  clue::PointsHost<2> h_points(queue, 1000);
+  std::ranges::copy(data, h_points.coords().begin());
+  std::ranges::copy(data, h_points.weights().begin());
+
+  clue::PointsDevice<2, Device> d_points(queue, size);
+  clue::copyToDevice(queue, d_points, h_points);
+
+  auto max_it = xtd::max_element(d_points.weight().begin(), d_points.weight().end());
+  auto max = 0.f;
+  alpaka::memcpy(
+      queue, clue::make_host_view(max), clue::make_device_view(alpaka::getDev(queue), *max_it));
+  CHECK(max == static_cast<float>(size - 1));
+}
+
+TEST_CASE("Test reduction of device points column") {
+  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
+  Queue queue(device);
+
+  const uint32_t size = 1000;
+  std::vector<float> data(size);
+  std::iota(data.begin(), data.end(), 0.0f);
+
+  clue::PointsHost<2> h_points(queue, 1000);
+  std::ranges::copy(data, h_points.coords().begin());
+  std::ranges::copy(data, h_points.weights().begin());
+
+  clue::PointsDevice<2, Device> d_points(queue, size);
+  clue::copyToDevice(queue, d_points, h_points);
+
+  CHECK(xtd::reduce(d_points.weight().begin(), d_points.weight().end()) == 499500.0f);
 }

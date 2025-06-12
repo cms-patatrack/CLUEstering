@@ -130,6 +130,49 @@ namespace clue {
 
     ALPAKA_FN_HOST_ACC uint32_t size() const { return m_size; }
 
+    ALPAKA_FN_HOST auto coords(size_t dim) const {
+      assert(dim < Ndim);
+      return std::span<const float>(m_hostView.data()->coords + dim * m_size, m_size);
+    }
+    ALPAKA_FN_HOST auto coords(size_t dim) {
+      assert(dim < Ndim);
+      return std::span<float>(m_hostView.data()->coords + dim * m_size, m_size);
+    }
+
+    ALPAKA_FN_HOST auto weight() const {
+      return std::span<const float>(m_hostView.data()->weight, m_size);
+    }
+    ALPAKA_FN_HOST auto weight() { return std::span<float>(m_hostView.data()->weight, m_size); }
+
+    ALPAKA_FN_HOST auto rho() const {
+      return std::span<const float>(m_hostView.data()->rho, m_size);
+    }
+    ALPAKA_FN_HOST auto rho() { return std::span<float>(m_hostView.data()->rho, m_size); }
+
+    ALPAKA_FN_HOST auto delta() const {
+      return std::span<const float>(m_hostView.data()->delta, m_size);
+    }
+    ALPAKA_FN_HOST auto delta() { return std::span<float>(m_hostView.data()->delta, m_size); }
+
+    ALPAKA_FN_HOST auto nearestHigher() const {
+      return std::span<const int>(m_hostView.data()->nearest_higher, m_size);
+    }
+    ALPAKA_FN_HOST auto nearestHigher() {
+      return std::span<int>(m_hostView.data()->nearest_higher, m_size);
+    }
+
+    ALPAKA_FN_HOST auto clusterIndex() const {
+      return std::span<const int>(m_hostView.data()->cluster_index, m_size);
+    }
+    ALPAKA_FN_HOST auto clusterIndex() {
+      return std::span<int>(m_hostView.data()->cluster_index, m_size);
+    }
+
+    ALPAKA_FN_HOST auto isSeed() const {
+      return std::span<const int>(m_hostView.data()->is_seed, m_size);
+    }
+    ALPAKA_FN_HOST auto isSeed() { return std::span<int>(m_hostView.data()->is_seed, m_size); }
+
     ALPAKA_FN_HOST PointsView* view() { return m_view.data(); }
     ALPAKA_FN_HOST const PointsView* view() const { return m_view.data(); }
 
