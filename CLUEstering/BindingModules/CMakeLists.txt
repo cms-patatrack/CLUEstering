@@ -6,20 +6,22 @@ pybind11_add_module(CLUE_Convolutional_Kernels SHARED
 target_include_directories(
   CLUE_Convolutional_Kernels
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../include
-          ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+          ${CMAKE_SOURCE_DIR}/extern/xtd/include ${alpaka_SOURCE_DIR}/include
+          ${Boost_INCLUDE_DIR})
 target_compile_definitions(
   CLUE_Convolutional_Kernels PRIVATE ALPAKA_HOST_ONLY
                                      ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 set_target_properties(
-  CLUE_Convolutional_Kernels PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-  ${CMAKE_CURRENT_BINARY_DIR}/../../lib/CLUEstering/lib/)
+  CLUE_Convolutional_Kernels
+  PROPERTIES LIBRARY_OUTPUT_DIRECTORY
+             ${CMAKE_CURRENT_BINARY_DIR}/../../lib/CLUEstering/lib/)
 # copy shared library for local testing
 add_custom_command(
   TARGET CLUE_Convolutional_Kernels
   POST_BUILD
   COMMAND
     ${CMAKE_COMMAND} -E copy
-	${CMAKE_CURRENT_BINARY_DIR}/../../lib/CLUEstering/lib/CLUE_Convolutional_Kernels.*
+    ${CMAKE_CURRENT_BINARY_DIR}/../../lib/CLUEstering/lib/CLUE_Convolutional_Kernels.*
     ${CMAKE_CURRENT_SOURCE_DIR}/../lib/)
 
 add_subdirectory(serial)

@@ -15,8 +15,10 @@ add_executable(cuda.out ${sources})
 target_link_libraries(cuda.out PRIVATE fmt::fmt)
 target_include_directories(
   cuda.out
-  PRIVATE ${CMAKE_SURCE_DIR}../../include
-          ${doctest_SOURCE_DIR}/doctest ${alpaka_SOURCE_DIR}/include
+  PRIVATE ${CMAKE_SOURCE_DIR}../../include
+          ${CMAKE_SOURCE_DIR}../../extern/xtd/include
+          ${doctest_SOURCE_DIR}/doctest
+          ${alpaka_SOURCE_DIR}/include
           ${Boost_INCLUDE_DIR})
 target_compile_definitions(cuda.out PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
 target_compile_options(cuda.out PRIVATE --expt-relaxed-constexpr)

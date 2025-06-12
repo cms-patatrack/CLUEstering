@@ -5,6 +5,7 @@
 #include <alpaka/core/Common.hpp>
 #include <chrono>
 #include <cstdint>
+#include "xtd/math.h"
 
 #include "CLUEstering/AlpakaCore/alpakaWorkDiv.hpp"
 #include "CLUEstering/DataFormats/PointsDevice.hpp"
@@ -214,7 +215,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                                        dm_squared,
                                                        i);
 
-        dev_points->delta[i] = alpaka::math::sqrt(acc, delta_i);
+        dev_points->delta[i] = xtd::sqrt(delta_i);
         dev_points->nearest_higher[i] = nh_i;
       }
     }

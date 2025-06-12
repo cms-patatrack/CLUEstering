@@ -12,7 +12,8 @@ add_executable(cuda.out ${CMAKE_SOURCE_DIR}/main.cpp)
 target_include_directories(
   cuda.out
   PRIVATE ${CMAKE_SOURCE_DIR}/../../include ${CMAKE_SOURCE_DIR}/../../benchmark
-          ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+          ${CMAKE_SOURCE_DIR}/../../extern/xtd/include ${alpaka_SOURCE_DIR}/include
+          ${Boost_INCLUDE_DIR})
 target_link_libraries(cuda.out PRIVATE ${pybind_link})
 target_compile_definitions(cuda.out PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
 target_compile_options(cuda.out PRIVATE --expt-relaxed-constexpr)
