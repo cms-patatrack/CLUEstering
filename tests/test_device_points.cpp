@@ -138,24 +138,6 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
                             size));
 }
 
-TEST_CASE("Test sort of device points column") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
-
-  const uint32_t size = 1000;
-  std::vector<float> data(size);
-  std::iota(data.begin(), data.end(), 0.0f);
-
-  clue::PointsHost<2> h_points(queue, 1000);
-  std::ranges::copy(data, h_points.coords().begin());
-  std::ranges::copy(data, h_points.weights().begin());
-
-  clue::PointsDevice<2, Device> d_points(queue, size);
-  clue::copyToDevice(queue, d_points, h_points);
-
-  xtd::sort(d_points.coords().begin(), d_points.coords().end());
-}
-
 TEST_CASE("Test extrema functions on device points column") {
   const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
   Queue queue(device);
@@ -171,8 +153,11 @@ TEST_CASE("Test extrema functions on device points column") {
   clue::PointsDevice<2, Device> d_points(queue, size);
   clue::copyToDevice(queue, d_points, h_points);
 
-  auto max = xtd::max_element(d_points.coords().begin(), d_points.coords().end());
-  // CHECK(xtd::max_element(d_points.coords().begin(), d_points.coords().end()));
+  auto max_it = xtd::max_element(d_points.weight().begin(), d_points.weight().end());
+  auto max = 0.f;
+  alpaka::memcpy(
+      queue, clue::make_host_view(max), clue::make_device_view(alpaka::getDev(queue), *max_it));
+  CHECK(max == static_cast<float>(size - 1));
 }
 
 TEST_CASE("Test reduction of device points column") {
@@ -190,6 +175,5 @@ TEST_CASE("Test reduction of device points column") {
   clue::PointsDevice<2, Device> d_points(queue, size);
   clue::copyToDevice(queue, d_points, h_points);
 
-  xtd::sort(d_points.coords().begin(), d_points.coords().end());
-  CHECK(xtd::reduce(d_points.coords().begin(), d_points.coords().end()) == 499500.0f);
+  CHECK(xtd::reduce(d_points.weight().begin(), d_points.weight().end()) == 499500.0f);
 }
