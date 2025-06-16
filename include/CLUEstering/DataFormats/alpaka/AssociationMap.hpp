@@ -104,6 +104,11 @@ namespace clue {
     size_t m_nbins;
 
   public:
+    struct Extents {
+      uint32_t content;
+      uint32_t offset;
+    };
+
     AssociationMap() = default;
     // TODO: see above
     AssociationMap(size_t nelements, size_t nbins, const TDev& dev)
@@ -170,6 +175,12 @@ namespace clue {
     }
 
     auto size() const { return m_nbins; }
+
+    auto extents() const {
+      return Extents{
+          alpaka::trait::GetExtents<clue::device_buffer<TDev, uint32_t[]>>{}(m_indexes)[0u],
+          alpaka::trait::GetExtents<clue::device_buffer<TDev, uint32_t[]>>{}(m_offsets)[0u]};
+    }
 
     ALPAKA_FN_HOST const device_buffer<TDev, uint32_t[]>& indexes() const { return m_indexes; }
     ALPAKA_FN_HOST device_buffer<TDev, uint32_t[]>& indexes() { return m_indexes; }
