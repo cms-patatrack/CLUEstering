@@ -34,16 +34,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     return coords;
   }
 
-  struct KernelResetFollowers {
-    template <typename TAcc>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  VecArray<int, max_followers>* d_followers,
-                                  uint32_t n_points) const {
-      for (auto index : alpaka::uniformElements(acc, n_points))
-        d_followers[index].reset();
-    }
-  };
-
   template <typename TAcc, uint8_t Ndim, uint8_t N_, typename KernelType>
   ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
                                         VecArray<uint32_t, Ndim>& base_vec,
@@ -225,7 +215,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
-                                  VecArray<int32_t, max_followers>* followers,
+                                  clue::FollowersView* followers,
                                   PointsView* dev_points,
                                   float dm,
                                   float seed_dc,
@@ -246,9 +236,6 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
           dev_points->is_seed[i] = 1;
           seeds->push_back(acc, i);
         } else {
-          if (!is_outlier) {
-            followers[dev_points->nearest_higher[i]].push_back(acc, i);
-          }
           dev_points->is_seed[i] = 0;
         }
       }
@@ -259,7 +246,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
-                                  VecArray<int, max_followers>* followers,
+                                  clue::FollowersView* followers,
                                   PointsView* dev_points) const {
       const auto& seeds_0{*seeds};
       const auto n_seeds{seeds_0.size()};
@@ -267,7 +254,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         int local_stack[256] = {-1};
         int local_stack_size{};
 
-        int idx_this_seed{seeds_0[idx_cls]};
+        int idx_this_seed = seeds_0[idx_cls];
         dev_points->cluster_index[idx_this_seed] = idx_cls;
         // push_back idThisSeed to localStack
         local_stack[local_stack_size] = idx_this_seed;
@@ -276,16 +263,16 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         while (local_stack_size > 0) {
           // get last element of localStack
           int idx_end_of_local_stack{local_stack[local_stack_size - 1]};
-          int temp_cluster_index{dev_points->cluster_index[idx_end_of_local_stack]};
+          int temp_cluster_index = dev_points->cluster_index[idx_end_of_local_stack];
           // pop_back last element of localStack
           local_stack[local_stack_size - 1] = -1;
           --local_stack_size;
-          const auto& followers_ies{followers[idx_end_of_local_stack]};
-          const auto followers_size{followers[idx_end_of_local_stack].size()};
+          const auto& followers_ies = (*followers)[idx_end_of_local_stack];
+          const auto followers_size = followers_ies.size();
           // loop over followers of last element of localStack
           for (int j{}; j != followers_size; ++j) {
             // pass id to follower
-            int follower{followers_ies[j]};
+            int follower = followers_ies[j];
             dev_points->cluster_index[follower] = temp_cluster_index;
             // push_back follower to localStack
             local_stack[local_stack_size] = follower;
