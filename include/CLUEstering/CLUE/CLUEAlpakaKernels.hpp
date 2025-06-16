@@ -69,7 +69,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
         float dist_ij_sq = tiles->distance(coords_i, coords_j);
 
-        auto k = kernel(acc, alpaka::math::sqrt(acc, dist_ij_sq), point_id, j);
+        auto k = kernel(acc, xtd::sqrt(dist_ij_sq), point_id, j);
         *rho_i += (int)(dist_ij_sq <= dc * dc) * k * dev_points->weight[j];
 
       }  // end of interate inside this bin
