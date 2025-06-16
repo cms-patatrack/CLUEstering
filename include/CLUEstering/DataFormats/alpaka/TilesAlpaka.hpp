@@ -59,8 +59,7 @@ namespace clue {
     ALPAKA_FN_ACC inline constexpr const uint8_t* wrapped() const { return wrapping; }
     ALPAKA_FN_ACC inline constexpr uint8_t* wrapped() { return wrapping; }
 
-    template <typename TAcc>
-    ALPAKA_FN_ACC inline constexpr int getBin(const TAcc& acc, float coord, int dim) const {
+    ALPAKA_FN_ACC inline constexpr int getBin(float coord, int dim) const {
       int coord_bin;
       if (wrapping[dim]) {
         coord_bin =
@@ -76,20 +75,18 @@ namespace clue {
       return coord_bin;
     }
 
-    template <typename TAcc>
-    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const TAcc& acc, const float* coords) const {
+    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords) const {
       int global_bin = 0;
       for (int dim = 0; dim != Ndim - 1; ++dim) {
         global_bin +=
-            xtd::pow(static_cast<float>(nperdim), Ndim - dim - 1) * getBin(acc, coords[dim], dim);
+            xtd::pow(static_cast<float>(nperdim), Ndim - dim - 1) * getBin(coords[dim], dim);
       }
-      global_bin += getBin(acc, coords[Ndim - 1], Ndim - 1);
+      global_bin += getBin(coords[Ndim - 1], Ndim - 1);
       return global_bin;
     }
 
-    template <typename TAcc>
     ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(
-        const TAcc& acc, const VecArray<uint32_t, Ndim>& Bins) const {
+        const VecArray<uint32_t, Ndim>& Bins) const {
       uint32_t globalBin = 0;
       for (int dim = 0; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
@@ -98,13 +95,11 @@ namespace clue {
       return globalBin;
     }
 
-    template <typename TAcc>
-    ALPAKA_FN_ACC inline void searchBox(const TAcc& acc,
-                                        const SearchBoxExtremes<Ndim>& searchbox_extremes,
+    ALPAKA_FN_ACC inline void searchBox(const SearchBoxExtremes<Ndim>& searchbox_extremes,
                                         SearchBoxBins<Ndim>& searchbox_bins) {
       for (int dim{}; dim != Ndim; ++dim) {
-        auto infBin = getBin(acc, searchbox_extremes[dim][0], dim);
-        auto supBin = getBin(acc, searchbox_extremes[dim][1], dim);
+        auto infBin = getBin(searchbox_extremes[dim][0], dim);
+        auto supBin = getBin(searchbox_extremes[dim][1], dim);
         if (wrapping[dim] and infBin > supBin)
           supBin += nperdim;
 
@@ -237,14 +232,13 @@ namespace clue {
       PointsView* pointsView;
       TilesAlpakaView<Ndim>* tilesView;
 
-      template <typename TAcc>
-      ALPAKA_FN_ACC uint32_t operator()(const TAcc& acc, uint32_t index) const {
+      ALPAKA_FN_ACC uint32_t operator()(uint32_t index) const {
         float coords[Ndim];
         for (auto dim = 0; dim < Ndim; ++dim) {
           coords[dim] = pointsView->coords[index + dim * pointsView->n];
         }
 
-        auto bin = tilesView->getGlobalBin(acc, coords);
+        auto bin = tilesView->getGlobalBin(coords);
         return bin;
       }
     };
