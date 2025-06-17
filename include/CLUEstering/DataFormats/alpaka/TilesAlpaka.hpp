@@ -41,12 +41,12 @@ namespace clue {
 
   template <uint8_t Ndim>
   struct TilesAlpakaView {
-    uint32_t* indexes;
-    uint32_t* offsets;
+    int32_t* indexes;
+    int32_t* offsets;
     CoordinateExtremes<Ndim>* minmax;
     float* tilesizes;
     uint8_t* wrapping;
-    uint32_t npoints;
+    int32_t npoints;
     int32_t ntiles;
     int32_t nperdim;
 
@@ -85,9 +85,8 @@ namespace clue {
       return global_bin;
     }
 
-    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(
-        const VecArray<uint32_t, Ndim>& Bins) const {
-      uint32_t globalBin = 0;
+    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins) const {
+      int32_t globalBin = 0;
       for (int dim = 0; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
         globalBin += xtd::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
@@ -103,16 +102,15 @@ namespace clue {
         if (wrapping[dim] and infBin > supBin)
           supBin += nperdim;
 
-        searchbox_bins[dim] =
-            nostd::make_array(static_cast<uint32_t>(infBin), static_cast<uint32_t>(supBin));
+        searchbox_bins[dim] = nostd::make_array(infBin, supBin);
       }
     }
 
-    ALPAKA_FN_ACC inline constexpr clue::Span<uint32_t> operator[](uint32_t globalBinId) {
+    ALPAKA_FN_ACC inline constexpr clue::Span<int32_t> operator[](int32_t globalBinId) {
       const auto size = offsets[globalBinId + 1] - offsets[globalBinId];
       const auto offset = offsets[globalBinId];
-      uint32_t* buf_ptr = indexes + offset;
-      return clue::Span<uint32_t>{buf_ptr, size};
+      int32_t* buf_ptr = indexes + offset;
+      return clue::Span<int32_t>{buf_ptr, size};
     }
 
     ALPAKA_FN_HOST_ACC inline constexpr float normalizeCoordinate(float coord, int dim) const {
@@ -143,33 +141,7 @@ namespace clue {
   class TilesAlpaka {
   public:
     template <concepts::queue TQueue>
-    TilesAlpaka(TQueue& queue, uint32_t n_points, uint32_t pointsPerTile) {
-      auto n_tiles = static_cast<int32_t>(std::ceil(n_points / static_cast<float>(pointsPerTile)));
-      const auto n_perdim = static_cast<int32_t>(std::ceil(std::pow(n_tiles, 1. / Ndim)));
-      n_tiles = static_cast<int32_t>(std::pow(n_perdim, Ndim));
-
-      m_assoc = clue::AssociationMap<TDev>(n_points, n_tiles, queue);
-      m_minmax = clue::make_device_buffer<CoordinateExtremes<Ndim>>(queue);
-      m_tilesizes = clue::make_device_buffer<float[Ndim]>(queue);
-      m_wrapped = clue::make_device_buffer<uint8_t[Ndim]>(queue);
-      m_ntiles = n_tiles;
-      m_nperdim = n_perdim;
-      m_view = clue::make_device_buffer<TilesAlpakaView<Ndim>>(queue);
-
-      auto host_view = clue::make_host_buffer<TilesAlpakaView<Ndim>>(queue);
-      host_view->indexes = m_assoc.indexes().data();
-      host_view->offsets = m_assoc.offsets().data();
-      host_view->minmax = m_minmax.data();
-      host_view->tilesizes = m_tilesizes.data();
-      host_view->wrapping = m_wrapped.data();
-      host_view->npoints = n_points;
-      host_view->ntiles = n_tiles;
-      host_view->nperdim = n_perdim;
-
-      alpaka::memcpy(queue, m_view, host_view);
-    }
-    template <concepts::queue TQueue>
-    TilesAlpaka(TQueue& queue, uint32_t n_points, int32_t n_tiles)
+    TilesAlpaka(TQueue& queue, int32_t n_points, int32_t n_tiles)
         : m_assoc{clue::AssociationMap<TDev>(n_points, n_tiles, queue)},
           m_minmax{clue::make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
           m_tilesizes{clue::make_device_buffer<float[Ndim]>(queue)},
@@ -193,10 +165,7 @@ namespace clue {
     TilesAlpakaView<Ndim>* view() { return m_view.data(); }
 
     template <concepts::queue TQueue>
-    ALPAKA_FN_HOST void initialize(uint32_t npoints,
-                                   int32_t ntiles,
-                                   int32_t nperdim,
-                                   TQueue& queue) {
+    ALPAKA_FN_HOST void initialize(int32_t npoints, int32_t ntiles, int32_t nperdim, TQueue& queue) {
       m_assoc.initialize(npoints, ntiles, queue);
       m_ntiles = ntiles;
       m_nperdim = nperdim;
@@ -214,7 +183,7 @@ namespace clue {
     }
 
     template <concepts::queue TQueue>
-    ALPAKA_FN_HOST void reset(uint32_t npoints, int32_t ntiles, int32_t nperdim, TQueue& queue) {
+    ALPAKA_FN_HOST void reset(int32_t npoints, int32_t ntiles, int32_t nperdim, TQueue& queue) {
       m_assoc.reset(queue, npoints, ntiles);
 
       m_ntiles = ntiles;
@@ -235,7 +204,7 @@ namespace clue {
       PointsView* pointsView;
       TilesAlpakaView<Ndim>* tilesView;
 
-      ALPAKA_FN_ACC uint32_t operator()(uint32_t index) const {
+      ALPAKA_FN_ACC int32_t operator()(int32_t index) const {
         float coords[Ndim];
         for (auto dim = 0; dim < Ndim; ++dim) {
           coords[dim] = pointsView->coords[index + dim * pointsView->n];
@@ -263,23 +232,23 @@ namespace clue {
       return m_wrapped;
     }
 
-    ALPAKA_FN_HOST inline constexpr auto size() { return m_ntiles; }
+    ALPAKA_FN_HOST inline constexpr auto size() const { return m_ntiles; }
 
     ALPAKA_FN_HOST inline constexpr auto nPerDim() const { return m_nperdim; }
 
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST inline constexpr void clear(const TQueue& queue) {}
 
-    ALPAKA_FN_HOST const clue::device_buffer<TDev, uint32_t[]>& indexes() const {
+    ALPAKA_FN_HOST const clue::device_buffer<TDev, int32_t[]>& indexes() const {
       return m_assoc.indexes();
     }
-    ALPAKA_FN_HOST clue::device_buffer<TDev, uint32_t[]>& indexes() { return m_assoc.indexes(); }
-    ALPAKA_FN_HOST const clue::device_buffer<TDev, uint32_t[]>& offsets() const {
+    ALPAKA_FN_HOST clue::device_buffer<TDev, int32_t[]>& indexes() { return m_assoc.indexes(); }
+    ALPAKA_FN_HOST const clue::device_buffer<TDev, int32_t[]>& offsets() const {
       return m_assoc.offsets();
     }
-    ALPAKA_FN_HOST clue::device_buffer<TDev, uint32_t[]>& offsets() { return m_assoc.offsets(); }
+    ALPAKA_FN_HOST clue::device_buffer<TDev, int32_t[]>& offsets() { return m_assoc.offsets(); }
 
-    ALPAKA_FN_HOST clue::device_view<TDev, uint32_t[]> indexes(const TDev& dev, size_t assoc_id) {
+    ALPAKA_FN_HOST clue::device_view<TDev, int32_t[]> indexes(const TDev& dev, size_t assoc_id) {
       return m_assoc.indexes(dev, assoc_id);
     }
 

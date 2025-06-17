@@ -36,7 +36,7 @@ namespace alpaka_cuda_async {
                py::array_t<int> results,
                const Kernel& kernel,
                int Ndim,
-               uint32_t n_points,
+               int32_t n_points,
                size_t block_size,
                size_t device_id) {
     auto rData = data.request();
@@ -190,7 +190,7 @@ namespace alpaka_cuda_async {
                                   py::array_t<int>,
                                   const FlatKernel&,
                                   int,
-                                  uint32_t,
+                                  int32_t,
                                   size_t,
                                   size_t>(&mainRun<FlatKernel>),
           "mainRun");
@@ -204,7 +204,7 @@ namespace alpaka_cuda_async {
                                   py::array_t<int>,
                                   const ExponentialKernel&,
                                   int,
-                                  uint32_t,
+                                  int32_t,
                                   size_t,
                                   size_t>(&mainRun<ExponentialKernel>),
           "mainRun");
@@ -218,7 +218,7 @@ namespace alpaka_cuda_async {
                                   py::array_t<int>,
                                   const GaussianKernel&,
                                   int,
-                                  uint32_t,
+                                  int32_t,
                                   size_t,
                                   size_t>(&mainRun<GaussianKernel>),
           "mainRun");

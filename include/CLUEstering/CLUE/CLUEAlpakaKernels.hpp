@@ -25,7 +25,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
   constexpr int32_t reserve{1000000};
 
   template <uint8_t Ndim>
-  ALPAKA_FN_ACC std::array<float, Ndim> getCoords(PointsView* d_points, uint32_t i) {
+  ALPAKA_FN_ACC std::array<float, Ndim> getCoords(PointsView* d_points, int32_t i) {
     std::array<float, Ndim> coords;
     for (auto dim = 0; dim < Ndim; ++dim) {
       coords[dim] = d_points->coords[i + dim * d_points->n];
@@ -36,7 +36,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <typename TAcc, uint8_t Ndim, uint8_t N_, typename KernelType>
   ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
-                                        VecArray<uint32_t, Ndim>& base_vec,
+                                        VecArray<int32_t, Ndim>& base_vec,
                                         const clue::SearchBoxBins<Ndim>& search_box,
                                         TilesAlpakaView<Ndim>* tiles,
                                         PointsView* dev_points,
@@ -44,7 +44,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                         const std::array<float, Ndim>& coords_i,
                                         float* rho_i,
                                         float dc,
-                                        uint32_t point_id) {
+                                        int32_t point_id) {
     if constexpr (N_ == 0) {
       auto binId = tiles->getGlobalBinByBin(base_vec);
       // get the size of this bin
@@ -52,7 +52,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
       // iterate inside this bin
       for (int binIter{}; binIter < binSize; ++binIter) {
-        uint32_t j{(*tiles)[binId][binIter]};
+        int32_t j{(*tiles)[binId][binIter]};
         // query N_{dc_}(i)
 
         auto coords_j = getCoords<Ndim>(dev_points, j);
@@ -65,7 +65,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
       }  // end of interate inside this bin
       return;
     } else {
-      for (unsigned int i{search_box[search_box.size() - N_][0]};
+      for (auto i = search_box[search_box.size() - N_][0];
            i <= search_box[search_box.size() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
@@ -82,7 +82,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                   PointsView* dev_points,
                                   const KernelType& kernel,
                                   float dc,
-                                  uint32_t n_points) const {
+                                  int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         float rho_i{0.f};
         auto coords_i = getCoords<Ndim>(dev_points, i);
@@ -97,7 +97,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         clue::SearchBoxBins<Ndim> searchbox_bins;
         dev_tiles->searchBox(searchbox_extremes, searchbox_bins);
 
-        VecArray<uint32_t, Ndim> base_vec;
+        VecArray<int32_t, Ndim> base_vec;
         for_recursion<TAcc, Ndim, Ndim>(
             acc, base_vec, searchbox_bins, dev_tiles, dev_points, kernel, coords_i, &rho_i, dc, i);
 
@@ -108,7 +108,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
   template <typename TAcc, uint8_t Ndim, uint8_t N_>
   ALPAKA_FN_HOST_ACC void for_recursion_nearest_higher(const TAcc& acc,
-                                                       VecArray<uint32_t, Ndim>& base_vec,
+                                                       VecArray<int32_t, Ndim>& base_vec,
                                                        const clue::SearchBoxBins<Ndim>& search_box,
                                                        TilesAlpakaView<Ndim>* tiles,
                                                        PointsView* dev_points,
@@ -117,7 +117,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                                        float* delta_i,
                                                        int* nh_i,
                                                        float dm_sq,
-                                                       uint32_t point_id) {
+                                                       int32_t point_id) {
     if constexpr (N_ == 0) {
       int binId{tiles->getGlobalBinByBin(base_vec)};
       // get the size of this bin
@@ -125,7 +125,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
       // iterate inside this bin
       for (int binIter{}; binIter < binSize; ++binIter) {
-        unsigned int j{(*tiles)[binId][binIter]};
+        const auto j{(*tiles)[binId][binIter]};
         // query N'_{dm}(i)
         float rho_j{dev_points->rho[j]};
         bool found_higher{(rho_j > rho_i)};
@@ -149,7 +149,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
       return;
     } else {
-      for (unsigned int i{search_box[search_box.size() - N_][0]};
+      for (auto i = search_box[search_box.size() - N_][0];
            i <= search_box[search_box.size() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
@@ -174,7 +174,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                   TilesAlpakaView<Ndim>* dev_tiles,
                                   PointsView* dev_points,
                                   float dm,
-                                  uint32_t n_points) const {
+                                  int32_t n_points) const {
       float dm_squared{dm * dm};
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         float delta_i{std::numeric_limits<float>::max()};
@@ -192,7 +192,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         clue::SearchBoxBins<Ndim> searchbox_bins;
         dev_tiles->searchBox(searchbox_extremes, searchbox_bins);
 
-        VecArray<uint32_t, Ndim> base_vec{};
+        VecArray<int32_t, Ndim> base_vec{};
         for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
                                                        base_vec,
                                                        searchbox_bins,
@@ -220,7 +220,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                   float dm,
                                   float seed_dc,
                                   float rhoc,
-                                  uint32_t n_points) const {
+                                  int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         // initialize cluster_index
         dev_points->cluster_index[i] = -1;

@@ -22,6 +22,6 @@ namespace clue {
   using SearchBoxExtremes = SearchBox<Ndim, float>;
 
   template <uint8_t Ndim>
-  using SearchBoxBins = SearchBox<Ndim, uint32_t>;
+  using SearchBoxBins = SearchBox<Ndim, int32_t>;
 
 }  // namespace clue
