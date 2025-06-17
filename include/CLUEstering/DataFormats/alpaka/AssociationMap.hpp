@@ -62,10 +62,10 @@ namespace clue {
   };
 
   struct KernelFillAssociator {
-    template <typename TAcc, typename TIdx>
+    template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   int32_t* indexes,
-                                  const TIdx* bin_buffer,
+                                  const int32_t* bin_buffer,
                                   int32_t* temp_offsets,
                                   size_t size) const {
       for (auto i : alpaka::uniformElements(acc, size)) {
