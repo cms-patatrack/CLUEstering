@@ -132,7 +132,7 @@ namespace clue {
     }
 
     template <concepts::queue TQueue>
-    AssociationMap(size_t nelements, size_t nbins, TQueue queue)
+    AssociationMap(size_t nelements, size_t nbins, TQueue& queue)
         : m_indexes{make_device_buffer<uint32_t[]>(queue, nelements)},
           m_offsets{make_device_buffer<uint32_t[]>(queue, nbins + 1)},
           m_hview{make_host_buffer<AssociationMapView>(queue)},
@@ -151,7 +151,7 @@ namespace clue {
     AssociationMapView* view() { return m_view.data(); }
 
     template <concepts::queue TQueue>
-    ALPAKA_FN_HOST void initialize(size_t nelements, size_t nbins, TQueue queue) {
+    ALPAKA_FN_HOST void initialize(size_t nelements, size_t nbins, TQueue& queue) {
       m_indexes = make_device_buffer<uint32_t[]>(queue, nelements);
       m_offsets = make_device_buffer<uint32_t[]>(queue, nbins);
       alpaka::memset(queue, m_offsets, 0);
@@ -165,7 +165,7 @@ namespace clue {
     }
 
     template <concepts::queue TQueue>
-    ALPAKA_FN_HOST void reset(TQueue queue, uint32_t nelements, int32_t nbins) {
+    ALPAKA_FN_HOST void reset(TQueue& queue, uint32_t nelements, int32_t nbins) {
       alpaka::memset(queue, m_indexes, 0);
       alpaka::memset(queue, m_offsets, 0);
       m_nbins = nbins;
@@ -210,7 +210,7 @@ namespace clue {
     ALPAKA_FN_ACC uint32_t offsets(size_t bin_id) const { return m_offsets[bin_id]; }
 
     template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
-    ALPAKA_FN_HOST void fill(size_t size, TFunc func, TQueue queue) {
+    ALPAKA_FN_HOST void fill(size_t size, TFunc func, TQueue& queue) {
       auto bin_buffer = make_device_buffer<uint32_t[]>(queue, size);
 
       // compute associations
@@ -264,7 +264,7 @@ namespace clue {
     }
 
     template <concepts::accelerator TAcc, concepts::queue TQueue>
-    ALPAKA_FN_HOST void fill(size_t size, std::span<int> associations, TQueue queue) {
+    ALPAKA_FN_HOST void fill(size_t size, std::span<int> associations, TQueue& queue) {
       const auto blocksize = 512;
       const auto gridsize = divide_up_by(size, blocksize);
       const auto workdiv = make_workdiv<TAcc>(gridsize, blocksize);

@@ -37,7 +37,7 @@ namespace clue {
   uint32_t computeAlignSoASize(uint32_t n_points);
 
   template <concepts::queue TQueue, uint8_t Ndim, concepts::device TDev>
-  void copyToHost(TQueue queue,
+  void copyToHost(TQueue& queue,
                   PointsHost<Ndim>& h_points,
                   const PointsDevice<Ndim, TDev>& d_points) {
     alpaka::memcpy(queue,
@@ -50,7 +50,7 @@ namespace clue {
         make_device_view(alpaka::getDev(queue), d_points.m_hostView->is_seed, h_points.size()));
   }
   template <concepts::queue TQueue, uint8_t Ndim, concepts::device TDev>
-  void copyToDevice(TQueue queue,
+  void copyToDevice(TQueue& queue,
                     PointsDevice<Ndim, TDev>& d_points,
                     const PointsHost<Ndim>& h_points) {
     alpaka::memcpy(queue,

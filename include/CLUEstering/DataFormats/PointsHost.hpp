@@ -82,7 +82,7 @@ namespace clue {
   class PointsHost {
   public:
     template <concepts::queue TQueue>
-    PointsHost(TQueue queue, uint32_t n_points)
+    PointsHost(TQueue& queue, uint32_t n_points)
         : m_buffer{make_host_buffer<std::byte[]>(queue, soa::host::computeSoASize<Ndim>(n_points))},
           m_view{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
@@ -90,7 +90,7 @@ namespace clue {
     }
 
     template <concepts::queue TQueue>
-    PointsHost(TQueue queue, uint32_t n_points, std::span<std::byte> buffer)
+    PointsHost(TQueue& queue, uint32_t n_points, std::span<std::byte> buffer)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       assert(buffer.size() == soa::host::computeSoASize<Ndim>(n_points));
 
@@ -99,7 +99,7 @@ namespace clue {
 
     template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
-    PointsHost(TQueue queue, uint32_t n_points, TBuffers&&... buffers)
+    PointsHost(TQueue& queue, uint32_t n_points, TBuffers&&... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(
           m_view.data(), n_points, std::forward<TBuffers>(buffers)...);
@@ -107,7 +107,7 @@ namespace clue {
 
     template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
-    PointsHost(TQueue queue, uint32_t n_points, TBuffers... buffers)
+    PointsHost(TQueue& queue, uint32_t n_points, TBuffers... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(m_view.data(), n_points, buffers...);
     }
@@ -161,11 +161,11 @@ namespace clue {
     ALPAKA_FN_HOST const PointsView* view() const { return m_view.data(); }
 
     template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
-    friend void copyToHost(_TQueue queue,
+    friend void copyToHost(_TQueue& queue,
                            PointsHost<_Ndim>& h_points,
                            const PointsDevice<_Ndim, _TDev>& d_points);
     template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
-    friend void copyToDevice(_TQueue queue,
+    friend void copyToDevice(_TQueue& queue,
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);
 
