@@ -56,7 +56,7 @@ namespace clue {
       }
     }
     explicit Clusterer(
-        Queue queue, float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128)
+        Queue& queue, float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128)
         : m_dc{dc},
           m_seed_dc{seed_dc},
           m_rhoc{rhoc},
@@ -68,7 +68,7 @@ namespace clue {
       }
       init_device(queue);
     }
-    explicit Clusterer(Queue queue,
+    explicit Clusterer(Queue& queue,
                        TilesDevice* tile_buffer,
                        float dc,
                        float rhoc,
@@ -94,7 +94,7 @@ namespace clue {
     template <typename KernelType>
     void make_clusters(PointsHost& h_points,
                        const KernelType& kernel,
-                       Queue queue,
+                       Queue& queue,
                        std::size_t block_size) {
       d_points = std::make_optional<PointsDevice>(queue, h_points.size());
       auto& dev_points = *d_points;
@@ -118,7 +118,7 @@ namespace clue {
     void make_clusters(PointsHost& h_points,
                        PointsDevice& dev_points,
                        const KernelType& kernel,
-                       Queue queue,
+                       Queue& queue,
                        std::size_t block_size) {
       setup(queue, h_points, dev_points, block_size);
       make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
@@ -163,17 +163,17 @@ namespace clue {
     std::optional<FollowersDevice> d_followers;
     std::optional<PointsDevice> d_points;
 
-    void init_device(Queue queue);
-    void init_device(Queue queue, TilesDevice* tile_buffer);
+    void init_device(Queue& queue);
+    void init_device(Queue& queue, TilesDevice* tile_buffer);
 
-    void setupTiles(Queue queue, const PointsHost& h_points);
-    void setupFollowers(Queue queue, const PointsHost& h_points);
+    void setupTiles(Queue& queue, const PointsHost& h_points);
+    void setupFollowers(Queue& queue, const PointsHost& h_points);
     void setupPoints(const PointsHost& h_points,
                      PointsDevice& dev_points,
-                     Queue queue,
+                     Queue& queue,
                      std::size_t block_size);
 
-    void setup(Queue queue,
+    void setup(Queue& queue,
                const PointsHost& h_points,
                PointsDevice& dev_points,
                std::size_t block_size) {
@@ -191,7 +191,7 @@ namespace clue {
     void make_clusters_impl(PointsHost& h_points,
                             PointsDevice& dev_points,
                             const KernelType& kernel,
-                            Queue queue,
+                            Queue& queue,
                             std::size_t block_size);
   };
 
@@ -213,13 +213,13 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  void Clusterer<Ndim>::init_device(Queue queue) {
+  void Clusterer<Ndim>::init_device(Queue& queue) {
     d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
     m_seeds = (*d_seeds).data();
   }
 
   template <uint8_t Ndim>
-  void Clusterer<Ndim>::init_device(Queue queue, TilesDevice* tile_buffer) {
+  void Clusterer<Ndim>::init_device(Queue& queue, TilesDevice* tile_buffer) {
     d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
     m_seeds = (*d_seeds).data();
 
@@ -229,7 +229,7 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  void Clusterer<Ndim>::setupTiles(Queue queue, const PointsHost& h_points) {
+  void Clusterer<Ndim>::setupTiles(Queue& queue, const PointsHost& h_points) {
     // TODO: reconsider the way that we compute the number of tiles
     auto nTiles =
         static_cast<int32_t>(std::ceil(h_points.size() / static_cast<float>(m_pointsPerTile)));
@@ -263,7 +263,7 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  void Clusterer<Ndim>::setupFollowers(Queue queue, const PointsHost& h_points) {
+  void Clusterer<Ndim>::setupFollowers(Queue& queue, const PointsHost& h_points) {
     if (!d_followers.has_value()) {
       d_followers = std::make_optional<FollowersDevice>(h_points.size(), queue);
       m_followers = d_followers->view();
@@ -279,7 +279,7 @@ namespace clue {
   template <uint8_t Ndim>
   void Clusterer<Ndim>::setupPoints(const PointsHost& h_points,
                                     PointsDevice& dev_points,
-                                    Queue queue,
+                                    Queue& queue,
                                     std::size_t block_size) {
     clue::copyToDevice(queue, dev_points, h_points);
 
@@ -291,7 +291,7 @@ namespace clue {
   void Clusterer<Ndim>::make_clusters_impl(PointsHost& h_points,
                                            PointsDevice& dev_points,
                                            const KernelType& kernel,
-                                           Queue queue,
+                                           Queue& queue,
                                            std::size_t block_size) {
     const auto nPoints = h_points.size();
     // fill the tiles

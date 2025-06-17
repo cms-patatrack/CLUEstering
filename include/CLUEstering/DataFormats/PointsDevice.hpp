@@ -88,7 +88,7 @@ namespace clue {
   class PointsDevice {
   public:
     template <concepts::queue TQueue>
-    PointsDevice(TQueue queue, uint32_t n_points)
+    PointsDevice(TQueue& queue, uint32_t n_points)
         : m_buffer{make_device_buffer<std::byte[]>(queue,
                                                    soa::device::computeSoASize<Ndim>(n_points))},
           m_view{make_device_buffer<PointsView>(queue)},
@@ -99,7 +99,7 @@ namespace clue {
     }
 
     template <concepts::queue TQueue>
-    PointsDevice(TQueue queue, uint32_t n_points, std::span<std::byte> buffer)
+    PointsDevice(TQueue& queue, uint32_t n_points, std::span<std::byte> buffer)
         : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(float))},
           m_view{make_device_buffer<PointsView>(queue)},
           m_hostView{make_host_buffer<PointsView>(queue)},
@@ -113,7 +113,7 @@ namespace clue {
 
     template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
-    PointsDevice(TQueue queue, uint32_t n_points, TBuffers... buffers)
+    PointsDevice(TQueue& queue, uint32_t n_points, TBuffers... buffers)
         : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(float))},
           m_view{make_device_buffer<PointsView>(queue)},
           m_hostView{make_host_buffer<PointsView>(queue)},
@@ -177,11 +177,11 @@ namespace clue {
     ALPAKA_FN_HOST const PointsView* view() const { return m_view.data(); }
 
     template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
-    friend void copyToHost(_TQueue queue,
+    friend void copyToHost(_TQueue& queue,
                            PointsHost<_Ndim>& h_points,
                            const PointsDevice<_Ndim, _TDev>& d_points);
     template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
-    friend void copyToDevice(_TQueue queue,
+    friend void copyToDevice(_TQueue& queue,
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);
 

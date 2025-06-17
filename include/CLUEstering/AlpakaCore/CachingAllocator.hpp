@@ -162,7 +162,7 @@ namespace clue {
     }
 
     // Allocate given number of bytes on the current device associated to given queue
-    void* allocate(size_t bytes, Queue queue) {
+    void* allocate(size_t bytes, Queue& queue) {
       // create a block descriptor for the requested allocation
       BlockDescriptor block;
       block.queue = std::move(queue);

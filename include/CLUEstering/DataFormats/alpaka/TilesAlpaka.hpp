@@ -143,7 +143,7 @@ namespace clue {
   class TilesAlpaka {
   public:
     template <concepts::queue TQueue>
-    TilesAlpaka(TQueue queue, uint32_t n_points, uint32_t pointsPerTile) {
+    TilesAlpaka(TQueue& queue, uint32_t n_points, uint32_t pointsPerTile) {
       auto n_tiles = static_cast<int32_t>(std::ceil(n_points / static_cast<float>(pointsPerTile)));
       const auto n_perdim = static_cast<int32_t>(std::ceil(std::pow(n_tiles, 1. / Ndim)));
       n_tiles = static_cast<int32_t>(std::pow(n_perdim, Ndim));
@@ -169,7 +169,7 @@ namespace clue {
       alpaka::memcpy(queue, m_view, host_view);
     }
     template <concepts::queue TQueue>
-    TilesAlpaka(TQueue queue, uint32_t n_points, int32_t n_tiles)
+    TilesAlpaka(TQueue& queue, uint32_t n_points, int32_t n_tiles)
         : m_assoc{clue::AssociationMap<TDev>(n_points, n_tiles, queue)},
           m_minmax{clue::make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
           m_tilesizes{clue::make_device_buffer<float[Ndim]>(queue)},
@@ -193,7 +193,10 @@ namespace clue {
     TilesAlpakaView<Ndim>* view() { return m_view.data(); }
 
     template <concepts::queue TQueue>
-    ALPAKA_FN_HOST void initialize(uint32_t npoints, int32_t ntiles, int32_t nperdim, TQueue queue) {
+    ALPAKA_FN_HOST void initialize(uint32_t npoints,
+                                   int32_t ntiles,
+                                   int32_t nperdim,
+                                   TQueue& queue) {
       m_assoc.initialize(npoints, ntiles, queue);
       m_ntiles = ntiles;
       m_nperdim = nperdim;
@@ -211,7 +214,7 @@ namespace clue {
     }
 
     template <concepts::queue TQueue>
-    ALPAKA_FN_HOST void reset(uint32_t npoints, int32_t ntiles, int32_t nperdim, TQueue queue) {
+    ALPAKA_FN_HOST void reset(uint32_t npoints, int32_t ntiles, int32_t nperdim, TQueue& queue) {
       m_assoc.reset(queue, npoints, ntiles);
 
       m_ntiles = ntiles;
@@ -244,7 +247,7 @@ namespace clue {
     };
 
     template <concepts::accelerator TAcc, concepts::queue TQueue>
-    ALPAKA_FN_HOST void fill(TQueue queue, PointsDevice<Ndim, TDev>& d_points, size_t size) {
+    ALPAKA_FN_HOST void fill(TQueue& queue, PointsDevice<Ndim, TDev>& d_points, size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
       m_assoc.template fill<TAcc>(size, GetGlobalBin{pointsView, m_view.data()}, queue);
