@@ -27,17 +27,6 @@ namespace clue {
   template <typename TFunc>
   struct KernelComputeAssociations {
     template <typename TAcc>
-      requires std::is_invocable_r_v<int32_t, TFunc, const TAcc&, int32_t>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  size_t size,
-                                  int32_t* associations,
-                                  TFunc func) const {
-      for (auto i : alpaka::uniformElements(acc, size)) {
-        associations[i] = func(acc, i);
-      }
-    }
-    template <typename TAcc>
-      requires std::is_invocable_r_v<int32_t, TFunc, int32_t>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   size_t size,
                                   int32_t* associations,
