@@ -242,9 +242,9 @@ namespace clue {
     }
     // check if tiles are large enough for current data
     if (!(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
-              d_tiles->indexes())[0u] >= h_points.size()) or
+              d_tiles->indexes())[0u] >= static_cast<std::size_t>(h_points.size())) or
         !(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
-              d_tiles->offsets())[0u] >= static_cast<int32_t>(nTiles))) {
+              d_tiles->offsets())[0u] >= static_cast<std::size_t>(nTiles))) {
       d_tiles->initialize(h_points.size(), nTiles, nPerDim, queue);
     } else {
       d_tiles->reset(h_points.size(), nTiles, nPerDim, queue);

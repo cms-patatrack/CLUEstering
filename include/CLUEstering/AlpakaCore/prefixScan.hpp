@@ -208,12 +208,13 @@ namespace clue {
       // and a second for the one thread per block accelerator.
       if constexpr (!requires_single_thread_per_block_v<TAcc>) {
         //  Here threadsPerBlock == elementsPerBlock
-        for (int32_t i = threadIdx + threadsPerBlock, k = 0; i < size; i += threadsPerBlock, ++k) {
+        for (std::size_t i = threadIdx + threadsPerBlock, k = 0; i < size;
+             i += threadsPerBlock, ++k) {
           co[i] += psum[k];
         }
       } else {
         // We are single threaded here, adding partial sums starting with the 2nd block.
-        for (int32_t i = elementsPerBlock; i < size; i++) {
+        for (std::size_t i = elementsPerBlock; i < size; i++) {
           co[i] += psum[i / elementsPerBlock - 1];
         }
       }
