@@ -185,7 +185,7 @@ namespace clue {
     void calculate_tile_size(CoordinateExtremes* min_max,
                              float* tile_sizes,
                              const PointsHost& h_points,
-                             uint32_t nPerDim);
+                             int32_t nPerDim);
 
     template <typename KernelType>
     void make_clusters_impl(PointsHost& h_points,
@@ -199,7 +199,7 @@ namespace clue {
   void Clusterer<Ndim>::calculate_tile_size(CoordinateExtremes* min_max,
                                             float* tile_sizes,
                                             const PointsHost& h_points,
-                                            uint32_t nPerDim) {
+                                            int32_t nPerDim) {
     for (size_t dim{}; dim != Ndim; ++dim) {
       const float dimMax = *std::ranges::max_element(h_points.coords(dim));
       const float dimMin = *std::ranges::min_element(h_points.coords(dim));
@@ -241,10 +241,10 @@ namespace clue {
       m_tiles = d_tiles->view();
     }
     // check if tiles are large enough for current data
-    if (!(alpaka::trait::GetExtents<clue::device_buffer<Device, uint32_t[]>>{}(
+    if (!(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
               d_tiles->indexes())[0u] >= h_points.size()) or
-        !(alpaka::trait::GetExtents<clue::device_buffer<Device, uint32_t[]>>{}(
-              d_tiles->offsets())[0u] >= static_cast<uint32_t>(nTiles))) {
+        !(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
+              d_tiles->offsets())[0u] >= static_cast<int32_t>(nTiles))) {
       d_tiles->initialize(h_points.size(), nTiles, nPerDim, queue);
     } else {
       d_tiles->reset(h_points.size(), nTiles, nPerDim, queue);

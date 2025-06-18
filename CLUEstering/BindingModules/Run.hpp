@@ -15,7 +15,7 @@ void run(float dc,
          float seed_dc,
          int pPBin,
          std::tuple<float*, int*>&& pData,
-         uint32_t n_points,
+         int32_t n_points,
          const Kernel& kernel,
          Queue queue,
          size_t block_size) {

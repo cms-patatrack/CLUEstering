@@ -18,12 +18,12 @@ namespace clue {
 
     // No need to allocate temporary buffers on the host
     template <uint8_t Ndim>
-    uint32_t computeSoASize(uint32_t n_points) {
+    int32_t computeSoASize(int32_t n_points) {
       return ((Ndim + 1) * sizeof(float) + 2 * sizeof(int)) * n_points;
     }
 
     template <uint8_t Ndim>
-    void partitionSoAView(PointsView* view, std::byte* buffer, uint32_t n_points) {
+    void partitionSoAView(PointsView* view, std::byte* buffer, int32_t n_points) {
       view->coords = reinterpret_cast<float*>(buffer);
       view->weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
       view->cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
@@ -32,7 +32,7 @@ namespace clue {
     }
     template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 4)
-    void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers... buffer) {
+    void partitionSoAView(PointsView* view, int32_t n_points, TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
@@ -43,7 +43,7 @@ namespace clue {
     }
     template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2)
-    void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers... buffers) {
+    void partitionSoAView(PointsView* view, int32_t n_points, TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
 
       // TODO: is reinterpret_cast necessary?
@@ -55,7 +55,7 @@ namespace clue {
     }
     template <uint8_t Ndim, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 4)
-    void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers&&... buffers) {
+    void partitionSoAView(PointsView* view, int32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data());
@@ -66,7 +66,7 @@ namespace clue {
     }
     template <uint8_t Ndim, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 2)
-    void partitionSoAView(PointsView* view, uint32_t n_points, TBuffers&&... buffers) {
+    void partitionSoAView(PointsView* view, int32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
       // TODO: is reinterpret_cast necessary?
       view->coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data());
@@ -82,7 +82,7 @@ namespace clue {
   class PointsHost {
   public:
     template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, uint32_t n_points)
+    PointsHost(TQueue& queue, int32_t n_points)
         : m_buffer{make_host_buffer<std::byte[]>(queue, soa::host::computeSoASize<Ndim>(n_points))},
           m_view{make_host_buffer<PointsView>(queue)},
           m_size{n_points} {
@@ -90,7 +90,7 @@ namespace clue {
     }
 
     template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, uint32_t n_points, std::span<std::byte> buffer)
+    PointsHost(TQueue& queue, int32_t n_points, std::span<std::byte> buffer)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       assert(buffer.size() == soa::host::computeSoASize<Ndim>(n_points));
 
@@ -99,7 +99,7 @@ namespace clue {
 
     template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
-    PointsHost(TQueue& queue, uint32_t n_points, TBuffers&&... buffers)
+    PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(
           m_view.data(), n_points, std::forward<TBuffers>(buffers)...);
@@ -107,7 +107,7 @@ namespace clue {
 
     template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
-    PointsHost(TQueue& queue, uint32_t n_points, TBuffers... buffers)
+    PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers)
         : m_view{make_host_buffer<PointsView>(queue)}, m_size{n_points} {
       soa::host::partitionSoAView<Ndim>(m_view.data(), n_points, buffers...);
     }
@@ -118,7 +118,7 @@ namespace clue {
     PointsHost& operator=(PointsHost&&) = default;
     ~PointsHost() = default;
 
-    ALPAKA_FN_HOST uint32_t size() const { return m_size; }
+    ALPAKA_FN_HOST int32_t size() const { return m_size; }
 
     ALPAKA_FN_HOST std::span<const float> coords() const {
       return std::span<const float>(m_view->coords, static_cast<std::size_t>(m_view->n * Ndim));
@@ -172,7 +172,7 @@ namespace clue {
   private:
     std::optional<host_buffer<std::byte[]>> m_buffer;
     host_buffer<PointsView> m_view;
-    uint32_t m_size;
+    int32_t m_size;
   };
 
 }  // namespace clue

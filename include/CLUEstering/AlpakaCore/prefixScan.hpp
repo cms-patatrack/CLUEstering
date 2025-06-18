@@ -25,7 +25,7 @@ namespace clue {
 
   template <concepts::accelerator TAcc, typename T>
   ALPAKA_FN_ACC ALPAKA_FN_INLINE void warpPrefixScan(
-      const TAcc& acc, int32_t laneId, T const* ci, T* co, uint32_t i, bool active = true) {
+      const TAcc& acc, int32_t laneId, T const* ci, T* co, int32_t i, bool active = true) {
     // ci and co may be the same
     T x = active ? ci[i] : 0;
     for (int32_t offset = 1; offset < alpaka::warp::getSize(acc); offset <<= 1) {
@@ -41,7 +41,7 @@ namespace clue {
 
   template <concepts::accelerator TAcc, typename T>
   ALPAKA_FN_ACC ALPAKA_FN_INLINE void warpPrefixScan(
-      const TAcc& acc, int32_t laneId, T* c, uint32_t i, bool active = true) {
+      const TAcc& acc, int32_t laneId, T* c, int32_t i, bool active = true) {
     warpPrefixScan(acc, laneId, c, c, i, active);
   }
 
@@ -143,7 +143,7 @@ namespace clue {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   T const* ci,
                                   T* co,
-                                  uint32_t size,
+                                  std::size_t size,
                                   int32_t /* numBlocks */,
                                   int32_t* pc,
                                   std::size_t warpSize) const {
@@ -164,7 +164,11 @@ namespace clue {
       // first each block does a scan
       [[maybe_unused]] int off = elementsPerBlock * blockIdx;
       if (size - off > 0) {
-        blockPrefixScan(acc, ci + off, co + off, std::min(elementsPerBlock, size - off), ws);
+        blockPrefixScan(acc,
+                        ci + off,
+                        co + off,
+                        std::min(elementsPerBlock, static_cast<uint32_t>(size - off)),
+                        ws);
       }
 
       // count blocks that finished
@@ -204,12 +208,12 @@ namespace clue {
       // and a second for the one thread per block accelerator.
       if constexpr (!requires_single_thread_per_block_v<TAcc>) {
         //  Here threadsPerBlock == elementsPerBlock
-        for (uint32_t i = threadIdx + threadsPerBlock, k = 0; i < size; i += threadsPerBlock, ++k) {
+        for (int32_t i = threadIdx + threadsPerBlock, k = 0; i < size; i += threadsPerBlock, ++k) {
           co[i] += psum[k];
         }
       } else {
         // We are single threaded here, adding partial sums starting with the 2nd block.
-        for (uint32_t i = elementsPerBlock; i < size; i++) {
+        for (int32_t i = elementsPerBlock; i < size; i++) {
           co[i] += psum[i / elementsPerBlock - 1];
         }
       }

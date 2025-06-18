@@ -20,7 +20,7 @@ namespace clue {
     float* rho;
     float* delta;
     int* nearest_higher;
-    uint32_t n;
+    int32_t n;
   };
 
   namespace detail {
@@ -34,7 +34,7 @@ namespace clue {
 
   // TODO: implement for better cache use
   template <uint8_t Ndim>
-  uint32_t computeAlignSoASize(uint32_t n_points);
+  int32_t computeAlignSoASize(int32_t n_points);
 
   template <concepts::queue TQueue, uint8_t Ndim, concepts::device TDev>
   void copyToHost(TQueue& queue,
