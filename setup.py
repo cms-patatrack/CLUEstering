@@ -9,7 +9,7 @@ __version__ = "2.6.5"
 this_directory = Path(__file__).parent
 long_description = (this_directory/'README.md').read_text()
 
-cmake_command = ['cmake', '-B', 'build']
+cmake_command = ['cmake', '-B', 'build', '-DBUILD_PYTHON=ON']
 make_command = ['make', '-C', 'build']
 
 try:

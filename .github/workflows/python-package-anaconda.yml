@@ -31,7 +31,7 @@ jobs:
     - name: Compile CLUEstering modules
       working-directory: ${{github.workspace}}
       run: |
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -- -j2
+        cmake -S . -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build -- -j2
     - name: Test with pytest
       working-directory: ${{github.workspace}}/tests
       run: |
