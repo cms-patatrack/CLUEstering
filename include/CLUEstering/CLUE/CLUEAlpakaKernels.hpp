@@ -222,11 +222,11 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
         // initialize cluster_index
         dev_points->cluster_index[i] = -1;
 
-        float delta_i{dev_points->delta[i]};
-        float rho_i{dev_points->rho[i]};
+        float delta_i = dev_points->delta[i];
+        float rho_i = dev_points->rho[i];
 
         // Determine whether the point is a seed or an outlier
-        bool is_seed{(delta_i > seed_dc) && (rho_i >= rhoc)};
+        bool is_seed = (delta_i > seed_dc) && (rho_i >= rhoc);
 
         if (is_seed) {
           dev_points->is_seed[i] = 1;

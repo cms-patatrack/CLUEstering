@@ -53,4 +53,15 @@ TEST_CASE("Test make_cluster interfaces") {
     CHECK(clue::validate_results(clusters, truth_ids));
     CHECK(std::ranges::equal(truth_isSeed, isSeed));
   }
+  SUBCASE("Run clustering from device points") {
+    clue::copyToDevice(queue, d_points, h_points);
+    algo.make_clusters(d_points, FlatKernel{.5f}, queue, block_size);
+    clue::copyToHost(queue, h_points, d_points);
+
+    auto clusters = h_points.clusterIndexes();
+    auto isSeed = h_points.isSeed();
+
+    CHECK(clue::validate_results(clusters, truth_ids));
+    CHECK(std::ranges::equal(truth_isSeed, isSeed));
+  }
 }
