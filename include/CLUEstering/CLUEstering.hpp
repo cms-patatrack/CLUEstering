@@ -141,7 +141,7 @@ namespace clue {
                        Queue& queue,
                        std::size_t block_size) {
       setupTiles(queue, dev_points);
-      setupFollowers(queue, dev_points);
+      setupFollowers(queue, dev_points.size());
       alpaka::memset(queue, *d_seeds, 0x00);
       make_clusters_impl(dev_points, kernel, queue, block_size);
     }
@@ -177,10 +177,9 @@ namespace clue {
     void init_device(Queue& queue, TilesDevice* tile_buffer);
 
     void setupTiles(Queue& queue, const PointsHost& h_points);
-    void setupTiles(Queue& queue, const PointsDevice& h_points);
+    void setupTiles(Queue& queue, const PointsDevice& d_points);
 
-    void setupFollowers(Queue& queue, const PointsHost& h_points);
-    void setupFollowers(Queue& queue, const PointsDevice& h_points);
+    void setupFollowers(Queue& queue, int32_t n_points);
 
     void setupPoints(const PointsHost& h_points,
                      PointsDevice& dev_points,
@@ -192,7 +191,7 @@ namespace clue {
                PointsDevice& dev_points,
                std::size_t block_size) {
       setupTiles(queue, h_points);
-      setupFollowers(queue, h_points);
+      setupFollowers(queue, h_points.size());
       setupPoints(h_points, dev_points, queue, block_size);
     }
 
@@ -345,30 +344,16 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  void Clusterer<Ndim>::setupFollowers(Queue& queue, const PointsHost& h_points) {
+  void Clusterer<Ndim>::setupFollowers(Queue& queue, int32_t n_points) {
     if (!d_followers.has_value()) {
-      d_followers = std::make_optional<FollowersDevice>(h_points.size(), queue);
+      d_followers = std::make_optional<FollowersDevice>(n_points, queue);
       m_followers = d_followers->view();
     }
 
-    if (!(d_followers->extents() >= h_points.size())) {
-      d_followers->initialize(h_points.size(), queue);
+    if (!(d_followers->extents() >= n_points)) {
+      d_followers->initialize(n_points, queue);
     } else {
-      d_followers->reset(h_points.size(), queue);
-    }
-  }
-
-  template <uint8_t Ndim>
-  void Clusterer<Ndim>::setupFollowers(Queue& queue, const PointsDevice& d_points) {
-    if (!d_followers.has_value()) {
-      d_followers = std::make_optional<FollowersDevice>(d_points.size(), queue);
-      m_followers = d_followers->view();
-    }
-
-    if (!(d_followers->extents() >= d_points.size())) {
-      d_followers->initialize(d_points.size(), queue);
-    } else {
-      d_followers->reset(d_points.size(), queue);
+      d_followers->reset(n_points, queue);
     }
   }
 
