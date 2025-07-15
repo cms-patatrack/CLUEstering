@@ -101,6 +101,7 @@ namespace clue {
 
       setup(queue, h_points, dev_points, block_size);
       make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+      alpaka::wait(queue);
     }
     template <typename KernelType>
     void make_clusters(PointsHost& h_points, const KernelType& kernel, std::size_t block_size) {
@@ -113,6 +114,7 @@ namespace clue {
 
       setup(queue, h_points, dev_points, block_size);
       make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+      alpaka::wait(queue);
     }
     template <typename KernelType>
     void make_clusters(PointsHost& h_points,
@@ -122,6 +124,7 @@ namespace clue {
                        std::size_t block_size) {
       setup(queue, h_points, dev_points, block_size);
       make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+      alpaka::wait(queue);
     }
     template <typename KernelType>
     void make_clusters(PointsHost& h_points,
@@ -134,6 +137,7 @@ namespace clue {
 
       setup(queue, h_points, dev_points, block_size);
       make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+      alpaka::wait(queue);
     }
     template <typename KernelType>
     void make_clusters(PointsDevice& dev_points,
@@ -144,6 +148,7 @@ namespace clue {
       setupFollowers(queue, dev_points.size());
       alpaka::memset(queue, *d_seeds, 0x00);
       make_clusters_impl(dev_points, kernel, queue, block_size);
+      alpaka::wait(queue);
     }
 
     void setWrappedCoordinates(const std::array<uint8_t, Ndim>& wrappedCoordinates) {
@@ -414,7 +419,6 @@ namespace clue {
     alpaka::wait(queue);
 
     clue::copyToHost(queue, h_points, dev_points);
-    alpaka::wait(queue);
   }
 
   template <uint8_t Ndim>
@@ -450,9 +454,7 @@ namespace clue {
                         working_div,
                         KernelFindClusters{},
                         m_seeds,
-                        m_followers,
                         dev_points.view(),
-                        m_dm,
                         m_seed_dc,
                         m_rhoc,
                         nPoints);
@@ -463,7 +465,6 @@ namespace clue {
 
     alpaka::exec<Acc1D>(
         queue, working_div_seeds, KernelAssignClusters{}, m_seeds, m_followers, dev_points.view());
-    alpaka::wait(queue);
   }
 
   template <uint8_t Ndim>
