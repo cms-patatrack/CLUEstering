@@ -19,10 +19,7 @@ include(FetchContent)
 # alpaka
 FetchContent_Declare(
   alpaka
-  GIT_REPOSITORY https://github.com/alpaka-group/alpaka.git
-  GIT_TAG develop
-  GIT_SHALLOW TRUE
-  FIND_PACKAGE_ARGS)
+  URL https://github.com/alpaka-group/alpaka/archive/refs/tags/1.2.0.tar.gz)
 FetchContent_MakeAvailable(alpaka)
 
 # doctest
