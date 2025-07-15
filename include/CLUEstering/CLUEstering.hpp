@@ -320,9 +320,7 @@ namespace clue {
                         working_div,
                         KernelFindClusters{},
                         m_seeds,
-                        m_followers,
                         dev_points.view(),
-                        m_dm,
                         m_seed_dc,
                         m_rhoc,
                         nPoints);

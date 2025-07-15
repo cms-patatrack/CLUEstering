@@ -214,9 +214,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
-                                  clue::FollowersView* followers,
                                   PointsView* dev_points,
-                                  float dm,
                                   float seed_dc,
                                   float rhoc,
                                   int32_t n_points) const {
