@@ -302,7 +302,6 @@ namespace clue {
     auto tile_sizes = clue::make_host_buffer<float[Ndim]>(queue);
     calculate_tile_size(min_max.data(), tile_sizes.data(), h_points, nPerDim);
 
-    const auto device = alpaka::getDev(queue);
     alpaka::memcpy(queue, d_tiles->minMax(), min_max);
     alpaka::memcpy(queue, d_tiles->tileSize(), tile_sizes);
     alpaka::memcpy(
@@ -335,7 +334,6 @@ namespace clue {
     auto tile_sizes = clue::make_host_buffer<float[Ndim]>(queue);
     calculate_tile_size(queue, min_max.data(), tile_sizes.data(), d_points, nPerDim);
 
-    const auto device = alpaka::getDev(queue);
     alpaka::memcpy(queue, d_tiles->minMax(), min_max);
     alpaka::memcpy(queue, d_tiles->tileSize(), tile_sizes);
     alpaka::memcpy(
