@@ -1,0 +1,43 @@
+{
+  "title": "CLUEstering",
+  "description": "CLUEstering is a density-based weighted clustering library based on a highly parallel and scalable algorithm, CLUE, which was developed at CERN. The library is designed to be performance portable, supporting both CPU and GPU architectures, and is implemented in C++20 using the Alpaka framework for heterogeneous computing. CLUEstering is suitable for high-performance computing environments and can be used in various applications requiring efficient clustering of large datasets.",
+  "creators": [
+    {
+      "name": "Balducci, Simone",
+      "affiliation": "CERN, University and INFN of Bologna",
+      "orcid": "0009-0001-0186-755X"
+    },
+    {
+      "name": "Pantaleo, Felice",
+      "affiliation": "CERN",
+      "orcid": "0000-0003-3266-4357"
+    },
+    {
+      "name": "Perego, Aurora",
+      "affiliation": "CERN, University of Milano Bicocca",
+      "orcid": "0009-0002-5210-6213"
+    },
+    {
+      "name": "Redjeb, Wahid",
+      "affiliation": "CERN, RWTH Aachen University",
+      "orcid": "0000-0001-9794-8292"
+    },
+    {
+      "name": "Rovere, Marco",
+      "affiliation": "CERN",
+      "orcid": "0000-0001-8048-1622"
+    },
+  ],
+  "access_right": "open",
+  "keywords": [
+    "C++20",
+    "Clustering",
+    "HPC",
+    "Alpaka",
+    "GPU",
+    "heterogeneous computing",
+    "performance portability"
+  ],
+  "license": "GPL-3.0",
+  "upload_type": "software",
+}
