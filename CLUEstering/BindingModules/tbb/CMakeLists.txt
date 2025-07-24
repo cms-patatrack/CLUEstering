@@ -5,7 +5,8 @@ target_include_directories(
           ${CMAKE_SOURCE_DIR}/extern/xtd/include ${alpaka_SOURCE_DIR}/include
           ${Boost_SOURCE_DIR})
 target_compile_definitions(
-  CLUE_CPU_TBB PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
+  CLUE_CPU_TBB PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
+                       CLUE_ENABLE_CACHING_ALLOCATOR)
 target_link_libraries(CLUE_CPU_TBB PRIVATE TBB::tbb)
 set_target_properties(
   CLUE_CPU_TBB

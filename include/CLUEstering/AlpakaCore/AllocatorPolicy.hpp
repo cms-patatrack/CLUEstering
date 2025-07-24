@@ -27,7 +27,7 @@ namespace clue {
 #if defined ALPAKA_ACC_GPU_CUDA_ENABLED
   template <>
   constexpr inline AllocatorPolicy allocator_policy<alpaka::DevCudaRt> =
-#if !defined ALPAKA_DISABLE_CACHING_ALLOCATOR
+#if defined CLUE_ENABLE_CACHING_ALLOCATOR
       AllocatorPolicy::Caching;
 #elif CUDA_VERSION >= 11020 && !defined ALPAKA_DISABLE_ASYNC_ALLOCATOR
       AllocatorPolicy::Asynchronous;
@@ -39,7 +39,7 @@ namespace clue {
 #if defined ALPAKA_ACC_GPU_HIP_ENABLED
   template <>
   constexpr inline AllocatorPolicy allocator_policy<alpaka::DevHipRt> =
-#if !defined ALPAKA_DISABLE_CACHING_ALLOCATOR
+#if defined CLUE_ENABLE_CACHING_ALLOCATOR
       AllocatorPolicy::Caching;
 #else
       AllocatorPolicy::Synchronous;

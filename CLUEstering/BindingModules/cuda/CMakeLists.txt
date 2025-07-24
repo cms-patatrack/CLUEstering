@@ -14,7 +14,8 @@ target_include_directories(
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
           ${CMAKE_SOURCE_DIR}/extern/xtd/include ${alpaka_SOURCE_DIR}/include
           ${Boost_INCLUDE_DIR})
-target_compile_definitions(CLUE_GPU_CUDA PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
+target_compile_definitions(CLUE_GPU_CUDA PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED
+                                                 CLUE_ENABLE_CACHING_ALLOCATOR)
 target_compile_options(CLUE_GPU_CUDA PRIVATE --expt-relaxed-constexpr)
 set_target_properties(
   CLUE_GPU_CUDA

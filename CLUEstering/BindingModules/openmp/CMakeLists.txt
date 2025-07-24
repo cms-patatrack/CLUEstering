@@ -5,7 +5,8 @@ target_include_directories(
           ${CMAKE_SOURCE_DIR}/extern/xtd/include ${alpaka_SOURCE_DIR}/include
           ${Boost_INCLUDE_DIR})
 target_compile_definitions(
-  CLUE_CPU_OMP PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
+  CLUE_CPU_OMP PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
+                       CLUE_ENABLE_CACHING_ALLOCATOR)
 target_link_libraries(CLUE_CPU_OMP PRIVATE OpenMP::OpenMP_CXX)
 set_target_properties(
   CLUE_CPU_OMP
