@@ -10,7 +10,8 @@ target_include_directories(
           ${alpaka_SOURCE_DIR}/include
           ${Boost_INCLUDE_DIR})
 target_compile_definitions(
-  serial.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+  serial.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
+                     CLUE_ENABLE_CACHING_ALLOCATOR)
 
 find_package(TBB)
 if(TBB_FOUND)
@@ -23,8 +24,9 @@ if(TBB_FOUND)
             ${alpaka_SOURCE_DIR}/include
             ${Boost_INCLUDE_DIR})
   target_link_libraries(tbb.out PRIVATE TBB::tbb fmt::fmt)
-  target_compile_definitions(tbb.out PRIVATE ALPAKA_HOST_ONLY
-                                             ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+  target_compile_definitions(
+    tbb.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
+                    CLUE_ENABLE_CACHING_ALLOCATOR)
 endif()
 
 find_package(OpenMP)
@@ -40,5 +42,6 @@ if(OpenMP_CXX_FOUND)
             ${Boost_INCLUDE_DIR})
   target_link_libraries(openmp.out PRIVATE OpenMP::OpenMP_CXX fmt::fmt)
   target_compile_definitions(
-    openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
+    openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
+                       CLUE_ENABLE_CACHING_ALLOCATOR)
 endif()
