@@ -8,7 +8,6 @@
 #include "CLUEstering/AlpakaCore/AllocatorConfig.hpp"
 #include "CLUEstering/AlpakaCore/CachingAllocator.hpp"
 #include "CLUEstering/AlpakaCore/alpakaDevices.hpp"
-#include "CLUEstering/AlpakaCore/alpakaFwd.hpp"
 #include "CLUEstering/AlpakaCore/getDeviceIndex.hpp"
 
 namespace clue {
