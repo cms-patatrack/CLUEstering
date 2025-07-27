@@ -3,11 +3,12 @@ add_executable(serial.out ${CMAKE_SOURCE_DIR}/main.cpp)
 target_include_directories(
   serial.out
   PRIVATE ${CMAKE_SOURCE_DIR}/../../include ${CMAKE_SOURCE_DIR}/../../benchmark
-          ${CMAKE_SOURCE_DIR}/../../extern/xtd/include ${alpaka_SOURCE_DIR}/include
-          ${Boost_INCLUDE_DIR})
+          ${CMAKE_SOURCE_DIR}/../../extern/xtd/include
+          ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
 target_link_libraries(serial.out PRIVATE ${pybind_link})
 target_compile_definitions(
-  serial.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+  serial.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
+                     CLUE_ENABLE_CACHING_ALLOCATOR)
 
 find_package(TBB)
 # CPU TBB
@@ -21,8 +22,9 @@ if(TBB_FOUND)
             ${alpaka_SOURCE_DIR}/include
             ${Boost_INCLUDE_DIR})
   target_link_libraries(tbb.out PRIVATE ${pybind_link} TBB::tbb)
-  target_compile_definitions(tbb.out PRIVATE ALPAKA_HOST_ONLY
-                                             ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
+  target_compile_definitions(
+    tbb.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
+                    CLUE_ENABLE_CACHING_ALLOCATOR)
 endif()
 
 find_package(OpenMP)
@@ -38,7 +40,8 @@ if(OpenMP_CXX_FOUND)
             ${Boost_INCLUDE_DIR})
   target_link_libraries(openmp.out PRIVATE ${pybind_link} OpenMP::OpenMP_CXX)
   target_compile_definitions(
-    openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
+    openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
+                       CLUE_ENABLE_CACHING_ALLOCATOR)
   set_target_properties(openmp.out PROPERTIES RUNTIME_OUTPUT_DIRECTORY
                                               ${CMAKE_BINARY_DIR})
 

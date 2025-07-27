@@ -11,7 +11,8 @@ target_include_directories(
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
           ${CMAKE_SOURCE_DIR}/extern/xtd/include ${alpaka_SOURCE_DIR}/include
           ${Boost_INCLUDE_DIR})
-target_compile_options(CLUE_GPU_HIP PRIVATE -DALPAKA_ACC_GPU_HIP_ENABLED)
+target_compile_definitions(CLUE_GPU_HIP PRIVATE ALPAKA_ACC_GPU_HIP_ENABLED
+                                                CLUE_ENABLE_CACHING_ALLOCATOR)
 target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_INCLUDE_DIRS})
 target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_BASE}/hiprand/include)
 target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_BASE}/rocrand/include)
