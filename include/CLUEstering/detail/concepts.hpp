@@ -19,6 +19,12 @@ namespace clue {
       template <typename T>
       concept platform = alpaka::isPlatform<T>;
 
+      template <typename T>
+      concept Numeric = requires {
+        std::is_arithmetic_v<T>;
+        requires sizeof(T) <= 8;
+      };
+
     }  // namespace concepts
   }  // namespace detail
 }  // namespace clue

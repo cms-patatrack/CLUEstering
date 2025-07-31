@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
 namespace clue {

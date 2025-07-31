@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "CLUEstering/CLUEstering.hpp"
-#include "CLUEstering/DataFormats/PointsHost.hpp"
-#include "CLUEstering/DataFormats/PointsDevice.hpp"
+#include "CLUEstering/data_structures/PointsHost.hpp"
+#include "CLUEstering/data_structures/PointsDevice.hpp"
 
 #include "CLUEstering/utility/read_csv.hpp"
 

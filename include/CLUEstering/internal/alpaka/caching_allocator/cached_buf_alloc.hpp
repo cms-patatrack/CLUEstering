@@ -3,8 +3,8 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "CLUEstering/AlpakaCore/getDeviceCachingAllocator.hpp"
-#include "CLUEstering/AlpakaCore/getHostCachingAllocator.hpp"
+#include "get_device_caching_allocator.hpp"
+#include "get_host_caching_allocator.hpp"
 
 namespace clue {
 

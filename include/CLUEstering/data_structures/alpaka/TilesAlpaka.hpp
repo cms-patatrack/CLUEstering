@@ -1,21 +1,20 @@
 
 #pragma once
 
-#include "CLUEstering/AlpakaCore/alpakaWorkDiv.hpp"
-#include "CLUEstering/AlpakaCore/alpakaConfig.hpp"
-#include "CLUEstering/AlpakaCore/alpakaMemory.hpp"
+#include "CLUEstering/data_structures/alpaka/AlpakaVecArray.hpp"
+#include "CLUEstering/data_structures/alpaka/AssociationMap.hpp"
+#include "CLUEstering/data_structures/alpaka/SearchBox.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/DataFormats/alpaka/AlpakaVecArray.hpp"
-#include "CLUEstering/DataFormats/alpaka/AssociationMap.hpp"
-#include "CLUEstering/DataFormats/alpaka/SearchBox.hpp"
 #include "CLUEstering/detail/make_array.hpp"
+#include "CLUEstering/internal/alpaka/work_division.hpp"
+#include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/math/math.hpp"
 
-#include <alpaka/core/Common.hpp>
 #include <alpaka/alpaka.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <cstdint>
-#include "xtd/math.h"
 
 namespace clue {
 
@@ -69,8 +68,8 @@ namespace clue {
       }
 
       // Address the cases of underflow and overflow
-      coord_bin = xtd::min(coord_bin, nperdim - 1);
-      coord_bin = xtd::max(coord_bin, 0);
+      coord_bin = internal::math::min(coord_bin, nperdim - 1);
+      coord_bin = internal::math::max(coord_bin, 0);
 
       return coord_bin;
     }
@@ -78,8 +77,8 @@ namespace clue {
     ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords) const {
       int global_bin = 0;
       for (int dim = 0; dim != Ndim - 1; ++dim) {
-        global_bin +=
-            xtd::pow(static_cast<float>(nperdim), Ndim - dim - 1) * getBin(coords[dim], dim);
+        global_bin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) *
+                      getBin(coords[dim], dim);
       }
       global_bin += getBin(coords[Ndim - 1], Ndim - 1);
       return global_bin;
@@ -89,7 +88,7 @@ namespace clue {
       int32_t globalBin = 0;
       for (int dim = 0; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
-        globalBin += xtd::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
+        globalBin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
       }
       return globalBin;
     }

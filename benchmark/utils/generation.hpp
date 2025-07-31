@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-#include "CLUEstering/DataFormats/PointsHost.hpp"
+#include "CLUEstering/data_structures/PointsHost.hpp"
 
 namespace clue {
   namespace utils {

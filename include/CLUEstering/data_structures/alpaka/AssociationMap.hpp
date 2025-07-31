@@ -13,12 +13,12 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "CLUEstering/AlpakaCore/alpakaConfig.hpp"
-#include "CLUEstering/AlpakaCore/alpakaMemory.hpp"
-#include "CLUEstering/AlpakaCore/alpakaWorkDiv.hpp"
-#include "CLUEstering/AlpakaCore/prefixScan.hpp"
+#include "CLUEstering/data_structures/alpaka/Span.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/DataFormats/alpaka/Span.hpp"
+#include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/work_division.hpp"
+#include "CLUEstering/internal/algorithm/scan/scan.hpp"
 
 namespace clue {
 
