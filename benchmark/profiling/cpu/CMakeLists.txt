@@ -3,7 +3,6 @@ add_executable(serial.out ${CMAKE_SOURCE_DIR}/main.cpp)
 target_include_directories(
   serial.out
   PRIVATE ${CMAKE_SOURCE_DIR}/../../include
-          ${CMAKE_SOURCE_DIR}/../../extern/xtd/include
           ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
 target_compile_definitions(
   serial.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
@@ -16,7 +15,6 @@ if(TBB_FOUND)
   target_include_directories(
     tbb.out
     PRIVATE ${CMAKE_SOURCE_DIR}/../../include
-            ${CMAKE_SOURCE_DIR}/../../extern/xtd/include
             ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
   target_link_libraries(tbb.out PRIVATE TBB::tbb)
   target_compile_definitions(
@@ -31,7 +29,6 @@ if(OpenMP_CXX_FOUND)
   target_include_directories(
     openmp.out
     PRIVATE ${CMAKE_SOURCE_DIR}/../../include
-            ${CMAKE_SOURCE_DIR}/../../extern/xtd/include
             ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
   target_link_libraries(openmp.out PRIVATE OpenMP::OpenMP_CXX)
   target_compile_definitions(

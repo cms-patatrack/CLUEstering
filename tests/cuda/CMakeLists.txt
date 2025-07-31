@@ -16,7 +16,6 @@ target_link_libraries(cuda.out PRIVATE fmt::fmt)
 target_include_directories(
   cuda.out
   PRIVATE ${CMAKE_SOURCE_DIR}/../include
-          ${CMAKE_SOURCE_DIR}/../extern/xtd/include
           ${doctest_SOURCE_DIR}/doctest
           ${alpaka_SOURCE_DIR}/include
           ${Boost_INCLUDE_DIR})
