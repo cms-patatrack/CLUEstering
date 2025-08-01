@@ -13,7 +13,7 @@ namespace clue {
     namespace math {
 
       template <clue::detail::concepts::Numeric T>
-      ALPAKA_FN_ACC inline constexpr const T& max(const T& a, const T& b) {
+      ALPAKA_FN_ACC inline constexpr T max(const T& a, const T& b) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
         // CUDA device code
         return ::max(a, b);
@@ -30,7 +30,7 @@ namespace clue {
       }
 
       template <clue::detail::concepts::Numeric T, typename Compare>
-      ALPAKA_FN_ACC inline constexpr const T& max(const T& a, const T& b, Compare comp) {
+      ALPAKA_FN_ACC inline constexpr T max(const T& a, const T& b, Compare comp) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
         // CUDA device code
         return ::max(a, b, comp);
