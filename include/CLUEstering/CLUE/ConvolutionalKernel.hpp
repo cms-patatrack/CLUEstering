@@ -4,7 +4,7 @@
 #include <alpaka/core/Common.hpp>
 #include <alpaka/alpaka.hpp>
 
-#include "xtd/math.h"
+#include "CLUEstering/internal/math/math.hpp"
 
 class FlatKernel {
 private:
@@ -38,8 +38,9 @@ public:
     if (point_id == j) {
       return 1.f;
     } else {
-      return m_gaus_amplitude * xtd::exp(-(dist_ij - m_gaus_avg) * (dist_ij - m_gaus_avg) /
-                                         (2 * m_gaus_std * m_gaus_std));
+      return m_gaus_amplitude *
+             clue::internal::math::exp(-(dist_ij - m_gaus_avg) * (dist_ij - m_gaus_avg) /
+                                       (2 * m_gaus_std * m_gaus_std));
     }
   }
 };
@@ -58,7 +59,7 @@ public:
     if (point_id == j) {
       return 1.f;
     } else {
-      return (m_exp_amplitude * xtd::exp(-m_exp_avg * dist_ij));
+      return (m_exp_amplitude * clue::internal::math::exp(-m_exp_avg * dist_ij));
     }
   }
 };

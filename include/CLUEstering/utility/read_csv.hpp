@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "CLUEstering/DataFormats/PointsHost.hpp"
+#include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
 #include <algorithm>

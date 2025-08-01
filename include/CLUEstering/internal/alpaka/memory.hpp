@@ -5,10 +5,10 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "CLUEstering/AlpakaCore/AllocatorPolicy.hpp"
-#include "CLUEstering/AlpakaCore/CachedBufAlloc.hpp"
-#include "CLUEstering/AlpakaCore/alpakaConfig.hpp"
-#include "CLUEstering/AlpakaCore/alpakaDevices.hpp"
+#include "CLUEstering/internal/alpaka/caching_allocator/allocator_policy.hpp"
+#include "CLUEstering/internal/alpaka/caching_allocator/cached_buf_alloc.hpp"
+#include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
 namespace clue {

@@ -5,13 +5,13 @@
 #include <alpaka/core/Common.hpp>
 #include <chrono>
 #include <cstdint>
-#include "xtd/math.h"
 
-#include "CLUEstering/AlpakaCore/alpakaWorkDiv.hpp"
-#include "CLUEstering/DataFormats/PointsDevice.hpp"
-#include "CLUEstering/DataFormats/alpaka/TilesAlpaka.hpp"
-#include "CLUEstering/DataFormats/alpaka/AlpakaVecArray.hpp"
-#include "CLUEstering/DataFormats/alpaka/SearchBox.hpp"
+#include "CLUEstering/internal/alpaka/work_division.hpp"
+#include "CLUEstering/data_structures/PointsDevice.hpp"
+#include "CLUEstering/data_structures/alpaka/TilesAlpaka.hpp"
+#include "CLUEstering/data_structures/alpaka/AlpakaVecArray.hpp"
+#include "CLUEstering/data_structures/alpaka/SearchBox.hpp"
+#include "CLUEstering/internal/math/math.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "ConvolutionalKernel.hpp"
 
@@ -58,7 +58,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
 
         float dist_ij_sq = tiles->distance(coords_i, coords_j);
 
-        auto k = kernel(acc, xtd::sqrt(dist_ij_sq), point_id, j);
+        auto k = kernel(acc, clue::internal::math::sqrt(dist_ij_sq), point_id, j);
         *rho_i += (int)(dist_ij_sq <= dc * dc) * k * dev_points->weight[j];
 
       }  // end of interate inside this bin
@@ -204,7 +204,7 @@ namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE {
                                                        dm_squared,
                                                        i);
 
-        dev_points->delta[i] = xtd::sqrt(delta_i);
+        dev_points->delta[i] = clue::internal::math::sqrt(delta_i);
         dev_points->nearest_higher[i] = nh_i;
       }
     }

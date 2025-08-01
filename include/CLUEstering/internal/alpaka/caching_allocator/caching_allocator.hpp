@@ -16,7 +16,7 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "CLUEstering/AlpakaCore/alpakaDevices.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 
 // Inspired by cub::CachingDeviceAllocator
 

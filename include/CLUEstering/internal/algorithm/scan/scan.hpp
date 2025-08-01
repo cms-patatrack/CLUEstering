@@ -3,8 +3,8 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "alpakaConfig.hpp"
-#include "alpakaWorkDiv.hpp"
+#include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
 namespace clue {

@@ -1,14 +1,14 @@
 
 #pragma once
 
-#include "CLUEstering/DataFormats/PointsHost.hpp"
-#include "CLUEstering/DataFormats/PointsDevice.hpp"
-#include "CLUEstering/DataFormats/alpaka/TilesAlpaka.hpp"
-#include "CLUEstering/DataFormats/alpaka/Followers.hpp"
+#include "CLUEstering/data_structures/PointsHost.hpp"
+#include "CLUEstering/data_structures/PointsDevice.hpp"
+#include "CLUEstering/data_structures/alpaka/TilesAlpaka.hpp"
+#include "CLUEstering/data_structures/alpaka/Followers.hpp"
+#include "CLUEstering/internal/algorithm/algorithm.hpp"
 #include "CLUEstering/CLUE/CLUEAlpakaKernels.hpp"
 #include "CLUEstering/CLUE/ConvolutionalKernel.hpp"
 #include "CLUEstering/utility/validation.hpp"
-#include "xtd/xtd.h"
 
 #include <algorithm>
 #include <alpaka/mem/view/Traits.hpp>
@@ -264,8 +264,10 @@ namespace clue {
                                             uint32_t nPerDim) {
     for (size_t dim{}; dim != Ndim; ++dim) {
       auto coords = dev_points.coords(dim);
-      const auto* dimMax = xtd::max_element(coords.data(), coords.data() + coords.size());
-      const auto* dimMin = xtd::min_element(coords.data(), coords.data() + coords.size());
+      const auto* dimMax =
+          clue::internal::algorithm::max_element(coords.data(), coords.data() + coords.size());
+      const auto* dimMin =
+          clue::internal::algorithm::min_element(coords.data(), coords.data() + coords.size());
 
       auto h_dimMin = make_host_buffer<float>(queue);
       auto h_dimMax = make_host_buffer<float>(queue);

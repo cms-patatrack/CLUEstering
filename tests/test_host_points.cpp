@@ -1,5 +1,5 @@
 
-#include "CLUEstering/DataFormats/PointsHost.hpp"
+#include "CLUEstering/data_structures/PointsHost.hpp"
 
 #include <numeric>
 #include <ranges>

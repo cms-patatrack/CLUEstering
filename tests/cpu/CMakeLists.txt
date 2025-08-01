@@ -5,7 +5,6 @@ target_link_libraries(serial.out PRIVATE fmt::fmt)
 target_include_directories(
   serial.out
   PRIVATE ${CMAKE_SOURCE_DIR}/../include
-          ${CMAKE_SOURCE_DIR}/../extern/xtd/include
           ${doctest_SOURCE_DIR}/doctest
           ${alpaka_SOURCE_DIR}/include
           ${Boost_INCLUDE_DIR})
@@ -19,7 +18,6 @@ if(TBB_FOUND)
   target_include_directories(
     tbb.out
     PRIVATE ${CMAKE_SOURCE_DIR}/../include
-            ${CMAKE_SOURCE_DIR}/../extern/xtd/include
             ${doctest_SOURCE_DIR}/doctest
             ${alpaka_SOURCE_DIR}/include
             ${Boost_INCLUDE_DIR})
@@ -36,7 +34,6 @@ if(OpenMP_CXX_FOUND)
   target_include_directories(
     openmp.out
     PRIVATE ${CMAKE_SOURCE_DIR}/../include
-            ${CMAKE_SOURCE_DIR}/../extern/xtd/include
             ${doctest_SOURCE_DIR}/doctest
             ${alpaka_SOURCE_DIR}/include
             ${Boost_INCLUDE_DIR})

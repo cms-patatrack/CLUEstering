@@ -3,7 +3,6 @@ add_executable(serial.out ${CMAKE_SOURCE_DIR}/main.cpp)
 target_include_directories(
   serial.out
   PRIVATE ${CMAKE_SOURCE_DIR}/../../include ${CMAKE_SOURCE_DIR}/../../benchmark
-          ${CMAKE_SOURCE_DIR}/../../extern/xtd/include
           ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
 target_link_libraries(serial.out PRIVATE ${pybind_link})
 target_compile_definitions(
@@ -18,7 +17,6 @@ if(TBB_FOUND)
     tbb.out
     PRIVATE ${CMAKE_SOURCE_DIR}/../../include
             ${CMAKE_SOURCE_DIR}/../../benchmark
-            ${CMAKE_SOURCE_DIR}/../../extern/xtd/include
             ${alpaka_SOURCE_DIR}/include
             ${Boost_INCLUDE_DIR})
   target_link_libraries(tbb.out PRIVATE ${pybind_link} TBB::tbb)
@@ -35,7 +33,6 @@ if(OpenMP_CXX_FOUND)
     openmp.out
     PRIVATE ${CMAKE_SOURCE_DIR}/../../include
             ${CMAKE_SOURCE_DIR}/../../benchmark
-            ${CMAKE_SOURCE_DIR}/../../extern/xtd/include
             ${alpaka_SOURCE_DIR}/include
             ${Boost_INCLUDE_DIR})
   target_link_libraries(openmp.out PRIVATE ${pybind_link} OpenMP::OpenMP_CXX)
