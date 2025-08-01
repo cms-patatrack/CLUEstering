@@ -99,7 +99,7 @@ namespace clue {
       d_points = std::make_optional<PointsDevice>(queue, h_points.size());
       auto& dev_points = *d_points;
 
-      setup(queue, h_points, dev_points, block_size);
+      setup(queue, h_points, dev_points);
       make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
       alpaka::wait(queue);
     }
@@ -112,7 +112,7 @@ namespace clue {
       d_points = std::make_optional<PointsDevice>(queue, h_points.size());
       auto& dev_points = *d_points;
 
-      setup(queue, h_points, dev_points, block_size);
+      setup(queue, h_points, dev_points);
       make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
       alpaka::wait(queue);
     }
@@ -122,7 +122,7 @@ namespace clue {
                        const KernelType& kernel,
                        Queue& queue,
                        std::size_t block_size) {
-      setup(queue, h_points, dev_points, block_size);
+      setup(queue, h_points, dev_points);
       make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
       alpaka::wait(queue);
     }
@@ -135,7 +135,7 @@ namespace clue {
       Queue queue(device);
       init_device(queue);
 
-      setup(queue, h_points, dev_points, block_size);
+      setup(queue, h_points, dev_points);
       make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
       alpaka::wait(queue);
     }
@@ -186,18 +186,12 @@ namespace clue {
 
     void setupFollowers(Queue& queue, int32_t n_points);
 
-    void setupPoints(const PointsHost& h_points,
-                     PointsDevice& dev_points,
-                     Queue& queue,
-                     std::size_t block_size);
+    void setupPoints(const PointsHost& h_points, PointsDevice& dev_points, Queue& queue);
 
-    void setup(Queue& queue,
-               const PointsHost& h_points,
-               PointsDevice& dev_points,
-               std::size_t block_size) {
+    void setup(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points) {
       setupTiles(queue, h_points);
       setupFollowers(queue, h_points.size());
-      setupPoints(h_points, dev_points, queue, block_size);
+      setupPoints(h_points, dev_points, queue);
     }
 
     void calculate_tile_size(CoordinateExtremes* min_max,
@@ -365,8 +359,7 @@ namespace clue {
   template <uint8_t Ndim>
   void Clusterer<Ndim>::setupPoints(const PointsHost& h_points,
                                     PointsDevice& dev_points,
-                                    Queue& queue,
-                                    std::size_t block_size) {
+                                    Queue& queue) {
     clue::copyToDevice(queue, dev_points, h_points);
 
     alpaka::memset(queue, *d_seeds, 0x00);
