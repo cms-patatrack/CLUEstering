@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/math/defines.hpp"
 #include <concepts>
 
 #if !defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && !defined(ALPAKA_ACC_GPU_HIP_ENABLED) && \
@@ -13,13 +14,13 @@ namespace clue {
     namespace math {
 
       ALPAKA_FN_ACC inline constexpr float exp(float x) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(CUDA_DEVICE_FN)
         // CUDA device code
         return ::exp(x);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(HIP_DEVICE_FN)
         // HIP/ROCm device code
         return ::exp(x);
-#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+#elif defined(SYCL_DEVICE_FN)
         // SYCL device code
         return sycl::exp(x);
 #else
@@ -29,13 +30,13 @@ namespace clue {
       }
 
       ALPAKA_FN_ACC inline constexpr double exp(double x) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(CUDA_DEVICE_FN)
         // CUDA device code
         return ::exp(x);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(HIP_DEVICE_FN)
         // HIP/ROCm device code
         return ::exp(x);
-#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+#elif defined(SYCL_DEVICE_FN)
         // SYCL device code
         return sycl::exp(x);
 #else
