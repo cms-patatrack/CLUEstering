@@ -1,5 +1,5 @@
 
-#include "CLUEstering/CLUE/ConvolutionalKernel.hpp"
+#include "CLUEstering/core/ConvolutionalKernel.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>

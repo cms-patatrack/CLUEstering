@@ -1,19 +1,20 @@
 
 #pragma once
 
-#include <array>
-#include <alpaka/core/Common.hpp>
-#include <chrono>
-#include <cstdint>
-
-#include "CLUEstering/internal/alpaka/work_division.hpp"
+#include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/alpaka/TilesAlpaka.hpp"
 #include "CLUEstering/data_structures/alpaka/AlpakaVecArray.hpp"
 #include "CLUEstering/data_structures/alpaka/SearchBox.hpp"
-#include "CLUEstering/internal/math/math.hpp"
+#include "CLUEstering/data_structures/alpaka/Followers.hpp"
 #include "CLUEstering/detail/make_array.hpp"
-#include "ConvolutionalKernel.hpp"
+#include "CLUEstering/internal/alpaka/work_division.hpp"
+#include "CLUEstering/internal/math/math.hpp"
+
+#include <array>
+#include <alpaka/core/Common.hpp>
+#include <chrono>
+#include <cstdint>
 
 using clue::PointsView;
 using clue::TilesAlpakaView;
