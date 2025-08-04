@@ -1,4 +1,5 @@
 
+#include "CLUEstering/core/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 
 #include <numeric>
@@ -8,11 +9,9 @@
 
 #include "doctest.h"
 
-using namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE;
-
 TEST_CASE("Test host points with internal allocation") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   clue::PointsHost<2> h_points(queue, size);
@@ -75,8 +74,8 @@ TEST_CASE("Test host points with internal allocation") {
 }
 
 TEST_CASE("Test host points with external allocation of whole buffer") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   std::vector<std::byte> buffer(clue::soa::host::computeSoASize<2>(size));
@@ -141,8 +140,8 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
 }
 
 TEST_CASE("Test host points with external allocation passing two buffers as spans") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   std::vector<float> input(3 * size);
@@ -209,8 +208,8 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
 }
 
 TEST_CASE("Test host points with external allocation passing two buffers as vectors") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   std::vector<float> input(3 * size);
@@ -276,8 +275,8 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
 }
 
 TEST_CASE("Test host points with external allocation passing two buffers as pointers") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   std::vector<float> input(3 * size);
@@ -343,8 +342,8 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
 }
 
 TEST_CASE("Test host points with external allocation passing four buffers as spans") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   std::vector<float> coords(2 * size);
@@ -417,8 +416,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
 }
 
 TEST_CASE("Test host points with external allocation passing four buffers as vectors") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   std::vector<float> coords(2 * size);
@@ -486,8 +485,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
 }
 
 TEST_CASE("Test host points with external allocation passing four buffers as pointers") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   std::vector<float> coords(2 * size);

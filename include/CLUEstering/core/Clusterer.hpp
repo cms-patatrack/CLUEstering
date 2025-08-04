@@ -3,6 +3,7 @@
 
 #include "CLUEstering/core/CLUEAlpakaKernels.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
+#include "CLUEstering/core/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/alpaka/TilesAlpaka.hpp"
@@ -25,24 +26,14 @@ namespace clue {
   template <uint8_t Ndim>
   class Clusterer {
   public:
-    using Device = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Device;
-    using Queue = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Queue;
-    using Acc1D = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Acc1D;
-    using Platform = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Platform;
-    using KernelCalculateLocalDensity =
-        ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelCalculateLocalDensity;
-    using KernelCalculateNearestHigher =
-        ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelCalculateNearestHigher;
-    using KernelFindClusters = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelFindClusters;
-    using KernelAssignClusters = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::KernelAssignClusters;
-
     using CoordinateExtremes = clue::CoordinateExtremes<Ndim>;
     using PointsHost = clue::PointsHost<Ndim>;
-    using PointsDevice = clue::PointsDevice<Ndim, Device>;
-    using TilesDevice = clue::TilesAlpaka<Ndim, Device>;
-    using FollowersDevice = clue::Followers<Device>;
+    using PointsDevice = clue::PointsDevice<Ndim, clue::Device>;
+    using TilesDevice = clue::TilesAlpaka<Ndim, clue::Device>;
+    using FollowersDevice = clue::Followers<clue::Device>;
+    using Acc = internal::Acc;
 
-    inline static constexpr auto reserve = ALPAKA_ACCELERATOR_NAMESPACE_CLUE::reserve;
+    inline static constexpr auto reserve = internal::reserve;
 
     explicit Clusterer(float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128)
         : m_dc{dc},
@@ -322,9 +313,9 @@ namespace clue {
       m_tiles = d_tiles->view();
     }
     // check if tiles are large enough for current data
-    if (!(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
+    if (!(alpaka::trait::GetExtents<clue::device_buffer<clue::Device, int32_t[]>>{}(
               d_tiles->indexes())[0u] >= d_points.size()) or
-        !(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
+        !(alpaka::trait::GetExtents<clue::device_buffer<clue::Device, int32_t[]>>{}(
               d_tiles->offsets())[0u] >= static_cast<uint32_t>(nTiles))) {
       d_tiles->initialize(d_points.size(), nTiles, nPerDim, queue);
     } else {
@@ -374,43 +365,47 @@ namespace clue {
                                            std::size_t block_size) {
     const auto nPoints = h_points.size();
     // fill the tiles
-    d_tiles->template fill<Acc1D>(queue, dev_points, nPoints);
+    d_tiles->template fill<Acc>(queue, dev_points, nPoints);
 
     const Idx grid_size = clue::divide_up_by(nPoints, block_size);
-    auto working_div = clue::make_workdiv<Acc1D>(grid_size, block_size);
-    alpaka::exec<Acc1D>(queue,
-                        working_div,
-                        KernelCalculateLocalDensity{},
-                        m_tiles,
-                        dev_points.view(),
-                        kernel,
-                        m_dc,
-                        nPoints);
-    alpaka::exec<Acc1D>(queue,
-                        working_div,
-                        KernelCalculateNearestHigher{},
-                        m_tiles,
-                        dev_points.view(),
-                        m_dm,
-                        nPoints);
+    auto working_div = clue::make_workdiv<Acc>(grid_size, block_size);
+    alpaka::exec<Acc>(queue,
+                      working_div,
+                      internal::KernelCalculateLocalDensity{},
+                      m_tiles,
+                      dev_points.view(),
+                      kernel,
+                      m_dc,
+                      nPoints);
+    alpaka::exec<Acc>(queue,
+                      working_div,
+                      internal::KernelCalculateNearestHigher{},
+                      m_tiles,
+                      dev_points.view(),
+                      m_dm,
+                      nPoints);
 
-    d_followers->template fill<Acc1D>(queue, dev_points);
+    d_followers->template fill<Acc>(queue, dev_points);
 
-    alpaka::exec<Acc1D>(queue,
-                        working_div,
-                        KernelFindClusters{},
-                        m_seeds,
-                        dev_points.view(),
-                        m_seed_dc,
-                        m_rhoc,
-                        nPoints);
+    alpaka::exec<Acc>(queue,
+                      working_div,
+                      internal::KernelFindClusters{},
+                      m_seeds,
+                      dev_points.view(),
+                      m_seed_dc,
+                      m_rhoc,
+                      nPoints);
 
     // We change the working division when assigning the clusters
     const Idx grid_size_seeds = clue::divide_up_by(reserve, block_size);
-    auto working_div_seeds = clue::make_workdiv<Acc1D>(grid_size_seeds, block_size);
+    auto working_div_seeds = clue::make_workdiv<Acc>(grid_size_seeds, block_size);
 
-    alpaka::exec<Acc1D>(
-        queue, working_div_seeds, KernelAssignClusters{}, m_seeds, m_followers, dev_points.view());
+    alpaka::exec<Acc>(queue,
+                      working_div_seeds,
+                      internal::KernelAssignClusters{},
+                      m_seeds,
+                      m_followers,
+                      dev_points.view());
     alpaka::wait(queue);
 
     clue::copyToHost(queue, h_points, dev_points);
@@ -423,43 +418,47 @@ namespace clue {
                                            Queue& queue,
                                            std::size_t block_size) {
     const auto nPoints = dev_points.size();
-    d_tiles->template fill<Acc1D>(queue, dev_points, nPoints);
+    d_tiles->template fill<Acc>(queue, dev_points, nPoints);
 
     const Idx grid_size = clue::divide_up_by(nPoints, block_size);
-    auto working_div = clue::make_workdiv<Acc1D>(grid_size, block_size);
-    alpaka::exec<Acc1D>(queue,
-                        working_div,
-                        KernelCalculateLocalDensity{},
-                        m_tiles,
-                        dev_points.view(),
-                        kernel,
-                        m_dc,
-                        nPoints);
-    alpaka::exec<Acc1D>(queue,
-                        working_div,
-                        KernelCalculateNearestHigher{},
-                        m_tiles,
-                        dev_points.view(),
-                        m_dm,
-                        nPoints);
+    auto working_div = clue::make_workdiv<Acc>(grid_size, block_size);
+    alpaka::exec<Acc>(queue,
+                      working_div,
+                      internal::KernelCalculateLocalDensity{},
+                      m_tiles,
+                      dev_points.view(),
+                      kernel,
+                      m_dc,
+                      nPoints);
+    alpaka::exec<Acc>(queue,
+                      working_div,
+                      internal::KernelCalculateNearestHigher{},
+                      m_tiles,
+                      dev_points.view(),
+                      m_dm,
+                      nPoints);
 
-    d_followers->template fill<Acc1D>(queue, dev_points);
+    d_followers->template fill<Acc>(queue, dev_points);
 
-    alpaka::exec<Acc1D>(queue,
-                        working_div,
-                        KernelFindClusters{},
-                        m_seeds,
-                        dev_points.view(),
-                        m_seed_dc,
-                        m_rhoc,
-                        nPoints);
+    alpaka::exec<Acc>(queue,
+                      working_div,
+                      internal::KernelFindClusters{},
+                      m_seeds,
+                      dev_points.view(),
+                      m_seed_dc,
+                      m_rhoc,
+                      nPoints);
 
     // We change the working division when assigning the clusters
     const Idx grid_size_seeds = clue::divide_up_by(reserve, block_size);
-    auto working_div_seeds = clue::make_workdiv<Acc1D>(grid_size_seeds, block_size);
+    auto working_div_seeds = clue::make_workdiv<Acc>(grid_size_seeds, block_size);
 
-    alpaka::exec<Acc1D>(
-        queue, working_div_seeds, KernelAssignClusters{}, m_seeds, m_followers, dev_points.view());
+    alpaka::exec<Acc>(queue,
+                      working_div_seeds,
+                      internal::KernelAssignClusters{},
+                      m_seeds,
+                      m_followers,
+                      dev_points.view());
   }
 
   template <uint8_t Ndim>

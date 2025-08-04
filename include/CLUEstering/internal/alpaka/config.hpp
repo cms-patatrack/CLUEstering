@@ -49,7 +49,7 @@ namespace alpaka_cuda_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_cuda_async
+#define ALPAKA_BACKEND alpaka_cuda_async
 }  // namespace alpaka_cuda_async
 
 #endif  // ALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND
@@ -69,7 +69,7 @@ namespace alpaka_rocm_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_rocm_async
+#define ALPAKA_BACKEND alpaka_rocm_async
 }  // namespace alpaka_rocm_async
 #endif
 
@@ -89,7 +89,7 @@ namespace alpaka_sycl_cpu {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_sycl_cpu
+#define ALPAKA_BACKEND alpaka_sycl_cpu
 }  // namespace alpaka_sycl_cpu
 
 #elif ALPAKA_SYCL_ONEAPI_GPU
@@ -107,7 +107,7 @@ namespace alpaka_sycl_gpu {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_sycl_gpu
+#define ALPAKA_BACKEND alpaka_sycl_gpu
 }  // namespace alpaka_sycl_gpu
 
 #endif
@@ -128,7 +128,7 @@ namespace alpaka_serial_sync {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_serial_sync
+#define ALPAKA_BACKEND alpaka_serial_sync
 }  // namespace alpaka_serial_sync
 
 #endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
@@ -148,7 +148,7 @@ namespace alpaka_tbb_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_tbb_async
+#define ALPAKA_BACKEND alpaka_tbb_async
 }  // namespace alpaka_tbb_async
 
 #endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
@@ -168,7 +168,7 @@ namespace alpaka_omp2_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-#define ALPAKA_ACCELERATOR_NAMESPACE_CLUE alpaka_omp2_async
+#define ALPAKA_BACKEND alpaka_omp2_async
 }  // namespace alpaka_omp2_async
 
 #endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
