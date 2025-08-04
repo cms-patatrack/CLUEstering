@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "CLUEstering/internal/math/defines.hpp"
+
 #if !defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && !defined(ALPAKA_ACC_GPU_HIP_ENABLED) && \
     !defined(ALPAKA_ACC_SYCL_ENABLED)
 #include <cmath>
@@ -11,13 +13,13 @@ namespace clue {
     namespace math {
 
       ALPAKA_FN_ACC inline constexpr float pow(float base, float exp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(CUDA_DEVICE_FN)
         // CUDA device code
         return ::pow(base, exp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(HIP_DEVICE_FN)
         // HIP/ROCm device code
         return ::pow(base, exp);
-#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+#elif defined(SYCL_DEVICE_FN)
         // SYCL device code
         return sycl::pow(base, exp);
 #else
@@ -27,13 +29,13 @@ namespace clue {
       }
 
       ALPAKA_FN_ACC inline constexpr double pow(double base, double exp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(CUDA_DEVICE_FN)
         // CUDA device code
         return ::pow(base, exp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(HIP_DEVICE_FN)
         // HIP/ROCm device code
         return ::pow(base, exp);
-#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+#elif defined(SYCL_DEVICE_FN)
         // SYCL device code
         return sycl::pow(base, exp);
 #else
