@@ -42,8 +42,7 @@ pybind11_add_module(CLUE_Convolutional_Kernels SHARED
 target_include_directories(
   CLUE_Convolutional_Kernels
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../include
-          ${alpaka_SOURCE_DIR}/include
-          ${Boost_INCLUDE_DIR})
+          ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
 target_compile_definitions(
   CLUE_Convolutional_Kernels PRIVATE ALPAKA_HOST_ONLY
                                      ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)

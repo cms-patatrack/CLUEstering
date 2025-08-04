@@ -190,11 +190,11 @@ namespace alpaka_serial_sync {
                                   int,
                                   py::array_t<float>,
                                   py::array_t<int>,
-                                  const FlatKernel&,
+                                  const clue::FlatKernel&,
                                   int,
                                   int32_t,
                                   size_t,
-                                  size_t>(&mainRun<FlatKernel>),
+                                  size_t>(&mainRun<clue::FlatKernel>),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -204,11 +204,11 @@ namespace alpaka_serial_sync {
                                   int,
                                   py::array_t<float>,
                                   py::array_t<int>,
-                                  const ExponentialKernel&,
+                                  const clue::ExponentialKernel&,
                                   int,
                                   int32_t,
                                   size_t,
-                                  size_t>(&mainRun<ExponentialKernel>),
+                                  size_t>(&mainRun<clue::ExponentialKernel>),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -218,11 +218,11 @@ namespace alpaka_serial_sync {
                                   int,
                                   py::array_t<float>,
                                   py::array_t<int>,
-                                  const GaussianKernel&,
+                                  const clue::GaussianKernel&,
                                   int,
                                   int32_t,
                                   size_t,
-                                  size_t>(&mainRun<GaussianKernel>),
+                                  size_t>(&mainRun<clue::GaussianKernel>),
           "mainRun");
   }
 };  // namespace alpaka_serial_sync
