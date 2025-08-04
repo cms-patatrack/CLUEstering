@@ -8,8 +8,7 @@
 #include "CLUEstering/CLUEstering.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-
-#include "CLUEstering/utility/read_csv.hpp"
+#include "CLUEstering/utils/read_csv.hpp"
 
 using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Acc1D;
 using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Device;

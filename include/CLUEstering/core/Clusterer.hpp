@@ -8,7 +8,7 @@
 #include "CLUEstering/data_structures/alpaka/TilesAlpaka.hpp"
 #include "CLUEstering/data_structures/alpaka/Followers.hpp"
 #include "CLUEstering/internal/algorithm/algorithm.hpp"
-#include "CLUEstering/utility/validation.hpp"
+#include "CLUEstering/utils/validation.hpp"
 
 #include <algorithm>
 #include <alpaka/mem/view/Traits.hpp>

@@ -6,8 +6,8 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "config.hpp"
-#include "get_device_index.hpp"
+#include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/get_device_index.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
 namespace clue {
