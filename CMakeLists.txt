@@ -21,7 +21,6 @@ add_library(CLUEstering INTERFACE)
 target_include_directories(
   CLUEstering
   INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/extern/xtd/include>
             $<BUILD_INTERFACE:${CLUE_GENERATED_INCLUDE_DIR}>
             $<INSTALL_INTERFACE:include>)
 
