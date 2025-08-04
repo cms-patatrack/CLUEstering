@@ -25,7 +25,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
     const std::size_t block_size{256};
-    algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
+    algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue, block_size);
     auto clusters = h_points.clusterIndexes();
     auto isSeed = h_points.isSeed();
 
@@ -50,7 +50,7 @@ TEST_CASE("Test clustering on sissa") {
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
   const std::size_t block_size{256};
-  algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
+  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue, block_size);
   auto clusters = h_points.clusterIndexes();
   auto isSeed = h_points.isSeed();
 
@@ -73,7 +73,7 @@ TEST_CASE("Test clustering on toy detector dataset") {
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
   const std::size_t block_size{256};
-  algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
+  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue, block_size);
   auto clusters = h_points.clusterIndexes();
   auto isSeed = h_points.isSeed();
 
@@ -96,7 +96,7 @@ TEST_CASE("Test clustering on blob dataset") {
   clue::Clusterer<3> algo(queue, dc, rhoc, outlier);
 
   const std::size_t block_size{256};
-  algo.make_clusters(h_points, d_points, FlatKernel{.5f}, queue, block_size);
+  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue, block_size);
   auto clusters = h_points.clusterIndexes();
   auto isSeed = h_points.isSeed();
 

@@ -3,6 +3,7 @@
 
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/math/defines.hpp"
+#include <alpaka/alpaka.hpp>
 
 #if !defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && !defined(ALPAKA_ACC_GPU_HIP_ENABLED) && \
     !defined(ALPAKA_ACC_SYCL_ENABLED)

@@ -24,7 +24,7 @@ TEST_CASE("Test make_cluster interfaces") {
   auto truth_ids = truth_data.clusterIndexes();
   auto truth_isSeed = truth_data.isSeed();
   SUBCASE("Run clustering without passing device points") {
-    algo.make_clusters(h_points, FlatKernel{.5f}, queue, block_size);
+    algo.make_clusters(h_points, clue::FlatKernel{.5f}, queue, block_size);
     auto clusters = h_points.clusterIndexes();
     auto isSeed = h_points.isSeed();
 
@@ -33,7 +33,7 @@ TEST_CASE("Test make_cluster interfaces") {
   }
 
   SUBCASE("Run clustering without passing the queue") {
-    algo.make_clusters(h_points, d_points, FlatKernel{.5f}, block_size);
+    algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, block_size);
     auto clusters = h_points.clusterIndexes();
     auto isSeed = h_points.isSeed();
 
@@ -42,7 +42,7 @@ TEST_CASE("Test make_cluster interfaces") {
   }
 
   SUBCASE("Run clustering without passing the queue and device points") {
-    algo.make_clusters(h_points, FlatKernel{.5f}, block_size);
+    algo.make_clusters(h_points, clue::FlatKernel{.5f}, block_size);
     auto clusters = h_points.clusterIndexes();
     auto isSeed = h_points.isSeed();
 
@@ -51,7 +51,7 @@ TEST_CASE("Test make_cluster interfaces") {
   }
   SUBCASE("Run clustering from device points") {
     clue::copyToDevice(queue, d_points, h_points);
-    algo.make_clusters(d_points, FlatKernel{.5f}, queue, block_size);
+    algo.make_clusters(d_points, clue::FlatKernel{.5f}, queue, block_size);
     clue::copyToHost(queue, h_points, d_points);
 
     auto clusters = h_points.clusterIndexes();

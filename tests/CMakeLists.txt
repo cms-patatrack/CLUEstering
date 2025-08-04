@@ -8,8 +8,9 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-string(APPEND CMAKE_CXX_FLAGS_DEBUG
-       " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg -fsanitize=address")
+string(
+  APPEND CMAKE_CXX_FLAGS_DEBUG
+  " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg -fsanitize=address")
 string(APPEND CMAKE_CXX_FLAGS "-O2")
 
 find_package(Boost 1.75.0 REQUIRED)
@@ -36,7 +37,7 @@ endif()
 FetchContent_Declare(
   fmt
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-  GIT_TAG        10.2.1  # or another stable version
+  GIT_TAG 10.2.1 # or another stable version
 )
 FetchContent_MakeAvailable(fmt)
 
