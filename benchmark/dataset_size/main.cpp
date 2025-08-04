@@ -10,8 +10,6 @@
 #include <vector>
 
 #include "CLUEstering/CLUEstering.hpp"
-#include "CLUEstering/data_structures/PointsHost.hpp"
-#include "CLUEstering/data_structures/PointsDevice.hpp"
 
 #include "utils/generation.hpp"
 
