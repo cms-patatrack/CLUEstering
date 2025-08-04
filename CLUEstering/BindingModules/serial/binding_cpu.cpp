@@ -16,7 +16,7 @@ namespace alpaka_serial_sync {
 
   void listDevices(const std::string& backend) {
     const char tab = '\t';
-    const std::vector<Device> devices = alpaka::getDevs(alpaka::Platform<Acc1D>());
+    const std::vector<Device> devices = alpaka::getDevs(clue::Platform{});
     if (devices.empty()) {
       std::cout << "No devices found for the " << backend << " backend." << std::endl;
       return;
@@ -46,10 +46,10 @@ namespace alpaka_serial_sync {
     auto rResults = results.request();
     int* pResults = static_cast<int*>(rResults.ptr);
 
-    const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, device_id);
+    const auto dev_acc = alpaka::getDevByIdx(clue::Platform{}, device_id);
 
     // Create the queue
-    Queue queue(dev_acc);
+    clue::Queue queue(dev_acc);
 
     // Running the clustering algorithm
     switch (Ndim) {

@@ -1,7 +1,7 @@
 
+#include "CLUEstering/core/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/algorithm/algorithm.hpp"
@@ -12,8 +12,6 @@
 #include <vector>
 
 #include "doctest.h"
-
-using namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE;
 
 template <uint8_t Ndim>
 struct KernelCompareDevicePoints {
@@ -35,10 +33,10 @@ struct KernelCompareDevicePoints {
 };
 
 template <std::ranges::range TRange, uint8_t Ndim>
-ALPAKA_FN_HOST bool compareDevicePoints(Queue queue,
+ALPAKA_FN_HOST bool compareDevicePoints(clue::Queue queue,
                                         TRange&& h_coords,
                                         TRange&& h_weights,
-                                        clue::PointsDevice<Ndim, Device>& d_points,
+                                        clue::PointsDevice<Ndim, clue::Device>& d_points,
                                         uint32_t size) {
   auto h_points = clue::PointsHost<Ndim>(queue, size);
   std::ranges::copy(h_coords, h_points.coords().begin());
@@ -52,14 +50,14 @@ ALPAKA_FN_HOST bool compareDevicePoints(Queue queue,
   auto d_comparison_result = clue::make_device_buffer<int>(queue);
   const auto blocksize = 512;
   const auto gridsize = clue::divide_up_by(size, blocksize);
-  auto work_division = clue::make_workdiv<Acc1D>(gridsize, blocksize);
-  alpaka::exec<Acc1D>(queue,
-                      work_division,
-                      KernelCompareDevicePoints<Ndim>{},
-                      d_points.view(),
-                      d_input.data(),
-                      size,
-                      d_comparison_result.data());
+  auto work_division = clue::make_workdiv<clue::internal::Acc>(gridsize, blocksize);
+  alpaka::exec<clue::internal::Acc>(queue,
+                                    work_division,
+                                    KernelCompareDevicePoints<Ndim>{},
+                                    d_points.view(),
+                                    d_input.data(),
+                                    size,
+                                    d_comparison_result.data());
   int comparison = 1;
   alpaka::memcpy(queue, clue::make_host_view<int>(comparison), d_comparison_result);
   alpaka::wait(queue);
@@ -68,11 +66,11 @@ ALPAKA_FN_HOST bool compareDevicePoints(Queue queue,
 }
 
 TEST_CASE("Test device points with internal allocation") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  clue::PointsDevice<2, Device> d_points(queue, size);
+  clue::PointsDevice<2, clue::Device> d_points(queue, size);
 
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(queue,
@@ -83,14 +81,14 @@ TEST_CASE("Test device points with internal allocation") {
 }
 
 TEST_CASE("Test device points with external allocation of whole buffer") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   const auto bytes = clue::soa::device::computeSoASize<2>(size);
   auto buffer = clue::make_device_buffer<std::byte[]>(queue, bytes);
 
-  clue::PointsDevice<2, Device> d_points(queue, size, std::span(buffer.data(), bytes));
+  clue::PointsDevice<2, clue::Device> d_points(queue, size, std::span(buffer.data(), bytes));
 
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(queue,
@@ -101,14 +99,14 @@ TEST_CASE("Test device points with external allocation of whole buffer") {
 }
 
 TEST_CASE("Test device points with external allocation passing the two buffers as pointers") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   auto input = clue::make_device_buffer<float[]>(queue, 3 * size);
   auto output = clue::make_device_buffer<int[]>(queue, 2 * size);
 
-  clue::PointsDevice<2, Device> d_points(queue, size, input.data(), output.data());
+  clue::PointsDevice<2, clue::Device> d_points(queue, size, input.data(), output.data());
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(queue,
                             std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float),
@@ -118,8 +116,8 @@ TEST_CASE("Test device points with external allocation passing the two buffers a
 }
 
 TEST_CASE("Test device points with external allocation passing four buffers as pointers") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   auto coords = clue::make_device_buffer<float[]>(queue, 2 * size);
@@ -127,7 +125,7 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
   auto cluster_ids = clue::make_device_buffer<int[]>(queue, size);
   auto b_isseed = clue::make_device_buffer<int[]>(queue, size);
 
-  clue::PointsDevice<2, Device> d_points(
+  clue::PointsDevice<2, clue::Device> d_points(
       queue, size, coords.data(), weights.data(), cluster_ids.data(), b_isseed.data());
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(queue,
@@ -138,8 +136,8 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
 }
 
 TEST_CASE("Test extrema functions on device points column") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   std::vector<float> data(size);
@@ -149,7 +147,7 @@ TEST_CASE("Test extrema functions on device points column") {
   std::ranges::copy(data, h_points.coords().begin());
   std::ranges::copy(data, h_points.weights().begin());
 
-  clue::PointsDevice<2, Device> d_points(queue, size);
+  clue::PointsDevice<2, clue::Device> d_points(queue, size);
   clue::copyToDevice(queue, d_points, h_points);
 
   auto max_it =
@@ -161,8 +159,8 @@ TEST_CASE("Test extrema functions on device points column") {
 }
 
 TEST_CASE("Test reduction of device points column") {
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(device);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(device);
 
   const uint32_t size = 1000;
   std::vector<float> data(size);
@@ -172,7 +170,7 @@ TEST_CASE("Test reduction of device points column") {
   std::ranges::copy(data, h_points.coords().begin());
   std::ranges::copy(data, h_points.weights().begin());
 
-  clue::PointsDevice<2, Device> d_points(queue, size);
+  clue::PointsDevice<2, clue::Device> d_points(queue, size);
   clue::copyToDevice(queue, d_points, h_points);
 
   CHECK(clue::internal::algorithm::reduce(d_points.weight().begin(), d_points.weight().end()) ==

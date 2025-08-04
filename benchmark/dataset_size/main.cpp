@@ -10,7 +10,6 @@
 #include <vector>
 
 #include "CLUEstering/CLUEstering.hpp"
-
 #include "utils/generation.hpp"
 
 #ifdef PYBIND11
@@ -79,11 +78,9 @@ void to_csv(const TimeMeasures& measures, const std::string& filename) {
   file.close();
 }
 
-using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Acc1D;
-using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Device;
-using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Queue;
-
-void run(clue::PointsHost<2>& h_points, clue::PointsDevice<2, Device>& d_points, Queue& queue) {
+void run(clue::PointsHost<2>& h_points,
+         clue::PointsDevice<2, clue::Device>& d_points,
+         clue::Queue& queue) {
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
@@ -110,17 +107,17 @@ int main(int argc, char* argv[]) {
   auto avgIt = time_averages.begin();
   auto stdIt = time_stddevs.begin();
   auto sizeIt = sizes.begin();
-  const auto device = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
+  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
   std::ranges::for_each(
       std::views::iota(min) | std::views::take(range),
       [nruns, &device, &sizeIt, &avgIt, &stdIt](auto i) -> void {
-        Queue queue(device);
+        clue::Queue queue(device);
 
         const auto n_points = static_cast<std::size_t>(std::pow(2, i));
 
         // Create the points host and device objects
         clue::PointsHost<2> h_points(queue, n_points);
-        clue::PointsDevice<2, Device> d_points(queue, n_points);
+        clue::PointsDevice<2, clue::Device> d_points(queue, n_points);
         clue::utils::generateRandomData<2>(h_points, 20, std::make_pair(-100.f, 100.f), 1.f);
 
         auto start = std::chrono::high_resolution_clock::now();

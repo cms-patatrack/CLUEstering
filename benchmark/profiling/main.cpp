@@ -7,16 +7,12 @@
 
 #include "CLUEstering/CLUEstering.hpp"
 
-using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Acc1D;
-using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Device;
-using ALPAKA_ACCELERATOR_NAMESPACE_CLUE::Queue;
-
 void run(const std::string& input_file) {
-  const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(dev_acc);
+  const auto dev_acc = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(dev_acc);
 
   auto h_points = clue::read_csv<2>(queue, input_file);
-  clue::PointsDevice<2, Device> d_points(queue, h_points.size());
+  clue::PointsDevice<2, clue::Device> d_points(queue, h_points.size());
 
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);

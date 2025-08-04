@@ -11,17 +11,15 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
-using namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE;
-
 TEST_CASE("Test clustering on benchmarking datasets") {
   for (auto i = 10; i < 19; ++i) {
-    const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-    Queue queue(dev_acc);
+    const auto dev_acc = alpaka::getDevByIdx(clue::Platform{}, 0u);
+    clue::Queue queue(dev_acc);
 
     clue::PointsHost<2> h_points =
         clue::read_csv<2>(queue, fmt::format("../data/data_{}.csv", std::pow(2, i)));
     const auto n_points = h_points.size();
-    clue::PointsDevice<2, Device> d_points(queue, n_points);
+    clue::PointsDevice<2, clue::Device> d_points(queue, n_points);
 
     const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
     clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
@@ -41,12 +39,12 @@ TEST_CASE("Test clustering on benchmarking datasets") {
 }
 
 TEST_CASE("Test clustering on sissa") {
-  const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(dev_acc);
+  const auto dev_acc = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(dev_acc);
 
   clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/sissa.csv");
   const auto n_points = h_points.size();
-  clue::PointsDevice<2, Device> d_points(queue, n_points);
+  clue::PointsDevice<2, clue::Device> d_points(queue, n_points);
 
   const float dc{20.f}, rhoc{10.f}, outlier{20.f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
@@ -64,12 +62,12 @@ TEST_CASE("Test clustering on sissa") {
 }
 
 TEST_CASE("Test clustering on toy detector dataset") {
-  const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(dev_acc);
+  const auto dev_acc = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(dev_acc);
 
   clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/toyDetector.csv");
   const auto n_points = h_points.size();
-  clue::PointsDevice<2, Device> d_points(queue, n_points);
+  clue::PointsDevice<2, clue::Device> d_points(queue, n_points);
 
   const float dc{4.5f}, rhoc{2.5f}, outlier{4.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
@@ -87,12 +85,12 @@ TEST_CASE("Test clustering on toy detector dataset") {
 }
 
 TEST_CASE("Test clustering on blob dataset") {
-  const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(dev_acc);
+  const auto dev_acc = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(dev_acc);
 
   clue::PointsHost<3> h_points = clue::read_csv<3>(queue, "../data/blob.csv");
   const auto n_points = h_points.size();
-  clue::PointsDevice<3, Device> d_points(queue, n_points);
+  clue::PointsDevice<3, clue::Device> d_points(queue, n_points);
 
   const float dc{1.f}, rhoc{5.f}, outlier{2.f};
   clue::Clusterer<3> algo(queue, dc, rhoc, outlier);

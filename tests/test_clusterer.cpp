@@ -8,15 +8,13 @@
 
 #include "doctest.h"
 
-using namespace ALPAKA_ACCELERATOR_NAMESPACE_CLUE;
-
 TEST_CASE("Test make_cluster interfaces") {
-  const auto dev_acc = alpaka::getDevByIdx(alpaka::Platform<Acc1D>{}, 0u);
-  Queue queue(dev_acc);
+  const auto dev_acc = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  clue::Queue queue(dev_acc);
 
   clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/data_32768.csv");
   const auto n_points = h_points.size();
-  clue::PointsDevice<2, Device> d_points(queue, n_points);
+  clue::PointsDevice<2, clue::Device> d_points(queue, n_points);
 
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
