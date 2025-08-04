@@ -33,28 +33,24 @@ jobs:
         main_minor=$(echo "$main_version" | awk -F '.' '{print $2}')
         main_patch=$(echo "$main_version" | awk -F '.' '{print $3}')
 
-        if [ "$main_major" -le "$pr_major" ]; then
-          if [ "$main_minor" -le "$pr_minor" ]; then
-            if [ "$main_patch" -lt "$pr_patch" ] ||
-               [ "$main_major" -lt "$pr_major" ] ||
-               [  "$main_minor" -lt "$pr_minor" ]; then
-              exit 0  # at least one version counters has been updated
-            else
-              echo -e "${RED}ERROR: Patch version is behind main. Update the version in setup.py"
-              echo -e "${RED}main -> $main_version"
-              echo -e "${RED}pr -> $pr_version"
-              exit 1
-            fi
-          else
-            echo -e "${RED}ERROR: Minor version is behind main. Update the version in setup.py"
-            echo -e "${RED}main -> $main_version"
-            echo -e "${RED}pr -> $pr_version"
-            exit 1
-          fi
-        else
-            echo -e "${RED}ERROR: Major version is behind main. Update the version in setup.py"
-            echo -e "${RED}main -> $main_version"
-            echo -e "${RED}pr -> $pr_version"
-            exit 1
+        if [ "$pr_major" -gt "$main_major" ]; then
+          exit 0
+        elif [ "$pr_major" -lt "$main_major" ]; then
+          echo -e "${RED}ERROR: Major version is behind main."
+          exit 1
+        fi
+
+        if [ "$pr_minor" -gt "$main_minor" ]; then
+          exit 0
+        elif [ "$pr_minor" -lt "$main_minor" ]; then
+          echo -e "${RED}ERROR: Minor version is behind main."
+          exit 1
+        fi
+
+        if [ "$pr_patch" -gt "$main_patch" ]; then
+          exit 0
+        elif [ "$pr_patch" -lt "$main_patch" ]; then
+          echo -e "${RED}ERROR: Patch version is behind main."
+          exit 1
         fi
 
