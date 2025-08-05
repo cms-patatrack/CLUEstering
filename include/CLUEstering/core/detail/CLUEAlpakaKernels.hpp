@@ -17,7 +17,7 @@
 #include <cstdint>
 
 namespace clue {
-  namespace internal {
+  namespace detail {
 
     using clue::PointsView;
     using clue::TilesAlpakaView;
@@ -283,5 +283,5 @@ namespace clue {
       }
     };
 
-  }  // namespace internal
+  }  // namespace detail
 }  // namespace clue
