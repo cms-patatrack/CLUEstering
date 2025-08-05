@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "CLUEstering/data_structures/alpaka/AssociationMap.hpp"
+#include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
 namespace clue {

@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "CLUEstering/data_structures/alpaka/AlpakaVecArray.hpp"
-#include "CLUEstering/data_structures/alpaka/AssociationMap.hpp"
-#include "CLUEstering/data_structures/alpaka/SearchBox.hpp"
+#include "CLUEstering/data_structures/AssociationMap.hpp"
+#include "CLUEstering/data_structures/internal/SearchBox.hpp"
+#include "CLUEstering/data_structures/internal/VecArray.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
