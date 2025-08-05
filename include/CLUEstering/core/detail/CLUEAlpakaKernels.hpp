@@ -13,7 +13,6 @@
 
 #include <array>
 #include <alpaka/core/Common.hpp>
-#include <chrono>
 #include <cstdint>
 
 namespace clue {

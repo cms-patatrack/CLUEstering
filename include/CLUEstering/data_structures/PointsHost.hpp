@@ -4,11 +4,10 @@
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
-#include <alpaka/alpaka.hpp>
 #include <optional>
 #include <ranges>
 #include <span>
-#include <tuple>
+#include <alpaka/alpaka.hpp>
 
 namespace clue {
 

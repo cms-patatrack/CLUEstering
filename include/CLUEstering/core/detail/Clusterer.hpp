@@ -12,14 +12,11 @@
 #include "CLUEstering/internal/algorithm/algorithm.hpp"
 #include "CLUEstering/utils/validation.hpp"
 
-#include <algorithm>
 #include <alpaka/mem/view/Traits.hpp>
 #include <alpaka/vec/Vec.hpp>
 #include <cmath>
 #include <cstdint>
-#include <iostream>
 #include <ranges>
-#include <utility>
 #include <vector>
 
 namespace clue {

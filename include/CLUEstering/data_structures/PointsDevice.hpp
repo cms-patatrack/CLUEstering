@@ -5,11 +5,10 @@
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
-#include <alpaka/alpaka.hpp>
 #include <optional>
 #include <ranges>
 #include <span>
-#include <tuple>
+#include <alpaka/alpaka.hpp>
 
 namespace clue {
 

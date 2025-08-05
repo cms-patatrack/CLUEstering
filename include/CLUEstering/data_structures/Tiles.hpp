@@ -11,10 +11,10 @@
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 
-#include <alpaka/alpaka.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <cstdint>
+#include <alpaka/alpaka.hpp>
 
 namespace clue {
 

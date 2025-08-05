@@ -1,24 +1,12 @@
 
 #pragma once
 
-#include <vector>
-#include <utility>
-#include <algorithm>
-#include <stdexcept>
-#include <type_traits>
-#include <iostream>
-#include <cassert>
-
-#include <limits>
-
-#include <alpaka/alpaka.hpp>
-
 #include "CLUEstering/data_structures/internal/Span.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
-#include "CLUEstering/internal/alpaka/work_division.hpp"
-#include "CLUEstering/internal/algorithm/scan/scan.hpp"
+
+#include <alpaka/alpaka.hpp>
 
 namespace clue {
 
