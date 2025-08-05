@@ -5,6 +5,7 @@
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/algorithm/algorithm.hpp"
+#include "CLUEstering/utils/get_device.hpp"
 
 #include <numeric>
 #include <ranges>
@@ -66,7 +67,7 @@ ALPAKA_FN_HOST bool compareDevicePoints(clue::Queue queue,
 }
 
 TEST_CASE("Test device points with internal allocation") {
-  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
@@ -81,7 +82,7 @@ TEST_CASE("Test device points with internal allocation") {
 }
 
 TEST_CASE("Test device points with external allocation of whole buffer") {
-  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
@@ -99,7 +100,7 @@ TEST_CASE("Test device points with external allocation of whole buffer") {
 }
 
 TEST_CASE("Test device points with external allocation passing the two buffers as pointers") {
-  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
@@ -116,7 +117,7 @@ TEST_CASE("Test device points with external allocation passing the two buffers a
 }
 
 TEST_CASE("Test device points with external allocation passing four buffers as pointers") {
-  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
@@ -136,7 +137,7 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
 }
 
 TEST_CASE("Test extrema functions on device points column") {
-  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
@@ -159,7 +160,7 @@ TEST_CASE("Test extrema functions on device points column") {
 }
 
 TEST_CASE("Test reduction of device points column") {
-  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
   const uint32_t size = 1000;

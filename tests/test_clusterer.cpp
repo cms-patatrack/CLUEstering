@@ -9,8 +9,8 @@
 #include "doctest.h"
 
 TEST_CASE("Test make_cluster interfaces") {
-  const auto dev_acc = alpaka::getDevByIdx(clue::Platform{}, 0u);
-  clue::Queue queue(dev_acc);
+  const auto device = clue::get_device(0u);
+  clue::Queue queue(device);
 
   clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/data_32768.csv");
   const auto n_points = h_points.size();
