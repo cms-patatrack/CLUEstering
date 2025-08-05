@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
   auto avgIt = time_averages.begin();
   auto stdIt = time_stddevs.begin();
   auto sizeIt = sizes.begin();
-  const auto device = alpaka::getDevByIdx(clue::Platform{}, 0u);
+  const auto device = clue::get_device(0u);
   std::ranges::for_each(
       std::views::iota(min) | std::views::take(range),
       [nruns, &device, &sizeIt, &avgIt, &stdIt](auto i) -> void {

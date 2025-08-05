@@ -8,3 +8,4 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/Tiles.hpp"
 #include "CLUEstering/utils/read_csv.hpp"
+#include "CLUEstering/utils/get_device.hpp"
