@@ -13,7 +13,7 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "CLUEstering/data_structures/alpaka/Span.hpp"
+#include "CLUEstering/data_structures/internal/Span.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"

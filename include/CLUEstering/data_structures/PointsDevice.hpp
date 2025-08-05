@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "CLUEstering/data_structures/Common.hpp"
+#include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 

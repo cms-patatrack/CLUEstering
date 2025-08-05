@@ -6,8 +6,8 @@
 #include "CLUEstering/core/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/data_structures/alpaka/TilesAlpaka.hpp"
-#include "CLUEstering/data_structures/alpaka/Followers.hpp"
+#include "CLUEstering/data_structures/Tiles.hpp"
+#include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/internal/algorithm/algorithm.hpp"
 #include "CLUEstering/utils/validation.hpp"
 
