@@ -14,33 +14,6 @@ namespace clue {
 
   namespace concepts = detail::concepts;
 
-  namespace soa::device {
-
-    template <uint8_t Ndim>
-    int32_t computeSoASize(int32_t n_points);
-
-    template <uint8_t Ndim>
-    void partitionSoAView(PointsView* view, std::byte* buffer, int32_t n_points);
-    template <uint8_t Ndim>
-    void partitionSoAView(PointsView* view,
-                          std::byte* alloc_buffer,
-                          std::byte* buffer,
-                          int32_t n_points);
-    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 4)
-    void partitionSoAView(PointsView* view,
-                          std::byte* alloc_buffer,
-                          int32_t n_points,
-                          TBuffers... buffer);
-    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 2)
-    void partitionSoAView(PointsView* view,
-                          std::byte* alloc_buffer,
-                          int32_t n_points,
-                          TBuffers... buffers);
-
-  }  // namespace soa::device
-
   template <uint8_t Ndim, concepts::device TDev>
   class PointsDevice {
   public:
