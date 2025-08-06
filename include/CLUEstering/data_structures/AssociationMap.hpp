@@ -19,11 +19,14 @@ namespace clue {
   public:
     using key_type = int32_t;
     using mapped_type = int32_t;
+    using value_type = std::pair<key_type, mapped_type>;
     using size_type = std::size_t;
+    using iterator = mapped_type*;
+    using const_iterator = const mapped_type*;
 
     struct Extents {
-      size_type content;
-      size_type offset;
+      size_type keys;
+      size_type values;
     };
 
     AssociationMap() = default;
@@ -32,7 +35,42 @@ namespace clue {
     template <concepts::queue TQueue>
     AssociationMap(size_type nelements, size_type nbins, TQueue& queue);
 
-    AssociationMapView* view();
+    auto size() const;
+    auto extents() const;
+
+    iterator begin();
+    const_iterator begin() const;
+    const_iterator cbegin() const;
+
+    iterator end();
+    const_iterator end() const;
+    const_iterator cend() const;
+
+    // TODO: the STL implementation for std::flat_multimap returns any element with the given key,
+    // Should we do the same? Should we return the first element or return a pair that gives the entire range?
+    // In the first case it would be equavalent to lower_bound, in the second case it would be equivalent to equal_range.
+    iterator find(key_type key);
+    const_iterator find(key_type key) const;
+
+    size_type count(key_type key) const;
+
+    bool contains(key_type key) const;
+
+    iterator lower_bound(key_type key);
+    const_iterator lower_bound(key_type key) const;
+
+    iterator upper_bound(key_type key);
+    const_iterator upper_bound(key_type key) const;
+
+    std::pair<iterator, iterator> equal_range(key_type key);
+    std::pair<const_iterator, const_iterator> equal_range(key_type key) const;
+
+  private:
+    device_buffer<TDev, mapped_type[]> m_indexes;
+    device_buffer<TDev, key_type[]> m_offsets;
+    host_buffer<AssociationMapView> m_hview;
+    device_buffer<TDev, AssociationMapView> m_view;
+    size_type m_nbins;
 
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(size_type nelements, size_type nbins, TQueue& queue);
