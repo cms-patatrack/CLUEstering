@@ -35,7 +35,7 @@ namespace clue {
       m_assoc.template fill<TAcc>(d_points.size(), d_points.nearestHigher(), queue);
     }
 
-    ALPAKA_FN_HOST inline constexpr int32_t extents() const { return m_assoc.extents().content; }
+    ALPAKA_FN_HOST inline constexpr int32_t extents() const { return m_assoc.extents().values; }
 
     ALPAKA_FN_HOST AssociationMapView* view() { return m_assoc.view(); }
 

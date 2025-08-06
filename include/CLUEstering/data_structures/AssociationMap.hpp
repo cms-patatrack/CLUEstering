@@ -78,9 +78,13 @@ namespace clue {
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST void reset(TQueue& queue, size_type nelements, size_type nbins);
 
-    auto size() const;
+    template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
+    ALPAKA_FN_HOST void fill(size_type size, TFunc func, TQueue& queue);
 
-    auto extents() const;
+    template <concepts::accelerator TAcc, concepts::queue TQueue>
+    ALPAKA_FN_HOST void fill(size_type size, std::span<key_type> associations, TQueue& queue);
+
+    AssociationMapView* view();
 
     ALPAKA_FN_HOST const auto& indexes() const;
     ALPAKA_FN_HOST auto& indexes();
@@ -94,18 +98,11 @@ namespace clue {
 
     ALPAKA_FN_ACC int32_t offsets(size_type bin_id) const;
 
-    template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
-    ALPAKA_FN_HOST void fill(size_type size, TFunc func, TQueue& queue);
+    template <concepts::device _TDev>
+    friend class Followers;
 
-    template <concepts::accelerator TAcc, concepts::queue TQueue>
-    ALPAKA_FN_HOST void fill(size_type size, std::span<key_type> associations, TQueue& queue);
-
-  private:
-    device_buffer<TDev, mapped_type[]> m_indexes;
-    device_buffer<TDev, key_type[]> m_offsets;
-    host_buffer<AssociationMapView> m_hview;
-    device_buffer<TDev, AssociationMapView> m_view;
-    size_type m_nbins;
+    template <uint8_t Ndim, concepts::device _TDev>
+    friend class TilesAlpaka;
   };
 
 }  // namespace clue

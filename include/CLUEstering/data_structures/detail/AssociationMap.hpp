@@ -242,17 +242,6 @@ namespace clue {
   }
 
   template <concepts::device TDev>
-  inline auto AssociationMap<TDev>::extents() const {
-    return Extents{
-        alpaka::trait::GetExtents<clue::device_buffer<TDev, mapped_type[]>>{}(m_indexes)[0u],
-        alpaka::trait::GetExtents<clue::device_buffer<TDev, key_type[]>>{}(m_offsets)[0u]};
-  }
-
-  template <concepts::device TDev>
-  ALPAKA_FN_HOST inline const auto& AssociationMap<TDev>::indexes() const {
-    return m_indexes;
-  }
-  template <concepts::device TDev>
   ALPAKA_FN_HOST inline auto& AssociationMap<TDev>::indexes() {
     return m_indexes;
   }
