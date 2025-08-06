@@ -18,7 +18,7 @@ namespace clue {
 
     // No need to allocate temporary buffers on the host
     template <uint8_t Ndim>
-    inline int32_t computeSoASize(int32_t n_points) {
+    inline auto computeSoASize(int32_t n_points) {
       return ((Ndim + 1) * sizeof(float) + 2 * sizeof(int)) * n_points;
     }
 

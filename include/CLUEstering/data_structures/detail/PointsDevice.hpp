@@ -19,7 +19,7 @@ namespace clue {
   namespace soa::device {
 
     template <uint8_t Ndim>
-    inline int32_t computeSoASize(int32_t n_points) {
+    inline auto computeSoASize(int32_t n_points) {
       return ((Ndim + 3) * sizeof(float) + 3 * sizeof(int)) * n_points;
     }
 
