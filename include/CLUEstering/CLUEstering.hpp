@@ -2,8 +2,8 @@
 #pragma once
 
 #include "CLUEstering/core/Clusterer.hpp"
-#include "CLUEstering/core/defines.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
+#include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/Tiles.hpp"
