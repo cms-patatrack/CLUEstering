@@ -32,9 +32,9 @@ TEST_CASE("Test clue::get_queue utility") {
 
     // check if data allocation works
     clue::PointsHost<2> points1(queue1, 1000);
-    auto d_points1 = clue::PointsDevice<2, clue::Device>(queue1, points1.size());
+    auto d_points1 = clue::PointsDevice<2>(queue1, points1.size());
     clue::PointsHost<2> points2(queue2, 1000);
-    auto d_points2 = clue::PointsDevice<2, clue::Device>(queue2, points2.size());
+    auto d_points2 = clue::PointsDevice<2>(queue2, points2.size());
     CHECK(1);
   }
 
@@ -52,9 +52,9 @@ TEST_CASE("Test clue::get_queue utility") {
 
     // check if data allocation works
     clue::PointsHost<2> points1(queue1, 1000);
-    auto d_points1 = clue::PointsDevice<2, clue::Device>(queue1, points1.size());
+    auto d_points1 = clue::PointsDevice<2>(queue1, points1.size());
     clue::PointsHost<2> points2(queue2, 1000);
-    auto d_points2 = clue::PointsDevice<2, clue::Device>(queue2, points2.size());
+    auto d_points2 = clue::PointsDevice<2>(queue2, points2.size());
     CHECK(1);
   }
 }

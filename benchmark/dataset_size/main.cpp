@@ -78,9 +78,7 @@ void to_csv(const TimeMeasures& measures, const std::string& filename) {
   file.close();
 }
 
-void run(clue::PointsHost<2>& h_points,
-         clue::PointsDevice<2, clue::Device>& d_points,
-         clue::Queue& queue) {
+void run(clue::PointsHost<2>& h_points, clue::PointsDevice<2>& d_points, clue::Queue& queue) {
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
@@ -117,7 +115,7 @@ int main(int argc, char* argv[]) {
 
         // Create the points host and device objects
         clue::PointsHost<2> h_points(queue, n_points);
-        clue::PointsDevice<2, clue::Device> d_points(queue, n_points);
+        clue::PointsDevice<2> d_points(queue, n_points);
         clue::utils::generateRandomData<2>(h_points, 20, std::make_pair(-100.f, 100.f), 1.f);
 
         auto start = std::chrono::high_resolution_clock::now();
