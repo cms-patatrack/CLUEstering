@@ -119,6 +119,86 @@ namespace clue {
   }
 
   template <concepts::device TDev>
+  inline auto AssociationMap<TDev>::extents() const {
+    return Extents{
+        alpaka::trait::GetExtents<clue::device_buffer<TDev, key_type[]>>{}(m_offsets)[0u],
+        alpaka::trait::GetExtents<clue::device_buffer<TDev, mapped_type[]>>{}(m_indexes)[0u]};
+  }
+
+  template <concepts::device TDev>
+  ALPAKA_FN_HOST inline const auto& AssociationMap<TDev>::indexes() const {
+    return m_indexes;
+  }
+
+  template <concepts::device TDev>
+  AssociationMap<TDev>::iterator AssociationMap<TDev>::begin() {
+    return iterator{m_indexes.data()};
+  }
+  template <concepts::device TDev>
+  AssociationMap<TDev>::const_iterator AssociationMap<TDev>::begin() const {
+    return const_iterator{m_indexes.data()};
+  }
+  template <concepts::device TDev>
+  AssociationMap<TDev>::const_iterator AssociationMap<TDev>::cbegin() const {
+    return const_iterator{m_indexes.data()};
+  }
+
+  template <concepts::device TDev>
+  AssociationMap<TDev>::iterator AssociationMap<TDev>::end() {
+    return iterator{m_indexes.data() + m_offsets[m_nbins]};
+  }
+  template <concepts::device TDev>
+  AssociationMap<TDev>::const_iterator AssociationMap<TDev>::end() const {
+    return const_iterator{m_indexes.data() + m_offsets[m_nbins]};
+  }
+  template <concepts::device TDev>
+  AssociationMap<TDev>::const_iterator AssociationMap<TDev>::cend() const {
+    return const_iterator{m_indexes.data() + m_offsets[m_nbins]};
+  }
+
+  template <concepts::device TDev>
+  AssociationMap<TDev>::size_type AssociationMap<TDev>::count(key_type key) const {
+    return m_offsets[key + 1] - m_offsets[key];
+  }
+
+  template <concepts::device TDev>
+  bool AssociationMap<TDev>::contains(key_type key) const {
+    return m_offsets[key + 1] > m_offsets[key];
+  }
+
+  template <concepts::device TDev>
+  AssociationMap<TDev>::iterator AssociationMap<TDev>::lower_bound(key_type key) {
+    return iterator{m_indexes.data() + m_offsets[key]};
+  }
+  template <concepts::device TDev>
+  AssociationMap<TDev>::const_iterator AssociationMap<TDev>::lower_bound(key_type key) const {
+    return const_iterator{m_indexes.data() + m_offsets[key]};
+  }
+
+  template <concepts::device TDev>
+  AssociationMap<TDev>::iterator AssociationMap<TDev>::upper_bound(key_type key) {
+    return iterator{m_indexes.data() + m_offsets[key + 1]};
+  }
+  template <concepts::device TDev>
+  AssociationMap<TDev>::const_iterator AssociationMap<TDev>::upper_bound(key_type key) const {
+    return const_iterator{m_indexes.data() + m_offsets[key + 1]};
+  }
+
+  template <concepts::device TDev>
+  std::pair<typename AssociationMap<TDev>::iterator, typename AssociationMap<TDev>::iterator>
+  AssociationMap<TDev>::equal_range(key_type key) {
+    return {iterator{m_indexes.data() + m_offsets[key]},
+            iterator{m_indexes.data() + m_offsets[key + 1]}};
+  }
+  template <concepts::device TDev>
+  std::pair<typename AssociationMap<TDev>::const_iterator,
+            typename AssociationMap<TDev>::const_iterator>
+  AssociationMap<TDev>::equal_range(key_type key) const {
+    return {const_iterator{m_indexes.data() + m_offsets[key]},
+            const_iterator{m_indexes.data() + m_offsets[key + 1]}};
+  }
+
+  template <concepts::device TDev>
   inline AssociationMapView* AssociationMap<TDev>::view() {
     return m_view.data();
   }
@@ -161,17 +241,6 @@ namespace clue {
     return m_nbins;
   }
 
-  template <concepts::device TDev>
-  inline auto AssociationMap<TDev>::extents() const {
-    return Extents{
-        alpaka::trait::GetExtents<clue::device_buffer<TDev, mapped_type[]>>{}(m_indexes)[0u],
-        alpaka::trait::GetExtents<clue::device_buffer<TDev, key_type[]>>{}(m_offsets)[0u]};
-  }
-
-  template <concepts::device TDev>
-  ALPAKA_FN_HOST inline const auto& AssociationMap<TDev>::indexes() const {
-    return m_indexes;
-  }
   template <concepts::device TDev>
   ALPAKA_FN_HOST inline auto& AssociationMap<TDev>::indexes() {
     return m_indexes;
