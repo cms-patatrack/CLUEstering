@@ -37,7 +37,7 @@ template <std::ranges::range TRange, uint8_t Ndim>
 ALPAKA_FN_HOST bool compareDevicePoints(clue::Queue queue,
                                         TRange&& h_coords,
                                         TRange&& h_weights,
-                                        clue::PointsDevice<Ndim, clue::Device>& d_points,
+                                        clue::PointsDevice<Ndim>& d_points,
                                         uint32_t size) {
   auto h_points = clue::PointsHost<Ndim>(queue, size);
   std::ranges::copy(h_coords, h_points.coords().begin());
@@ -71,7 +71,7 @@ TEST_CASE("Test device points with internal allocation") {
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  clue::PointsDevice<2, clue::Device> d_points(queue, size);
+  clue::PointsDevice<2> d_points(queue, size);
 
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(queue,
@@ -89,7 +89,7 @@ TEST_CASE("Test device points with external allocation of whole buffer") {
   const auto bytes = clue::soa::device::computeSoASize<2>(size);
   auto buffer = clue::make_device_buffer<std::byte[]>(queue, bytes);
 
-  clue::PointsDevice<2, clue::Device> d_points(queue, size, std::span(buffer.data(), bytes));
+  clue::PointsDevice<2> d_points(queue, size, std::span(buffer.data(), bytes));
 
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(queue,
@@ -107,7 +107,7 @@ TEST_CASE("Test device points with external allocation passing the two buffers a
   auto input = clue::make_device_buffer<float[]>(queue, 3 * size);
   auto output = clue::make_device_buffer<int[]>(queue, 2 * size);
 
-  clue::PointsDevice<2, clue::Device> d_points(queue, size, input.data(), output.data());
+  clue::PointsDevice<2> d_points(queue, size, input.data(), output.data());
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(queue,
                             std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float),
@@ -126,7 +126,7 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
   auto cluster_ids = clue::make_device_buffer<int[]>(queue, size);
   auto b_isseed = clue::make_device_buffer<int[]>(queue, size);
 
-  clue::PointsDevice<2, clue::Device> d_points(
+  clue::PointsDevice<2> d_points(
       queue, size, coords.data(), weights.data(), cluster_ids.data(), b_isseed.data());
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(queue,
@@ -148,7 +148,7 @@ TEST_CASE("Test extrema functions on device points column") {
   std::ranges::copy(data, h_points.coords().begin());
   std::ranges::copy(data, h_points.weights().begin());
 
-  clue::PointsDevice<2, clue::Device> d_points(queue, size);
+  clue::PointsDevice<2> d_points(queue, size);
   clue::copyToDevice(queue, d_points, h_points);
 
   auto max_it =
@@ -171,7 +171,7 @@ TEST_CASE("Test reduction of device points column") {
   std::ranges::copy(data, h_points.coords().begin());
   std::ranges::copy(data, h_points.weights().begin());
 
-  clue::PointsDevice<2, clue::Device> d_points(queue, size);
+  clue::PointsDevice<2> d_points(queue, size);
   clue::copyToDevice(queue, d_points, h_points);
 
   CHECK(clue::internal::algorithm::reduce(d_points.weight().begin(), d_points.weight().end()) ==

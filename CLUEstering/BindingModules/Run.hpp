@@ -19,7 +19,7 @@ void run(float dc,
 
   // Create the host and device points
   clue::PointsHost<Ndim> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
-  clue::PointsDevice<Ndim, clue::Device> d_points(queue, n_points);
+  clue::PointsDevice<Ndim> d_points(queue, n_points);
 
   algo.make_clusters(h_points, d_points, kernel, queue, block_size);
 }
