@@ -1,0 +1,52 @@
+\doxysection{Convolutional\+Kernel.\+hpp}
+\hypertarget{ConvolutionalKernel_8hpp_source}{}\label{ConvolutionalKernel_8hpp_source}\index{include/CLUEstering/core/ConvolutionalKernel.hpp@{include/CLUEstering/core/ConvolutionalKernel.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <alpaka/alpaka.hpp>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }clue\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classclue_1_1FlatKernel_ae4acc8580ae8aa6ed90dbb10a468a5af}{FlatKernel}}\ \{}
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_flat;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{classclue_1_1FlatKernel_ae4acc8580ae8aa6ed90dbb10a468a5af}{FlatKernel}}(\textcolor{keywordtype}{float}\ flat);}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TAcc>}
+\DoxyCodeLine{00026\ \ \ \ \ ALPAKA\_FN\_HOST\_ACC\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classclue_1_1FlatKernel_ad4cafcafd85a591a35d38aeae81b9632}{operator()}}(\textcolor{keyword}{const}\ TAcc\&,\ \textcolor{keywordtype}{float}\ \textcolor{comment}{/*dist\_ij*/},\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ \ \ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classclue_1_1GaussianKernel_af96609fe952e4ddd8d3bd69740fd84d0}{GaussianKernel}}\ \{}
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_gaus\_avg;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_gaus\_std;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_gaus\_amplitude;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classclue_1_1GaussianKernel_af96609fe952e4ddd8d3bd69740fd84d0}{GaussianKernel}}(\textcolor{keywordtype}{float}\ gaus\_avg,\ \textcolor{keywordtype}{float}\ gaus\_std,\ \textcolor{keywordtype}{float}\ gaus\_amplitude);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TAcc>}
+\DoxyCodeLine{00051\ \ \ \ \ ALPAKA\_FN\_HOST\_ACC\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classclue_1_1GaussianKernel_ab2486a7a7224eac9a730002f95e50437}{operator()}}(\textcolor{keyword}{const}\ TAcc\&\ acc,\ \textcolor{keywordtype}{float}\ dist\_ij,\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00052\ \ \ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classclue_1_1ExponentialKernel_a1897664e833a5322af604a1f3ce59aa2}{ExponentialKernel}}\ \{}
+\DoxyCodeLine{00055\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_exp\_avg;}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_exp\_amplitude;}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00064\ \ \ \ \ \mbox{\hyperlink{classclue_1_1ExponentialKernel_a1897664e833a5322af604a1f3ce59aa2}{ExponentialKernel}}(\textcolor{keywordtype}{float}\ exp\_avg,\ \textcolor{keywordtype}{float}\ exp\_amplitude);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ TAcc>}
+\DoxyCodeLine{00074\ \ \ \ \ ALPAKA\_FN\_HOST\_ACC\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classclue_1_1ExponentialKernel_a52c9ed16593cd7c5e0dbc07b1a187fa4}{operator()}}(\textcolor{keyword}{const}\ TAcc\&\ acc,\ \textcolor{keywordtype}{float}\ dist\_ij,\ \textcolor{keywordtype}{int}\ point\_id,\ \textcolor{keywordtype}{int}\ j)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ \ \ \};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \}\ \ \textcolor{comment}{//\ namespace\ clue}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/core/detail/ConvolutionalKernel.hpp"{}}}
+
+\end{DoxyCode}

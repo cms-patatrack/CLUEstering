@@ -1,0 +1,156 @@
+\doxysection{clue\+::Association\+Map\texorpdfstring{$<$}{<} TDev \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classclue_1_1AssociationMap}{}\label{classclue_1_1AssociationMap}\index{clue::AssociationMap$<$ TDev $>$@{clue::AssociationMap$<$ TDev $>$}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structclue_1_1AssociationMap_1_1Extents}{Extents}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classclue_1_1AssociationMap_ab7640a3b2e0c7c968b4d96f3c9203eef}\label{classclue_1_1AssociationMap_ab7640a3b2e0c7c968b4d96f3c9203eef} 
+using {\bfseries key\+\_\+type} = int32\+\_\+t
+\item 
+\Hypertarget{classclue_1_1AssociationMap_aeda3d00e89348a20597393103e8fab43}\label{classclue_1_1AssociationMap_aeda3d00e89348a20597393103e8fab43} 
+using {\bfseries mapped\+\_\+type} = int32\+\_\+t
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a274be1f44715ada258492974b84cbeb8}\label{classclue_1_1AssociationMap_a274be1f44715ada258492974b84cbeb8} 
+using {\bfseries size\+\_\+type} = std\+::size\+\_\+t
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a210ee89c60e4669813bdda9f0ae36517}\label{classclue_1_1AssociationMap_a210ee89c60e4669813bdda9f0ae36517} 
+{\bfseries Association\+Map} ()=default
+\begin{DoxyCompactList}\small\item\em Construct an empty \doxylink{classclue_1_1AssociationMap}{Association\+Map}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classclue_1_1AssociationMap_aa00c6e6cbd1f6a6f4fe40319b633b96c}{Association\+Map}} (size\+\_\+type nelements, size\+\_\+type nbins, const TDev \&dev)
+\begin{DoxyCompactList}\small\item\em Construct an \doxylink{classclue_1_1AssociationMap}{Association\+Map} with a specific number of elements and bins. \end{DoxyCompactList}\item 
+{\footnotesize template$<$concepts\+::queue TQueue$>$ }\\\mbox{\hyperlink{classclue_1_1AssociationMap_a03a2b802bb2f948a05814ee2b638f49b}{Association\+Map}} (size\+\_\+type nelements, size\+\_\+type nbins, TQueue \&queue)
+\begin{DoxyCompactList}\small\item\em Construct an \doxylink{classclue_1_1AssociationMap}{Association\+Map} with a specific number of elements and bins. \end{DoxyCompactList}\item 
+Association\+Map\+View \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classclue_1_1AssociationMap_a4690b751e09a4ce04c102625314a527b}{view}} ()
+\begin{DoxyCompactList}\small\item\em Obtain a view of the \doxylink{classclue_1_1AssociationMap}{Association\+Map}. \end{DoxyCompactList}\item 
+\Hypertarget{classclue_1_1AssociationMap_a6b41c241092381df6744c41bb5c567af}\label{classclue_1_1AssociationMap_a6b41c241092381df6744c41bb5c567af} 
+{\footnotesize template$<$concepts\+::queue TQueue$>$ }\\ALPAKA\+\_\+\+FN\+\_\+\+HOST void {\bfseries initialize} (size\+\_\+type nelements, size\+\_\+type nbins, TQueue \&queue)
+\item 
+\Hypertarget{classclue_1_1AssociationMap_aaa26c983ee4f323027ccb8afbf77fd33}\label{classclue_1_1AssociationMap_aaa26c983ee4f323027ccb8afbf77fd33} 
+{\footnotesize template$<$concepts\+::queue TQueue$>$ }\\ALPAKA\+\_\+\+FN\+\_\+\+HOST void {\bfseries reset} (TQueue \&queue, size\+\_\+type nelements, size\+\_\+type nbins)
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a5cc1c5519c84188e267a29a2b4be50b1}\label{classclue_1_1AssociationMap_a5cc1c5519c84188e267a29a2b4be50b1} 
+auto {\bfseries size} () const
+\item 
+auto \mbox{\hyperlink{classclue_1_1AssociationMap_aa1b1c333ac2590236db9f3fc539b5780}{extents}} () const
+\begin{DoxyCompactList}\small\item\em Get the size of the buffers in the \doxylink{classclue_1_1AssociationMap}{Association\+Map}. \end{DoxyCompactList}\item 
+\Hypertarget{classclue_1_1AssociationMap_a21749e604b0bad9f81cf354c58b796bc}\label{classclue_1_1AssociationMap_a21749e604b0bad9f81cf354c58b796bc} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST const auto \& {\bfseries indexes} () const
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a609c8abb7e698a8bb9b7a92460f96575}\label{classclue_1_1AssociationMap_a609c8abb7e698a8bb9b7a92460f96575} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \& {\bfseries indexes} ()
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a744b74797f2466efdd74e08227add30c}\label{classclue_1_1AssociationMap_a744b74797f2466efdd74e08227add30c} 
+ALPAKA\+\_\+\+FN\+\_\+\+ACC Span$<$ int32\+\_\+t $>$ {\bfseries indexes} (size\+\_\+type bin\+\_\+id)
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a95073931c8e7b83184fb750e3ced1334}\label{classclue_1_1AssociationMap_a95073931c8e7b83184fb750e3ced1334} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST device\+\_\+view$<$ TDev, int32\+\_\+t\mbox{[}$\,$\mbox{]}$>$ {\bfseries indexes} (const TDev \&dev, size\+\_\+type bin\+\_\+id)
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a5868529f2f0fde1ee0e3f0c9be69734d}\label{classclue_1_1AssociationMap_a5868529f2f0fde1ee0e3f0c9be69734d} 
+ALPAKA\+\_\+\+FN\+\_\+\+ACC Span$<$ int32\+\_\+t $>$ {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+type bin\+\_\+id)
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a888af7761de4f63c6ba84dd9f8a06102}\label{classclue_1_1AssociationMap_a888af7761de4f63c6ba84dd9f8a06102} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST const device\+\_\+buffer$<$ TDev, int32\+\_\+t\mbox{[}$\,$\mbox{]}$>$ \& {\bfseries offsets} () const
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a97dedc4455a78389ba5c6eaccecfbd2d}\label{classclue_1_1AssociationMap_a97dedc4455a78389ba5c6eaccecfbd2d} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST device\+\_\+buffer$<$ TDev, int32\+\_\+t\mbox{[}$\,$\mbox{]}$>$ \& {\bfseries offsets} ()
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a8c63f5276aa5fd63096f8efe130ba25e}\label{classclue_1_1AssociationMap_a8c63f5276aa5fd63096f8efe130ba25e} 
+ALPAKA\+\_\+\+FN\+\_\+\+ACC int32\+\_\+t {\bfseries offsets} (size\+\_\+type bin\+\_\+id) const
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a2372a7435326ffdc8ebcc9b9c609835c}\label{classclue_1_1AssociationMap_a2372a7435326ffdc8ebcc9b9c609835c} 
+{\footnotesize template$<$concepts\+::accelerator TAcc, typename TFunc, concepts\+::queue TQueue$>$ }\\ALPAKA\+\_\+\+FN\+\_\+\+HOST void {\bfseries fill} (size\+\_\+type size, TFunc func, TQueue \&queue)
+\item 
+\Hypertarget{classclue_1_1AssociationMap_a060c4835318fab1be281e1f37baa2c43}\label{classclue_1_1AssociationMap_a060c4835318fab1be281e1f37baa2c43} 
+{\footnotesize template$<$concepts\+::accelerator TAcc, concepts\+::queue TQueue$>$ }\\ALPAKA\+\_\+\+FN\+\_\+\+HOST void {\bfseries fill} (size\+\_\+type size, std\+::span$<$ key\+\_\+type $>$ associations, TQueue \&queue)
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classclue_1_1AssociationMap_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classclue_1_1AssociationMap_aa00c6e6cbd1f6a6f4fe40319b633b96c}\index{clue::AssociationMap$<$ TDev $>$@{clue::AssociationMap$<$ TDev $>$}!AssociationMap@{AssociationMap}}
+\index{AssociationMap@{AssociationMap}!clue::AssociationMap$<$ TDev $>$@{clue::AssociationMap$<$ TDev $>$}}
+\doxysubsubsection{\texorpdfstring{AssociationMap()}{AssociationMap()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classclue_1_1AssociationMap_aa00c6e6cbd1f6a6f4fe40319b633b96c} 
+template$<$concepts\+::device TDev$>$ \\
+\mbox{\hyperlink{classclue_1_1AssociationMap}{clue\+::\+Association\+Map}}$<$ TDev $>$\+::\+Association\+Map (\begin{DoxyParamCaption}\item[{size\+\_\+type}]{nelements}{, }\item[{size\+\_\+type}]{nbins}{, }\item[{const TDev \&}]{dev}{}\end{DoxyParamCaption})}
+
+
+
+Construct an \doxylink{classclue_1_1AssociationMap}{Association\+Map} with a specific number of elements and bins. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nelements} & The number of elements to allocate \\
+\hline
+{\em nbins} & The number of bins to allocate \\
+\hline
+{\em dev} & The device to use for the allocation \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classclue_1_1AssociationMap_a03a2b802bb2f948a05814ee2b638f49b}\index{clue::AssociationMap$<$ TDev $>$@{clue::AssociationMap$<$ TDev $>$}!AssociationMap@{AssociationMap}}
+\index{AssociationMap@{AssociationMap}!clue::AssociationMap$<$ TDev $>$@{clue::AssociationMap$<$ TDev $>$}}
+\doxysubsubsection{\texorpdfstring{AssociationMap()}{AssociationMap()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classclue_1_1AssociationMap_a03a2b802bb2f948a05814ee2b638f49b} 
+template$<$concepts\+::device TDev$>$ \\
+template$<$concepts\+::queue TQueue$>$ \\
+\mbox{\hyperlink{classclue_1_1AssociationMap}{clue\+::\+Association\+Map}}$<$ TDev $>$\+::\+Association\+Map (\begin{DoxyParamCaption}\item[{size\+\_\+type}]{nelements}{, }\item[{size\+\_\+type}]{nbins}{, }\item[{TQueue \&}]{queue}{}\end{DoxyParamCaption})}
+
+
+
+Construct an \doxylink{classclue_1_1AssociationMap}{Association\+Map} with a specific number of elements and bins. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nelements} & The number of elements to allocate \\
+\hline
+{\em nbins} & The number of bins to allocate \\
+\hline
+{\em queue} & The queue to use for the allocation \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classclue_1_1AssociationMap_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classclue_1_1AssociationMap_aa1b1c333ac2590236db9f3fc539b5780}\index{clue::AssociationMap$<$ TDev $>$@{clue::AssociationMap$<$ TDev $>$}!extents@{extents}}
+\index{extents@{extents}!clue::AssociationMap$<$ TDev $>$@{clue::AssociationMap$<$ TDev $>$}}
+\doxysubsubsection{\texorpdfstring{extents()}{extents()}}
+{\footnotesize\ttfamily \label{classclue_1_1AssociationMap_aa1b1c333ac2590236db9f3fc539b5780} 
+template$<$concepts\+::device TDev$>$ \\
+auto \mbox{\hyperlink{classclue_1_1AssociationMap}{clue\+::\+Association\+Map}}$<$ TDev $>$\+::extents (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the size of the buffers in the \doxylink{classclue_1_1AssociationMap}{Association\+Map}. 
+
+\begin{DoxyReturn}{Returns}
+A pair containing the size of the indexes and offsets buffers 
+\end{DoxyReturn}
+\Hypertarget{classclue_1_1AssociationMap_a4690b751e09a4ce04c102625314a527b}\index{clue::AssociationMap$<$ TDev $>$@{clue::AssociationMap$<$ TDev $>$}!view@{view}}
+\index{view@{view}!clue::AssociationMap$<$ TDev $>$@{clue::AssociationMap$<$ TDev $>$}}
+\doxysubsubsection{\texorpdfstring{view()}{view()}}
+{\footnotesize\ttfamily \label{classclue_1_1AssociationMap_a4690b751e09a4ce04c102625314a527b} 
+template$<$concepts\+::device TDev$>$ \\
+Association\+Map\+View \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classclue_1_1AssociationMap}{clue\+::\+Association\+Map}}$<$ TDev $>$\+::view (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Obtain a view of the \doxylink{classclue_1_1AssociationMap}{Association\+Map}. 
+
+\begin{DoxyReturn}{Returns}
+A pointer to the Association\+Map\+View 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\+CLUEstering/data\+\_\+structures/Association\+Map.\+hpp\end{DoxyCompactItemize}

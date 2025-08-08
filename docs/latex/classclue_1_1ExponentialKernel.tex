@@ -1,0 +1,66 @@
+\doxysection{clue\+::Exponential\+Kernel Class Reference}
+\hypertarget{classclue_1_1ExponentialKernel}{}\label{classclue_1_1ExponentialKernel}\index{clue::ExponentialKernel@{clue::ExponentialKernel}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classclue_1_1ExponentialKernel_a1897664e833a5322af604a1f3ce59aa2}{Exponential\+Kernel}} (float exp\+\_\+avg, float exp\+\_\+amplitude)
+\begin{DoxyCompactList}\small\item\em Construct an \doxylink{classclue_1_1ExponentialKernel}{Exponential\+Kernel} object. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename TAcc$>$ }\\ALPAKA\+\_\+\+FN\+\_\+\+HOST\+\_\+\+ACC float \mbox{\hyperlink{classclue_1_1ExponentialKernel_a52c9ed16593cd7c5e0dbc07b1a187fa4}{operator()}} (const TAcc \&acc, float dist\+\_\+ij, int point\+\_\+id, int j) const
+\begin{DoxyCompactList}\small\item\em Computes the kernel value between two points. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classclue_1_1ExponentialKernel_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classclue_1_1ExponentialKernel_a1897664e833a5322af604a1f3ce59aa2}\index{clue::ExponentialKernel@{clue::ExponentialKernel}!ExponentialKernel@{ExponentialKernel}}
+\index{ExponentialKernel@{ExponentialKernel}!clue::ExponentialKernel@{clue::ExponentialKernel}}
+\doxysubsubsection{\texorpdfstring{ExponentialKernel()}{ExponentialKernel()}}
+{\footnotesize\ttfamily \label{classclue_1_1ExponentialKernel_a1897664e833a5322af604a1f3ce59aa2} 
+clue\+::\+Exponential\+Kernel\+::\+Exponential\+Kernel (\begin{DoxyParamCaption}\item[{float}]{exp\+\_\+avg}{, }\item[{float}]{exp\+\_\+amplitude}{}\end{DoxyParamCaption})}
+
+
+
+Construct an \doxylink{classclue_1_1ExponentialKernel}{Exponential\+Kernel} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exp\+\_\+avg} & The average value for the exponential kernel \\
+\hline
+{\em exp\+\_\+amplitude} & The amplitude for the exponential kernel \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classclue_1_1ExponentialKernel_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classclue_1_1ExponentialKernel_a52c9ed16593cd7c5e0dbc07b1a187fa4}\index{clue::ExponentialKernel@{clue::ExponentialKernel}!operator()@{operator()}}
+\index{operator()@{operator()}!clue::ExponentialKernel@{clue::ExponentialKernel}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily \label{classclue_1_1ExponentialKernel_a52c9ed16593cd7c5e0dbc07b1a187fa4} 
+template$<$typename TAcc$>$ \\
+ALPAKA\+\_\+\+FN\+\_\+\+HOST\+\_\+\+ACC float clue\+::\+Exponential\+Kernel\+::operator() (\begin{DoxyParamCaption}\item[{const TAcc \&}]{acc}{, }\item[{float}]{dist\+\_\+ij}{, }\item[{int}]{point\+\_\+id}{, }\item[{int}]{j}{}\end{DoxyParamCaption}) const}
+
+
+
+Computes the kernel value between two points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em acc} & The accelerator to use for the computation \\
+\hline
+{\em dist\+\_\+ij} & The distance between the two points \\
+\hline
+{\em point\+\_\+id} & The index of the first point \\
+\hline
+{\em j} & The index of the second point \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The computed kernel value 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\+CLUEstering/core/Convolutional\+Kernel.\+hpp\end{DoxyCompactItemize}

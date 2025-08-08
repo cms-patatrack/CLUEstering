@@ -1,0 +1,262 @@
+\doxysection{clue\+::Points\+Device\texorpdfstring{$<$}{<} Ndim, TDev \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classclue_1_1PointsDevice}{}\label{classclue_1_1PointsDevice}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$concepts\+::queue TQueue$>$ }\\\mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{Points\+Device}} (TQueue \&queue, int32\+\_\+t n\+\_\+points)
+\begin{DoxyCompactList}\small\item\em Construct a \doxylink{classclue_1_1PointsDevice}{Points\+Device} object. \end{DoxyCompactList}\item 
+{\footnotesize template$<$concepts\+::queue TQueue$>$ }\\\mbox{\hyperlink{classclue_1_1PointsDevice_a3200c03bc08fcf475a8a19f483e0fcbf}{Points\+Device}} (TQueue \&queue, int32\+\_\+t n\+\_\+points, std\+::span$<$ std\+::byte $>$ buffer)
+\begin{DoxyCompactList}\small\item\em Construct a \doxylink{classclue_1_1PointsDevice}{Points\+Device} object with a pre-\/allocated buffer. \end{DoxyCompactList}\item 
+{\footnotesize template$<$concepts\+::queue TQueue, concepts\+::contiguous\+\_\+raw\+\_\+data... TBuffers$>$ \newline
+requires (sizeof...(TBuffers) == 2 \texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|} sizeof...(TBuffers) == 4)}\\\mbox{\hyperlink{classclue_1_1PointsDevice_a4359c5ae88e332352645156faab266c2}{Points\+Device}} (TQueue \&queue, int32\+\_\+t n\+\_\+points, TBuffers... buffers)
+\begin{DoxyCompactList}\small\item\em Construct a \doxylink{classclue_1_1PointsDevice}{Points\+Device} object with a pre-\/allocated buffer. \end{DoxyCompactList}\item 
+\Hypertarget{classclue_1_1PointsDevice_a26ec18378d69df3e41b769c00446c313}\label{classclue_1_1PointsDevice_a26ec18378d69df3e41b769c00446c313} 
+{\bfseries Points\+Device} (const \mbox{\hyperlink{classclue_1_1PointsDevice}{Points\+Device}} \&)=delete
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a248f491d9c6a7df8e77b383f810a715b}\label{classclue_1_1PointsDevice_a248f491d9c6a7df8e77b383f810a715b} 
+\mbox{\hyperlink{classclue_1_1PointsDevice}{Points\+Device}} \& {\bfseries operator=} (const \mbox{\hyperlink{classclue_1_1PointsDevice}{Points\+Device}} \&)=delete
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a32cf243f3bb1cc6875aafe5ffcccf448}\label{classclue_1_1PointsDevice_a32cf243f3bb1cc6875aafe5ffcccf448} 
+{\bfseries Points\+Device} (\mbox{\hyperlink{classclue_1_1PointsDevice}{Points\+Device}} \&\&)=default
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a69ece8c92913a01bd82b8696e243f09b}\label{classclue_1_1PointsDevice_a69ece8c92913a01bd82b8696e243f09b} 
+\mbox{\hyperlink{classclue_1_1PointsDevice}{Points\+Device}} \& {\bfseries operator=} (\mbox{\hyperlink{classclue_1_1PointsDevice}{Points\+Device}} \&\&)=default
+\item 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST\+\_\+\+ACC int32\+\_\+t \mbox{\hyperlink{classclue_1_1PointsDevice_ac14deb5806fe406e6521869bb059ecbd}{size}} () const
+\begin{DoxyCompactList}\small\item\em Get the size of the points. \end{DoxyCompactList}\item 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice_aece4d3abdccc9a1ac5fa1b8f6464d376}{coords}} (size\+\_\+t dim) const
+\begin{DoxyCompactList}\small\item\em Get the coordinates for a specific dimension. \end{DoxyCompactList}\item 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice_aa3600579841d9375bd96c7b787ffdf3e}{coords}} (size\+\_\+t dim)
+\begin{DoxyCompactList}\small\item\em Get the coordinates for a specific dimension. \end{DoxyCompactList}\item 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice_a61b2cf13ccd8d9678adbffed425df393}{weight}} () const
+\begin{DoxyCompactList}\small\item\em Get the weights of all the points. \end{DoxyCompactList}\item 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice_a540c75d9da5947321ba27943d6a39214}{weight}} ()
+\begin{DoxyCompactList}\small\item\em Get the weights of all the points. \end{DoxyCompactList}\item 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice_a9be1974bd8869ad5e51ab66eb1f523f7}{rho}} () const
+\begin{DoxyCompactList}\small\item\em Get the weighted density values of all the points. \end{DoxyCompactList}\item 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice_a4d6a5d40342cc472431328a73d16037d}{rho}} ()
+\begin{DoxyCompactList}\small\item\em Get the weighted density values of all the points. \end{DoxyCompactList}\item 
+\Hypertarget{classclue_1_1PointsDevice_a84a3c3f04f3cdd9265a2bf93a9ef573b}\label{classclue_1_1PointsDevice_a84a3c3f04f3cdd9265a2bf93a9ef573b} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto {\bfseries delta} () const
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a78a4dcbe1079ce983d30d646acba648e}\label{classclue_1_1PointsDevice_a78a4dcbe1079ce983d30d646acba648e} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto {\bfseries delta} ()
+\item 
+\Hypertarget{classclue_1_1PointsDevice_ac8cdacf6ea1c2ba6bb3b251f4ce674aa}\label{classclue_1_1PointsDevice_ac8cdacf6ea1c2ba6bb3b251f4ce674aa} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto {\bfseries nearest\+Higher} () const
+\item 
+\Hypertarget{classclue_1_1PointsDevice_aaa7d530c7870334c82be3783e1f12fe3}\label{classclue_1_1PointsDevice_aaa7d530c7870334c82be3783e1f12fe3} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto {\bfseries nearest\+Higher} ()
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a10c0a26f8de3495749b9811168b27b77}\label{classclue_1_1PointsDevice_a10c0a26f8de3495749b9811168b27b77} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto {\bfseries cluster\+Index} () const
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a2eeb421161a735ee39f37b4c78b3d874}\label{classclue_1_1PointsDevice_a2eeb421161a735ee39f37b4c78b3d874} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto {\bfseries cluster\+Index} ()
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a392841db09d7ac9601a7a607a615660a}\label{classclue_1_1PointsDevice_a392841db09d7ac9601a7a607a615660a} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto {\bfseries is\+Seed} () const
+\item 
+\Hypertarget{classclue_1_1PointsDevice_ab944a5e14e7d331c01a34403ecd140bb}\label{classclue_1_1PointsDevice_ab944a5e14e7d331c01a34403ecd140bb} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto {\bfseries is\+Seed} ()
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a6018de88c9521468e884726b5ea7e8fd}\label{classclue_1_1PointsDevice_a6018de88c9521468e884726b5ea7e8fd} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST const Points\+View \texorpdfstring{$\ast$}{*} {\bfseries view} () const
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a7e3a7e4ddd5cfcea38a36e1e18e1d883}\label{classclue_1_1PointsDevice_a7e3a7e4ddd5cfcea38a36e1e18e1d883} 
+ALPAKA\+\_\+\+FN\+\_\+\+HOST Points\+View \texorpdfstring{$\ast$}{*} {\bfseries view} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a19c916464a1e66f4b3181a7a5f0ffef3}\label{classclue_1_1PointsDevice_a19c916464a1e66f4b3181a7a5f0ffef3} 
+{\footnotesize template$<$concepts\+::queue \+\_\+\+TQueue, uint8\+\_\+t \+\_\+\+Ndim, concepts\+::device \+\_\+\+TDev$>$ }\\void {\bfseries copy\+To\+Host} (\+\_\+\+TQueue \&queue, \mbox{\hyperlink{classclue_1_1PointsHost}{Points\+Host}}$<$ \+\_\+\+Ndim $>$ \&h\+\_\+points, const \mbox{\hyperlink{classclue_1_1PointsDevice}{Points\+Device}}$<$ \+\_\+\+Ndim, \+\_\+\+TDev $>$ \&d\+\_\+points)
+\item 
+\Hypertarget{classclue_1_1PointsDevice_a68c983dd906a42eaefa2a56b42cac971}\label{classclue_1_1PointsDevice_a68c983dd906a42eaefa2a56b42cac971} 
+{\footnotesize template$<$concepts\+::queue \+\_\+\+TQueue, uint8\+\_\+t \+\_\+\+Ndim, concepts\+::device \+\_\+\+TDev$>$ }\\void {\bfseries copy\+To\+Device} (\+\_\+\+TQueue \&queue, \mbox{\hyperlink{classclue_1_1PointsDevice}{Points\+Device}}$<$ \+\_\+\+Ndim, \+\_\+\+TDev $>$ \&d\+\_\+points, const \mbox{\hyperlink{classclue_1_1PointsHost}{Points\+Host}}$<$ \+\_\+\+Ndim $>$ \&h\+\_\+points)
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classclue_1_1PointsDevice_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!PointsDevice@{PointsDevice}}
+\index{PointsDevice@{PointsDevice}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{PointsDevice()}{PointsDevice()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+template$<$concepts\+::queue TQueue$>$ \\
+\mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::\+Points\+Device (\begin{DoxyParamCaption}\item[{TQueue \&}]{queue}{, }\item[{int32\+\_\+t}]{n\+\_\+points}{}\end{DoxyParamCaption})}
+
+
+
+Construct a \doxylink{classclue_1_1PointsDevice}{Points\+Device} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue to use for the device operations \\
+\hline
+{\em n\+\_\+points} & The number of points to allocate \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classclue_1_1PointsDevice_a3200c03bc08fcf475a8a19f483e0fcbf}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!PointsDevice@{PointsDevice}}
+\index{PointsDevice@{PointsDevice}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{PointsDevice()}{PointsDevice()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_a3200c03bc08fcf475a8a19f483e0fcbf} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+template$<$concepts\+::queue TQueue$>$ \\
+\mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::\+Points\+Device (\begin{DoxyParamCaption}\item[{TQueue \&}]{queue}{, }\item[{int32\+\_\+t}]{n\+\_\+points}{, }\item[{std\+::span$<$ std\+::byte $>$}]{buffer}{}\end{DoxyParamCaption})}
+
+
+
+Construct a \doxylink{classclue_1_1PointsDevice}{Points\+Device} object with a pre-\/allocated buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue to use for the device operations \\
+\hline
+{\em n\+\_\+points} & The number of points to allocate \\
+\hline
+{\em buffer} & The buffer to use for the points \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classclue_1_1PointsDevice_a4359c5ae88e332352645156faab266c2}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!PointsDevice@{PointsDevice}}
+\index{PointsDevice@{PointsDevice}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{PointsDevice()}{PointsDevice()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_a4359c5ae88e332352645156faab266c2} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+template$<$concepts\+::queue TQueue, concepts\+::contiguous\+\_\+raw\+\_\+data... TBuffers$>$ \newline
+requires (sizeof...(TBuffers) == 2 \texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|} sizeof...(TBuffers) == 4)\\
+\mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::\+Points\+Device (\begin{DoxyParamCaption}\item[{TQueue \&}]{queue}{, }\item[{int32\+\_\+t}]{n\+\_\+points}{, }\item[{TBuffers...}]{buffers}{}\end{DoxyParamCaption})}
+
+
+
+Construct a \doxylink{classclue_1_1PointsDevice}{Points\+Device} object with a pre-\/allocated buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue to use for the device operations \\
+\hline
+{\em n\+\_\+points} & The number of points to allocate \\
+\hline
+{\em buffers} & The buffers to use for the points \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classclue_1_1PointsDevice_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classclue_1_1PointsDevice_aa3600579841d9375bd96c7b787ffdf3e}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!coords@{coords}}
+\index{coords@{coords}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{coords()}{coords()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_aa3600579841d9375bd96c7b787ffdf3e} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::coords (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{dim}{}\end{DoxyParamCaption})}
+
+
+
+Get the coordinates for a specific dimension. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dim} & The dimension to get the coordinates for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A span of coordinates for the specified dimension 
+\end{DoxyReturn}
+\Hypertarget{classclue_1_1PointsDevice_aece4d3abdccc9a1ac5fa1b8f6464d376}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!coords@{coords}}
+\index{coords@{coords}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{coords()}{coords()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_aece4d3abdccc9a1ac5fa1b8f6464d376} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::coords (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{dim}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the coordinates for a specific dimension. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dim} & The dimension to get the coordinates for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A constant span of coordinates for the specified dimension 
+\end{DoxyReturn}
+\Hypertarget{classclue_1_1PointsDevice_a4d6a5d40342cc472431328a73d16037d}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!rho@{rho}}
+\index{rho@{rho}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{rho()}{rho()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_a4d6a5d40342cc472431328a73d16037d} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::rho (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Get the weighted density values of all the points. 
+
+\begin{DoxyReturn}{Returns}
+A span of density values for all the points 
+\end{DoxyReturn}
+\Hypertarget{classclue_1_1PointsDevice_a9be1974bd8869ad5e51ab66eb1f523f7}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!rho@{rho}}
+\index{rho@{rho}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{rho()}{rho()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_a9be1974bd8869ad5e51ab66eb1f523f7} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::rho (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the weighted density values of all the points. 
+
+\begin{DoxyReturn}{Returns}
+A constant span of density values for all the points 
+\end{DoxyReturn}
+\Hypertarget{classclue_1_1PointsDevice_ac14deb5806fe406e6521869bb059ecbd}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!size@{size}}
+\index{size@{size}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_ac14deb5806fe406e6521869bb059ecbd} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+ALPAKA\+\_\+\+FN\+\_\+\+HOST\+\_\+\+ACC int32\+\_\+t \mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::size (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the size of the points. 
+
+\begin{DoxyReturn}{Returns}
+The number of points allocated 
+\end{DoxyReturn}
+\Hypertarget{classclue_1_1PointsDevice_a540c75d9da5947321ba27943d6a39214}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!weight@{weight}}
+\index{weight@{weight}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{weight()}{weight()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_a540c75d9da5947321ba27943d6a39214} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::weight (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Get the weights of all the points. 
+
+\begin{DoxyReturn}{Returns}
+A span of weights for all the points 
+\end{DoxyReturn}
+\Hypertarget{classclue_1_1PointsDevice_a61b2cf13ccd8d9678adbffed425df393}\index{clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}!weight@{weight}}
+\index{weight@{weight}!clue::PointsDevice$<$ Ndim, TDev $>$@{clue::PointsDevice$<$ Ndim, TDev $>$}}
+\doxysubsubsection{\texorpdfstring{weight()}{weight()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{classclue_1_1PointsDevice_a61b2cf13ccd8d9678adbffed425df393} 
+template$<$uint8\+\_\+t Ndim, concepts\+::device TDev$>$ \\
+ALPAKA\+\_\+\+FN\+\_\+\+HOST auto \mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$ Ndim, TDev $>$\+::weight (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+
+
+Get the weights of all the points. 
+
+\begin{DoxyReturn}{Returns}
+A constant span of weights for all the points 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\+CLUEstering/data\+\_\+structures/Points\+Device.\+hpp\end{DoxyCompactItemize}

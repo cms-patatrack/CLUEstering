@@ -1,0 +1,106 @@
+\doxysection{Points\+Host.\+hpp}
+\hypertarget{PointsHost_8hpp_source}{}\label{PointsHost_8hpp_source}\index{include/CLUEstering/data\_structures/PointsHost.hpp@{include/CLUEstering/data\_structures/PointsHost.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/internal/PointsCommon.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/internal/alpaka/memory.hpp"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <alpaka/alpaka.hpp>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <ranges>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <span>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }clue\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{namespace\ }concepts\ =\ detail::concepts;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{namespace\ }soa::host\ \{}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{//\ No\ need\ to\ allocate\ temporary\ buffers\ on\ the\ host}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
+\DoxyCodeLine{00021\ \ \ \ \ int32\_t\ computeSoASize(int32\_t\ n\_points);}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ partitionSoAView(PointsView*\ view,\ std::byte*\ buffer,\ int32\_t\ n\_points);}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{template}\ <uint8\_t\ Ndim,\ concepts::contiguous\_raw\_data...\ TBuffers>}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 4)}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ partitionSoAView(PointsView*\ view,\ int32\_t\ n\_points,\ TBuffers...\ buffer);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{template}\ <uint8\_t\ Ndim,\ concepts::contiguous\_raw\_data...\ TBuffers>}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 2)}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ partitionSoAView(PointsView*\ view,\ int32\_t\ n\_points,\ TBuffers...\ buffers);}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{template}\ <uint8\_t\ Ndim,\ std::ranges::contiguous\_range...\ TBuffers>}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 4)}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ partitionSoAView(PointsView*\ view,\ int32\_t\ n\_points,\ TBuffers\&\&...\ buffers);}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{template}\ <uint8\_t\ Ndim,\ std::ranges::contiguous\_range...\ TBuffers>}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 2)}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ partitionSoAView(PointsView*\ view,\ int32\_t\ n\_points,\ TBuffers\&\&...\ buffers);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \}\ \ \textcolor{comment}{//\ namespace\ soa::host}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
+\DoxyCodeLine{00041\ \ \ \textcolor{keyword}{class\ }PointsHost\ \{}
+\DoxyCodeLine{00042\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
+\DoxyCodeLine{00044\ \ \ \ \ PointsHost(TQueue\&\ queue,\ int32\_t\ n\_points);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
+\DoxyCodeLine{00047\ \ \ \ \ PointsHost(TQueue\&\ queue,\ int32\_t\ n\_points,\ std::span<std::byte>\ buffer);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue,\ std::ranges::contiguous\_range...\ TBuffers>}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 2\ ||\ \textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 4)}
+\DoxyCodeLine{00051\ \ \ \ \ PointsHost(TQueue\&\ queue,\ int32\_t\ n\_points,\ TBuffers\&\&...\ buffers);}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue,\ concepts::contiguous\_raw\_data...\ TBuffers>}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 2\ ||\ \textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 4)}
+\DoxyCodeLine{00055\ \ \ \ \ PointsHost(TQueue\&\ queue,\ int32\_t\ n\_points,\ TBuffers...\ buffers);}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ PointsHost(\textcolor{keyword}{const}\ PointsHost\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00058\ \ \ \ \ PointsHost\&\ operator=(\textcolor{keyword}{const}\ PointsHost\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00059\ \ \ \ \ PointsHost(PointsHost\&\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00060\ \ \ \ \ PointsHost\&\ operator=(PointsHost\&\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00061\ \ \ \ \ \string~PointsHost()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ ALPAKA\_FN\_HOST\ int32\_t\ size()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<const\ float>\ coords()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00066\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<float>\ coords();}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<const\ float>\ coords(\textcolor{keywordtype}{size\_t}\ dim)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00069\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<float>\ coords(\textcolor{keywordtype}{size\_t}\ dim);}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<const\ float>\ weights()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00072\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<float>\ weights();}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<const\ int>\ clusterIndexes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<int>\ clusterIndexes();}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<const\ int>\ isSeed()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00078\ \ \ \ \ ALPAKA\_FN\_HOST\ std::span<int>\ isSeed();}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{const}\ PointsView*\ view()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ \ \ \ \ ALPAKA\_FN\_HOST\ PointsView*\ view();}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ \_TQueue,\ u\textcolor{keywordtype}{int}8\_t\ \_Ndim,\ concepts::device\ \_TDev>}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{void}\ copyToHost(\_TQueue\&\ queue,}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PointsHost<\_Ndim>\&\ h\_points,}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsDevice}{PointsDevice<\_Ndim,\ \_TDev>}}\&\ d\_points);}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ \_TQueue,\ u\textcolor{keywordtype}{int}8\_t\ \_Ndim,\ concepts::device\ \_TDev>}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{void}\ copyToDevice(\_TQueue\&\ queue,}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice}{PointsDevice<\_Ndim,\ \_TDev>}}\&\ d\_points,}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ PointsHost<\_Ndim>\&\ h\_points);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00093\ \ \ \ \ std::optional<host\_buffer<std::byte[]>>\ m\_buffer;}
+\DoxyCodeLine{00094\ \ \ \ \ host\_buffer<PointsView>\ m\_view;}
+\DoxyCodeLine{00095\ \ \ \ \ int32\_t\ m\_size;}
+\DoxyCodeLine{00096\ \ \ \};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \}\ \ \textcolor{comment}{//\ namespace\ clue}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/detail/PointsHost.hpp"{}}}
+
+\end{DoxyCode}

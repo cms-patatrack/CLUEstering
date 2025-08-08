@@ -1,0 +1,68 @@
+\doxysection{clue\+::Gaussian\+Kernel Class Reference}
+\hypertarget{classclue_1_1GaussianKernel}{}\label{classclue_1_1GaussianKernel}\index{clue::GaussianKernel@{clue::GaussianKernel}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classclue_1_1GaussianKernel_af96609fe952e4ddd8d3bd69740fd84d0}{Gaussian\+Kernel}} (float gaus\+\_\+avg, float gaus\+\_\+std, float gaus\+\_\+amplitude)
+\begin{DoxyCompactList}\small\item\em Construct a \doxylink{classclue_1_1GaussianKernel}{Gaussian\+Kernel} object. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename TAcc$>$ }\\ALPAKA\+\_\+\+FN\+\_\+\+HOST\+\_\+\+ACC float \mbox{\hyperlink{classclue_1_1GaussianKernel_ab2486a7a7224eac9a730002f95e50437}{operator()}} (const TAcc \&acc, float dist\+\_\+ij, int point\+\_\+id, int j) const
+\begin{DoxyCompactList}\small\item\em Computes the kernel value between two points. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classclue_1_1GaussianKernel_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classclue_1_1GaussianKernel_af96609fe952e4ddd8d3bd69740fd84d0}\index{clue::GaussianKernel@{clue::GaussianKernel}!GaussianKernel@{GaussianKernel}}
+\index{GaussianKernel@{GaussianKernel}!clue::GaussianKernel@{clue::GaussianKernel}}
+\doxysubsubsection{\texorpdfstring{GaussianKernel()}{GaussianKernel()}}
+{\footnotesize\ttfamily \label{classclue_1_1GaussianKernel_af96609fe952e4ddd8d3bd69740fd84d0} 
+clue\+::\+Gaussian\+Kernel\+::\+Gaussian\+Kernel (\begin{DoxyParamCaption}\item[{float}]{gaus\+\_\+avg}{, }\item[{float}]{gaus\+\_\+std}{, }\item[{float}]{gaus\+\_\+amplitude}{}\end{DoxyParamCaption})}
+
+
+
+Construct a \doxylink{classclue_1_1GaussianKernel}{Gaussian\+Kernel} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gaus\+\_\+avg} & The average value for the Gaussian kernel \\
+\hline
+{\em gaus\+\_\+std} & The standard deviation for the Gaussian kernel \\
+\hline
+{\em gaus\+\_\+amplitude} & The amplitude for the Gaussian kernel \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classclue_1_1GaussianKernel_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classclue_1_1GaussianKernel_ab2486a7a7224eac9a730002f95e50437}\index{clue::GaussianKernel@{clue::GaussianKernel}!operator()@{operator()}}
+\index{operator()@{operator()}!clue::GaussianKernel@{clue::GaussianKernel}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily \label{classclue_1_1GaussianKernel_ab2486a7a7224eac9a730002f95e50437} 
+template$<$typename TAcc$>$ \\
+ALPAKA\+\_\+\+FN\+\_\+\+HOST\+\_\+\+ACC float clue\+::\+Gaussian\+Kernel\+::operator() (\begin{DoxyParamCaption}\item[{const TAcc \&}]{acc}{, }\item[{float}]{dist\+\_\+ij}{, }\item[{int}]{point\+\_\+id}{, }\item[{int}]{j}{}\end{DoxyParamCaption}) const}
+
+
+
+Computes the kernel value between two points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em acc} & The accelerator to use for the computation \\
+\hline
+{\em dist\+\_\+ij} & The distance between the two points \\
+\hline
+{\em point\+\_\+id} & The index of the first point \\
+\hline
+{\em j} & The index of the second point \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The computed kernel value 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\+CLUEstering/core/Convolutional\+Kernel.\+hpp\end{DoxyCompactItemize}

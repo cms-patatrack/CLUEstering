@@ -1,0 +1,136 @@
+\doxysection{Clusterer.\+hpp}
+\hypertarget{Clusterer_8hpp_source}{}\label{Clusterer_8hpp_source}\index{include/CLUEstering/core/Clusterer.hpp@{include/CLUEstering/core/Clusterer.hpp}}
+\mbox{\hyperlink{Clusterer_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/core/defines.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/core/detail/CLUEAlpakaKernels.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/PointsHost.hpp"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/PointsDevice.hpp"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/Tiles.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/internal/Followers.hpp"{}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{namespace\ }clue\ \{}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classclue_1_1Clusterer_a112ae74f59e0fd846417f77a920243d9}{Clusterer}}\ \{}
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{using\ }CoordinateExtremes\ =\ \mbox{\hyperlink{classclue_1_1CoordinateExtremes}{clue::CoordinateExtremes<Ndim>}};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{using\ }PointsHost\ =\ \mbox{\hyperlink{classclue_1_1PointsHost}{clue::PointsHost<Ndim>}};}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{using\ }PointsDevice\ =\ \mbox{\hyperlink{classclue_1_1PointsDevice}{clue::PointsDevice<Ndim,\ clue::Device>}};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{using\ }TilesDevice\ =\ \mbox{\hyperlink{classclue_1_1TilesAlpaka}{clue::TilesAlpaka<Ndim,\ clue::Device>}};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{using\ }FollowersDevice\ =\ clue::Followers<clue::Device>;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{using\ }Acc\ =\ internal::Acc;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ reserve\ =\ detail::reserve;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classclue_1_1Clusterer_a112ae74f59e0fd846417f77a920243d9}{Clusterer}}(\textcolor{keywordtype}{float}\ dc,\ \textcolor{keywordtype}{float}\ rhoc,\ \textcolor{keywordtype}{float}\ dm,\ \textcolor{keywordtype}{float}\ seed\_dc\ =\ -\/1.f,\ \textcolor{keywordtype}{int}\ pPBin\ =\ 128);}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classclue_1_1Clusterer_ac021a78f9e554c424390183479634ffc}{Clusterer}}(}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ Queue\&\ queue,\ \textcolor{keywordtype}{float}\ dc,\ \textcolor{keywordtype}{float}\ rhoc,\ \textcolor{keywordtype}{float}\ dm,\ \textcolor{keywordtype}{float}\ seed\_dc\ =\ -\/1.f,\ \textcolor{keywordtype}{int}\ pPBin\ =\ 128);}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classclue_1_1Clusterer_ab5c97ff2cba9ff97c5692c878d408304}{Clusterer}}(Queue\&\ queue,}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TilesDevice*\ tile\_buffer,}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dc,}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ rhoc,}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dm,}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ seed\_dc\ =\ -\/1.f,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ pPBin\ =\ 128);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{structclue_1_1TilesAlpakaView}{TilesAlpakaView<Ndim>}}*\ m\_tiles;}
+\DoxyCodeLine{00069\ \ \ \ \ VecArray<int32\_t,\ reserve>*\ m\_seeds;}
+\DoxyCodeLine{00070\ \ \ \ \ FollowersView*\ m\_followers;}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ KernelType>}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classclue_1_1Clusterer_a1da06cdaeae40f4aa90cfe4a2bcd37c1}{make\_clusters}}(PointsHost\&\ h\_points,}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ KernelType\&\ kernel,}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Queue\&\ queue,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ block\_size);}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ KernelType>}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classclue_1_1Clusterer_a87decd3e0a87b1b69a2a1278169b3512}{make\_clusters}}(PointsHost\&\ h\_points,\ \textcolor{keyword}{const}\ KernelType\&\ kernel,\ std::size\_t\ block\_size);}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ KernelType>}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classclue_1_1Clusterer_ad42a0bab5ce5434fb92272ecf5f21c77}{make\_clusters}}(PointsHost\&\ h\_points,}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PointsDevice\&\ dev\_points,}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ KernelType\&\ kernel,}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Queue\&\ queue,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ block\_size);}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ KernelType>}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classclue_1_1Clusterer_a8764be313ce05b624872ae400cb0ed14}{make\_clusters}}(PointsHost\&\ h\_points,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PointsDevice\&\ dev\_points,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ KernelType\&\ kernel,}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ block\_size);}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ KernelType>}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classclue_1_1Clusterer_a16cc71334d3018ecd96d96e45504007a}{make\_clusters}}(PointsDevice\&\ dev\_points,}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ KernelType\&\ kernel,}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Queue\&\ queue,}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ block\_size);}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classclue_1_1Clusterer_ac426421ce0989c84c10efc2951e984fc}{setWrappedCoordinates}}(\textcolor{keyword}{const}\ std::array<uint8\_t,\ Ndim>\&\ wrappedCoordinates);}
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classclue_1_1Clusterer_a946a7a452368fe84beba41b2015c1a88}{setWrappedCoordinates}}(std::array<uint8\_t,\ Ndim>\&\&\ wrappedCoordinates);}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ TArgs>}
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classclue_1_1Clusterer_a293f55603b867097d82f1de0a523d99c}{setWrappedCoordinates}}(TArgs...\ wrappedCoordinates);}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00145\ \ \ \ \ std::vector<std::vector<int>>\ \mbox{\hyperlink{classclue_1_1Clusterer_ab58d9be94f094a88b87de2e2996dbd81}{getClusters}}(\textcolor{keyword}{const}\ PointsHost\&\ h\_points);}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_dc;}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_seed\_dc;}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_rhoc;}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_dm;}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_pointsPerTile;\ \ \textcolor{comment}{//\ average\ number\ of\ points\ found\ in\ a\ tile}}
+\DoxyCodeLine{00153\ \ \ \ \ std::array<uint8\_t,\ Ndim>\ m\_wrappedCoordinates;}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{comment}{//\ internal\ buffers}}
+\DoxyCodeLine{00156\ \ \ \ \ std::optional<TilesDevice>\ d\_tiles;}
+\DoxyCodeLine{00157\ \ \ \ \ std::optional<clue::device\_buffer<Device,\ VecArray<int32\_t,\ reserve>>>\ d\_seeds;}
+\DoxyCodeLine{00158\ \ \ \ \ std::optional<FollowersDevice>\ d\_followers;}
+\DoxyCodeLine{00159\ \ \ \ \ std::optional<PointsDevice>\ d\_points;}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{void}\ init\_device(Queue\&\ queue);}
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keywordtype}{void}\ init\_device(Queue\&\ queue,\ TilesDevice*\ tile\_buffer);}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordtype}{void}\ setupTiles(Queue\&\ queue,\ \textcolor{keyword}{const}\ PointsHost\&\ h\_points);}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keywordtype}{void}\ setupTiles(Queue\&\ queue,\ \textcolor{keyword}{const}\ PointsDevice\&\ d\_points);}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{void}\ setupFollowers(Queue\&\ queue,\ int32\_t\ n\_points);}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordtype}{void}\ setupPoints(\textcolor{keyword}{const}\ PointsHost\&\ h\_points,\ PointsDevice\&\ dev\_points,\ Queue\&\ queue);}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{void}\ setup(Queue\&\ queue,\ \textcolor{keyword}{const}\ PointsHost\&\ h\_points,\ PointsDevice\&\ dev\_points)\ \{}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ setupTiles(queue,\ h\_points);}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ setupFollowers(queue,\ h\_points.size());}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ setupPoints(h\_points,\ dev\_points,\ queue);}
+\DoxyCodeLine{00175\ \ \ \ \ \}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keywordtype}{void}\ calculate\_tile\_size(\mbox{\hyperlink{classclue_1_1CoordinateExtremes}{CoordinateExtremes}}*\ min\_max,}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}*\ tile\_sizes,}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsHost}{PointsHost}}\&\ h\_points,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int32\_t\ nPerDim);}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{void}\ calculate\_tile\_size(Queue\&\ queue,}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classclue_1_1CoordinateExtremes}{CoordinateExtremes}}*\ min\_max,}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}*\ tile\_sizes,}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsDevice}{PointsDevice}}\&\ dev\_points,}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ nPerDim);}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ KernelType>}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{void}\ make\_clusters\_impl(\mbox{\hyperlink{classclue_1_1PointsHost}{PointsHost}}\&\ h\_points,}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice}{PointsDevice}}\&\ dev\_points,}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ KernelType\&\ kernel,}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Queue\&\ queue,}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ block\_size);}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ KernelType>}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordtype}{void}\ make\_clusters\_impl(\mbox{\hyperlink{classclue_1_1PointsDevice}{PointsDevice}}\&\ dev\_points,}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ KernelType\&\ kernel,}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Queue\&\ queue,}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ block\_size);}
+\DoxyCodeLine{00198\ \ \ \};}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \}\ \ \textcolor{comment}{//\ namespace\ clue}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/core/detail/Clusterer.hpp"{}}}
+
+\end{DoxyCode}
