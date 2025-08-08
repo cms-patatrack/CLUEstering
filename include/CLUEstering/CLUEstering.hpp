@@ -9,3 +9,4 @@
 #include "CLUEstering/data_structures/Tiles.hpp"
 #include "CLUEstering/utils/read_csv.hpp"
 #include "CLUEstering/utils/get_device.hpp"
+#include "CLUEstering/utils/get_queue.hpp"

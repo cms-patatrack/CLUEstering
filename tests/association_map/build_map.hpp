@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "CLUEstering/core/defines.hpp"
+#include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/algorithm/extrema/extrema.hpp"
