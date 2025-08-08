@@ -8,6 +8,8 @@
 
 namespace clue {
 
+  /// @brief The FlatKernel class implements a flat kernel for convolution.
+  /// It returns a constant value for the kernel, regardless of the distance between points.
   class FlatKernel {
   private:
     float m_flat;
@@ -29,6 +31,8 @@ namespace clue {
     ALPAKA_FN_HOST_ACC float operator()(const TAcc&, float /*dist_ij*/, int point_id, int j) const;
   };
 
+  /// @brief The GaussianKernel class implements a Gaussian kernel for convolution.
+  /// It computes the kernel value based on the Gaussian function, which is defined by its average, standard deviation, and amplitude.
   class GaussianKernel {
   private:
     float m_gaus_avg;
@@ -54,6 +58,8 @@ namespace clue {
     ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const;
   };
 
+  /// @brief The ExponentialKernel class implements an exponential kernel for convolution.
+  /// It computes the kernel value based on the exponential function, which is defined by its average and amplitude.
   class ExponentialKernel {
   private:
     float m_exp_avg;

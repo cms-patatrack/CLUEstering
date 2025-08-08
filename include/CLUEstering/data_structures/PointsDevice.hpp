@@ -18,6 +18,11 @@ namespace clue {
 
   namespace concepts = detail::concepts;
 
+  /// @brief The PointsDevice class is a data structure that manages points on a device.
+  /// It provides methods to allocate, access, and manipulate points in device memory.
+  ///
+  /// @tparam Ndim The number of dimensions of the points to manage
+  /// @tparam TDev The device type to use for the allocation. Defaults to clue::Device.
   template <uint8_t Ndim, concepts::device TDev = clue::Device>
   class PointsDevice {
   public:

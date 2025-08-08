@@ -23,6 +23,10 @@ namespace clue {
 
   struct AssociationMapView;
 
+  /// @brief The AssociationMap class is a data structure that maps keys to values.
+  /// It associates integer keys with integer values in ono-to-many or many-to-many associations.
+  ///
+  /// @tparam TDev The device type to use for the allocation. Defaults to clue::Device.
   template <concepts::device TDev = clue::Device>
   class AssociationMap {
   public:

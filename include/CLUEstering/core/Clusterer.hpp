@@ -16,6 +16,11 @@
 
 namespace clue {
 
+  /// @brief The Clusterer class is the interface for running the clustering algorithm.
+  /// It provides methods to set up the clustering parameters, initializes the internal buffers
+  /// and runs the clustering algorithm on host or device points.
+  ///
+  /// @tparam Ndim The number of dimensions of the points to cluster
   template <uint8_t Ndim>
   class Clusterer {
   private:

@@ -989,8 +989,8 @@ INPUT                  = include/CLUEstering/CLUEstering.hpp \
 						 include/CLUEstering/utils \
 						 docs/introduction.dox \
 						 docs/installation.dox \
-						 docs/cxx \
-						 docs/python
+						 docs/dependencies.dox \
+						 docs/getting-started.dox 
 
 # This tag can be used to specify the character encoding of the source files
 # that Doxygen parses. Internally Doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1144,7 +1144,8 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             =
+IMAGE_PATH             = images/docs \
+						 images/docs/getting-started
 
 # The INPUT_FILTER tag can be used to specify a program that Doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
