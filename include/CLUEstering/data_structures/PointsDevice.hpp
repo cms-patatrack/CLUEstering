@@ -1,3 +1,6 @@
+/// @file PointsDevice.hpp
+/// @brief Provides the PointsDevice class for managing points on a device
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 

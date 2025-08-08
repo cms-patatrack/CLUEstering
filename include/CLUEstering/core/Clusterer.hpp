@@ -1,8 +1,6 @@
-/**
- * @file Clusterer.hpp
- * @brief Implements the Clusterer class, which is the interface for running the clustering algorithm.
- * @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
- */
+/// @file Clusterer.hpp
+/// @brief Implements the Clusterer class, which is the interface for running the clustering algorithm.
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 

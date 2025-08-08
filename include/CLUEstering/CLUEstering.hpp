@@ -1,8 +1,6 @@
-/**
- * @file CLUEstering.hpp
- * @brief Header file for the CLUEstering library.
- * @author Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
- */
+/// @file CLUEstering.hpp
+/// @brief Header file for the CLUEstering library.
+/// @author Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 

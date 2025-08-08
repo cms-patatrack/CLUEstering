@@ -1,3 +1,6 @@
+/// @file ConvolutionalKernel.hpp
+/// @brief Provides the kernel classes for the convolution done when computing the weighted density of the points
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 

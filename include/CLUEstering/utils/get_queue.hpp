@@ -1,3 +1,6 @@
+/// @file get_queue.hpp
+/// @brief Provides functions to get an alpaka queue from a device index or a device object
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 

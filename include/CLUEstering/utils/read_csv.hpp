@@ -1,3 +1,6 @@
+/// @file read_csv.hpp
+/// @brief Provides functions to read points from a CSV file into a PointsHost object
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 

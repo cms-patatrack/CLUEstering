@@ -1,3 +1,6 @@
+/// @file get_device.hpp
+/// @brief Provides a function to get an alpaka device by its index
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 
