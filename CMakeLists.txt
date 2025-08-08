@@ -4,7 +4,7 @@ project(
   LANGUAGES CXX
   VERSION 2.6.4.3)
 
-option(BUILD_PYTHON "Build the Python bindings" OFF)
+  option(BUILD_PYTHON "Build the Python bindings" OFF)
 
 if(BUILD_PYTHON)
   add_subdirectory(extern/pybind11)

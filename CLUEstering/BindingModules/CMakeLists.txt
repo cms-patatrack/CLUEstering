@@ -22,7 +22,7 @@ string(
 )
 
 # include pybind11 extern subfolder
-set(PYBIND11_FINDPYTHON ON)
+  set(PYBIND11_FINDPYTHON ON)
 set(PYBIND11_PYTHON_VERSION ">=3.8")
 
 find_package(Boost 1.75.0 REQUIRED)
