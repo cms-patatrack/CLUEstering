@@ -10,6 +10,11 @@
 
 namespace clue {
 
+  namespace test {
+    template <concepts::queue _TQueue>
+    auto build_map(_TQueue&, std::span<const int32_t>, int32_t);
+  }
+
   namespace concepts = detail::concepts;
 
   struct AssociationMapView;
@@ -103,6 +108,9 @@ namespace clue {
 
     template <uint8_t Ndim, concepts::device _TDev>
     friend class TilesAlpaka;
+
+    template <concepts::queue _TQueue>
+    friend auto clue::test::build_map(_TQueue&, std::span<key_type>, int32_t);
   };
 
 }  // namespace clue
