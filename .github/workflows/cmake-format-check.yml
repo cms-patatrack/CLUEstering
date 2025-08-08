@@ -1,0 +1,110 @@
+# .github/workflows/cmake-format-check.yml
+
+name: CMake format check
+
+on:
+  pull_request:
+    paths:
+      - "**/CMakeLists.txt"
+      - "**/*.cmake"
+      - ".cmake-format.*"
+  push:
+    branches: [ main ]
+    paths:
+      - "**/CMakeLists.txt"
+      - "**/*.cmake"
+      - ".cmake-format.*"
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install cmake-format
+        run: |
+          python -m pip install --upgrade pip
+          pip install cmakelang
+          
+      - name: Check cmake-format and provide patch file if needed. 
+        shell: bash
+        run: |
+          set -euo pipefail #needed afterwards for checking diffs
+      
+          TMPDIR="$(mktemp -d)"
+
+          mapfile -d '' -t FILES < <(git ls-files -z ':(glob)**/CMakeLists.txt' ':(glob)**/*.cmake')
+          if (( ${#FILES[@]} == 0 )); then
+            echo "No CMake files found."
+            exit 0
+          fi
+      
+          echo "Checking ${#FILES[@]} CMake files"
+          bad=() #store files needing formatting
+          PATCH="$TMPDIR/cmake-format.patch"
+          : > "$PATCH"
+          : > "$TMPDIR/diffs.txt"
+      
+          for f in "${FILES[@]}"; do
+            out="$TMPDIR/${f//\//__}"
+            cmake-format "$f" > "$out"
+            
+            
+            if ! diff -u "$f" "$out" | tee -a "$TMPDIR/diffs.txt"; then
+              bad+=("$f")
+              echo >> "$TMPDIR/diffs.txt"
+              
+              # provide patch file 
+              diff -u "$f" "$out" >> "$PATCH" || true
+
+            fi
+          done
+          
+          if (( ${#bad[@]} )); then
+            echo "CMake files are not properly formatted. Run 'cmake-format -i' locally."
+            echo ""
+            echo "Files needing formatting:"
+            printf '%s\n' "${bad[@]}" | sort -u
+            echo ""
+            echo "Diffs (what to change):"
+            cat "$TMPDIR/diffs.txt"
+          
+            mv "$PATCH" "./cmake-format.patch"
+          
+          else
+            echo "All CMake files are properly formatted"
+          fi
+      
+
+      - name: Upload cmake-format patch
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f "cmake-format.patch" ]]; then
+            echo "Uploading cmake-format.patch"
+          else
+            echo "No patch to upload."
+            exit 0
+          fi
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cmake-format.patch
+          path: cmake-format.patch
+
+
+      - name: Suggest patch file 
+        shell: bash
+        run: |
+          if [[ -f "cmake-format.patch" ]]; then
+            echo "Formatting is required. Download 'cmake-format.patch' from artifacts and apply patch file with:"
+            echo "  git apply cmake-format.patch"
+            exit 1
+          else
+            echo "No formatting issues detected."
+          fi
+
