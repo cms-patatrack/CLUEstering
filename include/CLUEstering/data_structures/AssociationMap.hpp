@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/internal/Span.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
@@ -19,7 +20,7 @@ namespace clue {
 
   struct AssociationMapView;
 
-  template <concepts::device TDev>
+  template <concepts::device TDev = clue::Device>
   class AssociationMap {
   public:
     using key_type = int32_t;

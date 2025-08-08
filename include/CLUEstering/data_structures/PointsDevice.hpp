@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
@@ -14,7 +15,7 @@ namespace clue {
 
   namespace concepts = detail::concepts;
 
-  template <uint8_t Ndim, concepts::device TDev>
+  template <uint8_t Ndim, concepts::device TDev = clue::Device>
   class PointsDevice {
   public:
     template <concepts::queue TQueue>
