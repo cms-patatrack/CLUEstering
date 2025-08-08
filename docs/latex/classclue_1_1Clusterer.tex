@@ -1,26 +1,5 @@
 \doxysection{clue\+::Clusterer\texorpdfstring{$<$}{<} Ndim \texorpdfstring{$>$}{>} Class Template Reference}
 \hypertarget{classclue_1_1Clusterer}{}\label{classclue_1_1Clusterer}\index{clue::Clusterer$<$ Ndim $>$@{clue::Clusterer$<$ Ndim $>$}}
-\doxysubsubsection*{Public Types}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{classclue_1_1Clusterer_a7a45ff9836e2f9dc0a9a622cc00ecd2c}\label{classclue_1_1Clusterer_a7a45ff9836e2f9dc0a9a622cc00ecd2c} 
-using {\bfseries Coordinate\+Extremes} = \mbox{\hyperlink{classclue_1_1CoordinateExtremes}{clue\+::\+Coordinate\+Extremes}}$<$Ndim$>$
-\item 
-\Hypertarget{classclue_1_1Clusterer_a65d9736cba6fbf66714d0a47758e7f52}\label{classclue_1_1Clusterer_a65d9736cba6fbf66714d0a47758e7f52} 
-using {\bfseries Points\+Host} = \mbox{\hyperlink{classclue_1_1PointsHost}{clue\+::\+Points\+Host}}$<$Ndim$>$
-\item 
-\Hypertarget{classclue_1_1Clusterer_aadc2c302937a4fd891f827b6511b3778}\label{classclue_1_1Clusterer_aadc2c302937a4fd891f827b6511b3778} 
-using {\bfseries Points\+Device} = \mbox{\hyperlink{classclue_1_1PointsDevice}{clue\+::\+Points\+Device}}$<$Ndim, clue\+::\+Device$>$
-\item 
-\Hypertarget{classclue_1_1Clusterer_a4cf8ba9b5dac5764d0f08516ecc431f6}\label{classclue_1_1Clusterer_a4cf8ba9b5dac5764d0f08516ecc431f6} 
-using {\bfseries Tiles\+Device} = \mbox{\hyperlink{classclue_1_1TilesAlpaka}{clue\+::\+Tiles\+Alpaka}}$<$Ndim, clue\+::\+Device$>$
-\item 
-\Hypertarget{classclue_1_1Clusterer_a9e9766ab65b414599b6110e101dc322b}\label{classclue_1_1Clusterer_a9e9766ab65b414599b6110e101dc322b} 
-using {\bfseries Followers\+Device} = clue\+::\+Followers$<$clue\+::\+Device$>$
-\item 
-\Hypertarget{classclue_1_1Clusterer_a0192be7acdb158d4be3fc883b873080b}\label{classclue_1_1Clusterer_a0192be7acdb158d4be3fc883b873080b} 
-using {\bfseries Acc} = internal\+::\+Acc
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -48,24 +27,6 @@ void \mbox{\hyperlink{classclue_1_1Clusterer_a946a7a452368fe84beba41b2015c1a88}{
 \begin{DoxyCompactList}\small\item\em Specify which coordinates are periodic. \end{DoxyCompactList}\item 
 std\+::vector$<$ std\+::vector$<$ int $>$ $>$ \mbox{\hyperlink{classclue_1_1Clusterer_ab58d9be94f094a88b87de2e2996dbd81}{get\+Clusters}} (const \mbox{\hyperlink{classclue_1_1PointsHost}{Points\+Host}} \&h\+\_\+points)
 \begin{DoxyCompactList}\small\item\em Get the clusters from the host points. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{classclue_1_1Clusterer_ad01c2d397fc129ed292bc6dff118f8ce}\label{classclue_1_1Clusterer_ad01c2d397fc129ed292bc6dff118f8ce} 
-\mbox{\hyperlink{structclue_1_1TilesAlpakaView}{Tiles\+Alpaka\+View}}$<$ Ndim $>$ \texorpdfstring{$\ast$}{*} {\bfseries m\+\_\+tiles}
-\item 
-\Hypertarget{classclue_1_1Clusterer_ab16683526648c8b7ad551a223d96c1cb}\label{classclue_1_1Clusterer_ab16683526648c8b7ad551a223d96c1cb} 
-Vec\+Array$<$ int32\+\_\+t, reserve $>$ \texorpdfstring{$\ast$}{*} {\bfseries m\+\_\+seeds}
-\item 
-\Hypertarget{classclue_1_1Clusterer_a432863fa0e770779cf79d2318ed4d87d}\label{classclue_1_1Clusterer_a432863fa0e770779cf79d2318ed4d87d} 
-Followers\+View \texorpdfstring{$\ast$}{*} {\bfseries m\+\_\+followers}
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Static Public Attributes}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{classclue_1_1Clusterer_ace3c4653aabf7404eeb7d18e2ef3243b}\label{classclue_1_1Clusterer_ace3c4653aabf7404eeb7d18e2ef3243b} 
-static constexpr auto {\bfseries reserve} = detail\+::reserve
-\end{DoxyCompactItemize}
 
 
 \label{doc-constructors}
@@ -76,7 +37,7 @@ static constexpr auto {\bfseries reserve} = detail\+::reserve
 \doxysubsubsection{\texorpdfstring{Clusterer()}{Clusterer()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
 {\footnotesize\ttfamily \label{classclue_1_1Clusterer_a112ae74f59e0fd846417f77a920243d9} 
 template$<$uint8\+\_\+t Ndim$>$ \\
-\mbox{\hyperlink{classclue_1_1Clusterer}{clue\+::\+Clusterer}}$<$ Ndim $>$\+::\+Clusterer (\begin{DoxyParamCaption}\item[{float}]{dc}{, }\item[{float}]{rhoc}{, }\item[{float}]{dm}{, }\item[{float}]{seed\+\_\+dc}{ = {\ttfamily -\/1.f}, }\item[{int}]{p\+PBin}{ = {\ttfamily 128}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+\mbox{\hyperlink{classclue_1_1Clusterer}{clue\+::\+Clusterer}}$<$ Ndim $>$\+::\+Clusterer (\begin{DoxyParamCaption}\item[{float}]{dc}{, }\item[{float}]{rhoc}{, }\item[{float}]{dm}{, }\item[{float}]{seed\+\_\+dc}{ = {\ttfamily -\/1.f}, }\item[{int}]{p\+PBin}{ = {\ttfamily 128}}\end{DoxyParamCaption})}
 
 
 
@@ -100,7 +61,7 @@ Constuct a \doxylink{classclue_1_1Clusterer}{Clusterer} object.
 \doxysubsubsection{\texorpdfstring{Clusterer()}{Clusterer()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
 {\footnotesize\ttfamily \label{classclue_1_1Clusterer_ac021a78f9e554c424390183479634ffc} 
 template$<$uint8\+\_\+t Ndim$>$ \\
-\mbox{\hyperlink{classclue_1_1Clusterer}{clue\+::\+Clusterer}}$<$ Ndim $>$\+::\+Clusterer (\begin{DoxyParamCaption}\item[{Queue \&}]{queue}{, }\item[{float}]{dc}{, }\item[{float}]{rhoc}{, }\item[{float}]{dm}{, }\item[{float}]{seed\+\_\+dc}{ = {\ttfamily -\/1.f}, }\item[{int}]{p\+PBin}{ = {\ttfamily 128}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+\mbox{\hyperlink{classclue_1_1Clusterer}{clue\+::\+Clusterer}}$<$ Ndim $>$\+::\+Clusterer (\begin{DoxyParamCaption}\item[{Queue \&}]{queue}{, }\item[{float}]{dc}{, }\item[{float}]{rhoc}{, }\item[{float}]{dm}{, }\item[{float}]{seed\+\_\+dc}{ = {\ttfamily -\/1.f}, }\item[{int}]{p\+PBin}{ = {\ttfamily 128}}\end{DoxyParamCaption})}
 
 
 
@@ -126,7 +87,7 @@ Constuct a \doxylink{classclue_1_1Clusterer}{Clusterer} object.
 \doxysubsubsection{\texorpdfstring{Clusterer()}{Clusterer()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
 {\footnotesize\ttfamily \label{classclue_1_1Clusterer_ab5c97ff2cba9ff97c5692c878d408304} 
 template$<$uint8\+\_\+t Ndim$>$ \\
-\mbox{\hyperlink{classclue_1_1Clusterer}{clue\+::\+Clusterer}}$<$ Ndim $>$\+::\+Clusterer (\begin{DoxyParamCaption}\item[{Queue \&}]{queue}{, }\item[{\mbox{\hyperlink{classclue_1_1TilesAlpaka}{Tiles\+Device}} \texorpdfstring{$\ast$}{*}}]{tile\+\_\+buffer}{, }\item[{float}]{dc}{, }\item[{float}]{rhoc}{, }\item[{float}]{dm}{, }\item[{float}]{seed\+\_\+dc}{ = {\ttfamily -\/1.f}, }\item[{int}]{p\+PBin}{ = {\ttfamily 128}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+\mbox{\hyperlink{classclue_1_1Clusterer}{clue\+::\+Clusterer}}$<$ Ndim $>$\+::\+Clusterer (\begin{DoxyParamCaption}\item[{Queue \&}]{queue}{, }\item[{\mbox{\hyperlink{classclue_1_1TilesAlpaka}{Tiles\+Device}} \texorpdfstring{$\ast$}{*}}]{tile\+\_\+buffer}{, }\item[{float}]{dc}{, }\item[{float}]{rhoc}{, }\item[{float}]{dm}{, }\item[{float}]{seed\+\_\+dc}{ = {\ttfamily -\/1.f}, }\item[{int}]{p\+PBin}{ = {\ttfamily 128}}\end{DoxyParamCaption})}
 
 
 

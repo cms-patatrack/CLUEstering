@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CLUEstering: include/CLUEstering/CLUEstering.hpp Source File</title>
+<title>CLUEstering: include/CLUEstering/utils/get_queue.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -64,7 +64,7 @@ $(function() {
   </div>
 </div>
 <script type="text/javascript">
-$(function(){initNavTree('CLUEstering_8hpp_source.html','',''); });
+$(function(){initNavTree('get__queue_8hpp_source.html','',''); });
 </script>
 <div id="container">
 <div id="doc-content">
@@ -90,30 +90,38 @@ $(function(){initNavTree('CLUEstering_8hpp_source.html','',''); });
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">CLUEstering.hpp</div></div>
+  <div class="headertitle"><div class="title">get_queue.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="CLUEstering_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma once</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;CLUEstering/core/detail/defines.hpp&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;CLUEstering/detail/concepts.hpp&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;concepts&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;alpaka/alpaka.hpp&gt;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="Clusterer_8hpp.html">CLUEstering/core/Clusterer.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;CLUEstering/core/ConvolutionalKernel.hpp&quot;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;CLUEstering/core/detail/defines.hpp&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;CLUEstering/data_structures/PointsHost.hpp&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;CLUEstering/data_structures/PointsDevice.hpp&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;CLUEstering/data_structures/Tiles.hpp&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;CLUEstering/utils/read_csv.hpp&quot;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;CLUEstering/utils/get_device.hpp&quot;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;CLUEstering/utils/get_queue.hpp&quot;</span></div>
-<div class="ttc" id="aClusterer_8hpp_html"><div class="ttname"><a href="Clusterer_8hpp.html">Clusterer.hpp</a></div><div class="ttdoc">Implements the Clusterer class, which is the interface for running the clustering algorithm.</div></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>clue {</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>  <span class="keyword">template</span> &lt;std::<span class="keywordtype">int</span>egral TIdx&gt;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>  <span class="keyword">inline</span> clue::Queue get_queue(TIdx device_id = TIdx{}) {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">auto</span> device = alpaka::getDevByIdx(clue::Platform{}, device_id);</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keywordflow">return</span> clue::Queue{device};</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  }</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  <span class="keyword">template</span> &lt;detail::concepts::device TDevice&gt;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  <span class="keyword">inline</span> clue::Queue get_queue(<span class="keyword">const</span> TDevice&amp; device) {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordflow">return</span> clue::Queue{device};</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  }</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>}  <span class="comment">// namespace clue</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_8dff6c10bf0afdabd1dec894b4deddc1.html">CLUEstering</a></li><li class="navelem"><a href="CLUEstering_8hpp.html">CLUEstering.hpp</a></li>
+    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_8dff6c10bf0afdabd1dec894b4deddc1.html">CLUEstering</a></li><li class="navelem"><a href="dir_4d002444c984ff1eb7009e06d7cb4d26.html">utils</a></li><li class="navelem"><b>get_queue.hpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

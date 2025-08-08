@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['make_5fclusters_0',['make_clusters',['../classclue_1_1Clusterer.html#a1da06cdaeae40f4aa90cfe4a2bcd37c1',1,'clue::Clusterer::make_clusters(PointsHost &amp;h_points, const KernelType &amp;kernel, Queue &amp;queue, std::size_t block_size)'],['../classclue_1_1Clusterer.html#a87decd3e0a87b1b69a2a1278169b3512',1,'clue::Clusterer::make_clusters(PointsHost &amp;h_points, const KernelType &amp;kernel, std::size_t block_size)'],['../classclue_1_1Clusterer.html#ad42a0bab5ce5434fb92272ecf5f21c77',1,'clue::Clusterer::make_clusters(PointsHost &amp;h_points, PointsDevice &amp;dev_points, const KernelType &amp;kernel, Queue &amp;queue, std::size_t block_size)'],['../classclue_1_1Clusterer.html#a8764be313ce05b624872ae400cb0ed14',1,'clue::Clusterer::make_clusters(PointsHost &amp;h_points, PointsDevice &amp;dev_points, const KernelType &amp;kernel, std::size_t block_size)'],['../classclue_1_1Clusterer.html#a16cc71334d3018ecd96d96e45504007a',1,'clue::Clusterer::make_clusters(PointsDevice &amp;dev_points, const KernelType &amp;kernel, Queue &amp;queue, std::size_t block_size)']]]
+  ['install_0',['How to install',['../installation.html',1,'']]],
+  ['installing_20the_20c_20interface_1',['Installing the C++ interface',['../installation.html#autotoc_md1',1,'']]],
+  ['installing_20the_20python_20interface_2',['Installing the Python interface',['../installation.html#autotoc_md2',1,'']]],
+  ['interface_3',['interface',['../installation.html#autotoc_md1',1,'Installing the C++ interface'],['../installation.html#autotoc_md2',1,'Installing the Python interface']]]
 ];

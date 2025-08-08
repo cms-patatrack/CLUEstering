@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rho_0',['rho',['../classclue_1_1PointsDevice.html#a9be1974bd8869ad5e51ab66eb1f523f7',1,'clue::PointsDevice::rho() const'],['../classclue_1_1PointsDevice.html#a4d6a5d40342cc472431328a73d16037d',1,'clue::PointsDevice::rho()']]]
+  ['operator_28_29_0',['operator()',['../classclue_1_1FlatKernel.html#ad4cafcafd85a591a35d38aeae81b9632',1,'clue::FlatKernel::operator()()'],['../classclue_1_1GaussianKernel.html#ab2486a7a7224eac9a730002f95e50437',1,'clue::GaussianKernel::operator()()'],['../classclue_1_1ExponentialKernel.html#a52c9ed16593cd7c5e0dbc07b1a187fa4',1,'clue::ExponentialKernel::operator()()']]]
 ];

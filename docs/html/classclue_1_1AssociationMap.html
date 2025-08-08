@@ -104,8 +104,14 @@ Public Types</h2></td></tr>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>key_type</b> = int32_t</td></tr>
 <tr class="memitem:aeda3d00e89348a20597393103e8fab43" id="r_aeda3d00e89348a20597393103e8fab43"><td class="memItemLeft" align="right" valign="top"><a id="aeda3d00e89348a20597393103e8fab43" name="aeda3d00e89348a20597393103e8fab43"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>mapped_type</b> = int32_t</td></tr>
+<tr class="memitem:af5dad821ac129041c18b62acd305b03a" id="r_af5dad821ac129041c18b62acd305b03a"><td class="memItemLeft" align="right" valign="top"><a id="af5dad821ac129041c18b62acd305b03a" name="af5dad821ac129041c18b62acd305b03a"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = std::pair&lt;key_type, mapped_type&gt;</td></tr>
 <tr class="memitem:a274be1f44715ada258492974b84cbeb8" id="r_a274be1f44715ada258492974b84cbeb8"><td class="memItemLeft" align="right" valign="top"><a id="a274be1f44715ada258492974b84cbeb8" name="a274be1f44715ada258492974b84cbeb8"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>size_type</b> = std::size_t</td></tr>
+<tr class="memitem:abf09e578b4ae2f5504856a47b71b4efd" id="r_abf09e578b4ae2f5504856a47b71b4efd"><td class="memItemLeft" align="right" valign="top"><a id="abf09e578b4ae2f5504856a47b71b4efd" name="abf09e578b4ae2f5504856a47b71b4efd"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b> = mapped_type*</td></tr>
+<tr class="memitem:aff156b743cfa5f17e130378603481da1" id="r_aff156b743cfa5f17e130378603481da1"><td class="memItemLeft" align="right" valign="top"><a id="aff156b743cfa5f17e130378603481da1" name="aff156b743cfa5f17e130378603481da1"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = const mapped_type*</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -117,40 +123,54 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a03a2b802bb2f948a05814ee2b638f49b" id="r_a03a2b802bb2f948a05814ee2b638f49b"><td class="memTemplParams" colspan="2">template&lt;concepts::queue TQueue&gt; </td></tr>
 <tr class="memitem:a03a2b802bb2f948a05814ee2b638f49b template"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a03a2b802bb2f948a05814ee2b638f49b">AssociationMap</a> (size_type nelements, size_type nbins, TQueue &amp;queue)</td></tr>
 <tr class="memdesc:a03a2b802bb2f948a05814ee2b638f49b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct an <a class="el" href="classclue_1_1AssociationMap.html">AssociationMap</a> with a specific number of elements and bins.  <br /></td></tr>
-<tr class="memitem:a4690b751e09a4ce04c102625314a527b" id="r_a4690b751e09a4ce04c102625314a527b"><td class="memItemLeft" align="right" valign="top">AssociationMapView *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4690b751e09a4ce04c102625314a527b">view</a> ()</td></tr>
-<tr class="memdesc:a4690b751e09a4ce04c102625314a527b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obtain a view of the <a class="el" href="classclue_1_1AssociationMap.html">AssociationMap</a>.  <br /></td></tr>
-<tr class="memitem:a6b41c241092381df6744c41bb5c567af" id="r_a6b41c241092381df6744c41bb5c567af"><td class="memTemplParams" colspan="2"><a id="a6b41c241092381df6744c41bb5c567af" name="a6b41c241092381df6744c41bb5c567af"></a>
-template&lt;concepts::queue TQueue&gt; </td></tr>
-<tr class="memitem:a6b41c241092381df6744c41bb5c567af template"><td class="memItemLeft" align="right" valign="top">ALPAKA_FN_HOST void&#160;</td><td class="memItemRight" valign="bottom"><b>initialize</b> (size_type nelements, size_type nbins, TQueue &amp;queue)</td></tr>
-<tr class="memitem:aaa26c983ee4f323027ccb8afbf77fd33" id="r_aaa26c983ee4f323027ccb8afbf77fd33"><td class="memTemplParams" colspan="2"><a id="aaa26c983ee4f323027ccb8afbf77fd33" name="aaa26c983ee4f323027ccb8afbf77fd33"></a>
-template&lt;concepts::queue TQueue&gt; </td></tr>
-<tr class="memitem:aaa26c983ee4f323027ccb8afbf77fd33 template"><td class="memItemLeft" align="right" valign="top">ALPAKA_FN_HOST void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> (TQueue &amp;queue, size_type nelements, size_type nbins)</td></tr>
-<tr class="memitem:a5cc1c5519c84188e267a29a2b4be50b1" id="r_a5cc1c5519c84188e267a29a2b4be50b1"><td class="memItemLeft" align="right" valign="top"><a id="a5cc1c5519c84188e267a29a2b4be50b1" name="a5cc1c5519c84188e267a29a2b4be50b1"></a>
-auto&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="memitem:a5cc1c5519c84188e267a29a2b4be50b1" id="r_a5cc1c5519c84188e267a29a2b4be50b1"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cc1c5519c84188e267a29a2b4be50b1">size</a> () const</td></tr>
+<tr class="memdesc:a5cc1c5519c84188e267a29a2b4be50b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of bins in the map.  <br /></td></tr>
 <tr class="memitem:aa1b1c333ac2590236db9f3fc539b5780" id="r_aa1b1c333ac2590236db9f3fc539b5780"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1b1c333ac2590236db9f3fc539b5780">extents</a> () const</td></tr>
-<tr class="memdesc:aa1b1c333ac2590236db9f3fc539b5780"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the size of the buffers in the <a class="el" href="classclue_1_1AssociationMap.html">AssociationMap</a>.  <br /></td></tr>
-<tr class="memitem:a21749e604b0bad9f81cf354c58b796bc" id="r_a21749e604b0bad9f81cf354c58b796bc"><td class="memItemLeft" align="right" valign="top"><a id="a21749e604b0bad9f81cf354c58b796bc" name="a21749e604b0bad9f81cf354c58b796bc"></a>
-ALPAKA_FN_HOST const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>indexes</b> () const</td></tr>
-<tr class="memitem:a609c8abb7e698a8bb9b7a92460f96575" id="r_a609c8abb7e698a8bb9b7a92460f96575"><td class="memItemLeft" align="right" valign="top"><a id="a609c8abb7e698a8bb9b7a92460f96575" name="a609c8abb7e698a8bb9b7a92460f96575"></a>
-ALPAKA_FN_HOST auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>indexes</b> ()</td></tr>
-<tr class="memitem:a744b74797f2466efdd74e08227add30c" id="r_a744b74797f2466efdd74e08227add30c"><td class="memItemLeft" align="right" valign="top"><a id="a744b74797f2466efdd74e08227add30c" name="a744b74797f2466efdd74e08227add30c"></a>
-ALPAKA_FN_ACC Span&lt; int32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>indexes</b> (size_type bin_id)</td></tr>
-<tr class="memitem:a95073931c8e7b83184fb750e3ced1334" id="r_a95073931c8e7b83184fb750e3ced1334"><td class="memItemLeft" align="right" valign="top"><a id="a95073931c8e7b83184fb750e3ced1334" name="a95073931c8e7b83184fb750e3ced1334"></a>
-ALPAKA_FN_HOST device_view&lt; TDev, int32_t[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>indexes</b> (const TDev &amp;dev, size_type bin_id)</td></tr>
-<tr class="memitem:a5868529f2f0fde1ee0e3f0c9be69734d" id="r_a5868529f2f0fde1ee0e3f0c9be69734d"><td class="memItemLeft" align="right" valign="top"><a id="a5868529f2f0fde1ee0e3f0c9be69734d" name="a5868529f2f0fde1ee0e3f0c9be69734d"></a>
-ALPAKA_FN_ACC Span&lt; int32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_type bin_id)</td></tr>
-<tr class="memitem:a888af7761de4f63c6ba84dd9f8a06102" id="r_a888af7761de4f63c6ba84dd9f8a06102"><td class="memItemLeft" align="right" valign="top"><a id="a888af7761de4f63c6ba84dd9f8a06102" name="a888af7761de4f63c6ba84dd9f8a06102"></a>
-ALPAKA_FN_HOST const device_buffer&lt; TDev, int32_t[]&gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>offsets</b> () const</td></tr>
-<tr class="memitem:a97dedc4455a78389ba5c6eaccecfbd2d" id="r_a97dedc4455a78389ba5c6eaccecfbd2d"><td class="memItemLeft" align="right" valign="top"><a id="a97dedc4455a78389ba5c6eaccecfbd2d" name="a97dedc4455a78389ba5c6eaccecfbd2d"></a>
-ALPAKA_FN_HOST device_buffer&lt; TDev, int32_t[]&gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>offsets</b> ()</td></tr>
-<tr class="memitem:a8c63f5276aa5fd63096f8efe130ba25e" id="r_a8c63f5276aa5fd63096f8efe130ba25e"><td class="memItemLeft" align="right" valign="top"><a id="a8c63f5276aa5fd63096f8efe130ba25e" name="a8c63f5276aa5fd63096f8efe130ba25e"></a>
-ALPAKA_FN_ACC int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>offsets</b> (size_type bin_id) const</td></tr>
-<tr class="memitem:a2372a7435326ffdc8ebcc9b9c609835c" id="r_a2372a7435326ffdc8ebcc9b9c609835c"><td class="memTemplParams" colspan="2"><a id="a2372a7435326ffdc8ebcc9b9c609835c" name="a2372a7435326ffdc8ebcc9b9c609835c"></a>
-template&lt;concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue&gt; </td></tr>
-<tr class="memitem:a2372a7435326ffdc8ebcc9b9c609835c template"><td class="memItemLeft" align="right" valign="top">ALPAKA_FN_HOST void&#160;</td><td class="memItemRight" valign="bottom"><b>fill</b> (size_type size, TFunc func, TQueue &amp;queue)</td></tr>
-<tr class="memitem:a060c4835318fab1be281e1f37baa2c43" id="r_a060c4835318fab1be281e1f37baa2c43"><td class="memTemplParams" colspan="2"><a id="a060c4835318fab1be281e1f37baa2c43" name="a060c4835318fab1be281e1f37baa2c43"></a>
-template&lt;concepts::accelerator TAcc, concepts::queue TQueue&gt; </td></tr>
-<tr class="memitem:a060c4835318fab1be281e1f37baa2c43 template"><td class="memItemLeft" align="right" valign="top">ALPAKA_FN_HOST void&#160;</td><td class="memItemRight" valign="bottom"><b>fill</b> (size_type size, std::span&lt; key_type &gt; associations, TQueue &amp;queue)</td></tr>
+<tr class="memdesc:aa1b1c333ac2590236db9f3fc539b5780"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the extents of the internal buffers.  <br /></td></tr>
+<tr class="memitem:ae1aca74e7f7052a25e9fbd52dc19dc8b" id="r_ae1aca74e7f7052a25e9fbd52dc19dc8b"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1aca74e7f7052a25e9fbd52dc19dc8b">begin</a> ()</td></tr>
+<tr class="memdesc:ae1aca74e7f7052a25e9fbd52dc19dc8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return iterator to the beginning of the content buffer.  <br /></td></tr>
+<tr class="memitem:ac80051f92121b9f57b60969c5f8cfd06" id="r_ac80051f92121b9f57b60969c5f8cfd06"><td class="memItemLeft" align="right" valign="top">const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac80051f92121b9f57b60969c5f8cfd06">begin</a> () const</td></tr>
+<tr class="memdesc:ac80051f92121b9f57b60969c5f8cfd06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return const iterator to the beginning of the content buffer.  <br /></td></tr>
+<tr class="memitem:af590d7a186ba7b7768099cbf0765413b" id="r_af590d7a186ba7b7768099cbf0765413b"><td class="memItemLeft" align="right" valign="top">const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af590d7a186ba7b7768099cbf0765413b">cbegin</a> () const</td></tr>
+<tr class="memdesc:af590d7a186ba7b7768099cbf0765413b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return const iterator to the beginning of the content buffer.  <br /></td></tr>
+<tr class="memitem:a9223f5b3a1b20eaed9480f20a3dac039" id="r_a9223f5b3a1b20eaed9480f20a3dac039"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9223f5b3a1b20eaed9480f20a3dac039">end</a> ()</td></tr>
+<tr class="memdesc:a9223f5b3a1b20eaed9480f20a3dac039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return iterator to the end of the content buffer.  <br /></td></tr>
+<tr class="memitem:a21cf216ee48cb9f0d8a2eda98f7fb0f0" id="r_a21cf216ee48cb9f0d8a2eda98f7fb0f0"><td class="memItemLeft" align="right" valign="top">const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21cf216ee48cb9f0d8a2eda98f7fb0f0">end</a> () const</td></tr>
+<tr class="memdesc:a21cf216ee48cb9f0d8a2eda98f7fb0f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return const iterator to the end of the content buffer.  <br /></td></tr>
+<tr class="memitem:aa299c6c9bbf293d0a018be2756f1a67b" id="r_aa299c6c9bbf293d0a018be2756f1a67b"><td class="memItemLeft" align="right" valign="top">const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa299c6c9bbf293d0a018be2756f1a67b">cend</a> () const</td></tr>
+<tr class="memdesc:aa299c6c9bbf293d0a018be2756f1a67b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return const iterator to the end of the content buffer.  <br /></td></tr>
+<tr class="memitem:ac58d89f41fa4b09035328c16860b36da" id="r_ac58d89f41fa4b09035328c16860b36da"><td class="memItemLeft" align="right" valign="top"><a id="ac58d89f41fa4b09035328c16860b36da" name="ac58d89f41fa4b09035328c16860b36da"></a>
+iterator&#160;</td><td class="memItemRight" valign="bottom"><b>find</b> (key_type key)</td></tr>
+<tr class="memitem:ab0e38574ba06a3c68eeefa13b2ef8d4a" id="r_ab0e38574ba06a3c68eeefa13b2ef8d4a"><td class="memItemLeft" align="right" valign="top"><a id="ab0e38574ba06a3c68eeefa13b2ef8d4a" name="ab0e38574ba06a3c68eeefa13b2ef8d4a"></a>
+const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>find</b> (key_type key) const</td></tr>
+<tr class="memitem:a392897b0e8b8f2b86a0c26b7099da4f6" id="r_a392897b0e8b8f2b86a0c26b7099da4f6"><td class="memItemLeft" align="right" valign="top">size_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a392897b0e8b8f2b86a0c26b7099da4f6">count</a> (key_type key) const</td></tr>
+<tr class="memdesc:a392897b0e8b8f2b86a0c26b7099da4f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count the number of elements with the given key.  <br /></td></tr>
+<tr class="memitem:afd8e4452830c44c34e4c2893955054c9" id="r_afd8e4452830c44c34e4c2893955054c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd8e4452830c44c34e4c2893955054c9">contains</a> (key_type key) const</td></tr>
+<tr class="memdesc:afd8e4452830c44c34e4c2893955054c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the map contains elements with a given key.  <br /></td></tr>
+<tr class="memitem:ad31e53571666e30eef68510e903d3363" id="r_ad31e53571666e30eef68510e903d3363"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad31e53571666e30eef68510e903d3363">lower_bound</a> (key_type key)</td></tr>
+<tr class="memdesc:ad31e53571666e30eef68510e903d3363"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the iterator to the first element with a given key.  <br /></td></tr>
+<tr class="memitem:a54f37798de3521f0c92244cd9f900785" id="r_a54f37798de3521f0c92244cd9f900785"><td class="memItemLeft" align="right" valign="top">const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54f37798de3521f0c92244cd9f900785">lower_bound</a> (key_type key) const</td></tr>
+<tr class="memdesc:a54f37798de3521f0c92244cd9f900785"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the const iterator to the first element with a given key.  <br /></td></tr>
+<tr class="memitem:ad641bc369531f62767066885e39e62fe" id="r_ad641bc369531f62767066885e39e62fe"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad641bc369531f62767066885e39e62fe">upper_bound</a> (key_type key)</td></tr>
+<tr class="memdesc:ad641bc369531f62767066885e39e62fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the iterator to the first element with a key greater than the given key.  <br /></td></tr>
+<tr class="memitem:ac947d4704dd03f397a682a6c587df758" id="r_ac947d4704dd03f397a682a6c587df758"><td class="memItemLeft" align="right" valign="top">const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac947d4704dd03f397a682a6c587df758">upper_bound</a> (key_type key) const</td></tr>
+<tr class="memdesc:ac947d4704dd03f397a682a6c587df758"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the const iterator to the first element with a key greater than the given key.  <br /></td></tr>
+<tr class="memitem:a2214fead94f7cef09fdfddb4cc4d1467" id="r_a2214fead94f7cef09fdfddb4cc4d1467"><td class="memItemLeft" align="right" valign="top">std::pair&lt; iterator, iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2214fead94f7cef09fdfddb4cc4d1467">equal_range</a> (key_type key)</td></tr>
+<tr class="memdesc:a2214fead94f7cef09fdfddb4cc4d1467"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the range of elements with a given key.  <br /></td></tr>
+<tr class="memitem:a0e68e83e21a54ec60e6ddbcb0d2ebc04" id="r_a0e68e83e21a54ec60e6ddbcb0d2ebc04"><td class="memItemLeft" align="right" valign="top">std::pair&lt; const_iterator, const_iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e68e83e21a54ec60e6ddbcb0d2ebc04">equal_range</a> (key_type key) const</td></tr>
+<tr class="memdesc:a0e68e83e21a54ec60e6ddbcb0d2ebc04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the const range of elements with a given key.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-friends" class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a7942f9a4307ce23230ce5e00e5c9acd3" id="r_a7942f9a4307ce23230ce5e00e5c9acd3"><td class="memTemplParams" colspan="2"><a id="a7942f9a4307ce23230ce5e00e5c9acd3" name="a7942f9a4307ce23230ce5e00e5c9acd3"></a>
+template&lt;concepts::device _TDev&gt; </td></tr>
+<tr class="memitem:a7942f9a4307ce23230ce5e00e5c9acd3 template"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><b>Followers</b></td></tr>
+<tr class="memitem:a73fc08294966f259604c48ae5265ddbd" id="r_a73fc08294966f259604c48ae5265ddbd"><td class="memTemplParams" colspan="2"><a id="a73fc08294966f259604c48ae5265ddbd" name="a73fc08294966f259604c48ae5265ddbd"></a>
+template&lt;uint8_t Ndim, concepts::device _TDev&gt; </td></tr>
+<tr class="memitem:a73fc08294966f259604c48ae5265ddbd template"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><b>TilesAlpaka</b></td></tr>
+<tr class="memitem:a7810ae4861b915a73fa044a7cb7e9b37" id="r_a7810ae4861b915a73fa044a7cb7e9b37"><td class="memTemplParams" colspan="2"><a id="a7810ae4861b915a73fa044a7cb7e9b37" name="a7810ae4861b915a73fa044a7cb7e9b37"></a>
+template&lt;concepts::queue _TQueue&gt; </td></tr>
+<tr class="memitem:a7810ae4861b915a73fa044a7cb7e9b37 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><b>clue::test::build_map</b> (_TQueue &amp;, std::span&lt; key_type &gt;, int32_t)</td></tr>
 </table>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa00c6e6cbd1f6a6f4fe40319b633b96c" name="aa00c6e6cbd1f6a6f4fe40319b633b96c"></a>
@@ -232,6 +252,250 @@ template&lt;concepts::queue TQueue&gt; </div>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="ae1aca74e7f7052a25e9fbd52dc19dc8b" name="ae1aca74e7f7052a25e9fbd52dc19dc8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1aca74e7f7052a25e9fbd52dc19dc8b">&#9670;&#160;</a></span>begin() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::begin </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return iterator to the beginning of the content buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>An iterator to the beginning of the content buffer </dd></dl>
+
+</div>
+</div>
+<a id="ac80051f92121b9f57b60969c5f8cfd06" name="ac80051f92121b9f57b60969c5f8cfd06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac80051f92121b9f57b60969c5f8cfd06">&#9670;&#160;</a></span>begin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const_iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::begin </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return const iterator to the beginning of the content buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>A const iterator to the beginning of the content buffer </dd></dl>
+
+</div>
+</div>
+<a id="af590d7a186ba7b7768099cbf0765413b" name="af590d7a186ba7b7768099cbf0765413b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af590d7a186ba7b7768099cbf0765413b">&#9670;&#160;</a></span>cbegin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const_iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::cbegin </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return const iterator to the beginning of the content buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>A const iterator to the beginning of the content buffer </dd></dl>
+
+</div>
+</div>
+<a id="aa299c6c9bbf293d0a018be2756f1a67b" name="aa299c6c9bbf293d0a018be2756f1a67b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa299c6c9bbf293d0a018be2756f1a67b">&#9670;&#160;</a></span>cend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const_iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::cend </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return const iterator to the end of the content buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>A const iterator to the end of the content buffer </dd></dl>
+
+</div>
+</div>
+<a id="afd8e4452830c44c34e4c2893955054c9" name="afd8e4452830c44c34e4c2893955054c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd8e4452830c44c34e4c2893955054c9">&#9670;&#160;</a></span>contains()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::contains </td>
+          <td>(</td>
+          <td class="paramtype">key_type</td>          <td class="paramname"><span class="paramname"><em>key</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if the map contains elements with a given key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the map contains elements with the given key, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="a392897b0e8b8f2b86a0c26b7099da4f6" name="a392897b0e8b8f2b86a0c26b7099da4f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a392897b0e8b8f2b86a0c26b7099da4f6">&#9670;&#160;</a></span>count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">size_type <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::count </td>
+          <td>(</td>
+          <td class="paramtype">key_type</td>          <td class="paramname"><span class="paramname"><em>key</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Count the number of elements with the given key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key to count </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of elements associated to a given key </dd></dl>
+
+</div>
+</div>
+<a id="a9223f5b3a1b20eaed9480f20a3dac039" name="a9223f5b3a1b20eaed9480f20a3dac039"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9223f5b3a1b20eaed9480f20a3dac039">&#9670;&#160;</a></span>end() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::end </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return iterator to the end of the content buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>An iterator to the end of the content buffer </dd></dl>
+
+</div>
+</div>
+<a id="a21cf216ee48cb9f0d8a2eda98f7fb0f0" name="a21cf216ee48cb9f0d8a2eda98f7fb0f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21cf216ee48cb9f0d8a2eda98f7fb0f0">&#9670;&#160;</a></span>end() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const_iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::end </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return const iterator to the end of the content buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>A const iterator to the end of the content buffer </dd></dl>
+
+</div>
+</div>
+<a id="a2214fead94f7cef09fdfddb4cc4d1467" name="a2214fead94f7cef09fdfddb4cc4d1467"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2214fead94f7cef09fdfddb4cc4d1467">&#9670;&#160;</a></span>equal_range() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; iterator, iterator &gt; <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::equal_range </td>
+          <td>(</td>
+          <td class="paramtype">key_type</td>          <td class="paramname"><span class="paramname"><em>key</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the range of elements with a given key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key to search for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of iterators representing the range of elements with the given key </dd></dl>
+
+</div>
+</div>
+<a id="a0e68e83e21a54ec60e6ddbcb0d2ebc04" name="a0e68e83e21a54ec60e6ddbcb0d2ebc04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e68e83e21a54ec60e6ddbcb0d2ebc04">&#9670;&#160;</a></span>equal_range() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; const_iterator, const_iterator &gt; <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::equal_range </td>
+          <td>(</td>
+          <td class="paramtype">key_type</td>          <td class="paramname"><span class="paramname"><em>key</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the const range of elements with a given key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key to search for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of const iterators representing the range of elements with the given key </dd></dl>
+
+</div>
+</div>
 <a id="aa1b1c333ac2590236db9f3fc539b5780" name="aa1b1c333ac2590236db9f3fc539b5780"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa1b1c333ac2590236db9f3fc539b5780">&#9670;&#160;</a></span>extents()</h2>
 
@@ -249,13 +513,13 @@ template&lt;concepts::device TDev&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Get the size of the buffers in the <a class="el" href="classclue_1_1AssociationMap.html">AssociationMap</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>A pair containing the size of the indexes and offsets buffers </dd></dl>
+<p>Return the extents of the internal buffers. </p>
+<dl class="section return"><dt>Returns</dt><dd>A struct containing the number of keys and values in the map </dd></dl>
 
 </div>
 </div>
-<a id="a4690b751e09a4ce04c102625314a527b" name="a4690b751e09a4ce04c102625314a527b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4690b751e09a4ce04c102625314a527b">&#9670;&#160;</a></span>view()</h2>
+<a id="ad31e53571666e30eef68510e903d3363" name="ad31e53571666e30eef68510e903d3363"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad31e53571666e30eef68510e903d3363">&#9670;&#160;</a></span>lower_bound() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -263,16 +527,128 @@ template&lt;concepts::device TDev&gt; </div>
 template&lt;concepts::device TDev&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">AssociationMapView * <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::view </td>
+          <td class="memname">iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::lower_bound </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">key_type</td>          <td class="paramname"><span class="paramname"><em>key</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Obtain a view of the <a class="el" href="classclue_1_1AssociationMap.html">AssociationMap</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>A pointer to the AssociationMapView </dd></dl>
+<p>Get the iterator to the first element with a given key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key to search for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An iterator to the first element with the given key </dd></dl>
+
+</div>
+</div>
+<a id="a54f37798de3521f0c92244cd9f900785" name="a54f37798de3521f0c92244cd9f900785"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54f37798de3521f0c92244cd9f900785">&#9670;&#160;</a></span>lower_bound() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const_iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::lower_bound </td>
+          <td>(</td>
+          <td class="paramtype">key_type</td>          <td class="paramname"><span class="paramname"><em>key</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the const iterator to the first element with a given key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key to search for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A const iterator to the first element with the given key </dd></dl>
+
+</div>
+</div>
+<a id="a5cc1c5519c84188e267a29a2b4be50b1" name="a5cc1c5519c84188e267a29a2b4be50b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cc1c5519c84188e267a29a2b4be50b1">&#9670;&#160;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::size </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the number of bins in the map. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of bins in the map </dd></dl>
+
+</div>
+</div>
+<a id="ad641bc369531f62767066885e39e62fe" name="ad641bc369531f62767066885e39e62fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad641bc369531f62767066885e39e62fe">&#9670;&#160;</a></span>upper_bound() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::upper_bound </td>
+          <td>(</td>
+          <td class="paramtype">key_type</td>          <td class="paramname"><span class="paramname"><em>key</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the iterator to the first element with a key greater than the given key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key to search for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An iterator to the first element with a key greater than the given key </dd></dl>
+
+</div>
+</div>
+<a id="ac947d4704dd03f397a682a6c587df758" name="ac947d4704dd03f397a682a6c587df758"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac947d4704dd03f397a682a6c587df758">&#9670;&#160;</a></span>upper_bound() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;concepts::device TDev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const_iterator <a class="el" href="classclue_1_1AssociationMap.html">clue::AssociationMap</a>&lt; TDev &gt;::upper_bound </td>
+          <td>(</td>
+          <td class="paramtype">key_type</td>          <td class="paramname"><span class="paramname"><em>key</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the const iterator to the first element with a key greater than the given key. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>The key to search for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A const iterator to the first element with a key greater than the given key </dd></dl>
 
 </div>
 </div>

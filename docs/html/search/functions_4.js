@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['gaussiankernel_0',['GaussianKernel',['../classclue_1_1GaussianKernel.html#af96609fe952e4ddd8d3bd69740fd84d0',1,'clue::GaussianKernel']]],
-  ['getclusters_1',['getClusters',['../classclue_1_1Clusterer.html#ab58d9be94f094a88b87de2e2996dbd81',1,'clue::Clusterer']]]
+  ['flatkernel_0',['FlatKernel',['../classclue_1_1FlatKernel.html#ae4acc8580ae8aa6ed90dbb10a468a5af',1,'clue::FlatKernel']]]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['make_5fclusters_0',['make_clusters',['../classclue_1_1Clusterer.html#a1da06cdaeae40f4aa90cfe4a2bcd37c1',1,'clue::Clusterer::make_clusters(PointsHost &amp;h_points, const KernelType &amp;kernel, Queue &amp;queue, std::size_t block_size)'],['../classclue_1_1Clusterer.html#a87decd3e0a87b1b69a2a1278169b3512',1,'clue::Clusterer::make_clusters(PointsHost &amp;h_points, const KernelType &amp;kernel, std::size_t block_size)'],['../classclue_1_1Clusterer.html#ad42a0bab5ce5434fb92272ecf5f21c77',1,'clue::Clusterer::make_clusters(PointsHost &amp;h_points, PointsDevice &amp;dev_points, const KernelType &amp;kernel, Queue &amp;queue, std::size_t block_size)'],['../classclue_1_1Clusterer.html#a8764be313ce05b624872ae400cb0ed14',1,'clue::Clusterer::make_clusters(PointsHost &amp;h_points, PointsDevice &amp;dev_points, const KernelType &amp;kernel, std::size_t block_size)'],['../classclue_1_1Clusterer.html#a16cc71334d3018ecd96d96e45504007a',1,'clue::Clusterer::make_clusters(PointsDevice &amp;dev_points, const KernelType &amp;kernel, Queue &amp;queue, std::size_t block_size)']]]
+  ['gaussiankernel_0',['GaussianKernel',['../classclue_1_1GaussianKernel.html#af96609fe952e4ddd8d3bd69740fd84d0',1,'clue::GaussianKernel']]],
+  ['getclusters_1',['getClusters',['../classclue_1_1Clusterer.html#ab58d9be94f094a88b87de2e2996dbd81',1,'clue::Clusterer']]]
 ];

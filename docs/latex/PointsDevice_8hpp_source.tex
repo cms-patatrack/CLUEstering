@@ -9,106 +9,78 @@
 \DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/detail/concepts.hpp"{}}}
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/internal/alpaka/memory.hpp"{}}}
 \DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <alpaka/alpaka.hpp>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <optional>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <ranges>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <span>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <tuple>}}
-\DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }clue\ \{}
-\DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \ \ \textcolor{keyword}{namespace\ }concepts\ =\ detail::concepts;}
-\DoxyCodeLine{00017\ }
-\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{namespace\ }soa::device\ \{}
-\DoxyCodeLine{00019\ }
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
-\DoxyCodeLine{00021\ \ \ \ \ int32\_t\ computeSoASize(int32\_t\ n\_points);}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ partitionSoAView(PointsView*\ view,\ std::byte*\ buffer,\ int32\_t\ n\_points);}
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim>}
-\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ partitionSoAView(PointsView*\ view,}
-\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::byte*\ alloc\_buffer,}
-\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::byte*\ buffer,}
-\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int32\_t\ n\_points);}
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{template}\ <uint8\_t\ Ndim,\ concepts::contiguous\_raw\_data...\ TBuffers>}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 4)}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ partitionSoAView(PointsView*\ view,}
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::byte*\ alloc\_buffer,}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int32\_t\ n\_points,}
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TBuffers...\ buffer);}
-\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{template}\ <uint8\_t\ Ndim,\ concepts::contiguous\_raw\_data...\ TBuffers>}
-\DoxyCodeLine{00037\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 2)}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ partitionSoAView(PointsView*\ view,}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::byte*\ alloc\_buffer,}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int32\_t\ n\_points,}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TBuffers...\ buffers);}
-\DoxyCodeLine{00042\ }
-\DoxyCodeLine{00043\ \ \ \}\ \ \textcolor{comment}{//\ namespace\ soa::device}}
-\DoxyCodeLine{00044\ }
-\DoxyCodeLine{00045\ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim,\ concepts::device\ TDev>}
-\DoxyCodeLine{00046\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\ \{}
-\DoxyCodeLine{00047\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
-\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}(TQueue\&\ queue,\ int32\_t\ n\_points);}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <ranges>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <span>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <alpaka/alpaka.hpp>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }clue\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keyword}{namespace\ }concepts\ =\ detail::concepts;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim,\ concepts::device\ TDev>}
+\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\ \{}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}(TQueue\&\ queue,\ int32\_t\ n\_points);}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_a3200c03bc08fcf475a8a19f483e0fcbf}{PointsDevice}}(TQueue\&\ queue,\ int32\_t\ n\_points,\ std::span<std::byte>\ buffer);}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue,\ concepts::contiguous\_raw\_data...\ TBuffers>}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 2\ ||\ \textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 4)}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_a4359c5ae88e332352645156faab266c2}{PointsDevice}}(TQueue\&\ queue,\ int32\_t\ n\_points,\ TBuffers...\ buffers);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}(\mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&\ operator=(\mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{\string~PointsDevice}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00053\ \ \ \ \ ALPAKA\_FN\_HOST\_ACC\ int32\_t\ \mbox{\hyperlink{classclue_1_1PointsDevice_ac14deb5806fe406e6521869bb059ecbd}{size}}()\ \textcolor{keyword}{const};}
 \DoxyCodeLine{00054\ }
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
-\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_a3200c03bc08fcf475a8a19f483e0fcbf}{PointsDevice}}(TQueue\&\ queue,\ int32\_t\ n\_points,\ std::span<std::byte>\ buffer);}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue,\ concepts::contiguous\_raw\_data...\ TBuffers>}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \textcolor{keyword}{requires}(\textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 2\ ||\ \textcolor{keyword}{sizeof}...(TBuffers)\ ==\ 4)}
-\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_a4359c5ae88e332352645156faab266c2}{PointsDevice}}(TQueue\&\ queue,\ int32\_t\ n\_points,\ TBuffers...\ buffers);}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00074\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}(\mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&\&)\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00075\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&\ operator=(\mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice}}\&\&)\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{\string~PointsDevice}}()\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00077\ }
-\DoxyCodeLine{00081\ \ \ \ \ ALPAKA\_FN\_HOST\_ACC\ int32\_t\ \mbox{\hyperlink{classclue_1_1PointsDevice_ac14deb5806fe406e6521869bb059ecbd}{size}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00082\ }
-\DoxyCodeLine{00087\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_aece4d3abdccc9a1ac5fa1b8f6464d376}{coords}}(\textcolor{keywordtype}{size\_t}\ dim)\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00092\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_aa3600579841d9375bd96c7b787ffdf3e}{coords}}(\textcolor{keywordtype}{size\_t}\ dim);}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00097\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_a61b2cf13ccd8d9678adbffed425df393}{weight}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00101\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_a540c75d9da5947321ba27943d6a39214}{weight}}();}
-\DoxyCodeLine{00102\ }
-\DoxyCodeLine{00106\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_a9be1974bd8869ad5e51ab66eb1f523f7}{rho}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00110\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_a4d6a5d40342cc472431328a73d16037d}{rho}}();}
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ delta()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00113\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ delta();}
-\DoxyCodeLine{00114\ }
-\DoxyCodeLine{00115\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ nearestHigher()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00116\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ nearestHigher();}
+\DoxyCodeLine{00059\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_aece4d3abdccc9a1ac5fa1b8f6464d376}{coords}}(\textcolor{keywordtype}{size\_t}\ dim)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_aa3600579841d9375bd96c7b787ffdf3e}{coords}}(\textcolor{keywordtype}{size\_t}\ dim);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00069\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_a61b2cf13ccd8d9678adbffed425df393}{weight}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00073\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_a540c75d9da5947321ba27943d6a39214}{weight}}();}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00078\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_a9be1974bd8869ad5e51ab66eb1f523f7}{rho}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1PointsDevice_a4d6a5d40342cc472431328a73d16037d}{rho}}();}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ delta()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00085\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ delta();}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ nearestHigher()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ nearestHigher();}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ clusterIndex()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00091\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ clusterIndex();}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ isSeed()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00094\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ isSeed();}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{const}\ PointsView*\ view()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ \ \ \ \ ALPAKA\_FN\_HOST\ PointsView*\ view();}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ \_TQueue,\ u\textcolor{keywordtype}{int}8\_t\ \_Ndim,\ concepts::device\ \_TDev>}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{void}\ copyToHost(\_TQueue\&\ queue,}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsHost}{PointsHost<\_Ndim>}}\&\ h\_points,}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice<\_Ndim,\ \_TDev>}}\&\ d\_points);}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ \_TQueue,\ u\textcolor{keywordtype}{int}8\_t\ \_Ndim,\ concepts::device\ \_TDev>}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{void}\ copyToDevice(\_TQueue\&\ queue,}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice<\_Ndim,\ \_TDev>}}\&\ d\_points,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsHost}{PointsHost<\_Ndim>}}\&\ h\_points);}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00110\ \ \ \ \ device\_buffer<TDev,\ std::byte[]>\ m\_buffer;}
+\DoxyCodeLine{00111\ \ \ \ \ device\_buffer<TDev,\ PointsView>\ m\_view;}
+\DoxyCodeLine{00112\ \ \ \ \ host\_buffer<PointsView>\ m\_hostView;}
+\DoxyCodeLine{00113\ \ \ \ \ int32\_t\ m\_size;}
+\DoxyCodeLine{00114\ \ \ \};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \}\ \ \textcolor{comment}{//\ namespace\ clue}}
 \DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ clusterIndex()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00119\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ clusterIndex();}
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ isSeed()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00122\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\ isSeed();}
-\DoxyCodeLine{00123\ }
-\DoxyCodeLine{00124\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{const}\ PointsView*\ view()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00125\ \ \ \ \ ALPAKA\_FN\_HOST\ PointsView*\ view();}
-\DoxyCodeLine{00126\ }
-\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ \_TQueue,\ u\textcolor{keywordtype}{int}8\_t\ \_Ndim,\ concepts::device\ \_TDev>}
-\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{void}\ copyToHost(\_TQueue\&\ queue,}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsHost}{PointsHost<\_Ndim>}}\&\ h\_points,}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice<\_Ndim,\ \_TDev>}}\&\ d\_points);}
-\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ \_TQueue,\ u\textcolor{keywordtype}{int}8\_t\ \_Ndim,\ concepts::device\ \_TDev>}
-\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{void}\ copyToDevice(\_TQueue\&\ queue,}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classclue_1_1PointsDevice_afb0cafc0859966e559ac240145bbc29c}{PointsDevice<\_Ndim,\ \_TDev>}}\&\ d\_points,}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classclue_1_1PointsHost}{PointsHost<\_Ndim>}}\&\ h\_points);}
-\DoxyCodeLine{00136\ }
-\DoxyCodeLine{00137\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00138\ \ \ \ \ device\_buffer<TDev,\ std::byte[]>\ m\_buffer;}
-\DoxyCodeLine{00139\ \ \ \ \ device\_buffer<TDev,\ PointsView>\ m\_view;}
-\DoxyCodeLine{00140\ \ \ \ \ host\_buffer<PointsView>\ m\_hostView;}
-\DoxyCodeLine{00141\ \ \ \ \ int32\_t\ m\_size;}
-\DoxyCodeLine{00142\ \ \ \};}
-\DoxyCodeLine{00143\ }
-\DoxyCodeLine{00144\ \}\ \ \textcolor{comment}{//\ namespace\ clue}}
-\DoxyCodeLine{00145\ }
-\DoxyCodeLine{00146\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/detail/PointsDevice.hpp"{}}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/detail/PointsDevice.hpp"{}}}
 
 \end{DoxyCode}

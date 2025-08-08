@@ -5,89 +5,120 @@
 \DoxyCodeLine{00001\ }
 \DoxyCodeLine{00002\ \textcolor{preprocessor}{\#pragma\ once}}
 \DoxyCodeLine{00003\ }
-\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <vector>}}
-\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <utility>}}
-\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <algorithm>}}
-\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <iostream>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <cassert>}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <limits>}}
-\DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <alpaka/alpaka.hpp>}}
-\DoxyCodeLine{00015\ }
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/internal/Span.hpp"{}}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/detail/concepts.hpp"{}}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/internal/alpaka/config.hpp"{}}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/internal/alpaka/memory.hpp"{}}}
-\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/internal/alpaka/work\_division.hpp"{}}}
-\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/internal/algorithm/scan/scan.hpp"{}}}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \textcolor{keyword}{namespace\ }clue\ \{}
-\DoxyCodeLine{00024\ }
-\DoxyCodeLine{00025\ \ \ \textcolor{keyword}{namespace\ }concepts\ =\ detail::concepts;}
-\DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{struct\ }AssociationMapView;}
-\DoxyCodeLine{00028\ }
-\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{template}\ <concepts::device\ TDev>}
-\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classclue_1_1AssociationMap_a210ee89c60e4669813bdda9f0ae36517}{AssociationMap}}\ \{}
-\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{using\ }key\_type\ =\ int32\_t;}
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{using\ }mapped\_type\ =\ int32\_t;}
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{using\ }size\_type\ =\ std::size\_t;}
-\DoxyCodeLine{00035\ }
-\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structclue_1_1AssociationMap_1_1Extents}{Extents}}\ \{}
-\DoxyCodeLine{00037\ \ \ \ \ \ \ size\_type\ content;}
-\DoxyCodeLine{00038\ \ \ \ \ \ \ size\_type\ offset;}
-\DoxyCodeLine{00039\ \ \ \ \ \};}
-\DoxyCodeLine{00040\ }
-\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classclue_1_1AssociationMap_a210ee89c60e4669813bdda9f0ae36517}{AssociationMap}}()\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classclue_1_1AssociationMap_aa00c6e6cbd1f6a6f4fe40319b633b96c}{AssociationMap}}(size\_type\ nelements,\ size\_type\ nbins,\ \textcolor{keyword}{const}\ TDev\&\ dev);}
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
-\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classclue_1_1AssociationMap_a03a2b802bb2f948a05814ee2b638f49b}{AssociationMap}}(size\_type\ nelements,\ size\_type\ nbins,\ TQueue\&\ queue);}
-\DoxyCodeLine{00057\ }
-\DoxyCodeLine{00061\ \ \ \ \ AssociationMapView*\ \mbox{\hyperlink{classclue_1_1AssociationMap_a4690b751e09a4ce04c102625314a527b}{view}}();}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/internal/Span.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/detail/concepts.hpp"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/internal/alpaka/config.hpp"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/internal/alpaka/memory.hpp"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <alpaka/alpaka.hpp>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace\ }clue\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{namespace\ }test\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ \_TQueue>}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{auto}\ build\_map(\_TQueue\&,\ std::span<const\ int32\_t>,\ int32\_t);}
+\DoxyCodeLine{00016\ \ \ \}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{namespace\ }concepts\ =\ detail::concepts;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{struct\ }AssociationMapView;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{template}\ <concepts::device\ TDev>}
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classclue_1_1AssociationMap_a210ee89c60e4669813bdda9f0ae36517}{AssociationMap}}\ \{}
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{using\ }key\_type\ =\ int32\_t;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{using\ }mapped\_type\ =\ int32\_t;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ std::pair<key\_type,\ mapped\_type>;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{using\ }size\_type\ =\ std::size\_t;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{using\ }iterator\ =\ mapped\_type*;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{using\ }const\_iterator\ =\ \textcolor{keyword}{const}\ mapped\_type*;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structclue_1_1AssociationMap_1_1Extents}{Extents}}\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ size\_type\ keys;}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ size\_type\ values;}
+\DoxyCodeLine{00035\ \ \ \ \ \};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classclue_1_1AssociationMap_a210ee89c60e4669813bdda9f0ae36517}{AssociationMap}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classclue_1_1AssociationMap_aa00c6e6cbd1f6a6f4fe40319b633b96c}{AssociationMap}}(size\_type\ nelements,\ size\_type\ nbins,\ \textcolor{keyword}{const}\ TDev\&\ dev);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{classclue_1_1AssociationMap_a03a2b802bb2f948a05814ee2b638f49b}{AssociationMap}}(size\_type\ nelements,\ size\_type\ nbins,\ TQueue\&\ queue);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1AssociationMap_a5cc1c5519c84188e267a29a2b4be50b1}{size}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1AssociationMap_aa1b1c333ac2590236db9f3fc539b5780}{extents}}()\ \textcolor{keyword}{const};}
 \DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
-\DoxyCodeLine{00064\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keywordtype}{void}\ initialize(size\_type\ nelements,\ size\_type\ nbins,\ TQueue\&\ queue);}
-\DoxyCodeLine{00065\ }
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
-\DoxyCodeLine{00067\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keywordtype}{void}\ reset(TQueue\&\ queue,\ size\_type\ nelements,\ size\_type\ nbins);}
-\DoxyCodeLine{00068\ }
-\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{auto}\ size()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00070\ }
-\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classclue_1_1AssociationMap_aa1b1c333ac2590236db9f3fc539b5780}{extents}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ indexes()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00077\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\&\ indexes();}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ ALPAKA\_FN\_ACC\ Span<int32\_t>\ indexes(size\_type\ bin\_id);}
-\DoxyCodeLine{00080\ \ \ \ \ ALPAKA\_FN\_HOST\ device\_view<TDev,\ int32\_t[]>\ indexes(\textcolor{keyword}{const}\ TDev\&\ dev,\ size\_type\ bin\_id);}
-\DoxyCodeLine{00081\ \ \ \ \ ALPAKA\_FN\_ACC\ Span<int32\_t>\ operator[](size\_type\ bin\_id);}
+\DoxyCodeLine{00065\ \ \ \ \ iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_ae1aca74e7f7052a25e9fbd52dc19dc8b}{begin}}();}
+\DoxyCodeLine{00068\ \ \ \ \ const\_iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_ac80051f92121b9f57b60969c5f8cfd06}{begin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00071\ \ \ \ \ const\_iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_af590d7a186ba7b7768099cbf0765413b}{cbegin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00075\ \ \ \ \ iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_a9223f5b3a1b20eaed9480f20a3dac039}{end}}();}
+\DoxyCodeLine{00078\ \ \ \ \ const\_iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_a21cf216ee48cb9f0d8a2eda98f7fb0f0}{end}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ \ \ \ \ const\_iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_aa299c6c9bbf293d0a018be2756f1a67b}{cend}}()\ \textcolor{keyword}{const};}
 \DoxyCodeLine{00082\ }
-\DoxyCodeLine{00083\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{const}\ device\_buffer<TDev,\ int32\_t[]>\&\ offsets()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00084\ \ \ \ \ ALPAKA\_FN\_HOST\ device\_buffer<TDev,\ int32\_t[]>\&\ offsets();}
-\DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ \ \ \ \ ALPAKA\_FN\_ACC\ int32\_t\ offsets(size\_type\ bin\_id)\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00087\ }
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::accelerator\ TAcc,\ \textcolor{keyword}{typename}\ TFunc,\ concepts::queue\ TQueue>}
-\DoxyCodeLine{00089\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keywordtype}{void}\ fill(size\_type\ size,\ TFunc\ func,\ TQueue\&\ queue);}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::accelerator\ TAcc,\ concepts::queue\ TQueue>}
-\DoxyCodeLine{00092\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keywordtype}{void}\ fill(size\_type\ size,\ std::span<key\_type>\ associations,\ TQueue\&\ queue);}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00095\ \ \ \ \ device\_buffer<TDev,\ mapped\_type[]>\ m\_indexes;}
-\DoxyCodeLine{00096\ \ \ \ \ device\_buffer<TDev,\ key\_type[]>\ m\_offsets;}
-\DoxyCodeLine{00097\ \ \ \ \ host\_buffer<AssociationMapView>\ m\_hview;}
-\DoxyCodeLine{00098\ \ \ \ \ device\_buffer<TDev,\ AssociationMapView>\ m\_view;}
-\DoxyCodeLine{00099\ \ \ \ \ size\_type\ m\_nbins;}
-\DoxyCodeLine{00100\ \ \ \};}
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ \}\ \ \textcolor{comment}{//\ namespace\ clue}}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/detail/AssociationMap.hpp"{}}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//\ TODO:\ the\ STL\ implementation\ for\ std::flat\_multimap\ returns\ any\ element\ with\ the\ given\ key,}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{//\ Should\ we\ do\ the\ same?\ Should\ we\ return\ the\ first\ element\ or\ return\ a\ pair\ that\ gives\ the\ entire\ range?}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{//\ In\ the\ first\ case\ it\ would\ be\ equavalent\ to\ lower\_bound,\ in\ the\ second\ case\ it\ would\ be\ equivalent\ to\ equal\_range.}}
+\DoxyCodeLine{00086\ \ \ \ \ iterator\ find(key\_type\ key);}
+\DoxyCodeLine{00087\ \ \ \ \ const\_iterator\ find(key\_type\ key)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00093\ \ \ \ \ size\_type\ \mbox{\hyperlink{classclue_1_1AssociationMap_a392897b0e8b8f2b86a0c26b7099da4f6}{count}}(key\_type\ key)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classclue_1_1AssociationMap_afd8e4452830c44c34e4c2893955054c9}{contains}}(key\_type\ key)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00105\ \ \ \ \ iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_ad31e53571666e30eef68510e903d3363}{lower\_bound}}(key\_type\ key);}
+\DoxyCodeLine{00110\ \ \ \ \ const\_iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_a54f37798de3521f0c92244cd9f900785}{lower\_bound}}(key\_type\ key)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00116\ \ \ \ \ iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_ad641bc369531f62767066885e39e62fe}{upper\_bound}}(key\_type\ key);}
+\DoxyCodeLine{00121\ \ \ \ \ const\_iterator\ \mbox{\hyperlink{classclue_1_1AssociationMap_ac947d4704dd03f397a682a6c587df758}{upper\_bound}}(key\_type\ key)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00127\ \ \ \ \ std::pair<iterator,\ iterator>\ \mbox{\hyperlink{classclue_1_1AssociationMap_a2214fead94f7cef09fdfddb4cc4d1467}{equal\_range}}(key\_type\ key);}
+\DoxyCodeLine{00132\ \ \ \ \ std::pair<const\_iterator,\ const\_iterator>\ \mbox{\hyperlink{classclue_1_1AssociationMap_a0e68e83e21a54ec60e6ddbcb0d2ebc04}{equal\_range}}(key\_type\ key)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00135\ \ \ \ \ device\_buffer<TDev,\ mapped\_type[]>\ m\_indexes;}
+\DoxyCodeLine{00136\ \ \ \ \ device\_buffer<TDev,\ key\_type[]>\ m\_offsets;}
+\DoxyCodeLine{00137\ \ \ \ \ host\_buffer<AssociationMapView>\ m\_hview;}
+\DoxyCodeLine{00138\ \ \ \ \ device\_buffer<TDev,\ AssociationMapView>\ m\_view;}
+\DoxyCodeLine{00139\ \ \ \ \ size\_type\ m\_nbins;}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
+\DoxyCodeLine{00142\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keywordtype}{void}\ initialize(size\_type\ nelements,\ size\_type\ nbins,\ TQueue\&\ queue);}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ TQueue>}
+\DoxyCodeLine{00145\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keywordtype}{void}\ reset(TQueue\&\ queue,\ size\_type\ nelements,\ size\_type\ nbins);}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::accelerator\ TAcc,\ \textcolor{keyword}{typename}\ TFunc,\ concepts::queue\ TQueue>}
+\DoxyCodeLine{00148\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keywordtype}{void}\ fill(size\_type\ \mbox{\hyperlink{classclue_1_1AssociationMap_a5cc1c5519c84188e267a29a2b4be50b1}{size}},\ TFunc\ func,\ TQueue\&\ queue);}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::accelerator\ TAcc,\ concepts::queue\ TQueue>}
+\DoxyCodeLine{00151\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keywordtype}{void}\ fill(size\_type\ \mbox{\hyperlink{classclue_1_1AssociationMap_a5cc1c5519c84188e267a29a2b4be50b1}{size}},\ std::span<key\_type>\ associations,\ TQueue\&\ queue);}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ AssociationMapView*\ view();}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ indexes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00156\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{auto}\&\ indexes();}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ ALPAKA\_FN\_ACC\ Span<int32\_t>\ indexes(size\_type\ bin\_id);}
+\DoxyCodeLine{00159\ \ \ \ \ ALPAKA\_FN\_HOST\ device\_view<TDev,\ int32\_t[]>\ indexes(\textcolor{keyword}{const}\ TDev\&\ dev,\ size\_type\ bin\_id);}
+\DoxyCodeLine{00160\ \ \ \ \ ALPAKA\_FN\_ACC\ Span<int32\_t>\ operator[](size\_type\ bin\_id);}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ ALPAKA\_FN\_HOST\ \textcolor{keyword}{const}\ device\_buffer<TDev,\ int32\_t[]>\&\ offsets()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00163\ \ \ \ \ ALPAKA\_FN\_HOST\ device\_buffer<TDev,\ int32\_t[]>\&\ offsets();}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ ALPAKA\_FN\_ACC\ int32\_t\ offsets(size\_type\ bin\_id)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::device\ \_TDev>}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }Followers;}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keyword}{template}\ <u\textcolor{keywordtype}{int}8\_t\ Ndim,\ concepts::device\ \_TDev>}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }TilesAlpaka;}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{template}\ <concepts::queue\ \_TQueue>}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{auto}\ clue::test::build\_map(\_TQueue\&,\ std::span<key\_type>,\ int32\_t);}
+\DoxyCodeLine{00175\ \ \ \};}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \}\ \ \textcolor{comment}{//\ namespace\ clue}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \textcolor{preprocessor}{\#include\ "{}CLUEstering/data\_structures/detail/AssociationMap.hpp"{}}}
 
 \end{DoxyCode}

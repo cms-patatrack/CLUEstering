@@ -94,21 +94,6 @@ $(function(){initNavTree('classclue_1_1Clusterer.html','','classclue_1_1Clustere
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a7a45ff9836e2f9dc0a9a622cc00ecd2c" id="r_a7a45ff9836e2f9dc0a9a622cc00ecd2c"><td class="memItemLeft" align="right" valign="top"><a id="a7a45ff9836e2f9dc0a9a622cc00ecd2c" name="a7a45ff9836e2f9dc0a9a622cc00ecd2c"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>CoordinateExtremes</b> = <a class="el" href="classclue_1_1CoordinateExtremes.html">clue::CoordinateExtremes</a>&lt;Ndim&gt;</td></tr>
-<tr class="memitem:a65d9736cba6fbf66714d0a47758e7f52" id="r_a65d9736cba6fbf66714d0a47758e7f52"><td class="memItemLeft" align="right" valign="top"><a id="a65d9736cba6fbf66714d0a47758e7f52" name="a65d9736cba6fbf66714d0a47758e7f52"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>PointsHost</b> = <a class="el" href="classclue_1_1PointsHost.html">clue::PointsHost</a>&lt;Ndim&gt;</td></tr>
-<tr class="memitem:aadc2c302937a4fd891f827b6511b3778" id="r_aadc2c302937a4fd891f827b6511b3778"><td class="memItemLeft" align="right" valign="top"><a id="aadc2c302937a4fd891f827b6511b3778" name="aadc2c302937a4fd891f827b6511b3778"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>PointsDevice</b> = <a class="el" href="classclue_1_1PointsDevice.html">clue::PointsDevice</a>&lt;Ndim, clue::Device&gt;</td></tr>
-<tr class="memitem:a4cf8ba9b5dac5764d0f08516ecc431f6" id="r_a4cf8ba9b5dac5764d0f08516ecc431f6"><td class="memItemLeft" align="right" valign="top"><a id="a4cf8ba9b5dac5764d0f08516ecc431f6" name="a4cf8ba9b5dac5764d0f08516ecc431f6"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TilesDevice</b> = <a class="el" href="classclue_1_1TilesAlpaka.html">clue::TilesAlpaka</a>&lt;Ndim, clue::Device&gt;</td></tr>
-<tr class="memitem:a9e9766ab65b414599b6110e101dc322b" id="r_a9e9766ab65b414599b6110e101dc322b"><td class="memItemLeft" align="right" valign="top"><a id="a9e9766ab65b414599b6110e101dc322b" name="a9e9766ab65b414599b6110e101dc322b"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>FollowersDevice</b> = clue::Followers&lt;clue::Device&gt;</td></tr>
-<tr class="memitem:a0192be7acdb158d4be3fc883b873080b" id="r_a0192be7acdb158d4be3fc883b873080b"><td class="memItemLeft" align="right" valign="top"><a id="a0192be7acdb158d4be3fc883b873080b" name="a0192be7acdb158d4be3fc883b873080b"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>Acc</b> = internal::Acc</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a112ae74f59e0fd846417f77a920243d9" id="r_a112ae74f59e0fd846417f77a920243d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a112ae74f59e0fd846417f77a920243d9">Clusterer</a> (float dc, float rhoc, float dm, float seed_dc=-1.f, int pPBin=128)</td></tr>
@@ -141,20 +126,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a293f55603b867097d82f1de0a523d99c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify which coordinates are periodic.  <br /></td></tr>
 <tr class="memitem:ab58d9be94f094a88b87de2e2996dbd81" id="r_ab58d9be94f094a88b87de2e2996dbd81"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab58d9be94f094a88b87de2e2996dbd81">getClusters</a> (const <a class="el" href="classclue_1_1PointsHost.html">PointsHost</a> &amp;h_points)</td></tr>
 <tr class="memdesc:ab58d9be94f094a88b87de2e2996dbd81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the clusters from the host points.  <br /></td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ad01c2d397fc129ed292bc6dff118f8ce" id="r_ad01c2d397fc129ed292bc6dff118f8ce"><td class="memItemLeft" align="right" valign="top"><a id="ad01c2d397fc129ed292bc6dff118f8ce" name="ad01c2d397fc129ed292bc6dff118f8ce"></a>
-<a class="el" href="structclue_1_1TilesAlpakaView.html">TilesAlpakaView</a>&lt; Ndim &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>m_tiles</b></td></tr>
-<tr class="memitem:ab16683526648c8b7ad551a223d96c1cb" id="r_ab16683526648c8b7ad551a223d96c1cb"><td class="memItemLeft" align="right" valign="top"><a id="ab16683526648c8b7ad551a223d96c1cb" name="ab16683526648c8b7ad551a223d96c1cb"></a>
-VecArray&lt; int32_t, reserve &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>m_seeds</b></td></tr>
-<tr class="memitem:a432863fa0e770779cf79d2318ed4d87d" id="r_a432863fa0e770779cf79d2318ed4d87d"><td class="memItemLeft" align="right" valign="top"><a id="a432863fa0e770779cf79d2318ed4d87d" name="a432863fa0e770779cf79d2318ed4d87d"></a>
-FollowersView *&#160;</td><td class="memItemRight" valign="bottom"><b>m_followers</b></td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-static-attribs" class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:ace3c4653aabf7404eeb7d18e2ef3243b" id="r_ace3c4653aabf7404eeb7d18e2ef3243b"><td class="memItemLeft" align="right" valign="top"><a id="ace3c4653aabf7404eeb7d18e2ef3243b" name="ace3c4653aabf7404eeb7d18e2ef3243b"></a>
-static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>reserve</b> = detail::reserve</td></tr>
 </table>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a112ae74f59e0fd846417f77a920243d9" name="a112ae74f59e0fd846417f77a920243d9"></a>
@@ -164,9 +135,6 @@ static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><b>rese
 <div class="memproto">
 <div class="memtemplate">
 template&lt;uint8_t Ndim&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classclue_1_1Clusterer.html">clue::Clusterer</a>&lt; Ndim &gt;::Clusterer </td>
@@ -194,11 +162,6 @@ template&lt;uint8_t Ndim&gt; </div>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>pPBin</em></span><span class="paramdefsep"> = </span><span class="paramdefval">128</span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Constuct a <a class="el" href="classclue_1_1Clusterer.html">Clusterer</a> object. </p>
@@ -222,9 +185,6 @@ template&lt;uint8_t Ndim&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;uint8_t Ndim&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classclue_1_1Clusterer.html">clue::Clusterer</a>&lt; Ndim &gt;::Clusterer </td>
@@ -257,11 +217,6 @@ template&lt;uint8_t Ndim&gt; </div>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>pPBin</em></span><span class="paramdefsep"> = </span><span class="paramdefval">128</span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Constuct a <a class="el" href="classclue_1_1Clusterer.html">Clusterer</a> object. </p>
@@ -286,9 +241,6 @@ template&lt;uint8_t Ndim&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;uint8_t Ndim&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classclue_1_1Clusterer.html">clue::Clusterer</a>&lt; Ndim &gt;::Clusterer </td>
@@ -326,11 +278,6 @@ template&lt;uint8_t Ndim&gt; </div>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>pPBin</em></span><span class="paramdefsep"> = </span><span class="paramdefval">128</span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Constuct a <a class="el" href="classclue_1_1Clusterer.html">Clusterer</a> object. </p>
