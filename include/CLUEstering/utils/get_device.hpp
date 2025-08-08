@@ -6,6 +6,10 @@
 
 namespace clue {
 
+  /// @brief Get the alpaka device corresponding to a given index
+  ///
+  /// @param device_id The index of the device
+  /// @return The alpaka device corresponding to the given index
   inline clue::Device get_device(uint32_t device_id) {
     return alpaka::getDevByIdx(clue::Platform{}, device_id);
   }
