@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "CLUEstering/core/defines.hpp"
+#include "CLUEstering/core/detail/defines.hpp"
 #include <alpaka/alpaka.hpp>
 
 namespace clue {

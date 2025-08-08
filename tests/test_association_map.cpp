@@ -1,7 +1,7 @@
 
 #if !defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && !defined(ALPAKA_ACC_GPU_HIP_ENABLED)
 
-#include "CLUEstering/core/defines.hpp"
+#include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "association_map/build_map.hpp"
 
