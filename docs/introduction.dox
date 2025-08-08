@@ -1,0 +1,12 @@
+/**
+ * @mainpage Welcome to CLUEstering
+ *
+ * Welcome to the CLUEstering project!  
+ * This project provides GPU-accelerated clustering for high-energy physics and other domains.
+ *
+ * ## Contents
+ * - @ref usage
+ * - @ref Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
+ * - @ref changelog
+ */
+
