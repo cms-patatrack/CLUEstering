@@ -1,30 +1,5 @@
 
-#include <alpaka/alpaka.hpp>
 #include <CLUEstering/CLUEstering.hpp>
-
-#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
-using Platform = alpaka::PlatformCudaRt;
-using Queue = alpaka::QueueCudaRtNonBlocking;
-
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
-using Platform = alpaka::PlatformHipRt;
-using Queue = alpaka::QueueHipRtNonBlocking;
-
-#elif defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
-using Platform = alpaka::PlatformCpu;
-using Queue = alpaka::QueueCpuBlocking;
-
-#elif defined(ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
-using Platform = alpaka::PlatformCpu;
-using Queue = alpaka::QueueCpuNonBlocking;
-
-#elif defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
-using Platform = alpaka::PlatformCpu;
-using Queue = alpaka::QueueCpuBlocking;
-
-#else
-#error "No supported accelerator found. Please enable a GPU or CPU backend."
-#endif
 
 int main() {
   // Obtain the queue, which is used for allocations and kernel launches.
