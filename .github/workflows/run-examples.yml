@@ -1,0 +1,47 @@
+name: Run the examples
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Install dependencies
+      run: |
+        sudo apt install -y libboost-dev libtbb-dev libomp-dev
+        git clone https://github.com/alpaka-group/alpaka && cd alpaka
+        git switch release-2.0.0
+        cmake -B build && sudo cmake --install build
+
+    - name: Install CLUEstering
+      run: |
+        cmake -B build && sudo cmake --install build
+
+    - name: Compile and run examples
+      working-directory: ${{ github.workspace }}/examples
+      run: |
+        cmake -B build/serial -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED=ON -DCMAKE_BUILD_TYPE=Release
+        cmake -B build/tbb -DALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED=ON -DCMAKE_BUILD_TYPE=Release
+        cmake -B build/openmp -DALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED=ON -DCMAKE_BUILD_TYPE=Release
+        cmake --build build/serial 
+        cmake --build build/tbb
+        cmake --build build/openmp
+        echo "Running serial backend"
+        ./build/serial/serial.out
+        echo "Running TBB backend"
+        ./build/tbb/tbb.out
+        echo "Running OpenMP backend"
+        ./build/openmp/openmp.out
+
