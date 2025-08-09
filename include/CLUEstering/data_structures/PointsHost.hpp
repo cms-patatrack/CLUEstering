@@ -1,3 +1,6 @@
+/// @file PointsHost.hpp
+/// @brief Provides the PointsHost class for managing points in host memory
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 

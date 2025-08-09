@@ -1,3 +1,6 @@
+/// @file AssociationMap.hpp
+/// @brief Provides the AssociationMap class for managing associations between keys and values
+/// /// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 
@@ -35,21 +38,50 @@ namespace clue {
       size_type values;
     };
 
+    /// @brief Construct an empty AssociationMap
     AssociationMap() = default;
+    /// @brief Construct an AssociationMap with a specific number of elements and bins
+    ///
+    /// @param nelements The number of elements to allocate
+    /// @param nbins The number of bins to allocate
+    /// @param dev The device to use for the allocation
     AssociationMap(size_type nelements, size_type nbins, const TDev& dev);
 
+    /// @brief Construct an AssociationMap with a specific number of elements and bins
+    ///
+    /// @param nelements The number of elements to allocate
+    /// @param nbins The number of bins to allocate
+    /// @param queue The queue to use for the allocation
     template <concepts::queue TQueue>
     AssociationMap(size_type nelements, size_type nbins, TQueue& queue);
 
+    /// @brief Return the number of bins in the map
+    ///
+    /// @return The number of bins in the map
     auto size() const;
+    /// @brief Return the extents of the internal buffers
+    ///
+    /// @return A struct containing the number of keys and values in the map
     auto extents() const;
 
+    /// @brief Return iterator to the beginning of the content buffer
+    /// @return An iterator to the beginning of the content buffer
     iterator begin();
+    /// @brief Return const iterator to the beginning of the content buffer
+    /// @return A const iterator to the beginning of the content buffer
     const_iterator begin() const;
+    /// @brief Return const iterator to the beginning of the content buffer
+    /// @return A const iterator to the beginning of the content buffer
     const_iterator cbegin() const;
 
+    /// @brief Return iterator to the end of the content buffer
+    /// @return An iterator to the end of the content buffer
     iterator end();
+    /// @brief Return const iterator to the end of the content buffer
+    /// @return A const iterator to the end of the content buffer
     const_iterator end() const;
+    /// @brief Return const iterator to the end of the content buffer
+    /// @return A const iterator to the end of the content buffer
     const_iterator cend() const;
 
     // TODO: the STL implementation for std::flat_multimap returns any element with the given key,
@@ -58,17 +90,49 @@ namespace clue {
     iterator find(key_type key);
     const_iterator find(key_type key) const;
 
+    /// @brief Count the number of elements with the given key
+    ///
+    /// @param key The key to count
+    /// @return The number of elements associated to a given key
     size_type count(key_type key) const;
 
+    /// @brief Check if the map contains elements with a given key
+    ///
+    /// @param key The key to check
+    /// @return True if the map contains elements with the given key, false otherwise
     bool contains(key_type key) const;
 
+    /// @brief Get the iterator to the first element with a given key
+    ///
+    /// @param key The key to search for
+    /// @return An iterator to the first element with the given key
     iterator lower_bound(key_type key);
+    /// @brief Get the const iterator to the first element with a given key
+    ///
+    /// @param key The key to search for
+    /// @return A const iterator to the first element with the given key
     const_iterator lower_bound(key_type key) const;
 
+    /// @brief Get the iterator to the first element with a key greater than the given key
+    ///
+    /// @param key The key to search for
+    /// @return An iterator to the first element with a key greater than the given key
     iterator upper_bound(key_type key);
+    /// @brief Get the const iterator to the first element with a key greater than the given key
+    ///
+    /// @param key The key to search for
+    /// @return A const iterator to the first element with a key greater than the given key
     const_iterator upper_bound(key_type key) const;
 
+    /// @brief Get the range of elements with a given key
+    ///
+    /// @param key The key to search for
+    /// @return A pair of iterators representing the range of elements with the given key
     std::pair<iterator, iterator> equal_range(key_type key);
+    /// @brief Get the const range of elements with a given key
+    ///
+    /// @param key The key to search for
+    /// @return A pair of const iterators representing the range of elements with the given key
     std::pair<const_iterator, const_iterator> equal_range(key_type key) const;
 
   private:
