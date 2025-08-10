@@ -1,4 +1,7 @@
 # CLUEstering 
+
+[![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://cms-patatrack.github.io/CLUEstering/)
+
 The CLUE algorithm is a clustering algorithm written at CERN (https://www.frontiersin.org/articles/10.3389/fdata.2020.591315/full).
 
 The original algorithm was designed to work in 2 dimensions, with the data distributed in parallel layers.
