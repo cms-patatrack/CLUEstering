@@ -1,0 +1,37 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Switch to gh-pages branch and rebase
+        run: |
+          git fetch
+          git switch gh-pages
+          git reset --hard main
+
+      - name: Doxygen Action
+        uses: mattnotmitt/doxygen-action@edge
+        with:
+          enable-latex: true
+
+      - name: Set up git
+        run: |
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        
+      - name: Commit and Push
+        run: |
+          git add ./docs
+          git commit -m "Auto-deploy documentation"
+          git push --force
