@@ -1,3 +1,6 @@
+/// @file PointsHost.hpp
+/// @brief Provides the PointsHost class for managing points in host memory
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 
@@ -13,6 +16,10 @@ namespace clue {
 
   namespace concepts = detail::concepts;
 
+  /// @brief The PointsHost class is a data structure that manages points in host memory.
+  /// It provides methods to allocate, access, and manipulate points in host memory.
+  ///
+  /// @tparam Ndim The number of dimensions of the points to manage
   template <uint8_t Ndim>
   class PointsHost {
   public:

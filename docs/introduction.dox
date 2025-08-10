@@ -1,0 +1,31 @@
+/**
+ * @page introduction Introduction to CLUEstering
+ * @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
+ *
+ * \image html docs/CLUEstering-logo.png "" width=600px
+ * \image latex docs/CLUEstering-logo.png "" width=600px
+ *
+ * CLUEstering is a C++ library designed for high-performance, multi-dimensional clustering. It is based on the CLUE algorithm, a highly-parallel, density-based weighted clustering algorithm
+ * developed at CERN inside the CMS experiment. Unlike many popular clustering algorithm, CLUEstering combines the flexibility of density=based clustering, which makes it robust to noisy
+ * data and thus particularly suitable for experimental data, with the generality of weighted clustering, which allows to use the algorithm in a wide range of applications where the points
+ * are not all equal but they can have different relative importance. Whereas for most common density-based algorithms weights can only be assigned to the points by modifying the distance
+ * matrix or the dataset, CLUEstering uses the values directly in the computation of each point's density, thus allowing to use the weights in a more natural way and providing better performance.
+ *
+ * The CLUE algorithm is designed to be highly parallel, and thus efficiently executed on modern hardware accelerators such as GPUs and FPGAs. CLUEstering's backend uses alpaka, a C++ performance
+ * portability library to make the backend portable and automatically executable on many tipes of accelerators without any code duplicaiton. Finally, the high scalability of the algirithm makes it
+ * suitable for large datasets, especially when executed on parallel hardware.
+ *
+ * ## Description of the algorithm
+ * The algorithm proceeds in four main steps, which are also illustrated in the GIF below:
+ * * __computation of the local density__: the local energy density for each hit by searching for nearby hits and weighting them according to their distance and energy. A hit that is surrounded by many
+ * energetic neighbours will have a higher energy density. This computation is controlled by the `dc` parameter, that represents the radius inside of which the points are included in the computation
+ * of the local density for each point. 
+ * * __computation of the "nearest highers"__: each point is linked to the closest point with a greater local density, which is called *nearest higher*, within a maximum distance that is given by the
+ * `dm` parameter.
+ * * __finding cluster centers__: points without any nearest-higher are classified: those with a density above a given threshold `rhoc` become seeds, which act as cluster centres, while the others are
+ * marked as outliers.
+ * * __assigning points to clusters__: finally, clusters are built by linking each point to its nearest-higher, leaving outliers not attached to any cluster.
+ * The CLUE algorithm takes three main parameters: `dc`, `rhoc` and `dm`.
+ * \image html docs/algorithm-steps.gif width=500px
+ *
+ */

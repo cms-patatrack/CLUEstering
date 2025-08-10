@@ -1,0 +1,48 @@
+/**
+ * @page installation How to install
+ *
+ *
+ * ## Installing the C++ interface
+ * The C++ interface of CLUEstering can be easily installed using CMake with the following steps:
+ * ```shell
+ * mkdir -p build && cd build
+ * cmake -B .. -S ..
+ * sudo cmake --install .
+ * ```
+ * This will install the library and its headers in the default system paths. A different installation path can be specified by passing the `CMAKE_INSTALL_PREFIX` option to CMake during the configuration step:
+ * ```shell
+ * cmake -B .. -S .. -DCMAKE_INSTALL_PREFIX=/path/to/install
+ * ```
+ * ### Using CLUEstering without installing it
+ * It's not mandatory to install CLUEstering to use it in a project. Since it's an header-only library, it's enough for the source code to be included in the procject. The easiest ways to do so are:
+ * #### Adding CLUEstering as a git submodule
+ * ```shell
+ * cd my-project
+ * git submodule add https://github.com/cms-patatrack/CLUEstering.git external/CLUEstering --branch branch-name
+ * ```
+ * #### Using CMake's `FetchContent` 
+ * If the poject is built using CMake, CLUEstering can be added as a dependency using the `FetchContent` module:
+ * ```cmake
+ * include(FetchContent)
+ * FetchContent_Declare(
+ * 	CLUEstering
+ * 	URL https://github.com/cms-patatrack/CLUEstering
+ * ```
+ *
+ * ## Installing the Python interface
+ * The Python interface of CLUEstering can be easily installed using pip with the following command:
+ * ```shell
+ * cd CLUEstering
+ * pip install .
+ * ```
+ * Alternatively, the library is uploaded to PuPi, so the lavest versions can be installed with:
+ * ```shell
+ * pip install CLUEstering
+ * ```
+ * or, if a specific version is required:
+ * ```shell
+ * pip install CLUEstering==<version>
+ * ```
+ *
+ */
+
