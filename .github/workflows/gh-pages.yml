@@ -16,6 +16,11 @@ jobs:
           submodules: true
           ref: main
 
+      - name: Switch to gh-pages branch and rebase
+        run: |
+          git fetch
+          git checkout gh-pages
+          git reset --hard main
 
       - name: Doxygen Action
         uses: mattnotmitt/doxygen-action@edge
@@ -27,8 +32,6 @@ jobs:
         
       - name: Switch to gh-pages branch and rebase
         run: |
-          git fetch
-          git checkout gh-pages
-          git reset --hard main
-          git commit -am "Auto-deploy documentation"
+          git add ./docs --force
+          git commit -m "Auto-deploy documentation"
           git push origin gh-pages --force
