@@ -1,5 +1,7 @@
 # CLUEstering 
 
+[![Latest Release](https://img.shields.io/github/v/release/cms-patatrack/CLUEstering)](https://github.com/physycom/DynamicalSystemFramework/releases/latest)
+[![Standard](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://cms-patatrack.github.io/CLUEstering/)
 
 The CLUE algorithm is a clustering algorithm written at CERN (https://www.frontiersin.org/articles/10.3389/fdata.2020.591315/full).
