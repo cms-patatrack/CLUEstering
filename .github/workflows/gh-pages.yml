@@ -27,8 +27,8 @@ jobs:
         
       - name: Switch to gh-pages branch and rebase
         run: |
+          git fetch
           git checkout gh-pages
           git reset --hard
-          git add .
-          git commit -m "Auto-deploy documentation"
+          git commit -am "Auto-deploy documentation"
           git push origin gh-pages --force
