@@ -1,6 +1,9 @@
 name: GitHub Pages
 
 on:
+  pull_request:
+    branches: [ "fix-ghpages" ]
+
   push:
     branches: [ "main" ]
 
@@ -27,6 +30,7 @@ jobs:
         
       - name: Switch to gh-pages branch and rebase
         run: |
+          git fetch
           git checkout gh-pages
           git reset --hard
           git add .
