@@ -36,3 +36,4 @@ jobs:
           git add .
           git commit -m "Auto-deploy documentation"
           git push origin gh-pages --force
+
