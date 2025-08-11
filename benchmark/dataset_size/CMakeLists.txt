@@ -49,6 +49,11 @@ if(CMAKE_CUDA_COMPILER)
   add_subdirectory(cuda)
 endif()
 
+check_language(HIP)
+if(CMAKE_HIP_COMPILER)
+  add_subdirectory(hip)
+endif()
+
 set(_sycl_search_dirs ${SYCL_ROOT_DIR} /usr/lib /usr/local/lib
                       /opt/intel/oneapi/compiler/latest/linux)
 find_program(
