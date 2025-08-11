@@ -29,6 +29,6 @@ jobs:
         run: |
           git fetch
           git checkout gh-pages
-          git reset --hard
+          git reset --hard main
           git commit -am "Auto-deploy documentation"
           git push origin gh-pages --force
