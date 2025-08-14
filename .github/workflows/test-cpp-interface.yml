@@ -33,9 +33,9 @@ jobs:
         cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build -- -j 3
         echo "Running serial backend"
-        ./build/cpu/serial.out
+        ./build/cpu/serial.out --reporters=console --success
         echo "Running TBB backend"
-        ./build/cpu/tbb.out
+        ./build/cpu/tbb.out --reporters=console --success
         echo "Running OpenMP backend"
-        ./build/cpu/openmp.out
+        ./build/cpu/openmp.out --reporters=console --success
 
