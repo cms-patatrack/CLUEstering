@@ -11,7 +11,11 @@ endif()
 string(
   APPEND CMAKE_CXX_FLAGS_DEBUG
   " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg -fsanitize=address")
-string(APPEND CMAKE_CXX_FLAGS "-O2")
+string(
+  APPEND
+  CMAKE_CXX_FLAGS
+  "-O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
+)
 
 find_package(Boost 1.75.0 REQUIRED)
 

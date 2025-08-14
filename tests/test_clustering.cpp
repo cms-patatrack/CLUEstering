@@ -12,7 +12,13 @@
 #include "doctest.h"
 
 TEST_CASE("Test clustering on benchmarking datasets") {
-  for (auto i = 10; i < 19; ++i) {
+#ifdef COVERAGE
+  auto range = std::make_pair(10, 11);
+#else
+  auto range = std::make_pair(10, 19);
+#endif
+
+  for (auto i = range.first; i < range.second; ++i) {
     const auto device = clue::get_device(0u);
     clue::Queue queue(device);
 
