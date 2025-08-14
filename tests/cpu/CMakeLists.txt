@@ -9,7 +9,6 @@ target_include_directories(
 target_compile_definitions(
   serial.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
                      CLUE_ENABLE_CACHING_ALLOCATOR)
-
 find_package(TBB)
 if(TBB_FOUND)
   add_executable(tbb.out ${sources})
@@ -35,4 +34,9 @@ if(OpenMP_CXX_FOUND)
   target_compile_definitions(
     openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
                        CLUE_ENABLE_CACHING_ALLOCATOR)
+endif()
+if(COVERAGE)
+  message(STATUS "Enabling coverage for openmp.out")
+  target_compile_options(openmp.out PRIVATE -O0 -g --coverage)
+  target_link_options(openmp.out PRIVATE --coverage)
 endif()
