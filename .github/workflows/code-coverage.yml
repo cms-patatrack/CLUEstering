@@ -1,0 +1,40 @@
+
+name: Code Coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  codacy-coverage-reporter:
+    runs-on: ubuntu-latest
+    name: codecov-coverage-reporter
+    steps:
+      - name: Install coverage analysis tools
+        run: sudo apt-get install lcov gcovr
+
+      - uses: actions/checkout@v4
+
+      - name: Build and run tests
+        working-directory: ${{github.workspace}}/tests
+        run: |
+          sudo apt install -y libboost-dev libomp-dev
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DCOVERAGE=ON && cmake --build build -- -j4
+          ./build/cpu/openmp.out
+
+      - name: Create coverage report
+        working-directory: ${{github.workspace}}/tests/build
+        run: |
+          lcov --capture --directory .. --output-file coverage.info --ignore-errors mismatch
+          lcov --remove coverage.info '/usr/*' '*/extern/*' --output-file coverage_filtered.info
+
+      - uses: codecov/codecov-action@v5.4.3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ${{github.workspace}}/tests/build/coverage_filtered.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
+
