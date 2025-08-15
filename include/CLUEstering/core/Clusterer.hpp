@@ -101,7 +101,7 @@ namespace clue {
     /// @param dc Distance threshold for clustering
     /// @param rhoc Density threshold for clustering
     /// @param dm Minimum distance between clusters
-    /// @param seed_dc Distance threshold for seed points, if -1.f, dc is used
+    /// @param seed_dc Distance threshold for seed points, if the default value -1.f, dc is used
     /// @param pPBin Number of points per bin, used to determine the tile size
     Clusterer(Queue& queue, float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128);
     /// @brief Constuct a Clusterer object
@@ -111,7 +111,7 @@ namespace clue {
     /// @param dc Distance threshold for clustering
     /// @param rhoc Density threshold for clustering
     /// @param dm Minimum distance between clusters
-    /// @param seed_dc Distance threshold for seed points, if -1.f, dc is used
+    /// @param seed_dc Distance threshold for seed points, if the default value -1.f, dc is used
     /// @param pPBin Number of points per bin, used to determine the tile size
     Clusterer(Queue& queue,
               TilesDevice* tile_buffer,
@@ -120,6 +120,15 @@ namespace clue {
               float dm,
               float seed_dc = -1.f,
               int pPBin = 128);
+
+    /// @brief Set the parameters for the clustering algorithm
+    ///
+    /// @param dc Distance threshold for clustering
+    /// @param rhoc Density threshold for clustering
+    /// @param dm Minimum distance between clusters
+    /// @param seed_dc Distance threshold for seed points, if the defualt value -1.f, dc is used
+    /// @param pPBin Number of points per bin, used to determine the tile size
+    void setParameters(float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128);
 
     /// @brief Construct the clusters from host points
     ///

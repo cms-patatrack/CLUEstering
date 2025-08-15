@@ -70,6 +70,15 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
+  void Clusterer<Ndim>::setParameters(float dc, float rhoc, float dm, float seed_dc, int pPBin) {
+    m_dc = dc;
+    m_seed_dc = seed_dc < 0.f ? dc : seed_dc;
+    m_rhoc = rhoc;
+    m_dm = dm;
+    m_pointsPerTile = pPBin;
+  }
+
+  template <uint8_t Ndim>
   template <typename KernelType>
   inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
                                              const KernelType& kernel,
