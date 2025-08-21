@@ -18,15 +18,15 @@ template <uint8_t Ndim>
 struct KernelCompareDevicePoints {
   template <typename TAcc>
   ALPAKA_FN_ACC void operator()(
-      const TAcc& acc, clue::PointsView* view, float* d_input, uint32_t size, int* result) const {
+      const TAcc& acc, clue::PointsView view, float* d_input, uint32_t size, int* result) const {
     if (alpaka::oncePerGrid(acc))
       *result = 1;
     for (auto i : alpaka::uniformElements(acc, size)) {
       int comparison = 1;
       for (auto dim = 0; dim < Ndim; ++dim) {
-        comparison = (view->coords[i + dim * size] == d_input[i + dim * size]);
+        comparison = (view.coords[i + dim * size] == d_input[i + dim * size]);
       }
-      comparison = (view->weight[i] == d_input[i + Ndim * size]);
+      comparison = (view.weight[i] == d_input[i + Ndim * size]);
 
       alpaka::atomicAnd(acc, result, comparison);
     }

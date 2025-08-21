@@ -60,8 +60,8 @@ namespace clue {
     ALPAKA_FN_HOST std::span<const int> isSeed() const;
     ALPAKA_FN_HOST std::span<int> isSeed();
 
-    ALPAKA_FN_HOST const PointsView* view() const;
-    ALPAKA_FN_HOST PointsView* view();
+    ALPAKA_FN_HOST const PointsView& view() const;
+    ALPAKA_FN_HOST PointsView& view();
 
     template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue& queue,
@@ -74,7 +74,7 @@ namespace clue {
 
   private:
     std::optional<host_buffer<std::byte[]>> m_buffer;
-    host_buffer<PointsView> m_view;
+    PointsView m_view;
     int32_t m_size;
   };
 
