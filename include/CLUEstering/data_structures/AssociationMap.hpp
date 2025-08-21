@@ -6,6 +6,7 @@
 
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/internal/Span.hpp"
+#include "CLUEstering/data_structures/internal/AssociationMapView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
@@ -20,8 +21,6 @@ namespace clue {
   }
 
   namespace concepts = detail::concepts;
-
-  struct AssociationMapView;
 
   /// @brief The AssociationMap class is a data structure that maps keys to values.
   /// It associates integer keys with integer values in ono-to-many or many-to-many associations.
@@ -142,8 +141,7 @@ namespace clue {
   private:
     device_buffer<TDev, mapped_type[]> m_indexes;
     device_buffer<TDev, key_type[]> m_offsets;
-    host_buffer<AssociationMapView> m_hview;
-    device_buffer<TDev, AssociationMapView> m_view;
+    AssociationMapView m_view;
     size_type m_nbins;
 
     template <concepts::queue TQueue>
@@ -158,7 +156,8 @@ namespace clue {
     template <concepts::accelerator TAcc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, std::span<key_type> associations, TQueue& queue);
 
-    AssociationMapView* view();
+    const AssociationMapView& view() const;
+    AssociationMapView& view();
 
     ALPAKA_FN_HOST const auto& indexes() const;
     ALPAKA_FN_HOST auto& indexes();

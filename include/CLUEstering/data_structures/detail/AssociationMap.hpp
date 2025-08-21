@@ -63,39 +63,18 @@ namespace clue {
 
   }  // namespace detail
 
-  struct AssociationMapView {
-    int32_t* m_indexes;
-    int32_t* m_offsets;
-    int32_t m_nelements;
-    int32_t m_nbins;
-
-    ALPAKA_FN_ACC Span<int32_t> indexes(size_t bin_id) {
-      auto size = m_offsets[bin_id + 1] - m_offsets[bin_id];
-      auto* buf_ptr = m_indexes + m_offsets[bin_id];
-      return Span<int32_t>{buf_ptr, size};
-    }
-    ALPAKA_FN_ACC int32_t offsets(size_t bin_id) { return m_offsets[bin_id]; }
-    ALPAKA_FN_ACC Span<int32_t> operator[](size_t bin_id) {
-      auto size = m_offsets[bin_id + 1] - m_offsets[bin_id];
-      auto* buf_ptr = m_indexes + m_offsets[bin_id];
-      return Span<int32_t>{buf_ptr, size};
-    }
-  };
-
   template <concepts::device TDev>
   inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins, const TDev& dev)
       : m_indexes{make_device_buffer<mapped_type[]>(dev, nelements)},
         m_offsets{make_device_buffer<key_type[]>(dev, nbins + 1)},
-        m_hview{make_host_buffer<AssociationMapView>(dev)},
-        m_view{make_device_buffer<AssociationMapView>(dev)},
+        m_view{},
         m_nbins{nbins} {
-    m_hview->m_indexes = m_indexes.data();
-    m_hview->m_offsets = m_offsets.data();
-    m_hview->m_nelements = nelements;
-    m_hview->m_nbins = nbins;
+    m_view.m_indexes = m_indexes.data();
+    m_view.m_offsets = m_offsets.data();
+    m_view.m_nelements = nelements;
+    m_view.m_nbins = nbins;
 
     auto queue(dev);
-    alpaka::memcpy(queue, m_view, m_hview);
     // zero the offset buffer
     alpaka::memset(queue, m_offsets, 0);
   }
@@ -105,15 +84,13 @@ namespace clue {
   inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins, TQueue& queue)
       : m_indexes{make_device_buffer<mapped_type[]>(queue, nelements)},
         m_offsets{make_device_buffer<key_type[]>(queue, nbins + 1)},
-        m_hview{make_host_buffer<AssociationMapView>(queue)},
-        m_view{make_device_buffer<AssociationMapView>(queue)},
+        m_view{},
         m_nbins{nbins} {
-    m_hview->m_indexes = m_indexes.data();
-    m_hview->m_offsets = m_offsets.data();
-    m_hview->m_nelements = nelements;
-    m_hview->m_nbins = nbins;
+    m_view.m_indexes = m_indexes.data();
+    m_view.m_offsets = m_offsets.data();
+    m_view.m_nelements = nelements;
+    m_view.m_nbins = nbins;
 
-    alpaka::memcpy(queue, m_view, m_hview);
     // zero the offset buffer
     alpaka::memset(queue, m_offsets, 0);
   }
@@ -199,8 +176,13 @@ namespace clue {
   }
 
   template <concepts::device TDev>
-  inline AssociationMapView* AssociationMap<TDev>::view() {
-    return m_view.data();
+  inline const AssociationMapView& AssociationMap<TDev>::view() const {
+    return m_view;
+  }
+
+  template <concepts::device TDev>
+  inline AssociationMapView& AssociationMap<TDev>::view() {
+    return m_view;
   }
 
   template <concepts::device TDev>
@@ -213,11 +195,10 @@ namespace clue {
     alpaka::memset(queue, m_offsets, 0);
     m_nbins = nbins;
 
-    m_hview->m_indexes = m_indexes.data();
-    m_hview->m_offsets = m_offsets.data();
-    m_hview->m_nelements = nelements;
-    m_hview->m_nbins = nbins;
-    alpaka::memcpy(queue, m_view, m_hview);
+    m_view.m_indexes = m_indexes.data();
+    m_view.m_offsets = m_offsets.data();
+    m_view.m_nelements = nelements;
+    m_view.m_nbins = nbins;
   }
 
   template <concepts::device TDev>
@@ -229,11 +210,10 @@ namespace clue {
     alpaka::memset(queue, m_offsets, 0);
     m_nbins = nbins;
 
-    m_hview->m_indexes = m_indexes.data();
-    m_hview->m_offsets = m_offsets.data();
-    m_hview->m_nelements = nelements;
-    m_hview->m_nbins = nbins;
-    alpaka::memcpy(queue, m_view, m_hview);
+    m_view.m_indexes = m_indexes.data();
+    m_view.m_offsets = m_offsets.data();
+    m_view.m_nelements = nelements;
+    m_view.m_nbins = nbins;
   }
 
   template <concepts::device TDev>

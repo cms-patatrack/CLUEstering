@@ -15,11 +15,9 @@ namespace clue {
   template <concepts::device TDev>
   class Followers {
   public:
-    Followers(int32_t npoints, const TDev& dev)
-        : m_assoc(npoints, npoints, dev), m_view{make_device_buffer<AssociationMapView>(dev)} {}
+    Followers(int32_t npoints, const TDev& dev) : m_assoc(npoints, npoints, dev) {}
     template <concepts::queue TQueue>
-    Followers(int32_t npoints, TQueue& queue)
-        : m_assoc(npoints, npoints, queue), m_view{make_device_buffer<AssociationMapView>(queue)} {}
+    Followers(int32_t npoints, TQueue& queue) : m_assoc(npoints, npoints, queue) {}
 
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(int32_t npoints, TQueue& queue) {
@@ -37,11 +35,11 @@ namespace clue {
 
     ALPAKA_FN_HOST inline constexpr int32_t extents() const { return m_assoc.extents().values; }
 
-    ALPAKA_FN_HOST AssociationMapView* view() { return m_assoc.view(); }
+    ALPAKA_FN_HOST const AssociationMapView& view() const { return m_assoc.view(); }
+    ALPAKA_FN_HOST AssociationMapView& view() { return m_assoc.view(); }
 
   private:
     AssociationMap<TDev> m_assoc;
-    device_buffer<TDev, AssociationMapView> m_view;
   };
 
   using FollowersView = clue::AssociationMapView;

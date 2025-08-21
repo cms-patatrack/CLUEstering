@@ -140,7 +140,7 @@ namespace clue {
                                              std::size_t block_size) {
     setupTiles(queue, dev_points);
     setupFollowers(queue, dev_points.size());
-    alpaka::memset(queue, *d_seeds, 0x00);
+    alpaka::memset(queue, *m_seeds, 0x00);
     make_clusters_impl(dev_points, kernel, queue, block_size);
     alpaka::wait(queue);
   }
@@ -168,18 +168,15 @@ namespace clue {
 
   template <uint8_t Ndim>
   void Clusterer<Ndim>::init_device(Queue& queue) {
-    d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
-    m_seeds = (*d_seeds).data();
+    m_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
   }
 
   template <uint8_t Ndim>
   void Clusterer<Ndim>::init_device(Queue& queue, TilesDevice* tile_buffer) {
-    d_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
-    m_seeds = (*d_seeds).data();
+    m_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
 
     // load tiles from outside
-    d_tiles = *tile_buffer;
-    m_tiles = tile_buffer->view();
+    m_tiles = *tile_buffer;
   }
 
   template <uint8_t Ndim>
@@ -234,28 +231,27 @@ namespace clue {
     const auto nPerDim = static_cast<int32_t>(std::ceil(std::pow(nTiles, 1. / Ndim)));
     nTiles = static_cast<int32_t>(std::pow(nPerDim, Ndim));
 
-    if (!d_tiles.has_value()) {
-      d_tiles = std::make_optional<TilesDevice>(queue, h_points.size(), nTiles);
-      m_tiles = d_tiles->view();
+    if (!m_tiles.has_value()) {
+      m_tiles = std::make_optional<TilesDevice>(queue, h_points.size(), nTiles);
     }
     // check if tiles are large enough for current data
     if (!(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
-              d_tiles->indexes())[0u] >= static_cast<std::size_t>(h_points.size())) or
+              m_tiles->indexes())[0u] >= static_cast<std::size_t>(h_points.size())) or
         !(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
-              d_tiles->offsets())[0u] >= static_cast<std::size_t>(nTiles))) {
-      d_tiles->initialize(h_points.size(), nTiles, nPerDim, queue);
+              m_tiles->offsets())[0u] >= static_cast<std::size_t>(nTiles))) {
+      m_tiles->initialize(h_points.size(), nTiles, nPerDim, queue);
     } else {
-      d_tiles->reset(h_points.size(), nTiles, nPerDim, queue);
+      m_tiles->reset(h_points.size(), nTiles, nPerDim, queue);
     }
 
     auto min_max = clue::make_host_buffer<CoordinateExtremes>(queue);
     auto tile_sizes = clue::make_host_buffer<float[Ndim]>(queue);
     calculate_tile_size(min_max.data(), tile_sizes.data(), h_points, nPerDim);
 
-    alpaka::memcpy(queue, d_tiles->minMax(), min_max);
-    alpaka::memcpy(queue, d_tiles->tileSize(), tile_sizes);
+    alpaka::memcpy(queue, m_tiles->minMax(), min_max);
+    alpaka::memcpy(queue, m_tiles->tileSize(), tile_sizes);
     alpaka::memcpy(
-        queue, d_tiles->wrapped(), clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
+        queue, m_tiles->wrapped(), clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
     alpaka::wait(queue);
   }
 
@@ -266,42 +262,40 @@ namespace clue {
     const auto nPerDim = static_cast<int32_t>(std::ceil(std::pow(nTiles, 1. / Ndim)));
     nTiles = static_cast<int32_t>(std::pow(nPerDim, Ndim));
 
-    if (!d_tiles.has_value()) {
-      d_tiles = std::make_optional<TilesDevice>(queue, d_points.size(), nTiles);
-      m_tiles = d_tiles->view();
+    if (!m_tiles.has_value()) {
+      m_tiles = std::make_optional<TilesDevice>(queue, d_points.size(), nTiles);
     }
     // check if tiles are large enough for current data
     if (!(alpaka::trait::GetExtents<clue::device_buffer<clue::Device, int32_t[]>>{}(
-              d_tiles->indexes())[0u] >= static_cast<uint32_t>(d_points.size())) or
+              m_tiles->indexes())[0u] >= static_cast<uint32_t>(d_points.size())) or
         !(alpaka::trait::GetExtents<clue::device_buffer<clue::Device, int32_t[]>>{}(
-              d_tiles->offsets())[0u] >= static_cast<uint32_t>(nTiles))) {
-      d_tiles->initialize(d_points.size(), nTiles, nPerDim, queue);
+              m_tiles->offsets())[0u] >= static_cast<uint32_t>(nTiles))) {
+      m_tiles->initialize(d_points.size(), nTiles, nPerDim, queue);
     } else {
-      d_tiles->reset(d_points.size(), nTiles, nPerDim, queue);
+      m_tiles->reset(d_points.size(), nTiles, nPerDim, queue);
     }
 
     auto min_max = clue::make_host_buffer<CoordinateExtremes>(queue);
     auto tile_sizes = clue::make_host_buffer<float[Ndim]>(queue);
     calculate_tile_size(queue, min_max.data(), tile_sizes.data(), d_points, nPerDim);
 
-    alpaka::memcpy(queue, d_tiles->minMax(), min_max);
-    alpaka::memcpy(queue, d_tiles->tileSize(), tile_sizes);
+    alpaka::memcpy(queue, m_tiles->minMax(), min_max);
+    alpaka::memcpy(queue, m_tiles->tileSize(), tile_sizes);
     alpaka::memcpy(
-        queue, d_tiles->wrapped(), clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
+        queue, m_tiles->wrapped(), clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
     alpaka::wait(queue);
   }
 
   template <uint8_t Ndim>
   void Clusterer<Ndim>::setupFollowers(Queue& queue, int32_t n_points) {
-    if (!d_followers.has_value()) {
-      d_followers = std::make_optional<FollowersDevice>(n_points, queue);
-      m_followers = d_followers->view();
+    if (!m_followers.has_value()) {
+      m_followers = std::make_optional<FollowersDevice>(n_points, queue);
     }
 
-    if (!(d_followers->extents() >= n_points)) {
-      d_followers->initialize(n_points, queue);
+    if (!(m_followers->extents() >= n_points)) {
+      m_followers->initialize(n_points, queue);
     } else {
-      d_followers->reset(n_points, queue);
+      m_followers->reset(n_points, queue);
     }
   }
 
@@ -311,7 +305,7 @@ namespace clue {
                                     Queue& queue) {
     clue::copyToDevice(queue, dev_points, h_points);
 
-    alpaka::memset(queue, *d_seeds, 0x00);
+    alpaka::memset(queue, *m_seeds, 0x00);
   }
 
   template <uint8_t Ndim>
@@ -323,14 +317,14 @@ namespace clue {
                                            std::size_t block_size) {
     const auto nPoints = h_points.size();
     // fill the tiles
-    d_tiles->template fill<Acc>(queue, dev_points, nPoints);
+    m_tiles->template fill<Acc>(queue, dev_points, nPoints);
 
     const Idx grid_size = clue::divide_up_by(nPoints, block_size);
     auto working_div = clue::make_workdiv<Acc>(grid_size, block_size);
     alpaka::exec<Acc>(queue,
                       working_div,
                       detail::KernelCalculateLocalDensity{},
-                      m_tiles,
+                      m_tiles->view(),
                       dev_points.view(),
                       kernel,
                       m_dc,
@@ -338,17 +332,17 @@ namespace clue {
     alpaka::exec<Acc>(queue,
                       working_div,
                       detail::KernelCalculateNearestHigher{},
-                      m_tiles,
+                      m_tiles->view(),
                       dev_points.view(),
                       m_dm,
                       nPoints);
 
-    d_followers->template fill<Acc>(queue, dev_points);
+    m_followers->template fill<Acc>(queue, dev_points);
 
     alpaka::exec<Acc>(queue,
                       working_div,
                       detail::KernelFindClusters{},
-                      m_seeds,
+                      m_seeds->data(),
                       dev_points.view(),
                       m_seed_dc,
                       m_rhoc,
@@ -361,8 +355,8 @@ namespace clue {
     alpaka::exec<Acc>(queue,
                       working_div_seeds,
                       detail::KernelAssignClusters{},
-                      m_seeds,
-                      m_followers,
+                      m_seeds->data(),
+                      m_followers->view(),
                       dev_points.view());
     alpaka::wait(queue);
 
@@ -376,14 +370,14 @@ namespace clue {
                                            Queue& queue,
                                            std::size_t block_size) {
     const auto nPoints = dev_points.size();
-    d_tiles->template fill<Acc>(queue, dev_points, nPoints);
+    m_tiles->template fill<Acc>(queue, dev_points, nPoints);
 
     const Idx grid_size = clue::divide_up_by(nPoints, block_size);
     auto working_div = clue::make_workdiv<Acc>(grid_size, block_size);
     alpaka::exec<Acc>(queue,
                       working_div,
                       detail::KernelCalculateLocalDensity{},
-                      m_tiles,
+                      m_tiles->view(),
                       dev_points.view(),
                       kernel,
                       m_dc,
@@ -391,17 +385,17 @@ namespace clue {
     alpaka::exec<Acc>(queue,
                       working_div,
                       detail::KernelCalculateNearestHigher{},
-                      m_tiles,
+                      m_tiles->view(),
                       dev_points.view(),
                       m_dm,
                       nPoints);
 
-    d_followers->template fill<Acc>(queue, dev_points);
+    m_followers->template fill<Acc>(queue, dev_points);
 
     alpaka::exec<Acc>(queue,
                       working_div,
                       detail::KernelFindClusters{},
-                      m_seeds,
+                      m_seeds->data(),
                       dev_points.view(),
                       m_seed_dc,
                       m_rhoc,
@@ -414,8 +408,8 @@ namespace clue {
     alpaka::exec<Acc>(queue,
                       working_div_seeds,
                       detail::KernelAssignClusters{},
-                      m_seeds,
-                      m_followers,
+                      m_seeds->data(),
+                      m_followers->view(),
                       dev_points.view());
   }
 

@@ -38,7 +38,7 @@ namespace clue {
     ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
                                           VecArray<int32_t, Ndim>& base_vec,
                                           const clue::SearchBoxBins<Ndim>& search_box,
-                                          TilesAlpakaView<Ndim>* tiles,
+                                          TilesAlpakaView<Ndim>& tiles,
                                           PointsView& dev_points,
                                           const KernelType& kernel,
                                           const std::array<float, Ndim>& coords_i,
@@ -46,18 +46,18 @@ namespace clue {
                                           float dc,
                                           int32_t point_id) {
       if constexpr (N_ == 0) {
-        auto binId = tiles->getGlobalBinByBin(base_vec);
+        auto binId = tiles.getGlobalBinByBin(base_vec);
         // get the size of this bin
-        auto binSize = (*tiles)[binId].size();
+        auto binSize = tiles[binId].size();
 
         // iterate inside this bin
         for (int binIter{}; binIter < binSize; ++binIter) {
-          int32_t j{(*tiles)[binId][binIter]};
+          int32_t j{tiles[binId][binIter]};
           // query N_{dc_}(i)
 
           auto coords_j = getCoords<Ndim>(dev_points, j);
 
-          float dist_ij_sq = tiles->distance(coords_i, coords_j);
+          float dist_ij_sq = tiles.distance(coords_i, coords_j);
 
           auto k = kernel(acc, clue::internal::math::sqrt(dist_ij_sq), point_id, j);
           *rho_i += (int)(dist_ij_sq <= dc * dc) * k * dev_points.weight[j];
@@ -78,7 +78,7 @@ namespace clue {
     struct KernelCalculateLocalDensity {
       template <typename TAcc, uint8_t Ndim, typename KernelType>
       ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                    TilesAlpakaView<Ndim>* dev_tiles,
+                                    TilesAlpakaView<Ndim> dev_tiles,
                                     PointsView dev_points,
                                     const KernelType& kernel,
                                     float dc,
@@ -96,7 +96,7 @@ namespace clue {
 
           // Calculate the search box
           clue::SearchBoxBins<Ndim> searchbox_bins;
-          dev_tiles->searchBox(searchbox_extremes, searchbox_bins);
+          dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
 
           VecArray<int32_t, Ndim> base_vec;
           for_recursion<TAcc, Ndim, Ndim>(
@@ -111,7 +111,7 @@ namespace clue {
     ALPAKA_FN_HOST_ACC void for_recursion_nearest_higher(const TAcc& acc,
                                                          VecArray<int32_t, Ndim>& base_vec,
                                                          const clue::SearchBoxBins<Ndim>& search_box,
-                                                         TilesAlpakaView<Ndim>* tiles,
+                                                         TilesAlpakaView<Ndim>& tiles,
                                                          PointsView& dev_points,
                                                          const std::array<float, Ndim>& coords_i,
                                                          float rho_i,
@@ -120,13 +120,13 @@ namespace clue {
                                                          float dm_sq,
                                                          int32_t point_id) {
       if constexpr (N_ == 0) {
-        int binId{tiles->getGlobalBinByBin(base_vec)};
+        int binId{tiles.getGlobalBinByBin(base_vec)};
         // get the size of this bin
-        int binSize{(*tiles)[binId].size()};
+        int binSize{tiles[binId].size()};
 
         // iterate inside this bin
         for (int binIter{}; binIter < binSize; ++binIter) {
-          const auto j{(*tiles)[binId][binIter]};
+          const auto j{tiles[binId][binIter]};
           // query N'_{dm}(i)
           float rho_j{dev_points.rho[j]};
           bool found_higher{(rho_j > rho_i)};
@@ -136,7 +136,7 @@ namespace clue {
           // Calculate the distance between the two points
           auto coords_j = getCoords<Ndim>(dev_points, j);
 
-          float dist_ij_sq = tiles->distance(coords_i, coords_j);
+          float dist_ij_sq = tiles.distance(coords_i, coords_j);
 
           if (found_higher && dist_ij_sq <= dm_sq) {
             // find the nearest point within N'_{dm}(i)
@@ -172,7 +172,7 @@ namespace clue {
     struct KernelCalculateNearestHigher {
       template <typename TAcc, uint8_t Ndim>
       ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                    TilesAlpakaView<Ndim>* dev_tiles,
+                                    TilesAlpakaView<Ndim> dev_tiles,
                                     PointsView dev_points,
                                     float dm,
                                     int32_t n_points) const {
@@ -192,7 +192,7 @@ namespace clue {
 
           // Calculate the search box
           clue::SearchBoxBins<Ndim> searchbox_bins;
-          dev_tiles->searchBox(searchbox_extremes, searchbox_bins);
+          dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
 
           VecArray<int32_t, Ndim> base_vec{};
           for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
@@ -245,7 +245,7 @@ namespace clue {
       template <typename TAcc>
       ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                     VecArray<int32_t, reserve>* seeds,
-                                    clue::FollowersView* followers,
+                                    clue::FollowersView followers,
                                     PointsView dev_points) const {
         const auto& seeds_0{*seeds};
         const auto n_seeds{seeds_0.size()};
@@ -266,7 +266,7 @@ namespace clue {
             // pop_back last element of localStack
             local_stack[local_stack_size - 1] = -1;
             --local_stack_size;
-            const auto& followers_ies = (*followers)[idx_end_of_local_stack];
+            const auto& followers_ies = followers[idx_end_of_local_stack];
             const auto followers_size = followers_ies.size();
             // loop over followers of last element of localStack
             for (int j{}; j != followers_size; ++j) {
