@@ -200,13 +200,13 @@ namespace clue {
     }
 
     struct GetGlobalBin {
-      PointsView* pointsView;
+      PointsView pointsView;
       TilesAlpakaView<Ndim>* tilesView;
 
       ALPAKA_FN_ACC int32_t operator()(int32_t index) const {
         float coords[Ndim];
         for (auto dim = 0; dim < Ndim; ++dim) {
-          coords[dim] = pointsView->coords[index + dim * pointsView->n];
+          coords[dim] = pointsView.coords[index + dim * pointsView.n];
         }
 
         auto bin = tilesView->getGlobalBin(coords);
