@@ -14,7 +14,7 @@ namespace clue {
   namespace internal {
     namespace math {
 
-      template <clue::detail::concepts::Numeric T>
+      template <clue::concepts::Numeric T>
       ALPAKA_FN_ACC inline constexpr T min(const T& a, const T& b) {
 #if defined(CUDA_DEVICE_FN)
         // CUDA device code
@@ -31,7 +31,7 @@ namespace clue {
 #endif
       }
 
-      template <clue::detail::concepts::Numeric T, typename Compare>
+      template <clue::concepts::Numeric T, typename Compare>
       ALPAKA_FN_ACC inline constexpr T min(const T& a, const T& b, Compare comp) {
 #if defined(CUDA_DEVICE_FN)
         // CUDA device code

@@ -14,8 +14,6 @@
 
 namespace clue {
 
-  namespace concepts = detail::concepts;
-
   namespace detail {
 
     template <typename TFunc>

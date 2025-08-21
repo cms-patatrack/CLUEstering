@@ -9,8 +9,6 @@
 
 namespace clue {
 
-  namespace concepts = detail::concepts;
-
   template <std::integral T>
   constexpr bool isPowerOf2(T v) {
     // returns true iif v has only one bit set.
@@ -225,10 +223,8 @@ namespace clue {
 // declare the amount of block shared memory used by the multiBlockPrefixScan kernel
 namespace alpaka::trait {
 
-  namespace concepts = clue::detail::concepts;
-
   // Variable size shared mem
-  template <concepts::accelerator TAcc, typename T>
+  template <clue::concepts::accelerator TAcc, typename T>
   struct BlockSharedMemDynSizeBytes<clue::multiBlockPrefixScan<T>, TAcc> {
     template <typename TVec>
     ALPAKA_FN_HOST_ACC static std::size_t getBlockSharedMemDynSizeBytes(

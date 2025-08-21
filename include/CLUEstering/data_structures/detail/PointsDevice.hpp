@@ -14,8 +14,6 @@
 
 namespace clue {
 
-  namespace concepts = detail::concepts;
-
   namespace soa::device {
 
     template <uint8_t Ndim>

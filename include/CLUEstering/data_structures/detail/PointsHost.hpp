@@ -12,8 +12,6 @@
 
 namespace clue {
 
-  namespace concepts = detail::concepts;
-
   namespace soa::host {
 
     // No need to allocate temporary buffers on the host

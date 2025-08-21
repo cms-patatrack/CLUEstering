@@ -12,8 +12,6 @@
 
 namespace clue {
 
-  namespace concepts = detail::concepts;
-
   // returns the alpaka accelerator platform
   template <concepts::platform TPlatform>
   inline TPlatform const& platform() {

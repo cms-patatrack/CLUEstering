@@ -13,7 +13,7 @@
 
 namespace clue {
 
-  namespace detail {
+  namespace internal {
     namespace concepts {
 
       // bounded 1D array
@@ -30,7 +30,7 @@ namespace clue {
       concept scalar = not std::is_array_v<T>;
 
     }  // namespace concepts
-  }  // namespace detail
+  }  // namespace internal
 
   // for Extent, Dim1D, Idx
   using namespace alpaka_common;
@@ -70,8 +70,6 @@ namespace clue {
 
   }  // namespace detail
 
-  namespace concepts = detail::concepts;
-
   // scalar and 1-dimensional host buffers
 
   template <typename T>
@@ -79,17 +77,17 @@ namespace clue {
 
   // non-cached, non-pinned, scalar and 1-dimensional host buffers
 
-  template <concepts::scalar T>
+  template <internal::concepts::scalar T>
   host_buffer<T> make_host_buffer() {
     return alpaka::allocBuf<T, Idx>(host, Scalar{});
   }
 
-  template <concepts::unbounded_array T>
+  template <internal::concepts::unbounded_array T>
   host_buffer<T> make_host_buffer(Extent extent) {
     return alpaka::allocBuf<std::remove_extent_t<T>, Idx>(host, Vec1D{extent});
   }
 
-  template <concepts::bounded_array T>
+  template <internal::concepts::bounded_array T>
   host_buffer<T> make_host_buffer() {
     return alpaka::allocBuf<std::remove_extent_t<T>, Idx>(host, Vec1D{std::extent_v<T>});
   }
@@ -97,7 +95,7 @@ namespace clue {
   // potentially cached, pinned, scalar and 1-dimensional host buffers, associated to a work queue
   // the memory is pinned according to the device associated to the queue
 
-  template <concepts::scalar T, concepts::queue TQueue>
+  template <internal::concepts::scalar T, concepts::queue TQueue>
   host_buffer<T> make_host_buffer(TQueue const& queue) {
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
       return allocCachedBuf<T, Idx>(host, queue, Scalar{});
@@ -107,7 +105,7 @@ namespace clue {
     }
   }
 
-  template <concepts::unbounded_array T, concepts::queue TQueue>
+  template <internal::concepts::unbounded_array T, concepts::queue TQueue>
   host_buffer<T> make_host_buffer(TQueue const& queue, Extent extent) {
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
       return allocCachedBuf<std::remove_extent_t<T>, Idx>(host, queue, Vec1D{extent});
@@ -118,7 +116,7 @@ namespace clue {
     }
   }
 
-  template <concepts::bounded_array T, concepts::queue TQueue>
+  template <internal::concepts::bounded_array T, concepts::queue TQueue>
   host_buffer<T> make_host_buffer(TQueue const& queue) {
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
       return allocCachedBuf<std::remove_extent_t<T>, Idx>(host, queue, Vec1D{std::extent_v<T>});
@@ -134,23 +132,23 @@ namespace clue {
   template <typename T>
   using host_view = typename detail::view_type<DevHost, T>::type;
 
-  template <concepts::scalar T>
+  template <internal::concepts::scalar T>
   host_view<T> make_host_view(T& data) {
     return alpaka::ViewPlainPtr<DevHost, T, Dim0D, Idx>(&data, host, Scalar{});
   }
 
-  template <concepts::scalar T>
+  template <internal::concepts::scalar T>
   host_view<T[]> make_host_view(T* data, Extent extent) {
     return alpaka::ViewPlainPtr<DevHost, T, Dim1D, Idx>(data, host, Vec1D{extent});
   }
 
-  template <concepts::unbounded_array T>
+  template <internal::concepts::unbounded_array T>
   host_view<T> make_host_view(T& data, Extent extent) {
     return alpaka::ViewPlainPtr<DevHost, std::remove_extent_t<T>, Dim1D, Idx>(
         data, host, Vec1D{extent});
   }
 
-  template <concepts::bounded_array T>
+  template <internal::concepts::bounded_array T>
   host_view<T> make_host_view(T& data) {
     return alpaka::ViewPlainPtr<DevHost, std::remove_extent_t<T>, Dim1D, Idx>(
         data, host, Vec1D{std::extent_v<T>});
@@ -161,7 +159,7 @@ namespace clue {
   template <typename TDev, typename T>
   using device_buffer = typename detail::buffer_type<TDev, T>::type;
 
-  template <concepts::scalar T, concepts::queue TQueue>
+  template <internal::concepts::scalar T, concepts::queue TQueue>
   device_buffer<alpaka::Dev<TQueue>, T> make_device_buffer(TQueue const& queue) {
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
       return allocCachedBuf<T, Idx>(alpaka::getDev(queue), queue, Scalar{});
@@ -174,7 +172,7 @@ namespace clue {
     }
   }
 
-  template <concepts::unbounded_array T, concepts::queue TQueue>
+  template <internal::concepts::unbounded_array T, concepts::queue TQueue>
   device_buffer<alpaka::Dev<TQueue>, T> make_device_buffer(TQueue const& queue, Extent extent) {
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
       return allocCachedBuf<std::remove_extent_t<T>, Idx>(
@@ -188,7 +186,7 @@ namespace clue {
     }
   }
 
-  template <concepts::bounded_array T, concepts::queue TQueue>
+  template <internal::concepts::bounded_array T, concepts::queue TQueue>
   device_buffer<alpaka::Dev<TQueue>, T> make_device_buffer(TQueue const& queue) {
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
       return allocCachedBuf<std::remove_extent_t<T>, Idx>(
@@ -208,23 +206,23 @@ namespace clue {
   template <typename TDev, typename T>
   using device_view = typename detail::view_type<TDev, T>::type;
 
-  template <concepts::scalar T, concepts::device TDev>
+  template <internal::concepts::scalar T, concepts::device TDev>
   device_view<TDev, T> make_device_view(TDev const& device, T& data) {
     return alpaka::ViewPlainPtr<TDev, T, Dim0D, Idx>(&data, device, Scalar{});
   }
 
-  template <concepts::scalar T, concepts::device TDev>
+  template <internal::concepts::scalar T, concepts::device TDev>
   device_view<TDev, T[]> make_device_view(TDev const& device, T* data, Extent extent) {
     return alpaka::ViewPlainPtr<TDev, T, Dim1D, Idx>(data, device, Vec1D{extent});
   }
 
-  template <concepts::unbounded_array T, concepts::device TDev>
+  template <internal::concepts::unbounded_array T, concepts::device TDev>
   device_view<TDev, T> make_device_view(TDev const& device, T& data, Extent extent) {
     return alpaka::ViewPlainPtr<TDev, std::remove_extent_t<T>, Dim1D, Idx>(
         data, device, Vec1D{extent});
   }
 
-  template <concepts::bounded_array T, concepts::device TDev>
+  template <internal::concepts::bounded_array T, concepts::device TDev>
   device_view<TDev, T> make_device_view(TDev const& device, T& data) {
     return alpaka::ViewPlainPtr<TDev, std::remove_extent_t<T>, Dim1D, Idx>(
         data, device, Vec1D{std::extent_v<T>});

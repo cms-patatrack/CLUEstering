@@ -6,8 +6,6 @@
 
 namespace clue {
 
-  namespace concepts = detail::concepts;
-
   template <uint8_t Ndim>
   class PointsHost;
   template <uint8_t Ndim, concepts::device TDev>
@@ -24,14 +22,12 @@ namespace clue {
     int32_t n;
   };
 
-  namespace detail {
-    namespace concepts {
+  namespace concepts {
 
-      template <typename T>
-      concept contiguous_raw_data = std::is_array_v<T> || std::is_pointer_v<T>;
+    template <typename T>
+    concept contiguous_raw_data = std::is_array_v<T> || std::is_pointer_v<T>;
 
-    }  // namespace concepts
-  }  // namespace detail
+  }  // namespace concepts
 
   // TODO: implement for better cache use
   template <uint8_t Ndim>

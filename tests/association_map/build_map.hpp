@@ -10,7 +10,7 @@
 namespace clue {
   namespace test {
 
-    template <clue::detail::concepts::queue TQueue>
+    template <clue::concepts::queue TQueue>
     inline auto build_map(TQueue& queue, std::span<int32_t> associations, int32_t elements) {
       const auto bins = *clue::internal::algorithm::max_element(
                             associations.data(), associations.data() + associations.size()) +

@@ -20,8 +20,6 @@ namespace clue {
     auto build_map(_TQueue&, std::span<const int32_t>, int32_t);
   }
 
-  namespace concepts = detail::concepts;
-
   /// @brief The AssociationMap class is a data structure that maps keys to values.
   /// It associates integer keys with integer values in ono-to-many or many-to-many associations.
   ///

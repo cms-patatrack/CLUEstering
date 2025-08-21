@@ -27,7 +27,7 @@ namespace clue {
   /// @tparam TDevice The type of the device, must satisfy the `concepts::device` concept
   /// @param device The device to create the queue from
   /// @return An alpaka queue created from the given device
-  template <detail::concepts::device TDevice>
+  template <concepts::device TDevice>
   inline clue::Queue get_queue(const TDevice& device) {
     return clue::Queue{device};
   }

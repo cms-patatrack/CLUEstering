@@ -6,8 +6,6 @@
 
 namespace clue {
 
-  namespace concepts = detail::concepts;
-
   struct AssociationMapView;
   template <concepts::device TDev>
   class AssociationMap;

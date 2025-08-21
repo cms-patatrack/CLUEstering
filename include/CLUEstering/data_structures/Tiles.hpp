@@ -18,8 +18,6 @@
 
 namespace clue {
 
-  namespace concepts = detail::concepts;
-
   template <uint8_t Ndim>
   class CoordinateExtremes {
   private:
