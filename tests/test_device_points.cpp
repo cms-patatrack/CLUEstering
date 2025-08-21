@@ -152,7 +152,7 @@ TEST_CASE("Test extrema functions on device points column") {
   clue::copyToDevice(queue, d_points, h_points);
 
   auto max_it =
-      clue::internal::algorithm::max_element(d_points.weight().begin(), d_points.weight().end());
+      clue::internal::algorithm::max_element(d_points.weights().begin(), d_points.weights().end());
   auto max = 0.f;
   alpaka::memcpy(
       queue, clue::make_host_view(max), clue::make_device_view(alpaka::getDev(queue), *max_it));
@@ -174,6 +174,6 @@ TEST_CASE("Test reduction of device points column") {
   clue::PointsDevice<2> d_points(queue, size);
   clue::copyToDevice(queue, d_points, h_points);
 
-  CHECK(clue::internal::algorithm::reduce(d_points.weight().begin(), d_points.weight().end()) ==
+  CHECK(clue::internal::algorithm::reduce(d_points.weights().begin(), d_points.weights().end()) ==
         499500.0f);
 }
