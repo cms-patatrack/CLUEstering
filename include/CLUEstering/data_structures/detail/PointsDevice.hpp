@@ -105,8 +105,7 @@ namespace clue {
         m_size{n_points} {
     assert(buffer.size() == soa::device::computeSoASize<Ndim>(n_points));
 
-    soa::device::partitionSoAView<Ndim>(
-        m_view, m_buffer.data(), buffer.data(), n_points);
+    soa::device::partitionSoAView<Ndim>(m_view, m_buffer.data(), buffer.data(), n_points);
   }
 
   template <uint8_t Ndim, concepts::device TDev>

@@ -41,10 +41,10 @@ namespace clue {
   void copyToHost(TQueue& queue,
                   PointsHost<Ndim>& h_points,
                   const PointsDevice<Ndim, TDev>& d_points) {
-    alpaka::memcpy(queue,
-                   make_host_view(h_points.m_view.cluster_index, h_points.size()),
-                   make_device_view(
-                       alpaka::getDev(queue), d_points.m_view.cluster_index, h_points.size()));
+    alpaka::memcpy(
+        queue,
+        make_host_view(h_points.m_view.cluster_index, h_points.size()),
+        make_device_view(alpaka::getDev(queue), d_points.m_view.cluster_index, h_points.size()));
     alpaka::memcpy(
         queue,
         make_host_view(h_points.m_view.is_seed, h_points.size()),
@@ -54,14 +54,13 @@ namespace clue {
   void copyToDevice(TQueue& queue,
                     PointsDevice<Ndim, TDev>& d_points,
                     const PointsHost<Ndim>& h_points) {
-    alpaka::memcpy(queue,
-                   make_device_view(
-                       alpaka::getDev(queue), d_points.m_view.coords, Ndim * h_points.size()),
-                   make_host_view(h_points.m_view.coords, Ndim * h_points.size()));
     alpaka::memcpy(
         queue,
-        make_device_view(alpaka::getDev(queue), d_points.m_view.weight, h_points.size()),
-        make_host_view(h_points.m_view.weight, h_points.size()));
+        make_device_view(alpaka::getDev(queue), d_points.m_view.coords, Ndim * h_points.size()),
+        make_host_view(h_points.m_view.coords, Ndim * h_points.size()));
+    alpaka::memcpy(queue,
+                   make_device_view(alpaka::getDev(queue), d_points.m_view.weight, h_points.size()),
+                   make_host_view(h_points.m_view.weight, h_points.size()));
   }
 
 }  // namespace clue

@@ -39,14 +39,10 @@ namespace clue {
     int m_pointsPerTile;  // average number of points found in a tile
     std::array<uint8_t, Ndim> m_wrappedCoordinates;
 
-    std::optional<TilesDevice> d_tiles;
-    std::optional<clue::device_buffer<Device, VecArray<int32_t, reserve>>> d_seeds;
-    std::optional<FollowersDevice> d_followers;
+    std::optional<TilesDevice> m_tiles;
+    std::optional<clue::device_buffer<Device, VecArray<int32_t, reserve>>> m_seeds;
+    std::optional<FollowersDevice> m_followers;
     std::optional<PointsDevice> d_points;
-
-    TilesAlpakaView<Ndim>* m_tiles;
-    VecArray<int32_t, reserve>* m_seeds;
-    FollowersView* m_followers;
 
     void init_device(Queue& queue);
     void init_device(Queue& queue, TilesDevice* tile_buffer);
