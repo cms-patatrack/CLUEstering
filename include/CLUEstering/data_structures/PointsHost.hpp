@@ -19,7 +19,7 @@ namespace clue {
   ///
   /// @tparam Ndim The number of dimensions of the points to manage
   template <uint8_t Ndim>
-  class PointsHost {
+  class PointsHost : public internal::points_interface<PointsHost<Ndim>> {
   public:
     template <concepts::queue TQueue>
     PointsHost(TQueue& queue, int32_t n_points);
@@ -41,25 +41,14 @@ namespace clue {
     PointsHost& operator=(PointsHost&&) = default;
     ~PointsHost() = default;
 
-    ALPAKA_FN_HOST int32_t size() const;
+  private:
+    std::optional<host_buffer<std::byte[]>> m_buffer;
+    PointsView m_view;
+    int32_t m_size;
 
-    ALPAKA_FN_HOST std::span<const float> coords() const;
-    ALPAKA_FN_HOST std::span<float> coords();
+    inline static constexpr uint8_t Ndim_ = Ndim;
 
-    ALPAKA_FN_HOST std::span<const float> coords(size_t dim) const;
-    ALPAKA_FN_HOST std::span<float> coords(size_t dim);
-
-    ALPAKA_FN_HOST std::span<const float> weights() const;
-    ALPAKA_FN_HOST std::span<float> weights();
-
-    ALPAKA_FN_HOST std::span<const int> clusterIndexes() const;
-    ALPAKA_FN_HOST std::span<int> clusterIndexes();
-
-    ALPAKA_FN_HOST std::span<const int> isSeed() const;
-    ALPAKA_FN_HOST std::span<int> isSeed();
-
-    ALPAKA_FN_HOST const PointsView& view() const;
-    ALPAKA_FN_HOST PointsView& view();
+    friend struct internal::points_interface<PointsHost<Ndim>>;
 
     template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue& queue,
@@ -69,11 +58,6 @@ namespace clue {
     friend void copyToDevice(_TQueue& queue,
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);
-
-  private:
-    std::optional<host_buffer<std::byte[]>> m_buffer;
-    PointsView m_view;
-    int32_t m_size;
   };
 
 }  // namespace clue

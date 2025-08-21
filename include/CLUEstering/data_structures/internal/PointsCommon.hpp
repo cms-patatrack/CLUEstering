@@ -3,13 +3,66 @@
 
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include <span>
 
 namespace clue {
 
-  template <uint8_t Ndim>
-  class PointsHost;
-  template <uint8_t Ndim, concepts::device TDev>
-  class PointsDevice;
+  namespace internal {
+
+    template <typename TPoints>
+    struct points_interface {
+      ALPAKA_FN_HOST int32_t size() const { return static_cast<const TPoints*>(this)->m_size; }
+
+      ALPAKA_FN_HOST auto coords() const {
+        auto& view = static_cast<const TPoints*>(this)->m_view;
+        return std::span<const float>(view.coords, view.n * TPoints::Ndim_);
+      }
+      ALPAKA_FN_HOST auto coords() {
+        auto& view = static_cast<TPoints*>(this)->m_view;
+        return std::span<float>(view.coords, view.n * TPoints::Ndim_);
+      }
+
+      ALPAKA_FN_HOST auto coords(size_t dim) const {
+        auto& view = static_cast<const TPoints*>(this)->m_view;
+        return std::span<const float>(view.coords + dim * view.n, view.n);
+      }
+      ALPAKA_FN_HOST auto coords(size_t dim) {
+        auto& view = static_cast<TPoints*>(this)->m_view;
+        return std::span<float>(view.coords + dim * view.n, view.n);
+      }
+
+      ALPAKA_FN_HOST auto weights() const {
+        auto& view = static_cast<const TPoints*>(this)->m_view;
+        return std::span<const float>(view.weight, view.n);
+      }
+      ALPAKA_FN_HOST auto weights() {
+        auto& view = static_cast<TPoints*>(this)->m_view;
+        return std::span<float>(view.weight, view.n);
+      }
+
+      ALPAKA_FN_HOST auto clusterIndexes() const {
+        auto& view = static_cast<const TPoints*>(this)->m_view;
+        return std::span<const int>(view.cluster_index, view.n);
+      }
+      ALPAKA_FN_HOST auto clusterIndexes() {
+        auto& view = static_cast<TPoints*>(this)->m_view;
+        return std::span<int>(view.cluster_index, view.n);
+      }
+
+      ALPAKA_FN_HOST auto isSeed() const {
+        auto& view = static_cast<const TPoints*>(this)->m_view;
+        return std::span<const int>(view.is_seed, view.n);
+      }
+      ALPAKA_FN_HOST auto isSeed() {
+        auto& view = static_cast<TPoints*>(this)->m_view;
+        return std::span<int>(view.is_seed, view.n);
+      }
+
+      ALPAKA_FN_HOST const auto& view() const { return static_cast<const TPoints*>(this)->m_view; }
+      ALPAKA_FN_HOST auto& view() { return static_cast<TPoints*>(this)->m_view; }
+    };
+
+  }  // namespace internal
 
   struct PointsView {
     float* coords;
@@ -32,6 +85,11 @@ namespace clue {
   // TODO: implement for better cache use
   template <uint8_t Ndim>
   int32_t computeAlignSoASize(int32_t n_points);
+
+  template <uint8_t Ndim>
+  class PointsHost;
+  template <uint8_t Ndim, concepts::device TDev>
+  class PointsDevice;
 
   template <concepts::queue TQueue, uint8_t Ndim, concepts::device TDev>
   void copyToHost(TQueue& queue,

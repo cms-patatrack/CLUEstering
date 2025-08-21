@@ -119,31 +119,6 @@ namespace clue {
   }
 
   template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST_ACC inline int32_t PointsDevice<Ndim, TDev>::size() const {
-    return m_size;
-  }
-
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::coords(size_t dim) const {
-    assert(dim < Ndim);
-    return std::span<const float>(m_view.coords + dim * m_size, m_size);
-  }
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::coords(size_t dim) {
-    assert(dim < Ndim);
-    return std::span<float>(m_view.coords + dim * m_size, m_size);
-  }
-
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::weight() const {
-    return std::span<const float>(m_view.weight, m_size);
-  }
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::weight() {
-    return std::span<float>(m_view.weight, m_size);
-  }
-
-  template <uint8_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::rho() const {
     return std::span<const float>(m_view.rho, m_size);
   }
@@ -168,33 +143,6 @@ namespace clue {
   template <uint8_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::nearestHigher() {
     return std::span<int>(m_view.nearest_higher, m_size);
-  }
-
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::clusterIndex() const {
-    return std::span<const int>(m_view.cluster_index, m_size);
-  }
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::clusterIndex() {
-    return std::span<int>(m_view.cluster_index, m_size);
-  }
-
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::isSeed() const {
-    return std::span<const int>(m_view.is_seed, m_size);
-  }
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::isSeed() {
-    return std::span<int>(m_view.is_seed, m_size);
-  }
-
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline const PointsView& PointsDevice<Ndim, TDev>::view() const {
-    return m_view;
-  }
-  template <uint8_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline PointsView& PointsDevice<Ndim, TDev>::view() {
-    return m_view;
   }
 
 }  // namespace clue

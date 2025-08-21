@@ -22,7 +22,7 @@ namespace clue {
   /// @tparam Ndim The number of dimensions of the points to manage
   /// @tparam TDev The device type to use for the allocation. Defaults to clue::Device.
   template <uint8_t Ndim, concepts::device TDev = clue::Device>
-  class PointsDevice {
+  class PointsDevice : public internal::points_interface<PointsDevice<Ndim, TDev>> {
   public:
     /// @brief Construct a PointsDevice object
     ///
@@ -54,38 +54,7 @@ namespace clue {
     PointsDevice& operator=(PointsDevice&&) = default;
     ~PointsDevice() = default;
 
-    /// @brief Get the size of the points
-    ///
-    /// @return The number of points allocated
-    ALPAKA_FN_HOST_ACC int32_t size() const;
-
-    /// @brief Get the coordinates for a specific dimension
-    ///
-    /// @param dim The dimension to get the coordinates for
-    /// @return A constant span of coordinates for the specified dimension
-    ALPAKA_FN_HOST auto coords(size_t dim) const;
-    /// @brief Get the coordinates for a specific dimension
-    ///
-    /// @param dim The dimension to get the coordinates for
-    /// @return A span of coordinates for the specified dimension
-    ALPAKA_FN_HOST auto coords(size_t dim);
-
-    /// @brief Get the weights of all the points
-    ///
-    /// @return A constant span of weights for all the points
-    ALPAKA_FN_HOST auto weight() const;
-    /// @brief Get the weights of all the points
-    ///
-    /// @return A span of weights for all the points
-    ALPAKA_FN_HOST auto weight();
-
-    /// @brief Get the weighted density values of all the points
-    ///
-    /// @return A constant span of density values for all the points
     ALPAKA_FN_HOST auto rho() const;
-    /// @brief Get the weighted density values of all the points
-    ///
-    /// @return A span of density values for all the points
     ALPAKA_FN_HOST auto rho();
 
     ALPAKA_FN_HOST auto delta() const;
@@ -94,14 +63,14 @@ namespace clue {
     ALPAKA_FN_HOST auto nearestHigher() const;
     ALPAKA_FN_HOST auto nearestHigher();
 
-    ALPAKA_FN_HOST auto clusterIndex() const;
-    ALPAKA_FN_HOST auto clusterIndex();
+  private:
+    device_buffer<TDev, std::byte[]> m_buffer;
+    PointsView m_view;
+    int32_t m_size;
 
-    ALPAKA_FN_HOST auto isSeed() const;
-    ALPAKA_FN_HOST auto isSeed();
+    inline static constexpr uint8_t Ndim_ = Ndim;
 
-    ALPAKA_FN_HOST const PointsView& view() const;
-    ALPAKA_FN_HOST PointsView& view();
+    friend struct internal::points_interface<PointsDevice<Ndim, TDev>>;
 
     template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue& queue,
@@ -111,11 +80,6 @@ namespace clue {
     friend void copyToDevice(_TQueue& queue,
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);
-
-  private:
-    device_buffer<TDev, std::byte[]> m_buffer;
-    PointsView m_view;
-    int32_t m_size;
   };
 
 }  // namespace clue
