@@ -39,5 +39,4 @@ if(OpenMP_CXX_FOUND)
                        CLUE_ENABLE_CACHING_ALLOCATOR)
   set_target_properties(openmp.out PROPERTIES RUNTIME_OUTPUT_DIRECTORY
                                               ${CMAKE_BINARY_DIR})
-
 endif()
