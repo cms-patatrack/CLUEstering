@@ -315,51 +315,25 @@ namespace clue {
                                            const KernelType& kernel,
                                            Queue& queue,
                                            std::size_t block_size) {
-    const auto nPoints = h_points.size();
-    // fill the tiles
-    m_tiles->template fill<Acc>(queue, dev_points, nPoints);
+    const auto n_points = h_points.size();
+    m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
-    const Idx grid_size = clue::divide_up_by(nPoints, block_size);
-    auto working_div = clue::make_workdiv<Acc>(grid_size, block_size);
-    alpaka::exec<Acc>(queue,
-                      working_div,
-                      detail::KernelCalculateLocalDensity{},
-                      m_tiles->view(),
-                      dev_points.view(),
-                      kernel,
-                      m_dc,
-                      nPoints);
-    alpaka::exec<Acc>(queue,
-                      working_div,
-                      detail::KernelCalculateNearestHigher{},
-                      m_tiles->view(),
-                      dev_points.view(),
-                      m_dm,
-                      nPoints);
+    const Idx grid_size = clue::divide_up_by(n_points, block_size);
+    auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
+
+    detail::computeLocalDensity<Acc>(
+        queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
+    detail::computeNearestHighers<Acc>(
+        queue, work_division, m_tiles->view(), dev_points.view(), m_dm, n_points);
 
     m_followers->template fill<Acc>(queue, dev_points);
 
-    alpaka::exec<Acc>(queue,
-                      working_div,
-                      detail::KernelFindClusters{},
-                      m_seeds->data(),
-                      dev_points.view(),
-                      m_seed_dc,
-                      m_rhoc,
-                      nPoints);
+    detail::findClusterSeeds<Acc>(
+        queue, work_division, m_seeds->data(), dev_points.view(), m_seed_dc, m_rhoc, n_points);
+    detail::assignPointsToClusters<Acc>(
+        queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
 
-    // We change the working division when assigning the clusters
-    const Idx grid_size_seeds = clue::divide_up_by(reserve, block_size);
-    auto working_div_seeds = clue::make_workdiv<Acc>(grid_size_seeds, block_size);
-
-    alpaka::exec<Acc>(queue,
-                      working_div_seeds,
-                      detail::KernelAssignClusters{},
-                      m_seeds->data(),
-                      m_followers->view(),
-                      dev_points.view());
     alpaka::wait(queue);
-
     clue::copyToHost(queue, h_points, dev_points);
   }
 
@@ -369,48 +343,23 @@ namespace clue {
                                            const KernelType& kernel,
                                            Queue& queue,
                                            std::size_t block_size) {
-    const auto nPoints = dev_points.size();
-    m_tiles->template fill<Acc>(queue, dev_points, nPoints);
+    const auto n_points = dev_points.size();
+    m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
-    const Idx grid_size = clue::divide_up_by(nPoints, block_size);
-    auto working_div = clue::make_workdiv<Acc>(grid_size, block_size);
-    alpaka::exec<Acc>(queue,
-                      working_div,
-                      detail::KernelCalculateLocalDensity{},
-                      m_tiles->view(),
-                      dev_points.view(),
-                      kernel,
-                      m_dc,
-                      nPoints);
-    alpaka::exec<Acc>(queue,
-                      working_div,
-                      detail::KernelCalculateNearestHigher{},
-                      m_tiles->view(),
-                      dev_points.view(),
-                      m_dm,
-                      nPoints);
+    const Idx grid_size = clue::divide_up_by(n_points, block_size);
+    auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
+
+    detail::computeLocalDensity<Acc>(
+        queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
+    detail::computeNearestHighers<Acc>(
+        queue, work_division, m_tiles->view(), dev_points.view(), m_dm, n_points);
 
     m_followers->template fill<Acc>(queue, dev_points);
 
-    alpaka::exec<Acc>(queue,
-                      working_div,
-                      detail::KernelFindClusters{},
-                      m_seeds->data(),
-                      dev_points.view(),
-                      m_seed_dc,
-                      m_rhoc,
-                      nPoints);
-
-    // We change the working division when assigning the clusters
-    const Idx grid_size_seeds = clue::divide_up_by(reserve, block_size);
-    auto working_div_seeds = clue::make_workdiv<Acc>(grid_size_seeds, block_size);
-
-    alpaka::exec<Acc>(queue,
-                      working_div_seeds,
-                      detail::KernelAssignClusters{},
-                      m_seeds->data(),
-                      m_followers->view(),
-                      dev_points.view());
+    detail::findClusterSeeds<Acc>(
+        queue, work_division, m_seeds->data(), dev_points.view(), m_seed_dc, m_rhoc, n_points);
+    detail::assignPointsToClusters<Acc>(
+        queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
   }
 
 }  // namespace clue
