@@ -15,8 +15,7 @@ int main() {
 
   // Launch the clustering
   // The results will be stored in the `clue::PointsHost` object
-  const std::size_t block_size{256};
-  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue, block_size);
+  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue);
   // Read the data from the host points
   auto clusters_indexes = h_points.clusterIndexes();  // Get the cluster index for each points
   auto seed_map =

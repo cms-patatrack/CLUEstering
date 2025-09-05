@@ -81,9 +81,7 @@ void to_csv(const TimeMeasures& measures, const std::string& filename) {
 void run(clue::PointsHost<2>& h_points, clue::PointsDevice<2>& d_points, clue::Queue& queue) {
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
-
-  const std::size_t block_size{256};
-  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue, block_size);
+  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue);
 }
 
 int main(int argc, char* argv[]) {
