@@ -235,10 +235,8 @@ namespace clue {
       m_tiles = std::make_optional<TilesDevice>(queue, h_points.size(), nTiles);
     }
     // check if tiles are large enough for current data
-    if (!(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
-              m_tiles->indexes())[0u] >= static_cast<std::size_t>(h_points.size())) or
-        !(alpaka::trait::GetExtents<clue::device_buffer<Device, int32_t[]>>{}(
-              m_tiles->offsets())[0u] >= static_cast<std::size_t>(nTiles))) {
+    if (!(m_tiles->extents().values >= static_cast<std::size_t>(h_points.size())) or
+        !(m_tiles->extents().keys >= static_cast<std::size_t>(nTiles))) {
       m_tiles->initialize(h_points.size(), nTiles, nPerDim, queue);
     } else {
       m_tiles->reset(h_points.size(), nTiles, nPerDim, queue);
@@ -252,7 +250,6 @@ namespace clue {
     alpaka::memcpy(queue, m_tiles->tileSize(), tile_sizes);
     alpaka::memcpy(
         queue, m_tiles->wrapped(), clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
-    alpaka::wait(queue);
   }
 
   template <uint8_t Ndim>
@@ -266,10 +263,8 @@ namespace clue {
       m_tiles = std::make_optional<TilesDevice>(queue, d_points.size(), nTiles);
     }
     // check if tiles are large enough for current data
-    if (!(alpaka::trait::GetExtents<clue::device_buffer<clue::Device, int32_t[]>>{}(
-              m_tiles->indexes())[0u] >= static_cast<uint32_t>(d_points.size())) or
-        !(alpaka::trait::GetExtents<clue::device_buffer<clue::Device, int32_t[]>>{}(
-              m_tiles->offsets())[0u] >= static_cast<uint32_t>(nTiles))) {
+    if (!(m_tiles->extents().values >= static_cast<std::size_t>(h_points.size())) or
+        !(m_tiles->extents().keys >= static_cast<std::size_t>(nTiles))) {
       m_tiles->initialize(d_points.size(), nTiles, nPerDim, queue);
     } else {
       m_tiles->reset(d_points.size(), nTiles, nPerDim, queue);
@@ -283,7 +278,6 @@ namespace clue {
     alpaka::memcpy(queue, m_tiles->tileSize(), tile_sizes);
     alpaka::memcpy(
         queue, m_tiles->wrapped(), clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
-    alpaka::wait(queue);
   }
 
   template <uint8_t Ndim>
@@ -304,7 +298,6 @@ namespace clue {
                                     PointsDevice& dev_points,
                                     Queue& queue) {
     clue::copyToDevice(queue, dev_points, h_points);
-
     alpaka::memset(queue, *m_seeds, 0x00);
   }
 
@@ -333,7 +326,6 @@ namespace clue {
     detail::assignPointsToClusters<Acc>(
         queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
 
-    alpaka::wait(queue);
     clue::copyToHost(queue, h_points, dev_points);
   }
 
@@ -360,6 +352,8 @@ namespace clue {
         queue, work_division, m_seeds->data(), dev_points.view(), m_seed_dc, m_rhoc, n_points);
     detail::assignPointsToClusters<Acc>(
         queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
+
+    alpaka::wait(queue);
   }
 
 }  // namespace clue
