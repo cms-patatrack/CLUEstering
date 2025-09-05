@@ -15,7 +15,7 @@ int main() {
 
   // Launch the clustering
   // The results will be stored in the `clue::PointsHost` object
-  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue);
+  algo.make_clusters(queue, h_points, d_points, clue::FlatKernel{.5f});
   // Read the data from the host points
   auto clusters_indexes = h_points.clusterIndexes();  // Get the cluster index for each points
   auto seed_map =

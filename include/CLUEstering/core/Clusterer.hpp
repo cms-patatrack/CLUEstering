@@ -128,14 +128,14 @@ namespace clue {
 
     /// @brief Construct the clusters from host points
     ///
+    /// @param queue The queue to use for the device operations
     /// @param h_points Host points to cluster
     /// @param kernel The convolutional kernel to use for clustering
-    /// @param queue The queue to use for the device operations
     /// @param block_size The size of the blocks to use for clustering, default is 256
     template <concepts::convolutional_kernel Kernel>
-    void make_clusters(PointsHost& h_points,
+    void make_clusters(Queue& queue,
+                       PointsHost& h_points,
                        const Kernel& kernel,
-                       Queue& queue,
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host points
     ///
@@ -147,16 +147,16 @@ namespace clue {
     void make_clusters(PointsHost& h_points, const Kernel& kernel, std::size_t block_size = 256);
     /// @brief Construct the clusters from host and device points
     ///
+    /// @param queue The queue to use for the device operations
     /// @param h_points Host points to cluster
     /// @param dev_points Device points to cluster
     /// @param kernel The convolutional kernel to use for clustering
-    /// @param queue The queue to use for the device operations
     /// @param block_size The size of the blocks to use for clustering, default is 256
     template <concepts::convolutional_kernel Kernel>
-    void make_clusters(PointsHost& h_points,
+    void make_clusters(Queue& queue,
+                       PointsHost& h_points,
                        PointsDevice& dev_points,
                        const Kernel& kernel,
-                       Queue& queue,
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host and device points
     ///
@@ -172,14 +172,14 @@ namespace clue {
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from device points
     ///
+    /// @param queue The queue to use for the device operations
     /// @param dev_points Device points to cluster
     /// @param kernel The convolutional kernel to use for clustering
-    /// @param queue The queue to use for the device operations
     /// @param block_size The size of the blocks to use for clustering, default is 256
     template <concepts::convolutional_kernel Kernel>
-    void make_clusters(PointsDevice& dev_points,
+    void make_clusters(Queue& queue,
+                       PointsDevice& dev_points,
                        const Kernel& kernel,
-                       Queue& queue,
                        std::size_t block_size = 256);
 
     /// @brief Specify which coordinates are periodic

@@ -80,9 +80,9 @@ namespace clue {
 
   template <uint8_t Ndim>
   template <concepts::convolutional_kernel Kernel>
-  inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
+  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
+                                             PointsHost& h_points,
                                              const Kernel& kernel,
-                                             Queue& queue,
                                              std::size_t block_size) {
     d_points = std::make_optional<PointsDevice>(queue, h_points.size());
     auto& dev_points = *d_points;
@@ -109,10 +109,10 @@ namespace clue {
   }
   template <uint8_t Ndim>
   template <concepts::convolutional_kernel Kernel>
-  inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
+  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
+                                             PointsHost& h_points,
                                              PointsDevice& dev_points,
                                              const Kernel& kernel,
-                                             Queue& queue,
                                              std::size_t block_size) {
     setup(queue, h_points, dev_points);
     make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
@@ -134,9 +134,9 @@ namespace clue {
   }
   template <uint8_t Ndim>
   template <concepts::convolutional_kernel Kernel>
-  inline void Clusterer<Ndim>::make_clusters(PointsDevice& dev_points,
+  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
+                                             PointsDevice& dev_points,
                                              const Kernel& kernel,
-                                             Queue& queue,
                                              std::size_t block_size) {
     setupTiles(queue, dev_points);
     setupFollowers(queue, dev_points.size());
