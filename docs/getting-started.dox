@@ -22,8 +22,7 @@
  * 
  *   // Launch the clustering
  *   // The results will be stored in the `clue::PointsHost` object
- *   const std::size_t block_size{256};
- *   algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue, block_size);
+ *   algo.make_clusters(queue, h_points, d_points);
  *   // Read the data from the host points
  *   auto clusters_indexes = h_points.clusterIndexes();  // Get the cluster index for each points
  *   auto seed_map =
@@ -49,9 +48,10 @@
  * Then, the `clue::Clusterer`, which is the object that handles the internal allocations and contains the algorithm logic, is created. The `Clusterer`
  * requires the CLUE algorithm's parameters to be passed. Their meaning is explained in the introduction section, along with a description of the algorithm.
  *
- * Finally, the algorithm is launched with the `make_clusters` method, which takes as arguments the host and device points, the kernel to use for the
- * clustering, the queue to use for the operations and the bloch size. The input data is copied from the host to the device container, the algorithm is then 
- * executed on the device, where the results are computed and finally copied back to the host container.
+ * Finally, the algorithm is launched with the `make_clusters` method, which takes as arguments the queue to use for the device operations, the host and
+ * device points and optionally the kernel to use for computing the points' density and the block-size that the kernels are launched with.
+ * The input data is copied from the host to the device container, the algorithm is then executed on the device, where the results are computed and finally
+ * copied back to the host container.
  *
  * The results of the clustering can then be read from the host points: the `clue::PointsHost::clusterIndexes` method returns a span of integers
  * representing the cluster index for each point, while the `clue::PointsHost::isSeed` method returns a boolean array indicating which points are the seeds
