@@ -227,6 +227,8 @@ namespace clue {
 
     ALPAKA_FN_HOST inline constexpr auto nPerDim() const { return m_nperdim; }
 
+    ALPAKA_FN_HOST inline constexpr auto extents() const { return m_assoc.extents(); }
+
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST inline constexpr void clear(const TQueue& queue) {}
 

@@ -263,7 +263,7 @@ namespace clue {
       m_tiles = std::make_optional<TilesDevice>(queue, d_points.size(), nTiles);
     }
     // check if tiles are large enough for current data
-    if (!(m_tiles->extents().values >= static_cast<std::size_t>(h_points.size())) or
+    if (!(m_tiles->extents().values >= static_cast<std::size_t>(d_points.size())) or
         !(m_tiles->extents().keys >= static_cast<std::size_t>(nTiles))) {
       m_tiles->initialize(d_points.size(), nTiles, nPerDim, queue);
     } else {
