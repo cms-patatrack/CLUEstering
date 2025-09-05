@@ -79,9 +79,9 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  template <typename KernelType>
+  template <concepts::convolutional_kernel Kernel>
   inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
-                                             const KernelType& kernel,
+                                             const Kernel& kernel,
                                              Queue& queue,
                                              std::size_t block_size) {
     d_points = std::make_optional<PointsDevice>(queue, h_points.size());
@@ -92,9 +92,9 @@ namespace clue {
     alpaka::wait(queue);
   }
   template <uint8_t Ndim>
-  template <typename KernelType>
+  template <concepts::convolutional_kernel Kernel>
   inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
-                                             const KernelType& kernel,
+                                             const Kernel& kernel,
                                              std::size_t block_size) {
     auto device = alpaka::getDevByIdx(Platform{}, 0u);
     Queue queue(device);
@@ -108,10 +108,10 @@ namespace clue {
     alpaka::wait(queue);
   }
   template <uint8_t Ndim>
-  template <typename KernelType>
+  template <concepts::convolutional_kernel Kernel>
   inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
                                              PointsDevice& dev_points,
-                                             const KernelType& kernel,
+                                             const Kernel& kernel,
                                              Queue& queue,
                                              std::size_t block_size) {
     setup(queue, h_points, dev_points);
@@ -119,10 +119,10 @@ namespace clue {
     alpaka::wait(queue);
   }
   template <uint8_t Ndim>
-  template <typename KernelType>
+  template <concepts::convolutional_kernel Kernel>
   inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
                                              PointsDevice& dev_points,
-                                             const KernelType& kernel,
+                                             const Kernel& kernel,
                                              std::size_t block_size) {
     auto device = alpaka::getDevByIdx(Platform{}, 0u);
     Queue queue(device);
@@ -133,9 +133,9 @@ namespace clue {
     alpaka::wait(queue);
   }
   template <uint8_t Ndim>
-  template <typename KernelType>
+  template <concepts::convolutional_kernel Kernel>
   inline void Clusterer<Ndim>::make_clusters(PointsDevice& dev_points,
-                                             const KernelType& kernel,
+                                             const Kernel& kernel,
                                              Queue& queue,
                                              std::size_t block_size) {
     setupTiles(queue, dev_points);
@@ -309,10 +309,10 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  template <typename KernelType>
+  template <concepts::convolutional_kernel Kernel>
   void Clusterer<Ndim>::make_clusters_impl(PointsHost& h_points,
                                            PointsDevice& dev_points,
-                                           const KernelType& kernel,
+                                           const Kernel& kernel,
                                            Queue& queue,
                                            std::size_t block_size) {
     const auto n_points = h_points.size();
@@ -338,9 +338,9 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  template <typename KernelType>
+  template <concepts::convolutional_kernel Kernel>
   void Clusterer<Ndim>::make_clusters_impl(PointsDevice& dev_points,
-                                           const KernelType& kernel,
+                                           const Kernel& kernel,
                                            Queue& queue,
                                            std::size_t block_size) {
     const auto n_points = dev_points.size();

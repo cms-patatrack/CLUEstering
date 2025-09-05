@@ -34,7 +34,7 @@ namespace clue {
       return coords;
     }
 
-    template <typename TAcc, uint8_t Ndim, uint8_t N_, typename KernelType>
+    template <typename TAcc, uint8_t Ndim, uint8_t N_, concepts::convolutional_kernel KernelType>
     ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
                                           VecArray<int32_t, Ndim>& base_vec,
                                           const clue::SearchBoxBins<Ndim>& search_box,
@@ -71,7 +71,7 @@ namespace clue {
     }
 
     struct KernelCalculateLocalDensity {
-      template <typename TAcc, uint8_t Ndim, typename KernelType>
+      template <typename TAcc, uint8_t Ndim, concepts::convolutional_kernel KernelType>
       ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                     TilesAlpakaView<Ndim> dev_tiles,
                                     PointsView dev_points,
