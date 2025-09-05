@@ -30,7 +30,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
     clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
-    algo.make_clusters(queue, h_points, d_points, clue::FlatKernel{.5f});
+    algo.make_clusters(queue, h_points, d_points);
     auto clusters = h_points.clusterIndexes();
     auto isSeed = h_points.isSeed();
 
@@ -54,7 +54,7 @@ TEST_CASE("Test clustering on sissa") {
   const float dc{20.f}, rhoc{10.f}, outlier{20.f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
-  algo.make_clusters(queue, h_points, d_points, clue::FlatKernel{.5f});
+  algo.make_clusters(queue, h_points, d_points);
   auto clusters = h_points.clusterIndexes();
   auto isSeed = h_points.isSeed();
 
@@ -76,7 +76,7 @@ TEST_CASE("Test clustering on toy detector dataset") {
   const float dc{4.5f}, rhoc{2.5f}, outlier{4.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
-  algo.make_clusters(queue, h_points, d_points, clue::FlatKernel{.5f});
+  algo.make_clusters(queue, h_points, d_points);
   auto clusters = h_points.clusterIndexes();
   auto isSeed = h_points.isSeed();
 
@@ -98,7 +98,7 @@ TEST_CASE("Test clustering on blob dataset") {
   const float dc{1.f}, rhoc{5.f}, outlier{2.f};
   clue::Clusterer<3> algo(queue, dc, rhoc, outlier);
 
-  algo.make_clusters(queue, h_points, d_points, clue::FlatKernel{.5f});
+  algo.make_clusters(queue, h_points, d_points);
   auto clusters = h_points.clusterIndexes();
   auto isSeed = h_points.isSeed();
 
