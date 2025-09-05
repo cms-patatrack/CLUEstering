@@ -27,7 +27,7 @@ namespace alpaka_tbb_async {
     }
   }
 
-  template <typename Kernel>
+  template <clue::concepts::convolutional_kernel Kernel>
   void mainRun(float dc,
                float rhoc,
                float dm,

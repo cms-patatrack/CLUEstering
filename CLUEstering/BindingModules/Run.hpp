@@ -4,7 +4,7 @@
 #include <vector>
 #include "CLUEstering/CLUEstering.hpp"
 
-template <uint8_t Ndim, typename Kernel>
+template <uint8_t Ndim, clue::concepts::convolutional_kernel Kernel>
 void run(float dc,
          float rhoc,
          float dm,
