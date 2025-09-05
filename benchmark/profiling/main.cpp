@@ -17,8 +17,7 @@ void run(const std::string& input_file) {
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
-  const std::size_t block_size{256};
-  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue, block_size);
+  algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, queue);
   auto clusters = algo.getClusters(h_points);
 }
 
