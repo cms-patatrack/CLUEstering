@@ -16,6 +16,7 @@
 #include <alpaka/vec/Vec.hpp>
 #include <cmath>
 #include <cstdint>
+#include <execution>
 #include <ranges>
 #include <vector>
 
@@ -185,8 +186,17 @@ namespace clue {
                                             const PointsHost& h_points,
                                             int32_t nPerDim) {
     for (size_t dim{}; dim != Ndim; ++dim) {
-      const float dimMax = *std::ranges::max_element(h_points.coords(dim));
-      const float dimMin = *std::ranges::min_element(h_points.coords(dim));
+      auto coords = h_points.coords(dim);
+      const float dimMax = std::reduce(std::execution::unseq,
+                                       coords.begin(),
+                                       coords.end(),
+                                       std::numeric_limits<float>::lowest(),
+                                       [](float a, float b) { return std::max(a, b); });
+      const float dimMin = std::reduce(std::execution::unseq,
+                                       coords.begin(),
+                                       coords.end(),
+                                       std::numeric_limits<float>::max(),
+                                       [](float a, float b) { return std::min(a, b); });
 
       min_max->min(dim) = dimMin;
       min_max->max(dim) = dimMax;
@@ -204,15 +214,21 @@ namespace clue {
                                             uint32_t nPerDim) {
     for (size_t dim{}; dim != Ndim; ++dim) {
       auto coords = dev_points.coords(dim);
-      const auto* dimMax =
-          clue::internal::algorithm::max_element(coords.data(), coords.data() + coords.size());
-      const auto* dimMin =
-          clue::internal::algorithm::min_element(coords.data(), coords.data() + coords.size());
+      const auto dimMax = clue::internal::algorithm::reduce(
+          coords.begin(),
+          coords.end(),
+          std::numeric_limits<float>::lowest(),
+          [](float a, float b) constexpr { return std::max(a, b); });
+      const auto dimMin = clue::internal::algorithm::reduce(
+          coords.begin(),
+          coords.end(),
+          std::numeric_limits<float>::max(),
+          [](float a, float b) constexpr { return std::min(a, b); });
 
       auto h_dimMin = make_host_buffer<float>(queue);
       auto h_dimMax = make_host_buffer<float>(queue);
-      alpaka::memcpy(queue, h_dimMin, make_device_view(alpaka::getDev(queue), *dimMin));
-      alpaka::memcpy(queue, h_dimMax, make_device_view(alpaka::getDev(queue), *dimMax));
+      alpaka::memcpy(queue, h_dimMin, make_device_view(alpaka::getDev(queue), dimMin));
+      alpaka::memcpy(queue, h_dimMax, make_device_view(alpaka::getDev(queue), dimMax));
       alpaka::wait(queue);
 
       min_max->min(dim) = *h_dimMin;
