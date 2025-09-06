@@ -16,6 +16,8 @@ jobs:
         run: sudo apt-get install lcov gcovr
 
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Build and run tests
         working-directory: ${{github.workspace}}/tests
