@@ -1,6 +1,6 @@
 # CLUEstering 
 
-[![Latest Release](https://img.shields.io/github/v/release/cms-patatrack/CLUEstering)](https://github.com/physycom/DynamicalSystemFramework/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/cms-patatrack/CLUEstering)](https://github.com/cms-patatrack/CLUEstering/releases/latest)
 [![Standard](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://cms-patatrack.github.io/CLUEstering/)
 [![codecov](https://codecov.io/gh/cms-patatrack/CLUEstering/graph/badge.svg?token=JV53J6IUJ3)](https://codecov.io/gh/cms-patatrack/CLUEstering)
