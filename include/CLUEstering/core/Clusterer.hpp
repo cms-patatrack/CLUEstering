@@ -60,16 +60,6 @@ namespace clue {
       setupPoints(h_points, dev_points, queue);
     }
 
-    void calculate_tile_size(CoordinateExtremes* min_max,
-                             float* tile_sizes,
-                             const PointsHost& h_points,
-                             int32_t nPerDim);
-    void calculate_tile_size(Queue& queue,
-                             CoordinateExtremes* min_max,
-                             float* tile_sizes,
-                             const PointsDevice& dev_points,
-                             uint32_t nPerDim);
-
     template <concepts::convolutional_kernel Kernel>
     void make_clusters_impl(PointsHost& h_points,
                             PointsDevice& dev_points,
