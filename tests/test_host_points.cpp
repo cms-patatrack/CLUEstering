@@ -23,7 +23,6 @@ TEST_CASE("Test host points with internal allocation") {
     auto coords = h_points.coords();
     auto weights = h_points.weights();
     auto cluster_indexes = h_points.clusterIndexes();
-    auto is_seed = h_points.isSeed();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
@@ -60,7 +59,6 @@ TEST_CASE("Test host points with internal allocation") {
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
     CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
-    CHECK(std::ranges::equal(std::span(is_seed, size), h_points.isSeed()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -89,7 +87,6 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
     auto coords = h_points.coords();
     auto weights = h_points.weights();
     auto cluster_indexes = h_points.clusterIndexes();
-    auto is_seed = h_points.isSeed();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
@@ -126,7 +123,6 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
     CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
-    CHECK(std::ranges::equal(std::span(is_seed, size), h_points.isSeed()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -157,7 +153,6 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
     auto coords = h_points.coords();
     auto weights = h_points.weights();
     auto cluster_indexes = h_points.clusterIndexes();
-    auto is_seed = h_points.isSeed();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
@@ -194,7 +189,6 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
     CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
-    CHECK(std::ranges::equal(std::span(is_seed, size), h_points.isSeed()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -224,7 +218,6 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
     auto coords = h_points.coords();
     auto weights = h_points.weights();
     auto cluster_indexes = h_points.clusterIndexes();
-    auto is_seed = h_points.isSeed();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
@@ -261,7 +254,6 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
     CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
-    CHECK(std::ranges::equal(std::span(is_seed, size), h_points.isSeed()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -291,7 +283,6 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
     auto coords = h_points.coords();
     auto weights = h_points.weights();
     auto cluster_indexes = h_points.clusterIndexes();
-    auto is_seed = h_points.isSeed();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
@@ -328,7 +319,6 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
     CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
-    CHECK(std::ranges::equal(std::span(is_seed, size), h_points.isSeed()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -365,7 +355,6 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
     auto coords = h_points.coords();
     auto weights = h_points.weights();
     auto cluster_indexes = h_points.clusterIndexes();
-    auto is_seed = h_points.isSeed();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
@@ -402,7 +391,6 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
     CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
-    CHECK(std::ranges::equal(std::span(is_seed, size), h_points.isSeed()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -434,7 +422,6 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
     auto coords = h_points.coords();
     auto weights = h_points.weights();
     auto cluster_indexes = h_points.clusterIndexes();
-    auto is_seed = h_points.isSeed();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
@@ -471,7 +458,6 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
     CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
-    CHECK(std::ranges::equal(std::span(is_seed, size), h_points.isSeed()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -504,7 +490,6 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
     auto coords = h_points.coords();
     auto weights = h_points.weights();
     auto cluster_indexes = h_points.clusterIndexes();
-    auto is_seed = h_points.isSeed();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
@@ -541,7 +526,6 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
     CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
-    CHECK(std::ranges::equal(std::span(is_seed, size), h_points.isSeed()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
