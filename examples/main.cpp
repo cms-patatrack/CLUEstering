@@ -18,7 +18,4 @@ int main() {
   algo.make_clusters(queue, h_points, d_points);
   // Read the data from the host points
   auto clusters_indexes = h_points.clusterIndexes();  // Get the cluster index for each points
-  auto seed_map =
-      h_points.isSeed();  // Obtain a boolean array indicating which points are the seeds
-                          // i.e. the cluster centers
 }
