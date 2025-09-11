@@ -27,13 +27,11 @@ TEST_CASE("Test host points with internal allocation") {
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
     std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
-    std::fill(is_seed.begin(), is_seed.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords, 2 * size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
     CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
-    CHECK(std::ranges::equal(is_seed, std::span<int>(view.is_seed, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -41,19 +39,16 @@ TEST_CASE("Test host points with internal allocation") {
         coords, std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float)));
     CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
-    std::ranges::for_each(is_seed, [](auto x) { CHECK(x == 0); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords;
     auto weights = view.weight;
     auto cluster_indexes = view.cluster_index;
-    auto is_seed = view.is_seed;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
     std::iota(cluster_indexes, cluster_indexes + size, 2000);
-    std::fill(is_seed, is_seed + size, 3);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
@@ -68,7 +63,6 @@ TEST_CASE("Test host points with internal allocation") {
     CHECK(std::ranges::equal(std::span(cluster_indexes, size),
                              std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
-    std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
   }
 }
 
@@ -91,13 +85,11 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
     std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
-    std::fill(is_seed.begin(), is_seed.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords, 2 * size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
     CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
-    CHECK(std::ranges::equal(is_seed, std::span<int>(view.is_seed, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -105,19 +97,16 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
         coords, std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float)));
     CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
-    std::ranges::for_each(is_seed, [](auto x) { CHECK(x == 0); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords;
     auto weights = view.weight;
     auto cluster_indexes = view.cluster_index;
-    auto is_seed = view.is_seed;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
     std::iota(cluster_indexes, cluster_indexes + size, 2000);
-    std::fill(is_seed, is_seed + size, 3);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
@@ -132,7 +121,6 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
     CHECK(std::ranges::equal(std::span(cluster_indexes, size),
                              std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
-    std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
   }
 }
 
@@ -157,13 +145,11 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
     std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
-    std::fill(is_seed.begin(), is_seed.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords, 2 * size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
     CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
-    CHECK(std::ranges::equal(is_seed, std::span<int>(view.is_seed, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -171,19 +157,16 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
         coords, std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float)));
     CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
-    std::ranges::for_each(is_seed, [](auto x) { CHECK(x == 0); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords;
     auto weights = view.weight;
     auto cluster_indexes = view.cluster_index;
-    auto is_seed = view.is_seed;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
     std::iota(cluster_indexes, cluster_indexes + size, 2000);
-    std::fill(is_seed, is_seed + size, 3);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
@@ -198,7 +181,6 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
     CHECK(std::ranges::equal(std::span(cluster_indexes, size),
                              std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
-    std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
   }
 }
 
@@ -222,13 +204,11 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
     std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
-    std::fill(is_seed.begin(), is_seed.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords, 2 * size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
     CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
-    CHECK(std::ranges::equal(is_seed, std::span<int>(view.is_seed, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -236,19 +216,16 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
         coords, std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float)));
     CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
-    std::ranges::for_each(is_seed, [](auto x) { CHECK(x == 0); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords;
     auto weights = view.weight;
     auto cluster_indexes = view.cluster_index;
-    auto is_seed = view.is_seed;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
     std::iota(cluster_indexes, cluster_indexes + size, 2000);
-    std::fill(is_seed, is_seed + size, 3);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
@@ -263,7 +240,6 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
     CHECK(std::ranges::equal(std::span(cluster_indexes, size),
                              std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
-    std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
   }
 }
 
@@ -287,13 +263,11 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
     std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
-    std::fill(is_seed.begin(), is_seed.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords, 2 * size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
     CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
-    CHECK(std::ranges::equal(is_seed, std::span<int>(view.is_seed, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -301,19 +275,16 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
         coords, std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float)));
     CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
-    std::ranges::for_each(is_seed, [](auto x) { CHECK(x == 0); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords;
     auto weights = view.weight;
     auto cluster_indexes = view.cluster_index;
-    auto is_seed = view.is_seed;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
     std::iota(cluster_indexes, cluster_indexes + size, 2000);
-    std::fill(is_seed, is_seed + size, 3);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
@@ -328,7 +299,6 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
     CHECK(std::ranges::equal(std::span(cluster_indexes, size),
                              std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
-    std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
   }
 }
 
@@ -359,13 +329,11 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
     std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
-    std::fill(is_seed.begin(), is_seed.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords, 2 * size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
     CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
-    CHECK(std::ranges::equal(is_seed, std::span<int>(view.is_seed, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -373,19 +341,16 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
         coords, std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float)));
     CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
-    std::ranges::for_each(is_seed, [](auto x) { CHECK(x == 0); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords;
     auto weights = view.weight;
     auto cluster_indexes = view.cluster_index;
-    auto is_seed = view.is_seed;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
     std::iota(cluster_indexes, cluster_indexes + size, 2000);
-    std::fill(is_seed, is_seed + size, 3);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
@@ -400,7 +365,6 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
     CHECK(std::ranges::equal(std::span(cluster_indexes, size),
                              std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
-    std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
   }
 }
 
@@ -426,13 +390,11 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
     std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
-    std::fill(is_seed.begin(), is_seed.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords, 2 * size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
     CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
-    CHECK(std::ranges::equal(is_seed, std::span<int>(view.is_seed, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -440,19 +402,16 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
         coords, std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float)));
     CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
-    std::ranges::for_each(is_seed, [](auto x) { CHECK(x == 0); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords;
     auto weights = view.weight;
     auto cluster_indexes = view.cluster_index;
-    auto is_seed = view.is_seed;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
     std::iota(cluster_indexes, cluster_indexes + size, 2000);
-    std::fill(is_seed, is_seed + size, 3);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
@@ -467,7 +426,6 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
     CHECK(std::ranges::equal(std::span(cluster_indexes, size),
                              std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
-    std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
   }
 }
 
@@ -494,13 +452,11 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
     std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
-    std::fill(is_seed.begin(), is_seed.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords, 2 * size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
     CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
-    CHECK(std::ranges::equal(is_seed, std::span<int>(view.is_seed, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -508,19 +464,16 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
         coords, std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float)));
     CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
-    std::ranges::for_each(is_seed, [](auto x) { CHECK(x == 0); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords;
     auto weights = view.weight;
     auto cluster_indexes = view.cluster_index;
-    auto is_seed = view.is_seed;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
     std::iota(cluster_indexes, cluster_indexes + size, 2000);
-    std::fill(is_seed, is_seed + size, 3);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, 2 * size), h_points.coords()));
@@ -535,6 +488,5 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
     CHECK(std::ranges::equal(std::span(cluster_indexes, size),
                              std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
-    std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
   }
 }
