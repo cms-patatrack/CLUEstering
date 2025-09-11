@@ -49,15 +49,6 @@ namespace clue {
         return std::span<int>(view.cluster_index, view.n);
       }
 
-      ALPAKA_FN_HOST auto isSeed() const {
-        auto& view = static_cast<const TPoints*>(this)->m_view;
-        return std::span<const int>(view.is_seed, view.n);
-      }
-      ALPAKA_FN_HOST auto isSeed() {
-        auto& view = static_cast<TPoints*>(this)->m_view;
-        return std::span<int>(view.is_seed, view.n);
-      }
-
       ALPAKA_FN_HOST const auto& view() const { return static_cast<const TPoints*>(this)->m_view; }
       ALPAKA_FN_HOST auto& view() { return static_cast<TPoints*>(this)->m_view; }
     };
