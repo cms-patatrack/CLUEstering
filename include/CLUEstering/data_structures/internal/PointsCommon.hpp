@@ -90,10 +90,6 @@ namespace clue {
         queue,
         make_host_view(h_points.m_view.cluster_index, h_points.size()),
         make_device_view(alpaka::getDev(queue), d_points.m_view.cluster_index, h_points.size()));
-    alpaka::memcpy(
-        queue,
-        make_host_view(h_points.m_view.is_seed, h_points.size()),
-        make_device_view(alpaka::getDev(queue), d_points.m_view.is_seed, h_points.size()));
   }
   template <concepts::queue TQueue, uint8_t Ndim, concepts::device TDev>
   void copyToDevice(TQueue& queue,
