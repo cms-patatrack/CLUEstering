@@ -73,8 +73,6 @@ namespace clue {
       points.weights()[point_id] = std::stof(value);
       getline(buffer_stream, value, ',');
       points.clusterIndexes()[point_id] = std::stoi(value);
-      getline(buffer_stream, value);
-      points.isSeed()[point_id] = std::stoi(value);
 
       ++point_id;
     }
