@@ -91,7 +91,7 @@ namespace clue {
 
   template <uint8_t Ndim>
   template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
-    requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+    requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
   inline PointsHost<Ndim>::PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers)
       : m_view{}, m_size{n_points} {
     soa::host::partitionSoAView<Ndim>(m_view, n_points, std::forward<TBuffers>(buffers)...);
@@ -99,7 +99,7 @@ namespace clue {
 
   template <uint8_t Ndim>
   template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-    requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+    requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
   inline PointsHost<Ndim>::PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers)
       : m_view{}, m_size{n_points} {
     soa::host::partitionSoAView<Ndim>(m_view, n_points, buffers...);
