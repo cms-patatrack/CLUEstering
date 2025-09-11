@@ -310,14 +310,12 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
   std::vector<float> coords(2 * size);
   std::vector<float> weights(size);
   std::vector<int> cluster_ids(size);
-  std::vector<int> v_isseed(size);
 
   clue::PointsHost<2> h_points(queue,
                                size,
                                std::span(coords.data(), coords.size()),
                                std::span(weights.data(), weights.size()),
-                               std::span(cluster_ids.data(), cluster_ids.size()),
-                               std::span(v_isseed.data(), v_isseed.size()));
+                               std::span(cluster_ids.data(), cluster_ids.size()));
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -376,9 +374,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
   std::vector<float> coords(2 * size);
   std::vector<float> weights(size);
   std::vector<int> cluster_ids(size);
-  std::vector<int> v_isseed(size);
 
-  clue::PointsHost<2> h_points(queue, size, coords, weights, cluster_ids, v_isseed);
+  clue::PointsHost<2> h_points(queue, size, coords, weights, cluster_ids);
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -437,10 +434,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
   std::vector<float> coords(2 * size);
   std::vector<float> weights(size);
   std::vector<int> cluster_ids(size);
-  std::vector<int> v_isseed(size);
 
-  clue::PointsHost<2> h_points(
-      queue, size, coords.data(), weights.data(), cluster_ids.data(), v_isseed.data());
+  clue::PointsHost<2> h_points(queue, size, coords.data(), weights.data(), cluster_ids.data());
   auto view = h_points.view();
 
   CHECK(view.n == size);
