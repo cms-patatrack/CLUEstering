@@ -9,7 +9,11 @@
 namespace clue {
 
   inline int compute_nclusters(std::span<const int> cluster_ids) {
-    return *std::ranges::max_element(cluster_ids) + 1;
+    return std::reduce(cluster_ids.begin(),
+                       cluster_ids.end(),
+                       std::numeric_limits<int>::lowest(),
+                       [](int a, int b) { return std::max(a, b); }) +
+           1;
   }
 
   inline std::vector<std::vector<int>> compute_clusters_points(std::span<const int> cluster_ids) {
