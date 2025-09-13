@@ -35,7 +35,7 @@ jobs:
       - uses: codecov/codecov-action@v5.4.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${{github.workspace}}/tests/build/coverage_filtered.info
+          files: ${{github.workspace}}/tests/build/coverage_filtered.info
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true
