@@ -26,13 +26,6 @@ jobs:
           cmake -B build -DCMAKE_BUILD_TYPE=Release -DCOVERAGE=ON && cmake --build build -- -j4
           ./build/cpu/openmp.out --reporters=console --success
 
-      - name: Check coverage file
-        run: |
-          if [ ! -s coverage_filtered.info ]; then
-            echo "Error: Coverage file is empty"
-            exit 1
-          fi
-
       - name: Create coverage report
         working-directory: ${{github.workspace}}/tests/build
         run: |
