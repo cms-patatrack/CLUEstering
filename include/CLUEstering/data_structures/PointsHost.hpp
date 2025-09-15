@@ -26,6 +26,19 @@ namespace clue {
     int32_t m_size;
 
   public:
+    class Point {
+      std::array<float, Ndim> m_coordinates;
+      float m_weight;
+      int m_clusterIndex;
+
+    public:
+      Point(const std::array<float, Ndim>& coordinates, float weight, int cluster_index);
+      float operator[](size_t dim) const;
+
+      float weight() const;
+      float cluster_index() const;
+    };
+
     template <concepts::queue TQueue>
     PointsHost(TQueue& queue, int32_t n_points);
 
@@ -90,6 +103,8 @@ namespace clue {
     ALPAKA_FN_HOST auto& view();
 #endif
 
+    Point operator[](std::size_t idx) const;
+
   private:
     inline static constexpr uint8_t Ndim_ = Ndim;
 
@@ -107,3 +122,4 @@ namespace clue {
 }  // namespace clue
 
 #include "CLUEstering/data_structures/detail/PointsHost.hpp"
+#include "CLUEstering/data_structures/detail/Point.hpp"
