@@ -40,3 +40,4 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: true
           verbose: true
+          commit_parent: ${{ github.event.pull_request.base.sha || '' }}
