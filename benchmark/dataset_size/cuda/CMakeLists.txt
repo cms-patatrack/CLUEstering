@@ -17,6 +17,5 @@ target_link_libraries(cuda.out PRIVATE ${pybind_link})
 target_compile_definitions(cuda.out PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED
                                             CLUE_ENABLE_CACHING_ALLOCATOR)
 target_compile_options(cuda.out PRIVATE --expt-relaxed-constexpr)
-set_target_properties(
-  cuda.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON CUDA_ARCHITECTURES
-                                                    "50;60;61;62;70;80;90")
+set_target_properties(cuda.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON
+                                          CUDA_ARCHITECTURES "75;80;90")
