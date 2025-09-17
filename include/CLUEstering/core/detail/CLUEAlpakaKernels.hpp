@@ -215,6 +215,7 @@ namespace clue {
 
           if (is_seed) {
             dev_points.is_seed[i] = 1;
+            dev_points.nearest_higher[i] = -1;
             seeds->push_back(acc, i);
           } else {
             dev_points.is_seed[i] = 0;
