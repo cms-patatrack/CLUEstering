@@ -275,11 +275,11 @@ namespace clue {
         queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
     detail::computeNearestHighers<Acc>(
         queue, work_division, m_tiles->view(), dev_points.view(), m_dm, n_points);
+    detail::findClusterSeeds<Acc>(
+        queue, work_division, m_seeds->data(), dev_points.view(), m_seed_dc, m_rhoc, n_points);
 
     m_followers->template fill<Acc>(queue, dev_points);
 
-    detail::findClusterSeeds<Acc>(
-        queue, work_division, m_seeds->data(), dev_points.view(), m_seed_dc, m_rhoc, n_points);
     detail::assignPointsToClusters<Acc>(
         queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
 
@@ -302,11 +302,11 @@ namespace clue {
         queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
     detail::computeNearestHighers<Acc>(
         queue, work_division, m_tiles->view(), dev_points.view(), m_dm, n_points);
+    detail::findClusterSeeds<Acc>(
+        queue, work_division, m_seeds->data(), dev_points.view(), m_seed_dc, m_rhoc, n_points);
 
     m_followers->template fill<Acc>(queue, dev_points);
 
-    detail::findClusterSeeds<Acc>(
-        queue, work_division, m_seeds->data(), dev_points.view(), m_seed_dc, m_rhoc, n_points);
     detail::assignPointsToClusters<Acc>(
         queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
 
