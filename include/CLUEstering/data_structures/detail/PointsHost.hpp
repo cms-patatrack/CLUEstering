@@ -17,6 +17,10 @@ namespace clue {
     // No need to allocate temporary buffers on the host
     template <uint8_t Ndim>
     inline auto computeSoASize(int32_t n_points) {
+      if (n_points <= 0) {
+        throw std::invalid_argument(
+            "Number of points passed to PointsHost constructor must be positive.");
+      }
       return ((Ndim + 1) * sizeof(float) + 2 * sizeof(int)) * n_points;
     }
 
