@@ -42,4 +42,4 @@ namespace clue {
     return compare_nclusters && compare_clusters_size;
   }
 
-}  // namespace clue
+}  // namespace clue::internal

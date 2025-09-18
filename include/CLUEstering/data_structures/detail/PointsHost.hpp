@@ -168,4 +168,12 @@ namespace clue {
     return Point(coords, m_view.weight[idx], m_view.cluster_index[idx]);
   }
 
+  template <uint8_t Ndim>
+  inline auto PointsHost<Ndim>::n_clusters() {
+	if (!m_nclusters.has_value()) {
+	  m_nclusters = internal::compunte_nclusters(this->clusterIndexes());
+	}
+	return m_nclusters.value();
+  }
+
 }  // namespace clue
