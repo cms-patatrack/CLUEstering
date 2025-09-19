@@ -67,6 +67,10 @@ namespace clue {
         m_offsets{make_device_buffer<key_type[]>(dev, nbins + 1)},
         m_view{},
         m_nbins{nbins} {
+    if (nbins <= 0 || nelements <= 0) {
+      throw std::invalid_argument(
+          "Number of bins and elements must be positive in AssociationMap constructor");
+    }
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
     m_view.m_nelements = nelements;
@@ -84,6 +88,10 @@ namespace clue {
         m_offsets{make_device_buffer<key_type[]>(queue, nbins + 1)},
         m_view{},
         m_nbins{nbins} {
+    if (nbins <= 0 || nelements <= 0) {
+      throw std::invalid_argument(
+          "Number of bins and elements must be positive in AssociationMap constructor");
+    }
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
     m_view.m_nelements = nelements;
@@ -133,35 +141,56 @@ namespace clue {
 
   template <concepts::device TDev>
   AssociationMap<TDev>::size_type AssociationMap<TDev>::count(key_type key) const {
+    if (key < 0 || key >= static_cast<key_type>(m_nbins)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::count.");
+    }
     return m_offsets[key + 1] - m_offsets[key];
   }
 
   template <concepts::device TDev>
   bool AssociationMap<TDev>::contains(key_type key) const {
+    if (key < 0 || key >= static_cast<key_type>(m_nbins)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::contains.");
+    }
     return m_offsets[key + 1] > m_offsets[key];
   }
 
   template <concepts::device TDev>
   AssociationMap<TDev>::iterator AssociationMap<TDev>::lower_bound(key_type key) {
+    if (key < 0 || key >= static_cast<key_type>(m_nbins)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::lower_bound.");
+    }
     return iterator{m_indexes.data() + m_offsets[key]};
   }
   template <concepts::device TDev>
   AssociationMap<TDev>::const_iterator AssociationMap<TDev>::lower_bound(key_type key) const {
+    if (key < 0 || key >= static_cast<key_type>(m_nbins)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::lower_bound.");
+    }
     return const_iterator{m_indexes.data() + m_offsets[key]};
   }
 
   template <concepts::device TDev>
   AssociationMap<TDev>::iterator AssociationMap<TDev>::upper_bound(key_type key) {
+    if (key < 0 || key >= static_cast<key_type>(m_nbins)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::upper_bound.");
+    }
     return iterator{m_indexes.data() + m_offsets[key + 1]};
   }
   template <concepts::device TDev>
   AssociationMap<TDev>::const_iterator AssociationMap<TDev>::upper_bound(key_type key) const {
+    if (key < 0 || key >= static_cast<key_type>(m_nbins)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::upper_bound.");
+    }
     return const_iterator{m_indexes.data() + m_offsets[key + 1]};
   }
 
   template <concepts::device TDev>
   std::pair<typename AssociationMap<TDev>::iterator, typename AssociationMap<TDev>::iterator>
   AssociationMap<TDev>::equal_range(key_type key) {
+    if (key < 0 || key >= static_cast<key_type>(m_nbins)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::equal_range.");
+    }
     return {iterator{m_indexes.data() + m_offsets[key]},
             iterator{m_indexes.data() + m_offsets[key + 1]}};
   }
@@ -169,6 +198,9 @@ namespace clue {
   std::pair<typename AssociationMap<TDev>::const_iterator,
             typename AssociationMap<TDev>::const_iterator>
   AssociationMap<TDev>::equal_range(key_type key) const {
+    if (key < 0 || key >= static_cast<key_type>(m_nbins)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::equal_range.");
+    }
     return {const_iterator{m_indexes.data() + m_offsets[key]},
             const_iterator{m_indexes.data() + m_offsets[key + 1]}};
   }

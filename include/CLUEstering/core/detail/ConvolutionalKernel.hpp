@@ -8,7 +8,11 @@
 
 namespace clue {
 
-  inline FlatKernel::FlatKernel(float flat) : m_flat{flat} {}
+  inline FlatKernel::FlatKernel(float flat) : m_flat{flat} {
+    if (flat <= 0.f) {
+      throw std::invalid_argument("Flat kernel parameter must be positive.");
+    }
+  }
 
   template <typename TAcc>
   inline ALPAKA_FN_HOST_ACC float FlatKernel::operator()(const TAcc&,
@@ -23,7 +27,11 @@ namespace clue {
   }
 
   inline GaussianKernel::GaussianKernel(float gaus_avg, float gaus_std, float gaus_amplitude)
-      : m_gaus_avg{gaus_avg}, m_gaus_std{gaus_std}, m_gaus_amplitude{gaus_amplitude} {}
+      : m_gaus_avg{gaus_avg}, m_gaus_std{gaus_std}, m_gaus_amplitude{gaus_amplitude} {
+    if (gaus_std <= 0.f || gaus_amplitude <= 0.f) {
+      throw std::invalid_argument("Gaussian kernel parameters must be positive.");
+    }
+  }
 
   template <typename TAcc>
   inline ALPAKA_FN_HOST_ACC float GaussianKernel::operator()(const TAcc& acc,
@@ -40,7 +48,11 @@ namespace clue {
   }
 
   inline ExponentialKernel::ExponentialKernel(float exp_avg, float exp_amplitude)
-      : m_exp_avg{exp_avg}, m_exp_amplitude{exp_amplitude} {}
+      : m_exp_avg{exp_avg}, m_exp_amplitude{exp_amplitude} {
+    if (exp_avg <= 0.f || exp_amplitude <= 0.f) {
+      throw std::invalid_argument("Exponential kernel parameters must be positive.");
+    }
+  }
 
   template <typename TAcc>
   inline ALPAKA_FN_HOST_ACC float ExponentialKernel::operator()(const TAcc& acc,
