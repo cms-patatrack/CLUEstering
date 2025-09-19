@@ -5,20 +5,30 @@
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/algorithm/extrema/extrema.hpp"
+#include <limits>
 #include <span>
 
-namespace clue {
-  namespace test {
+namespace clue::test {
 
-    template <clue::concepts::queue TQueue>
-    inline auto build_map(TQueue& queue, std::span<int32_t> associations, int32_t elements) {
-      const auto bins = *clue::internal::algorithm::max_element(
-                            associations.data(), associations.data() + associations.size()) +
-                        1;
-      clue::AssociationMap<decltype(alpaka::getDev(queue))> map(elements, bins, queue);
-      map.template fill<clue::internal::Acc>(elements, associations, queue);
-      return map;
-    }
+  template <clue::concepts::queue TQueue>
+  inline auto build_map(TQueue& queue, std::span<int32_t> associations, int32_t elements) {
+    const auto bins = *clue::internal::algorithm::max_element(
+                          associations.data(), associations.data() + associations.size()) +
+                      1;
+    clue::AssociationMap<decltype(alpaka::getDev(queue))> map(elements, bins, queue);
+    map.template fill<clue::internal::Acc>(elements, associations, queue);
+    return map;
+  }
 
-  }  // namespace test
-}  // namespace clue
+  inline auto build_map(std::span<int32_t> associations, int32_t elements) {
+    const auto bins = std::reduce(associations.data(),
+                                  associations.data() + associations.size(),
+                                  std::numeric_limits<int32_t>::lowest(),
+                                  [](auto a, auto b) { return std::max(a, b); }) +
+                      1;
+    clue::host_associator map(elements, bins);
+    map.fill(elements, associations);
+    return map;
+  }
+
+}  // namespace clue::test
