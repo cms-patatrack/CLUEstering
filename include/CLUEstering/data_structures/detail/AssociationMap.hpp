@@ -7,6 +7,7 @@
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
+#include "CLUEstering/internal/algorithm/default_policy.hpp"
 #include "CLUEstering/internal/algorithm/scan/scan.hpp"
 
 #include <span>
@@ -60,6 +61,21 @@ namespace clue {
     };
 
   }  // namespace detail
+
+  template <concepts::device TDev>
+  inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins)
+    requires std::same_as<TDev, alpaka::DevCpu>
+      : m_indexes{make_host_buffer<mapped_type[]>(nelements)},
+        m_offsets{make_host_buffer<key_type[]>(nbins + 1)},
+        m_view{},
+        m_nbins{nbins} {
+    m_view.m_indexes = m_indexes.data();
+    m_view.m_offsets = m_offsets.data();
+    m_view.m_nelements = nelements;
+    m_view.m_nbins = nbins;
+
+    std::memset(m_offsets.data(), 0, (nbins + 1) * sizeof(key_type));
+  }
 
   template <concepts::device TDev>
   inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins, const TDev& dev)
@@ -216,13 +232,43 @@ namespace clue {
   }
 
   template <concepts::device TDev>
+  inline ALPAKA_FN_HOST void AssociationMap<TDev>::initialize(size_type nelements, size_type nbins)
+    requires std::same_as<TDev, alpaka::DevCpu>
+  {
+    m_indexes = make_host_buffer<int32_t[]>(nelements);
+    m_offsets = make_host_buffer<int32_t[]>(nbins + 1);
+    std::memset(m_offsets.data(), 0, (nbins + 1) * sizeof(int32_t));
+    m_nbins = nbins;
+
+    m_view.m_indexes = m_indexes.data();
+    m_view.m_offsets = m_offsets.data();
+    m_view.m_nelements = nelements;
+    m_view.m_nbins = nbins;
+  }
+
+  template <concepts::device TDev>
   template <concepts::queue TQueue>
   inline ALPAKA_FN_HOST void AssociationMap<TDev>::initialize(size_type nelements,
                                                               size_type nbins,
                                                               TQueue& queue) {
     m_indexes = make_device_buffer<int32_t[]>(queue, nelements);
-    m_offsets = make_device_buffer<int32_t[]>(queue, nbins);
+    m_offsets = make_device_buffer<int32_t[]>(queue, nbins + 1);
     alpaka::memset(queue, m_offsets, 0);
+    m_nbins = nbins;
+
+    m_view.m_indexes = m_indexes.data();
+    m_view.m_offsets = m_offsets.data();
+    m_view.m_nelements = nelements;
+    m_view.m_nbins = nbins;
+  }
+
+  template <concepts::device TDev>
+
+  inline ALPAKA_FN_HOST void AssociationMap<TDev>::reset(size_type nelements, size_type nbins)
+    requires std::same_as<TDev, alpaka::DevCpu>
+  {
+    std::memset(m_indexes.data(), 0, nelements * sizeof(int32_t));
+    std::memset(m_offsets.data(), 0, (nbins + 1) * sizeof(int32_t));
     m_nbins = nbins;
 
     m_view.m_indexes = m_indexes.data();
@@ -343,6 +389,28 @@ namespace clue {
                        bin_buffer.data(),
                        temp_offsets.data(),
                        size);
+  }
+
+  template <concepts::device TDev>
+  ALPAKA_FN_HOST void AssociationMap<TDev>::fill(size_type size, std::span<key_type> associations)
+    requires std::same_as<TDev, alpaka::DevCpu>
+  {
+    std::vector<key_type> sizes(m_nbins, 0);
+    std::for_each(associations.begin(), associations.end(), [&](key_type key) { sizes[key]++; });
+
+    std::vector<key_type> temporary_keys(m_nbins + 1);
+    temporary_keys[0] = 0;
+    std::inclusive_scan(
+        internal::default_policy, sizes.begin(), sizes.end(), temporary_keys.begin() + 1);
+    std::copy(internal::default_policy,
+              temporary_keys.data(),
+              temporary_keys.data() + m_nbins + 1,
+              m_offsets.data());
+    for (auto i = 0u; i < associations.size(); ++i) {
+      auto& offset = temporary_keys[associations[i]];
+      m_indexes[offset] = i;
+      ++offset;
+    }
   }
 
   template <concepts::device TDev>

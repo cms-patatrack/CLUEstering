@@ -42,6 +42,12 @@ namespace clue {
     /// @brief Construct an empty AssociationMap
     AssociationMap() = default;
     /// @brief Construct an AssociationMap with a specific number of elements and bins
+    /// @param nelements The number of elements to allocate
+    /// @param nbins The number of bins to allocate
+    /// @note This constructor is only available for the CPU device
+    AssociationMap(size_type nelements, size_type nbins)
+      requires std::same_as<TDev, alpaka::DevCpu>;
+    /// @brief Construct an AssociationMap with a specific number of elements and bins
     ///
     /// @param nelements The number of elements to allocate
     /// @param nbins The number of bins to allocate
@@ -142,14 +148,23 @@ namespace clue {
     AssociationMapView m_view;
     size_type m_nbins;
 
+    ALPAKA_FN_HOST void initialize(size_type nelements, size_type nbins)
+      requires std::same_as<TDev, alpaka::DevCpu>;
+
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(size_type nelements, size_type nbins, TQueue& queue);
+
+    ALPAKA_FN_HOST void reset(size_type nelements, size_type nbins)
+      requires std::same_as<TDev, alpaka::DevCpu>;
 
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST void reset(TQueue& queue, size_type nelements, size_type nbins);
 
     template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, TFunc func, TQueue& queue);
+
+    ALPAKA_FN_HOST void fill(size_type size, std::span<key_type> associations)
+      requires std::same_as<TDev, alpaka::DevCpu>;
 
     template <concepts::accelerator TAcc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, std::span<key_type> associations, TQueue& queue);
@@ -177,7 +192,10 @@ namespace clue {
 
     template <concepts::queue _TQueue>
     friend auto clue::test::build_map(_TQueue&, std::span<key_type>, int32_t);
+    friend auto clue::test::build_map(std::span<int32_t> associations, int32_t elements);
   };
+
+  using host_associator = AssociationMap<alpaka::DevCpu>;
 
 }  // namespace clue
 
