@@ -554,3 +554,9 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
     std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
   }
 }
+
+TEST_CASE("Test constructor throwing conditions") {
+  auto queue - clue::get_queue(0u);
+  CHECK_THROWS(clue::PointsHost<2>(queue, 0));
+  CHECK_THROWS(clue::PointsHost<2>(queue, -5));
+}

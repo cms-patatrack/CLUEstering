@@ -177,3 +177,9 @@ TEST_CASE("Test reduction of device points column") {
   CHECK(clue::internal::algorithm::reduce(d_points.weights().begin(), d_points.weights().end()) ==
         499500.0f);
 }
+
+TEST_CASE("Test constructor throwing conditions") {
+  auto queue - clue::get_queue(0u);
+  CHECK_THROWS(clue::PointsDevice<2>(queue, 0));
+  CHECK_THROWS(clue::PointsDevice<2>(queue, -5));
+}
