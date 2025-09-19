@@ -6,6 +6,7 @@
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/algorithm/algorithm.hpp"
 #include "CLUEstering/utils/get_device.hpp"
+#include "CLUEstering/utils/get_queue.hpp"
 
 #include <numeric>
 #include <ranges>
@@ -176,4 +177,29 @@ TEST_CASE("Test reduction of device points column") {
 
   CHECK(clue::internal::algorithm::reduce(d_points.weights().begin(), d_points.weights().end()) ==
         499500.0f);
+}
+
+TEST_CASE("Test constructor throwing conditions") {
+  auto queue = clue::get_queue(0u);
+  CHECK_THROWS(clue::PointsDevice<2>(queue, 0));
+  CHECK_THROWS(clue::PointsDevice<2>(queue, -5));
+}
+
+TEST_CASE("Test coordinate getter throwing conditions") {
+  SUBCASE("Const points") {
+    const uint32_t size = 1000;
+    auto queue = clue::get_queue(0u);
+    clue::PointsHost<2> points(queue, size);
+    CHECK_THROWS(points.coords(-5));
+    CHECK_THROWS(points.coords(3));
+    CHECK_THROWS(points.coords(10));
+  }
+  SUBCASE("Non-const points") {
+    const uint32_t size = 1000;
+    auto queue = clue::get_queue(0u);
+    const clue::PointsDevice<2> points(queue, size);
+    CHECK_THROWS(points.coords(-5));
+    CHECK_THROWS(points.coords(3));
+    CHECK_THROWS(points.coords(10));
+  }
 }

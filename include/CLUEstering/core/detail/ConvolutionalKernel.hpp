@@ -28,7 +28,7 @@ namespace clue {
 
   inline GaussianKernel::GaussianKernel(float gaus_avg, float gaus_std, float gaus_amplitude)
       : m_gaus_avg{gaus_avg}, m_gaus_std{gaus_std}, m_gaus_amplitude{gaus_amplitude} {
-    if (gaus_std <= 0.f || gaus_amplitude <= 0.f) {
+    if (gaus_std <= 0.f || gaus_amplitude <= 0.f || gaus_avg <= 0.f) {
       throw std::invalid_argument("Gaussian kernel parameters must be positive.");
     }
   }

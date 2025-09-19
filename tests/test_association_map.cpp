@@ -53,4 +53,63 @@ TEST_CASE("Test binary association map") {
   }
 }
 
+TEST_CASE("Test throwing conditions") {
+  const auto host = alpaka::getDevByIdx(alpaka::PlatformCpu{}, 0u);
+  clue::Queue queue(host);
+
+  const int32_t size = 1000;
+  auto associations = clue::make_host_buffer<int32_t[]>(queue, size);
+  std::ranges::transform(
+      std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
+
+  SUBCASE("Test construction throwing conditions") {
+    CHECK_THROWS(clue::test::build_map(queue, std::span<int32_t>(associations.data(), 0), 0));
+  }
+
+  auto map = clue::test::build_map(queue, std::span<int32_t>(associations.data(), size), size);
+  SUBCASE("Test count throwing conditions") {
+    CHECK_THROWS(map.count(-1));
+    CHECK_THROWS(map.count(2));
+    CHECK_THROWS(map.count(3));
+  }
+  SUBCASE("Test contains throwing conditions") {
+    CHECK_THROWS(map.contains(-1));
+    CHECK_THROWS(map.contains(2));
+    CHECK_THROWS(map.contains(3));
+  }
+  SUBCASE("Test lower_bound throwing conditions") {
+    CHECK_THROWS(map.lower_bound(-1));
+    CHECK_THROWS(map.lower_bound(2));
+    CHECK_THROWS(map.lower_bound(3));
+  }
+  SUBCASE("Test upper_bound throwing conditions") {
+    CHECK_THROWS(map.upper_bound(-1));
+    CHECK_THROWS(map.upper_bound(2));
+    CHECK_THROWS(map.upper_bound(3));
+  }
+  SUBCASE("Test equal_range throwing conditions") {
+    CHECK_THROWS(map.equal_range(-1));
+    CHECK_THROWS(map.equal_range(2));
+    CHECK_THROWS(map.equal_range(3));
+  }
+
+  const auto const_map =
+      clue::test::build_map(queue, std::span<int32_t>(associations.data(), size), size);
+  SUBCASE("Test lower_bound throwing conditions") {
+    CHECK_THROWS(map.lower_bound(-1));
+    CHECK_THROWS(map.lower_bound(2));
+    CHECK_THROWS(map.lower_bound(3));
+  }
+  SUBCASE("Test upper_bound throwing conditions") {
+    CHECK_THROWS(map.upper_bound(-1));
+    CHECK_THROWS(map.upper_bound(2));
+    CHECK_THROWS(map.upper_bound(3));
+  }
+  SUBCASE("Test equal_range throwing conditions") {
+    CHECK_THROWS(map.equal_range(-1));
+    CHECK_THROWS(map.equal_range(2));
+    CHECK_THROWS(map.equal_range(3));
+  }
+}
+
 #endif
