@@ -2,6 +2,7 @@
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/utils/get_device.hpp"
+#include "CLUEstering/utils/get_queue.hpp"
 
 #include <numeric>
 #include <ranges>
@@ -552,5 +553,30 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
                              std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
     std::ranges::for_each(std::span(is_seed, size), [](auto x) { CHECK(x == 3); });
+  }
+}
+
+TEST_CASE("Test constructor throwing conditions") {
+  auto queue = clue::get_queue(0u);
+  CHECK_THROWS(clue::PointsHost<2>(queue, 0));
+  CHECK_THROWS(clue::PointsHost<2>(queue, -5));
+}
+
+TEST_CASE("Test coordinate getter throwing conditions") {
+  SUBCASE("Const points") {
+    const uint32_t size = 1000;
+    auto queue = clue::get_queue(0u);
+    clue::PointsHost<2> points(queue, size);
+    CHECK_THROWS(points.coords(-5));
+    CHECK_THROWS(points.coords(3));
+    CHECK_THROWS(points.coords(10));
+  }
+  SUBCASE("Non-const points") {
+    const uint32_t size = 1000;
+    auto queue = clue::get_queue(0u);
+    const clue::PointsHost<2> points(queue, size);
+    CHECK_THROWS(points.coords(-5));
+    CHECK_THROWS(points.coords(3));
+    CHECK_THROWS(points.coords(10));
   }
 }

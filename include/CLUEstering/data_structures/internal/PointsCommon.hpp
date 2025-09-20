@@ -23,10 +23,16 @@ namespace clue {
       }
 
       ALPAKA_FN_HOST auto coords(size_t dim) const {
+        if (dim < 0 || dim >= TPoints::Ndim_) {
+          throw std::out_of_range("Dimension out of range in call to coords.");
+        }
         auto& view = static_cast<const TPoints*>(this)->m_view;
         return std::span<const float>(view.coords + dim * view.n, view.n);
       }
       ALPAKA_FN_HOST auto coords(size_t dim) {
+        if (dim < 0 || dim >= TPoints::Ndim_) {
+          throw std::out_of_range("Dimension out of range in call to coords.");
+        }
         auto& view = static_cast<TPoints*>(this)->m_view;
         return std::span<float>(view.coords + dim * view.n, view.n);
       }

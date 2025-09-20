@@ -18,6 +18,10 @@ namespace clue {
 
     template <uint8_t Ndim>
     inline auto computeSoASize(int32_t n_points) {
+      if (n_points <= 0) {
+        throw std::invalid_argument(
+            "Number of points passed to PointsDevice constructor must be positive.");
+      }
       return ((Ndim + 3) * sizeof(float) + 3 * sizeof(int)) * n_points;
     }
 
@@ -101,8 +105,6 @@ namespace clue {
       : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(float))},
         m_view{},
         m_size{n_points} {
-    assert(buffer.size() == soa::device::computeSoASize<Ndim>(n_points));
-
     soa::device::partitionSoAView<Ndim>(m_view, m_buffer.data(), buffer.data(), n_points);
   }
 
