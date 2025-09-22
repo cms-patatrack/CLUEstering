@@ -25,15 +25,15 @@ namespace clue {
     return clusters;
   }
 
-  inline std::vector<int> compute_clusters_size(std::span<const int> cluster_ids) {
-    const auto nclusters = compute_nclusters(cluster_ids);
-    const auto clusters_points = compute_clusters_points(cluster_ids);
+  // inline std::vector<int> compute_clusters_size(std::span<const int> cluster_ids) {
+  //   const auto nclusters = compute_nclusters(cluster_ids);
+  //   const auto clusters_points = compute_clusters_points(cluster_ids);
 
-    std::vector<int> clusters(nclusters);
-    std::ranges::transform(
-        clusters_points, clusters.begin(), [&](const auto& cluster) { return cluster.size(); });
-    return clusters;
-  }
+  //   std::vector<int> clusters(nclusters);
+  //   std::ranges::transform(
+  //       clusters_points, clusters.begin(), [&](const auto& cluster) { return cluster.size(); });
+  //   return clusters;
+  // }
 
   inline bool validate_results(std::span<const int> cluster_ids, std::span<const int> truth) {
     auto result_clusters_sizes = compute_clusters_size(cluster_ids);
