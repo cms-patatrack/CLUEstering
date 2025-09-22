@@ -3,7 +3,7 @@
 
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
-#include "association_map/build_map.hpp"
+#include "CLUEstering/data_structures/internal/MakeAssociator.hpp"
 
 #include <numeric>
 #include <ranges>
@@ -20,7 +20,8 @@ TEST_CASE("Test binary association map") {
   auto associations = clue::make_host_buffer<int32_t[]>(queue, size);
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
-  auto map = clue::test::build_map(queue, std::span<int32_t>(associations.data(), size), size);
+  auto map =
+      clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), size), size);
 
   SUBCASE("Check size") { CHECK(map.size() == 2); }
   SUBCASE("Check extents") {
@@ -63,10 +64,12 @@ TEST_CASE("Test throwing conditions") {
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
 
   SUBCASE("Test construction throwing conditions") {
-    CHECK_THROWS(clue::test::build_map(queue, std::span<int32_t>(associations.data(), 0), 0));
+    CHECK_THROWS(
+        clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), 0), 0));
   }
 
-  auto map = clue::test::build_map(queue, std::span<int32_t>(associations.data(), size), size);
+  auto map =
+      clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), size), size);
   SUBCASE("Test count throwing conditions") {
     CHECK_THROWS(map.count(-1));
     CHECK_THROWS(map.count(2));
@@ -94,7 +97,7 @@ TEST_CASE("Test throwing conditions") {
   }
 
   const auto const_map =
-      clue::test::build_map(queue, std::span<int32_t>(associations.data(), size), size);
+      clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), size), size);
   SUBCASE("Test lower_bound throwing conditions") {
     CHECK_THROWS(map.lower_bound(-1));
     CHECK_THROWS(map.lower_bound(2));
@@ -118,7 +121,7 @@ TEST_CASE("Test binary host_associator") {
   auto associations = clue::make_host_buffer<int32_t[]>(size);
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
-  auto map = clue::test::build_map(std::span<int32_t>(associations.data(), size), size);
+  auto map = clue::internal::make_associator(std::span<int32_t>(associations.data(), size), size);
 
   SUBCASE("Check size") { CHECK(map.size() == 2); }
   SUBCASE("Check extents") {
