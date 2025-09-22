@@ -129,7 +129,7 @@ def test_square_box(square, box):
 
     c2 = clue.clusterer(1., 2., 1.6)
     c2.read_data(box)
-    assert c.n_dim == 3
+    assert c2.n_dim == 3
     c2.run_clue(dimensions=[0, 1])
 
     # check that the result of clustering the 3D dataset using only
