@@ -148,7 +148,7 @@
  * clust.run_clue("gpu hip")
  * ```
  * NOTE: the support for the SYCL backends is still in an experimental state and is not included in the Python interface
- * as of version `2.6.5`.
+ * as of version `2.7.2`.
  *
  * The results of the clustering can be accessed with the clsuter's public getters:
  * ```python
@@ -175,11 +175,9 @@
  * To finish this section, we describe what is the expected format for the data passed to CLUEstering. 
  * ### CSV files
  * When the data is passed from a CSV file, each row should contain the data for each point, by putting in order the
- * coordinates and then the point's weight. In the header, the coordinates should be labelled as `x*`, going from 0 to N-1
- * where N is the number of dimensions, and at the end the weight column should be called `weight`.
- * Below is an example:
+ * coordinates and then the point's weight. Below is an example:
  * ```csv
- * x0,x1,x2,weight
+ * x,y,z,weight
  * -9.95,5.17,0.15,1.0
  * -9.43,5.68,0.15,1.0
  * -11.0,7.29,0.15,1.0
