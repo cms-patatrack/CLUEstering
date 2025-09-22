@@ -193,7 +193,7 @@ namespace clue {
     ///
     /// @param h_points Host points to cluster
     /// @return A vector of clusters, where each cluster is a vector of point indices
-    std::vector<std::vector<int>> getClusters(const PointsHost& h_points);
+    host_associator getClusters(const PointsHost& h_points);
   };
 
 }  // namespace clue

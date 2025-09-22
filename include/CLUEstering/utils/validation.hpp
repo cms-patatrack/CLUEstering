@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/data_structures/AssociationMap.hpp"
 #include <algorithm>
 #include <ranges>
 #include <span>
@@ -16,16 +17,12 @@ namespace clue {
            1;
   }
 
-  inline std::vector<std::vector<int>> compute_clusters_points(std::span<const int> cluster_ids) {
+  inline host_associator compute_clusters_points(std::span<const int> cluster_ids) {
     const auto nclusters = compute_nclusters(cluster_ids);
-    std::vector<std::vector<int>> clusters_points(nclusters);
+    host_associator clusters(cluster_ids.size() nclusters);
+	clusters.fill(cluster_ids.size(), cluster_ids);
 
-    std::for_each(cluster_ids.begin(), cluster_ids.end(), [&, i = 0](auto cluster_id) mutable {
-      if (cluster_id > -1)
-        clusters_points[cluster_id].push_back(i++);
-    });
-
-    return clusters_points;
+    return clusters;
   }
 
   inline std::vector<int> compute_clusters_size(std::span<const int> cluster_ids) {
