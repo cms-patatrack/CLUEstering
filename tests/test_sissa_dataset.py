@@ -32,6 +32,7 @@ def test_clustering(sissa):
 
     c = clue.clusterer(21., 10., 21.)
     c.read_data(sissa)
+    assert c.n_dim == 2
     c.run_clue()
     c.to_csv('./', 'sissa_output.csv')
 

@@ -32,6 +32,7 @@ def test_clustering(blobs):
 
     c = clue.clusterer(1., 5, 2.)
     c.read_data(blobs)
+    assert c.n_dim == 3
     c.run_clue()
     c.to_csv('./', 'blobs_output.csv')
 
