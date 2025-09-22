@@ -20,7 +20,7 @@ namespace clue {
   inline host_associator compute_clusters_points(std::span<const int> cluster_ids) {
     const auto nclusters = compute_nclusters(cluster_ids);
     host_associator clusters(cluster_ids.size() nclusters);
-	clusters.fill(cluster_ids.size(), cluster_ids);
+    clusters.fill(cluster_ids.size(), cluster_ids);
 
     return clusters;
   }
