@@ -20,7 +20,7 @@ TEST_CASE("Test make_cluster interfaces") {
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
   const std::size_t block_size{256};
 
-  const auto truth_data = clue::read_output<2>(queue, "../data/truth_files/data_32768_truth.csv");
+  auto truth_data = clue::read_output<2>(queue, "../data/truth_files/data_32768_truth.csv");
   auto truth_ids = truth_data.clusterIndexes();
   SUBCASE("Run clustering without passing device points") {
     algo.make_clusters(queue, h_points, clue::FlatKernel{.5f}, block_size);
