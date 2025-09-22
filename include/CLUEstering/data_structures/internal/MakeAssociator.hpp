@@ -8,10 +8,10 @@
 #include <limits>
 #include <span>
 
-namespace clue::test {
+namespace clue::internal {
 
   template <clue::concepts::queue TQueue>
-  inline auto build_map(TQueue& queue, std::span<int32_t> associations, int32_t elements) {
+  inline auto make_associator(TQueue& queue, std::span<int32_t> associations, int32_t elements) {
     const auto bins = *clue::internal::algorithm::max_element(
                           associations.data(), associations.data() + associations.size()) +
                       1;
@@ -20,7 +20,7 @@ namespace clue::test {
     return map;
   }
 
-  inline auto build_map(std::span<int32_t> associations, int32_t elements) {
+  inline auto make_associator(std::span<int32_t> associations, int32_t elements) {
     const auto bins = std::reduce(associations.data(),
                                   associations.data() + associations.size(),
                                   std::numeric_limits<int32_t>::lowest(),
@@ -31,4 +31,4 @@ namespace clue::test {
     return map;
   }
 
-}  // namespace clue::test
+}  // namespace clue::internal
