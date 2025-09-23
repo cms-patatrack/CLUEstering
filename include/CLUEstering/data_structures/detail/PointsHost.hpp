@@ -114,4 +114,16 @@ namespace clue {
     soa::host::partitionSoAView<Ndim>(m_view, n_points, buffers...);
   }
 
+  template <uint8_t Ndim>
+  inline PointsHost<Ndim>::Point PointsHost<Ndim>::operator[](std::size_t idx) const {
+    if (idx >= static_cast<size_t>(m_size))
+      throw std::out_of_range("Index out of range in PointsHost::operator[]");
+
+    std::array<float, Ndim> coords;
+    for (size_t dim = 0; dim < Ndim; ++dim) {
+      coords[dim] = m_view.coords[dim * m_size + idx];
+    }
+    return Point(coords, m_view.weight[idx], m_view.cluster_index[idx]);
+  }
+
 }  // namespace clue
