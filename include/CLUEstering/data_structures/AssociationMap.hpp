@@ -15,10 +15,14 @@
 
 namespace clue {
 
+  template <concepts::device TDev>
+  class AssociationMap;
+
   namespace internal {
     template <clue::concepts::queue TQueue>
     auto make_associator(TQueue& queue, std::span<int32_t> associations, int32_t elements);
-    auto make_associator(std::span<int32_t> associations, int32_t elements);
+    auto make_associator(std::span<int32_t> associations, int32_t elements)
+        -> AssociationMap<alpaka::DevCpu>;
   }  // namespace internal
 
   /// @brief The AssociationMap class is a data structure that maps keys to values.
@@ -192,8 +196,9 @@ namespace clue {
     friend class TilesAlpaka;
 
     template <concepts::queue _TQueue>
-    friend auto clue::internal::make_associator(_TQueue&, std::span<key_type>, int32_t);
-    friend auto clue::internal::make_associator(std::span<int32_t> associations, int32_t elements);
+    friend auto clue::internal::make_associator(_TQueue&, std::span<int32_t>, int32_t);
+    friend auto clue::internal::make_associator(std::span<int32_t>, int32_t)
+        -> AssociationMap<alpaka::DevCpu>;
   };
 
   using host_associator = AssociationMap<alpaka::DevCpu>;

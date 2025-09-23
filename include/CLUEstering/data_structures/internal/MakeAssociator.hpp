@@ -20,7 +20,8 @@ namespace clue::internal {
     return map;
   }
 
-  inline auto make_associator(std::span<int32_t> associations, int32_t elements) {
+  inline auto make_associator(std::span<int32_t> associations, int32_t elements)
+      -> AssociationMap<alpaka::DevCpu> {
     const auto bins = std::reduce(associations.data(),
                                   associations.data() + associations.size(),
                                   std::numeric_limits<int32_t>::lowest(),
