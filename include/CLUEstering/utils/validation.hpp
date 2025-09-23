@@ -18,11 +18,7 @@ namespace clue {
   }
 
   inline host_associator compute_clusters_points(std::span<int> cluster_ids) {
-    const auto nclusters = compute_nclusters(cluster_ids);
-    host_associator clusters(cluster_ids.size(), nclusters);
-    clusters.fill(cluster_ids.size(), cluster_ids);
-
-    return clusters;
+    return internal::make_associator(cluster_ids, cluster_ids.size());
   }
 
   // inline std::vector<int> compute_clusters_size(std::span<const int> cluster_ids) {
