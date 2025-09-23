@@ -556,6 +556,31 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
   }
 }
 
+TEST_CASE("Test point accessor") {
+  auto queue = clue::get_queue(0u);
+  const uint32_t size = 1000;
+
+  clue::PointsHost<2> points(queue, size);
+  std::iota(points.coords().begin(), points.coords().end(), 0.f);
+  std::fill(points.weights().begin(), points.weights().end(), 1.f);
+  std::iota(points.clusterIndexes().begin(), points.clusterIndexes().end(), 0);
+  std::fill(points.isSeed().begin(), points.isSeed().end(), 0);
+
+  SUBCASE("Test point methods") {
+    auto point = points[0];
+    CHECK(point[0] == 0.f);
+    CHECK(point[1] == 1000.f);
+    CHECK(point.weight() == 1.f);
+    CHECK(point.cluster_index() == 0);
+
+    auto point2 = points[999];
+    CHECK(point2[0] == 999.f);
+    CHECK(point2[1] == 1999.f);
+    CHECK(point2.weight() == 1.f);
+    CHECK(point2.cluster_index() == 999);
+  }
+}
+
 TEST_CASE("Test constructor throwing conditions") {
   auto queue = clue::get_queue(0u);
   CHECK_THROWS(clue::PointsHost<2>(queue, 0));
