@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CLUEstering/data_structures/AssociationMap.hpp"
+#include "CLUEstering/data_structures/internal/MakeAssociator.hpp"
 #include <algorithm>
 #include <ranges>
 #include <span>
