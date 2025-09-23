@@ -32,9 +32,7 @@ namespace clue {
                                          coords.end(),
                                          std::numeric_limits<float>::max(),
                                          clue::nostd::minimum<float>{});
-
-        min_max->min(dim) = dimMin;
-        min_max->max(dim) = dimMax;
+        min_max = {dimMin, dimMax};
 
         const float tileSize = (dimMax - dimMin) / nPerDim;
         tile_sizes[dim] = tileSize;
@@ -57,9 +55,7 @@ namespace clue {
                                                               coords.end(),
                                                               std::numeric_limits<float>::max(),
                                                               clue::nostd::minimum<float>{});
-
-        min_max->min(dim) = dimMin;
-        min_max->max(dim) = dimMax;
+        min_max = {dimMin, dimMax};
 
         const float tileSize = (dimMax - dimMin) / nPerDim;
         tile_sizes[dim] = tileSize;
