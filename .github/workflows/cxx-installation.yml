@@ -1,0 +1,22 @@
+name: Test installation of the C++ library
+
+# The workflow gets triggered by pushes and pull requests
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  python-installation:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install the C++ interface
+        working-directory: ${{github.workspace}}
+        run: cmake -B build && sudo cmake --install build

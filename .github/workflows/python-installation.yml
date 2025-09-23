@@ -1,4 +1,4 @@
-name: Test installation of the library
+name: Test installation of the Python library
 
 # The workflow gets triggered by pushes and pull requests
 on:
@@ -8,7 +8,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  cxx-installation:
 
     runs-on: ubuntu-latest
     strategy:
@@ -32,7 +32,6 @@ jobs:
           ls
           docker build -t serial .
 
-          echo "Testing installation from PyPi"
           docker run -t -v "$(pwd)"/../../:/app serial bash -c \
             "cd /app && pip install .;
             python3 -c 'import CLUEstering' || exit 0"
@@ -42,7 +41,6 @@ jobs:
         run: |
           docker build -t noboost .
 
-          echo "Testing installation from PyPi"
           docker run -t -v "$(pwd)"/../../:/app noboost bash -c \
             "cd /app && pip install .;
             python3 -c 'import CLUEstering' || exit 0"
@@ -52,7 +50,6 @@ jobs:
         run: |
           docker build -t tbb .
 
-          echo "Testing installation from PyPi"
           docker run -t -v "$(pwd)"/../../:/app tbb bash -c \
             "cd /app && pip install .;
             python3 -c 'import CLUEstering' || exit 0"
@@ -62,7 +59,6 @@ jobs:
         run: |
           docker build -t nogcc .
 
-          echo "Testing installation from PyPi"
           docker run -t -v "$(pwd)"/../../:/app nogcc bash -c \
             "cd /app && pip install .;
             python3 -c 'import CLUEstering' || exit 0"
@@ -72,7 +68,6 @@ jobs:
         run: |
           docker build -t nocmake .
 
-          echo "Testing installation from PyPi"
           docker run -t -v "$(pwd)"/../../:/app nocmake bash -c \
             "cd app && pip install .;
             python3 -c 'import CLUEstering' || exit 0"
