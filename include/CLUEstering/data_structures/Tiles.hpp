@@ -21,19 +21,15 @@ namespace clue {
   template <uint8_t Ndim>
   class CoordinateExtremes {
   private:
-    float m_data[2 * Ndim];
+    std::array<std::array<float, 2>, Ndim> m_data;
 
   public:
-    CoordinateExtremes() = default;
-
     ALPAKA_FN_HOST_ACC const float* data() const { return m_data; }
     ALPAKA_FN_HOST_ACC float* data() { return m_data; }
 
-    ALPAKA_FN_HOST_ACC float min(int i) const { return m_data[2 * i]; }
-    ALPAKA_FN_HOST_ACC float& min(int i) { return m_data[2 * i]; }
-    ALPAKA_FN_HOST_ACC float max(int i) const { return m_data[2 * i + 1]; }
-    ALPAKA_FN_HOST_ACC float& max(int i) { return m_data[2 * i + 1]; }
-    ALPAKA_FN_HOST_ACC float range(int i) const { return max(i) - min(i); }
+	constexpr ALPAKA_FN_HOST_ACC const auto& operator[](int i) const { return m_data[i]; }
+	constexpr ALPAKA_FN_HOST_ACC auto& operator[](int i) { return m_data[i]; }
+    ALPAKA_FN_HOST_ACC float range(int i) const { return m_data[i][1] - m_data[i][0]; }
   };
 
   template <uint8_t Ndim>
