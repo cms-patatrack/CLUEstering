@@ -179,7 +179,7 @@ namespace clue {
   }
 
   template <uint8_t Ndim>
-  inline std::vector<std::vector<int>> Clusterer<Ndim>::getClusters(const PointsHost& h_points) {
+  inline host_associator Clusterer<Ndim>::getClusters(const PointsHost& h_points) {
     return clue::compute_clusters_points(h_points.clusterIndexes());
   }
 
