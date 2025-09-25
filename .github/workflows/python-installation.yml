@@ -16,6 +16,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Install docker
         run: |
@@ -33,8 +35,8 @@ jobs:
           docker build -t serial .
 
           docker run -t -v "$(pwd)"/../../:/app serial bash -c \
-            "cd /app && pip install .;
-            python3 -c 'import CLUEstering' || exit 0"
+            "cd /app && (pip install .);
+            python3 -c 'import CLUEstering'"
 
       - name: Test installation inside docker containers (serial without boost)
         working-directory: ${{github.workspace}}/docker/no_boost
