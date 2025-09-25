@@ -8,7 +8,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  cxx-installation:
+  python-installation:
 
     runs-on: ubuntu-latest
     strategy:
@@ -35,7 +35,7 @@ jobs:
           docker build -t serial .
 
           docker run -t -v "$(pwd)"/../../:/app serial bash -c \
-            "cd /app && (pip install .);
+            "cd /app && pip install . --break-system-packages;
             python3 -c 'import CLUEstering'"
 
       - name: Test installation inside docker containers (serial without boost)
@@ -44,8 +44,8 @@ jobs:
           docker build -t noboost .
 
           docker run -t -v "$(pwd)"/../../:/app noboost bash -c \
-            "cd /app && pip install .;
-            python3 -c 'import CLUEstering' || exit 0"
+            "cd /app && pip install . --break-system-packages;
+            python3 -c 'import CLUEstering' || exit 1" || exit 0
 
       - name: Test installation inside docker containers (tbb)
         working-directory: ${{github.workspace}}/docker/tbb
@@ -53,8 +53,8 @@ jobs:
           docker build -t tbb .
 
           docker run -t -v "$(pwd)"/../../:/app tbb bash -c \
-            "cd /app && pip install .;
-            python3 -c 'import CLUEstering' || exit 0"
+            "cd /app && pip install . --break-system-packages;
+            python3 -c 'import CLUEstering' || exit 1"
 
       - name: Test installation inside docker containers (without gcc)
         working-directory: ${{github.workspace}}/docker/no_gcc
@@ -62,8 +62,8 @@ jobs:
           docker build -t nogcc .
 
           docker run -t -v "$(pwd)"/../../:/app nogcc bash -c \
-            "cd /app && pip install .;
-            python3 -c 'import CLUEstering' || exit 0"
+            "cd /app && (pip install . --break-system-packages);
+            python3 -c 'import CLUEstering'" || exit 0
 
       - name: Test installation inside docker containers (without cmake)
         working-directory: ${{github.workspace}}/docker/no_cmake
@@ -71,5 +71,5 @@ jobs:
           docker build -t nocmake .
 
           docker run -t -v "$(pwd)"/../../:/app nocmake bash -c \
-            "cd app && pip install .;
-            python3 -c 'import CLUEstering' || exit 0"
+            "cd app && pip install . --break-system-packages;
+            python3 -c 'import CLUEstering'" || exit 0
