@@ -406,25 +406,18 @@ class clusterer:
         None
         """
 
-        # Check that the user provided the weights
-        if 'weight' not in df_.columns:
-            raise ValueError("Inadequate data. The input dataframe must"
-                             + " contain a weight column.")
-
-        coordinate_columns = [col for col in df_.columns if col[0] == 'x']
-
         # Check that the dimensionality of the dataset is adequate
         if len(df_.columns) < 2:
             raise ValueError("Inadequate data. The data must contain"
                              + " at least one coordinate and the weight.")
-        if len(coordinate_columns) > 10:
+        if len(df_.columns) > 11:
             raise ValueError("Inadequate data. The maximum number of"
                              + " dimensions supported is 10.")
-        ndim = len(coordinate_columns)
+        ndim = len(df_.columns) - 1
         npoints = len(df_.index)
         coords = df_.iloc[:, 0:-1].to_numpy()
         coords = np.vstack([coords.T,             # coordinates SoA
-                            df_['weight']],       # weights
+                            df_.iloc[:, -1]],       # weights
                             dtype=np.float32)
         results = np.vstack([np.zeros(npoints, dtype=np.int32),   # cluster ids
                              np.zeros(npoints, dtype=np.int32)],  # is_seed
@@ -446,8 +439,8 @@ class clusterer:
         Parameters
         ----------
         input_data : pandas dataframe
-            The dataframe should contain one column for every
-            coordinate, each one called 'x*', and one column for the weight.
+            The dataframe should contain one column for every coordinate and
+            one column for the weight.
         input_data : string
             The string should contain the full path to a csv file containing
             the data.
