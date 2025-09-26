@@ -47,19 +47,31 @@ namespace clue {
       }
 
       ALPAKA_FN_HOST auto clusterIndexes() const {
+        if (!static_cast<const TPoints*>(this)->m_isClustered)
+          throw std::runtime_error("Points have not been clustered yet.");
+
         auto& view = static_cast<const TPoints*>(this)->m_view;
         return std::span<const int>(view.cluster_index, view.n);
       }
       ALPAKA_FN_HOST auto clusterIndexes() {
+        if (!static_cast<const TPoints*>(this)->m_isClustered)
+          throw std::runtime_error("Points have not been clustered yet.");
+
         auto& view = static_cast<TPoints*>(this)->m_view;
         return std::span<int>(view.cluster_index, view.n);
       }
 
       ALPAKA_FN_HOST auto isSeed() const {
+        if (!static_cast<const TPoints*>(this)->m_isClustered)
+          throw std::runtime_error("Points have not been clustered yet.");
+
         auto& view = static_cast<const TPoints*>(this)->m_view;
         return std::span<const int>(view.is_seed, view.n);
       }
       ALPAKA_FN_HOST auto isSeed() {
+        if (!static_cast<const TPoints*>(this)->m_isClustered)
+          throw std::runtime_error("Points have not been clustered yet.");
+
         auto& view = static_cast<TPoints*>(this)->m_view;
         return std::span<int>(view.is_seed, view.n);
       }
