@@ -14,6 +14,9 @@
 
 namespace clue {
 
+  template <uint8_t Ndim>
+  class Clusterer;
+
   /// @brief The PointsHost class is a data structure that manages points in host memory.
   /// It provides methods to allocate, access, and manipulate points in host memory.
   ///
@@ -24,6 +27,7 @@ namespace clue {
     std::optional<host_buffer<std::byte[]>> m_buffer;
     PointsView m_view;
     int32_t m_size;
+	bool m_isClustered = false;
 
   public:
     class Point {
@@ -108,6 +112,8 @@ namespace clue {
   private:
     inline static constexpr uint8_t Ndim_ = Ndim;
 
+    template <uint8_t _Ndim>
+    friend class Clusterer;
     template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue& queue,
                            PointsHost<_Ndim>& h_points,
