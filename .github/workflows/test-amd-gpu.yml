@@ -1,0 +1,24 @@
+name: Compile and run tests on AMD GPUs
+
+on: pull_request
+
+jobs:
+  run-tests:
+    strategy:
+      matrix:
+        runner:
+          - cms-patatrack-mi300x
+          - cms-patatrack-w7900
+    runs-on: ${{ matrix.runner }}
+    container: registry.cern.ch/ngt/lxplus-like:9
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile and run benchmark
+        working-directory: ${{ github.workspace }}/tests
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --parallel
+          ./build/hip/hip.out
