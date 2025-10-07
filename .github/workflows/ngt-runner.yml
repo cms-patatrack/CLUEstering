@@ -1,0 +1,38 @@
+name: Run tests on NGT Patatrack machines
+
+on: pull_request
+
+jobs:
+  run-tests:
+    strategy:
+      matrix:
+        runner:
+          - cms-patatrack-h100
+          - cms-patatrack-l40s
+          - cms-patatrack-mi300x
+          - cms-patatrack-w7900
+    runs-on: ${{ matrix.runner }}
+    container: registry.cern.ch/ngt/lxplus-like:9
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          sudo apt install -y libboost-dev
+          sudo apt install -y libtbb-dev
+          sudo apt install libomp-dev
+
+      - name: Compile and run benchmark
+        working-directory: ${{ github.workspace }}/tests
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -- -j 4
+          echo "Running serial backend"
+          ./build/cpu/serial.out --reporters=console --success
+          echo "Running TBB backend"
+          ./build/cpu/tbb.out --reporters=console --success
+          echo "Running OpenMP backend"
+          ./build/cpu/openmp.out --reporters=console --success
