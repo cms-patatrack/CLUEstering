@@ -4,7 +4,9 @@
 
 #pragma once
 
-#include "CLUEstering/core/detail/CLUEAlpakaKernels.hpp"
+#include "CLUEstering/core/DistanceParameter.hpp"
+#include "CLUEstering/core/ConvolutionalKernel.hpp"
+#include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
@@ -32,10 +34,10 @@ namespace clue {
     using Acc = internal::Acc;
     inline static constexpr auto reserve = detail::reserve;
 
-    float m_dc;
-    float m_seed_dc;
+    DistanceParameter<Ndim> m_dc;
+    DistanceParameter<Ndim> m_seed_dc;
     float m_rhoc;
-    float m_dm;
+    DistanceParameter<Ndim> m_dm;
     int m_pointsPerTile;  // average number of points found in a tile
     std::array<uint8_t, Ndim> m_wrappedCoordinates;
 
@@ -73,6 +75,17 @@ namespace clue {
                             std::size_t block_size);
 
   public:
+    Clusterer(DistanceParameter<Ndim> dc,
+              float rhoc,
+              DistanceParameter<Ndim> dm,
+              DistanceParameter<Ndim> seed_dc = -1.f,
+              int pPBin = 128);
+    Clusterer(Queue& queue,
+              DistanceParameter<Ndim> dc,
+              float rhoc,
+              DistanceParameter<Ndim> dm,
+              DistanceParameter<Ndim> seed_dc = -1.f,
+              int pPBin = 128);
     /// @brief Constuct a Clusterer object
     ///
     /// @param dc Distance threshold for clustering
@@ -80,7 +93,7 @@ namespace clue {
     /// @param dm Minimum distance between clusters
     /// @param seed_dc Distance threshold for seed points, if -1.f, dc is used
     /// @param pPBin Number of points per bin, used to determine the tile size
-    Clusterer(float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128);
+    // Clusterer(float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128);
     /// @brief Constuct a Clusterer object
     ///
     /// @param queue The queue to use for the device operations
@@ -89,7 +102,7 @@ namespace clue {
     /// @param dm Minimum distance between clusters
     /// @param seed_dc Distance threshold for seed points, if the default value -1.f, dc is used
     /// @param pPBin Number of points per bin, used to determine the tile size
-    Clusterer(Queue& queue, float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128);
+    // Clusterer(Queue& queue, float dc, float rhoc, float dm, float seed_dc = -1.f, int pPBin = 128);
     /// @brief Constuct a Clusterer object
     ///
     /// @param queue The queue to use for the device operations
@@ -99,13 +112,13 @@ namespace clue {
     /// @param dm Minimum distance between clusters
     /// @param seed_dc Distance threshold for seed points, if the default value -1.f, dc is used
     /// @param pPBin Number of points per bin, used to determine the tile size
-    Clusterer(Queue& queue,
-              TilesDevice* tile_buffer,
-              float dc,
-              float rhoc,
-              float dm,
-              float seed_dc = -1.f,
-              int pPBin = 128);
+    // Clusterer(Queue& queue,
+    //           TilesDevice* tile_buffer,
+    //           float dc,
+    //           float rhoc,
+    //           float dm,
+    //           float seed_dc = -1.f,
+    //           int pPBin = 128);
 
     /// @brief Set the parameters for the clustering algorithm
     ///
