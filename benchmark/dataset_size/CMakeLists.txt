@@ -34,12 +34,15 @@ else()
   message(STATUS "pybind11 not found, so no plots will be generated.")
 endif()
 
-include(FetchContent)
-FetchContent_Declare(
-  alpaka
-  URL https://github.com/alpaka-group/alpaka/archive/refs/tags/1.2.0.tar.gz)
+find_package(alpaka)
+if(NOT alpaka_FOUND)
+  include(FetchContent)
+  FetchContent_Declare(
+    alpaka
+    URL https://github.com/alpaka-group/alpaka/archive/refs/tags/1.2.0.tar.gz)
 
-FetchContent_MakeAvailable(alpaka)
+  FetchContent_MakeAvailable(alpaka)
+endif()
 
 add_subdirectory(cpu)
 
