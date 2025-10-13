@@ -13,6 +13,7 @@
 
 #include <span>
 #include <alpaka/alpaka.hpp>
+#include <span>
 
 namespace clue {
 
