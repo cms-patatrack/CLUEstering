@@ -12,10 +12,9 @@ foreach(src IN LISTS sources)
   set_source_files_properties(${src} PROPERTIES LANGUAGE CUDA)
 endforeach()
 add_executable(cuda.out ${sources})
-target_link_libraries(cuda.out PRIVATE fmt::fmt)
-target_include_directories(
-  cuda.out PRIVATE ${CMAKE_SOURCE_DIR}/../include ${doctest_SOURCE_DIR}/doctest
-                   ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+target_include_directories(cuda.out PRIVATE ${CMAKE_SOURCE_DIR}/../include
+                                            ${doctest_SOURCE_DIR}/doctest)
+target_link_libraries(cuda.out PRIVATE alpaka::alpaka Boost::boost fmt::fmt)
 target_compile_definitions(cuda.out PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED
                                             CLUE_ENABLE_CACHING_ALLOCATOR)
 target_compile_options(cuda.out PRIVATE --expt-relaxed-constexpr)
