@@ -29,12 +29,6 @@ namespace clue {
   };
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED
 
-#ifdef ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
-  template <typename TDim>
-  struct requires_single_thread_per_block<alpaka::AccCpuThreads<TDim, Idx>>
-      : public std::false_type {};
-#endif  // ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
-
   // Whether or not the accelerator expects the threads-per-block and elements-per-thread to be swapped
   template <concepts::accelerator TAcc>
   inline constexpr bool requires_single_thread_per_block_v =
