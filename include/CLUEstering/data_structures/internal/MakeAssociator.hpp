@@ -4,7 +4,8 @@
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/internal/algorithm/extrema/extrema.hpp"
+#include "CLUEstering/internal/algorithm/reduce/reduce.hpp"
+#include "CLUEstering/internal/nostd/maximum.hpp"
 #include <limits>
 #include <span>
 
@@ -12,8 +13,10 @@ namespace clue::internal {
 
   template <clue::concepts::queue TQueue>
   inline auto make_associator(TQueue& queue, std::span<int32_t> associations, int32_t elements) {
-    const auto bins = *clue::internal::algorithm::max_element(
-                          associations.data(), associations.data() + associations.size()) +
+    const auto bins = clue::internal::algorithm::reduce(associations.begin(),
+                                                        associations.end(),
+                                                        std::numeric_limits<int32_t>::lowest(),
+                                                        clue::nostd::maximum<int32_t>{}) +
                       1;
     clue::AssociationMap<decltype(alpaka::getDev(queue))> map(elements, bins, queue);
     map.template fill<clue::internal::Acc>(elements, associations, queue);
@@ -22,10 +25,11 @@ namespace clue::internal {
 
   inline auto make_associator(std::span<int32_t> associations, int32_t elements)
       -> AssociationMap<alpaka::DevCpu> {
-    const auto bins = std::reduce(associations.data(),
-                                  associations.data() + associations.size(),
+    const auto bins = std::reduce(associations.begin(),
+                                  associations.end(),
                                   std::numeric_limits<int32_t>::lowest(),
-                                  [](auto a, auto b) { return std::max(a, b); }) +
+                                  clue::nostd::maximum<int32_t>{}) +
+
                       1;
     clue::host_associator map(elements, bins);
     map.fill(elements, associations);
