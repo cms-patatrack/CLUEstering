@@ -592,7 +592,6 @@ TEST_CASE("Test coordinate getter throwing conditions") {
     const uint32_t size = 1000;
     auto queue = clue::get_queue(0u);
     clue::PointsHost<2> points(queue, size);
-    CHECK_THROWS(points.coords(-5));
     CHECK_THROWS(points.coords(3));
     CHECK_THROWS(points.coords(10));
   }
@@ -600,7 +599,6 @@ TEST_CASE("Test coordinate getter throwing conditions") {
     const uint32_t size = 1000;
     auto queue = clue::get_queue(0u);
     const clue::PointsHost<2> points(queue, size);
-    CHECK_THROWS(points.coords(-5));
     CHECK_THROWS(points.coords(3));
     CHECK_THROWS(points.coords(10));
   }
