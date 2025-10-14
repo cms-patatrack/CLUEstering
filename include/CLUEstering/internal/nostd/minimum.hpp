@@ -10,4 +10,4 @@ namespace clue::nostd {
     }
   };
 
-}  // namespace clue
+}  // namespace clue::nostd
