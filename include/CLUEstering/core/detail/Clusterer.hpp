@@ -298,8 +298,10 @@ namespace clue {
 
     detail::assignPointsToClusters<Acc>(
         queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
-
     clue::copyToHost(queue, h_points, dev_points);
+
+    h_points.m_isClustered = true;
+    dev_points.m_isClustered = true;
   }
 
   template <uint8_t Ndim>
@@ -325,6 +327,7 @@ namespace clue {
 
     detail::assignPointsToClusters<Acc>(
         queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
+    dev_points.m_isClustered = true;
 
     alpaka::wait(queue);
   }

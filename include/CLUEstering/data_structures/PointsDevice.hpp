@@ -16,6 +16,9 @@
 
 namespace clue {
 
+  template <uint8_t Ndim>
+  class Clusterer;
+
   /// @brief The PointsDevice class is a data structure that manages points on a device.
   /// It provides methods to allocate, access, and manipulate points in device memory.
   ///
@@ -27,6 +30,7 @@ namespace clue {
     device_buffer<TDev, std::byte[]> m_buffer;
     PointsView m_view;
     int32_t m_size;
+	bool m_isClustered = false;
 
   public:
     /// @brief Construct a PointsDevice object
@@ -115,6 +119,8 @@ namespace clue {
   private:
     inline static constexpr uint8_t Ndim_ = Ndim;
 
+    template <uint8_t _Ndim>
+    friend class Clusterer;
     template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue& queue,
                            PointsHost<_Ndim>& h_points,
