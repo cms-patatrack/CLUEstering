@@ -6,6 +6,7 @@
 #include <span>
 #include <vector>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
 TEST_CASE("Test clue::get_device utility") {
@@ -63,7 +64,7 @@ TEST_CASE("Test get_clusters host function") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/data_32768.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/data_32768.csv");
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -77,7 +78,7 @@ TEST_CASE("Test get_clusters device function") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/data_32768.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/data_32768.csv");
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 

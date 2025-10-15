@@ -6,6 +6,7 @@
 #include <span>
 #include <vector>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
 TEST_CASE("Test host points with internal allocation") {
@@ -460,7 +461,7 @@ TEST_CASE("Test coordinate getter throwing conditions") {
 TEST_CASE("Test cluster properties accessors") {
   auto queue = clue::get_queue(0u);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/data_32768.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/data_32768.csv");
 
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);

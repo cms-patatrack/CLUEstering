@@ -1,5 +1,7 @@
 
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
+
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
 TEST_CASE("Test FlatKernel throwing conditions") {

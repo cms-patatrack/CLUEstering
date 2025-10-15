@@ -49,6 +49,10 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fmt)
 
+option(COVERAGE "Enable code coverage" OFF)
+
+enable_testing()
+
 add_subdirectory(cpu)
 
 include(CheckLanguage)

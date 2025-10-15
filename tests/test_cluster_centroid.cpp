@@ -9,13 +9,14 @@
 #include <fmt/core.h>
 #include <fmt/format.h>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
 TEST_CASE("Test computation of cluster centroid") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/sissa_1000.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/sissa_1000.csv");
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -37,7 +38,7 @@ TEST_CASE("Test computation of all cluster centroids") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/sissa_1000.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/sissa_1000.csv");
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 

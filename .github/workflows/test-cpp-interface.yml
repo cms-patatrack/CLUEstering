@@ -30,11 +30,5 @@ jobs:
       working-directory: ${{ github.workspace }}/tests
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build -- -j 3
-        echo "Running serial backend"
-        ./build/cpu/serial.out
-        echo "Running TBB backend"
-        ./build/cpu/tbb.out
-        echo "Running OpenMP backend"
-        ./build/cpu/openmp.out
-
+        cmake --build build --parallel
+        ctest --test-dir build --output-on-failure

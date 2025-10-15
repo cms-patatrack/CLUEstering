@@ -5,6 +5,7 @@
 #include <numeric>
 #include <vector>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
 TEST_CASE("Test zip iterator with two containers of the same type") {
