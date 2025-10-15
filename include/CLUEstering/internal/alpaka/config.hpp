@@ -172,3 +172,23 @@ namespace alpaka_omp2_async {
 }  // namespace alpaka_omp2_async
 
 #endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
+
+#ifdef ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
+namespace alpaka_threads_async {
+  using namespace alpaka_common;
+
+  using Platform = alpaka::PlatformCpu;
+  using Device = alpaka::DevCpu;
+  using Queue = alpaka::QueueCpuBlocking;
+  using Event = alpaka::EventCpu;
+
+  template <typename TDim>
+  using Acc = alpaka::AccCpuThreads<TDim, Idx>;
+  using Acc1D = Acc<Dim1D>;
+  using Acc2D = Acc<Dim2D>;
+  using Acc3D = Acc<Dim3D>;
+
+#define ALPAKA_BACKEND alpaka_threads_async
+}  // namespace alpaka_threads_async
+
+#endif  // ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
