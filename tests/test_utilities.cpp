@@ -58,3 +58,17 @@ TEST_CASE("Test clue::get_queue utility") {
     CHECK(1);
   }
 }
+
+TEST_CASE("Test validation utilities") {
+  const auto device = clue::get_device(0u);
+  clue::Queue queue(device);
+
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/data_32768.csv");
+  const auto n_points = h_points.size();
+  clue::PointsDevice<2> d_points(queue, n_points);
+
+  const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
+  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  algo.make_clusters(queue, h_points, d_points);
+  auto clusters = clue::compute_clusters_points(h_points.clusterIndexes());
+}
