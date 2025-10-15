@@ -47,6 +47,7 @@ def test_one_out_of_two(moons):
 
     c = clue.clusterer(0.4, 2., 0.4)
     c.read_data(moons)
+    assert c.n_dim == 2
     # check the initial number of dimensions
     assert len(c.clust_data.coords[0]) == 999
     coordsoa_x0 = c._partial_dimension_dataset([0])
@@ -68,6 +69,7 @@ def test_one_out_of_three(blobs):
 
     c = clue.clusterer(0.4, 2., 0.4)
     c.read_data(blobs)
+    assert c.n_dim == 3
     # check the initial number of dimensions
     assert len(c.clust_data.coords[0]) == 10000
     coordsoa_x0 = c._partial_dimension_dataset([0])
@@ -93,6 +95,7 @@ def test_two_out_of_three(blobs):
 
     c = clue.clusterer(0.4, 2., 0.4)
     c.read_data(blobs)
+    assert c.n_dim == 3
     # check the initial number of dimensions
     assert len(c.clust_data.coords[0]) == 10000
     coordsoa_x0x1 = c._partial_dimension_dataset([0, 1])
@@ -121,10 +124,12 @@ def test_square_box(square, box):
     '''
     c1 = clue.clusterer(1., 2., 1.6)
     c1.read_data(square)
+    assert c1.n_dim == 2
     c1.run_clue()
 
     c2 = clue.clusterer(1., 2., 1.6)
     c2.read_data(box)
+    assert c2.n_dim == 3
     c2.run_clue(dimensions=[0, 1])
 
     # check that the result of clustering the 3D dataset using only
