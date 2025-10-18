@@ -396,7 +396,11 @@ namespace clue {
     requires std::same_as<TDev, alpaka::DevCpu>
   {
     std::vector<key_type> sizes(m_nbins, 0);
-    std::for_each(associations.begin(), associations.end(), [&](key_type key) { sizes[key]++; });
+    std::for_each(associations.begin(), associations.end(), [&](key_type key) {
+      if (key >= 0) {
+        sizes[key]++;
+      }
+    });
 
     std::vector<key_type> temporary_keys(m_nbins + 1);
     temporary_keys[0] = 0;
@@ -407,9 +411,11 @@ namespace clue {
               temporary_keys.data() + m_nbins + 1,
               m_offsets.data());
     for (auto i = 0u; i < associations.size(); ++i) {
-      auto& offset = temporary_keys[associations[i]];
-      m_indexes[offset] = i;
-      ++offset;
+      if (associations[i] >= 0) {
+        auto& offset = temporary_keys[associations[i]];
+        m_indexes[offset] = i;
+        ++offset;
+      }
     }
   }
 
