@@ -46,11 +46,11 @@ namespace clue {
     PointsHost(TQueue& queue, int32_t n_points, std::span<std::byte> buffer);
 
     template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
     PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers);
 
     template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
     PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers);
 
     PointsHost(const PointsHost&) = delete;
@@ -89,12 +89,6 @@ namespace clue {
     /// @brief Returns the cluster indexes of the points as a span
     /// @return A span of the cluster indexes of the points
     ALPAKA_FN_HOST auto clusterIndexes();
-    /// @brief Returns the seed status of the points as a const span
-    /// @return A const span indicating whether each point is a seed
-    ALPAKA_FN_HOST auto isSeed() const;
-    /// @brief Returns the seed status of the points as a span
-    /// @return A span indicating whether each point is a seed
-    ALPAKA_FN_HOST auto isSeed();
     /// @brief Returns the view of the points
     /// @return A const reference to the PointsView structure containing the points data
     ALPAKA_FN_HOST const auto& view() const;

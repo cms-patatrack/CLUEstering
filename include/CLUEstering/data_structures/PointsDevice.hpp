@@ -89,12 +89,6 @@ namespace clue {
     /// @brief Returns the cluster indexes of the points as a span
     /// @return A span of the cluster indexes of the points
     ALPAKA_FN_HOST auto clusterIndexes();
-    /// @brief Returns the seed status of the points as a const span
-    /// @return A const span indicating whether each point is a seed
-    ALPAKA_FN_HOST auto isSeed() const;
-    /// @brief Returns the seed status of the points as a span
-    /// @return A span indicating whether each point is a seed
-    ALPAKA_FN_HOST auto isSeed();
     /// @brief Returns the view of the points
     /// @return A const reference to the PointsView structure containing the points data
     ALPAKA_FN_HOST const auto& view() const;
@@ -111,6 +105,9 @@ namespace clue {
 
     ALPAKA_FN_HOST auto nearestHigher() const;
     ALPAKA_FN_HOST auto nearestHigher();
+
+    ALPAKA_FN_HOST auto isSeed() const;
+    ALPAKA_FN_HOST auto isSeed();
 
   private:
     inline static constexpr uint8_t Ndim_ = Ndim;

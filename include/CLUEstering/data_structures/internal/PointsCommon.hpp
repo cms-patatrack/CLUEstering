@@ -55,15 +55,6 @@ namespace clue {
         return std::span<int>(view.cluster_index, view.n);
       }
 
-      ALPAKA_FN_HOST auto isSeed() const {
-        auto& view = static_cast<const TPoints*>(this)->m_view;
-        return std::span<const int>(view.is_seed, view.n);
-      }
-      ALPAKA_FN_HOST auto isSeed() {
-        auto& view = static_cast<TPoints*>(this)->m_view;
-        return std::span<int>(view.is_seed, view.n);
-      }
-
       ALPAKA_FN_HOST const auto& view() const { return static_cast<const TPoints*>(this)->m_view; }
       ALPAKA_FN_HOST auto& view() { return static_cast<TPoints*>(this)->m_view; }
     };
@@ -105,10 +96,6 @@ namespace clue {
         queue,
         make_host_view(h_points.m_view.cluster_index, h_points.size()),
         make_device_view(alpaka::getDev(queue), d_points.m_view.cluster_index, h_points.size()));
-    alpaka::memcpy(
-        queue,
-        make_host_view(h_points.m_view.is_seed, h_points.size()),
-        make_device_view(alpaka::getDev(queue), d_points.m_view.is_seed, h_points.size()));
   }
   template <concepts::queue TQueue, uint8_t Ndim, concepts::device TDev>
   void copyToDevice(TQueue& queue,

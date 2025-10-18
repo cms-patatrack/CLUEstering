@@ -147,4 +147,13 @@ namespace clue {
     return std::span<int>(m_view.nearest_higher, m_size);
   }
 
+  template <uint8_t Ndim, concepts::device TDev>
+  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::isSeed() const {
+    return std::span<const int>(m_view.is_seed, m_size);
+  }
+  template <uint8_t Ndim, concepts::device TDev>
+  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::isSeed() {
+    return std::span<int>(m_view.is_seed, m_size);
+  }
+
 }  // namespace clue
