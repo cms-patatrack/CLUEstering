@@ -35,10 +35,10 @@ namespace clue {
       requires(sizeof...(TBuffers) == 3)
     inline void partitionSoAView(PointsView& view, int32_t n_points, TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
-      // TODO: is reinterpret_cast necessary?
-      view.coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
-      view.weight = reinterpret_cast<float*>(std::get<1>(buffers_tuple));
-      view.cluster_index = reinterpret_cast<int*>(std::get<2>(buffers_tuple));
+
+      view.coords = std::get<0>(buffers_tuple);
+      view.weight = std::get<1>(buffers_tuple);
+      view.cluster_index = std::get<2>(buffers_tuple);
       view.n = n_points;
     }
     template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
@@ -46,30 +46,29 @@ namespace clue {
     inline void partitionSoAView(PointsView& view, int32_t n_points, TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
 
-      // TODO: is reinterpret_cast necessary?
-      view.coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
-      view.weight = reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Ndim * n_points);
-      view.cluster_index = reinterpret_cast<int*>(std::get<1>(buffers_tuple));
+      view.coords = std::get<0>(buffers_tuple);
+      view.weight = std::get<0>(buffers_tuple) + Ndim * n_points;
+      view.cluster_index = std::get<1>(buffers_tuple);
       view.n = n_points;
     }
     template <uint8_t Ndim, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 3)
     inline void partitionSoAView(PointsView& view, int32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
-      // TODO: is reinterpret_cast necessary?
-      view.coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data());
-      view.weight = reinterpret_cast<float*>(std::get<1>(buffers_tuple).data());
-      view.cluster_index = reinterpret_cast<int*>(std::get<2>(buffers_tuple).data());
+
+      view.coords = std::get<0>(buffers_tuple).data();
+      view.weight = std::get<1>(buffers_tuple).data();
+      view.cluster_index = std::get<2>(buffers_tuple).data();
       view.n = n_points;
     }
     template <uint8_t Ndim, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 2)
     inline void partitionSoAView(PointsView& view, int32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
-      // TODO: is reinterpret_cast necessary?
-      view.coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data());
-      view.weight = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Ndim * n_points);
-      view.cluster_index = reinterpret_cast<int*>(std::get<1>(buffers_tuple).data());
+
+      view.coords = std::get<0>(buffers_tuple).data();
+      view.weight = std::get<0>(buffers_tuple).data() + Ndim * n_points;
+      view.cluster_index = std::get<1>(buffers_tuple).data();
       view.n = n_points;
     }
 
