@@ -10,7 +10,7 @@
 
 namespace clue {
 
-  inline int compute_nclusters(std::span<int> cluster_ids) {
+  inline int compute_nclusters(std::span<const int> cluster_ids) {
     return std::reduce(cluster_ids.begin(),
                        cluster_ids.end(),
                        std::numeric_limits<int>::lowest(),
@@ -18,11 +18,11 @@ namespace clue {
            1;
   }
 
-  inline host_associator compute_clusters_points(std::span<int> cluster_ids) {
+  inline host_associator compute_clusters_points(std::span<const int> cluster_ids) {
     return internal::make_associator(cluster_ids, cluster_ids.size());
   }
 
-  inline std::vector<int> compute_clusters_size(std::span<int> cluster_ids) {
+  inline std::vector<int> compute_clusters_size(std::span<const int> cluster_ids) {
     const auto nclusters = compute_nclusters(cluster_ids);
     const auto clusters_points = compute_clusters_points(cluster_ids);
 
@@ -33,7 +33,7 @@ namespace clue {
     return clusters;
   }
 
-  inline bool validate_results(std::span<int> cluster_ids, std::span<int> truth) {
+  inline bool validate_results(std::span<const int> cluster_ids, std::span<const int> truth) {
     auto result_clusters_sizes = compute_clusters_size(cluster_ids);
     auto truth_clusters_sizes = compute_clusters_size(truth);
     std::ranges::sort(result_clusters_sizes);
