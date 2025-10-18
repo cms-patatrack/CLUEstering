@@ -21,8 +21,8 @@ namespace clue {
 
   namespace internal {
     template <clue::concepts::queue TQueue>
-    auto make_associator(TQueue& queue, std::span<int32_t> associations, int32_t elements);
-    auto make_associator(std::span<int32_t> associations, int32_t elements)
+    auto make_associator(TQueue& queue, std::span<const int32_t> associations, int32_t elements);
+    auto make_associator(std::span<const int32_t> associations, int32_t elements)
         -> AssociationMap<alpaka::DevCpu>;
   }  // namespace internal
 
@@ -169,11 +169,11 @@ namespace clue {
     template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, TFunc func, TQueue& queue);
 
-    ALPAKA_FN_HOST void fill(std::span<key_type> associations)
+    ALPAKA_FN_HOST void fill(std::span<const key_type> associations)
       requires std::same_as<TDev, alpaka::DevCpu>;
 
     template <concepts::accelerator TAcc, concepts::queue TQueue>
-    ALPAKA_FN_HOST void fill(size_type size, std::span<key_type> associations, TQueue& queue);
+    ALPAKA_FN_HOST void fill(size_type size, std::span<const key_type> associations, TQueue& queue);
 
     const AssociationMapView& view() const;
     AssociationMapView& view();
@@ -197,8 +197,8 @@ namespace clue {
     friend class TilesAlpaka;
 
     template <concepts::queue _TQueue>
-    friend auto clue::internal::make_associator(_TQueue&, std::span<int32_t>, int32_t);
-    friend auto clue::internal::make_associator(std::span<int32_t>, int32_t)
+    friend auto clue::internal::make_associator(_TQueue&, std::span<const int32_t>, int32_t);
+    friend auto clue::internal::make_associator(std::span<const int32_t>, int32_t)
         -> AssociationMap<alpaka::DevCpu>;
   };
 

@@ -12,7 +12,9 @@
 namespace clue::internal {
 
   template <clue::concepts::queue TQueue>
-  inline auto make_associator(TQueue& queue, std::span<int32_t> associations, int32_t elements) {
+  inline auto make_associator(TQueue& queue,
+                              std::span<const int32_t> associations,
+                              int32_t elements) {
     const auto bins = clue::internal::algorithm::reduce(associations.begin(),
                                                         associations.end(),
                                                         std::numeric_limits<int32_t>::lowest(),
@@ -23,7 +25,7 @@ namespace clue::internal {
     return map;
   }
 
-  inline auto make_associator(std::span<int32_t> associations, int32_t elements)
+  inline auto make_associator(std::span<const int32_t> associations, int32_t elements)
       -> AssociationMap<alpaka::DevCpu> {
     const auto bins = std::reduce(associations.begin(),
                                   associations.end(),

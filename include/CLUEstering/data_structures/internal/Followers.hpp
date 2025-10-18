@@ -27,7 +27,7 @@ namespace clue {
     }
 
     template <concepts::accelerator TAcc, concepts::queue TQueue, uint8_t Ndim>
-    ALPAKA_FN_HOST void fill(TQueue& queue, PointsDevice<Ndim, TDev>& d_points) {
+    ALPAKA_FN_HOST void fill(TQueue& queue, const PointsDevice<Ndim, TDev>& d_points) {
       m_assoc.template fill<TAcc>(d_points.size(), d_points.nearestHigher(), queue);
     }
 
