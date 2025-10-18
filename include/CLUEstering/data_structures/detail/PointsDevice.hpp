@@ -57,11 +57,11 @@ namespace clue {
                                  int32_t n_points,
                                  TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
-      // TODO: is reinterpret_cast necessary?
-      view.coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
-      view.weight = reinterpret_cast<float*>(std::get<1>(buffers_tuple));
-      view.cluster_index = reinterpret_cast<int*>(std::get<2>(buffers_tuple));
-      view.is_seed = reinterpret_cast<int*>(std::get<3>(buffers_tuple));
+
+      view.coords = std::get<0>(buffers_tuple);
+      view.weight = std::get<1>(buffers_tuple);
+      view.cluster_index = std::get<2>(buffers_tuple);
+      view.is_seed = std::get<3>(buffers_tuple);
       view.rho = reinterpret_cast<float*>(alloc_buffer);
       view.delta = reinterpret_cast<float*>(alloc_buffer + sizeof(float) * n_points);
       view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
@@ -74,11 +74,11 @@ namespace clue {
                                  int32_t n_points,
                                  TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
-      // TODO: is reinterpret_cast necessary?
-      view.coords = reinterpret_cast<float*>(std::get<0>(buffers_tuple));
-      view.weight = reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Ndim * n_points);
-      view.cluster_index = reinterpret_cast<int*>(std::get<1>(buffers_tuple));
-      view.is_seed = reinterpret_cast<int*>(std::get<1>(buffers_tuple) + n_points);
+
+      view.coords = std::get<0>(buffers_tuple);
+      view.weight = std::get<0>(buffers_tuple) + Ndim * n_points;
+      view.cluster_index = std::get<1>(buffers_tuple);
+      view.is_seed = std::get<1>(buffers_tuple) + n_points;
       view.rho = reinterpret_cast<float*>(alloc_buffer);
       view.delta = reinterpret_cast<float*>(alloc_buffer + sizeof(float) * n_points);
       view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
