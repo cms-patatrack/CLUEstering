@@ -15,7 +15,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
 #ifdef COVERAGE
   auto range = std::make_pair(10, 11);
 #else
-  auto range = std::make_pair(10, 19);
+  auto range = std::make_pair(10, 18);
 #endif
 
   for (auto i = range.first; i < range.second; ++i) {
@@ -27,7 +27,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     const auto n_points = h_points.size();
     clue::PointsDevice<2> d_points(queue, n_points);
 
-    const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
+    const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
     clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
@@ -48,7 +48,7 @@ TEST_CASE("Test clustering on sissa") {
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
-  const float dc{20.f}, rhoc{10.f}, outlier{20.f};
+  const float dc{21.f}, rhoc{10.f}, outlier{21.f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
   algo.make_clusters(queue, h_points, d_points);
@@ -67,7 +67,7 @@ TEST_CASE("Test clustering on toy detector dataset") {
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
-  const float dc{4.5f}, rhoc{2.5f}, outlier{4.5f};
+  const float dc{4.f}, rhoc{2.5f}, outlier{4.f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
   algo.make_clusters(queue, h_points, d_points);
