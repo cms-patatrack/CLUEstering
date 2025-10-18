@@ -32,7 +32,7 @@ namespace clue::internal {
 
                       1;
     clue::host_associator map(elements, bins);
-    map.fill(elements, associations);
+    map.fill(associations);
     return map;
   }
 

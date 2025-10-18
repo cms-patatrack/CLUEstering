@@ -392,7 +392,7 @@ namespace clue {
   }
 
   template <concepts::device TDev>
-  ALPAKA_FN_HOST void AssociationMap<TDev>::fill(size_type size, std::span<key_type> associations)
+  ALPAKA_FN_HOST void AssociationMap<TDev>::fill(std::span<key_type> associations)
     requires std::same_as<TDev, alpaka::DevCpu>
   {
     std::vector<key_type> sizes(m_nbins, 0);

@@ -11,6 +11,7 @@
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
+#include <span>
 #include <alpaka/alpaka.hpp>
 
 namespace clue {
@@ -168,7 +169,7 @@ namespace clue {
     template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, TFunc func, TQueue& queue);
 
-    ALPAKA_FN_HOST void fill(size_type size, std::span<key_type> associations)
+    ALPAKA_FN_HOST void fill(std::span<key_type> associations)
       requires std::same_as<TDev, alpaka::DevCpu>;
 
     template <concepts::accelerator TAcc, concepts::queue TQueue>
