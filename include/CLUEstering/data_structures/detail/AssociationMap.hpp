@@ -305,26 +305,9 @@ namespace clue {
                        sizes_buffer.data(),
                        size);
 
-    auto block_counter = make_device_buffer<int32_t>(queue);
-    alpaka::memset(queue, block_counter, 0);
-
     auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_nbins + 1);
-    alpaka::memset(queue, temp_offsets, 0u, 1u);
-    const auto blocksize_multiblockscan = 1024;
-    auto gridsize_multiblockscan = divide_up_by(m_nbins, blocksize_multiblockscan);
-    const auto workdiv_multiblockscan =
-        make_workdiv<TAcc>(gridsize_multiblockscan, blocksize_multiblockscan);
-    const auto dev = alpaka::getDev(queue);
-    auto warp_size = alpaka::getPreferredWarpSize(dev);
-    alpaka::exec<TAcc>(queue,
-                       workdiv_multiblockscan,
-                       multiBlockPrefixScan<int32_t>{},
-                       sizes_buffer.data(),
-                       temp_offsets.data() + 1,
-                       m_nbins,
-                       gridsize_multiblockscan,
-                       block_counter.data(),
-                       warp_size);
+    internal::algorithm::inclusive_scan(
+        sizes_buffer.data(), sizes_buffer.data() + m_nbins, temp_offsets.data() + 1);
 
     alpaka::memcpy(queue,
                    make_device_view(alpaka::getDev(queue), m_offsets.data(), m_nbins + 1),
@@ -382,26 +365,9 @@ namespace clue {
                        sizes_buffer.data(),
                        size);
 
-    auto block_counter = make_device_buffer<int32_t>(queue);
-    alpaka::memset(queue, block_counter, 0);
-
     auto temp_offsets = make_device_buffer<key_type[]>(queue, m_nbins + 1);
-    alpaka::memset(queue, temp_offsets, 0u, 1u);
-    const auto blocksize_multiblockscan = 1024;
-    auto gridsize_multiblockscan = divide_up_by(m_nbins, blocksize_multiblockscan);
-    const auto workdiv_multiblockscan =
-        make_workdiv<TAcc>(gridsize_multiblockscan, blocksize_multiblockscan);
-    const auto dev = alpaka::getDev(queue);
-    auto warp_size = alpaka::getPreferredWarpSize(dev);
-    alpaka::exec<TAcc>(queue,
-                       workdiv_multiblockscan,
-                       multiBlockPrefixScan<key_type>{},
-                       sizes_buffer.data(),
-                       temp_offsets.data() + 1,
-                       m_nbins,
-                       gridsize_multiblockscan,
-                       block_counter.data(),
-                       warp_size);
+    internal::algorithm::inclusive_scan(
+        sizes_buffer.data(), sizes_buffer.data() + m_nbins, temp_offsets.data() + 1);
 
     alpaka::memcpy(queue,
                    make_device_view(alpaka::getDev(queue), m_offsets.data(), m_nbins + 1),
