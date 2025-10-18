@@ -210,7 +210,7 @@ namespace clue::detail {
     template <typename TAcc, std::size_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
-								  TilesAlpakaView<Ndim> tiles,
+                                  TilesAlpakaView<Ndim> tiles,
                                   PointsView dev_points,
                                   DistanceParameter<Ndim> seed_dc,
                                   float rhoc,
@@ -306,7 +306,7 @@ namespace clue::detail {
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
                                VecArray<int32_t, reserve>* seeds,
-							   TilesAlpakaView<Ndim>& tiles,
+                               TilesAlpakaView<Ndim>& tiles,
                                PointsView& dev_points,
                                const DistanceParameter<Ndim>& seed_dc,
                                float rhoc,
