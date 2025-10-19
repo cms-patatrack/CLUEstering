@@ -21,7 +21,7 @@ namespace clue {
   /// and runs the clustering algorithm on host or device points.
   ///
   /// @tparam Ndim The number of dimensions of the points to cluster
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   class Clusterer {
   private:
     using CoordinateExtremes = clue::CoordinateExtremes<Ndim>;

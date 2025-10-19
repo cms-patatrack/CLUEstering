@@ -80,15 +80,15 @@ namespace clue {
   }  // namespace concepts
 
   // TODO: implement for better cache use
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   int32_t computeAlignSoASize(int32_t n_points);
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   class PointsHost;
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   class PointsDevice;
 
-  template <concepts::queue TQueue, uint8_t Ndim, concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
   void copyToHost(TQueue& queue,
                   PointsHost<Ndim>& h_points,
                   const PointsDevice<Ndim, TDev>& d_points) {
@@ -97,7 +97,7 @@ namespace clue {
         make_host_view(h_points.m_view.cluster_index, h_points.size()),
         make_device_view(alpaka::getDev(queue), d_points.m_view.cluster_index, h_points.size()));
   }
-  template <concepts::queue TQueue, uint8_t Ndim, concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
   void copyToDevice(TQueue& queue,
                     PointsDevice<Ndim, TDev>& d_points,
                     const PointsHost<Ndim>& h_points) {

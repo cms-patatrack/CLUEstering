@@ -15,7 +15,7 @@ namespace clue {
   namespace soa::host {
 
     // No need to allocate temporary buffers on the host
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     inline auto computeSoASize(int32_t n_points) {
       if (n_points <= 0) {
         throw std::invalid_argument(
@@ -24,14 +24,14 @@ namespace clue {
       return ((Ndim + 1) * sizeof(float) + sizeof(int)) * n_points;
     }
 
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     inline void partitionSoAView(PointsView& view, std::byte* buffer, int32_t n_points) {
       view.coords = reinterpret_cast<float*>(buffer);
       view.weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
       view.cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
       view.n = n_points;
     }
-    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
+    template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 3)
     inline void partitionSoAView(PointsView& view, int32_t n_points, TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
@@ -41,7 +41,7 @@ namespace clue {
       view.cluster_index = std::get<2>(buffers_tuple);
       view.n = n_points;
     }
-    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
+    template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2)
     inline void partitionSoAView(PointsView& view, int32_t n_points, TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
@@ -51,7 +51,7 @@ namespace clue {
       view.cluster_index = std::get<1>(buffers_tuple);
       view.n = n_points;
     }
-    template <uint8_t Ndim, std::ranges::contiguous_range... TBuffers>
+    template <std::size_t Ndim, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 3)
     inline void partitionSoAView(PointsView& view, int32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
@@ -61,7 +61,7 @@ namespace clue {
       view.cluster_index = std::get<2>(buffers_tuple).data();
       view.n = n_points;
     }
-    template <uint8_t Ndim, std::ranges::contiguous_range... TBuffers>
+    template <std::size_t Ndim, std::ranges::contiguous_range... TBuffers>
       requires(sizeof...(TBuffers) == 2)
     inline void partitionSoAView(PointsView& view, int32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
@@ -74,7 +74,7 @@ namespace clue {
 
   }  // namespace soa::host
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   template <concepts::queue TQueue>
   inline PointsHost<Ndim>::PointsHost(TQueue& queue, int32_t n_points)
       : m_buffer{make_host_buffer<std::byte[]>(queue, soa::host::computeSoASize<Ndim>(n_points))},
@@ -83,7 +83,7 @@ namespace clue {
     soa::host::partitionSoAView<Ndim>(m_view, m_buffer->data(), n_points);
   }
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   template <concepts::queue TQueue>
   inline PointsHost<Ndim>::PointsHost(TQueue& queue, int32_t n_points, std::span<std::byte> buffer)
       : m_view{}, m_size{n_points} {
@@ -92,7 +92,7 @@ namespace clue {
     soa::host::partitionSoAView<Ndim>(m_view, buffer.data(), n_points);
   }
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
     requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
   inline PointsHost<Ndim>::PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers)
@@ -100,7 +100,7 @@ namespace clue {
     soa::host::partitionSoAView<Ndim>(m_view, n_points, std::forward<TBuffers>(buffers)...);
   }
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
     requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
   inline PointsHost<Ndim>::PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers)
@@ -108,7 +108,7 @@ namespace clue {
     soa::host::partitionSoAView<Ndim>(m_view, n_points, buffers...);
   }
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   inline PointsHost<Ndim>::Point PointsHost<Ndim>::operator[](std::size_t idx) const {
     if (idx >= static_cast<size_t>(m_size))
       throw std::out_of_range("Index out of range in PointsHost::operator[]");

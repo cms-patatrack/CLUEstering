@@ -6,7 +6,7 @@
 
 namespace clue {
 
-  template <uint8_t Ndim, typename T>
+  template <std::size_t Ndim, typename T>
   class SearchBox {
   public:
     constexpr auto& operator[](int dim) { return m_extremes[dim]; }
@@ -18,10 +18,10 @@ namespace clue {
     std::array<std::array<T, 2>, Ndim> m_extremes;
   };
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   using SearchBoxExtremes = SearchBox<Ndim, float>;
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   using SearchBoxBins = SearchBox<Ndim, int32_t>;
 
 }  // namespace clue

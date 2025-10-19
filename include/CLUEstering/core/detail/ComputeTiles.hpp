@@ -14,7 +14,7 @@
 namespace clue {
   namespace detail {
 
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     void compute_tile_size(clue::CoordinateExtremes<Ndim>* min_max,
                            float* tile_sizes,
                            const clue::PointsHost<Ndim>& h_points,
@@ -40,7 +40,7 @@ namespace clue {
       }
     }
 
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     void compute_tile_size(Queue& queue,
                            clue::CoordinateExtremes<Ndim>* min_max,
                            float* tile_sizes,

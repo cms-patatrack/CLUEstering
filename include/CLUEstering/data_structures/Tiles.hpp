@@ -18,7 +18,7 @@
 
 namespace clue {
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   class CoordinateExtremes {
   private:
     float m_data[2 * Ndim];
@@ -36,7 +36,7 @@ namespace clue {
     ALPAKA_FN_HOST_ACC float range(int i) const { return max(i) - min(i); }
   };
 
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   struct TilesAlpakaView {
     int32_t* indexes;
     int32_t* offsets;
@@ -74,7 +74,7 @@ namespace clue {
 
     ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords) const {
       int global_bin = 0;
-      for (int dim = 0; dim != Ndim - 1; ++dim) {
+      for (auto dim = 0u; dim != Ndim - 1; ++dim) {
         global_bin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) *
                       getBin(coords[dim], dim);
       }
@@ -84,7 +84,7 @@ namespace clue {
 
     ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins) const {
       int32_t globalBin = 0;
-      for (int dim = 0; dim != Ndim; ++dim) {
+      for (auto dim = 0u; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
         globalBin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
       }
@@ -93,7 +93,7 @@ namespace clue {
 
     ALPAKA_FN_ACC inline void searchBox(const SearchBoxExtremes<Ndim>& searchbox_extremes,
                                         SearchBoxBins<Ndim>& searchbox_bins) {
-      for (int dim{}; dim != Ndim; ++dim) {
+      for (auto dim = 0u; dim != Ndim; ++dim) {
         auto infBin = getBin(searchbox_extremes[dim][0], dim);
         auto supBin = getBin(searchbox_extremes[dim][1], dim);
         if (wrapping[dim] and infBin > supBin)
@@ -123,7 +123,7 @@ namespace clue {
     ALPAKA_FN_ACC inline float distance(const std::array<float, Ndim>& coord_i,
                                         const std::array<float, Ndim>& coord_j) {
       float dist_sq = 0.f;
-      for (int dim = 0; dim != Ndim; ++dim) {
+      for (auto dim = 0u; dim != Ndim; ++dim) {
         if (wrapping[dim])
           dist_sq += normalizeCoordinate(coord_i[dim] - coord_j[dim], dim) *
                      normalizeCoordinate(coord_i[dim] - coord_j[dim], dim);
@@ -134,7 +134,7 @@ namespace clue {
     }
   };
 
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   class TilesAlpaka {
   public:
     template <concepts::queue TQueue>
@@ -197,7 +197,7 @@ namespace clue {
 
       ALPAKA_FN_ACC int32_t operator()(int32_t index) const {
         float coords[Ndim];
-        for (auto dim = 0; dim < Ndim; ++dim) {
+        for (auto dim = 0u; dim < Ndim; ++dim) {
           coords[dim] = pointsView.coords[index + dim * pointsView.n];
         }
 

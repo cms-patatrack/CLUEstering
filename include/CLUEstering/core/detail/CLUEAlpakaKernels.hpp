@@ -24,17 +24,20 @@ namespace clue {
 
     constexpr int32_t reserve{1000000};
 
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     ALPAKA_FN_ACC std::array<float, Ndim> getCoords(PointsView& d_points, int32_t i) {
       std::array<float, Ndim> coords;
-      for (auto dim = 0; dim < Ndim; ++dim) {
+      for (auto dim = 0u; dim < Ndim; ++dim) {
         coords[dim] = d_points.coords[i + dim * d_points.n];
       }
 
       return coords;
     }
 
-    template <typename TAcc, uint8_t Ndim, uint8_t N_, concepts::convolutional_kernel KernelType>
+    template <typename TAcc,
+              std::size_t Ndim,
+              std::size_t N_,
+              concepts::convolutional_kernel KernelType>
     ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
                                           VecArray<int32_t, Ndim>& base_vec,
                                           const clue::SearchBoxBins<Ndim>& search_box,
@@ -71,7 +74,7 @@ namespace clue {
     }
 
     struct KernelCalculateLocalDensity {
-      template <typename TAcc, uint8_t Ndim, concepts::convolutional_kernel KernelType>
+      template <typename TAcc, std::size_t Ndim, concepts::convolutional_kernel KernelType>
       ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                     TilesAlpakaView<Ndim> dev_tiles,
                                     PointsView dev_points,
@@ -83,7 +86,7 @@ namespace clue {
           auto coords_i = getCoords<Ndim>(dev_points, i);
 
           clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-          for (int dim{}; dim != Ndim; ++dim) {
+          for (auto dim = 0u; dim != Ndim; ++dim) {
             searchbox_extremes[dim] =
                 clue::nostd::make_array(coords_i[dim] - dc, coords_i[dim] + dc);
           }
@@ -100,7 +103,7 @@ namespace clue {
       }
     };
 
-    template <typename TAcc, uint8_t Ndim, uint8_t N_>
+    template <typename TAcc, std::size_t Ndim, std::size_t N_>
     ALPAKA_FN_HOST_ACC void for_recursion_nearest_higher(const TAcc& acc,
                                                          VecArray<int32_t, Ndim>& base_vec,
                                                          const clue::SearchBoxBins<Ndim>& search_box,
@@ -156,7 +159,7 @@ namespace clue {
     }
 
     struct KernelCalculateNearestHigher {
-      template <typename TAcc, uint8_t Ndim>
+      template <typename TAcc, std::size_t Ndim>
       ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                     TilesAlpakaView<Ndim> dev_tiles,
                                     PointsView dev_points,
@@ -170,7 +173,7 @@ namespace clue {
           float rho_i{dev_points.rho[i]};
 
           clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-          for (int dim{}; dim != Ndim; ++dim) {
+          for (auto dim = 0u; dim != Ndim; ++dim) {
             searchbox_extremes[dim] =
                 clue::nostd::make_array(coords_i[dim] - dm, coords_i[dim] + dm);
           }
@@ -260,7 +263,7 @@ namespace clue {
 
     using WorkDiv = clue::WorkDiv<clue::Dim1D>;
 
-    template <concepts::accelerator TAcc, concepts::queue TQueue, uint8_t Ndim, typename KernelType>
+    template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim, typename KernelType>
     inline void computeLocalDensity(TQueue& queue,
                                     const WorkDiv& work_division,
                                     TilesAlpakaView<Ndim>& tiles,
@@ -278,7 +281,7 @@ namespace clue {
                          size);
     }
 
-    template <concepts::accelerator TAcc, concepts::queue TQueue, uint8_t Ndim>
+    template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
     inline void computeNearestHighers(TQueue& queue,
                                       const WorkDiv& work_division,
                                       TilesAlpakaView<Ndim>& tiles,

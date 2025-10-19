@@ -18,7 +18,7 @@ namespace clue {
   /// It provides methods to allocate, access, and manipulate points in host memory.
   ///
   /// @tparam Ndim The number of dimensions of the points to manage
-  template <uint8_t Ndim>
+  template <std::size_t Ndim>
   class PointsHost : public internal::points_interface<PointsHost<Ndim>> {
   private:
     std::optional<host_buffer<std::byte[]>> m_buffer;
@@ -100,13 +100,13 @@ namespace clue {
     Point operator[](std::size_t idx) const;
 
   private:
-    inline static constexpr uint8_t Ndim_ = Ndim;
+    inline static constexpr std::size_t Ndim_ = Ndim;
 
-    template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
+    template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue& queue,
                            PointsHost<_Ndim>& h_points,
                            const PointsDevice<_Ndim, _TDev>& d_points);
-    template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
+    template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
     friend void copyToDevice(_TQueue& queue,
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);

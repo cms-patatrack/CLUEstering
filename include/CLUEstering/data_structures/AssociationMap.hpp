@@ -193,7 +193,7 @@ namespace clue {
     template <concepts::device _TDev>
     friend class Followers;
 
-    template <uint8_t Ndim, concepts::device _TDev>
+    template <std::size_t Ndim, concepts::device _TDev>
     friend class TilesAlpaka;
 
     template <concepts::queue _TQueue>
