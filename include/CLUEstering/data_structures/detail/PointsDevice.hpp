@@ -16,7 +16,7 @@ namespace clue {
 
   namespace soa::device {
 
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     inline auto computeSoASize(int32_t n_points) {
       if (n_points <= 0) {
         throw std::invalid_argument(
@@ -25,7 +25,7 @@ namespace clue {
       return ((Ndim + 3) * sizeof(float) + 3 * sizeof(int)) * n_points;
     }
 
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     inline void partitionSoAView(PointsView& view, std::byte* buffer, int32_t n_points) {
       view.coords = reinterpret_cast<float*>(buffer);
       view.weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
@@ -36,7 +36,7 @@ namespace clue {
       view.nearest_higher = reinterpret_cast<int*>(buffer + (Ndim + 5) * n_points * sizeof(float));
       view.n = n_points;
     }
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     inline void partitionSoAView(PointsView& view,
                                  std::byte* alloc_buffer,
                                  std::byte* buffer,
@@ -50,7 +50,7 @@ namespace clue {
       view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(float));
       view.n = n_points;
     }
-    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
+    template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 4)
     inline void partitionSoAView(PointsView& view,
                                  std::byte* alloc_buffer,
@@ -67,7 +67,7 @@ namespace clue {
       view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
       view.n = n_points;
     }
-    template <uint8_t Ndim, concepts::contiguous_raw_data... TBuffers>
+    template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2)
     inline void partitionSoAView(PointsView& view,
                                  std::byte* alloc_buffer,
@@ -87,7 +87,7 @@ namespace clue {
 
   }  // namespace soa::device
 
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   template <concepts::queue TQueue>
   inline PointsDevice<Ndim, TDev>::PointsDevice(TQueue& queue, int32_t n_points)
       : m_buffer{make_device_buffer<std::byte[]>(queue,
@@ -97,7 +97,7 @@ namespace clue {
     soa::device::partitionSoAView<Ndim>(m_view, m_buffer.data(), n_points);
   }
 
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   template <concepts::queue TQueue>
   inline PointsDevice<Ndim, TDev>::PointsDevice(TQueue& queue,
                                                 int32_t n_points,
@@ -108,7 +108,7 @@ namespace clue {
     soa::device::partitionSoAView<Ndim>(m_view, m_buffer.data(), buffer.data(), n_points);
   }
 
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
     requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
   inline PointsDevice<Ndim, TDev>::PointsDevice(TQueue& queue,
@@ -120,38 +120,38 @@ namespace clue {
     soa::device::partitionSoAView<Ndim>(m_view, m_buffer.data(), n_points, buffers...);
   }
 
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::rho() const {
     return std::span<const float>(m_view.rho, m_size);
   }
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::rho() {
     return std::span<float>(m_view.rho, m_size);
   }
 
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::delta() const {
     return std::span<const float>(m_view.delta, m_size);
   }
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::delta() {
     return std::span<float>(m_view.delta, m_size);
   }
 
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::nearestHigher() const {
     return std::span<const int>(m_view.nearest_higher, m_size);
   }
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::nearestHigher() {
     return std::span<int>(m_view.nearest_higher, m_size);
   }
 
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::isSeed() const {
     return std::span<const int>(m_view.is_seed, m_size);
   }
-  template <uint8_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::isSeed() {
     return std::span<int>(m_view.is_seed, m_size);
   }

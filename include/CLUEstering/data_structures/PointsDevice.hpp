@@ -21,7 +21,7 @@ namespace clue {
   ///
   /// @tparam Ndim The number of dimensions of the points to manage
   /// @tparam TDev The device type to use for the allocation. Defaults to clue::Device.
-  template <uint8_t Ndim, concepts::device TDev = clue::Device>
+  template <std::size_t Ndim, concepts::device TDev = clue::Device>
   class PointsDevice : public internal::points_interface<PointsDevice<Ndim, TDev>> {
   private:
     device_buffer<TDev, std::byte[]> m_buffer;
@@ -110,13 +110,13 @@ namespace clue {
     ALPAKA_FN_HOST auto isSeed();
 
   private:
-    inline static constexpr uint8_t Ndim_ = Ndim;
+    inline static constexpr std::size_t Ndim_ = Ndim;
 
-    template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
+    template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue& queue,
                            PointsHost<_Ndim>& h_points,
                            const PointsDevice<_Ndim, _TDev>& d_points);
-    template <concepts::queue _TQueue, uint8_t _Ndim, concepts::device _TDev>
+    template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
     friend void copyToDevice(_TQueue& queue,
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);

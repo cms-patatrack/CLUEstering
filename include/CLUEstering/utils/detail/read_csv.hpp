@@ -11,7 +11,7 @@
 #include <string>
 
 namespace clue {
-  template <size_t NDim, concepts::queue TQueue>
+  template <std::size_t NDim, concepts::queue TQueue>
   inline clue::PointsHost<NDim> read_csv(TQueue& queue, const std::string& file_path) {
     std::fstream file(file_path);
     if (!file.is_open()) {
@@ -45,7 +45,7 @@ namespace clue {
     return points;
   }
 
-  template <size_t NDim, concepts::queue TQueue>
+  template <std::size_t NDim, concepts::queue TQueue>
   inline clue::PointsHost<NDim> read_output(TQueue& queue, const std::string& file_path) {
     std::fstream file(file_path);
     if (!file.is_open()) {

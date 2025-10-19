@@ -15,7 +15,7 @@
 
 #include "doctest.h"
 
-template <uint8_t Ndim>
+template <std::size_t Ndim>
 struct KernelCompareDevicePoints {
   template <typename TAcc>
   ALPAKA_FN_ACC void operator()(
@@ -34,7 +34,7 @@ struct KernelCompareDevicePoints {
   }
 };
 
-template <std::ranges::range TRange, uint8_t Ndim>
+template <std::ranges::range TRange, std::size_t Ndim>
 ALPAKA_FN_HOST bool compareDevicePoints(clue::Queue queue,
                                         TRange&& h_coords,
                                         TRange&& h_weights,
