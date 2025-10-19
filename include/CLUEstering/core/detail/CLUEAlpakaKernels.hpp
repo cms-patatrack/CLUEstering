@@ -34,7 +34,10 @@ namespace clue {
       return coords;
     }
 
-    template <typename TAcc, std::size_t Ndim, std::size_t N_, concepts::convolutional_kernel KernelType>
+    template <typename TAcc,
+              std::size_t Ndim,
+              std::size_t N_,
+              concepts::convolutional_kernel KernelType>
     ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
                                           VecArray<int32_t, Ndim>& base_vec,
                                           const clue::SearchBoxBins<Ndim>& search_box,

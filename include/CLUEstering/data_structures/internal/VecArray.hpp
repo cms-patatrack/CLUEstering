@@ -9,7 +9,7 @@
 
 namespace clue {
 
-  template <class T, int maxSize>
+  template <class T, std::size_t maxSize>
   struct VecArray {
     inline constexpr int push_back_unsafe(const T& element) {
       auto previousSize = m_size;
@@ -46,12 +46,12 @@ namespace clue {
     // thread-safe version of the vector, when used in a CUDA kernel
     template <typename T_Acc>
     ALPAKA_FN_ACC int push_back(const T_Acc& acc, const T& element) {
-      auto previousSize = atomicAdd(acc, &m_size, 1, alpaka::hierarchy::Blocks{});
+      auto previousSize = atomicAdd(acc, &m_size, 1ul, alpaka::hierarchy::Blocks{});
       if (previousSize < maxSize) {
         m_data[previousSize] = element;
         return previousSize;
       } else {
-        atomicSub(acc, &m_size, 1, alpaka::hierarchy::Blocks{});
+        atomicSub(acc, &m_size, 1ul, alpaka::hierarchy::Blocks{});
         assert(("Too few elemets reserved"));
         return -1;
       }
@@ -59,12 +59,12 @@ namespace clue {
 
     template <typename T_Acc, class... Ts>
     ALPAKA_FN_ACC int emplace_back(const T_Acc& acc, Ts&&... args) {
-      auto previousSize = atomicAdd(acc, &m_size, 1, alpaka::hierarchy::Blocks{});
+      auto previousSize = atomicAdd(acc, &m_size, 1ul, alpaka::hierarchy::Blocks{});
       if (previousSize < maxSize) {
         (new (&m_data[previousSize]) T(std::forward<Ts>(args)...));
         return previousSize;
       } else {
-        atomicSub(acc, &m_size, 1, alpaka::hierarchy::Blocks{});
+        atomicSub(acc, &m_size, 1ul, alpaka::hierarchy::Blocks{});
         return -1;
       }
     }
@@ -93,7 +93,7 @@ namespace clue {
     inline constexpr bool empty() const { return 0 == m_size; }
     inline constexpr bool full() const { return maxSize == m_size; }
 
-    int m_size = 0;
+    std::size_t m_size = 0;
 
     T m_data[maxSize];
   };
