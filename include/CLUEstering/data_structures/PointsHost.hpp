@@ -22,7 +22,7 @@ namespace clue {
   class PointsHost : public internal::points_interface<PointsHost<Ndim>> {
   private:
     std::optional<host_buffer<std::byte[]>> m_buffer;
-    PointsView m_view;
+    PointsView<Ndim> m_view;
     int32_t m_size;
 
   public:

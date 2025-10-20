@@ -27,6 +27,10 @@ namespace clue {
 
     template <std::size_t Ndim>
     inline void partitionSoAView(PointsView& view, std::byte* buffer, int32_t n_points) {
+      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
+        ((view.coords[Dims] = reinterpret_cast<float*>(buffer + Dims * n_points * sizeof(float))),
+         ...);
+      }(std::make_index_sequence<Ndim>{});
       view.coords = reinterpret_cast<float*>(buffer);
       view.weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
       view.cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
@@ -37,11 +41,14 @@ namespace clue {
       view.n = n_points;
     }
     template <std::size_t Ndim>
-    inline void partitionSoAView(PointsView& view,
+    inline void partitionSoAView(PointsView<Ndim>& view,
                                  std::byte* alloc_buffer,
                                  std::byte* buffer,
                                  int32_t n_points) {
-      view.coords = reinterpret_cast<float*>(buffer);
+      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
+        ((view.coords[Dims] = reinterpret_cast<float*>(buffer + Dims * n_points * sizeof(float))),
+         ...);
+      }(std::make_index_sequence<Ndim>{});
       view.weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
       view.cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
       view.is_seed = reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
@@ -52,13 +59,17 @@ namespace clue {
     }
     template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 4)
-    inline void partitionSoAView(PointsView& view,
+    inline void partitionSoAView(PointsView<Ndim>& view,
                                  std::byte* alloc_buffer,
                                  int32_t n_points,
                                  TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
 
-      view.coords = std::get<0>(buffers_tuple);
+      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
+        ((view.coords[Dims] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) +
+                                                       Dims * n_points * sizeof(float))),
+         ...);
+      }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<1>(buffers_tuple);
       view.cluster_index = std::get<2>(buffers_tuple);
       view.is_seed = std::get<3>(buffers_tuple);
@@ -69,15 +80,39 @@ namespace clue {
     }
     template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
       requires(sizeof...(TBuffers) == 2)
-    inline void partitionSoAView(PointsView& view,
+    inline void partitionSoAView(PointsView<Ndim>& view,
                                  std::byte* alloc_buffer,
                                  int32_t n_points,
                                  TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
 
-      view.coords = std::get<0>(buffers_tuple);
+      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
+        ((view.coords[Dims] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) +
+                                                       Dims * n_points * sizeof(float))),
+         ...);
+      }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<0>(buffers_tuple) + Ndim * n_points;
       view.cluster_index = std::get<1>(buffers_tuple);
+      view.is_seed = std::get<1>(buffers_tuple) + n_points;
+      view.rho = reinterpret_cast<float*>(alloc_buffer);
+      view.delta = reinterpret_cast<float*>(alloc_buffer + sizeof(float) * n_points);
+      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
+      view.n = n_points;
+    }
+    template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
+      requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
+    inline void partitionSoAView(PointsView<Ndim>& view,
+                                 std::byte* alloc_buffer,
+                                 int32_t n_points,
+                                 TBuffers... buffers) {
+      auto buffers_tuple = std::make_tuple(buffers...);
+
+      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
+        ((view.coords[Dims] = (std::get<Dims>(buffers_tuple) + Dims * n_points * sizeof(float))),
+         ...);
+      }(std::make_index_sequence<Ndim>{});
+      view.weight = std::get<Ndim>(buffers_tuple) + Ndim * n_points;
+      view.cluster_index = std::get<Ndim + 1>(buffers_tuple);
       view.is_seed = std::get<1>(buffers_tuple) + n_points;
       view.rho = reinterpret_cast<float*>(alloc_buffer);
       view.delta = reinterpret_cast<float*>(alloc_buffer + sizeof(float) * n_points);
