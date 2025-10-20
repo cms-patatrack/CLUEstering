@@ -26,7 +26,7 @@ namespace clue {
     }
 
     template <std::size_t Ndim>
-    inline void partitionSoAView(PointsView& view, std::byte* buffer, int32_t n_points) {
+    inline void partitionSoAView(PointsView<Ndim>& view, std::byte* buffer, int32_t n_points) {
       [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
         ((view.coords[Dims] = reinterpret_cast<float*>(buffer + Dims * n_points * sizeof(float))),
          ...);
@@ -38,7 +38,7 @@ namespace clue {
       view.rho = reinterpret_cast<float*>(buffer + (Ndim + 3) * n_points * sizeof(float));
       view.delta = reinterpret_cast<float*>(buffer + (Ndim + 4) * n_points * sizeof(float));
       view.nearest_higher = reinterpret_cast<int*>(buffer + (Ndim + 5) * n_points * sizeof(float));
-      view.n = n_points;
+      view.n = n_points
     }
     template <std::size_t Ndim>
     inline void partitionSoAView(PointsView<Ndim>& view,
