@@ -31,7 +31,7 @@ namespace clue::detail {
 
     std::array<float, Ndim> coords;
     for (auto dim = 0; dim < Ndim; ++dim) {
-      coords[dim] = d_points.coords[i + dim * d_points.n];
+      coords[dim] = d_points.coords[dim][i];
     }
 
     return coords;
@@ -238,7 +238,7 @@ namespace clue::detail {
   };
 
   struct KernelAssignClusters {
-    template <typename TAcc>
+    template <typename TAcc, std::size_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
                                   clue::FollowersView followers,
@@ -315,7 +315,7 @@ namespace clue::detail {
         queue, work_division, KernelFindClusters{}, seeds, tiles, dev_points, seed_dc, rhoc, size);
   }
 
-  template <concepts::accelerator TAcc, concepts::queue TQueue>
+  template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
   inline void assignPointsToClusters(TQueue& queue,
                                      std::size_t block_size,
                                      VecArray<int32_t, reserve>* seeds,

@@ -192,7 +192,7 @@ namespace clue {
     }
 
     struct GetGlobalBin {
-      PointsView pointsView;
+      PointsView<Ndim> pointsView;
       TilesAlpakaView<Ndim> tilesView;
 
       ALPAKA_FN_ACC int32_t operator()(int32_t index) const {

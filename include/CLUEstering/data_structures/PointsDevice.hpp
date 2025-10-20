@@ -64,12 +64,6 @@ namespace clue {
     /// @brief Returns the number of points
     /// @return The number of points
     ALPAKA_FN_HOST int32_t size() const;
-    /// @brief Returns the coordinates of the points as a const span
-    /// @return A const span of the coordinates of the points
-    ALPAKA_FN_HOST auto coords() const;
-    /// @brief Returns the coordinates of the points as a span
-    /// @return A span of the coordinates of the points
-    ALPAKA_FN_HOST auto coords();
     /// @brief Returns the coordinates of the points for a specific dimension as a const span
     /// @param dim The dimension for which to get the coordinates
     /// @return A const span of the coordinates for the specified dimension

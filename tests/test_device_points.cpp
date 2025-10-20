@@ -19,7 +19,7 @@ template <std::size_t Ndim>
 struct KernelCompareDevicePoints {
   template <typename TAcc>
   ALPAKA_FN_ACC void operator()(
-      const TAcc& acc, clue::PointsView view, float* d_input, uint32_t size, int* result) const {
+      const TAcc& acc, clue::PointsView<Ndim> view, float* d_input, uint32_t size, int* result) const {
     if (alpaka::oncePerGrid(acc))
       *result = 1;
     for (auto i : alpaka::uniformElements(acc, size)) {
@@ -41,13 +41,13 @@ ALPAKA_FN_HOST bool compareDevicePoints(clue::Queue queue,
                                         clue::PointsDevice<Ndim>& d_points,
                                         uint32_t size) {
   auto h_points = clue::PointsHost<Ndim>(queue, size);
-  std::ranges::copy(h_coords, h_points.coords().begin());
+  std::ranges::copy(h_coords, h_points.coords(0).begin());
   std::ranges::copy(h_weights, h_points.weights().begin());
   clue::copyToDevice(queue, d_points, h_points);
 
   // define buffers for comparison
   auto d_input = clue::make_device_buffer<float[]>(queue, (Ndim + 1) * size);
-  alpaka::memcpy(queue, d_input, clue::make_host_view(h_points.coords().data(), (Ndim + 1) * size));
+  alpaka::memcpy(queue, d_input, clue::make_host_view(h_points.coords(0).data(), (Ndim + 1) * size));
 
   auto d_comparison_result = clue::make_device_buffer<int>(queue);
   const auto blocksize = 512;
@@ -146,7 +146,7 @@ TEST_CASE("Test extrema functions on device points column") {
   std::iota(data.begin(), data.end(), 0.0f);
 
   clue::PointsHost<2> h_points(queue, 1000);
-  std::ranges::copy(data, h_points.coords().begin());
+  std::ranges::copy(data, h_points.coords(0).begin());
   std::ranges::copy(data, h_points.weights().begin());
 
   clue::PointsDevice<2> d_points(queue, size);
@@ -169,7 +169,7 @@ TEST_CASE("Test reduction of device points column") {
   std::iota(data.begin(), data.end(), 0.0f);
 
   clue::PointsHost<2> h_points(queue, 1000);
-  std::ranges::copy(data, h_points.coords().begin());
+  std::ranges::copy(data, h_points.coords(0).begin());
   std::ranges::copy(data, h_points.weights().begin());
 
   clue::PointsDevice<2> d_points(queue, size);

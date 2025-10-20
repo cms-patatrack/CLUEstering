@@ -163,7 +163,7 @@ namespace clue {
 
     std::array<float, Ndim> coords;
     for (size_t dim = 0; dim < Ndim; ++dim) {
-      coords[dim] = m_view.coords[dim * m_size + idx];
+      coords[dim] = m_view.coords[0][dim * m_size + idx];
     }
     return Point(coords, m_view.weight[idx], m_view.cluster_index[idx]);
   }

@@ -31,14 +31,13 @@ namespace clue {
         ((view.coords[Dims] = reinterpret_cast<float*>(buffer + Dims * n_points * sizeof(float))),
          ...);
       }(std::make_index_sequence<Ndim>{});
-      view.coords = reinterpret_cast<float*>(buffer);
       view.weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
       view.cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
       view.is_seed = reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
       view.rho = reinterpret_cast<float*>(buffer + (Ndim + 3) * n_points * sizeof(float));
       view.delta = reinterpret_cast<float*>(buffer + (Ndim + 4) * n_points * sizeof(float));
       view.nearest_higher = reinterpret_cast<int*>(buffer + (Ndim + 5) * n_points * sizeof(float));
-      view.n = n_points
+      view.n = n_points;
     }
     template <std::size_t Ndim>
     inline void partitionSoAView(PointsView<Ndim>& view,
@@ -145,7 +144,8 @@ namespace clue {
 
   template <std::size_t Ndim, concepts::device TDev>
   template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-    requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+    requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4 ||
+             (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
   inline PointsDevice<Ndim, TDev>::PointsDevice(TQueue& queue,
                                                 int32_t n_points,
                                                 TBuffers... buffers)
