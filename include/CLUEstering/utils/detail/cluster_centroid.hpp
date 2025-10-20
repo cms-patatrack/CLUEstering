@@ -50,7 +50,8 @@ namespace clue {
                       [=, &centroids](auto&& tuple) -> void {
                         const auto coord = std::get<0>(tuple);
                         const auto point_cluster = std::get<1>(tuple);
-                        centroids[point_cluster][dim] += coord;
+                        if (point_cluster >= 0)
+                          centroids[point_cluster][dim] += coord;
                       });
       std::ranges::for_each(centroids, [&, dim, cl = 0](auto& centroid) mutable {
         const auto size = clusters.count(cl);
