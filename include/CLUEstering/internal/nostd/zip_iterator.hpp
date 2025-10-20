@@ -13,16 +13,16 @@ namespace clue {
     class zip_iterator {
     public:
       using value_type = std::tuple<typename std::iter_value_t<Iterators>...>;
-      using difference_type = int;
+      using difference_type = std::ptrdiff_t;
       using pointer = void;
-      using reference_type = std::tuple<typename std::iter_reference_t<Iterators>...>;
+      using reference = std::tuple<typename std::iter_reference_t<Iterators>...>;
       using iterator_category = std::random_access_iterator_tag;
 
     private:
       std::tuple<Iterators...> m_iterators;
 
       template <std::size_t... Indexes>
-      reference_type accessor_impl(std::size_t idx, std::index_sequence<Indexes...>) {
+      reference accessor_impl(std::size_t idx, std::index_sequence<Indexes...>) {
         return std::tie(std::get<Indexes>(m_iterators)[idx]...);
       }
 
@@ -32,7 +32,7 @@ namespace clue {
       }
 
       template <std::size_t... Indexes>
-      reference_type dereference_impl(std::index_sequence<Indexes...>) {
+      reference dereference_impl(std::index_sequence<Indexes...>) {
         return std::tie(*std::get<Indexes>(m_iterators)...);
       }
 
@@ -65,15 +65,13 @@ namespace clue {
       zip_iterator(Iterators... iterators) : m_iterators{std::make_tuple(iterators...)} {}
       zip_iterator(const std::tuple<Iterators...>& tuple) : m_iterators{tuple} {}
 
-      reference_type operator[](std::size_t idx) {
+      reference operator[](std::size_t idx) {
         return accessor_impl(idx, std::index_sequence_for<Iterators...>());
       }
       value_type operator[](std::size_t idx) const {
         return accessor_impl(idx, std::index_sequence_for<Iterators...>());
       }
-      reference_type operator*() {
-        return dereference_impl(std::index_sequence_for<Iterators...>());
-      }
+      reference operator*() { return dereference_impl(std::index_sequence_for<Iterators...>()); }
       value_type operator*() const {
         return dereference_impl(std::index_sequence_for<Iterators...>());
       }
