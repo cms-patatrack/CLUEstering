@@ -120,17 +120,17 @@ namespace clue {
       return remainder;
     }
 
-    ALPAKA_FN_ACC inline float distance(const std::array<float, Ndim>& coord_i,
-                                        const std::array<float, Ndim>& coord_j) {
-      float dist_sq = 0.f;
+    ALPAKA_FN_ACC inline auto distance(const std::array<float, Ndim>& coord_i,
+                                       const std::array<float, Ndim>& coord_j) const {
+      std::array<float, Ndim> distance_vector;
       for (auto dim = 0u; dim != Ndim; ++dim) {
         if (wrapping[dim])
-          dist_sq += normalizeCoordinate(coord_i[dim] - coord_j[dim], dim) *
-                     normalizeCoordinate(coord_i[dim] - coord_j[dim], dim);
+          distance_vector[dim] =
+              internal::math::fabs(normalizeCoordinate(coord_i[dim] - coord_j[dim], dim));
         else
-          dist_sq += (coord_i[dim] - coord_j[dim]) * (coord_i[dim] - coord_j[dim]);
+          distance_vector[dim] = internal::math::fabs(coord_i[dim] - coord_j[dim]);
       }
-      return dist_sq;
+      return distance_vector;
     }
   };
 

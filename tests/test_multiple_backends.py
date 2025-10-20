@@ -83,7 +83,7 @@ def test_moons_clustering(moons):
         if os.path.isfile(f'./moons_output_{_fill_space(backend)}.csv'):
             os.remove(f'./moons_output_{_fill_space(backend)}.csv')
 
-        c = clue.clusterer(70., 5., 175.)
+        c = clue.clusterer(50., 5., 120.)
         c.read_data(moons)
         c.run_clue(backend=backend)
         c.to_csv('./', f'moons_output_{_fill_space(backend)}.csv')
@@ -103,7 +103,7 @@ def test_sissa_clustering(sissa):
         if os.path.isfile(f'./sissa_output_{_fill_space(backend)}.csv'):
             os.remove(f'./sissa_output_{_fill_space(backend)}.csv')
 
-        c = clue.clusterer(20., 10., 20.)
+        c = clue.clusterer(21., 10., 21.)
         c.read_data(sissa)
         c.run_clue(backend=backend)
         c.to_csv('./', f'sissa_output_{_fill_space(backend)}.csv')
@@ -123,7 +123,7 @@ def test_toydet_clustering(toy_det):
         if os.path.isfile(f'./toy_det_output_{_fill_space(backend)}.csv'):
             os.remove(f'./toy_det_output_{_fill_space(backend)}.csv')
 
-        c = clue.clusterer(4.5, 2.5, 4.5)
+        c = clue.clusterer(4., 2.5, 4.)
         c.read_data(toy_det)
         c.run_clue(backend=backend)
         c.to_csv('./', f'toy_det_output_{_fill_space(backend)}.csv')
@@ -138,17 +138,17 @@ if __name__ == "__main__":
     c.run_clue()
     c.cluster_plotter()
 
-    c = clue.clusterer(70., 5., 175.)
+    c = clue.clusterer(50., 5., 120.)
     c.read_data("../data/moons.csv")
     c.run_clue()
     c.cluster_plotter()
 
-    c = clue.clusterer(20., 10., 20.)
+    c = clue.clusterer(21., 10., 21.)
     c.read_data("../data/sissa.csv")
     c.run_clue()
     c.cluster_plotter()
 
-    c = clue.clusterer(4.5, 2.5, 4.5)
+    c = clue.clusterer(4., 2.5, 4.)
     c.read_data("../data/toyDetector.csv")
     c.run_clue()
     c.cluster_plotter()

@@ -16,7 +16,7 @@ TEST_CASE("Test make_cluster interfaces") {
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
-  const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
+  const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
   const std::size_t block_size{256};
 

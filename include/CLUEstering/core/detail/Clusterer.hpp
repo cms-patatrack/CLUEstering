@@ -2,8 +2,9 @@
 #pragma once
 
 #include "CLUEstering/core/Clusterer.hpp"
+#include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
-#include "CLUEstering/core/detail/CLUEAlpakaKernels.hpp"
+#include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
@@ -23,48 +24,32 @@
 namespace clue {
 
   template <std::size_t Ndim>
-  inline Clusterer<Ndim>::Clusterer(float dc, float rhoc, float dm, float seed_dc, int pPBin)
-      : m_dc{dc},
-        m_seed_dc{seed_dc},
+  Clusterer<Ndim>::Clusterer(DistanceParameter<Ndim> dc,
+                             float rhoc,
+                             DistanceParameter<Ndim> dm,
+                             DistanceParameter<Ndim> seed_dc,
+                             int pPBin)
+      : m_dc{std::move(dc)},
+        m_seed_dc{std::move(seed_dc)},
         m_rhoc{rhoc},
-        m_dm{dm},
+        m_dm{std::move(dm)},
         m_pointsPerTile{pPBin},
         m_wrappedCoordinates{} {
-    if (dc <= 0.f || rhoc < 0.f || dm < 0.f || pPBin <= 0) {
+    if (dc <= 0.f || rhoc <= 0.f || dm <= 0.f || pPBin <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
     if (seed_dc < 0.f) {
       m_seed_dc = dc;
     }
-  }
-
-  template <std::size_t Ndim>
-  inline Clusterer<Ndim>::Clusterer(
-      Queue& queue, float dc, float rhoc, float dm, float seed_dc, int pPBin)
-      : m_dc{dc},
-        m_seed_dc{seed_dc},
-        m_rhoc{rhoc},
-        m_dm{dm},
-        m_pointsPerTile{pPBin},
-        m_wrappedCoordinates{} {
-    if (dc <= 0.f || rhoc < 0.f || dm < 0.f || pPBin <= 0) {
-      throw std::invalid_argument(
-          "Invalid clustering parameters. The parameters must be positive.");
-    }
-    if (seed_dc < 0.f) {
-      m_seed_dc = dc;
-    }
-    init_device(queue);
   }
 
   template <std::size_t Ndim>
   inline Clusterer<Ndim>::Clusterer(Queue& queue,
-                                    TilesDevice* tile_buffer,
-                                    float dc,
+                                    DistanceParameter<Ndim> dc,
                                     float rhoc,
-                                    float dm,
-                                    float seed_dc,
+                                    DistanceParameter<Ndim> dm,
+                                    DistanceParameter<Ndim> seed_dc,
                                     int pPBin)
       : m_dc{dc},
         m_seed_dc{seed_dc},
@@ -72,14 +57,14 @@ namespace clue {
         m_dm{dm},
         m_pointsPerTile{pPBin},
         m_wrappedCoordinates{} {
-    if (dc <= 0.f || rhoc < 0.f || dm < 0.f || pPBin <= 0) {
+    if (dc <= 0.f || rhoc <= 0.f || dm <= 0.f || pPBin <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
     if (seed_dc < 0.f) {
       m_seed_dc = dc;
     }
-    init_device(queue, tile_buffer);
+    init_device(queue);
   }
 
   template <std::size_t Ndim>
@@ -291,8 +276,14 @@ namespace clue {
         queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
     detail::computeNearestHighers<Acc>(
         queue, work_division, m_tiles->view(), dev_points.view(), m_dm, n_points);
-    detail::findClusterSeeds<Acc>(
-        queue, work_division, m_seeds->data(), dev_points.view(), m_seed_dc, m_rhoc, n_points);
+    detail::findClusterSeeds<Acc>(queue,
+                                  work_division,
+                                  m_seeds->data(),
+                                  m_tiles->view(),
+                                  dev_points.view(),
+                                  m_seed_dc,
+                                  m_rhoc,
+                                  n_points);
 
     m_followers->template fill<Acc>(queue, dev_points);
 
@@ -318,8 +309,14 @@ namespace clue {
         queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
     detail::computeNearestHighers<Acc>(
         queue, work_division, m_tiles->view(), dev_points.view(), m_dm, n_points);
-    detail::findClusterSeeds<Acc>(
-        queue, work_division, m_seeds->data(), dev_points.view(), m_seed_dc, m_rhoc, n_points);
+    detail::findClusterSeeds<Acc>(queue,
+                                  work_division,
+                                  m_seeds->data(),
+                                  m_tiles->view(),
+                                  dev_points.view(),
+                                  m_seed_dc,
+                                  m_rhoc,
+                                  n_points);
 
     m_followers->template fill<Acc>(queue, dev_points);
 

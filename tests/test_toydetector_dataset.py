@@ -30,7 +30,7 @@ def test_clustering(toy_det):
     if os.path.isfile('./toy_det_output.csv'):
         os.remove('./toy_det_output.csv')
 
-    c = clue.clusterer(4.5, 2.5, 4.5)
+    c = clue.clusterer(4., 2.5, 4.)
     c.read_data(toy_det)
     c.run_clue()
     c.to_csv('./', 'toy_det_output.csv')
@@ -40,7 +40,7 @@ def test_clustering(toy_det):
 
 
 if __name__ == "__main__":
-    c = clue.clusterer(4.5, 2.5, 4.5)
+    c = clue.clusterer(4., 2.5, 4.)
     c.read_data("../data/toyDetector.csv")
     c.run_clue()
     c.cluster_plotter()
