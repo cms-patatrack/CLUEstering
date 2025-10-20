@@ -25,7 +25,7 @@ namespace clue {
   class PointsDevice : public internal::points_interface<PointsDevice<Ndim, TDev>> {
   private:
     device_buffer<TDev, std::byte[]> m_buffer;
-    PointsView m_view;
+    PointsView<Ndim> m_view;
     int32_t m_size;
 
   public:
@@ -50,7 +50,8 @@ namespace clue {
     /// @param n_points The number of points to allocate
     /// @param buffers The buffers to use for the points
     template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4 ||
+               (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
     PointsDevice(TQueue& queue, int32_t n_points, TBuffers... buffers);
 
     PointsDevice(const PointsDevice&) = delete;

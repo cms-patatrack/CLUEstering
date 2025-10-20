@@ -46,11 +46,13 @@ namespace clue {
     PointsHost(TQueue& queue, int32_t n_points, std::span<std::byte> buffer);
 
     template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
+               (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
     PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers);
 
     template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
+               (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
     PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers);
 
     PointsHost(const PointsHost&) = delete;
