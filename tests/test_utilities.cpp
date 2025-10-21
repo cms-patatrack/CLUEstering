@@ -64,7 +64,7 @@ TEST_CASE("Test validation utilities") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/data_32768.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/data_32768.csv");
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 

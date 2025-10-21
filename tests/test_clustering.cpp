@@ -94,7 +94,7 @@ TEST_CASE("Test clustering on blob dataset") {
   algo.make_clusters(queue, h_points, d_points);
   auto clusters = h_points.clusterIndexes();
 
-  const auto truth_data = clue::read_output<3>(queue, "../../../data/truth_files/blobs_truth.csv");
+  auto truth_data = clue::read_output<3>(queue, "../../../data/truth_files/blobs_truth.csv");
   auto truth_ids = truth_data.clusterIndexes();
   CHECK(clue::validate_results(clusters, truth_ids));
 }
