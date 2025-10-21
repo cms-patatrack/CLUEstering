@@ -165,7 +165,13 @@ namespace clue {
 
   template <std::size_t Ndim>
   inline host_associator Clusterer<Ndim>::getClusters(const PointsHost& h_points) {
-    return clue::get_clusters(h_points.clusterIndexes());
+    return clue::get_clusters(h_points);
+  }
+
+  template <std::size_t Ndim>
+  inline AssociationMap<Device> Clusterer<Ndim>::getClusters(Queue& queue,
+                                                             const PointsDevice& d_points) {
+    return clue::get_clusters(queue, d_points);
   }
 
   template <std::size_t Ndim>

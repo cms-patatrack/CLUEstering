@@ -15,7 +15,7 @@ namespace clue {
   inline Centroid<Ndim> cluster_centroid(const clue::PointsHost<Ndim>& points,
                                          std::size_t cluster_id) {
     auto cluster_ids = points.clusterIndexes();
-    auto clusters = get_clusters(cluster_ids);
+    auto clusters = get_clusters(points);
     // TODO: add error handling
     Centroid<Ndim> centroid;
     auto size = clusters.count(cluster_id);
@@ -39,7 +39,7 @@ namespace clue {
   template <std::size_t Ndim>
   inline Centroids<Ndim> cluster_centroids(const clue::PointsHost<Ndim>& points) {
     auto cluster_ids = points.clusterIndexes();
-    auto clusters = get_clusters(cluster_ids);
+    auto clusters = get_clusters(points);
     const auto n_clusters = clusters.size();
 
     Centroids<Ndim> centroids(n_clusters);

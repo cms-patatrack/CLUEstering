@@ -8,13 +8,13 @@
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
+#include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/Tiles.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 
 #include <cstdint>
-#include <vector>
 
 namespace clue {
 
@@ -204,9 +204,15 @@ namespace clue {
 
     /// @brief Get the clusters from the host points
     ///
-    /// @param h_points Host points to cluster
-    /// @return A vector of clusters, where each cluster is a vector of point indices
+    /// @param h_points Host points
+    /// @return An associator mapping clusters and points
     host_associator getClusters(const PointsHost& h_points);
+    /// @brief Get the clusters from the device points
+    /// This function returns an associator object mapping the clusters to the points they contain.
+    ///
+    /// @param d_points Device points
+    /// @return An associator mapping clusters and points
+    AssociationMap<Device> getClusters(Queue& queue, const PointsDevice& d_points);
   };
 
 }  // namespace clue
