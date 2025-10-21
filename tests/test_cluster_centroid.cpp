@@ -39,6 +39,6 @@ TEST_CASE("Test computation of all cluster centroids") {
 
   algo.make_clusters(queue, h_points, d_points);
   auto centroids = clue::cluster_centroids(h_points);
-  auto clusters = clue::compute_clusters_points(h_points.clusterIndexes());
+  auto clusters = clue::get_clusters(h_points);
   CHECK(centroids.size() == clusters.size());
 }

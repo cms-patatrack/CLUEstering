@@ -3,6 +3,7 @@
 
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/internal/MakeAssociator.hpp"
+#include "CLUEstering/utils/detail/get_clusters.hpp"
 #include <algorithm>
 #include <ranges>
 #include <span>
@@ -18,13 +19,9 @@ namespace clue {
            1;
   }
 
-  inline host_associator compute_clusters_points(std::span<const int> cluster_ids) {
-    return internal::make_associator(cluster_ids, cluster_ids.size());
-  }
-
   inline std::vector<int> compute_clusters_size(std::span<const int> cluster_ids) {
     const auto nclusters = compute_nclusters(cluster_ids);
-    const auto clusters_points = compute_clusters_points(cluster_ids);
+    const auto clusters_points = detail::get_clusters(cluster_ids);
 
     std::vector<int> clusters(nclusters);
     std::ranges::transform(std::views::iota(0, nclusters), clusters.begin(), [&](int i) {

@@ -1,5 +1,6 @@
 
 #include "CLUEstering/CLUEstering.hpp"
+#include "CLUEstering/utils/validation.hpp"
 
 #include <cmath>
 #include <ranges>
