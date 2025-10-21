@@ -18,14 +18,17 @@
 template <std::size_t Ndim>
 struct KernelCompareDevicePoints {
   template <typename TAcc>
-  ALPAKA_FN_ACC void operator()(
-      const TAcc& acc, clue::PointsView<Ndim> view, float* d_input, uint32_t size, int* result) const {
+  ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                clue::PointsView<Ndim> view,
+                                float* d_input,
+                                uint32_t size,
+                                int* result) const {
     if (alpaka::oncePerGrid(acc))
       *result = 1;
     for (auto i : alpaka::uniformElements(acc, size)) {
       int comparison = 1;
-      for (auto dim = 0; dim < Ndim; ++dim) {
-        comparison = (view.coords[i + dim * size] == d_input[i + dim * size]);
+      for (auto dim = 0u; dim < Ndim; ++dim) {
+        comparison = (view.coords[dim][i] == d_input[i + dim * size]);
       }
       comparison = (view.weight[i] == d_input[i + Ndim * size]);
 
@@ -47,7 +50,8 @@ ALPAKA_FN_HOST bool compareDevicePoints(clue::Queue queue,
 
   // define buffers for comparison
   auto d_input = clue::make_device_buffer<float[]>(queue, (Ndim + 1) * size);
-  alpaka::memcpy(queue, d_input, clue::make_host_view(h_points.coords(0).data(), (Ndim + 1) * size));
+  alpaka::memcpy(
+      queue, d_input, clue::make_host_view(h_points.coords(0).data(), (Ndim + 1) * size));
 
   auto d_comparison_result = clue::make_device_buffer<int>(queue);
   const auto blocksize = 512;
@@ -125,10 +129,8 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
   auto coords = clue::make_device_buffer<float[]>(queue, 2 * size);
   auto weights = clue::make_device_buffer<float[]>(queue, size);
   auto cluster_ids = clue::make_device_buffer<int[]>(queue, size);
-  auto b_isseed = clue::make_device_buffer<int[]>(queue, size);
 
-  clue::PointsDevice<2> d_points(
-      queue, size, coords.data(), weights.data(), cluster_ids.data(), b_isseed.data());
+  clue::PointsDevice<2> d_points(queue, size, coords.data(), weights.data(), cluster_ids.data());
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(queue,
                             std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float),

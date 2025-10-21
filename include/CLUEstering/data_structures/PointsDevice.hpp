@@ -50,7 +50,7 @@ namespace clue {
     /// @param n_points The number of points to allocate
     /// @param buffers The buffers to use for the points
     template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4 ||
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
                (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
     PointsDevice(TQueue& queue, int32_t n_points, TBuffers... buffers);
 

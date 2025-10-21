@@ -198,7 +198,7 @@ namespace clue {
       ALPAKA_FN_ACC int32_t operator()(int32_t index) const {
         float coords[Ndim];
         for (auto dim = 0u; dim < Ndim; ++dim) {
-          coords[dim] = pointsView.coords[index + dim * pointsView.n];
+          coords[dim] = pointsView.coords[dim][index];
         }
 
         auto bin = tilesView.getGlobalBin(coords);
