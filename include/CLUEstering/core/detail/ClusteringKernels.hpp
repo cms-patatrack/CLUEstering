@@ -25,13 +25,13 @@ namespace clue::detail {
   constexpr int32_t reserve{1000000};
 
   template <std::size_t Ndim>
-  ALPAKA_FN_ACC std::array<float, Ndim> getCoords(PointsView& d_points, int32_t i) {
+  ALPAKA_FN_ACC std::array<float, Ndim> getCoords(PointsView<Ndim>& d_points, int32_t i) {
     if (i == -1)
       return clue::nostd::make_array<float, Ndim>(std::numeric_limits<float>::max());
 
     std::array<float, Ndim> coords;
     for (auto dim = 0; dim < Ndim; ++dim) {
-      coords[dim] = d_points.coords[i + dim * d_points.n];
+      coords[dim] = d_points.coords[dim][i];
     }
 
     return coords;
@@ -42,7 +42,7 @@ namespace clue::detail {
                                         VecArray<int32_t, Ndim>& base_vec,
                                         const clue::SearchBoxBins<Ndim>& search_box,
                                         TilesAlpakaView<Ndim>& tiles,
-                                        PointsView& dev_points,
+                                        PointsView<Ndim>& dev_points,
                                         const KernelType& kernel,
                                         const std::array<float, Ndim>& coords_i,
                                         float* rho_i,
@@ -81,7 +81,7 @@ namespace clue::detail {
     template <typename TAcc, std::size_t Ndim, concepts::convolutional_kernel KernelType>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   TilesAlpakaView<Ndim> dev_tiles,
-                                  PointsView dev_points,
+                                  PointsView<Ndim> dev_points,
                                   const KernelType& kernel,
                                   DistanceParameter<Ndim> dc,
                                   int32_t n_points) const {
@@ -112,7 +112,7 @@ namespace clue::detail {
                                                        VecArray<int32_t, Ndim>& base_vec,
                                                        const clue::SearchBoxBins<Ndim>& search_box,
                                                        TilesAlpakaView<Ndim>& tiles,
-                                                       PointsView& dev_points,
+                                                       PointsView<Ndim>& dev_points,
                                                        const std::array<float, Ndim>& coords_i,
                                                        float rho_i,
                                                        float* delta_i,
@@ -169,7 +169,7 @@ namespace clue::detail {
     template <typename TAcc, std::size_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   TilesAlpakaView<Ndim> dev_tiles,
-                                  PointsView dev_points,
+                                  PointsView<Ndim> dev_points,
                                   DistanceParameter<Ndim> dm,
                                   int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
@@ -211,7 +211,7 @@ namespace clue::detail {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
                                   TilesAlpakaView<Ndim> tiles,
-                                  PointsView dev_points,
+                                  PointsView<Ndim> dev_points,
                                   DistanceParameter<Ndim> seed_dc,
                                   float rhoc,
                                   int32_t n_points) const {
@@ -238,11 +238,11 @@ namespace clue::detail {
   };
 
   struct KernelAssignClusters {
-    template <typename TAcc>
+    template <typename TAcc, std::size_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
                                   clue::FollowersView followers,
-                                  PointsView dev_points) const {
+                                  PointsView<Ndim> dev_points) const {
       const auto& seeds_0 = *seeds;
       const auto n_seeds = seeds_0.size();
       for (auto idx_cls : alpaka::uniformElements(acc, n_seeds)) {
@@ -277,7 +277,7 @@ namespace clue::detail {
   inline void computeLocalDensity(TQueue& queue,
                                   const WorkDiv& work_division,
                                   TilesAlpakaView<Ndim>& tiles,
-                                  PointsView& dev_points,
+                                  PointsView<Ndim>& dev_points,
                                   KernelType&& kernel,
                                   const DistanceParameter<Ndim>& dc,
                                   int32_t size) {
@@ -295,7 +295,7 @@ namespace clue::detail {
   inline void computeNearestHighers(TQueue& queue,
                                     const WorkDiv& work_division,
                                     TilesAlpakaView<Ndim>& tiles,
-                                    PointsView& dev_points,
+                                    PointsView<Ndim>& dev_points,
                                     const DistanceParameter<Ndim>& dm,
                                     int32_t size) {
     alpaka::exec<TAcc>(
@@ -307,7 +307,7 @@ namespace clue::detail {
                                const WorkDiv& work_division,
                                VecArray<int32_t, reserve>* seeds,
                                TilesAlpakaView<Ndim>& tiles,
-                               PointsView& dev_points,
+                               PointsView<Ndim>& dev_points,
                                const DistanceParameter<Ndim>& seed_dc,
                                float rhoc,
                                int32_t size) {
@@ -315,12 +315,12 @@ namespace clue::detail {
         queue, work_division, KernelFindClusters{}, seeds, tiles, dev_points, seed_dc, rhoc, size);
   }
 
-  template <concepts::accelerator TAcc, concepts::queue TQueue>
+  template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
   inline void assignPointsToClusters(TQueue& queue,
                                      std::size_t block_size,
                                      VecArray<int32_t, reserve>* seeds,
                                      clue::FollowersView followers,
-                                     PointsView dev_points) {
+                                     PointsView<Ndim> dev_points) {
     const Idx grid_size = clue::divide_up_by(reserve, block_size);
     const auto work_division = clue::make_workdiv<TAcc>(grid_size, block_size);
     alpaka::exec<TAcc>(queue, work_division, KernelAssignClusters{}, seeds, followers, dev_points);

@@ -22,7 +22,7 @@ namespace clue {
   class PointsHost : public internal::points_interface<PointsHost<Ndim>> {
   private:
     std::optional<host_buffer<std::byte[]>> m_buffer;
-    PointsView m_view;
+    PointsView<Ndim> m_view;
     int32_t m_size;
 
   public:
@@ -46,11 +46,13 @@ namespace clue {
     PointsHost(TQueue& queue, int32_t n_points, std::span<std::byte> buffer);
 
     template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
+               (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
     PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers);
 
     template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3)
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
+               (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
     PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers);
 
     PointsHost(const PointsHost&) = delete;
@@ -63,12 +65,6 @@ namespace clue {
     /// @brief Returns the number of points
     /// @return The number of points
     ALPAKA_FN_HOST int32_t size() const;
-    /// @brief Returns the coordinates of the points as a const span
-    /// @return A const span of the coordinates of the points
-    ALPAKA_FN_HOST auto coords() const;
-    /// @brief Returns the coordinates of the points as a span
-    /// @return A span of the coordinates of the points
-    ALPAKA_FN_HOST auto coords();
     /// @brief Returns the coordinates of the points for a specific dimension as a const span
     /// @param dim The dimension for which to get the coordinates
     /// @return A const span of the coordinates for the specified dimension

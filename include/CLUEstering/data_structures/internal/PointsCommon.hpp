@@ -13,28 +13,19 @@ namespace clue {
     struct points_interface {
       ALPAKA_FN_HOST int32_t size() const { return static_cast<const TPoints*>(this)->m_size; }
 
-      ALPAKA_FN_HOST auto coords() const {
-        auto& view = static_cast<const TPoints*>(this)->m_view;
-        return std::span<const float>(view.coords, view.n * TPoints::Ndim_);
-      }
-      ALPAKA_FN_HOST auto coords() {
-        auto& view = static_cast<TPoints*>(this)->m_view;
-        return std::span<float>(view.coords, view.n * TPoints::Ndim_);
-      }
-
-      ALPAKA_FN_HOST auto coords(size_t dim) const {
+      ALPAKA_FN_HOST auto coords(std::size_t dim) const {
         if (dim >= TPoints::Ndim_) {
           throw std::out_of_range("Dimension out of range in call to coords.");
         }
         auto& view = static_cast<const TPoints*>(this)->m_view;
-        return std::span<const float>(view.coords + dim * view.n, view.n);
+        return std::span<const float>(view.coords[dim], view.n);
       }
-      ALPAKA_FN_HOST auto coords(size_t dim) {
+      ALPAKA_FN_HOST auto coords(std::size_t dim) {
         if (dim >= TPoints::Ndim_) {
           throw std::out_of_range("Dimension out of range in call to coords.");
         }
         auto& view = static_cast<TPoints*>(this)->m_view;
-        return std::span<float>(view.coords + dim * view.n, view.n);
+        return std::span<float>(view.coords[dim], view.n);
       }
 
       ALPAKA_FN_HOST auto weights() const {
@@ -61,8 +52,9 @@ namespace clue {
 
   }  // namespace internal
 
+  template <std::size_t Ndim>
   struct PointsView {
-    float* coords;
+    std::array<float*, Ndim> coords;
     float* weight;
     int* cluster_index;
     int* is_seed;
@@ -103,8 +95,8 @@ namespace clue {
                     const PointsHost<Ndim>& h_points) {
     alpaka::memcpy(
         queue,
-        make_device_view(alpaka::getDev(queue), d_points.m_view.coords, Ndim * h_points.size()),
-        make_host_view(h_points.m_view.coords, Ndim * h_points.size()));
+        make_device_view(alpaka::getDev(queue), d_points.m_view.coords[0], Ndim * h_points.size()),
+        make_host_view(h_points.m_view.coords[0], Ndim * h_points.size()));
     alpaka::memcpy(queue,
                    make_device_view(alpaka::getDev(queue), d_points.m_view.weight, h_points.size()),
                    make_host_view(h_points.m_view.weight, h_points.size()));

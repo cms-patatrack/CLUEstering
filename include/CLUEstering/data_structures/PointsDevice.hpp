@@ -25,7 +25,7 @@ namespace clue {
   class PointsDevice : public internal::points_interface<PointsDevice<Ndim, TDev>> {
   private:
     device_buffer<TDev, std::byte[]> m_buffer;
-    PointsView m_view;
+    PointsView<Ndim> m_view;
     int32_t m_size;
 
   public:
@@ -50,7 +50,8 @@ namespace clue {
     /// @param n_points The number of points to allocate
     /// @param buffers The buffers to use for the points
     template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 4)
+      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
+               (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
     PointsDevice(TQueue& queue, int32_t n_points, TBuffers... buffers);
 
     PointsDevice(const PointsDevice&) = delete;
@@ -63,12 +64,6 @@ namespace clue {
     /// @brief Returns the number of points
     /// @return The number of points
     ALPAKA_FN_HOST int32_t size() const;
-    /// @brief Returns the coordinates of the points as a const span
-    /// @return A const span of the coordinates of the points
-    ALPAKA_FN_HOST auto coords() const;
-    /// @brief Returns the coordinates of the points as a span
-    /// @return A span of the coordinates of the points
-    ALPAKA_FN_HOST auto coords();
     /// @brief Returns the coordinates of the points for a specific dimension as a const span
     /// @param dim The dimension for which to get the coordinates
     /// @return A const span of the coordinates for the specified dimension
