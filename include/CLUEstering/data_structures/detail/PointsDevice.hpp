@@ -50,10 +50,10 @@ namespace clue {
       }(std::make_index_sequence<Ndim>{});
       view.weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
       view.cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
-      view.is_seed = reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
-      view.rho = reinterpret_cast<float*>(alloc_buffer);
-      view.delta = reinterpret_cast<float*>(alloc_buffer + n_points * sizeof(float));
-      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(float));
+      view.is_seed = reinterpret_cast<int*>(alloc_buffer);
+      view.rho = reinterpret_cast<float*>(alloc_buffer + n_points * sizeof(float));
+      view.delta = reinterpret_cast<float*>(alloc_buffer + 2 * n_points * sizeof(float));
+      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 3 * n_points * sizeof(float));
       view.n = n_points;
     }
     template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
@@ -72,9 +72,9 @@ namespace clue {
       view.weight = std::get<1>(buffers_tuple);
       view.cluster_index = std::get<2>(buffers_tuple);
       view.is_seed = reinterpret_cast<int*>(alloc_buffer);
-      view.rho = reinterpret_cast<float*>(alloc_buffer + sizeof(float) * n_points);
-      view.delta = reinterpret_cast<float*>(alloc_buffer + 2 * sizeof(float) * n_points);
-      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 3 * sizeof(float) * n_points);
+      view.rho = reinterpret_cast<float*>(alloc_buffer + n_points * sizeof(float));
+      view.delta = reinterpret_cast<float*>(alloc_buffer + 2 * n_points * sizeof(float));
+      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 3 * n_points * sizeof(float));
       view.n = n_points;
     }
     template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
@@ -92,10 +92,10 @@ namespace clue {
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<0>(buffers_tuple) + Ndim * n_points;
       view.cluster_index = std::get<1>(buffers_tuple);
-      view.is_seed = std::get<1>(buffers_tuple) + n_points;
-      view.rho = reinterpret_cast<float*>(alloc_buffer);
-      view.delta = reinterpret_cast<float*>(alloc_buffer + sizeof(float) * n_points);
-      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
+      view.is_seed = reinterpret_cast<int*>(alloc_buffer);
+      view.rho = reinterpret_cast<float*>(alloc_buffer + n_points * sizeof(float));
+      view.delta = reinterpret_cast<float*>(alloc_buffer + 2 * n_points * sizeof(float));
+      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 3 * n_points * sizeof(float));
       view.n = n_points;
     }
     template <std::size_t Ndim, concepts::contiguous_raw_data... TBuffers>
@@ -112,10 +112,10 @@ namespace clue {
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<Ndim>(buffers_tuple) + Ndim * n_points;
       view.cluster_index = std::get<Ndim + 1>(buffers_tuple);
-      view.is_seed = std::get<1>(buffers_tuple) + n_points;
-      view.rho = reinterpret_cast<float*>(alloc_buffer);
-      view.delta = reinterpret_cast<float*>(alloc_buffer + sizeof(float) * n_points);
-      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * sizeof(float) * n_points);
+      view.is_seed = reinterpret_cast<int*>(alloc_buffer);
+      view.rho = reinterpret_cast<float*>(alloc_buffer + n_points * sizeof(float));
+      view.delta = reinterpret_cast<float*>(alloc_buffer + 2 * n_points * sizeof(float));
+      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 3 * n_points * sizeof(float));
       view.n = n_points;
     }
 
