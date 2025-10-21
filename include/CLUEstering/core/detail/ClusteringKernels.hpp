@@ -30,7 +30,7 @@ namespace clue::detail {
       return clue::nostd::make_array<float, Ndim>(std::numeric_limits<float>::max());
 
     std::array<float, Ndim> coords;
-    for (auto dim = 0; dim < Ndim; ++dim) {
+    for (auto dim = 0u; dim < Ndim; ++dim) {
       coords[dim] = d_points.coords[dim][i];
     }
 
@@ -58,7 +58,7 @@ namespace clue::detail {
         auto coords_j = getCoords<Ndim>(dev_points, j);
         auto distance_vector = tiles.distance(coords_i, coords_j);
         auto distance = 0.f;
-        for (auto dim = 0; dim < Ndim; ++dim) {
+        for (auto dim = 0u; dim < Ndim; ++dim) {
           distance += distance_vector[dim] * distance_vector[dim];
         }
 
@@ -90,7 +90,7 @@ namespace clue::detail {
         auto coords_i = getCoords<Ndim>(dev_points, i);
 
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-        for (auto dim = 0; dim != Ndim; ++dim) {
+        for (auto dim = 0u; dim != Ndim; ++dim) {
           searchbox_extremes[dim] =
               clue::nostd::make_array(coords_i[dim] - dc[dim], coords_i[dim] + dc[dim]);
         }
@@ -132,7 +132,7 @@ namespace clue::detail {
         auto coords_j = getCoords<Ndim>(dev_points, j);
         auto distance_vector = tiles.distance(coords_i, coords_j);
         auto distance = 0.f;
-        for (auto dim = 0; dim < Ndim; ++dim) {
+        for (auto dim = 0u; dim < Ndim; ++dim) {
           distance += distance_vector[dim] * distance_vector[dim];
         }
 
@@ -179,7 +179,7 @@ namespace clue::detail {
         float rho_i = dev_points.rho[i];
 
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-        for (auto dim = 0; dim != Ndim; ++dim) {
+        for (auto dim = 0u; dim != Ndim; ++dim) {
           searchbox_extremes[dim] =
               clue::nostd::make_array(coords_i[dim] - dm[dim], coords_i[dim] + dm[dim]);
         }

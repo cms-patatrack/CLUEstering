@@ -19,7 +19,7 @@ namespace clue {
     // TODO: add error handling
     Centroid<Ndim> centroid;
     auto size = clusters.count(cluster_id);
-    for (auto dim = 0; dim < Ndim; ++dim) {
+    for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
       std::for_each_n(nostd::zip(coords.begin(), cluster_ids.begin()),
                       points.size(),
@@ -43,7 +43,7 @@ namespace clue {
     const auto n_clusters = clusters.size();
 
     Centroids<Ndim> centroids(n_clusters);
-    for (auto dim = 0; dim < Ndim; ++dim) {
+    for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
       std::for_each_n(nostd::zip(coords.begin(), cluster_ids.begin()),
                       points.size(),
