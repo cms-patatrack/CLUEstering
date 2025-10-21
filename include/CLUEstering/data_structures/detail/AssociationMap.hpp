@@ -356,6 +356,7 @@ namespace clue {
                        bin_buffer.data(),
                        sizes_buffer.data(),
                        size);
+    alpaka::wait(queue);
 
     internal::algorithm::inclusive_scan(
         sizes_buffer.data(), sizes_buffer.data() + m_nbins, m_offsets.data() + 1);
@@ -418,6 +419,7 @@ namespace clue {
                        associations.data(),
                        sizes_buffer.data(),
                        size);
+    alpaka::wait(queue);
 
     internal::algorithm::inclusive_scan(
         sizes_buffer.data(), sizes_buffer.data() + m_nbins, m_offsets.data() + 1);
