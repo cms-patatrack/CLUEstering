@@ -11,7 +11,7 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/Tiles.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
-#include "CLUEstering/utils/validation.hpp"
+#include "CLUEstering/utils/get_clusters.hpp"
 
 #include <alpaka/mem/view/Traits.hpp>
 #include <alpaka/vec/Vec.hpp>
@@ -165,7 +165,7 @@ namespace clue {
 
   template <std::size_t Ndim>
   inline host_associator Clusterer<Ndim>::getClusters(const PointsHost& h_points) {
-    return clue::compute_clusters_points(h_points.clusterIndexes());
+    return clue::get_clusters(h_points.clusterIndexes());
   }
 
   template <std::size_t Ndim>
