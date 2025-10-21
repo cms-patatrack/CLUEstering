@@ -304,6 +304,7 @@ namespace clue {
                        bin_buffer.data(),
                        sizes_buffer.data(),
                        size);
+    alpaka::wait(queue);
 
     auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_nbins + 1);
     internal::algorithm::inclusive_scan(
@@ -364,6 +365,7 @@ namespace clue {
                        associations.data(),
                        sizes_buffer.data(),
                        size);
+    alpaka::wait(queue);
 
     auto temp_offsets = make_device_buffer<key_type[]>(queue, m_nbins + 1);
     internal::algorithm::inclusive_scan(
