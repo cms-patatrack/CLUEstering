@@ -154,12 +154,14 @@ TEST_CASE("Test extrema functions on device points column") {
 
   clue::PointsDevice<2> d_points(queue, size);
   clue::copyToDevice(queue, d_points, h_points);
+  alpaka::wait(queue);
 
   auto max_it =
       clue::internal::algorithm::max_element(d_points.weights().begin(), d_points.weights().end());
   auto max = 0.f;
   alpaka::memcpy(
       queue, clue::make_host_view(max), clue::make_device_view(alpaka::getDev(queue), *max_it));
+  alpaka::wait(queue);
   CHECK(max == static_cast<float>(size - 1));
 }
 

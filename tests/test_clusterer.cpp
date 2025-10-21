@@ -48,6 +48,7 @@ TEST_CASE("Test make_cluster interfaces") {
     clue::copyToDevice(queue, d_points, h_points);
     algo.make_clusters(queue, d_points, clue::FlatKernel{.5f}, block_size);
     clue::copyToHost(queue, h_points, d_points);
+    alpaka::wait(queue);
 
     auto clusters = h_points.clusterIndexes();
 
