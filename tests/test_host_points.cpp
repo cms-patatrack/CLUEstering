@@ -36,9 +36,9 @@ TEST_CASE("Test host points with internal allocation") {
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
-    CHECK(std::ranges::equal(coords,
-                             std::views::iota(0, (int)(size)) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
+    CHECK(std::ranges::equal(
+        coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
+    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
@@ -94,9 +94,9 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
-    CHECK(std::ranges::equal(coords,
-                             std::views::iota(0, (int)(size)) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
+    CHECK(std::ranges::equal(
+        coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
+    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
@@ -154,9 +154,9 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
-    CHECK(std::ranges::equal(coords,
-                             std::views::iota(0, (int)(size)) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
+    CHECK(std::ranges::equal(
+        coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
+    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
@@ -213,9 +213,9 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
-    CHECK(std::ranges::equal(coords,
-                             std::views::iota(0, (int)(size)) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
+    CHECK(std::ranges::equal(
+        coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
+    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
@@ -272,9 +272,9 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
-    CHECK(std::ranges::equal(coords,
-                             std::views::iota(0, (int)(size)) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
+    CHECK(std::ranges::equal(
+        coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
+    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
@@ -336,9 +336,9 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
-    CHECK(std::ranges::equal(coords,
-                             std::views::iota(0, (int)(size)) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
+    CHECK(std::ranges::equal(
+        coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
+    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
@@ -396,9 +396,9 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
-    CHECK(std::ranges::equal(coords,
-                             std::views::iota(0, (int)(size)) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
+    CHECK(std::ranges::equal(
+        coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
+    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
@@ -456,9 +456,9 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
-    CHECK(std::ranges::equal(coords,
-                             std::views::iota(0, (int)(size)) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0, (int)size)));
+    CHECK(std::ranges::equal(
+        coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
+    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
