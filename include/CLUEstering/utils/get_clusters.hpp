@@ -8,10 +8,10 @@
 namespace clue {
 
   template <std::size_t Ndim>
-  inline host_associator get_clusters(const PointsHost<Ndim>& points);
+  inline auto get_clusters(const PointsHost<Ndim>& points);
 
   template <concepts::queue TQueue, std::size_t Ndim>
-  inline host_associator get_clusters(TQueue& queue, const PointsDevice<Ndim>& points);
+  inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim>& points);
 
 }  // namespace clue
 

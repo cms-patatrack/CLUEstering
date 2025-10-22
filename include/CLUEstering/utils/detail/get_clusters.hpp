@@ -21,12 +21,12 @@ namespace clue {
   }  // namespace detail
 
   template <std::size_t Ndim>
-  inline host_associator get_clusters(const PointsHost<Ndim>& points) {
+  inline auto get_clusters(const PointsHost<Ndim>& points) {
     return detail::get_clusters(points.clusterIndexes());
   }
 
   template <concepts::queue TQueue, std::size_t Ndim>
-  inline host_associator get_clusters(TQueue& queue, const PointsDevice<Ndim>& points) {
+  inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim>& points) {
     return detail::get_clusters(queue, points.clusterIndexes());
   }
 
