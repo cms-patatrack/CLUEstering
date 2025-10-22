@@ -79,11 +79,12 @@ TEST_CASE("Test device points with internal allocation") {
   clue::PointsDevice<2> d_points(queue, size);
 
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
-  CHECK(compareDevicePoints(queue,
-                            std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float),
-                            std::views::iota(0, (int)(size)) | std::views::transform(to_float),
-                            d_points,
-                            size));
+  CHECK(compareDevicePoints(
+      queue,
+      std::views::iota(0) | std::views::take(2 * size) | std::views::transform(to_float),
+      std::views::iota(0) | std::views::take(size) | std::views::transform(to_float),
+      d_points,
+      size));
 }
 
 TEST_CASE("Test device points with external allocation of whole buffer") {
@@ -97,11 +98,12 @@ TEST_CASE("Test device points with external allocation of whole buffer") {
   clue::PointsDevice<2> d_points(queue, size, std::span(buffer.data(), bytes));
 
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
-  CHECK(compareDevicePoints(queue,
-                            std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float),
-                            std::views::iota(0, (int)(size)) | std::views::transform(to_float),
-                            d_points,
-                            size));
+  CHECK(compareDevicePoints(
+      queue,
+      std::views::iota(0) | std::views::take(2 * size) | std::views::transform(to_float),
+      std::views::iota(0) | std::views::take(size) | std::views::transform(to_float),
+      d_points,
+      size));
 }
 
 TEST_CASE("Test device points with external allocation passing the two buffers as pointers") {
@@ -114,11 +116,12 @@ TEST_CASE("Test device points with external allocation passing the two buffers a
 
   clue::PointsDevice<2> d_points(queue, size, input.data(), output.data());
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
-  CHECK(compareDevicePoints(queue,
-                            std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float),
-                            std::views::iota(0, (int)(size)) | std::views::transform(to_float),
-                            d_points,
-                            size));
+  CHECK(compareDevicePoints(
+      queue,
+      std::views::iota(0) | std::views::take(2 * size) | std::views::transform(to_float),
+      std::views::iota(0) | std::views::take(size) | std::views::transform(to_float),
+      d_points,
+      size));
 }
 
 TEST_CASE("Test device points with external allocation passing four buffers as pointers") {
@@ -132,11 +135,12 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
 
   clue::PointsDevice<2> d_points(queue, size, coords.data(), weights.data(), cluster_ids.data());
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
-  CHECK(compareDevicePoints(queue,
-                            std::views::iota(0, (int)(2 * size)) | std::views::transform(to_float),
-                            std::views::iota(0, (int)(size)) | std::views::transform(to_float),
-                            d_points,
-                            size));
+  CHECK(compareDevicePoints(
+      queue,
+      std::views::iota(0) | std::views::take(2 * size) | std::views::transform(to_float),
+      std::views::iota(0) | std::views::take(size) | std::views::transform(to_float),
+      d_points,
+      size));
 }
 
 TEST_CASE("Test extrema functions on device points column") {
