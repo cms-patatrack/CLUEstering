@@ -1,3 +1,6 @@
+/// @file cluster_centroid.hpp
+/// @brief Provides functions for computing the centroids of clusters.
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 
@@ -7,9 +10,11 @@
 
 namespace clue {
 
+  /// @brief Type alias for a centroid in Ndim dimensions
   template <std::size_t Ndim>
   using Centroid = std::array<float, Ndim>;
 
+  /// @brief Type alias for a collection of centroids in Ndim dimensions
   template <std::size_t Ndim>
   using Centroids = std::vector<Centroid<Ndim>>;
 
