@@ -2,8 +2,12 @@
 #pragma once
 
 #include "CLUEstering/internal/algorithm/default_policy.hpp"
+#include <alpaka/alpaka.hpp>
 
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) || defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+#include <thrust/extrema.h>
+#include <thrust/execution_policy.h>
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/extrema.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
@@ -20,9 +24,9 @@ namespace clue {
       template <typename ForwardIterator>
       ALPAKA_FN_HOST inline constexpr ForwardIterator min_element(ForwardIterator first,
                                                                   ForwardIterator last) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::min_element(thrust::device, first, last);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::min_element(thrust::hip::par, first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last);
@@ -35,9 +39,9 @@ namespace clue {
       ALPAKA_FN_HOST inline constexpr ForwardIterator min_element(ExecutionPolicy&& policy,
                                                                   ForwardIterator first,
                                                                   ForwardIterator last) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::min_element(std::forward<ExecutionPolicy>(policy), first, last);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::min_element(std::forward<ExecutionPolicy>(policy), first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::min_element(std::forward<ExecutionPolicy>(policy), first, last);
@@ -50,9 +54,9 @@ namespace clue {
       ALPAKA_FN_HOST inline constexpr ForwardIterator min_element(ForwardIterator first,
                                                                   ForwardIterator last,
                                                                   BinaryPredicate comp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::min_element(thrust::device, first, last, comp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::min_element(thrust::hip::par, first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
@@ -66,9 +70,9 @@ namespace clue {
                                                                   ForwardIterator first,
                                                                   ForwardIterator last,
                                                                   BinaryPredicate comp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::min_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::min_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::min_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
@@ -80,9 +84,9 @@ namespace clue {
       template <typename ForwardIterator>
       ALPAKA_FN_HOST inline constexpr ForwardIterator max_element(ForwardIterator first,
                                                                   ForwardIterator last) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::max_element(thrust::device, first, last);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::max_element(thrust::hip::par, first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last);
@@ -95,9 +99,9 @@ namespace clue {
       ALPAKA_FN_HOST inline constexpr ForwardIterator max_element(ExecutionPolicy&& policy,
                                                                   ForwardIterator first,
                                                                   ForwardIterator last) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::max_element(std::forward<ExecutionPolicy>(policy), first, last);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::max_element(std::forward<ExecutionPolicy>(policy), first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::max_element(std::forward<ExecutionPolicy>(policy), first, last);
@@ -110,9 +114,9 @@ namespace clue {
       ALPAKA_FN_HOST inline constexpr ForwardIterator max_element(ForwardIterator first,
                                                                   ForwardIterator last,
                                                                   BinaryPredicate comp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::max_element(thrust::device, first, last, comp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::max_element(thrust::hip::par, first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
@@ -126,9 +130,9 @@ namespace clue {
                                                                   ForwardIterator first,
                                                                   ForwardIterator last,
                                                                   BinaryPredicate comp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::max_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::max_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::max_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
@@ -140,9 +144,9 @@ namespace clue {
       template <typename ForwardIterator>
       ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
           ForwardIterator first, ForwardIterator last) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::minmax_element(thrust::device, first, last);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::minmax_element(thrust::hip::par, first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::minmax_element(oneapi::dpl::execution::dpcpp_default, first, last);
@@ -154,9 +158,9 @@ namespace clue {
       template <typename ExecutionPolicy, typename ForwardIterator>
       ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
           ExecutionPolicy&& policy, ForwardIterator first, ForwardIterator last) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::minmax_element(std::forward<ExecutionPolicy>(policy), first, last);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::minmax_element(std::forward<ExecutionPolicy>(policy), first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::minmax_element(std::forward<ExecutionPolicy>(policy), first, last);
@@ -168,9 +172,9 @@ namespace clue {
       template <typename ForwardIterator, typename BinaryPredicate>
       ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
           ForwardIterator first, ForwardIterator last, BinaryPredicate comp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::minmax_element(thrust::device, first, last, comp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::minmax_element(thrust::hip::par, first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::minmax_element(
@@ -186,9 +190,9 @@ namespace clue {
           ForwardIterator first,
           ForwardIterator last,
           BinaryPredicate comp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::minmax_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         return thrust::minmax_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::minmax_element(

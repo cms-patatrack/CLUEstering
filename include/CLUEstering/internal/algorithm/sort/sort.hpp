@@ -3,8 +3,12 @@
 #pragma once
 
 #include "CLUEstering/internal/algorithm/default_policy.hpp"
+#include <alpaka/alpaka.hpp>
 
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) || defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+#include <thrust/sort.h>
+#include <thrust/execution_policy.h>
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/sort.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
@@ -21,9 +25,9 @@ namespace clue {
       template <typename RandomAccessIterator>
       ALPAKA_FN_HOST inline constexpr void sort(RandomAccessIterator first,
                                                 RandomAccessIterator last) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         thrust::sort(thrust::device, first, last);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         thrust::sort(thrust::hip::par, first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         oneapi::dpl::sort(oneapi::dpl::execution::dpcpp_default, first, last);
@@ -36,9 +40,9 @@ namespace clue {
       ALPAKA_FN_HOST inline constexpr void sort(ExecutionPolicy&& policy,
                                                 RandomAccessIterator first,
                                                 RandomAccessIterator last) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         thrust::sort(std::forward<ExecutionPolicy>(policy), first, last);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         thrust::sort(std::forward<ExecutionPolicy>(policy), first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         oneapi::dpl::sort(std::forward<ExecutionPolicy>(policy), first, last);
@@ -51,9 +55,9 @@ namespace clue {
       ALPAKA_FN_HOST inline constexpr void sort(RandomAccessIterator first,
                                                 RandomAccessIterator last,
                                                 Compare comp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         thrust::sort(thrust::device, first, last, comp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         thrust::sort(thrust::hip::par, first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         oneapi::dpl::sort(oneapi::dpl::execution::dpcpp_default, first, last, comp);
@@ -67,9 +71,9 @@ namespace clue {
                                                 RandomAccessIterator first,
                                                 RandomAccessIterator last,
                                                 Compare comp) {
-#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         thrust::sort(std::forward<ExecutionPolicy>(policy), first, last, comp);
-#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
         thrust::sort(std::forward<ExecutionPolicy>(policy), first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         oneapi::dpl::sort(std::forward<ExecutionPolicy>(policy), first, last, comp);
