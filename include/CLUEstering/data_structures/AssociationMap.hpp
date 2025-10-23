@@ -20,6 +20,10 @@ namespace clue {
   class AssociationMap;
 
   namespace internal {
+
+    template <std::size_t Ndim, clue::concepts::device TDev>
+    class Tiles;
+
     template <clue::concepts::queue TQueue>
     auto make_associator(TQueue& queue, std::span<const int32_t> associations, int32_t elements);
     auto make_associator(std::span<const int32_t> associations, int32_t elements)
@@ -198,7 +202,7 @@ namespace clue {
     friend class Followers;
 
     template <std::size_t Ndim, concepts::device _TDev>
-    friend class TilesAlpaka;
+    friend class internal::Tiles;
 
     template <concepts::queue _TQueue>
     friend auto clue::internal::make_associator(_TQueue&, std::span<const int32_t>, int32_t);

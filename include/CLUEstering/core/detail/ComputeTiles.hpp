@@ -3,7 +3,8 @@
 
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/data_structures/Tiles.hpp"
+#include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
+#include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/internal/algorithm/algorithm.hpp"
 #include "CLUEstering/internal/algorithm/default_policy.hpp"
 #include "CLUEstering/internal/nostd/maximum.hpp"
@@ -15,7 +16,7 @@ namespace clue {
   namespace detail {
 
     template <std::size_t Ndim>
-    void compute_tile_size(clue::CoordinateExtremes<Ndim>* min_max,
+    void compute_tile_size(internal::CoordinateExtremes<Ndim>* min_max,
                            float* tile_sizes,
                            const clue::PointsHost<Ndim>& h_points,
                            int32_t nPerDim) {
@@ -42,7 +43,7 @@ namespace clue {
 
     template <std::size_t Ndim>
     void compute_tile_size(Queue& queue,
-                           clue::CoordinateExtremes<Ndim>* min_max,
+                           internal::CoordinateExtremes<Ndim>* min_max,
                            float* tile_sizes,
                            const clue::PointsDevice<Ndim>& dev_points,
                            uint32_t nPerDim) {
