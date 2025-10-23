@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CLUEstering/data_structures/AssociationMap.hpp"
+#include "CLUEstering/data_structures/AssociationMapView.hpp"
 #include "CLUEstering/data_structures/internal/Span.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
@@ -71,8 +72,7 @@ namespace clue {
         m_nbins{nbins} {
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
-    m_view.m_nelements = nelements;
-    m_view.m_nbins = nbins;
+    m_view.m_extents = {nelements, nbins};
 
     std::memset(m_offsets.data(), 0, (nbins + 1) * sizeof(key_type));
   }
@@ -89,8 +89,7 @@ namespace clue {
     }
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
-    m_view.m_nelements = nelements;
-    m_view.m_nbins = nbins;
+    m_view.m_extents = {nelements, nbins};
 
     auto queue(dev);
     // zero the offset buffer
@@ -110,8 +109,7 @@ namespace clue {
     }
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
-    m_view.m_nelements = nelements;
-    m_view.m_nbins = nbins;
+    m_view.m_extents = {nelements, nbins};
 
     // zero the offset buffer
     alpaka::memset(queue, m_offsets, 0);
@@ -242,8 +240,7 @@ namespace clue {
 
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
-    m_view.m_nelements = nelements;
-    m_view.m_nbins = nbins;
+    m_view.m_extents = {nelements, nbins};
   }
 
   template <concepts::device TDev>
@@ -258,8 +255,7 @@ namespace clue {
 
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
-    m_view.m_nelements = nelements;
-    m_view.m_nbins = nbins;
+    m_view.m_extents = {nelements, nbins};
   }
 
   template <concepts::device TDev>
@@ -273,8 +269,7 @@ namespace clue {
 
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
-    m_view.m_nelements = nelements;
-    m_view.m_nbins = nbins;
+    m_view.m_extents = {nelements, nbins};
   }
 
   template <concepts::device TDev>
@@ -288,8 +283,7 @@ namespace clue {
 
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
-    m_view.m_nelements = nelements;
-    m_view.m_nbins = nbins;
+    m_view.m_extents = {nelements, nbins};
   }
 
   template <concepts::device TDev>
