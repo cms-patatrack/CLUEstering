@@ -6,7 +6,7 @@
 
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/internal/Span.hpp"
-#include "CLUEstering/data_structures/internal/AssociationMapView.hpp"
+#include "CLUEstering/data_structures/AssociationMapView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
@@ -148,6 +148,9 @@ namespace clue {
     /// @return A pair of const iterators representing the range of elements with the given key
     std::pair<const_iterator, const_iterator> equal_range(key_type key) const;
 
+    const AssociationMapView& view() const;
+    AssociationMapView& view();
+
   private:
     device_buffer<TDev, mapped_type[]> m_indexes;
     device_buffer<TDev, key_type[]> m_offsets;
@@ -174,9 +177,6 @@ namespace clue {
 
     template <concepts::accelerator TAcc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, std::span<const key_type> associations, TQueue& queue);
-
-    const AssociationMapView& view() const;
-    AssociationMapView& view();
 
     ALPAKA_FN_HOST const auto& indexes() const;
     ALPAKA_FN_HOST auto& indexes();
