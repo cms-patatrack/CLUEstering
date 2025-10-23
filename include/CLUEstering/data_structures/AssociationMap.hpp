@@ -148,7 +148,11 @@ namespace clue {
     /// @return A pair of const iterators representing the range of elements with the given key
     std::pair<const_iterator, const_iterator> equal_range(key_type key) const;
 
+    /// @brief Get the constant view of the association map
+    /// @return A const reference to the AssociationMapView
     const AssociationMapView& view() const;
+    /// @brief Get the view of the association map
+    /// @return A reference to the AssociationMapView
     AssociationMapView& view();
 
   private:
