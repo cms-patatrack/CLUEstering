@@ -112,22 +112,6 @@ namespace clue::internal {
 
     ALPAKA_FN_HOST inline constexpr auto extents() const { return m_assoc.extents(); }
 
-    template <clue::concepts::queue TQueue>
-    ALPAKA_FN_HOST inline constexpr void clear(const TQueue& queue) {}
-
-    ALPAKA_FN_HOST const clue::device_buffer<TDev, int32_t[]>& indexes() const {
-      return m_assoc.indexes();
-    }
-    ALPAKA_FN_HOST clue::device_buffer<TDev, int32_t[]>& indexes() { return m_assoc.indexes(); }
-    ALPAKA_FN_HOST const clue::device_buffer<TDev, int32_t[]>& offsets() const {
-      return m_assoc.offsets();
-    }
-    ALPAKA_FN_HOST clue::device_buffer<TDev, int32_t[]>& offsets() { return m_assoc.offsets(); }
-
-    ALPAKA_FN_HOST clue::device_view<TDev, int32_t[]> indexes(const TDev& dev, size_t assoc_id) {
-      return m_assoc.indexes(dev, assoc_id);
-    }
-
   private:
     AssociationMap<TDev> m_assoc;
     device_buffer<TDev, CoordinateExtremes<Ndim>> m_minmax;
