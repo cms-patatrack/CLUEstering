@@ -11,7 +11,7 @@
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/data_structures/Tiles.hpp"
+#include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 
 #include <cstdint>
@@ -26,10 +26,10 @@ namespace clue {
   template <std::size_t Ndim>
   class Clusterer {
   private:
-    using CoordinateExtremes = clue::CoordinateExtremes<Ndim>;
+    using CoordinateExtremes = clue::internal::CoordinateExtremes<Ndim>;
     using PointsHost = clue::PointsHost<Ndim>;
     using PointsDevice = clue::PointsDevice<Ndim, clue::Device>;
-    using TilesDevice = clue::TilesAlpaka<Ndim, clue::Device>;
+    using TilesDevice = clue::internal::Tiles<Ndim, clue::Device>;
     using FollowersDevice = clue::Followers<clue::Device>;
     using Acc = internal::Acc;
     inline static constexpr auto reserve = detail::reserve;

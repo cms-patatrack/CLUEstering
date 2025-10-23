@@ -9,7 +9,7 @@
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/data_structures/Tiles.hpp"
+#include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/utils/get_clusters.hpp"
 
