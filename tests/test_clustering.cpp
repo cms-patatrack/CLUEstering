@@ -97,3 +97,33 @@ TEST_CASE("Test clustering on blob dataset") {
   auto truth_ids = truth_data.clusterIndexes();
   CHECK(clue::validate_results(clusters, truth_ids));
 }
+
+TEST_CASE("Test clustering on circles dataset") {
+	const auto device = clue::get_device(0u);
+	clue::Queue queue(device);
+
+	clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/circles.csv");
+	const auto n_points = h_points.size();
+	for (size_t i = 0; i < n_points; ++i) {
+	  const auto r = std::sqrt(h_points.coords(0)[i] * h_points.coords(0)[i] +
+	                         h_points.coords(1)[i] * h_points.coords(1)[i]);
+	  const auto theta = std::atan2(h_points.coords(1)[i], h_points.coords(0)[i]);
+	  h_points.coords(0)[i] = r * std::cos(theta);
+	  h_points.coords(1)[i] = r * std::sin(theta);
+	}
+	clue::PointsDevice<2> d_points(queue, n_points);
+
+	const float dc{0.2f}, rhoc{5.f}, outlier{0.3f};
+	clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+
+	algo.setWrappedCoordinates(0, 1);
+	algo.make_clusters(queue, h_points, d_points);
+	auto clusters = h_points.clusterIndexes();
+	auto isSeed = h_points.isSeed();
+
+	const auto truth_data = clue::read_output<2>(queue, "../data/truth_files/circles_1000_truth.csv");
+	auto truth_ids = truth_data.clusterIndexes();
+	auto truth_isSeed = truth_data.isSeed();
+	CHECK(clue::validate_results(clusters, truth_ids));
+	CHECK(std::ranges::equal(truth_isSeed, isSeed));
+}
