@@ -4,7 +4,7 @@
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/data_structures/Tiles.hpp"
+#include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/data_structures/internal/VecArray.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
@@ -17,10 +17,6 @@
 #include <cstdint>
 
 namespace clue::detail {
-
-  using clue::PointsView;
-  using clue::TilesAlpakaView;
-  using clue::VecArray;
 
   constexpr int32_t reserve{1000000};
 
@@ -41,7 +37,7 @@ namespace clue::detail {
   ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
                                         VecArray<int32_t, Ndim>& base_vec,
                                         const clue::SearchBoxBins<Ndim>& search_box,
-                                        TilesAlpakaView<Ndim>& tiles,
+                                        internal::TilesView<Ndim>& tiles,
                                         PointsView<Ndim>& dev_points,
                                         const KernelType& kernel,
                                         const std::array<float, Ndim>& coords_i,
@@ -80,7 +76,7 @@ namespace clue::detail {
   struct KernelCalculateLocalDensity {
     template <typename TAcc, std::size_t Ndim, concepts::convolutional_kernel KernelType>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  TilesAlpakaView<Ndim> dev_tiles,
+                                  internal::TilesView<Ndim> dev_tiles,
                                   PointsView<Ndim> dev_points,
                                   const KernelType& kernel,
                                   DistanceParameter<Ndim> dc,
@@ -111,7 +107,7 @@ namespace clue::detail {
   ALPAKA_FN_HOST_ACC void for_recursion_nearest_higher(const TAcc& acc,
                                                        VecArray<int32_t, Ndim>& base_vec,
                                                        const clue::SearchBoxBins<Ndim>& search_box,
-                                                       TilesAlpakaView<Ndim>& tiles,
+                                                       internal::TilesView<Ndim>& tiles,
                                                        PointsView<Ndim>& dev_points,
                                                        const std::array<float, Ndim>& coords_i,
                                                        float rho_i,
@@ -168,7 +164,7 @@ namespace clue::detail {
   struct KernelCalculateNearestHigher {
     template <typename TAcc, std::size_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  TilesAlpakaView<Ndim> dev_tiles,
+                                  internal::TilesView<Ndim> dev_tiles,
                                   PointsView<Ndim> dev_points,
                                   DistanceParameter<Ndim> dm,
                                   int32_t n_points) const {
@@ -210,7 +206,7 @@ namespace clue::detail {
     template <typename TAcc, std::size_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   VecArray<int32_t, reserve>* seeds,
-                                  TilesAlpakaView<Ndim> tiles,
+                                  internal::TilesView<Ndim> tiles,
                                   PointsView<Ndim> dev_points,
                                   DistanceParameter<Ndim> seed_dc,
                                   float rhoc,
@@ -276,7 +272,7 @@ namespace clue::detail {
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim, typename KernelType>
   inline void computeLocalDensity(TQueue& queue,
                                   const WorkDiv& work_division,
-                                  TilesAlpakaView<Ndim>& tiles,
+                                  internal::TilesView<Ndim>& tiles,
                                   PointsView<Ndim>& dev_points,
                                   KernelType&& kernel,
                                   const DistanceParameter<Ndim>& dc,
@@ -294,7 +290,7 @@ namespace clue::detail {
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
   inline void computeNearestHighers(TQueue& queue,
                                     const WorkDiv& work_division,
-                                    TilesAlpakaView<Ndim>& tiles,
+                                    internal::TilesView<Ndim>& tiles,
                                     PointsView<Ndim>& dev_points,
                                     const DistanceParameter<Ndim>& dm,
                                     int32_t size) {
@@ -306,7 +302,7 @@ namespace clue::detail {
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
                                VecArray<int32_t, reserve>* seeds,
-                               TilesAlpakaView<Ndim>& tiles,
+                               internal::TilesView<Ndim>& tiles,
                                PointsView<Ndim>& dev_points,
                                const DistanceParameter<Ndim>& seed_dc,
                                float rhoc,
