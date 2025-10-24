@@ -24,7 +24,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     clue::Queue queue(device);
 
     clue::PointsHost<2> h_points =
-        clue::read_csv<2>(queue, fmt::format("../data/data_{}.csv", std::pow(2, i)));
+        clue::read_csv<2>(queue, fmt::format("../../../data/data_{}.csv", std::pow(2, i)));
     const auto n_points = h_points.size();
     clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -34,8 +34,8 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     algo.make_clusters(queue, h_points, d_points);
     auto clusters = h_points.clusterIndexes();
 
-    auto truth_data = clue::read_output<2>(
-        queue, fmt::format("../data/truth_files/data_{}_truth.csv", std::pow(2, i)));
+    const auto truth_data = clue::read_output<2>(
+        queue, fmt::format("../../../data/truth_files/data_{}_truth.csv", std::pow(2, i)));
     auto truth_ids = truth_data.clusterIndexes();
     CHECK(clue::validate_results(clusters, truth_ids));
   }
@@ -45,7 +45,7 @@ TEST_CASE("Test clustering on sissa") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/sissa.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/sissa.csv");
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -55,7 +55,8 @@ TEST_CASE("Test clustering on sissa") {
   algo.make_clusters(queue, h_points, d_points);
   auto clusters = h_points.clusterIndexes();
 
-  auto truth_data = clue::read_output<2>(queue, "../data/truth_files/sissa_1000_truth.csv");
+  const auto truth_data =
+      clue::read_output<2>(queue, "../../../data/truth_files/sissa_1000_truth.csv");
   auto truth_ids = truth_data.clusterIndexes();
   CHECK(clue::validate_results(clusters, truth_ids));
 }
@@ -64,7 +65,7 @@ TEST_CASE("Test clustering on toy detector dataset") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/toyDetector.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/toyDetector.csv");
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -74,7 +75,8 @@ TEST_CASE("Test clustering on toy detector dataset") {
   algo.make_clusters(queue, h_points, d_points);
   auto clusters = h_points.clusterIndexes();
 
-  auto truth_data = clue::read_output<2>(queue, "../data/truth_files/toy_det_1000_truth.csv");
+  const auto truth_data =
+      clue::read_output<2>(queue, "../../../data/truth_files/toy_det_1000_truth.csv");
   auto truth_ids = truth_data.clusterIndexes();
   CHECK(clue::validate_results(clusters, truth_ids));
 }
@@ -83,7 +85,7 @@ TEST_CASE("Test clustering on blob dataset") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<3> h_points = clue::read_csv<3>(queue, "../data/blob.csv");
+  clue::PointsHost<3> h_points = clue::read_csv<3>(queue, "../../../data/blob.csv");
   const auto n_points = h_points.size();
   clue::PointsDevice<3> d_points(queue, n_points);
 
@@ -93,7 +95,7 @@ TEST_CASE("Test clustering on blob dataset") {
   algo.make_clusters(queue, h_points, d_points);
   auto clusters = h_points.clusterIndexes();
 
-  auto truth_data = clue::read_output<3>(queue, "../data/truth_files/blobs_truth.csv");
+  auto truth_data = clue::read_output<3>(queue, "../../../data/truth_files/blobs_truth.csv");
   auto truth_ids = truth_data.clusterIndexes();
   CHECK(clue::validate_results(clusters, truth_ids));
 }

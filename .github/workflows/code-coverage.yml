@@ -24,7 +24,7 @@ jobs:
         run: |
           sudo apt install -y libboost-dev libomp-dev
           cmake -B build -DCMAKE_BUILD_TYPE=Release -DCOVERAGE=ON && cmake --build build -- -j4
-          ./build/cpu/openmp.out --reporters=console --success
+          cd build ; ctest .
 
       - name: Create coverage report
         working-directory: ${{github.workspace}}/tests/build
