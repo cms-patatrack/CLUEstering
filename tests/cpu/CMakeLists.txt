@@ -55,5 +55,10 @@ if(OpenMP_CXX_FOUND)
     set_target_properties(
       ${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/openmp
                            OUTPUT_NAME ${test_name})
+  if(COVERAGE)
+	target_compile_options(${target} PRIVATE -O0 -g --coverage)
+	target_link_options(${target} PRIVATE --coverage)
+	target_compile_definitions(${target} PRIVATE COVERAGE)
+  endif()
   endforeach()
 endif()
