@@ -1,0 +1,32 @@
+name: Test C++ interface
+
+# The workflow gets triggered by pushes and pull requests
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    # checks out the code in the repository
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Install dependencies
+      run: |
+        sudo apt install -y libboost-dev
+
+    - name: Compile and run benchmark
+      working-directory: ${{ github.workspace }}/tests
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build
+
