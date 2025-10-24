@@ -236,7 +236,7 @@ namespace clue {
 
     auto min_max = clue::make_host_buffer<CoordinateExtremes>(queue);
     auto tile_sizes = clue::make_host_buffer<float[Ndim]>(queue);
-    detail::compute_tile_size(queue, min_max.data(), tile_sizes.data(), d_points, nPerDim);
+    detail::compute_tile_size(min_max.data(), tile_sizes.data(), d_points, nPerDim);
 
     alpaka::memcpy(queue, m_tiles->minMax(), min_max);
     alpaka::memcpy(queue, m_tiles->tileSize(), tile_sizes);

@@ -256,7 +256,7 @@ namespace clue::detail {
           --local_stack_size;
           const auto& followers_ies = followers[idx_end_of_local_stack];
           const auto followers_size = followers_ies.size();
-          for (auto j = 0; j != followers_size; ++j) {
+          for (auto j = 0u; j != followers_size; ++j) {
             int follower = followers_ies[j];
             dev_points.cluster_index[follower] = temp_cluster_index;
             local_stack[local_stack_size] = follower;

@@ -26,7 +26,7 @@ namespace clue {
                       [=, &centroid](auto&& tuple) -> void {
                         const auto coord = std::get<0>(tuple);
                         const auto point_cluster = std::get<1>(tuple);
-                        if (point_cluster == cluster_id) {
+                        if (static_cast<std::size_t>(point_cluster) == cluster_id) {
                           centroid[dim] += coord;
                         }
                       });

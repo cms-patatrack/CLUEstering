@@ -42,8 +42,7 @@ namespace clue {
     }
 
     template <std::size_t Ndim>
-    void compute_tile_size(Queue& queue,
-                           internal::CoordinateExtremes<Ndim>* min_max,
+    void compute_tile_size(internal::CoordinateExtremes<Ndim>* min_max,
                            float* tile_sizes,
                            const clue::PointsDevice<Ndim>& dev_points,
                            uint32_t nPerDim) {
