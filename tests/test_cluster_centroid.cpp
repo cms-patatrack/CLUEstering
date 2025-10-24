@@ -23,7 +23,7 @@ TEST_CASE("Test computation of cluster centroid") {
 
   algo.make_clusters(queue, h_points, d_points);
 
-  SUBCASE("Check centroid of cluster 0") { auto centroid = clue::cluster_centroid(h_points, 0); }
+  SUBCASE("Check centroid of cluster 0") { volatile auto _ = clue::cluster_centroid(h_points, 0); }
 }
 
 TEST_CASE("Test computation of all cluster centroids") {

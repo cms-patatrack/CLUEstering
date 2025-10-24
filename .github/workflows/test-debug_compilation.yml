@@ -1,6 +1,5 @@
-name: Test C++ interface
+name: Test debug compilation to check presence of warnings
 
-# The workflow gets triggered by pushes and pull requests
 on:
   push:
     branches: [ "main" ]
@@ -15,7 +14,6 @@ jobs:
       fail-fast: false
 
     steps:
-    # checks out the code in the repository
     - uses: actions/checkout@v3
       with:
         submodules: true
@@ -24,7 +22,7 @@ jobs:
       run: |
         sudo apt install -y libboost-dev
 
-    - name: Compile and run benchmark
+    - name: Compile the tests in debug mode
       working-directory: ${{ github.workspace }}/tests
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
