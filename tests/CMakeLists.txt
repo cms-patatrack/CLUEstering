@@ -9,8 +9,10 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 string(
-  APPEND CMAKE_CXX_FLAGS_DEBUG
-  " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -pg -fsanitize=address")
+  APPEND
+  CMAKE_CXX_FLAGS_DEBUG
+  " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wshadow -Wimplicit-fallthrough -Wextra-semi -Wold-style-cast -pg -fsanitize=address"
+)
 string(
   APPEND
   CMAKE_CXX_FLAGS

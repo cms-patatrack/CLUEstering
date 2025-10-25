@@ -44,7 +44,6 @@ namespace clue {
     std::optional<TilesDevice> m_tiles;
     std::optional<clue::device_buffer<Device, VecArray<int32_t, reserve>>> m_seeds;
     std::optional<FollowersDevice> m_followers;
-    std::optional<PointsDevice> d_points;
 
     void init_device(Queue& queue);
     void init_device(Queue& queue, TilesDevice* tile_buffer);
