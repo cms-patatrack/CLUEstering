@@ -86,11 +86,10 @@ namespace clue {
                                              PointsHost& h_points,
                                              const Kernel& kernel,
                                              std::size_t block_size) {
-    d_points = std::make_optional<PointsDevice>(queue, h_points.size());
-    auto& dev_points = *d_points;
+    auto d_points = PointsDevice(queue, h_points.size());
 
-    setup(queue, h_points, dev_points);
-    make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+    setup(queue, h_points, d_points);
+    make_clusters_impl(h_points, d_points, kernel, queue, block_size);
     alpaka::wait(queue);
   }
   template <std::size_t Ndim>
@@ -102,11 +101,10 @@ namespace clue {
     Queue queue(device);
     init_device(queue);
 
-    d_points = std::make_optional<PointsDevice>(queue, h_points.size());
-    auto& dev_points = *d_points;
+    auto d_points = PointsDevice(queue, h_points.size());
 
-    setup(queue, h_points, dev_points);
-    make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+    setup(queue, h_points, d_points);
+    make_clusters_impl(h_points, d_points, kernel, queue, block_size);
     alpaka::wait(queue);
   }
   template <std::size_t Ndim>
