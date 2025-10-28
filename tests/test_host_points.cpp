@@ -1,8 +1,5 @@
 
-#include "CLUEstering/core/detail/defines.hpp"
-#include "CLUEstering/data_structures/PointsHost.hpp"
-#include "CLUEstering/utils/get_device.hpp"
-#include "CLUEstering/utils/get_queue.hpp"
+#include "CLUEstering/CLUEstering.hpp"
 
 #include <numeric>
 #include <ranges>
@@ -531,5 +528,34 @@ TEST_CASE("Test coordinate getter throwing conditions") {
     const clue::PointsHost<2> points(queue, size);
     CHECK_THROWS(points.coords(3));
     CHECK_THROWS(points.coords(10));
+  }
+}
+
+TEST_CASE("Test cluster properties accessors") {
+  auto queue = clue::get_queue(0u);
+
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/data_32768.csv");
+
+  const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
+  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  algo.make_clusters(queue, h_points, clue::FlatKernel{.5f});
+
+  SUBCASE("Test get number of clusters") {
+    const auto n_clusters = h_points.n_clusters();
+    CHECK(n_clusters == 20);
+    const auto cached_n_clusters = h_points.n_clusters();
+    CHECK(cached_n_clusters == n_clusters);
+  }
+  SUBCASE("Test get clusters") {
+    const auto clusters = h_points.clusters();
+    CHECK(clusters.size() == h_points.n_clusters());
+    const auto cached_clusters = h_points.clusters();
+    CHECK(cached_clusters.size() == clusters.size());
+  }
+  SUBCASE("Test get cluster sizes") {
+    const auto cluster_sizes = h_points.cluster_sizes();
+    CHECK(cluster_sizes.size() == h_points.n_clusters());
+    const auto cached_cluster_sizes = h_points.cluster_sizes();
+    CHECK(cached_cluster_sizes.size() == cluster_sizes.size());
   }
 }

@@ -21,36 +21,31 @@ TEST_CASE("Test make_cluster interfaces") {
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
   const std::size_t block_size{256};
 
-  auto truth_data = clue::read_output<2>(queue, "../data/truth_files/data_32768_truth.csv");
-  auto truth_ids = truth_data.clusterIndexes();
+  auto truth = clue::read_output<2>(queue, "../data/truth_files/data_32768_truth.csv");
   SUBCASE("Run clustering without passing device points") {
     algo.make_clusters(queue, h_points, clue::FlatKernel{.5f}, block_size);
-    auto clusters = h_points.clusterIndexes();
 
-    CHECK(clue::validate_results(clusters, truth_ids));
+    CHECK(clue::validate_results(h_points, truth));
   }
 
   SUBCASE("Run clustering without passing the queue") {
     algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, block_size);
     auto clusters = h_points.clusterIndexes();
 
-    CHECK(clue::validate_results(clusters, truth_ids));
+    CHECK(clue::validate_results(h_points, truth));
   }
 
   SUBCASE("Run clustering without passing the queue and device points") {
     algo.make_clusters(h_points, clue::FlatKernel{.5f}, block_size);
-    auto clusters = h_points.clusterIndexes();
 
-    CHECK(clue::validate_results(clusters, truth_ids));
+    CHECK(clue::validate_results(h_points, truth));
   }
   SUBCASE("Run clustering from device points") {
     clue::copyToDevice(queue, d_points, h_points);
     algo.make_clusters(queue, d_points, clue::FlatKernel{.5f}, block_size);
     clue::copyToHost(queue, h_points, d_points);
 
-    auto clusters = h_points.clusterIndexes();
-
-    CHECK(clue::validate_results(clusters, truth_ids));
+    CHECK(clue::validate_results(h_points, truth));
   }
 }
 

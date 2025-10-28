@@ -2,6 +2,8 @@
 #pragma once
 
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
+#include "CLUEstering/data_structures/ClusterProperties.hpp"
+#include "CLUEstering/utils/detail/get_cluster_properties.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
 #include <alpaka/alpaka.hpp>
@@ -166,6 +168,41 @@ namespace clue {
       coords[dim] = m_view.coords[0][dim * m_size + idx];
     }
     return Point(coords, m_view.weight[idx], m_view.cluster_index[idx]);
+  }
+
+  template <std::size_t Ndim>
+  inline const auto& PointsHost<Ndim>::n_clusters() {
+    if (m_clusterProperties.has_value()) {
+      return m_clusterProperties->n_clusters();
+    }
+    if (!m_nclusters.has_value()) {
+      m_nclusters = detail::compute_nclusters(this->clusterIndexes());
+    }
+    return m_nclusters.value();
+  }
+
+  template <std::size_t Ndim>
+  inline const auto& PointsHost<Ndim>::clusters() {
+    if (!m_clusterProperties.has_value()) {
+      m_clusterProperties = ClusterProperties{this->clusterIndexes()};
+    }
+    return m_clusterProperties->m_clusters_to_points;
+  }
+
+  template <std::size_t Ndim>
+  inline const auto& PointsHost<Ndim>::cluster_sizes() {
+    if (!m_clusterProperties.has_value()) {
+      m_clusterProperties = ClusterProperties{this->clusterIndexes()};
+    }
+    return m_clusterProperties->m_cluster_sizes;
+  }
+
+  template <std::size_t Ndim>
+  inline const auto& PointsHost<Ndim>::cluster_properties() {
+    if (!m_clusterProperties.has_value()) {
+      m_clusterProperties = ClusterProperties{this->clusterIndexes()};
+    }
+    return m_clusterProperties.value();
   }
 
 }  // namespace clue
