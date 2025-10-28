@@ -96,11 +96,31 @@ namespace clue {
     ALPAKA_FN_HOST auto& view();
 #endif
 
+    /// @brief Returns the Point object at the specified index
+    ///
+    /// @param idx The index of the point to retrieve
+    /// @return The Point object at the specified index
     Point operator[](std::size_t idx) const;
 
+    /// @brief Teturns the cluster properties of the points
+    ///
+    /// @return The number of clusters reconstructed
+    /// @note This value is lazily evaluated and cached upon the first call
     const auto& n_clusters();
+    /// @brief Returns the associator mapping clusters to their associated points
+    ///
+    /// @return An host_associator mapping clusters to points
+    /// @note This object is lazily evaluated and cached upon the first call
     const auto& clusters();
+    /// @brief Returns a vector containing the sizes of each cluster
+    ///
+    /// @return A vector of containing the sizes of each cluster
+    /// @note This vector is lazily evaluated and cached upon the first call
     const auto& cluster_sizes();
+    /// @brief Returns the ClusterProperties object containing the properties of the clusters
+    ///
+    /// @return The ClusterProperties object
+    /// @note This object is lazily evaluated and cached upon the first call
     const auto& cluster_properties();
 
   private:
