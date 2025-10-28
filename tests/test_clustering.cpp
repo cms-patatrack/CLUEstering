@@ -32,12 +32,10 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
-    auto clusters = h_points.clusterIndexes();
 
-    auto truth_data = clue::read_output<2>(
+    auto truth = clue::read_output<2>(
         queue, fmt::format("../data/truth_files/data_{}_truth.csv", std::pow(2, i)));
-    auto truth_ids = truth_data.clusterIndexes();
-    CHECK(clue::validate_results(clusters, truth_ids));
+    CHECK(clue::validate_results(h_points, truth));
   }
 }
 
@@ -53,11 +51,9 @@ TEST_CASE("Test clustering on sissa") {
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
   algo.make_clusters(queue, h_points, d_points);
-  auto clusters = h_points.clusterIndexes();
 
-  auto truth_data = clue::read_output<2>(queue, "../data/truth_files/sissa_1000_truth.csv");
-  auto truth_ids = truth_data.clusterIndexes();
-  CHECK(clue::validate_results(clusters, truth_ids));
+  auto truth = clue::read_output<2>(queue, "../data/truth_files/sissa_1000_truth.csv");
+  CHECK(clue::validate_results(h_points, truth));
 }
 
 TEST_CASE("Test clustering on toy detector dataset") {
@@ -72,11 +68,9 @@ TEST_CASE("Test clustering on toy detector dataset") {
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
   algo.make_clusters(queue, h_points, d_points);
-  auto clusters = h_points.clusterIndexes();
 
-  auto truth_data = clue::read_output<2>(queue, "../data/truth_files/toy_det_1000_truth.csv");
-  auto truth_ids = truth_data.clusterIndexes();
-  CHECK(clue::validate_results(clusters, truth_ids));
+  auto truth = clue::read_output<2>(queue, "../data/truth_files/toy_det_1000_truth.csv");
+  CHECK(clue::validate_results(h_points, truth));
 }
 
 TEST_CASE("Test clustering on blob dataset") {
@@ -91,9 +85,7 @@ TEST_CASE("Test clustering on blob dataset") {
   clue::Clusterer<3> algo(queue, dc, rhoc, outlier);
 
   algo.make_clusters(queue, h_points, d_points);
-  auto clusters = h_points.clusterIndexes();
 
-  auto truth_data = clue::read_output<3>(queue, "../data/truth_files/blobs_truth.csv");
-  auto truth_ids = truth_data.clusterIndexes();
-  CHECK(clue::validate_results(clusters, truth_ids));
+  auto truth = clue::read_output<3>(queue, "../data/truth_files/blobs_truth.csv");
+  CHECK(clue::validate_results(h_points, truth));
 }

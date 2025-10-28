@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/data_structures/ClusterProperties.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
@@ -23,6 +24,8 @@ namespace clue {
   private:
     std::optional<host_buffer<std::byte[]>> m_buffer;
     PointsView<Ndim> m_view;
+    std::optional<ClusterProperties> m_clusterProperties;
+    std::optional<std::size_t> m_nclusters;
     int32_t m_size;
 
   public:
@@ -38,12 +41,6 @@ namespace clue {
       float weight() const;
       float cluster_index() const;
     };
-
-	struct ClusterProperties {
-	  std::optional<std::size_t> n_clusters;
-	  std::optional<host_associator> clusters_to_points;
-	  std::optional<std::vector<std::size_t>> cluster_sizes;
-	};
 
     template <concepts::queue TQueue>
     PointsHost(TQueue& queue, int32_t n_points);
@@ -101,7 +98,10 @@ namespace clue {
 
     Point operator[](std::size_t idx) const;
 
-	auto n_clusters();
+    const auto& n_clusters();
+    const auto& clusters();
+    const auto& cluster_sizes();
+    const auto& cluster_properties();
 
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;

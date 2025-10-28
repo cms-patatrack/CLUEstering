@@ -11,7 +11,6 @@ namespace clue {
 
     template <typename TPoints>
     struct points_interface {
-    protected:
     public:
       ALPAKA_FN_HOST int32_t size() const { return static_cast<const TPoints*>(this)->m_size; }
 
