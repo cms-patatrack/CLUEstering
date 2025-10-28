@@ -22,11 +22,13 @@ namespace clue {
 
   template <std::size_t Ndim>
   inline auto get_clusters(const PointsHost<Ndim>& points) {
+    assert(points.clustered());
     return detail::get_clusters(points.clusterIndexes());
   }
 
   template <concepts::queue TQueue, std::size_t Ndim>
   inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim>& points) {
+    assert(points.clustered());
     return detail::get_clusters(queue, points.clusterIndexes());
   }
 

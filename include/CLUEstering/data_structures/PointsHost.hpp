@@ -27,6 +27,7 @@ namespace clue {
     std::optional<ClusterProperties> m_clusterProperties;
     std::optional<std::size_t> m_nclusters;
     int32_t m_size;
+    bool m_clustered = false;
 
   public:
     class Point {
@@ -88,6 +89,9 @@ namespace clue {
     /// @brief Returns the cluster indexes of the points as a span
     /// @return A span of the cluster indexes of the points
     ALPAKA_FN_HOST auto clusterIndexes();
+    /// @brief Indicates whether the points have been clustered
+    /// @return True if the points have been clustered, false otherwise
+    ALPAKA_FN_HOST auto clustered() const;
     /// @brief Returns the view of the points
     /// @return A const reference to the PointsView structure containing the points data
     ALPAKA_FN_HOST const auto& view() const;
@@ -126,6 +130,10 @@ namespace clue {
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;
 
+    void mark_clustered() { m_clustered = true; }
+
+    template <std::size_t _Ndim>
+    friend class Clusterer;
     template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue& queue,
                            PointsHost<_Ndim>& h_points,
