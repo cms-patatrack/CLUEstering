@@ -295,8 +295,8 @@ namespace clue {
         queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
 
     clue::copyToHost(queue, h_points, dev_points);
-    h_points.clustered();
-    dev_points.clustered();
+    h_points.mark_clustered();
+    dev_points.mark_clustered();
   }
 
   template <std::size_t Ndim>
@@ -330,7 +330,7 @@ namespace clue {
         queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
 
     alpaka::wait(queue);
-    dev_points.clustered();
+    dev_points.mark_clustered();
   }
 
 }  // namespace clue
