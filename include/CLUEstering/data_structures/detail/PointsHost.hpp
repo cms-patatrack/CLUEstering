@@ -172,36 +172,39 @@ namespace clue {
 
   template <std::size_t Ndim>
   inline const auto& PointsHost<Ndim>::n_clusters() {
-    if (m_clusterProperties.has_value()) {
+    assert(m_clustered);
+    if (m_clusterProperties.has_value())
       return m_clusterProperties->n_clusters();
-    }
-    if (!m_nclusters.has_value()) {
+    if (!m_nclusters.has_value())
       m_nclusters = detail::compute_nclusters(this->clusterIndexes());
-    }
+
     return m_nclusters.value();
   }
 
   template <std::size_t Ndim>
   inline const auto& PointsHost<Ndim>::clusters() {
-    if (!m_clusterProperties.has_value()) {
+    assert(m_clustered);
+    if (!m_clusterProperties.has_value())
       m_clusterProperties = ClusterProperties{this->clusterIndexes()};
-    }
+
     return m_clusterProperties->m_clusters_to_points;
   }
 
   template <std::size_t Ndim>
   inline const auto& PointsHost<Ndim>::cluster_sizes() {
-    if (!m_clusterProperties.has_value()) {
+    assert(m_clustered);
+    if (!m_clusterProperties.has_value())
       m_clusterProperties = ClusterProperties{this->clusterIndexes()};
-    }
+
     return m_clusterProperties->m_cluster_sizes;
   }
 
   template <std::size_t Ndim>
   inline const auto& PointsHost<Ndim>::cluster_properties() {
-    if (!m_clusterProperties.has_value()) {
+    assert(m_clustered);
+    if (!m_clusterProperties.has_value())
       m_clusterProperties = ClusterProperties{this->clusterIndexes()};
-    }
+
     return m_clusterProperties.value();
   }
 

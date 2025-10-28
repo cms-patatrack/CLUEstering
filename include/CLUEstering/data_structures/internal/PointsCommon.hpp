@@ -38,10 +38,12 @@ namespace clue {
       }
 
       ALPAKA_FN_HOST auto clusterIndexes() const {
+        assert(static_cast<const TPoints&>(*this).m_clustered);
         auto& view = static_cast<const TPoints*>(this)->m_view;
         return std::span<const int>(view.cluster_index, view.n);
       }
       ALPAKA_FN_HOST auto clusterIndexes() {
+        assert(static_cast<const TPoints&>(*this).m_clustered);
         auto& view = static_cast<TPoints*>(this)->m_view;
         return std::span<int>(view.cluster_index, view.n);
       }

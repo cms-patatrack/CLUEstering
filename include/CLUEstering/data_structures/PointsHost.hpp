@@ -27,6 +27,7 @@ namespace clue {
     std::optional<ClusterProperties> m_clusterProperties;
     std::optional<std::size_t> m_nclusters;
     int32_t m_size;
+    bool m_clustered = false;
 
   public:
     class Point {
@@ -126,6 +127,10 @@ namespace clue {
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;
 
+    void clustered() { m_clustered = true; }
+
+    template <std::size_t _Ndim>
+    friend class Clusterer;
     template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
     friend void copyToHost(_TQueue& queue,
                            PointsHost<_Ndim>& h_points,
