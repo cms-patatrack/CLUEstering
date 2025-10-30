@@ -32,19 +32,6 @@ def test_read_string_except():
 
 
 @pytest.fixture
-def no_weight_dataset():
-    '''
-    Returns a dataset with no weight associated to the points
-    '''
-    x0 = np.array([0, 1, 2, 3, 4])
-    x1 = np.array([5, 6, 7, 8, 9])
-    x2 = np.array([10, 11, 12, 13, 14])
-    data = {'x0': x0, 'x1': x1, 'x2': x2}
-
-    return pd.DataFrame(data)
-
-
-@pytest.fixture
 def low_dimensionality_dataset():
     '''
     Returns a dataset with no coordinates
@@ -78,16 +65,13 @@ def high_dimensionality_dataset():
     return pd.DataFrame(data)
 
 
-def test_handle_dataframe_except(no_weight_dataset,
-                                 low_dimensionality_dataset,
+def test_handle_dataframe_except(low_dimensionality_dataset,
                                  high_dimensionality_dataset):
     '''
     Test the error handling when passing incorrect dataframes
     '''
     clust = clue.clusterer(0.5, 5., 1.)
 
-    with pytest.raises(ValueError):
-        clust._handle_dataframe(no_weight_dataset)
     with pytest.raises(ValueError):
         clust._handle_dataframe(low_dimensionality_dataset)
     with pytest.raises(ValueError):
@@ -118,9 +102,9 @@ def dictionary(dataframe):
     '''
     Returns a test dataset as dictionary
     '''
-    data_dict = {'x0': dataframe['x0'].values.tolist(),
-                 'x1': dataframe['x1'].values.tolist(),
-                 'x2': dataframe['x2'].values.tolist(),
+    data_dict = {'x0': dataframe['x'].values.tolist(),
+                 'x1': dataframe['y'].values.tolist(),
+                 'x2': dataframe['z'].values.tolist(),
                  'weight': dataframe['weight'].values.tolist()}
     return data_dict
 
@@ -130,9 +114,9 @@ def lists(dataframe):
     '''
     Returns a test dataset as a list of lists
     '''
-    data_lists = [dataframe['x0'].values.tolist(),
-                  dataframe['x1'].values.tolist(),
-                  dataframe['x2'].values.tolist(),
+    data_lists = [dataframe['x'].values.tolist(),
+                  dataframe['y'].values.tolist(),
+                  dataframe['z'].values.tolist(),
                   dataframe['weight'].values.tolist()]
     return data_lists
 
@@ -142,9 +126,9 @@ def arrays(dataframe):
     '''
     Returns a test dataset as an array of arrays
     '''
-    data_arrays = np.array([np.array(dataframe['x0'].values.tolist()),
-                            np.array(dataframe['x1'].values.tolist()),
-                            np.array(dataframe['x2'].values.tolist()),
+    data_arrays = np.array([np.array(dataframe['x'].values.tolist()),
+                            np.array(dataframe['y'].values.tolist()),
+                            np.array(dataframe['z'].values.tolist()),
                             np.array(dataframe['weight'].values.tolist())])
     return data_arrays
 

@@ -32,6 +32,7 @@ def test_clustering(toy_det):
 
     c = clue.clusterer(4., 2.5, 4.)
     c.read_data(toy_det)
+    assert c.n_dim == 2
     c.run_clue()
     c.to_csv('./', 'toy_det_output.csv')
 

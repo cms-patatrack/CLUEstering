@@ -32,6 +32,7 @@ def test_clustering(moons):
 
     c = clue.clusterer(50., 5., 120.)
     c.read_data(moons)
+    assert c.n_dim == 2
     c.run_clue()
     c.to_csv('./', 'moons_output.csv')
 
