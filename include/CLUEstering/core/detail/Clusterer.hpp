@@ -156,9 +156,9 @@ namespace clue {
     m_wrappedCoordinates = std::move(wrappedCoordinates);
   }
   template <std::size_t Ndim>
-  template <typename... TArgs>
+  template <std::integral... TArgs>
   inline void Clusterer<Ndim>::setWrappedCoordinates(TArgs... wrappedCoordinates) {
-    m_wrappedCoordinates = {wrappedCoordinates...};
+    m_wrappedCoordinates = {static_cast<uint8_t>(wrappedCoordinates)...};
   }
 
   template <std::size_t Ndim>

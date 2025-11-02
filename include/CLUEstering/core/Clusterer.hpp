@@ -198,7 +198,7 @@ namespace clue {
     ///
     /// @tparam TArgs Types of the wrapped coordinates, should be convertible to uint8_t
     /// @param wrappedCoordinates Wrapped coordinates, where 1 means periodic and 0 means non-periodic
-    template <typename... TArgs>
+    template <std::integral... TArgs>
     void setWrappedCoordinates(TArgs... wrappedCoordinates);
 
     /// @brief Get the clusters from the host points
