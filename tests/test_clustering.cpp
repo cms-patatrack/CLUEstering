@@ -89,3 +89,16 @@ TEST_CASE("Test clustering on blob dataset") {
   auto truth = clue::read_output<3>(queue, "../data/truth_files/blobs_truth.csv");
   CHECK(clue::validate_results(h_points, truth));
 }
+
+TEST_CASE("Test clustering on data with periodic coordinates") {
+  const auto device = clue::get_device(0u);
+  clue::Queue queue(device);
+
+  clue::PointsHost<2> points = clue::read_csv<2>(queue, "../data/opposite_angles.csv");
+  const float dc{.2f}, rhoc{5.f}, outlier{.2f};
+  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+
+  algo.setWrappedCoordinates(0, 1);
+  algo.make_clusters(queue, points);
+  CHECK(points.n_clusters() == 1);
+}
