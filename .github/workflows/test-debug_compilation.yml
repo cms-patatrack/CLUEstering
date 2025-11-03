@@ -25,6 +25,6 @@ jobs:
     - name: Compile the tests in debug mode
       working-directory: ${{ github.workspace }}/tests
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror"
+        cmake --build build --parallel
 
