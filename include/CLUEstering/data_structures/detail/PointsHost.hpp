@@ -133,7 +133,7 @@ namespace clue {
 
   template <std::size_t Ndim>
   template <concepts::queue TQueue>
-  inline PointsHost<Ndim>::PointsHost(TQueue& queue, int32_t n_points, std::span<std::byte> buffer)
+  inline PointsHost<Ndim>::PointsHost(TQueue&, int32_t n_points, std::span<std::byte> buffer)
       : m_view{}, m_size{n_points} {
     assert(buffer.size() == soa::host::computeSoASize<Ndim>(n_points));
 
@@ -144,7 +144,7 @@ namespace clue {
   template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
     requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
              (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
-  inline PointsHost<Ndim>::PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers)
+  inline PointsHost<Ndim>::PointsHost(TQueue&, int32_t n_points, TBuffers&&... buffers)
       : m_view{}, m_size{n_points} {
     soa::host::partitionSoAView<Ndim>(m_view, n_points, std::forward<TBuffers>(buffers)...);
   }
@@ -153,7 +153,7 @@ namespace clue {
   template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
     requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
              (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
-  inline PointsHost<Ndim>::PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers)
+  inline PointsHost<Ndim>::PointsHost(TQueue&, int32_t n_points, TBuffers... buffers)
       : m_view{}, m_size{n_points} {
     soa::host::partitionSoAView<Ndim>(m_view, n_points, buffers...);
   }
