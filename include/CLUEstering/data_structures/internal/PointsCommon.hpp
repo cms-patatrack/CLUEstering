@@ -92,8 +92,6 @@ namespace clue {
   void copyToHost(TQueue& queue,
                   PointsHost<Ndim>& h_points,
                   const PointsDevice<Ndim, TDev>& d_points) {
-    assert(("The device points have not been clustered yet, so they cannot be copied to host",
-            d_points.clustered()));
     alpaka::memcpy(
         queue,
         make_host_view(h_points.m_view.cluster_index, h_points.size()),

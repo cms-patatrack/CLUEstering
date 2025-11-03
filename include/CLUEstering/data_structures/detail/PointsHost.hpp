@@ -42,8 +42,8 @@ namespace clue {
       auto buffers_tuple = std::make_tuple(buffer...);
 
       [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) +
-                                                       Dims * n_points * sizeof(float))),
+        ((view.coords[Dims] =
+              reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dims * n_points)),
          ...);
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<1>(buffers_tuple);
@@ -56,8 +56,8 @@ namespace clue {
       auto buffers_tuple = std::make_tuple(buffers...);
 
       [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) +
-                                                       Dims * n_points * sizeof(float))),
+        ((view.coords[Dims] =
+              reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dims * n_points)),
          ...);
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<0>(buffers_tuple) + Ndim * n_points;
@@ -83,8 +83,8 @@ namespace clue {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
 
       [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() +
-                                                       Dims * n_points * sizeof(float))),
+        ((view.coords[Dims] =
+              reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Dims * n_points)),
          ...);
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<1>(buffers_tuple).data();
@@ -97,8 +97,8 @@ namespace clue {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
 
       [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() +
-                                                       Dims * n_points * sizeof(float))),
+        ((view.coords[Dims] =
+              reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Dims * n_points)),
          ...);
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<0>(buffers_tuple).data() + Ndim * n_points;
@@ -111,8 +111,8 @@ namespace clue {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
 
       [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() +
-                                                       Dims * n_points * sizeof(float))),
+        ((view.coords[Dims] =
+              reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Dims * n_points)),
          ...);
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<0>(buffers_tuple).data() + Ndim * n_points;
