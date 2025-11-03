@@ -172,8 +172,8 @@ namespace clue {
 
   template <std::size_t Ndim>
   inline const auto& PointsHost<Ndim>::n_clusters() {
-    assert(("The points have to be clustered before the cluster properties can be accessed",
-            m_clustered));
+    assert(m_clustered &&
+           "The points have to be clustered before the cluster properties can be accessed");
     if (m_clusterProperties.has_value())
       return m_clusterProperties->n_clusters();
     if (!m_nclusters.has_value())
@@ -184,8 +184,8 @@ namespace clue {
 
   template <std::size_t Ndim>
   inline const auto& PointsHost<Ndim>::clusters() {
-    assert(("The points have to be clustered before the cluster properties can be accessed",
-            m_clustered));
+    assert(m_clustered &&
+           "The points have to be clustered before the cluster properties can be accessed");
     if (!m_clusterProperties.has_value())
       m_clusterProperties = ClusterProperties{this->clusterIndexes()};
 
@@ -194,8 +194,8 @@ namespace clue {
 
   template <std::size_t Ndim>
   inline const auto& PointsHost<Ndim>::cluster_sizes() {
-    assert(("The points have to be clustered before the cluster properties can be accessed",
-            m_clustered));
+    assert(m_clustered &&
+           "The points have to be clustered before the cluster properties can be accessed");
     if (!m_clusterProperties.has_value())
       m_clusterProperties = ClusterProperties{this->clusterIndexes()};
 
@@ -204,8 +204,8 @@ namespace clue {
 
   template <std::size_t Ndim>
   inline const auto& PointsHost<Ndim>::cluster_properties() {
-    assert(("The points have to be clustered before the cluster properties can be accessed",
-            m_clustered));
+    assert(m_clustered &&
+           "The points have to be clustered before the cluster properties can be accessed");
     if (!m_clusterProperties.has_value())
       m_clusterProperties = ClusterProperties{this->clusterIndexes()};
 
