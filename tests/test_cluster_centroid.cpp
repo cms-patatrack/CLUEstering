@@ -7,6 +7,7 @@
 #include <vector>
 
 #include <fmt/core.h>
+#include <fmt/format.h>
 
 #include "doctest.h"
 
@@ -23,7 +24,13 @@ TEST_CASE("Test computation of cluster centroid") {
 
   algo.make_clusters(queue, h_points, d_points);
 
-  SUBCASE("Check centroid of cluster 0") { volatile auto _ = clue::cluster_centroid(h_points, 0); }
+  SUBCASE("Check centroid of cluster 0") {
+    auto centroid = clue::cluster_centroid(h_points, 0);
+    std::ranges::for_each(centroid, [](auto coord) -> void {
+      CHECK(std::isfinite(coord));
+      CHECK(!std::isnan(coord));
+    });
+  }
 }
 
 TEST_CASE("Test computation of all cluster centroids") {

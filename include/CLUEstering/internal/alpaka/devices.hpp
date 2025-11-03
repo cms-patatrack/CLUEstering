@@ -39,14 +39,13 @@ namespace clue {
   std::vector<alpaka::Dev<TPlatform>> enumerate() {
     assert(getDeviceIndex(host) == 0u);
 
-    using Device = alpaka::Dev<TPlatform>;
-    using Platform = TPlatform;
+    using TDev = alpaka::Dev<TPlatform>;
 
-    std::vector<Device> devices;
-    uint32_t n = alpaka::getDevCount(Platform{});
+    std::vector<TDev> devices;
+    uint32_t n = alpaka::getDevCount(TPlatform{});
     devices.reserve(n);
     for (uint32_t i = 0; i < n; ++i) {
-      devices.push_back(alpaka::getDevByIdx(Platform{}, i));
+      devices.push_back(alpaka::getDevByIdx(TPlatform{}, i));
       assert(getDeviceIndex(devices.back()) == static_cast<int>(i));
     }
     return devices;

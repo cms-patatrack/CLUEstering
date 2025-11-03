@@ -305,15 +305,15 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  std::vector<float> coords(2 * size);
-  std::vector<float> weights(size);
-  std::vector<int> cluster_ids(size);
+  std::vector<float> coords_vector(2 * size);
+  std::vector<float> weights_vector(size);
+  std::vector<int> cluster_ids_vector(size);
 
   clue::PointsHost<2> h_points(queue,
                                size,
-                               std::span(coords.data(), coords.size()),
-                               std::span(weights.data(), weights.size()),
-                               std::span(cluster_ids.data(), cluster_ids.size()));
+                               std::span(coords_vector.data(), coords_vector.size()),
+                               std::span(weights_vector.data(), weights_vector.size()),
+                               std::span(cluster_ids_vector.data(), cluster_ids_vector.size()));
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -369,11 +369,11 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  std::vector<float> coords(2 * size);
-  std::vector<float> weights(size);
-  std::vector<int> cluster_ids(size);
+  std::vector<float> coords_vector(2 * size);
+  std::vector<float> weights_vector(size);
+  std::vector<int> cluster_ids_vector(size);
 
-  clue::PointsHost<2> h_points(queue, size, coords, weights, cluster_ids);
+  clue::PointsHost<2> h_points(queue, size, coords_vector, weights_vector, cluster_ids_vector);
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -429,11 +429,12 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  std::vector<float> coords(2 * size);
-  std::vector<float> weights(size);
-  std::vector<int> cluster_ids(size);
+  std::vector<float> coords_vector(2 * size);
+  std::vector<float> weights_vector(size);
+  std::vector<int> cluster_ids_vector(size);
 
-  clue::PointsHost<2> h_points(queue, size, coords.data(), weights.data(), cluster_ids.data());
+  clue::PointsHost<2> h_points(
+      queue, size, coords_vector.data(), weights_vector.data(), cluster_ids_vector.data());
   auto view = h_points.view();
 
   CHECK(view.n == size);
