@@ -38,12 +38,14 @@ namespace clue {
       }
 
       ALPAKA_FN_HOST auto clusterIndexes() const {
-        assert(static_cast<const TPoints&>(*this).m_clustered);
+        assert(("The points have not been clustered yet, so the cluster indexes cannot be accessed",
+                static_cast<const TPoints&>(*this).m_clustered));
         auto& view = static_cast<const TPoints*>(this)->m_view;
         return std::span<const int>(view.cluster_index, view.n);
       }
       ALPAKA_FN_HOST auto clusterIndexes() {
-        assert(static_cast<const TPoints&>(*this).m_clustered);
+        assert(("The points have not been clustered yet, so the cluster indexes cannot be accessed",
+                static_cast<const TPoints&>(*this).m_clustered));
         auto& view = static_cast<TPoints*>(this)->m_view;
         return std::span<int>(view.cluster_index, view.n);
       }
@@ -90,6 +92,8 @@ namespace clue {
   void copyToHost(TQueue& queue,
                   PointsHost<Ndim>& h_points,
                   const PointsDevice<Ndim, TDev>& d_points) {
+    assert(("The device points have not been clustered yet, so they cannot be copied to host",
+            d_points.clustered()));
     alpaka::memcpy(
         queue,
         make_host_view(h_points.m_view.cluster_index, h_points.size()),
