@@ -1,6 +1,6 @@
 /// @file AssociationMap.hpp
 /// @brief Provides the AssociationMap class for managing associations between keys and values
-/// /// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
+/// @authors Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini
 
 #pragma once
 
