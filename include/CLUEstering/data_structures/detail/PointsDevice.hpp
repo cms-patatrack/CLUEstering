@@ -65,8 +65,8 @@ namespace clue {
       auto buffers_tuple = std::make_tuple(buffer...);
 
       [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) +
-                                                       Dims * n_points * sizeof(float))),
+        ((view.coords[Dims] =
+              reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dims * n_points)),
          ...);
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<1>(buffers_tuple);
@@ -86,8 +86,8 @@ namespace clue {
       auto buffers_tuple = std::make_tuple(buffers...);
 
       [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) +
-                                                       Dims * n_points * sizeof(float))),
+        ((view.coords[Dims] =
+              reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dims * n_points)),
          ...);
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<0>(buffers_tuple) + Ndim * n_points;
@@ -107,8 +107,7 @@ namespace clue {
       auto buffers_tuple = std::make_tuple(buffers...);
 
       [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = (std::get<Dims>(buffers_tuple) + Dims * n_points * sizeof(float))),
-         ...);
+        ((view.coords[Dims] = (std::get<Dims>(buffers_tuple) + Dims * n_points)), ...);
       }(std::make_index_sequence<Ndim>{});
       view.weight = std::get<Ndim>(buffers_tuple) + Ndim * n_points;
       view.cluster_index = std::get<Ndim + 1>(buffers_tuple);
