@@ -201,7 +201,7 @@ namespace clue {
         !(m_tiles->extents().keys >= static_cast<std::size_t>(nTiles))) {
       m_tiles->initialize(h_points.size(), nTiles, nPerDim, queue);
     } else {
-      m_tiles->reset(h_points.size(), nTiles, nPerDim, queue);
+      m_tiles->reset(h_points.size(), nTiles, nPerDim);
     }
 
     auto min_max = clue::make_host_buffer<CoordinateExtremes>(queue);
@@ -229,7 +229,7 @@ namespace clue {
         !(m_tiles->extents().keys >= static_cast<std::size_t>(nTiles))) {
       m_tiles->initialize(d_points.size(), nTiles, nPerDim, queue);
     } else {
-      m_tiles->reset(d_points.size(), nTiles, nPerDim, queue);
+      m_tiles->reset(d_points.size(), nTiles, nPerDim);
     }
 
     auto min_max = clue::make_host_buffer<CoordinateExtremes>(queue);
@@ -251,7 +251,7 @@ namespace clue {
     if (!(m_followers->extents() >= n_points)) {
       m_followers->initialize(n_points, queue);
     } else {
-      m_followers->reset(n_points, queue);
+      m_followers->reset(n_points);
     }
   }
 

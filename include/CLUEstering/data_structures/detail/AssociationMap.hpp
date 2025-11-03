@@ -90,10 +90,6 @@ namespace clue {
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
     m_view.m_extents = {nelements, nbins};
-
-    auto queue(dev);
-    // zero the offset buffer
-    alpaka::memset(queue, m_offsets, 0);
   }
 
   template <concepts::device TDev>
@@ -110,9 +106,6 @@ namespace clue {
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
     m_view.m_extents = {nelements, nbins};
-
-    // zero the offset buffer
-    alpaka::memset(queue, m_offsets, 0);
   }
 
   template <concepts::device TDev>
@@ -235,7 +228,6 @@ namespace clue {
   {
     m_indexes = make_host_buffer<int32_t[]>(nelements);
     m_offsets = make_host_buffer<int32_t[]>(nbins + 1);
-    std::memset(m_offsets.data(), 0, (nbins + 1) * sizeof(int32_t));
     m_nbins = nbins;
 
     m_view.m_indexes = m_indexes.data();
@@ -250,7 +242,6 @@ namespace clue {
                                                               TQueue& queue) {
     m_indexes = make_device_buffer<int32_t[]>(queue, nelements);
     m_offsets = make_device_buffer<int32_t[]>(queue, nbins + 1);
-    alpaka::memset(queue, m_offsets, 0);
     m_nbins = nbins;
 
     m_view.m_indexes = m_indexes.data();
@@ -259,30 +250,8 @@ namespace clue {
   }
 
   template <concepts::device TDev>
-
-  inline ALPAKA_FN_HOST void AssociationMap<TDev>::reset(size_type nelements, size_type nbins)
-    requires std::same_as<TDev, alpaka::DevCpu>
-  {
-    std::memset(m_indexes.data(), 0, nelements * sizeof(int32_t));
-    std::memset(m_offsets.data(), 0, (nbins + 1) * sizeof(int32_t));
+  inline ALPAKA_FN_HOST void AssociationMap<TDev>::reset(size_type nelements, size_type nbins) {
     m_nbins = nbins;
-
-    m_view.m_indexes = m_indexes.data();
-    m_view.m_offsets = m_offsets.data();
-    m_view.m_extents = {nelements, nbins};
-  }
-
-  template <concepts::device TDev>
-  template <concepts::queue TQueue>
-  inline ALPAKA_FN_HOST void AssociationMap<TDev>::reset(TQueue& queue,
-                                                         size_type nelements,
-                                                         size_type nbins) {
-    alpaka::memset(queue, m_indexes, 0);
-    alpaka::memset(queue, m_offsets, 0);
-    m_nbins = nbins;
-
-    m_view.m_indexes = m_indexes.data();
-    m_view.m_offsets = m_offsets.data();
     m_view.m_extents = {nelements, nbins};
   }
 
@@ -335,7 +304,6 @@ namespace clue {
   ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size, TFunc func, TQueue& queue) {
     auto bin_buffer = make_device_buffer<int32_t[]>(queue, size);
 
-    // compute associations
     const auto blocksize = 512;
     const auto gridsize = divide_up_by(size, blocksize);
     const auto workdiv = make_workdiv<TAcc>(gridsize, blocksize);
@@ -351,10 +319,11 @@ namespace clue {
                        sizes_buffer.data(),
                        size);
 
-    // prepare prefix scan
     auto block_counter = make_device_buffer<int32_t>(queue);
     alpaka::memset(queue, block_counter, 0);
 
+    auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_nbins + 1);
+    alpaka::memset(queue, make_device_view(alpaka::getDev(queue), temp_offsets.data(), 1), 0);
     const auto blocksize_multiblockscan = 1024;
     auto gridsize_multiblockscan = divide_up_by(m_nbins, blocksize_multiblockscan);
     const auto workdiv_multiblockscan =
@@ -365,17 +334,15 @@ namespace clue {
                        workdiv_multiblockscan,
                        multiBlockPrefixScan<int32_t>{},
                        sizes_buffer.data(),
-                       m_offsets.data() + 1,
+                       temp_offsets.data() + 1,
                        m_nbins,
                        gridsize_multiblockscan,
                        block_counter.data(),
                        warp_size);
 
-    // fill associator
-    auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_nbins + 1);
     alpaka::memcpy(queue,
-                   temp_offsets,
-                   make_device_view(alpaka::getDev(queue), m_offsets.data(), m_nbins + 1));
+                   make_device_view(alpaka::getDev(queue), m_offsets.data(), m_nbins + 1),
+                   temp_offsets);
     alpaka::exec<TAcc>(queue,
                        workdiv,
                        detail::KernelFillAssociator{},
@@ -431,10 +398,11 @@ namespace clue {
                        sizes_buffer.data(),
                        size);
 
-    // prepare prefix scan
     auto block_counter = make_device_buffer<int32_t>(queue);
     alpaka::memset(queue, block_counter, 0);
 
+    auto temp_offsets = make_device_buffer<key_type[]>(queue, m_nbins + 1);
+    alpaka::memset(queue, make_device_view(alpaka::getDev(queue), temp_offsets.data(), 1), 0);
     const auto blocksize_multiblockscan = 1024;
     auto gridsize_multiblockscan = divide_up_by(m_nbins, blocksize_multiblockscan);
     const auto workdiv_multiblockscan =
@@ -445,17 +413,15 @@ namespace clue {
                        workdiv_multiblockscan,
                        multiBlockPrefixScan<key_type>{},
                        sizes_buffer.data(),
-                       m_offsets.data() + 1,
+                       temp_offsets.data() + 1,
                        m_nbins,
                        gridsize_multiblockscan,
                        block_counter.data(),
                        warp_size);
 
-    // fill associator
-    auto temp_offsets = make_device_buffer<key_type[]>(queue, m_nbins + 1);
     alpaka::memcpy(queue,
-                   temp_offsets,
-                   make_device_view(alpaka::getDev(queue), m_offsets.data(), m_nbins + 1));
+                   make_device_view(alpaka::getDev(queue), m_offsets.data(), m_nbins + 1),
+                   temp_offsets);
     alpaka::exec<TAcc>(queue,
                        workdiv,
                        detail::KernelFillAssociator{},
