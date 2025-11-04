@@ -21,10 +21,7 @@ namespace clue {
     ALPAKA_FN_HOST void initialize(int32_t npoints, TQueue& queue) {
       m_assoc.initialize(npoints, npoints, queue);
     }
-    template <concepts::queue TQueue>
-    ALPAKA_FN_HOST void reset(int32_t npoints, TQueue& queue) {
-      m_assoc.reset(queue, npoints, npoints);
-    }
+    ALPAKA_FN_HOST void reset(int32_t npoints) { m_assoc.reset(npoints, npoints); }
 
     template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
     ALPAKA_FN_HOST void fill(TQueue& queue, const PointsDevice<Ndim, TDev>& d_points) {

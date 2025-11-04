@@ -58,9 +58,8 @@ namespace clue::internal {
       m_view.nperdim = nperdim;
     }
 
-    template <clue::concepts::queue TQueue>
-    ALPAKA_FN_HOST void reset(int32_t npoints, int32_t ntiles, int32_t nperdim, TQueue& queue) {
-      m_assoc.reset(queue, npoints, ntiles);
+    ALPAKA_FN_HOST void reset(int32_t npoints, int32_t ntiles, int32_t nperdim) {
+      m_assoc.reset(npoints, ntiles);
 
       m_ntiles = ntiles;
       m_nperdim = nperdim;

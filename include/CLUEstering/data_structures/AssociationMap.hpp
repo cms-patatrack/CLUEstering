@@ -171,11 +171,7 @@ namespace clue {
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(size_type nelements, size_type nbins, TQueue& queue);
 
-    ALPAKA_FN_HOST void reset(size_type nelements, size_type nbins)
-      requires std::same_as<TDev, alpaka::DevCpu>;
-
-    template <concepts::queue TQueue>
-    ALPAKA_FN_HOST void reset(TQueue& queue, size_type nelements, size_type nbins);
+    ALPAKA_FN_HOST void reset(size_type nelements, size_type nbins);
 
     template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, TFunc func, TQueue& queue);
