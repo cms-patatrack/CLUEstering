@@ -17,6 +17,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.hpp.in
 
 set(CLUE_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/CLUEstering")
 
+# old alias, to be removed in future versions
 add_library(CLUEstering INTERFACE)
 target_include_directories(
   CLUEstering
@@ -24,14 +25,25 @@ target_include_directories(
             $<BUILD_INTERFACE:${CLUE_GENERATED_INCLUDE_DIR}>
             $<INSTALL_INTERFACE:include>)
 
+# properly namespaced target
+add_library(CLUEstering::CLUEstering ALIAS CLUEstering)
+
 install(DIRECTORY include/ DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CLUEstering/version.hpp
         DESTINATION include/CLUEstering)
+# export old namespace target
+install(TARGETS CLUEstering EXPORT CLUEsteringTargets-clue)
+install(
+  EXPORT CLUEsteringTargets-clue
+  FILE CLUEsteringTargets-clue.cmake
+  NAMESPACE clue::
+  DESTINATION lib/cmake/CLUEstering)
+# export new namespace target
 install(TARGETS CLUEstering EXPORT CLUEsteringTargets)
 install(
   EXPORT CLUEsteringTargets
   FILE CLUEsteringTargets.cmake
-  NAMESPACE clue::
+  NAMESPACE CLUEstering::
   DESTINATION lib/cmake/CLUEstering)
 
 set(CLUEstering_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
