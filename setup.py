@@ -4,18 +4,16 @@ from pathlib import Path
 from setuptools import setup
 import subprocess
 
-__version__ = "2.7.2"
+__version__ = "2.8.0"
 
 this_directory = Path(__file__).parent
 long_description = (this_directory/'README.md').read_text()
 
 cmake_command = ['cmake', '-B', 'build', '-DBUILD_PYTHON=ON']
-make_command = ['make', '-C', 'build']
+make_command = ['cmake', '--build', 'build', '--parallel']
 
 try:
-    # Execute the cmake command and print its output
     subprocess.check_call(cmake_command, stderr=subprocess.STDOUT)
-    # Execute the make command and print its output
     subprocess.check_call(make_command, stderr=subprocess.STDOUT)
 except subprocess.CalledProcessError as e:
     print(e.output)
