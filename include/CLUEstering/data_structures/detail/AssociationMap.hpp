@@ -70,6 +70,10 @@ namespace clue {
         m_offsets{make_host_buffer<key_type[]>(nbins + 1)},
         m_view{},
         m_nbins{nbins} {
+    if (nelements == 0) {
+      throw std::invalid_argument(
+          "Number of bins and elements must be positive in AssociationMap constructor");
+    }
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
     m_view.m_extents = {nelements, nbins};
@@ -83,7 +87,7 @@ namespace clue {
         m_offsets{make_device_buffer<key_type[]>(dev, nbins + 1)},
         m_view{},
         m_nbins{nbins} {
-    if (nbins == 0 || nelements == 0) {
+    if (nelements == 0) {
       throw std::invalid_argument(
           "Number of bins and elements must be positive in AssociationMap constructor");
     }
@@ -302,6 +306,9 @@ namespace clue {
   template <concepts::device TDev>
   template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
   ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size, TFunc func, TQueue& queue) {
+    if (m_nbins == 0)
+      return;
+
     auto bin_buffer = make_device_buffer<int32_t[]>(queue, size);
 
     const auto blocksize = 512;
@@ -323,7 +330,7 @@ namespace clue {
     alpaka::memset(queue, block_counter, 0);
 
     auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_nbins + 1);
-    alpaka::memset(queue, make_device_view(alpaka::getDev(queue), temp_offsets.data(), 1), 0);
+    alpaka::memset(queue, temp_offsets, 0u, 1u);
     const auto blocksize_multiblockscan = 1024;
     auto gridsize_multiblockscan = divide_up_by(m_nbins, blocksize_multiblockscan);
     const auto workdiv_multiblockscan =
@@ -385,6 +392,8 @@ namespace clue {
   ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size,
                                                         std::span<const key_type> associations,
                                                         TQueue& queue) {
+    if (m_nbins == 0)
+      return;
     const auto blocksize = 512;
     const auto gridsize = divide_up_by(size, blocksize);
     const auto workdiv = make_workdiv<TAcc>(gridsize, blocksize);
@@ -402,7 +411,7 @@ namespace clue {
     alpaka::memset(queue, block_counter, 0);
 
     auto temp_offsets = make_device_buffer<key_type[]>(queue, m_nbins + 1);
-    alpaka::memset(queue, make_device_view(alpaka::getDev(queue), temp_offsets.data(), 1), 0);
+    alpaka::memset(queue, temp_offsets, 0u, 1u);
     const auto blocksize_multiblockscan = 1024;
     auto gridsize_multiblockscan = divide_up_by(m_nbins, blocksize_multiblockscan);
     const auto workdiv_multiblockscan =
