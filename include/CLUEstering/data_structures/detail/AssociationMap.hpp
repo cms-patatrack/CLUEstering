@@ -8,7 +8,6 @@
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
-#include "CLUEstering/internal/algorithm/default_policy.hpp"
 #include "CLUEstering/internal/algorithm/scan/scan.hpp"
 
 #include <span>
@@ -372,12 +371,8 @@ namespace clue {
 
     std::vector<key_type> temporary_keys(m_nbins + 1);
     temporary_keys[0] = 0;
-    std::inclusive_scan(
-        internal::default_policy, sizes.begin(), sizes.end(), temporary_keys.begin() + 1);
-    std::copy(internal::default_policy,
-              temporary_keys.data(),
-              temporary_keys.data() + m_nbins + 1,
-              m_offsets.data());
+    std::inclusive_scan(sizes.begin(), sizes.end(), temporary_keys.begin() + 1);
+    std::copy(temporary_keys.data(), temporary_keys.data() + m_nbins + 1, m_offsets.data());
     for (auto i = 0u; i < associations.size(); ++i) {
       if (associations[i] >= 0) {
         auto& offset = temporary_keys[associations[i]];
