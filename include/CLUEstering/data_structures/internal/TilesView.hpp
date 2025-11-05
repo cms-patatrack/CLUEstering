@@ -37,9 +37,9 @@ namespace clue::internal {
       int coord_bin;
       if (wrapping[dim]) {
         coord_bin =
-            static_cast<int>((normalizeCoordinate(coord, dim) - minmax->min(dim)) / tilesizes[dim]);
+            static_cast<int>((normalizeCoordinate(coord, dim) - minmax[dim].min) / tilesizes[dim]);
       } else {
-        coord_bin = static_cast<int>((coord - minmax->min(dim)) / tilesizes[dim]);
+        coord_bin = static_cast<int>((coord - minmax[dim].min) / tilesizes[dim]);
       }
 
       // Address the cases of underflow and overflow
@@ -90,9 +90,9 @@ namespace clue::internal {
     ALPAKA_FN_HOST_ACC inline constexpr float normalizeCoordinate(float coord, int dim) const {
       const float range = minmax->range(dim);
       float remainder = coord - static_cast<int>(coord / range) * range;
-      if (remainder >= minmax->max(dim))
+      if (remainder >= minmax[dim].max)
         remainder -= range;
-      else if (remainder < minmax->min(dim))
+      else if (remainder < minmax[dim].min)
         remainder += range;
       return remainder;
     }
