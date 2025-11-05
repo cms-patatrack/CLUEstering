@@ -11,12 +11,10 @@ endif()
 string(
   APPEND
   CMAKE_CXX_FLAGS_DEBUG
-  " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wshadow -Wimplicit-fallthrough -Wextra-semi -Wold-style-cast -pg -fsanitize=address"
+  " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -O0 -Wall -Wextra -Wpedantic -Wshadow -Wimplicit-fallthrough -Wextra-semi -Wold-style-cast -g -pg -fsanitize=address"
 )
-string(
-  APPEND
-  CMAKE_CXX_FLAGS
-  " -O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
+set(CMAKE_CXX_FLAGS_RELEASE
+    " -O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
 )
 
 find_package(Boost 1.75.0 REQUIRED)
