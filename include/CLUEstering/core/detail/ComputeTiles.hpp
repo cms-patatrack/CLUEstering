@@ -6,7 +6,6 @@
 #include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/internal/algorithm/algorithm.hpp"
-#include "CLUEstering/internal/algorithm/default_policy.hpp"
 #include "CLUEstering/internal/nostd/maximum.hpp"
 #include "CLUEstering/internal/nostd/minimum.hpp"
 #include <algorithm>
@@ -22,13 +21,11 @@ namespace clue {
                            int32_t nPerDim) {
       for (size_t dim{}; dim != Ndim; ++dim) {
         auto coords = h_points.coords(dim);
-        const float dimMax = std::reduce(clue::internal::default_policy,
-                                         coords.begin(),
+        const float dimMax = std::reduce(coords.begin(),
                                          coords.end(),
                                          std::numeric_limits<float>::lowest(),
                                          clue::nostd::maximum<float>{});
-        const float dimMin = std::reduce(clue::internal::default_policy,
-                                         coords.begin(),
+        const float dimMin = std::reduce(coords.begin(),
                                          coords.end(),
                                          std::numeric_limits<float>::max(),
                                          clue::nostd::minimum<float>{});

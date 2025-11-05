@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "CLUEstering/internal/algorithm/default_policy.hpp"
 #include <alpaka/alpaka.hpp>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -31,7 +30,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
-        return std::min_element(default_policy, first, last);
+        return std::min_element(first, last);
 #endif
       }
 
@@ -61,7 +60,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
-        return std::min_element(default_policy, first, last, comp);
+        return std::min_element(first, last, comp);
 #endif
       }
 
@@ -91,7 +90,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
-        return std::max_element(default_policy, first, last);
+        return std::max_element(first, last);
 #endif
       }
 
@@ -121,7 +120,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
-        return std::max_element(default_policy, first, last, comp);
+        return std::max_element(first, last, comp);
 #endif
       }
 
@@ -151,7 +150,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::minmax_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
-        return std::minmax_element(default_policy, first, last);
+        return std::minmax_element(first, last);
 #endif
       }
 
@@ -180,7 +179,7 @@ namespace clue {
         return oneapi::dpl::minmax_element(
             oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
-        return std::minmax_element(default_policy, first, last, comp);
+        return std::minmax_element(first, last, comp);
 #endif
       }
 

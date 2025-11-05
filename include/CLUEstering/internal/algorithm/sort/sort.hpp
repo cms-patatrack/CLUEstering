@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CLUEstering/internal/algorithm/default_policy.hpp"
 #include <alpaka/alpaka.hpp>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -32,7 +31,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         oneapi::dpl::sort(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
-        std::sort(default_policy, first, last);
+        std::sort(first, last);
 #endif
       }
 
@@ -62,7 +61,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         oneapi::dpl::sort(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
-        std::sort(default_policy, first, last, comp);
+        std::sort(first, last, comp);
 #endif
       }
 

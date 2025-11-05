@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "CLUEstering/internal/algorithm/default_policy.hpp"
 #include <alpaka/alpaka.hpp>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -31,7 +30,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
-        return std::reduce(default_policy, first, last);
+        return std::reduce(first, last);
 #endif
       }
 
@@ -58,7 +57,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last, init);
 #else
-        return std::reduce(default_policy, first, last, init);
+        return std::reduce(first, last, init);
 #endif
       }
 
@@ -90,7 +89,7 @@ namespace clue {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
         return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last, init, op);
 #else
-        return std::reduce(default_policy, first, last, init, op);
+        return std::reduce(first, last, init, op);
 #endif
       }
 
