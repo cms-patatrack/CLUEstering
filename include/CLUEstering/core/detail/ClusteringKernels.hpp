@@ -196,7 +196,6 @@ namespace clue::detail {
                                                        dm,
                                                        i);
 
-        dev_points.delta[i] = clue::internal::math::sqrt(delta_i);
         dev_points.nearest_higher[i] = nh_i;
       }
     }
