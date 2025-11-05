@@ -67,7 +67,6 @@ namespace clue {
     int* cluster_index;
     int* is_seed;
     float* rho;
-    float* delta;
     int* nearest_higher;
     int32_t n;
   };
