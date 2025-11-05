@@ -15,6 +15,9 @@
 
 namespace clue {
 
+  template <std::size_t NDim, concepts::queue TQueue>
+  clue::PointsHost<NDim> read_output(TQueue& queue, const std::string& file_path);
+
   /// @brief The PointsHost class is a data structure that manages points in host memory.
   /// It provides methods to allocate, access, and manipulate points in host memory.
   ///
@@ -166,6 +169,8 @@ namespace clue {
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);
     friend struct internal::points_interface<PointsHost<Ndim>>;
+    template <std::size_t NDim, concepts::queue TQueue>
+    friend clue::PointsHost<NDim> read_output(TQueue& queue, const std::string& file_path);
   };
 
 }  // namespace clue
