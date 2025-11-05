@@ -20,46 +20,37 @@ TEST_CASE("Test host points with internal allocation") {
   SUBCASE("Set from host span") {
     auto coords = h_points.coords(0);
     auto weights = h_points.weights();
-    auto cluster_indexes = h_points.clusterIndexes();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
-    std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
-    CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords[0];
     auto weights = view.weight;
-    auto cluster_indexes = view.cluster_index;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
-    std::iota(cluster_indexes, cluster_indexes + size, 2000);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, size), h_points.coords(0)));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         std::span(coords, size),
         std::views::iota(2000) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size),
-                             std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
   }
 }
@@ -78,46 +69,37 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
   SUBCASE("Set from host span") {
     auto coords = h_points.coords(0);
     auto weights = h_points.weights();
-    auto cluster_indexes = h_points.clusterIndexes();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
-    std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
-    CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords[0];
     auto weights = view.weight;
-    auto cluster_indexes = view.cluster_index;
 
     std::iota(coords, coords + size, 2000.f);
     std::fill(weights, weights + size, 2.f);
-    std::iota(cluster_indexes, cluster_indexes + size, 2000);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, size), h_points.coords(0)));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         std::span(coords, size),
         std::views::iota(2000) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size),
-                             std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
   }
 }
@@ -138,46 +120,37 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
   SUBCASE("Set from host span") {
     auto coords = h_points.coords(0);
     auto weights = h_points.weights();
-    auto cluster_indexes = h_points.clusterIndexes();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
-    std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
-    CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords[0];
     auto weights = view.weight;
-    auto cluster_indexes = view.cluster_index;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
-    std::iota(cluster_indexes, cluster_indexes + size, 2000);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, size), h_points.coords(0)));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         std::span(coords, size),
         std::views::iota(2000) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size),
-                             std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
   }
 }
@@ -197,46 +170,37 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
   SUBCASE("Set from host span") {
     auto coords = h_points.coords(0);
     auto weights = h_points.weights();
-    auto cluster_indexes = h_points.clusterIndexes();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
-    std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
-    CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords[0];
     auto weights = view.weight;
-    auto cluster_indexes = view.cluster_index;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
-    std::iota(cluster_indexes, cluster_indexes + size, 2000);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, size), h_points.coords(0)));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         std::span(coords, size),
         std::views::iota(2000) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size),
-                             std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
   }
 }
@@ -256,46 +220,37 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
   SUBCASE("Set from host span") {
     auto coords = h_points.coords(0);
     auto weights = h_points.weights();
-    auto cluster_indexes = h_points.clusterIndexes();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
-    std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
-    CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords[0];
     auto weights = view.weight;
-    auto cluster_indexes = view.cluster_index;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
-    std::iota(cluster_indexes, cluster_indexes + size, 2000);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, size), h_points.coords(0)));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         std::span(coords, size),
         std::views::iota(2000) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size),
-                             std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
   }
 }
@@ -320,46 +275,37 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
   SUBCASE("Set from host span") {
     auto coords = h_points.coords(0);
     auto weights = h_points.weights();
-    auto cluster_indexes = h_points.clusterIndexes();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
-    std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
-    CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords[0];
     auto weights = view.weight;
-    auto cluster_indexes = view.cluster_index;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
-    std::iota(cluster_indexes, cluster_indexes + size, 2000);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, size), h_points.coords(0)));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         std::span(coords, size),
         std::views::iota(2000) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size),
-                             std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
   }
 }
@@ -380,46 +326,37 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
   SUBCASE("Set from host span") {
     auto coords = h_points.coords(0);
     auto weights = h_points.weights();
-    auto cluster_indexes = h_points.clusterIndexes();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
-    std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
-    CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords[0];
     auto weights = view.weight;
-    auto cluster_indexes = view.cluster_index;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
-    std::iota(cluster_indexes, cluster_indexes + size, 2000);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, size), h_points.coords(0)));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         std::span(coords, size),
         std::views::iota(2000) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size),
-                             std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
   }
 }
@@ -441,46 +378,37 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
   SUBCASE("Set from host span") {
     auto coords = h_points.coords(0);
     auto weights = h_points.weights();
-    auto cluster_indexes = h_points.clusterIndexes();
 
     std::iota(coords.begin(), coords.end(), 0.f);
     std::fill(weights.begin(), weights.end(), 1.f);
-    std::iota(cluster_indexes.begin(), cluster_indexes.end(), 0);
 
     // compare with content of the view
     CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
     CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
-    CHECK(std::ranges::equal(cluster_indexes, std::span<int>(view.cluster_index, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         coords, std::views::iota(0) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(cluster_indexes, std::views::iota(0) | std::views::take(size)));
     std::ranges::for_each(weights, [](auto x) { CHECK(x == 1.f); });
   }
 
   SUBCASE("Set from view") {
     auto coords = view.coords[0];
     auto weights = view.weight;
-    auto cluster_indexes = view.cluster_index;
 
     std::iota(coords, coords + 2 * size, 2000.f);
     std::fill(weights, weights + size, 2.f);
-    std::iota(cluster_indexes, cluster_indexes + size, 2000);
 
     // compare with content of the view
     CHECK(std::ranges::equal(std::span(coords, size), h_points.coords(0)));
     CHECK(std::ranges::equal(std::span(weights, size), h_points.weights()));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size), h_points.clusterIndexes()));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
     CHECK(std::ranges::equal(
         std::span(coords, size),
         std::views::iota(2000) | std::views::take(size) | std::views::transform(to_float)));
-    CHECK(std::ranges::equal(std::span(cluster_indexes, size),
-                             std::views::iota(2000) | std::views::take(size)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
   }
 }
@@ -492,20 +420,17 @@ TEST_CASE("Test point accessor") {
   clue::PointsHost<2> points(queue, size);
   std::iota(points.coords(0).begin(), points.coords(1).end(), 0.f);
   std::fill(points.weights().begin(), points.weights().end(), 1.f);
-  std::iota(points.clusterIndexes().begin(), points.clusterIndexes().end(), 0);
 
   SUBCASE("Test point methods") {
     auto point = points[0];
     CHECK(point[0] == 0.f);
     CHECK(point[1] == 1000.f);
     CHECK(point.weight() == 1.f);
-    CHECK(point.cluster_index() == 0);
 
     auto point2 = points[999];
     CHECK(point2[0] == 999.f);
     CHECK(point2[1] == 1999.f);
     CHECK(point2.weight() == 1.f);
-    CHECK(point2.cluster_index() == 999);
   }
 }
 
