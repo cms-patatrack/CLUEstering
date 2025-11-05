@@ -9,7 +9,6 @@
 #include "CLUEstering/internal/nostd/maximum.hpp"
 #include "CLUEstering/internal/nostd/minimum.hpp"
 #include <algorithm>
-#include <execution>
 
 namespace clue {
   namespace detail {

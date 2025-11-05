@@ -17,7 +17,6 @@
 #include <alpaka/vec/Vec.hpp>
 #include <cmath>
 #include <cstdint>
-#include <execution>
 #include <ranges>
 #include <vector>
 
