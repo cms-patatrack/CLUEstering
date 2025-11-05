@@ -55,6 +55,7 @@ namespace clue {
         std::count(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') -
         1;
     clue::PointsHost<NDim> points(queue, n_points);
+    points.mark_clustered();
 
     file = std::fstream(file_path);
     // discard the header
