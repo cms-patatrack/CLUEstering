@@ -78,14 +78,19 @@ jobs:
         apt update
         apt install -y libboost-dev libtbb-dev libomp-dev
 
+          
+    - name: Verify repo structure
+      run: ls -R
+      working-directory: ${{ github.workspace }}
+
     - name: Compile tests
-      working-directory: ${{ github.workspace }}/tests
+      working-directory: tests
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
         cmake --build build --parallel
 
     - name: Run tests
-      working-directory: ${{ github.workspace }}/tests
+      working-directory: tests
       run: |
         echo "Running serial backend"
         ./build/serial.out
