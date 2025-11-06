@@ -76,7 +76,7 @@ jobs:
     - name: Install dependencies
       run: |
         apt update
-        apt install -y build-essential libboost-dev libtbb-dev libomp-dev
+        apt install -y build-essential cmake libboost-dev libtbb-dev libomp-dev
 
           
     - name: Verify repo structure
