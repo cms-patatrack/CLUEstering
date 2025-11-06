@@ -5,5 +5,5 @@ graft extern
 graft tests
 include CMakeLists.txt
 
-exclude tests/*.py
+# exclude tests/*.py
 exclude build/*
