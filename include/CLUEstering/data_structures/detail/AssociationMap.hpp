@@ -102,7 +102,7 @@ namespace clue {
         m_offsets{make_device_buffer<key_type[]>(queue, nbins + 1)},
         m_view{},
         m_nbins{nbins} {
-    if (nbins == 0 || nelements == 0) {
+    if (nelements == 0) {
       throw std::invalid_argument(
           "Number of bins and elements must be positive in AssociationMap constructor");
     }
