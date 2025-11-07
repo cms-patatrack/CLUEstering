@@ -15,10 +15,10 @@ namespace clue {
   }
 
   template <typename TAcc>
-  inline ALPAKA_FN_HOST_ACC float FlatKernel::operator()(const TAcc&,
-                                                         float /*dist_ij*/,
-                                                         int point_id,
-                                                         int j) const {
+  inline ALPAKA_FN_ACC float FlatKernel::operator()(const TAcc&,
+                                                    float /*dist_ij*/,
+                                                    int point_id,
+                                                    int j) const {
     if (point_id == j) {
       return 1.f;
     } else {
@@ -34,10 +34,10 @@ namespace clue {
   }
 
   template <typename TAcc>
-  inline ALPAKA_FN_HOST_ACC float GaussianKernel::operator()(const TAcc& acc,
-                                                             float dist_ij,
-                                                             int point_id,
-                                                             int j) const {
+  inline ALPAKA_FN_ACC float GaussianKernel::operator()(const TAcc& acc,
+                                                        float dist_ij,
+                                                        int point_id,
+                                                        int j) const {
     if (point_id == j) {
       return 1.f;
     } else {
@@ -55,10 +55,10 @@ namespace clue {
   }
 
   template <typename TAcc>
-  inline ALPAKA_FN_HOST_ACC float ExponentialKernel::operator()(const TAcc& acc,
-                                                                float dist_ij,
-                                                                int point_id,
-                                                                int j) const {
+  inline ALPAKA_FN_ACC float ExponentialKernel::operator()(const TAcc& acc,
+                                                           float dist_ij,
+                                                           int point_id,
+                                                           int j) const {
     if (point_id == j) {
       return 1.f;
     } else {
