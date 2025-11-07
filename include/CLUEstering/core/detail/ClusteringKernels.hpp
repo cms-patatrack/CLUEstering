@@ -34,16 +34,16 @@ namespace clue::detail {
   }
 
   template <typename TAcc, std::size_t Ndim, std::size_t N_, concepts::convolutional_kernel KernelType>
-  ALPAKA_FN_HOST_ACC void for_recursion(const TAcc& acc,
-                                        VecArray<int32_t, Ndim>& base_vec,
-                                        const clue::SearchBoxBins<Ndim>& search_box,
-                                        internal::TilesView<Ndim>& tiles,
-                                        PointsView<Ndim>& dev_points,
-                                        const KernelType& kernel,
-                                        const std::array<float, Ndim>& coords_i,
-                                        float* rho_i,
-                                        const DistanceParameter<Ndim>& dc,
-                                        int32_t point_id) {
+  ALPAKA_FN_ACC void for_recursion(const TAcc& acc,
+                                   VecArray<int32_t, Ndim>& base_vec,
+                                   const clue::SearchBoxBins<Ndim>& search_box,
+                                   internal::TilesView<Ndim>& tiles,
+                                   PointsView<Ndim>& dev_points,
+                                   const KernelType& kernel,
+                                   const std::array<float, Ndim>& coords_i,
+                                   float* rho_i,
+                                   const DistanceParameter<Ndim>& dc,
+                                   int32_t point_id) {
     if constexpr (N_ == 0) {
       auto binId = tiles.getGlobalBinByBin(base_vec);
       auto binSize = tiles[binId].size();
@@ -104,17 +104,17 @@ namespace clue::detail {
   };
 
   template <typename TAcc, std::size_t Ndim, std::size_t N_>
-  ALPAKA_FN_HOST_ACC void for_recursion_nearest_higher(const TAcc& acc,
-                                                       VecArray<int32_t, Ndim>& base_vec,
-                                                       const clue::SearchBoxBins<Ndim>& search_box,
-                                                       internal::TilesView<Ndim>& tiles,
-                                                       PointsView<Ndim>& dev_points,
-                                                       const std::array<float, Ndim>& coords_i,
-                                                       float rho_i,
-                                                       float* delta_i,
-                                                       int* nh_i,
-                                                       const DistanceParameter<Ndim>& dm,
-                                                       int32_t point_id) {
+  ALPAKA_FN_ACC void for_recursion_nearest_higher(const TAcc& acc,
+                                                  VecArray<int32_t, Ndim>& base_vec,
+                                                  const clue::SearchBoxBins<Ndim>& search_box,
+                                                  internal::TilesView<Ndim>& tiles,
+                                                  PointsView<Ndim>& dev_points,
+                                                  const std::array<float, Ndim>& coords_i,
+                                                  float rho_i,
+                                                  float* delta_i,
+                                                  int* nh_i,
+                                                  const DistanceParameter<Ndim>& dm,
+                                                  int32_t point_id) {
     if constexpr (N_ == 0) {
       int binId = tiles.getGlobalBinByBin(base_vec);
       int binSize = tiles[binId].size();

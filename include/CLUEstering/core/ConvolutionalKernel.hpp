@@ -28,7 +28,7 @@ namespace clue {
     /// @param j The index of the second point
     /// @return The computed kernel value
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC float operator()(const TAcc&, float /*dist_ij*/, int point_id, int j) const;
+    ALPAKA_FN_ACC float operator()(const TAcc&, float /*dist_ij*/, int point_id, int j) const;
   };
 
   /// @brief The GaussianKernel class implements a Gaussian kernel for convolution.
@@ -55,7 +55,7 @@ namespace clue {
     /// @param j The index of the second point
     /// @return The computed kernel value
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const;
+    ALPAKA_FN_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const;
   };
 
   /// @brief The ExponentialKernel class implements an exponential kernel for convolution.
@@ -80,7 +80,7 @@ namespace clue {
     /// @param j The index of the second point
     /// @return The computed kernel value
     template <typename TAcc>
-    ALPAKA_FN_HOST_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const;
+    ALPAKA_FN_ACC float operator()(const TAcc& acc, float dist_ij, int point_id, int j) const;
   };
 
 }  // namespace clue

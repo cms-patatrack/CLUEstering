@@ -87,7 +87,7 @@ namespace clue::internal {
       return clue::Span<int32_t>{buf_ptr, size};
     }
 
-    ALPAKA_FN_HOST_ACC inline constexpr float normalizeCoordinate(float coord, int dim) const {
+    ALPAKA_FN_ACC inline constexpr float normalizeCoordinate(float coord, int dim) const {
       const float range = minmax->range(dim);
       float remainder = coord - static_cast<int>(coord / range) * range;
       if (remainder >= minmax->max(dim))
