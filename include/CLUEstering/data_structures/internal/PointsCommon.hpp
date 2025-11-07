@@ -3,6 +3,7 @@
 
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include "CLUEstering/detail/make_array.hpp"
 #include <span>
 
 namespace clue {
@@ -69,6 +70,17 @@ namespace clue {
     float* rho;
     int* nearest_higher;
     int32_t n;
+
+    ALPAKA_FN_HOST_ACC auto operator[](int i) const {
+      if (i == -1)
+        return clue::nostd::make_array<float, Ndim>(std::numeric_limits<float>::max());
+
+      std::array<float, Ndim> point;
+      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
+        ((point[Dims] = coords[Dims][i]), ...);
+      }(std::make_index_sequence<Ndim>{});
+      return point;
+    }
   };
 
   namespace concepts {
@@ -101,6 +113,7 @@ namespace clue {
   void copyToDevice(TQueue& queue,
                     PointsDevice<Ndim, TDev>& d_points,
                     const PointsHost<Ndim>& h_points) {
+    // TODO: copy each coordinate column separately
     alpaka::memcpy(
         queue,
         make_device_view(alpaka::getDev(queue), d_points.m_view.coords[0], Ndim * h_points.size()),
