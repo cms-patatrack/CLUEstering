@@ -18,20 +18,7 @@
 
 namespace clue::detail {
 
-  constexpr int32_t reserve{1000000};
-
-  template <std::size_t Ndim>
-  ALPAKA_FN_ACC std::array<float, Ndim> getCoords(PointsView<Ndim>& d_points, int32_t i) {
-    if (i == -1)
-      return clue::nostd::make_array<float, Ndim>(std::numeric_limits<float>::max());
-
-    std::array<float, Ndim> coords;
-    for (auto dim = 0u; dim < Ndim; ++dim) {
-      coords[dim] = d_points.coords[dim][i];
-    }
-
-    return coords;
-  }
+  constexpr int32_t reserve = 1000000;
 
   template <typename TAcc, std::size_t Ndim, std::size_t N_, concepts::convolutional_kernel KernelType>
   ALPAKA_FN_ACC void for_recursion(const TAcc& acc,
@@ -41,7 +28,7 @@ namespace clue::detail {
                                    PointsView<Ndim>& dev_points,
                                    const KernelType& kernel,
                                    const std::array<float, Ndim>& coords_i,
-                                   float* rho_i,
+                                   float& rho_i,
                                    const DistanceParameter<Ndim>& dc,
                                    int32_t point_id) {
     if constexpr (N_ == 0) {
@@ -51,7 +38,7 @@ namespace clue::detail {
       for (auto binIter = 0; binIter < binSize; ++binIter) {
         int32_t j = tiles[binId][binIter];
 
-        auto coords_j = getCoords<Ndim>(dev_points, j);
+        auto coords_j = dev_points[j];
         auto distance_vector = tiles.distance(coords_i, coords_j);
         auto distance = 0.f;
         for (auto dim = 0u; dim < Ndim; ++dim) {
@@ -59,7 +46,7 @@ namespace clue::detail {
         }
 
         auto k = kernel(acc, clue::internal::math::sqrt(distance), point_id, j);
-        *rho_i += static_cast<int>(distance_vector <= dc) * k * dev_points.weight[j];
+        rho_i += static_cast<int>(distance_vector <= dc) * k * dev_points.weight[j];
       }
       return;
     } else {
@@ -83,7 +70,7 @@ namespace clue::detail {
                                   int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         float rho_i = 0.f;
-        auto coords_i = getCoords<Ndim>(dev_points, i);
+        auto coords_i = dev_points[i];
 
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
@@ -96,7 +83,7 @@ namespace clue::detail {
 
         VecArray<int32_t, Ndim> base_vec;
         for_recursion<TAcc, Ndim, Ndim>(
-            acc, base_vec, searchbox_bins, dev_tiles, dev_points, kernel, coords_i, &rho_i, dc, i);
+            acc, base_vec, searchbox_bins, dev_tiles, dev_points, kernel, coords_i, rho_i, dc, i);
 
         dev_points.rho[i] = rho_i;
       }
@@ -111,8 +98,8 @@ namespace clue::detail {
                                                   PointsView<Ndim>& dev_points,
                                                   const std::array<float, Ndim>& coords_i,
                                                   float rho_i,
-                                                  float* delta_i,
-                                                  int* nh_i,
+                                                  float& delta_i,
+                                                  int& nh_i,
                                                   const DistanceParameter<Ndim>& dm,
                                                   int32_t point_id) {
     if constexpr (N_ == 0) {
@@ -125,7 +112,7 @@ namespace clue::detail {
         bool found_higher = (rho_j > rho_i);
         found_higher = found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
 
-        auto coords_j = getCoords<Ndim>(dev_points, j);
+        auto coords_j = dev_points[j];
         auto distance_vector = tiles.distance(coords_i, coords_j);
         auto distance = 0.f;
         for (auto dim = 0u; dim < Ndim; ++dim) {
@@ -133,9 +120,9 @@ namespace clue::detail {
         }
 
         if (found_higher && distance_vector <= dm) {
-          if (distance < *delta_i) {
-            *delta_i = distance;
-            *nh_i = j;
+          if (distance < delta_i) {
+            delta_i = distance;
+            nh_i = j;
           }
         }
       }
@@ -171,7 +158,7 @@ namespace clue::detail {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         float delta_i = std::numeric_limits<float>::max();
         int nh_i = -1;
-        auto coords_i = getCoords<Ndim>(dev_points, i);
+        auto coords_i = dev_points[i];
         float rho_i = dev_points.rho[i];
 
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
@@ -191,8 +178,8 @@ namespace clue::detail {
                                                        dev_points,
                                                        coords_i,
                                                        rho_i,
-                                                       &delta_i,
-                                                       &nh_i,
+                                                       delta_i,
+                                                       nh_i,
                                                        dm,
                                                        i);
 
@@ -214,8 +201,8 @@ namespace clue::detail {
         dev_points.cluster_index[i] = -1;
         auto nh = dev_points.nearest_higher[i];
 
-        auto coords_i = getCoords<Ndim>(dev_points, i);
-        auto coords_nh = getCoords<Ndim>(dev_points, nh);
+        auto coords_i = dev_points[i];
+        auto coords_nh = dev_points[nh];
         auto distance_vector = tiles.distance(coords_i, coords_nh);
 
         float rho_i = dev_points.rho[i];
