@@ -16,6 +16,16 @@
 
 namespace clue {
 
+  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  void copyToHost(TQueue& queue,
+                  PointsHost<Ndim>& h_points,
+                  const PointsDevice<Ndim, TDev>& d_points);
+
+  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  void copyToDevice(TQueue& queue,
+                    PointsDevice<Ndim, TDev>& d_points,
+                    const PointsHost<Ndim>& h_points);
+
   /// @brief The PointsDevice class is a data structure that manages points on a device.
   /// It provides methods to allocate, access, and manipulate points in device memory.
   ///
