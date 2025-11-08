@@ -5,6 +5,7 @@
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/meta/apply.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <optional>
@@ -27,10 +28,9 @@ namespace clue {
 
     template <std::size_t Ndim>
     inline void partitionSoAView(PointsView<Ndim>& view, std::byte* buffer, int32_t n_points) {
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(buffer + Dims * n_points * sizeof(float))),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] = reinterpret_cast<float*>(buffer + Dim * n_points * sizeof(float));
+      });
       view.weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
       view.cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
       view.is_seed = reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(float));
@@ -43,10 +43,9 @@ namespace clue {
                                  std::byte* alloc_buffer,
                                  std::byte* buffer,
                                  int32_t n_points) {
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(buffer + Dims * n_points * sizeof(float))),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] = reinterpret_cast<float*>(buffer + Dim * n_points * sizeof(float));
+      });
       view.weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
       view.cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
       view.is_seed = reinterpret_cast<int*>(alloc_buffer);
@@ -62,11 +61,9 @@ namespace clue {
                                  TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
 
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] =
-              reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dims * n_points)),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dim * n_points);
+      });
       view.weight = std::get<1>(buffers_tuple);
       view.cluster_index = std::get<2>(buffers_tuple);
       view.is_seed = reinterpret_cast<int*>(alloc_buffer);
@@ -82,11 +79,9 @@ namespace clue {
                                  TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
 
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] =
-              reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dims * n_points)),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dim * n_points);
+      });
       view.weight = std::get<0>(buffers_tuple) + Ndim * n_points;
       view.cluster_index = std::get<1>(buffers_tuple);
       view.is_seed = reinterpret_cast<int*>(alloc_buffer);
@@ -102,9 +97,9 @@ namespace clue {
                                  TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
 
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = (std::get<Dims>(buffers_tuple) + Dims * n_points)), ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] = (std::get<Dim>(buffers_tuple) + Dim * n_points);
+      });
       view.weight = std::get<Ndim>(buffers_tuple) + Ndim * n_points;
       view.cluster_index = std::get<Ndim + 1>(buffers_tuple);
       view.is_seed = reinterpret_cast<int*>(alloc_buffer);

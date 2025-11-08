@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/meta/apply.hpp"
 #include <array>
 #include <type_traits>
 
@@ -15,9 +16,7 @@ namespace clue {
     template <typename T, std::size_t N>
     inline constexpr auto make_array(T value) {
       std::array<T, N> arr;
-      [=, &arr]<std::size_t... Ids>(std::index_sequence<Ids...>) -> void {
-        ((arr[Ids] = value), ...);
-      }(std::make_index_sequence<N>{});
+      meta::apply<N>([=, &arr]<std::size_t Idx> { arr[Idx] = value; });
       return arr;
     }
 
