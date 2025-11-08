@@ -5,6 +5,7 @@
 #include "CLUEstering/data_structures/ClusterProperties.hpp"
 #include "CLUEstering/utils/detail/get_cluster_properties.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/meta/apply.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <optional>
@@ -28,10 +29,9 @@ namespace clue {
 
     template <std::size_t Ndim>
     inline void partitionSoAView(PointsView<Ndim>& view, std::byte* buffer, int32_t n_points) {
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = reinterpret_cast<float*>(buffer + Dims * n_points * sizeof(float))),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] = reinterpret_cast<float*>(buffer + Dim * n_points * sizeof(float));
+      });
       view.weight = reinterpret_cast<float*>(buffer + Ndim * n_points * sizeof(float));
       view.cluster_index = reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(float));
       view.n = n_points;
@@ -41,11 +41,9 @@ namespace clue {
     inline void partitionSoAView(PointsView<Ndim>& view, int32_t n_points, TBuffers... buffer) {
       auto buffers_tuple = std::make_tuple(buffer...);
 
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] =
-              reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dims * n_points)),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dim * n_points);
+      });
       view.weight = std::get<1>(buffers_tuple);
       view.cluster_index = std::get<2>(buffers_tuple);
       view.n = n_points;
@@ -55,11 +53,9 @@ namespace clue {
     inline void partitionSoAView(PointsView<Ndim>& view, int32_t n_points, TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
 
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] =
-              reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dims * n_points)),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] = reinterpret_cast<float*>(std::get<0>(buffers_tuple) + Dim * n_points);
+      });
       view.weight = std::get<0>(buffers_tuple) + Ndim * n_points;
       view.cluster_index = std::get<1>(buffers_tuple);
       view.n = n_points;
@@ -69,9 +65,7 @@ namespace clue {
     inline void partitionSoAView(PointsView<Ndim>& view, int32_t n_points, TBuffers... buffers) {
       auto buffers_tuple = std::make_tuple(buffers...);
 
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] = std::get<Dims>(buffers_tuple)), ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> { view.coords[Dim] = std::get<Dim>(buffers_tuple); });
       view.weight = std::get<Ndim>(buffers_tuple) + Ndim * n_points;
       view.cluster_index = std::get<Ndim + 1>(buffers_tuple);
       view.n = n_points;
@@ -82,11 +76,10 @@ namespace clue {
     inline void partitionSoAView(PointsView<Ndim>& view, int32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
 
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] =
-              reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Dims * n_points)),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] =
+            reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Dim * n_points);
+      });
       view.weight = std::get<1>(buffers_tuple).data();
       view.cluster_index = std::get<2>(buffers_tuple).data();
       view.n = n_points;
@@ -96,11 +89,10 @@ namespace clue {
     inline void partitionSoAView(PointsView<Ndim>& view, int32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
 
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] =
-              reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Dims * n_points)),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] =
+            reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Dim * n_points);
+      });
       view.weight = std::get<0>(buffers_tuple).data() + Ndim * n_points;
       view.cluster_index = std::get<1>(buffers_tuple).data();
       view.n = n_points;
@@ -110,11 +102,10 @@ namespace clue {
     inline void partitionSoAView(PointsView<Ndim>& view, int32_t n_points, TBuffers&&... buffers) {
       auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
 
-      [&]<std::size_t... Dims>(std::index_sequence<Dims...>) -> void {
-        ((view.coords[Dims] =
-              reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Dims * n_points)),
-         ...);
-      }(std::make_index_sequence<Ndim>{});
+      meta::apply<Ndim>([&]<std::size_t Dim> {
+        view.coords[Dim] =
+            reinterpret_cast<float*>(std::get<0>(buffers_tuple).data() + Dim * n_points);
+      });
       view.weight = std::get<0>(buffers_tuple).data() + Ndim * n_points;
       view.cluster_index = std::get<1>(buffers_tuple).data();
       view.n = n_points;
