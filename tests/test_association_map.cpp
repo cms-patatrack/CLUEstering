@@ -52,6 +52,16 @@ TEST_CASE("Test binary association map") {
     CHECK(std::distance(map.equal_range(0).first, map.equal_range(0).second) == size / 2);
     CHECK(std::distance(map.equal_range(1).first, map.equal_range(1).second) == size / 2);
   }
+  SUBCASE("Test accessor to underlying containers") {
+    auto containers = map.extract();
+    const auto& keys = containers.keys;
+    const auto& values = containers.values;
+    CHECK(keys[0] == 0);
+    CHECK(keys[1] == size / 2);
+    CHECK(keys[2] == size);
+    CHECK(values[0] % 2 != 0);
+    CHECK(values[size - 1] % 2 == 0);
+  }
 }
 
 TEST_CASE("Test throwing conditions") {

@@ -43,10 +43,17 @@ namespace clue {
     using size_type = std::size_t;
     using iterator = mapped_type*;
     using const_iterator = const mapped_type*;
+    using keys_container_type = device_buffer<TDev, key_type[]>;
+    using mapped_container_type = device_buffer<TDev, mapped_type[]>;
 
     struct Extents {
       size_type keys;
       size_type values;
+    };
+
+    struct Containers {
+      const keys_container_type& keys;
+      const mapped_container_type& values;
     };
 
     /// @brief Construct an empty AssociationMap
@@ -152,6 +159,11 @@ namespace clue {
     /// @return A pair of const iterators representing the range of elements with the given key
     std::pair<const_iterator, const_iterator> equal_range(key_type key) const;
 
+    /// @brief Get a const-reference to the underlying containers
+    ///
+    /// @return A Containers object
+    Containers extract() const;
+
     /// @brief Get the constant view of the association map
     /// @return A const reference to the AssociationMapView
     const AssociationMapView& view() const;
@@ -167,7 +179,6 @@ namespace clue {
 
     ALPAKA_FN_HOST void initialize(size_type nelements, size_type nbins)
       requires std::same_as<TDev, alpaka::DevCpu>;
-
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(size_type nelements, size_type nbins, TQueue& queue);
 
@@ -175,24 +186,16 @@ namespace clue {
 
     template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, TFunc func, TQueue& queue);
-
     ALPAKA_FN_HOST void fill(std::span<const key_type> associations)
       requires std::same_as<TDev, alpaka::DevCpu>;
-
     template <concepts::accelerator TAcc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, std::span<const key_type> associations, TQueue& queue);
 
     ALPAKA_FN_HOST const auto& indexes() const;
     ALPAKA_FN_HOST auto& indexes();
 
-    ALPAKA_FN_ACC Span<int32_t> indexes(size_type bin_id);
-    ALPAKA_FN_HOST device_view<TDev, int32_t[]> indexes(const TDev& dev, size_type bin_id);
-    ALPAKA_FN_ACC Span<int32_t> operator[](size_type bin_id);
-
     ALPAKA_FN_HOST const device_buffer<TDev, int32_t[]>& offsets() const;
     ALPAKA_FN_HOST device_buffer<TDev, int32_t[]>& offsets();
-
-    ALPAKA_FN_ACC int32_t offsets(size_type bin_id) const;
 
     template <concepts::device _TDev>
     friend class Followers;
