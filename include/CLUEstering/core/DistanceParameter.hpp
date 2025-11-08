@@ -56,33 +56,26 @@ namespace clue {
     }
 
   private:
-    // TODO: needed to avoid failed template substitution
-    // to be removed when changing type of Ndim
-    template <std::size_t N1, std::size_t N2>
-      requires(N1 == N2)
-    ALPAKA_FN_ACC friend bool operator<=(const std::array<float, N1>&,
-                                         const DistanceParameter<N2>&);
-    // TODO: needed to avoid failed template substitution
-    // to be removed when changing type of Ndim
-    template <std::size_t N1, std::size_t N2>
-      requires(N1 == N2)
-    ALPAKA_FN_ACC friend bool operator>(const std::array<float, N1>&, const DistanceParameter<N2>&);
+    template <std::size_t Ndim_>
+    ALPAKA_FN_ACC friend bool operator<=(const std::array<float, Ndim_>&,
+                                         const DistanceParameter<Ndim_>&);
+    template <std::size_t Ndim_>
+    ALPAKA_FN_ACC friend bool operator>(const std::array<float, Ndim_>&,
+                                        const DistanceParameter<Ndim_>&);
   };
 
-  template <std::size_t N1, std::size_t N2>
-    requires(N1 == N2)
-  ALPAKA_FN_ACC bool operator<=(std::array<float, N1>& lhs, const DistanceParameter<N2>& rhs) {
+  template <std::size_t Ndim>
+  ALPAKA_FN_ACC bool operator<=(std::array<float, Ndim>& lhs, const DistanceParameter<Ndim>& rhs) {
     return [&]<std::size_t... Ids>(std::index_sequence<Ids...>) -> bool {
       return ((lhs[Ids] <= rhs[Ids]) && ...);
-    }(std::make_index_sequence<N1>{});
+    }(std::make_index_sequence<Ndim>{});
   }
 
-  template <std::size_t N1, std::size_t N2>
-    requires(N1 == N2)
-  ALPAKA_FN_ACC bool operator>(std::array<float, N1>& lhs, const DistanceParameter<N2>& rhs) {
+  template <std::size_t Ndim>
+  ALPAKA_FN_ACC bool operator>(std::array<float, Ndim>& lhs, const DistanceParameter<Ndim>& rhs) {
     return [&]<std::size_t... Ids>(std::index_sequence<Ids...>) -> bool {
       return ((lhs[Ids] > rhs[Ids]) && ...);
-    }(std::make_index_sequence<N1>{});
+    }(std::make_index_sequence<Ndim>{});
   }
 
 }  // namespace clue
