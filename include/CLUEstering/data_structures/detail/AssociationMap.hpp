@@ -216,6 +216,11 @@ namespace clue {
   }
 
   template <concepts::device TDev>
+  inline AssociationMap<TDev>::Containers AssociationMap<TDev>::extract() const {
+    return Containers{m_offsets, m_indexes};
+  }
+
+  template <concepts::device TDev>
   inline const AssociationMapView& AssociationMap<TDev>::view() const {
     return m_view;
   }
@@ -269,37 +274,12 @@ namespace clue {
   }
 
   template <concepts::device TDev>
-  ALPAKA_FN_ACC inline Span<int32_t> AssociationMap<TDev>::indexes(size_type bin_id) {
-    const auto size = m_offsets[bin_id + 1] - m_offsets[bin_id];
-    auto* buf_ptr = m_indexes.data() + m_offsets[bin_id];
-    return Span<mapped_type>{buf_ptr, size};
-  }
-  template <concepts::device TDev>
-  ALPAKA_FN_HOST inline device_view<TDev, int32_t[]> AssociationMap<TDev>::indexes(
-      const TDev& dev, size_type bin_id) {
-    const auto size = m_offsets[bin_id + 1] - m_offsets[bin_id];
-    auto* buf_ptr = m_indexes.data() + m_offsets[bin_id];
-    return make_device_view<int32_t[], TDev>(dev, buf_ptr, size);
-  }
-  template <concepts::device TDev>
-  ALPAKA_FN_ACC inline Span<int32_t> AssociationMap<TDev>::operator[](size_type bin_id) {
-    const auto size = m_offsets[bin_id + 1] - m_offsets[bin_id];
-    auto* buf_ptr = m_indexes.data() + m_offsets[bin_id];
-    return Span<int32_t>{buf_ptr, size};
-  }
-
-  template <concepts::device TDev>
   ALPAKA_FN_HOST inline const device_buffer<TDev, int32_t[]>& AssociationMap<TDev>::offsets() const {
     return m_offsets;
   }
   template <concepts::device TDev>
   ALPAKA_FN_HOST inline device_buffer<TDev, int32_t[]>& AssociationMap<TDev>::offsets() {
     return m_offsets;
-  }
-
-  template <concepts::device TDev>
-  ALPAKA_FN_ACC inline int32_t AssociationMap<TDev>::offsets(size_type bin_id) const {
-    return m_offsets[bin_id];
   }
 
   template <concepts::device TDev>
