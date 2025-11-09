@@ -1219,6 +1219,10 @@ class clusterer:
         None
         """
 
+        if output_folder[-1] != '/':
+            output_folder += '/'
+        if file_name[-4:] != '.csv':
+            file_name += '.csv' 
         out_path = output_folder + file_name
         data = {}
         for i in range(self.clust_data.n_dim):
