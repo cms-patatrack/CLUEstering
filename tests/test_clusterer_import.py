@@ -15,7 +15,7 @@ def sissa():
     '''
     Returns the dataframe containing the sissa dataset
     '''
-    return pd.read_csv("../data/sissa.csv")
+    return pd.read_csv("../data/sissa_1000.csv")
 
 def test_clusterer_import(sissa):
     '''
@@ -37,7 +37,7 @@ def test_clusterer_import(sissa):
 
 if __name__ == "__main__":
     c = clue.clusterer(20., 10., 20.)
-    c.read_data("../data/sissa.csv")
+    c.read_data("../data/sissa_1000.csv")
     c.run_clue()
     c.cluster_plotter()
     c.to_csv('./', 'test_sissa_import.csv')

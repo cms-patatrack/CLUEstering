@@ -6,7 +6,7 @@ int main() {
   auto queue = clue::get_queue(0u);
 
   // Allocate the points on the host and device.
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/sissa.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/sissa_1000.csv");
   clue::PointsDevice<2> d_points(queue, h_points.size());
 
   // Define the parameters for the clustering and construct the clusterer.

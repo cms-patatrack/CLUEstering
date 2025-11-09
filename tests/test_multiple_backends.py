@@ -41,7 +41,7 @@ def sissa():
     '''
     Returns the dataframe containing the sissa dataset
     '''
-    return pd.read_csv("../data/sissa.csv")
+    return pd.read_csv("../data/sissa_1000.csv")
 
 
 @pytest.fixture
@@ -49,7 +49,7 @@ def toy_det():
     '''
     Returns the dataframe containing the toy-detector dataset
     '''
-    return pd.read_csv("../data/toyDetector.csv")
+    return pd.read_csv("../data/toyDetector_1000.csv")
 
 
 def test_blobs_clustering(blobs):
@@ -144,11 +144,11 @@ if __name__ == "__main__":
     c.cluster_plotter()
 
     c = clue.clusterer(21., 10., 21.)
-    c.read_data("../data/sissa.csv")
+    c.read_data("../data/sissa_1000.csv")
     c.run_clue()
     c.cluster_plotter()
 
     c = clue.clusterer(4., 2.5, 4.)
-    c.read_data("../data/toyDetector.csv")
+    c.read_data("../data/toyDetector_1000.csv")
     c.run_clue()
     c.cluster_plotter()

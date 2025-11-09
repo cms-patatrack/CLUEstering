@@ -14,7 +14,7 @@ def sissa():
     '''
     Returns the dataframe containing the sissa ataset
     '''
-    return pd.read_csv("../data/sissa.csv")
+    return pd.read_csv("../data/sissa_1000.csv")
 
 
 @pytest.fixture
@@ -22,7 +22,7 @@ def toy_det():
     '''
     Returns the dataframe containing the toy detector dataset
     '''
-    return pd.read_csv("../data/toyDetector.csv")
+    return pd.read_csv("../data/toyDetector_1000.csv")
 
 
 def test_clusterer_equality(sissa, toy_det):
