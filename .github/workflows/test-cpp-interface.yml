@@ -24,12 +24,13 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v27
 
-      - name: Build in Nix flake shell
+      - name: Build in Nix shell
         run: |
-          nix develop .#default --command bash -c "
+          nix develop --command bash -c "
             cmake -B build -S tests -DCMAKE_CXX_COMPILER=$(which g++-12) -DCMAKE_BUILD_TYPE=Release
             cmake --build build -- -j3
             ./build/cpu/serial.out --reporters=console --success
             ./build/cpu/tbb.out --reporters=console --success
             ./build/cpu/openmp.out --reporters=console --success
           "
+
