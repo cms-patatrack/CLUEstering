@@ -26,11 +26,11 @@ jobs:
 
       - name: Build in Nix shell
         run: |
+          echo "Using compiler: ${{ matrix.compiler }}"
           nix develop --command bash -c "
-            cmake -B build -S tests -DCMAKE_CXX_COMPILER=$(which g++-12) -DCMAKE_BUILD_TYPE=Release
+            cmake -B build -S tests -DCMAKE_CXX_COMPILER=$(which ${{ matrix.compiler }}) -DCMAKE_BUILD_TYPE=Release
             cmake --build build -- -j3
             ./build/cpu/serial.out --reporters=console --success
             ./build/cpu/tbb.out --reporters=console --success
             ./build/cpu/openmp.out --reporters=console --success
           "
-
