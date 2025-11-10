@@ -1,4 +1,4 @@
-name: Test C++ interface (Nix)
+name: Test C++ interface (Nix Flake)
 
 on:
   push:
@@ -16,8 +16,7 @@ jobs:
         compiler: [gcc12, gcc13, clang15]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -27,11 +26,10 @@ jobs:
       - name: Build in Nix shell
         run: |
           echo "Using compiler: ${{ matrix.compiler }}"
-          nix-shell shell.nix --run "
-            cmake -B build -S tests -DCMAKE_CXX_COMPILER=$(which ${{ matrix.compiler }}) -DCMAKE_BUILD_TYPE=Release
+          nix develop .#${{ matrix.compiler }} --command bash -c "
+            cmake -B build -S tests -DCMAKE_CXX_COMPILER=$(which c++) -DCMAKE_BUILD_TYPE=Release
             cmake --build build -- -j3
             ./build/cpu/serial.out --reporters=console --success
             ./build/cpu/tbb.out --reporters=console --success
             ./build/cpu/openmp.out --reporters=console --success
           "
-
