@@ -1,194 +1,120 @@
-# CLUEstering 
+# CLUEstering — High-Performance Density-Based Weighted Clustering for Heterogeneous Computing
+
 
 [![Latest Release](https://img.shields.io/github/v/release/cms-patatrack/CLUEstering)](https://github.com/cms-patatrack/CLUEstering/releases/latest)
 [![Standard](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://cms-patatrack.github.io/CLUEstering/)
 [![codecov](https://codecov.io/gh/cms-patatrack/CLUEstering/graph/badge.svg?token=JV53J6IUJ3)](https://codecov.io/gh/cms-patatrack/CLUEstering)
+[![License](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
 
 <p align="center">
   <img width="580" height="380" src="https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/docs/CLUEstering-logo.png">
 </p>
 
-The CLUE algorithm is a clustering algorithm written at CERN (https://www.frontiersin.org/articles/10.3389/fdata.2020.591315/full).
+**CLUEstering** is a general-purpose, density-based, weighted clustering library designed for high-performance scientific computing.  
+It is written in **C++20** and provides both **C++** and **Python** interfaces.
 
-The original algorithm was designed to work in 2 dimensions, with the data distributed in parallel layers.
-Unlike other clustering algorithms, CLUE takes the coordinates of the points and also their weight, which represents their energy, and calculates the energy density of each point.
-This energy density is used to find the seeds for each cluster, their followers and the outliers, which are dismissed as noise.
-CLUE takes 4 parameters in input: 
-* `dc`, which is the side of the box inside of which the density of a point is calculated;
-* `rhoc`, which is the minimum energy density that a point must have to not be considered an outlier,
-* `dm`, which is the side of the box inside of which the followers of a point are searched;
-* `pointsPerBin`, which is the average number of points that are to be found inside a bin. This value allows to control the size of the bins.
+CLUEstering is based on [**CLUE**](https://www.frontiersin.org/articles/10.3389/fdata.2020.591315/full), a clustering algorithm developed at **CERN**.
+CLUE combines the flexibility of density-based clustering with the generality of weighted clustering. Unlike traditional density-based methods,
+CLUE integrates point weights directly into the computation of local densities—making weights an intrinsic part of the clustering logic rather than an external modifier.
 
-This library generalizes the original algorithm, making it N-dimensional, and turns it into a general purpose algorithm, usable by any user and applicaple to a wider range of applications, in particular outside particle physics.
-
-The C++ code is binded using PyBind11, and the module is created locally during the installation of the library.
-
-In the library is defined the `clusterer` class, which contains the methods for reading the data, running the algorithm, plotting the data both in input and output, and others.  
-Outside of the class is also defined the function test_blobs, which takes the number of points and the number of dimensions, and is a way to test quickly the library, producing some N-dimensional blobs.
-
-Below is shown a basic example of how the library can be used:
-```
-import CLUEstering as clue
-
-clust = clue.clusterer(.4, 2., 1.5)
-clust.read_data(clue.test_blobs(1000,2))
-clust.run_clue()
-clust.cluster_plotter()
-```
-
-<p align="center">
-  <img width="380" height="380" src="https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/blobwithnoise.png">
-</p>
+CLUE is also designed for parallel execution, scaling linearly with problem size and performing efficiently on massively parallel architectures such as **GPUs** and **FPGAs**.  
+To maximize hardware portability and performance, CLUEstering’s backend is implemented using [**alpaka**](https://github.com/alpaka-group/alpaka),
+a high-efficiency abstraction library for performance portability across CPUs, GPUs, and other accelerators.
 
 ## Installation
-### Dependencies
-The main dependencies of CLUEstering are [Boost](https://www.boost.org/) (version 1.75.0+) and [Alpaka](https://github.com/alpaka-group/alpaka).
-If alpaka is not found, it will be automatically fetched from the official repository, so it's not mandatory to install it manually.
+### C++ API
+CLUEstering can be installed via **CMake**. It requires a C++20 compliant compiler and CMake 3.16 or higher.
+To install CLUEstering globally on your system, first clone the repository or download on the the release
+tarballs from the [archive](https://github.com/cms-patatrack/CLUEstering/releases), then install with the following commands:
+```shell
+cd <CLUEstering-folder> && mkdir build
+cmake -B build -DCMAKE_INSTALL_PREFIX=/desired/installation/path
+cmake --install build
+```
+where the installation step may require sudo privileges depending on the chosen installation path.
+Then you can link CLUEstering to your project using CMake's `find_package`:
+```CMake
+find_package(CLUEstering REQUIRED)
+add_executable(your_target your_source.cpp)
+target_link_libraries(your_target PRIVATE CLUEstering::CLUEstering)
+target_compile_options(your_target PRIVATE ALPAKA_FLAG)
+```
+where the `ALPAKA_FLAG` is a CMake variable used to specify the desired alpaka backend. For the list of available backends and their corresponding flags, 
+please look at the subsetion below.
 
+### Python API
+### From PyPi
+CLUEstering is available on the PyPi repository, and can be easily installed with:
+```shell
+pip install -v CLUEstering
+```
 ### From source
-To install the library, first clone the repository recursively:
-```shell
-git clone --recursive https://github.com/cms-patatrack/CLUEstering.git
-```
-alternatively, clone and update the submodules manually:
-```shell
-git clone https://github.com/cms-patatrack/CLUEstering.git
-git submodule update --init --recursive
-```
-Then, inside the root directory install the library with pip:
+CLUEstering can also be compiled and installed from source. To do so, first clone the repository
+recursively or download one of the release tarballs from [archive](https://github.com/cms-patatrack/CLUEstering/releases).  
+Then, inside the root directory install it using pip:
 ```shell
 pip install -v .
 ```
 where the `-v` flag is optional but suggested because provides more details during the compilation process.
+This will automatically fetch the build dependencies and compile all the supported backends.
 
-### From PyPi
-The library is also available on the PyPi repository, and can be installed with:
-```shell
-pip install -v CLUEstering
+## Heterogeneous backends support
+CLUEstering leverages the **alpaka** library to provide support for multiple backends without any code duplications.  
+The table below lists the currently supported backends and the corresponding CMake flags to enable them:
+| Backend        | CMake Flag           |
+|----------------|----------------------|
+| Serial         | `ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED` |
+| OpenMP         | `ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED` |
+| TBB            | `ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED`  |
+| CUDA           | `ALPAKA_ACC_GPU_CUDA_T_SEQ_ENABLED` |
+| HIP            | `ALPAKA_ACC_GPU_HIP_T_SEQ_ENABLED` |  
+
+For the list of supported compiler versions for each backend, please refer to the
+[alpaka documentation](https://github.com/alpaka-group/alpaka).
+
+## Quick example
+### C++ API
+Here is basic example of how to use CLUEstering in C++:
+```cpp
+
+#include <CLUEstering/CLUEstering.hpp>
+
+int main() {
+  // Obtain the queue, which is used for allocations and kernel launches.
+  auto queue = clue::get_queue(0u);
+
+  // Allocate the points on the host
+  clue::PointsHost<2> points = clue::read_csv<2>(queue, "data.csv");
+
+  // Define the parameters for the clustering and construct the clusterer.
+  const float distance = 20.f, density_cutoff = 10.f;
+  clue::Clusterer<2> clusterer(queue, distance, density_cutoff);
+
+  // Launch the clustering
+  // The results will be stored in the `clue::PointsHost` object
+  clusterer.make_clusters(queue, points);
+  auto clusters_indexes = h_points.clusterIndexes();  // Get the cluster index for each points
+  auto clusters = h_points.clusters();                // Get the clusters-to-point associations
+}
 ```
-
-## Heterogeneous backend support with `Alpaka`
-Since version `2.0.0` the pybind module is compiled for all the supported backends using the `Alpaka` portability library (https://github.com/alpaka-group/alpaka).  
-Currently the supported backends include:
-* CPU serial
-* CPU parallel using TBB
-* NVIDIA GPUs
-* AMD GPUs  
-
-The modules are compiled automatically at the moment of installation, and the user can choose the backend to use when running by passing a parameter to the
-`run_clue` method.
-```
-clust.run_clue("cpu serial")
-clust.run_clue("cpu tbb")
-clust.run_clue("gpu cuda")
-clust.run_clue("gpu hip")
-```
-If no argument is passed, by default the serial backend is used.  
-It is possible to list all the available devices with the `list_devices` method. If no argument is passed, the method lists all the devices for all the backends,
-but it's also possible to specify the backend whose devices want to be listed.
-```
-# list devices for all backends
-c.list_devices()
-# specify the backend
-c.list_devices('cpu serial')
-c.list_devices('cpu tbb')
-c.list_devices('gpu cuda')
-c.list_devices('gpu hip')
-```
-
-## The `clusterer` class
-The `clusterer` class represents a wrapper class around the method `mainRun`, which is binded from `C++` and that is the method that runs the CLUE algorithm.  
-When an instance of this class is created, it requires at least three parameters: `dc`, `rhoc` and `dm`. There is a fourth parameter, `pPBin`, which represents the desired average number of points found in each of the bins that the clustering space is divided into. This parameter has a default value of `10`.  
-The parameters `dc`, `rhoc` and `dm` must be `floats` or a type convertible to a `float`. `ppBin`, on the other hand, is an `integer`.
-
-The class has several methods:
-* `read_data`, which takes the data in input and inizializes the class members. The data can be in the form of list, numpy array, dictionary, string containing the path to a csv file or pandas DataFrame;
-* `change_coordinates`, which allows to change the coordinate system used for clustering;
-* `change_domains`, which allows to change the domain ranges of any eventual periodic coordinates;
-* `choose_kernel`, which allows to change the convolution kernel used when calculating the local density of each point. The default kernel is a flat kernel with parameter `0.5`, but it can be changed to an exponential or gaussian kernel, or a custom kernel, which is user defined and can be any continuous function;
-* `run_clue`, which runs the CLUE algorithm;
-* `list_devices`, which lists all the available devices for the supported backends;
-* `input_plotter`, which plots all the points in input. This method is useful for getting an idea of the shape of the dataset before clustering. In addition to some plot customizations (like the colour or the size of the points, the addition of a grid, the axis labels and so on) it's also possible to pass the functions for the change of coordinates and change the coordinate system used for plotting.
-* `cluster_plotter`, which plots the data using a different colour for each cluster. The seeds are indicated by stars and the outliers by small grey crosses.
-* `to_csv`, which takes two strings, the first containing the path to a folder and the second containing the desired name for the csv file (also with the .csv suffix) and produces the csv file containing the cluster informations.
-
-
-## Reading data
-Data is read with the `read_data` method.  
-For the data to be acceptable, it must contain the values of at least one coordinate for all the points, and their `weights`. The `weights` of the points represent their relative importance in the dataset, so in most cases they can all be set to 1. There are several accepted formats for providing the data:  
-* `string`, where the string contains the relative path to a `csv` file. The file must contain at least one column for the coordinates, which must be named as `x*` (`x0`, `x1`, ecc.) and one column for the `weight`
-* `pandas.DataFrame`, where the columns for the coordinates must be named `x*` (`x0`, `x1`, ecc.) and one column should contain the `weight`
-* `list` or `np.ndarray`, where the coordinate data should be provided as a list of lists (or array of arrays), and the weights inserted in a second, separate list/array
-* `dictionary`, where the coordinate data must be contained in lists, each with key `x*` (`x0`, `x1`, ecc.) and the weights in another list with key `weight`
-
-## Generating a test dataset with `test_blobs`
-If a user wants to test the library without using real data, they can easily do so using the `test_blobs` method.
-`test_blobs` generates a dataset containing any number of gaussian blobs (4 by default), i.e. regular distributions of points distributed gaussianly in a round shape. These blobs can be generated in 2 or 3 dimensions.  
-It is possible to customize:
-* the number of points in the dataset, through the parameter `n_samples`
-* how spread out the points are, through the `mean` and `sigma` parameters
-* the spatial span over which these blobs are placed, throught the parameters `x_max` and `y_max`. By modifying this parameters it's possible to make the blobs more crammed or more well separated, thus making it harder or easier to clusterize them
-
-## Change of kernels for the calculation of local density
-Since `version 1.3.0` it is possible to choose what kernel to use when calculating the local density of each point. 
-The default choices are `gaussian`, `exponential` and `flat`. Each of the kernels require a list of parameters:
-* `flat`, takes a single parameter
-* `exp`, takes two parameters, the amplitude and the mean.
-* `gaus`, takes three parameters, the amplitude, the mean and the standard deviation.   
-
-The default kernel is a flat kernel with parameter `0.5`.
-The different kernels can be chosen using the `choose_kernel` method. It is also possible to use a user-defined kernel, by passing it as a function object. Custom kernels require an empty list to be passed as parameters.  
-The functions used to define a custom kernel should take three parameters: 
-* The distance `dist_ij` between the two points.
-* The id `point_id` of the fixed point.
-* The id `j` of the neighbouring points.
-
-```
+This example reads a set of 2D points from a CSV file, performs clustering using CLUE, and retrieves the cluster assignments for each point.
+For more detailed examples and usage instructions, please refer to the [documentation](https://cms-patatrack.github.io/CLUEstering/).
+### Python API
+Here is a basic example of how to use CLUEstering in Python:
+```python
 import CLUEstering as clue
 
-clust = clue.clusterer(1., 5., 1.5) # the default kernel is flat(0.5)
-
-# Change to an exponential kernel 
-clust.choose_kernel('exp', [1. 1.5])
-
-# Now use a custom kernel, a linear function
-clust.choose_kernel('custom', [], lambda x, y, z: 2 * x)
+clusterer = clue.clusterer(1., 5.)
+clusterer.read_data(data)
+clusterer.run_clue()
+clusterer.cluster_plotter()
+clusterer.to_csv('output_folder', 'data_results.csv')
 ```
+The data can be provided in many different formats, including numpy arrays, pandas DataFrames, and CSV files.
 
-## Input and cluster `plotter` methods
-The `input_plotter` and `cluster_plotter` methods two plotting methods based on matplotlib. `input_plotter` is intenteded to be used as a way to observe the data before clustering and getting an idea of the expected result, whereas `cluster_plotter` plots the results of the clustering, plotting the points corresponding to the same cluster with the same colour and the outliers as small grey crosses.  
-Both methods allow for a wide range of customizations:
-* the title of the plot and its size can be changed with the `plot_title` and `title_size` parameters
-* the labels of the axis can be changed with the `x_label`, `y_label` and `z_label` parameters
-* the size and colour of the points. In the cluster plotter it is possible to change the size of the three classes of points (normal, seed and outlier) singularly
-* it's possible to add a grid to the point with the `grid` boolean parameter, and change its style and size with the `grid_style` and `grid_size` parameters
-* the ticks on the axis can be changed with the `x_ticks`, `y_ticks` and `z_ticks` parameters
-
-Since `version 1.4.0` both plotting methods can take function objects as kwargs, where the functions represent equations for the change of coordinates, thus allowing to change the coordinate system used for plotting.
-
-```
-import CLUEstering as clue
-
-clust = clue.clusterer(1., 5., 1.5)
-clust.read_data(data)
-
-# Plot the data in polar coordinates
-clust.input_plotter(x0=lambda x: np.sqrt(x[0]**2 + x[1]**2),
-                    x1=lambda x: np.arctan2(x[1], x[0]))
-clust.run_clue()
-```
-This is particularly useful when the data has some kind of simmetry, which allows it to be clustered more easily in another coordinate system.
-
-## Writing the results of the clustering to file
-The results of the clustering can be saved to a csv file for later analysis, using the method `to_csv`.  
-This method taks as parameter the path to the `output_folder` and the `file_name`, where the name of the file must include the `.csv` suffix.  
-The data saved on the file include the entire input, so the points' coordinates and weights, as well as their `cluster_id`s, an integer that indicates to what cluster they belong, and `is_seed`, a boolean value indicating whether a point is a seed or not.
-```
-import CLUEstering as clue
-
-clust = clue.clusterer(1., 5., 1.5)
-clust.read_data(data)
-clust.run_clue()
-clust.to_csv('./output/', 'data_results.csv')
-```
+## References and citing
+- [M. Rovere et al., *CLUE: A Fast Parallel Clustering Algorithm for High-Density Environments*, Front. Big Data (2020)](https://www.frontiersin.org/articles/10.3389/fdata.2020.591315/full)
+- [S. Balducci, *CLUEstering: a high-performance density-based clustering library for scientific computing*, UNIBO Master Thesis (2024)](https://amslaurea.unibo.it/id/eprint/32544/)
+- [S. Balducci et al., *CLUE: A Scalable Clustering Algorithm for the Data Challenges of Tomorrow*, CERN EP newsletter (2025)](https://ep-news.web.cern.ch/content/clue-scalable-clustering-algorithm-data-challenges-tomorrow)
+- [S. Balducci et al., *CLUEstering: a novel high-performance clustering library for scientific computing*, 23rd International Workshop on Advanced Computing and Analysis Techniques in Physics Research (ACAT 2025)](https://indico.cern.ch/event/1488410/contributions/6562810/)
