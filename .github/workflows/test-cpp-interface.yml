@@ -25,7 +25,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        suto apt-get update -y
+        sudo apt-get update -y
         sudo apt install -y libboost-dev
         sudo apt install -y libtbb-dev
         sudo apt install libomp-dev
