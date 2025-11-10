@@ -5,39 +5,39 @@
 
   outputs = { self, nixpkgs }: {
     devShells.x86_64-linux = {
-      # Shells for different compilers
-      gcc12 = let pkgs = import nixpkgs { system = "x86_64-linux"; }; in
-        pkgs.mkShell {
-          buildInputs = [
-            pkgs.gcc12
-            pkgs.boost
-            pkgs.tbb
-            pkgs.libomp
-            pkgs.cmake
-          ];
-        };
+      gcc12 = let
+        pkgs = import nixpkgs { system = "x86_64-linux"; };
+      in pkgs.mkShell {
+        buildInputs = [
+          pkgs.gcc12
+          pkgs.boost
+          pkgs.tbb
+          pkgs.cmake
+        ];
+      };
 
-      gcc13 = let pkgs = import nixpkgs { system = "x86_64-linux"; }; in
-        pkgs.mkShell {
-          buildInputs = [
-            pkgs.gcc13
-            pkgs.boost
-            pkgs.tbb
-            pkgs.libomp
-            pkgs.cmake
-          ];
-        };
+      gcc13 = let
+        pkgs = import nixpkgs { system = "x86_64-linux"; };
+      in pkgs.mkShell {
+        buildInputs = [
+          pkgs.gcc13
+          pkgs.boost
+          pkgs.tbb
+          pkgs.cmake
+        ];
+      };
 
-      clang15 = let pkgs = import nixpkgs { system = "x86_64-linux"; }; in
-        pkgs.mkShell {
-          buildInputs = [
-            pkgs.llvmPackages_15.clang
-            pkgs.boost
-            pkgs.tbb
-            pkgs.libomp
-            pkgs.cmake
-          ];
-        };
+      clang15 = let
+        pkgs = import nixpkgs { system = "x86_64-linux"; };
+      in pkgs.mkShell {
+        buildInputs = [
+          pkgs.llvmPackages_15.clang
+          pkgs.llvmPackages_15.libomp   # <-- fix here
+          pkgs.boost
+          pkgs.tbb
+          pkgs.cmake
+        ];
+      };
     };
   };
 }
