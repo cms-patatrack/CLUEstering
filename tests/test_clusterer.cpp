@@ -51,14 +51,12 @@ TEST_CASE("Test make_cluster interfaces") {
 
 TEST_CASE("Test Clusterer constructors with invalid parameters") {
   SUBCASE("Constructor without queue") {
-    CHECK_THROWS(clue::Clusterer<2>(-1.f, 10.f, 1.5f));
-    CHECK_THROWS(clue::Clusterer<2>(1.f, -10.f, 1.5f));
-    CHECK_THROWS(clue::Clusterer<2>(1.f, 10.f, -1.5f));
+    CHECK_THROWS(clue::Clusterer<2>(-1.f, 10.f));
+    CHECK_THROWS(clue::Clusterer<2>(1.f, -10.f));
   }
   SUBCASE("Constructor with queue") {
     auto queue = clue::get_queue(0u);
-    CHECK_THROWS(clue::Clusterer<2>(queue, -1.f, 10.f, 1.5f));
-    CHECK_THROWS(clue::Clusterer<2>(queue, 1.f, -10.f, 1.5f));
-    CHECK_THROWS(clue::Clusterer<2>(queue, 1.f, 10.f, -1.5f));
+    CHECK_THROWS(clue::Clusterer<2>(queue, -1.f, 10.f));
+    CHECK_THROWS(clue::Clusterer<2>(queue, 1.f, -10.f));
   }
 }
