@@ -24,38 +24,12 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v27
 
-      - name: Setup Nix shell and build
+      - name: Build in Nix flake shell
         run: |
-          nix develop -L -E '
-            let
-              pkgs = import <nixpkgs> {};
-              compiler = {
-                gcc12 = pkgs.gcc12;
-                gcc13 = pkgs.gcc13;
-                clang15 = pkgs.llvmPackages_15.clang;
-              }.${{ matrix.compiler }};
-            in
-              pkgs.mkShell {
-                buildInputs = [
-                  compiler
-                  pkgs.boost
-                  pkgs.tbb
-                  pkgs.libomp
-                  pkgs.cmake
-                ];
-              }
-          ' --command bash -c "
-            cmake -B build -S tests \
-              -DCMAKE_CXX_COMPILER=$(which c++) \
-              -DCMAKE_BUILD_TYPE=Release
+          nix develop .#default --command bash -c "
+            cmake -B build -S tests -DCMAKE_CXX_COMPILER=$(which g++-12) -DCMAKE_BUILD_TYPE=Release
             cmake --build build -- -j3
-
-            echo 'Running serial backend'
             ./build/cpu/serial.out --reporters=console --success
-
-            echo 'Running TBB backend'
             ./build/cpu/tbb.out --reporters=console --success
-
-            echo 'Running OpenMP backend'
             ./build/cpu/openmp.out --reporters=console --success
           "
