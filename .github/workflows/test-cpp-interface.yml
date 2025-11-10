@@ -1,6 +1,5 @@
-name: Test C++ interface
+name: Test C++ interface (Nix)
 
-# The workflow gets triggered by pushes and pull requests
 on:
   push:
     branches: [ "main" ]
@@ -9,38 +8,54 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-22.04
+
     strategy:
       fail-fast: false
       matrix:
-        compiler: [g++-12, g++-13, clang-15]
-
+        compiler: [gcc12, gcc13, clang15]
 
     steps:
-    # checks out the code in the repository
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update -y
-        sudo apt install -y libboost-dev
-        sudo apt install -y libtbb-dev
-        sudo apt install libomp-dev
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
 
-    - name: Install compiler
-      run: sudo apt install ${{ matrix.compiler }}
+      - name: Setup Nix shell and build
+        run: |
+          nix develop -L -E '
+            let
+              pkgs = import <nixpkgs> {};
+              compiler = {
+                gcc12 = pkgs.gcc12;
+                gcc13 = pkgs.gcc13;
+                clang15 = pkgs.llvmPackages_15.clang;
+              }.${{ matrix.compiler }};
+            in
+              pkgs.mkShell {
+                buildInputs = [
+                  compiler
+                  pkgs.boost
+                  pkgs.tbb
+                  pkgs.libomp
+                  pkgs.cmake
+                ];
+              }
+          ' --command bash -c "
+            cmake -B build -S tests \
+              -DCMAKE_CXX_COMPILER=$(which c++) \
+              -DCMAKE_BUILD_TYPE=Release
+            cmake --build build -- -j3
 
-    - name: Compile and run benchmark
-      working-directory: ${{ github.workspace }}/tests
-      run: |
-        cmake -B build -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=Release
-        cmake --build build -- -j 3
-        echo "Running serial backend"
-        ./build/cpu/serial.out --reporters=console --success
-        echo "Running TBB backend"
-        ./build/cpu/tbb.out --reporters=console --success
-        echo "Running OpenMP backend"
-        ./build/cpu/openmp.out --reporters=console --success
+            echo 'Running serial backend'
+            ./build/cpu/serial.out --reporters=console --success
+
+            echo 'Running TBB backend'
+            ./build/cpu/tbb.out --reporters=console --success
+
+            echo 'Running OpenMP backend'
+            ./build/cpu/openmp.out --reporters=console --success
+          "
