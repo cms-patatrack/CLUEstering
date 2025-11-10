@@ -77,7 +77,7 @@ namespace clue {
         return clue::nostd::make_array<float, Ndim>(std::numeric_limits<float>::max());
 
       std::array<float, Ndim> point;
-      meta::apply<Ndim>([&]<std::size_t Dim> { point[Dim] = coords[Dim][i]; });
+      meta::apply<Ndim>([&]<std::size_t Dim>() { point[Dim] = coords[Dim][i]; });
       return point;
     }
   };

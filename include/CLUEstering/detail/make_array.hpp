@@ -16,7 +16,7 @@ namespace clue {
     template <typename T, std::size_t N>
     inline constexpr auto make_array(T value) {
       std::array<T, N> arr;
-      meta::apply<N>([=, &arr]<std::size_t Idx> { arr[Idx] = value; });
+      meta::apply<N>([=, &arr]<std::size_t Idx>() { arr[Idx] = value; });
       return arr;
     }
 
