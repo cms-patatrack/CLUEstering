@@ -1,5 +1,6 @@
 name: Test C++ interface
 
+# The workflow gets triggered by pushes and pull requests
 on:
   push:
     branches: [ "main" ]
@@ -7,95 +8,39 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build_and_test:
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
-    container: ${{ matrix.container }}
-    defaults:
-      run:
-        shell: bash
+  build:
 
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        include:
-        ### Analysis builds
-        - name: linux_clang-18_cuda-12.1_debug_analysis
-          os: ubuntu-24.04
-          container: ubuntu:20.04
-        # - name: windows_cl-2022_debug_analysis
-        #   os: windows-2022
-        # - name: macos_xcode-15.4_debug_analysis
-        #   os: macos-14
-        - name: linux_gcc-12_debug_analysis
-          os: ubuntu-22.04
-          container: ubuntu:22.04
+        compiler: [g++-12, g++-13, clang-15]
 
-        ### macOS
-        # - name: macos_xcode-15.4_release
-        #   os: macos-14
-        # - name: macos_xcode-16.1_debug
-        #   os: macos-15
-
-        ### Windows
-        # - name: windows_cl-2022_release
-        #   os: windows-2022
-        # - name: windows_cl-2022_debug
-        #   os: windows-2022
-
-        - name: linux_gcc-11_debug
-          os: ubuntu-22.04
-          container: ubuntu:20.04
-        - name: linux_gcc-12_release_c++20
-          os: ubuntu-22.04
-          container: ubuntu:22.04
-        - name: linux_gcc-13_debug
-          os: ubuntu-22.04
-          container: ubuntu:22.04
-
-        # clang++
-        - name: linux_clang-14_release
-          os: ubuntu-22.04
-          container: ubuntu:20.04
-        - name: linux_clang-15_release
-          os: ubuntu-22.04
-          container: ubuntu:20.04
-        - name: linux_clang-15_debug
-          os: ubuntu-22.04
-          container: ubuntu:22.04
-        - name: linux_clang-16_debug_ubsan
-          os: ubuntu-22.04
-          container: ubuntu:22.04
-        - name: linux_clang-16_debug_tsan
-          os: ubuntu-22.04
-          container: ubuntu:22.04
 
     steps:
-    - uses: actions/checkout@v4
+    # checks out the code in the repository
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
 
     - name: Install dependencies
       run: |
-        export DEBIAN_FRONTEND=noninteractive
-        apt update
-        apt install -y build-essential cmake libboost-dev libtbb-dev libomp-dev
+        suto apt-get update -y
+        sudo apt install -y libboost-dev
+        sudo apt install -y libtbb-dev
+        sudo apt install libomp-dev
 
-          
-    - name: Verify repo structure
-      run: ls -R
-      working-directory: ${{ github.workspace }}
+    - name: Install compiler
+      run: sudo apt install ${{ matrix.compiler }}
 
-    - name: Compile tests
+    - name: Compile and run benchmark
+      working-directory: ${{ github.workspace }}/tests
       run: |
-        cd tests;
-        cmake -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build --parallel
-
-    - name: Run tests
-      run: |
-        cd tests;
+        cmake -B build -DCMAKE_CXX_COMPILER={{ matrix.compiler }} -DCMAKE_BUILD_TYPE=Release
+        cmake --build build -- -j 3
         echo "Running serial backend"
-        ./build/serial.out
+        ./build/cpu/serial.out --reporters=console --success
         echo "Running TBB backend"
-        ./build/tbb.out
+        ./build/cpu/tbb.out --reporters=console --success
         echo "Running OpenMP backend"
-        ./build/openmp.out
+        ./build/cpu/openmp.out --reporters=console --success
