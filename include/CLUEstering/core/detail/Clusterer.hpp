@@ -73,7 +73,11 @@ namespace clue {
   }
 
   template <std::size_t Ndim>
-  void Clusterer<Ndim>::setParameters(float dc, float rhoc, float dm, float seed_dc, int pPBin) {
+  void Clusterer<Ndim>::setParameters(DistanceParameter<Ndim> dc,
+                                      float rhoc,
+                                      DistanceParameter<Ndim> dm,
+                                      DistanceParameter<Ndim> seed_dc,
+                                      int pPBin) {
     if (dc <= 0.f || rhoc < 0.f || pPBin <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
@@ -82,7 +86,7 @@ namespace clue {
     m_dm = dm < 0.f ? dc : dm;
     m_seed_dc = seed_dc < 0.f ? dc : seed_dc;
     m_rhoc = rhoc;
-    m_dm = dm;
+    m_dm = dm < 0.f ? dc : dm;
     m_pointsPerTile = pPBin;
   }
 

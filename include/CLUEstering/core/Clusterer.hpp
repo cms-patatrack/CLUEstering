@@ -114,7 +114,11 @@ namespace clue {
     /// @param dm Minimum distance between clusters
     /// @param seed_dc Distance threshold for seed points, if the defualt value -1.f, dc is used
     /// @param pPBin Number of points per bin, used to determine the tile size
-    void setParameters(float dc, float rhoc, float dm = -1.f, float seed_dc = -1.f, int pPBin = 128);
+    void setParameters(DistanceParameter<Ndim> dc,
+                       float rhoc,
+                       DistanceParameter<Ndim> dm = -1.f,
+                       DistanceParameter<Ndim> seed_dc = -1.f,
+                       int pPBin = 128);
 
     /// @brief Construct the clusters from host points
     ///
