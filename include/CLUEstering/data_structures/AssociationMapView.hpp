@@ -20,8 +20,8 @@ namespace clue {
   class AssociationMapView {
   public:
     struct Extents {
-      std::size_t values;
       std::size_t keys;
+      std::size_t values;
     };
 
   private:

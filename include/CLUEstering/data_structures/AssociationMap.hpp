@@ -175,7 +175,7 @@ namespace clue {
     device_buffer<TDev, mapped_type[]> m_indexes;
     device_buffer<TDev, key_type[]> m_offsets;
     AssociationMapView m_view;
-    size_type m_nbins;
+    Extents m_extents;
 
     ALPAKA_FN_HOST void initialize(size_type nelements, size_type nbins)
       requires std::same_as<TDev, alpaka::DevCpu>;
