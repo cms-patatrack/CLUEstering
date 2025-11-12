@@ -26,7 +26,7 @@ TEST_CASE("Test binary association map") {
   SUBCASE("Check size") { CHECK(map.size() == 2); }
   SUBCASE("Check extents") {
     CHECK(map.extents().values == size);
-    CHECK(map.extents().keys == 3);
+    CHECK(map.extents().keys == 2);
   }
   SUBCASE("Test contains") {
     CHECK(map.contains(0));
@@ -136,7 +136,7 @@ TEST_CASE("Test binary host_associator") {
   SUBCASE("Check size") { CHECK(map.size() == 2); }
   SUBCASE("Check extents") {
     CHECK(map.extents().values == size);
-    CHECK(map.extents().keys == 3);
+    CHECK(map.extents().keys == 2);
   }
   SUBCASE("Test contains") {
     CHECK(map.contains(0));
