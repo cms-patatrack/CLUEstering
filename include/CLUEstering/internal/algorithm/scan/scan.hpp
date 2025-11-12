@@ -1,11 +1,10 @@
 
 #pragma once
 
-#include <alpaka/alpaka.hpp>
-
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include <alpaka/alpaka.hpp>
 
 namespace clue {
 

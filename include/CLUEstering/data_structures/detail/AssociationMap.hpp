@@ -390,6 +390,7 @@ namespace clue {
     const auto workdiv_multiblockscan =
         make_workdiv<TAcc>(gridsize_multiblockscan, blocksize_multiblockscan);
     const auto dev = alpaka::getDev(queue);
+
     auto warp_size = alpaka::getPreferredWarpSize(dev);
     alpaka::exec<TAcc>(queue,
                        workdiv_multiblockscan,
