@@ -766,6 +766,129 @@ class clusterer:
             print(f'CLUE executed in {self.elapsed_time} ms')
             print(f'Number of clusters found: {self.clust_prop.n_clusters}')
 
+    def fit(self,
+            data: Union[pd.DataFrame,str,dict,list,np.ndarray],
+            backend: str = "cpu serial",
+            block_size: int = 1024,
+            device_id: int = 0,
+            verbose: bool = False,
+            dimensions: Union[list, None] = None) -> 'Clusterer':
+        """
+        Find the clusters using the CLUE algorithm.
+
+        Parameters
+        ----------
+        input_data : pandas dataframe
+            The dataframe should contain one column for every coordinate and
+            one column for the weight.
+        input_data : string
+            The string should contain the full path to a csv file containing
+            the data.
+        input_data : dict
+            The dictionary should contain one key for every coordinate and
+            one key for the weight.
+        input_data : array_like
+            The list or numpy array should contain a list of lists for the
+            coordinates and a list for the weight.
+        backend : str, optional
+            The backend to be used for the execution of the algorithm.
+        block_size : int, optional
+            The size of the blocks used for the parallel execution.
+        device_id : int, optional
+            The id of the device on which the algorithm is executed.
+        verbose : bool, optional
+            The verbose option prints the execution time of runCLUE and the number
+            of clusters found.
+
+        Modified attributes
+        -------------------
+        n_clusters : int
+            Number of clusters reconstructed.
+        n_seeds : int
+            Number of seeds found, which indicates the clusters excluding the group of outliers.
+        clusters : ndarray
+            Array containing the list of the clusters found.
+        cluster_ids : ndarray
+            Contains the cluster_id corresponding to every point.
+        is_seed : ndarray
+            For every point the value is 1 if the point is a seed or an
+            outlier and 0 if it isn't.
+        cluster_points : ndarray of lists
+            Contains, for every cluster, the list of points associated to id.
+        points_per_cluster : ndarray
+            Contains the number of points associated to every cluster.
+
+        Return
+        ------
+        self
+            Return the clusterer object itself.
+        """
+
+        self.read_data(data)
+        self.run_clue(backend, block_size, device_id, verbose, dimensions)
+        return self
+
+    def fit_predict(self,
+                    data: [],
+                    backend: str = "cpu serial",
+                    block_size: int = 1024,
+                    device_id: int = 0,
+                    verbose: bool = False,
+                    dimensions: Union[list, None] = None) -> np.ndarray:
+        """
+        Find the clusters using the CLUE algorithm and return the labels.
+
+        Parameters
+        ----------
+        input_data : pandas dataframe
+            The dataframe should contain one column for every coordinate and
+            one column for the weight.
+        input_data : string
+            The string should contain the full path to a csv file containing
+            the data.
+        input_data : dict
+            The dictionary should contain one key for every coordinate and
+            one key for the weight.
+        input_data : array_like
+            The list or numpy array should contain a list of lists for the
+            coordinates and a list for the weight.
+        backend : str, optional
+            The backend to be used for the execution of the algorithm.
+        block_size : int, optional
+            The size of the blocks used for the parallel execution.
+        device_id : int, optional
+            The id of the device on which the algorithm is executed.
+        verbose : bool, optional
+            The verbose option prints the execution time of runCLUE and the number
+            of clusters found.
+
+        Modified attributes
+        -------------------
+        n_clusters : int
+            Number of clusters reconstructed.
+        n_seeds : int
+            Number of seeds found, which indicates the clusters excluding the group of outliers.
+        clusters : ndarray
+            Array containing the list of the clusters found.
+        cluster_ids : ndarray
+            Contains the cluster_id corresponding to every point.
+        is_seed : ndarray
+            For every point the value is 1 if the point is a seed or an
+            outlier and 0 if it isn't.
+        cluster_points : ndarray of lists
+            Contains, for every cluster, the list of points associated to id.
+        points_per_cluster : ndarray
+            Contains the number of points associated to every cluster.
+
+        Return
+        ------
+        np.ndarray 
+            Array containing the label (cluster index) of every point.
+        """
+        self.read_data(data)
+        self.run_clue(backend, block_size, device_id, verbose, dimensions)
+        return self.cluster_ids
+
     # getters for the properties of the clusters
     @property
     def n_clusters(self) -> int:
@@ -793,6 +916,13 @@ class clusterer:
 
     @property
     def cluster_ids(self) -> np.ndarray:
+        '''
+        Returns the index of the cluster to which each point belongs.
+        '''
+        return self.clust_prop.cluster_ids
+
+    @property
+    def labels(self) -> np.ndarray:
         '''
         Returns the index of the cluster to which each point belongs.
         '''
