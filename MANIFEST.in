@@ -2,7 +2,8 @@ graft CLUEstering
 graft cmake
 graft include
 graft extern
+graft tests
 include CMakeLists.txt
 
-exclude tests/*.py
+# exclude tests/*.py
 exclude build/*

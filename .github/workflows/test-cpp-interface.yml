@@ -1,6 +1,5 @@
-name: Test C++ interface
+name: Test C++ interface (Nix Flake)
 
-# The workflow gets triggered by pushes and pull requests
 on:
   push:
     branches: [ "main" ]
@@ -9,32 +8,28 @@ on:
 
 jobs:
   build:
+    runs-on: ubuntu-22.04
 
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        compiler: [gcc12, gcc13, clang15]
 
     steps:
-    # checks out the code in the repository
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    - name: Install dependencies
-      run: |
-        sudo apt install -y libboost-dev
-        sudo apt install -y libtbb-dev
-        sudo apt install libomp-dev
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
 
-    - name: Compile and run tests
-      working-directory: ${{ github.workspace }}/tests
-      run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build -- -j 3
-        echo "Running serial backend"
-        ./build/cpu/serial.out
-        echo "Running TBB backend"
-        ./build/cpu/tbb.out
-        echo "Running OpenMP backend"
-        ./build/cpu/openmp.out
-
+      - name: Build in Nix shell
+        run: |
+          echo "Using compiler: ${{ matrix.compiler }}"
+          nix develop .#${{ matrix.compiler }} --command bash -c "
+            cmake -B build -S tests -DCMAKE_CXX_COMPILER=$(which c++) -DCMAKE_BUILD_TYPE=Release
+            cmake --build build -- -j3
+            ./build/cpu/serial.out --reporters=console --success
+            ./build/cpu/tbb.out --reporters=console --success
+            ./build/cpu/openmp.out --reporters=console --success
+          "
