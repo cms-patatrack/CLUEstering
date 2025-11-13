@@ -1,0 +1,39 @@
+CompileFlags:
+  Add: [
+    -std=c++20,
+    -Iinclude,
+    -Ithird_party/eigen,
+    -Wall,
+    -Wextra,
+    -Wpedantic,
+    -ferror-limit=0
+  ]
+  Remove: [-m*, -O*, -g*]
+  FallbackFlags: [-std=c++20, -Iinclude]
+  CompilationDatabase: build
+
+Diagnostics:
+  ClangTidy:
+    UseSystemConfig: true
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
+  Suppress: ["incomplete-type"]
+
+Index:
+  Background: Build
+  StandardLibrary: Yes
+  Threads: 4
+
+InlayHints:
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+  Designators: Yes
+
+Hover:
+  ShowAKA: Yes
+
+Completion:
+  AllScopes: Yes
+  Dedupe: Yes
+  IncludeInsertion: Always
