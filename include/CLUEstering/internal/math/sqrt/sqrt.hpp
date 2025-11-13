@@ -10,49 +10,45 @@
 #include <cmath>
 #endif
 
-namespace clue {
-  namespace internal {
-    namespace math {
+namespace clue::internal::math {
 
-      ALPAKA_FN_ACC inline constexpr float sqrt(float x) {
+  ALPAKA_FN_ACC inline constexpr float sqrt(float x) {
 #if defined(CUDA_DEVICE_FN)
-        // CUDA device code
-        return ::sqrt(x);
+    // CUDA device code
+    return ::sqrt(x);
 #elif defined(HIP_DEVICE_FN)
-        // HIP/ROCm device code
-        return ::sqrt(x);
+    // HIP/ROCm device code
+    return ::sqrt(x);
 #elif defined(SYCL_DEVICE_FN)
-        // SYCL device code
-        return sycl::sqrt(x);
+    // SYCL device code
+    return sycl::sqrt(x);
 #else
-        // standard C++ code
-        return std::sqrt(x);
+    // standard C++ code
+    return std::sqrt(x);
 #endif
-      }
+  }
 
-      ALPAKA_FN_ACC inline constexpr double sqrt(double x) {
+  ALPAKA_FN_ACC inline constexpr double sqrt(double x) {
 #if defined(CUDA_DEVICE_FN)
-        // CUDA device code
-        return ::sqrt(x);
+    // CUDA device code
+    return ::sqrt(x);
 #elif defined(HIP_DEVICE_FN)
-        // HIP/ROCm device code
-        return ::sqrt(x);
+    // HIP/ROCm device code
+    return ::sqrt(x);
 #elif defined(SYCL_DEVICE_FN)
-        // SYCL device code
-        return sycl::sqrt(x);
+    // SYCL device code
+    return sycl::sqrt(x);
 #else
-        // standard C++ code
-        return std::sqrt(x);
+    // standard C++ code
+    return std::sqrt(x);
 #endif
-      }
+  }
 
-      ALPAKA_FN_ACC inline constexpr float sqrtf(float x) { return sqrt(x); }
+  ALPAKA_FN_ACC inline constexpr float sqrtf(float x) { return sqrt(x); }
 
-      template <std::integral T>
-      ALPAKA_FN_ACC inline constexpr double sqrt(T x) {
-        return sqrt(static_cast<double>(x));
-      }
+  template <std::integral T>
+  ALPAKA_FN_ACC inline constexpr double sqrt(T x) {
+    return sqrt(static_cast<double>(x));
+  }
 
-    }  // namespace math
-  }  // namespace internal
-}  // namespace clue
+}  // namespace clue::internal::math
