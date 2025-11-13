@@ -13,24 +13,22 @@
 
 namespace clue {
 
-  namespace internal {
-    namespace concepts {
+  namespace internal::concepts {
 
-      // bounded 1D array
-      template <typename T>
-      concept bounded_array =
-          std::is_bounded_array_v<T> && not std::is_array_v<std::remove_extent_t<T>>;
+    // bounded 1D array
+    template <typename T>
+    concept bounded_array =
+        std::is_bounded_array_v<T> && not std::is_array_v<std::remove_extent_t<T>>;
 
-      // unbounded 1D array
-      template <typename T>
-      concept unbounded_array =
-          std::is_unbounded_array_v<T> && not std::is_array_v<std::remove_extent_t<T>>;
+    // unbounded 1D array
+    template <typename T>
+    concept unbounded_array =
+        std::is_unbounded_array_v<T> && not std::is_array_v<std::remove_extent_t<T>>;
 
-      template <typename T>
-      concept scalar = not std::is_array_v<T>;
+    template <typename T>
+    concept scalar = not std::is_array_v<T>;
 
-    }  // namespace concepts
-  }  // namespace internal
+  }  // namespace internal::concepts
 
   // for Extent, Dim1D, Idx
   using namespace alpaka_common;

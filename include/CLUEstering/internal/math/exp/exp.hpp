@@ -10,49 +10,45 @@
 #include <cmath>
 #endif
 
-namespace clue {
-  namespace internal {
-    namespace math {
+namespace clue::internal::math {
 
-      ALPAKA_FN_ACC inline constexpr float exp(float x) {
+  ALPAKA_FN_ACC inline constexpr float exp(float x) {
 #if defined(CUDA_DEVICE_FN)
-        // CUDA device code
-        return ::exp(x);
+    // CUDA device code
+    return ::exp(x);
 #elif defined(HIP_DEVICE_FN)
-        // HIP/ROCm device code
-        return ::exp(x);
+    // HIP/ROCm device code
+    return ::exp(x);
 #elif defined(SYCL_DEVICE_FN)
-        // SYCL device code
-        return sycl::exp(x);
+    // SYCL device code
+    return sycl::exp(x);
 #else
-        // standard C++ code
-        return std::exp(x);
+    // standard C++ code
+    return std::exp(x);
 #endif
-      }
+  }
 
-      ALPAKA_FN_ACC inline constexpr double exp(double x) {
+  ALPAKA_FN_ACC inline constexpr double exp(double x) {
 #if defined(CUDA_DEVICE_FN)
-        // CUDA device code
-        return ::exp(x);
+    // CUDA device code
+    return ::exp(x);
 #elif defined(HIP_DEVICE_FN)
-        // HIP/ROCm device code
-        return ::exp(x);
+    // HIP/ROCm device code
+    return ::exp(x);
 #elif defined(SYCL_DEVICE_FN)
-        // SYCL device code
-        return sycl::exp(x);
+    // SYCL device code
+    return sycl::exp(x);
 #else
-        // standard C++ code
-        return std::exp(x);
+    // standard C++ code
+    return std::exp(x);
 #endif
-      }
+  }
 
-      ALPAKA_FN_ACC inline constexpr float expf(float x) { return exp(x); }
+  ALPAKA_FN_ACC inline constexpr float expf(float x) { return exp(x); }
 
-      template <std::integral T>
-      ALPAKA_FN_ACC inline constexpr double exp(T x) {
-        return exp(static_cast<double>(x));
-      }
+  template <std::integral T>
+  ALPAKA_FN_ACC inline constexpr double exp(T x) {
+    return exp(static_cast<double>(x));
+  }
 
-    }  // namespace math
-  }  // namespace internal
-}  // namespace clue
+}  // namespace clue::internal::math

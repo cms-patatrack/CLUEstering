@@ -10,44 +10,40 @@
 #include <algorithm>
 #endif
 
-namespace clue {
-  namespace internal {
-    namespace math {
+namespace clue::internal::math {
 
-      template <clue::concepts::Numeric T>
-      ALPAKA_FN_ACC inline constexpr T min(const T& a, const T& b) {
+  template <clue::concepts::Numeric T>
+  ALPAKA_FN_ACC inline constexpr T min(const T& a, const T& b) {
 #if defined(CUDA_DEVICE_FN)
-        // CUDA device code
-        return ::min(a, b);
+    // CUDA device code
+    return ::min(a, b);
 #elif defined(HIP_DEVICE_FN)
-        // HIP/ROCm device code
-        return ::min(a, b);
+    // HIP/ROCm device code
+    return ::min(a, b);
 #elif defined(SYCL_DEVICE_FN)
-        // SYCL device code
-        return sycl::min(a, b);
+    // SYCL device code
+    return sycl::min(a, b);
 #else
-        // standard C++ code
-        return std::min(a, b);
+    // standard C++ code
+    return std::min(a, b);
 #endif
-      }
+  }
 
-      template <clue::concepts::Numeric T, typename Compare>
-      ALPAKA_FN_ACC inline constexpr T min(const T& a, const T& b, Compare comp) {
+  template <clue::concepts::Numeric T, typename Compare>
+  ALPAKA_FN_ACC inline constexpr T min(const T& a, const T& b, Compare comp) {
 #if defined(CUDA_DEVICE_FN)
-        // CUDA device code
-        return ::min(a, b, comp);
+    // CUDA device code
+    return ::min(a, b, comp);
 #elif defined(HIP_DEVICE_FN)
-        // HIP/ROCm device code
-        return ::min(a, b, comp);
+    // HIP/ROCm device code
+    return ::min(a, b, comp);
 #elif defined(SYCL_DEVICE_FN)
-        // SYCL device code
-        return sycl::min(a, b, comp);
+    // SYCL device code
+    return sycl::min(a, b, comp);
 #else
-        // standard C++ code
-        return std::min(a, b, comp);
+    // standard C++ code
+    return std::min(a, b, comp);
 #endif
-      }
+  }
 
-    }  // namespace math
-  }  // namespace internal
-}  // namespace clue
+}  // namespace clue::internal::math
