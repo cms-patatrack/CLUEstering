@@ -7,13 +7,14 @@
 #include <span>
 #include <vector>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
 TEST_CASE("Test make_cluster interfaces") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../data/data_32768.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/data_32768.csv");
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -21,7 +22,7 @@ TEST_CASE("Test make_cluster interfaces") {
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
   const std::size_t block_size{256};
 
-  auto truth = clue::read_output<2>(queue, "../data/truth_files/data_32768_truth.csv");
+  auto truth = clue::read_output<2>(queue, "../../../data/truth_files/data_32768_truth.csv");
   SUBCASE("Run clustering without passing device points") {
     algo.make_clusters(queue, h_points, clue::FlatKernel{.5f}, block_size);
 
@@ -44,6 +45,7 @@ TEST_CASE("Test make_cluster interfaces") {
     clue::copyToDevice(queue, d_points, h_points);
     algo.make_clusters(queue, d_points, clue::FlatKernel{.5f}, block_size);
     clue::copyToHost(queue, h_points, d_points);
+    alpaka::wait(queue);
 
     CHECK(clue::validate_results(h_points, truth));
   }

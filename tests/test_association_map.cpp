@@ -10,6 +10,7 @@
 #include <span>
 #include <vector>
 
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
 TEST_CASE("Test binary association map") {
@@ -163,5 +164,9 @@ TEST_CASE("Test binary host_associator") {
     CHECK(std::distance(map.equal_range(1).first, map.equal_range(1).second) == size / 2);
   }
 }
+
+#else
+
+int main() {}
 
 #endif

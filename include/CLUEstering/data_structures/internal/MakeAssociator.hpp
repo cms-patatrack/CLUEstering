@@ -22,6 +22,7 @@ namespace clue::internal {
                       1;
     clue::AssociationMap<decltype(alpaka::getDev(queue))> map(elements, bins, queue);
     map.template fill<clue::internal::Acc>(elements, associations, queue);
+    alpaka::wait(queue);
     return map;
   }
 

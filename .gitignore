@@ -34,5 +34,8 @@ docs/*.css
 docs/*.html
 docs/*.svg
 
-# cacke folders
+# cache folders
 *.cache
+
+# ctest folders
+*Testing
