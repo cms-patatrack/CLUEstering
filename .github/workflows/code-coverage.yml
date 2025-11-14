@@ -18,11 +18,29 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: true
 
-      - name: Build and run tests
+      - name: Install dependencies
         working-directory: ${{github.workspace}}/tests
         run: |
           sudo apt install -y libboost-dev libomp-dev
+          python -m pip install --upgrade pip
+          python -m pip install pytest scikit-learn pandas matplotlib coverage
+
+      - name: Compile Python modules
+        working-directory: ${{github.workspace}}
+        run: |
+          cmake -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel
+
+      - name: Measure coverage of Python tests
+        working-directory: ${{github.workspace}}/tests
+        run: |
+          coverage run -m pytest
+          coverage xml -o python-coverage.xml
+
+      - name: Measure coverage of C++ tests
+        working-directory: ${{github.workspace}}/tests
+        run: |
           cmake -B build -DCMAKE_BUILD_TYPE=Release -DCOVERAGE=ON && cmake --build build -- -j4
           cd build ; ctest .
 
@@ -30,12 +48,14 @@ jobs:
         working-directory: ${{github.workspace}}/tests/build
         run: |
           lcov --capture --directory .. --output-file coverage.info --ignore-errors mismatch
-          lcov --remove coverage.info '/usr/*' '*/extern/*' --output-file coverage_filtered.info --ignore-errors unused mismatch
+          lcov --remove coverage.info '/usr/*' '*/extern/*' --output-file cpp-coverage.info --ignore-errors unused mismatch
 
       - uses: codecov/codecov-action@v5.4.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ${{github.workspace}}/tests/build/coverage_filtered.info
+          files: |
+            ${{github.workspace}}/tests/build/cpp-coverage.info
+            python-coverage.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true
