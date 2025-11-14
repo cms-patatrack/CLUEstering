@@ -7,8 +7,11 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
-  codacy-coverage-reporter:
+  codecov-coverage-reporter:
     runs-on: ubuntu-latest
     name: codecov-coverage-reporter
     steps:
@@ -23,7 +26,7 @@ jobs:
       - name: Install dependencies
         working-directory: ${{github.workspace}}/tests
         run: |
-          sudo apt install -y libboost-dev libomp-dev
+          sudo apt install -y libboost-dev
           python -m pip install --upgrade pip
           python -m pip install pytest scikit-learn pandas matplotlib coverage
 
@@ -41,8 +44,8 @@ jobs:
       - name: Measure coverage of C++ tests
         working-directory: ${{github.workspace}}/tests
         run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=Release -DCOVERAGE=ON && cmake --build build -- -j4
-          cd build ; ctest .
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DCOVERAGE=ON && cmake --build build --parallel
+          ctest --test-dir build --output-on-failure
 
       - name: Create coverage report
         working-directory: ${{github.workspace}}/tests/build
@@ -51,6 +54,7 @@ jobs:
           lcov --remove coverage.info '/usr/*' '*/extern/*' --output-file cpp-coverage.info --ignore-errors unused mismatch
 
       - uses: codecov/codecov-action@v5.4.3
+        if: github.repository == 'cms-patatrack/CLUEstering'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: |
