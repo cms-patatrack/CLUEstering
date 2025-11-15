@@ -4,10 +4,15 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include "CLUEstering/internal/algorithm/reduce/reduce.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/internal/meta/apply.hpp"
+#include "CLUEstering/internal/nostd/maximum.hpp"
 
 #include <alpaka/alpaka.hpp>
+#include <cassert>
+#include <cstdint>
+#include <limits>
 #include <optional>
 #include <ranges>
 #include <span>
@@ -169,6 +174,22 @@ namespace clue {
   template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::isSeed() {
     return std::span<int>(m_view.is_seed, m_size);
+  }
+
+  template <std::size_t Ndim, concepts::device TDev>
+  ALPAKA_FN_HOST inline const auto& PointsDevice<Ndim, TDev>::n_clusters() {
+    assert(m_clustered &&
+           "The points have to be clustered before the cluster properties can be accessed");
+    if (!m_nclusters.has_value()) {
+      auto cluster_ids = this->clusterIndexes();
+      m_nclusters = internal::algorithm::reduce(cluster_ids.begin(),
+                                                cluster_ids.end(),
+                                                std::numeric_limits<int32_t>::lowest(),
+                                                clue::nostd::maximum<int32_t>{}) +
+                    1;
+    }
+
+    return m_nclusters.value();
   }
 
 }  // namespace clue

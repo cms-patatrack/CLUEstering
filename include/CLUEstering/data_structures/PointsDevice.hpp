@@ -36,6 +36,7 @@ namespace clue {
   private:
     device_buffer<TDev, std::byte[]> m_buffer;
     PointsView<Ndim> m_view;
+    std::optional<std::size_t> m_nclusters;
     int32_t m_size;
     bool m_clustered = false;
 
@@ -117,6 +118,12 @@ namespace clue {
 
     ALPAKA_FN_HOST auto isSeed() const;
     ALPAKA_FN_HOST auto isSeed();
+
+    /// @brief Teturns the cluster properties of the points
+    ///
+    /// @return The number of clusters reconstructed
+    /// @note This value is lazily evaluated and cached upon the first call
+    ALPAKA_FN_HOST const auto& n_clusters();
 
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;
