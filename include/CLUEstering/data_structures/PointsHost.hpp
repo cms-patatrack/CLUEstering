@@ -6,10 +6,14 @@
 
 #include "CLUEstering/data_structures/ClusterProperties.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
+#include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
+#include <cstddef>
+#include <cstdint>
 #include <optional>
 #include <ranges>
+#include <string>
 #include <span>
 #include <alpaka/alpaka.hpp>
 
@@ -77,28 +81,68 @@ namespace clue {
     template <concepts::queue TQueue>
     PointsHost(TQueue& queue, int32_t n_points, std::span<std::byte> buffer);
 
-    /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
+    /// @brief Constructs a container for the points allocated on the host using interleaved data
     ///
     /// @param queue The queue to use for memory allocation
     /// @param n_points The number of points
-    /// @param buffers The pre-allocated buffers to use for the points data
-    /// @note The number of buffers must be 2 (coordinates and weights), 3 (coordinates, weights, and cluster indexes),
-    /// 		 or Ndim + 2 (one buffer per dimension for coordinates, plus weights and cluster indexes)
-    template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
-               (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
-    PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers);
+    /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
+    /// @param output_buffer The pre-allocated buffer to store the cluster indexes
+    /// @note The input buffer must contain the coordinates and weights in an SoA format
+    template <concepts::queue TQueue>
+    PointsHost(TQueue& queue, int32_t n_points, std::span<float> input, std::span<int> output);
+
+    /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
+    ///
+    /// @param queue The queue to use for memory allocation
+    /// @param n_points The number of points
+    /// @param coordinates The pre-allocated buffer containing the coordinates
+    /// @param weights The pre-allocated buffer containing the weights
+    /// @param output The pre-allocated buffer to store the cluster indexes
+    /// @note The coordinates buffer must have a size of n_points * Ndim
+    template <concepts::queue TQueue>
+    PointsHost(TQueue& queue,
+               int32_t n_points,
+               std::span<float> coordinates,
+               std::span<float> weights,
+               std::span<int> output);
 
     /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
     ///
     /// @param queue The queue to use for memory allocation
     /// @param n_points The number of points
     /// @param buffers The pre-allocated buffers to use for the points data
-    /// @note The number of buffers must be 2 (coordinates and weights), 3 (coordinates, weights, and cluster indexes),
-    /// 		 or Ndim + 2 (one buffer per dimension for coordinates, plus weights and cluster indexes)
-    template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
-               (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
+    template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
+      requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
+    PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers);
+
+    /// @brief Constructs a container for the points allocated on the host using interleaved data
+    ///
+    /// @param queue The queue to use for memory allocation
+    /// @param n_points The number of points
+    /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
+    /// @param output_buffer The pre-allocated buffer to store the cluster indexes
+    /// @note The input buffer must contain the coordinates and weights in an SoA format
+    template <concepts::queue TQueue>
+    PointsHost(TQueue& queue, int32_t n_points, float* input, int* output);
+
+    /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
+    ///
+    /// @param queue The queue to use for memory allocation
+    /// @param n_points The number of points
+    /// @param coordinates The pre-allocated buffer containing the coordinates
+    /// @param weights The pre-allocated buffer containing the weights
+    /// @param output The pre-allocated buffer to store the cluster indexes
+    /// @note The coordinates buffer must have a size of n_points * Ndim
+    template <concepts::queue TQueue>
+    PointsHost(TQueue& queue, int32_t n_points, float* coordinates, float* weights, int* output);
+
+    /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
+    ///
+    /// @param queue The queue to use for memory allocation
+    /// @param n_points The number of points
+    /// @param buffers The pre-allocated buffers to use for the points data
+    template <concepts::queue TQueue, concepts::pointer... TBuffers>
+      requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
     PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers);
 
     PointsHost(const PointsHost&) = delete;

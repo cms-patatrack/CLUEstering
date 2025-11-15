@@ -9,8 +9,9 @@
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
+#include <cstddef>
+#include <cstdint>
 #include <optional>
-#include <ranges>
 #include <span>
 #include <alpaka/alpaka.hpp>
 
@@ -56,14 +57,59 @@ namespace clue {
     template <concepts::queue TQueue>
     PointsDevice(TQueue& queue, int32_t n_points, std::span<std::byte> buffer);
 
+    /// @brief Constructs a container for the points allocated on the device using interleaved data
+    ///
+    /// @param queue The queue to use for memory allocation
+    /// @param n_points The number of points
+    /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
+    /// @param output_buffer The pre-allocated buffer to store the cluster indexes
+    /// @note The input buffer must contain the coordinates and weights in an SoA format
+    template <concepts::queue TQueue>
+    PointsDevice(TQueue& queue, int32_t n_points, std::span<float> input, std::span<int> output);
+
+    /// @brief Constructs a container for the points allocated on the device using separate coordinate and weight buffers
+    ///
+    /// @param queue The queue to use for memory allocation
+    /// @param n_points The number of points
+    /// @param coordinates The pre-allocated buffer containing the coordinates
+    /// @param weights The pre-allocated buffer containing the weights
+    /// @param output The pre-allocated buffer to store the cluster indexes
+    /// @note The coordinates buffer must have a size of n_points * Ndim
+    template <concepts::queue TQueue>
+    PointsDevice(TQueue& queue,
+                 int32_t n_points,
+                 std::span<float> coordinates,
+                 std::span<float> weights,
+                 std::span<int> output);
+
+    /// @brief Constructs a container for the points allocated on the device using interleaved data
+    ///
+    /// @param queue The queue to use for memory allocation
+    /// @param n_points The number of points
+    /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
+    /// @param output_buffer The pre-allocated buffer to store the cluster indexes
+    /// @note The input buffer must contain the coordinates and weights in an SoA format
+    template <concepts::queue TQueue>
+    PointsDevice(TQueue& queue, int32_t n_points, float* input, int* output);
+
+    /// @brief Constructs a container for the points allocated on the device using separate coordinate and weight buffers
+    ///
+    /// @param queue The queue to use for memory allocation
+    /// @param n_points The number of points
+    /// @param coordinates The pre-allocated buffer containing the coordinates
+    /// @param weights The pre-allocated buffer containing the weights
+    /// @param output The pre-allocated buffer to store the cluster indexes
+    /// @note The coordinates buffer must have a size of n_points * Ndim
+    template <concepts::queue TQueue>
+    PointsDevice(TQueue& queue, int32_t n_points, float* coordinates, float* weights, int* output);
+
     /// @brief Construct a PointsDevice object with a pre-allocated buffer
     ///
     /// @param queue The queue to use for the device operations
     /// @param n_points The number of points to allocate
     /// @param buffers The buffers to use for the points
-    template <concepts::queue TQueue, concepts::contiguous_raw_data... TBuffers>
-      requires(sizeof...(TBuffers) == 2 || sizeof...(TBuffers) == 3 ||
-               (sizeof...(TBuffers) == Ndim + 2 and Ndim > 1))
+    template <concepts::queue TQueue, concepts::pointer... TBuffers>
+      requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
     PointsDevice(TQueue& queue, int32_t n_points, TBuffers... buffers);
 
     PointsDevice(const PointsDevice&) = delete;

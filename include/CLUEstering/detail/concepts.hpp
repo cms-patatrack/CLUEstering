@@ -19,6 +19,9 @@ namespace clue::concepts {
   concept platform = alpaka::isPlatform<T>;
 
   template <typename T>
+  concept pointer = std::is_pointer_v<T>;
+
+  template <typename T>
   concept Numeric = requires {
     std::is_arithmetic_v<T>;
     requires sizeof(T) <= 8;
