@@ -1,12 +1,5 @@
 
-#include "CLUEstering/core/detail/defines.hpp"
-#include "CLUEstering/data_structures/PointsHost.hpp"
-#include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
-#include "CLUEstering/internal/alpaka/work_division.hpp"
-#include "CLUEstering/internal/algorithm/algorithm.hpp"
-#include "CLUEstering/utils/get_device.hpp"
-#include "CLUEstering/utils/get_queue.hpp"
+#include "CLUEstering/CLUEstering.hpp"
 
 #include <numeric>
 #include <ranges>
@@ -208,5 +201,23 @@ TEST_CASE("Test coordinate getter throwing conditions") {
     const clue::PointsDevice<2> points(queue, size);
     CHECK_THROWS(points.coords(3));
     CHECK_THROWS(points.coords(10));
+  }
+}
+
+TEST_CASE("Test n_cluster getter") {
+  auto queue = clue::get_queue(0u);
+
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/data_32768.csv");
+  clue::PointsDevice<2> d_points(queue, h_points.size());
+
+  const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
+  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  algo.make_clusters(queue, h_points, d_points, clue::FlatKernel{.5f});
+
+  SUBCASE("Check the number of clusters") {
+    const auto n_clusters = d_points.n_clusters();
+    CHECK(n_clusters == 20);
+    const auto cached_n_clusters = d_points.n_clusters();
+    CHECK(cached_n_clusters == n_clusters);
   }
 }
