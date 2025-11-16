@@ -57,6 +57,23 @@ namespace clue {
       view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(float));
       view.n = n_points;
     }
+    template <std::size_t Ndim>
+    inline void partitionSoAView(PointsView<Ndim>& view,
+                                 std::byte* alloc_buffer,
+                                 int32_t n_points,
+                                 std::span<float> coordinates,
+                                 std::span<float> weights,
+                                 std::span<int> output) {
+      meta::apply<Ndim>([&]<std::size_t Dim>() {
+        view.coords[Dim] = reinterpret_cast<float*>(coordinates.data() + Dim * n_points);
+      });
+      view.weight = weights.data();
+      view.cluster_index = output.data();
+      view.is_seed = reinterpret_cast<int*>(alloc_buffer);
+      view.rho = reinterpret_cast<float*>(alloc_buffer + n_points * sizeof(float));
+      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(float));
+      view.n = n_points;
+    }
     template <std::size_t Ndim, concepts::pointer... TBuffers>
       requires(sizeof...(TBuffers) == 3)
     inline void partitionSoAView(PointsView<Ndim>& view,
@@ -70,6 +87,22 @@ namespace clue {
       });
       view.weight = std::get<1>(buffers_tuple);
       view.cluster_index = std::get<2>(buffers_tuple);
+      view.is_seed = reinterpret_cast<int*>(alloc_buffer);
+      view.rho = reinterpret_cast<float*>(alloc_buffer + n_points * sizeof(float));
+      view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(float));
+      view.n = n_points;
+    }
+    template <std::size_t Ndim>
+    inline void partitionSoAView(PointsView<Ndim>& view,
+                                 std::byte* alloc_buffer,
+                                 int32_t n_points,
+                                 std::span<float> input,
+                                 std::span<int> output) {
+      meta::apply<Ndim>([&]<std::size_t Dim>() {
+        view.coords[Dim] = reinterpret_cast<float*>(input.data() + Dim * n_points);
+      });
+      view.weight = input.data() + Ndim * n_points;
+      view.cluster_index = output.data();
       view.is_seed = reinterpret_cast<int*>(alloc_buffer);
       view.rho = reinterpret_cast<float*>(alloc_buffer + n_points * sizeof(float));
       view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(float));
