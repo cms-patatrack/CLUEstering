@@ -34,7 +34,7 @@ jobs:
         working-directory: ${{ github.workspace }}/docs
         run: |
           make html
-          mv build/* ./
+          mv build/html/* ./
 
       - name: Set up git
         run: |
