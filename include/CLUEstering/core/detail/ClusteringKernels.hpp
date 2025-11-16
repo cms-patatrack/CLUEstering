@@ -38,7 +38,7 @@ namespace clue::detail {
       auto binId = tiles.getGlobalBinByBin(base_vec);
       auto binSize = tiles[binId].size();
 
-      for (auto binIter = 0; binIter < binSize; ++binIter) {
+      for (auto binIter = 0u; binIter < binSize; ++binIter) {
         int32_t j = tiles[binId][binIter];
 
         auto coords_j = dev_points[j];
@@ -130,7 +130,7 @@ namespace clue::detail {
       int binId = tiles.getGlobalBinByBin(base_vec);
       int binSize = tiles[binId].size();
 
-      for (auto binIter = 0; binIter < binSize; ++binIter) {
+      for (auto binIter = 0u; binIter < binSize; ++binIter) {
         const auto j = tiles[binId][binIter];
         float rho_j = dev_points.rho[j];
         bool found_higher = (rho_j > rho_i);
