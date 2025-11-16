@@ -100,6 +100,25 @@ TEST_CASE("Test device points with external allocation of whole buffer") {
       size));
 }
 
+TEST_CASE("Test device points with external allocation passing the two buffers as spans") {
+  const auto device = clue::get_device(0u);
+  clue::Queue queue(device);
+
+  const uint32_t size = 1000;
+  auto input = clue::make_device_buffer<float[]>(queue, 3 * size);
+  auto output = clue::make_device_buffer<int[]>(queue, 2 * size);
+
+  clue::PointsDevice<2> d_points(
+      queue, size, std::span{input.data(), 3 * size}, std::span{output.data(), 2 * size});
+  auto to_float = [](int i) -> float { return static_cast<float>(i); };
+  CHECK(compareDevicePoints(
+      queue,
+      std::views::iota(0) | std::views::take(2 * size) | std::views::transform(to_float),
+      std::views::iota(0) | std::views::take(size) | std::views::transform(to_float),
+      d_points,
+      size));
+}
+
 TEST_CASE("Test device points with external allocation passing the two buffers as pointers") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
@@ -109,6 +128,29 @@ TEST_CASE("Test device points with external allocation passing the two buffers a
   auto output = clue::make_device_buffer<int[]>(queue, 2 * size);
 
   clue::PointsDevice<2> d_points(queue, size, input.data(), output.data());
+  auto to_float = [](int i) -> float { return static_cast<float>(i); };
+  CHECK(compareDevicePoints(
+      queue,
+      std::views::iota(0) | std::views::take(2 * size) | std::views::transform(to_float),
+      std::views::iota(0) | std::views::take(size) | std::views::transform(to_float),
+      d_points,
+      size));
+}
+
+TEST_CASE("Test device points with external allocation passing four buffers as spans") {
+  const auto device = clue::get_device(0u);
+  clue::Queue queue(device);
+
+  const uint32_t size = 1000;
+  auto coords = clue::make_device_buffer<float[]>(queue, 2 * size);
+  auto weights = clue::make_device_buffer<float[]>(queue, size);
+  auto cluster_ids = clue::make_device_buffer<int[]>(queue, size);
+
+  clue::PointsDevice<2> d_points(queue,
+                                 size,
+                                 std::span{coords.data(), 2 * size},
+                                 std::span{weights.data(), size},
+                                 std::span{cluster_ids.data(), size});
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
   CHECK(compareDevicePoints(
       queue,
