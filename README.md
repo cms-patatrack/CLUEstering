@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
 
 <p align="center">
-  <img width="580" height="380" src="https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/images/docs/CLUEstering-logo.png">
+  <img width="580" height="380" src="https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/docs/source/images/docs/CLUEstering-logo.png">
 </p>
 
 **CLUEstering** is a general-purpose, density-based, weighted clustering library designed for high-performance scientific computing.  
