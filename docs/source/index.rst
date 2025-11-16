@@ -1,11 +1,8 @@
 CLUEstering Documentation
 =========================
 
-Welcome to the CLUEstering documentation.
-
 .. toctree::
-   :maxdepth: 1
-   :caption: Contents
+   :maxdepth: 2
 
    introduction.rst
    dependencies.rst
@@ -30,3 +27,5 @@ Welcome to the CLUEstering documentation.
    .. python_api
    .. cpp_api
    .. usage
+
+   .. :caption: Contents

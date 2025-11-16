@@ -1,4 +1,4 @@
 Convolutional Kernels
 =====================
 
-.. doxygenfile:: ConvolutionalKernels.hpp
+.. doxygenfile:: ConvolutionalKernel.hpp

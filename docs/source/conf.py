@@ -23,6 +23,8 @@ extensions = [
     'breathe'
 ]
 
+autodoc_member_order = 'bysource'
+
 templates_path = ['_templates']
 exclude_patterns = []
 
@@ -33,32 +35,9 @@ pygments_style = "sphinx"
 # html_theme = "sphinx_rtd_theme"
 html_theme = "sphinx_immaterial"
 html_static_path = ['_static']
-# html_context = {
-#         "default_mode": "dark"  # Options are "auto", "dark", or "light"
-# }
 html_theme_options = {
 
-    # Set the name of the project to appear in the navigation.
-    'nav_title': 'CLUEstering',
-
-    # Specify a base_url used to generate sitemap.xml. If not
-    # specified, then no sitemap will be built.
-    'base_url': 'https://cms-patatrack.github.io/CLUEstering',
-
-    # Set the color and the accent color
-    'color_primary': 'blue',
-    'color_accent': 'light-blue',
-
-    # Set the repo location to get a badge with stats
-    'repo_url': 'https://github.com/cms-patatrack/CLUEstering/',
     'repo_name': 'CLUEstering',
-
-    # Visible levels of the global TOC; -1 means unlimited
-    'globaltoc_depth': 3,
-    # If False, expand all TOC entries
-    'globaltoc_collapse': False,
-    # If True, show hidden TOC entries
-    'globaltoc_includehidden': False,
 
     "palette": [
         {
@@ -87,6 +66,9 @@ html_theme_options = {
         "search.share",
         "header.autohide",
     ],
+
+    "globaltoc_collapse": False,
+    "globaltoc_includehidden": False,
 }
 
 # -- Options for HTML output -------------------------------------------------

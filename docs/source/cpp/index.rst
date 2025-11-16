@@ -5,9 +5,16 @@ C++ API Reference
    :maxdepth: 1
 
    clusterer
-   association_map
-   convolutional_kernel
-   cluster_properties
-   points_conversion
    points_host
    points_device
+   points_conversion
+   distance_parameter
+   convolutional_kernel
+   association_map
+   association_map_view
+   cluster_properties
+   get_clusters
+   cluster_centroid
+   read_csv
+   alpaka_utils
+   scores

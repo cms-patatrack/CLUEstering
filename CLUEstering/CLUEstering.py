@@ -42,66 +42,71 @@ if hip_found:
 
 def is_tbb_available():
     """
-    Returns True if the library is compiled with TBB support, False otherwise.
-    """
+    Check if the library is compiled with TBB support.
 
+    :returns: True if TBB is available, False otherwise.
+    :rtype: bool
+    """
     return tbb_found
 
 
 def is_openmp_available():
     """
-    Returns True if the library is compiled with OpenMP support, False otherwise.
-    """
+    Check if the library is compiled with OpenMP support.
 
+    :returns: True if OpenMP is available, False otherwise.
+    :rtype: bool
+    """
     return omp_found
 
 
 def is_cuda_available():
     """
-    Returns True if the library is compiled with CUDA support, False otherwise.
-    """
+    Check if the library is compiled with CUDA support.
 
+    :returns: True if CUDA is available, False otherwise.
+    :rtype: bool
+    """
     return cuda_found
 
 
 def is_hip_available():
     """
-    Returns True if the library is compiled with HIP support, False otherwise.
-    """
+    Check if the library is compiled with HIP support.
 
+    :returns: True if HIP is available, False otherwise.
+    :rtype: bool
+    """
     return hip_found
 
 
 def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
     """
-    Returns a dataframe containing randomly generated 2-dimensional or 3-dimensional blobs.
+    Generate random 2D or 3D gaussian blobs for testing purposes.
 
-    This functions serves as a tool for generating a random dataset to test the library.
+    This function is useful for creating a random dataset to test the library.
 
-    Parameters
-    ----------
-    n_samples : int
-        The number of points in the dataset.
-    n_dim : int
-        The number of dimensions.
-    n_blobs : int, optional
-        The number of blobs that should be produced. By default it is set to 4.
-    mean : float, optional
-        The mean of the gaussian distribution of the z values.
-    sigma : float, optional
-        The standard deviation of the gaussian distribution of the z values.
-    x_max : float, optional
-        Limit of the space where the blobs are created in the x direction.
-    y_max : float, optional
-        Limit of the space where the blobs are created in the y direction.
+    :param n_samples: Number of points in the dataset.
+    :type n_samples: int
+    :param n_dim: Number of dimensions (2 or 3).
+    :type n_dim: int
+    :param n_blobs: Number of blobs to generate. Defaults to 4.
+    :type n_blobs: int, optional
+    :param mean: Mean of the gaussian distribution for z-values. Defaults to 0.
+    :type mean: float, optional
+    :param sigma: Standard deviation of the gaussian distribution for z-values. Defaults to 0.5.
+    :type sigma: float, optional
+    :param x_max: Maximum x-coordinate for blobs. Defaults to 30.
+    :type x_max: float, optional
+    :param y_max: Maximum y-coordinate for blobs. Defaults to 30.
+    :type y_max: float, optional
 
-    Returns
-    -------
-    Pandas DataFrame
-        DataFrame containing n_blobs gaussian blobs.
+    :raises ValueError: If n_blobs < 0, sigma < 0, or n_dim > 3.
+
+    :returns: DataFrame containing the generated blobs and their weights.
+    :rtype: pd.DataFrame
     """
-
     if n_blobs < 0:
         raise ValueError('Wrong parameter value. The number of blobs must be positive.')
     if sigma < 0.:
@@ -148,10 +153,16 @@ def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
 @dataclass()
 class ClusteringDataSoA:
     """
-    Container of the input data coordinates and the results of the clustering.
+    Container for input coordinates and clustering results using Structure of Arrays (SoA).
 
-    SoA data structure containing two buffers: one for the input coordinates (floats) and one
-    for the results of the clustering (ints).
+    :param coords: Input coordinates including weights.
+    :type coords: np.ndarray
+    :param results: Clustering results including cluster IDs and seed flags.
+    :type results: np.ndarray
+    :param n_dim: Number of dimensions.
+    :type n_dim: int
+    :param n_points: Number of points.
+    :type n_points: int
     """
 
     coords: np.ndarray
@@ -159,7 +170,7 @@ class ClusteringDataSoA:
     n_dim : int
     n_points : int
 
-    def __init__(self, coords = None, results = None, n_dim = None, n_points = None):
+    def __init__(self, coords=None, results=None, n_dim=None, n_points=None):
         self.coords = coords
         self.results = results
         self.n_dim = n_dim
@@ -169,27 +180,24 @@ class ClusteringDataSoA:
 @dataclass(eq=False)
 class cluster_properties:
     """
-    Container of the data resulting from the clusterization of the input data.
+    Container for results produced by the clustering algorithm.
 
-    Attributes
-    ----------
-    n_clusters : int
-        Number of clusters constructed.
-    n_seeds : int
-        Number of seeds found, which indicates the clusters excluding the group of outliers.
-    clusters : np.ndarray
-        Array containing the list of the clusters found.
-    cluster_ids : np.ndarray
-        Array containing the cluster_id of each point.
-    is_seed : np.ndarray
-        Array of integers containing '1' if a point is a seed and '0' if it isn't
-    cluster_points : np.ndarray
-        Array containing, for each cluster, the list of point_ids corresponding to the
-        clusters bolonging to that cluster.
-    points_per_cluster : np.ndarray
-        Array containing the number of points belonging to each cluster.
-    output_df : pd.DataFrame
-        Dataframe containing is_seed and cluster_ids as columns.
+    :param n_clusters: Number of clusters constructed.
+    :type n_clusters: int
+    :param n_seeds: Number of seeds found (clusters excluding outliers).
+    :type n_seeds: int
+    :param clusters: List of clusters found.
+    :type clusters: np.ndarray
+    :param cluster_ids: Cluster ID for each point.
+    :type cluster_ids: np.ndarray
+    :param is_seed: Array where 1 indicates a seed and 0 otherwise.
+    :type is_seed: np.ndarray
+    :param cluster_points: Lists of point IDs belonging to each cluster.
+    :type cluster_points: np.ndarray
+    :param points_per_cluster: Number of points per cluster.
+    :type points_per_cluster: np.ndarray
+    :param output_df: DataFrame containing is_seed and cluster_ids as columns.
+    :type output_df: pd.DataFrame
     """
 
     n_clusters : int
@@ -210,44 +218,29 @@ class cluster_properties:
             return False
         if not (self.is_seed == other.is_seed).all():
             return False
-
         return True
 
 
 class clusterer:
     """
-    Class representing a wrapper for the methods using in the process of clustering using
-    the CLUE algorithm.
+    Wrapper class for performing clustering using the CLUE algorithm.
 
-    Attributes
-    ----------
-    dc : float
-        Spatial parameter indicating how large is the region over which the local density of
-        each point is calculated.
-    rhoc : float
-        Parameter representing the density threshold value which divides seeds and
-        outliers.
-
-        Points with a density lower than rhoc can't be seeds, can only be followers
-        or outliers.
-    dm: float
-        Similar to dc, it's a spatial parameter that determines the region over
-        which the followers of a point are searched.
-
-        While dc determines the size of the search box in which the neighbors
-        of a point are searched when calculating its local density, when
-        looking for followers while trying to find potential seeds the size of
-        the search box is given by dm.
-    ppbin : int
-        Average number of points to be found in each tile.
-    kernel : Algo.kernel
-        Convolution kernel used to calculate the local density of the points.
-    clust_data : clustering_data
-        Container of the data used by the clustering algorithm.
-    clust_prop : cluster_properties
-        Container of the data produced as output of the algorithm.
-    elapsed_time : int
-        Execution time of the algorithm, expressed in nanoseconds.
+    :param dc: Spatial parameter controlling the region for local density calculation.
+    :type dc: float
+    :param rhoc: Density threshold separating seeds from outliers.
+    :type rhoc: float
+    :param dm: Spatial parameter controlling the region for follower search.
+    :type dm: float
+    :param ppbin: Average number of points per tile.
+    :type ppbin: int
+    :param kernel: Kernel used to calculate local density.
+    :type kernel: clue_kernels.Algo.kernel
+    :param clust_data: Container for input data.
+    :type clust_data: ClusteringDataSoA
+    :param clust_prop: Container for clustering results.
+    :type clust_prop: cluster_properties
+    :param elapsed_time: Execution time of the algorithm in nanoseconds.
+    :type elapsed_time: float
     """
 
     def __init__(self, dc: float, rhoc: float, dm: [float, None] = None, seed_dc: [float, None] = None, ppbin: int = 128):
@@ -274,6 +267,20 @@ class clusterer:
 
     def set_params(self, dc: float, rhoc: float,
                    dm: [float, None] = None, seed_dc: [float, None] = None, ppbin: int = 128) -> None:
+        """
+        Set parameters for the clustering algorithm.
+
+        :param dc: Spatial parameter for density calculation.
+        :type dc: float
+        :param rhoc: Density threshold.
+        :type rhoc: float
+        :param dm: Follower search region. Defaults to dc if None.
+        :type dm: float or None
+        :param seed_dc: Seed search region. Defaults to dc if None.
+        :type seed_dc: float or None
+        :param ppbin: Average points per tile.
+        :type ppbin: int
+        """
         self.dc = dc
         self.rhoc = rhoc
         if dm is not None:
@@ -288,23 +295,15 @@ class clusterer:
 
     def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
         """
-        Reads data provided with lists or np.ndarrays
+        Read data from lists or np.ndarrays and initialize clustering data.
 
-        Attributes
-        ----------
-        input_data : list, np.ndarray
-            The coordinates and weight values of the data points
+        :param input_data: Coordinates and weights of data points.
+        :type input_data: list or np.ndarray
 
-        Modified attributes
-        -------------------
-        clust_data : clustering_data
-            Properties of the input data
+        :raises ValueError: If input data format is invalid.
 
-        Returns
-        -------
-        None
+        :returns: None
         """
-
         # [[x0, x1, x2, ...], [y0, y1, y2, ...], ... , [weights]]
         if isinstance(input_data[0][0], (int, float)):
             if len(input_data) < 2 or len(input_data) > 11:
@@ -318,7 +317,7 @@ class clusterer:
             results = np.vstack([np.zeros(npoints, dtype=np.int32),    # cluster ids
                                  np.zeros(npoints, dtype=np.int32)],   # is_seed
                                  dtype=np.int32)
-            coords = np.ascontiguousarray(coords, dtype=np.float32)  # if already contiguous this is a no-op
+            coords = np.ascontiguousarray(coords, dtype=np.float32)
             results = np.ascontiguousarray(results, dtype=np.int32)
             self.clust_data = ClusteringDataSoA(coords,
                                                 results,
@@ -338,146 +337,91 @@ class clusterer:
             results = np.vstack([np.zeros(npoints, dtype=np.int32),    # cluster ids
                                  np.zeros(npoints, dtype=np.int32)],   # is_seed
                                  dtype=np.int32)
-            coords = np.ascontiguousarray(coords, dtype=np.float32)  # if already contiguous this is a no-op
+            coords = np.ascontiguousarray(coords, dtype=np.float32)
             results = np.ascontiguousarray(results, dtype=np.int32)
             self.clust_data = ClusteringDataSoA(coords,
                                                 results,
                                                 ndim,
                                                 npoints)
 
-    def _read_string(self, input_data: str) -> Union[pd.DataFrame,None]:
+    def _read_string(self, input_data: str) -> Union[pd.DataFrame, None]:
         """
-        Reads data provided by passing a string containing the path to a csv file
+        Read input data from a CSV file.
 
-        Attributes
-        ----------
-        input_data : str
-            The path to the csv file containing the input data
+        :param input_data: Path to the CSV file containing the input data.
+        :type input_data: str
 
-        Modified attributes
-        -------------------
-        None
+        :raises ValueError: If the file is not a CSV.
 
-        Returns
-        -------------------
-        pd.DataFrame
-            Dataframe containing the input data
+        :returns: DataFrame containing the input data.
+        :rtype: pd.DataFrame
         """
-
         if not input_data.endswith('.csv'):
             raise ValueError('Wrong type of file. The file is not a csv file.')
         df_ = pd.read_csv(input_data, dtype=np.float32)
         return df_
 
+
     def _read_dict_df(self, input_data: Union[dict, pd.DataFrame]) -> pd.DataFrame:
         """
-        Reads data provided using dictionaries or pandas dataframes
+        Read input data from a dictionary or pandas DataFrame.
 
-        Attributes
-        ----------
-        input_data : dict, pd.DataFrame
-            The coordinates and weight values of the data points
+        :param input_data: Dictionary or DataFrame containing coordinates and weights.
+        :type input_data: dict or pd.DataFrame
 
-        Modified attributes
-        -------------------
-        None
-
-        Returns
-        -------------------
-        pd.DataFrame
-            Dataframe containing the input data
+        :returns: DataFrame containing the input data.
+        :rtype: pd.DataFrame
         """
-
         df_ = pd.DataFrame(input_data, copy=False, dtype=np.float32)
         return df_
 
+
     def _handle_dataframe(self, df_: pd.DataFrame) -> None:
         """
-        Constructs the clust_data attribute from the dataframe produced by the
-        _read_string or _read_dict_df methods
+        Initialize the `clust_data` attribute from a DataFrame.
 
-        Modified attributes
-        -------------------
-        clust_data : clustering_data
-            Properties of the input data
+        :param df_: DataFrame produced by `_read_string` or `_read_dict_df`.
+        :type df_: pd.DataFrame
 
-        Returns
-        -------
-        None
+        :raises ValueError: If the number of columns is less than 2 or greater than 11.
+
+        :returns: None
         """
-
-        # Check that the dimensionality of the dataset is adequate
         if len(df_.columns) < 2:
-            raise ValueError("Inadequate data. The data must contain"
-                             + " at least one coordinate and the weight.")
+            raise ValueError("Inadequate data. The data must contain at least one coordinate and the weight.")
         if len(df_.columns) > 11:
-            raise ValueError("Inadequate data. The maximum number of"
-                             + " dimensions supported is 10.")
+            raise ValueError("Inadequate data. The maximum number of dimensions supported is 10.")
+
         ndim = len(df_.columns) - 1
         npoints = len(df_.index)
         coords = df_.iloc[:, 0:-1].to_numpy()
-        coords = np.vstack([coords.T,             # coordinates SoA
-                            df_.iloc[:, -1]],       # weights
-                            dtype=np.float32)
-        results = np.vstack([np.zeros(npoints, dtype=np.int32),   # cluster ids
-                             np.zeros(npoints, dtype=np.int32)],  # is_seed
-                             dtype=np.int32)
-        coords = np.ascontiguousarray(coords, dtype=np.float32)  # if already contiguous this is a no-op
+        coords = np.vstack([coords.T, df_.iloc[:, -1]], dtype=np.float32)
+        results = np.vstack([np.zeros(npoints, dtype=np.int32),
+                             np.zeros(npoints, dtype=np.int32)], dtype=np.int32)
+        coords = np.ascontiguousarray(coords, dtype=np.float32)
         results = np.ascontiguousarray(results, dtype=np.int32)
 
-        self.clust_data = ClusteringDataSoA(coords,
-                                            results,
-                                            ndim,
-                                            npoints)
+        self.clust_data = ClusteringDataSoA(coords, results, ndim, npoints)
 
-    def read_data(self,
-                  input_data: Union[pd.DataFrame,str,dict,list,np.ndarray]) -> None:
+
+    def read_data(self, input_data: Union[pd.DataFrame, str, dict, list, np.ndarray]) -> None:
         """
-        Reads the data in input and fills the class members containing the coordinates
-        of the points, the weight, the number of dimensions and the number of points.
+        Read input data and initialize clustering-related attributes.
 
-        Parameters
-        ----------
-        input_data : pandas dataframe
-            The dataframe should contain one column for every coordinate and
-            one column for the weight.
-        input_data : string
-            The string should contain the full path to a csv file containing
-            the data.
-        input_data : dict
-        input_data : array_like
-            The list or numpy array should contain a list of lists for the
-            coordinates and a list for the weight.
-        kwargs : tuples
-            Tuples corresponding to the domain of any periodic variables. The
-            keyword should be the keyword of the corrispoding variable.
+        :param input_data: Data to read. Can be one of:
+            - pandas DataFrame: must contain one column per coordinate plus one column for weight.
+            - string: path to a CSV file containing the data.
+            - dict: dictionary with coordinates and weights.
+            - list or ndarray: list of coordinate lists plus a weight list.
 
-        Modified attributes
-        -------------------
-        coords : ndarray
-            Point coordinates used for clustering, spatially normalized.
-        original_coords : ndarray
-            Point coordinates in the original coordinate system used by the user.
-        weight : ndarray
-            Weights of all the points.
-        domain_ranges : list of Algo.domain_t
-            List of the domains for each coordinate.
-        n_dim : int
-            The number of dimensions in which we are calculating the clusters.
-        n_points : int
-            The number of points in the dataset.
+        :raises ValueError: If the data format is not supported.
 
-        Returns
-        -------
-        None
+        :returns: None
         """
-
-        # lists and np ndarrays
         if isinstance(input_data, (list, np.ndarray)):
             self._read_array(input_data)
 
-        # path to .csv file or pandas dataframe
-        if isinstance(input_data, (str)):
+        if isinstance(input_data, str):
             df = self._read_string(input_data)
             self._handle_dataframe(df)
 
@@ -485,106 +429,103 @@ class clusterer:
             df = self._read_dict_df(input_data)
             self._handle_dataframe(df)
 
+
     def choose_kernel(self,
                       choice: str,
-                      parameters: Union[list,None] = None,
+                      parameters: Union[list, None] = None,
                       function: types.FunctionType = lambda: 0) -> None:
         """
-        Changes the kernel used in the calculation of local density. The default kernel
-        is a flat kernel with parameter 0.5
+        Set the kernel for local density calculation.
 
-        Parameters
-        ----------
-        choice : string
-            The type of kernel that you want to choose (flat, exp, gaus or custom).
-        parameters : array_like, optional
-            List of the parameters needed by the kernels.
-            The flat kernel requires one, the exponential requires two
-            (amplitude and mean), the gaussian requires three (amplitude,
-            mean and standard deviation) and the custom doesn't require any.
-        function : function object, optional
-            Function that should be used as kernel when the custom kernel is chosen.
+        The default kernel is a flat kernel with parameter 0.5.
 
-        Modified attributes
-        -------------------
-        kernel : Algo.kernel
+        :param choice: Kernel type to use. Options are: 'flat', 'exp', 'gaus', or 'custom'.
+        :type choice: str
+        :param parameters: Parameters for the kernel. Required for 'flat', 'exp', 'gaus'.
+            Not required for 'custom'.
+        :type parameters: list or None
+        :param function: Function to use for a custom kernel.
+        :type function: function, optional
 
-        Return
-        ------
-        None
+        :raises ValueError: If the number of parameters is invalid or the kernel choice is invalid.
+
+        :returns: None
         """
-
         if choice == "flat":
             if len(parameters) != 1:
-                raise ValueError("Wrong number of parameters. The flat kernel"
-                                 + " requires 1 parameter.")
+                raise ValueError("Wrong number of parameters. The flat kernel requires 1 parameter.")
             self.kernel = clue_kernels.FlatKernel(parameters[0])
         elif choice == "exp":
             if len(parameters) != 2:
-                raise ValueError("Wrong number of parameters. The exponential"
-                                 + " kernel requires 2 parameters.")
-            self.kernel = clue_kernels.ExponentialKernel(parameters[0],
-                                                                       parameters[1])
+                raise ValueError("Wrong number of parameters. The exponential kernel requires 2 parameters.")
+            self.kernel = clue_kernels.ExponentialKernel(parameters[0], parameters[1])
         elif choice == "gaus":
             if len(parameters) != 3:
-                raise ValueError("Wrong number of parameters. The gaussian" +
-                                 " kernel requires 3 parameters.")
-            self.kernel = clue_kernels.GaussianKernel(parameters[0],
-                                                                   parameters[1],
-                                                                   parameters[2])
+                raise ValueError("Wrong number of parameters. The gaussian kernel requires 3 parameters.")
+            self.kernel = clue_kernels.GaussianKernel(parameters[0], parameters[1], parameters[2])
         elif choice == "custom":
             if len(parameters) != 0:
-                raise ValueError("Wrong number of parameters. Custom kernels"
-                                 + " requires 0 parameters.")
+                raise ValueError("Wrong number of parameters. Custom kernels requires 0 parameters.")
         else:
-            raise ValueError("Invalid kernel. The allowed choices for the"
-                             + " kernels are: flat, exp, gaus and custom.")
+            raise ValueError("Invalid kernel. Allowed choices are: flat, exp, gaus, custom.")
 
-    # getters for the properties of the clustering data
+
     @property
     def coords(self) -> np.ndarray:
-        '''
-        Returns the coordinates of the points used for clustering.
-        '''
+        """
+        Return the coordinates of the points used for clustering.
+
+        :returns: Coordinates array.
+        :rtype: np.ndarray
+        """
         return self.clust_data.coords[:-1]
+
 
     @property
     def weight(self) -> np.ndarray:
-        '''
-        Returns the weight of the points.
-        '''
+        """
+        Return the weights of the points.
+
+        :returns: Weights array.
+        :rtype: np.ndarray
+        """
         return self.clust_data.coords[-1]
+
 
     @property
     def n_dim(self) -> int:
-        '''
-        Returns the number of dimensions of the points.
-        '''
+        """
+        Return the number of dimensions.
+
+        :returns: Number of dimensions.
+        :rtype: int
+        """
         return self.clust_data.n_dim
+
 
     @property
     def n_points(self) -> int:
-        '''
-        Returns the number of points in the dataset.
-        '''
+        """
+        Return the number of points in the dataset.
+
+        :returns: Number of points.
+        :rtype: int
+        """
         return self.clust_data.n_points
+
 
     def list_devices(self, backend: str = "all") -> None:
         """
-        Lists the devices available for the chosen backend.
+        List available devices for a given backend.
 
-        Parameters
-        ----------
-        backend : string, optional
-            The backend for which the devices are listed. The allowed values are
-            'all', 'cpu serial', 'cpu tbb' and 'gpu cuda'.
-            The default value is 'all'.
+        :param backend: Backend to list devices for. Options: 'all', 'cpu serial', 'cpu tbb',
+                        'cpu openmp', 'gpu cuda', 'gpu hip'. Defaults to 'all'.
+        :type backend: str, optional
 
-        Raises
-        ------
-        ValueError : If the backend is not valid.
+        :raises ValueError: If the backend is not valid.
+
+        :returns: None
         """
-
         if backend == "all":
             cpu_serial.listDevices('cpu serial')
             if tbb_found:
@@ -618,32 +559,73 @@ class clusterer:
             else:
                 print("HIP module not found. Please re-compile the library and try again.")
         else:
-            raise ValueError("Invalid backend. The allowed choices for the"
-                             + " backend are: all, cpu serial, cpu tbb, cpu openmp, gpu cuda and gpu hip.")
+            raise ValueError("Invalid backend. Allowed choices are: all, cpu serial, cpu tbb, cpu openmp, gpu cuda, gpu hip.")
 
-    def _partial_dimension_dataset(self, dimensions: list):
+    def list_devices(self, backend: str = "all") -> None:
         """
-        Returns a dataset containing only the coordinates of the chosen dimensions.
+        List available devices for the chosen backend.
 
-        This method returns a dataset containing only the coordinates of the chosen
-        dimensions when a set of dimensions is chosen in the `run_clue` method. This
-        allows to run the algorithm in a lower dimensional space.
+        :param backend: The backend to list devices for. Options are 'all', 'cpu serial', 
+                        'cpu tbb', 'cpu openmp', 'gpu cuda', 'gpu hip'. Defaults to 'all'.
+        :type backend: str, optional
 
-        Parameters
-        ----------
-        dimensions : list
-            The list of the dimensions that should be considered.
+        :raises ValueError: If the backend is not valid.
 
-        Returns
-        -------
-        np.ndarray
-            Array containing the coordinates of the chosen dimensions.
-
+        :returns: None
         """
+        if backend == "all":
+            cpu_serial.listDevices('cpu serial')
+            if tbb_found:
+                cpu_tbb.listDevices('cpu tbb')
+            if omp_found:
+                cpu_omp.listDevices('cpu openmp')
+            if cuda_found:
+                gpu_cuda.listDevices('gpu cuda')
+            if hip_found:
+                gpu_hip.listDevices('gpu hip')
+        elif backend == "cpu serial":
+            cpu_serial.listDevices(backend)
+        elif backend == "cpu tbb":
+            if tbb_found:
+                cpu_tbb.listDevices(backend)
+            else:
+                print("TBB module not found. Please re-compile the library and try again.")
+        elif backend == "cpu openmp":
+            if omp_found:
+                cpu_omp.listDevices(backend)
+            else:
+                print("OpenMP module not found. Please re-compile the library and try again.")
+        elif backend == "gpu cuda":
+            if cuda_found:
+                gpu_cuda.listDevices(backend)
+            else:
+                print("CUDA module not found. Please re-compile the library and try again.")
+        elif backend == "gpu hip":
+            if hip_found:
+                gpu_hip.listDevices(backend)
+            else:
+                print("HIP module not found. Please re-compile the library and try again.")
+        else:
+            raise ValueError("Invalid backend. Allowed choices are: all, cpu serial, cpu tbb, cpu openmp, gpu cuda, gpu hip.")
 
+
+    def _partial_dimension_dataset(self, dimensions: list) -> np.ndarray:
+        """
+        Return a dataset containing only the selected dimensions.
+
+        This method selects a subset of dimensions from the original dataset, useful
+        for running CLUE in lower-dimensional spaces.
+
+        :param dimensions: List of dimension indices to keep.
+        :type dimensions: list[int]
+
+        :returns: Array containing coordinates of the selected dimensions, with weights appended.
+        :rtype: np.ndarray
+        """
         coords = [np.copy(self.clust_data.coords[dim]) for dim in dimensions]
         coords.append(np.copy(self.clust_data.coords[-1]))
         return np.ascontiguousarray(coords, dtype=np.float32)
+
 
     def run_clue(self,
                  backend: str = "cpu serial",
@@ -652,37 +634,21 @@ class clusterer:
                  verbose: bool = False,
                  dimensions: Union[list, None] = None) -> None:
         """
-        Executes the CLUE clustering algorithm.
+        Execute the CLUE clustering algorithm.
 
-        Parameters
-        ----------
-        verbose : bool, optional
-            The verbose option prints the execution time of runCLUE and the number
-            of clusters found.
+        :param backend: Backend to use for execution. Defaults to 'cpu serial'.
+        :type backend: str, optional
+        :param block_size: Size of blocks for parallel execution. Defaults to 1024.
+        :type block_size: int, optional
+        :param device_id: Device ID to run the algorithm on. Defaults to 0.
+        :type device_id: int, optional
+        :param verbose: If True, prints execution time and number of clusters found.
+        :type verbose: bool, optional
+        :param dimensions: Optional list of dimensions to consider. Defaults to None.
+        :type dimensions: list[int] or None, optional
 
-        Modified attributes
-        -------------------
-        n_clusters : int
-            Number of clusters reconstructed.
-        n_seeds : int
-            Number of seeds found, which indicates the clusters excluding the group of outliers.
-        clusters : ndarray
-            Array containing the list of the clusters found.
-        cluster_ids : ndarray
-            Contains the cluster_id corresponding to every point.
-        is_seed : ndarray
-            For every point the value is 1 if the point is a seed or an
-            outlier and 0 if it isn't.
-        cluster_points : ndarray of lists
-            Contains, for every cluster, the list of points associated to id.
-        points_per_cluster : ndarray
-            Contains the number of points associated to every cluster.
-
-        Return
-        ------
-        None
+        :returns: None
         """
-
         if dimensions is None:
             data = self.clust_data
         else:
@@ -706,7 +672,6 @@ class clusterer:
                                                      data.n_points, block_size, device_id)
             else:
                 print("TBB module not found. Please re-compile the library and try again.")
-
         elif backend == "cpu openmp":
             if omp_found:
                 cluster_id_is_seed = cpu_omp.mainRun(self.dc, self.rhoc, self.dm, self.seed_dc,
@@ -715,7 +680,6 @@ class clusterer:
                                                      data.n_points, block_size, device_id)
             else:
                 print("OpenMP module not found. Please re-compile the library and try again.")
-
         elif backend == "gpu cuda":
             if cuda_found:
                 cluster_id_is_seed = gpu_cuda.mainRun(self.dc, self.rhoc, self.dm, self.seed_dc,
@@ -724,7 +688,6 @@ class clusterer:
                                                       data.n_points, block_size, device_id)
             else:
                 print("CUDA module not found. Please re-compile the library and try again.")
-
         elif backend == "gpu hip":
             if hip_found:
                 cluster_id_is_seed = gpu_hip.mainRun(self.dc, self.rhoc, self.dm, self.seed_dc,
@@ -741,16 +704,12 @@ class clusterer:
         n_seeds = np.sum(is_seed)
         n_clusters = len(clusters)
 
-
         cluster_points = [[] for _ in range(n_clusters)]
-        # note: the outlier set is always the last cluster
         for i in range(self.clust_data.n_points):
             cluster_points[cluster_ids[i]].append(i)
 
         points_per_cluster = np.array([len(clust) for clust in cluster_points])
-
-        data = {'cluster_ids': cluster_ids, 'is_seed': is_seed}
-        output_df = pd.DataFrame(data)
+        output_df = pd.DataFrame({'cluster_ids': cluster_ids, 'is_seed': is_seed})
 
         self.clust_prop = cluster_properties(n_clusters,
                                              n_seeds,
@@ -760,8 +719,7 @@ class clusterer:
                                              np.asarray(cluster_points, dtype=object),
                                              points_per_cluster,
                                              output_df)
-
-        self.elapsed_time = (finish - start)/(10**6)
+        self.elapsed_time = (finish - start) / 1e6
         if verbose:
             print(f'CLUE executed in {self.elapsed_time} ms')
             print(f'Number of clusters found: {self.clust_prop.n_clusters}')
@@ -774,54 +732,27 @@ class clusterer:
             verbose: bool = False,
             dimensions: Union[list, None] = None) -> 'Clusterer':
         """
-        Find the clusters using the CLUE algorithm.
+        Run the CLUE clustering algorithm on the input data.
 
-        Parameters
-        ----------
-        input_data : pandas dataframe
-            The dataframe should contain one column for every coordinate and
-            one column for the weight.
-        input_data : string
-            The string should contain the full path to a csv file containing
-            the data.
-        input_data : dict
-            The dictionary should contain one key for every coordinate and
-            one key for the weight.
-        input_data : array_like
-            The list or numpy array should contain a list of lists for the
-            coordinates and a list for the weight.
-        backend : str, optional
-            The backend to be used for the execution of the algorithm.
-        block_size : int, optional
-            The size of the blocks used for the parallel execution.
-        device_id : int, optional
-            The id of the device on which the algorithm is executed.
-        verbose : bool, optional
-            The verbose option prints the execution time of runCLUE and the number
-            of clusters found.
+        :param data: Input data. Can be a pandas DataFrame, a CSV file path (string),
+                     a dictionary with coordinate keys and weight, or a list/array
+                     containing coordinates and weights.
+        :type data: Union[pd.DataFrame, str, dict, list, np.ndarray]
+        :param backend: Backend to use for the algorithm execution.
+        :type backend: str, optional
+        :param block_size: Block size for parallel execution.
+        :type block_size: int, optional
+        :param device_id: ID of the device to run the algorithm on.
+        :type device_id: int, optional
+        :param verbose: If True, prints execution information.
+        :type verbose: bool, optional
+        :param dimensions: List of dimensions to consider. If None, all are used.
+        :type dimensions: list or None, optional
 
-        Modified attributes
-        -------------------
-        n_clusters : int
-            Number of clusters reconstructed.
-        n_seeds : int
-            Number of seeds found, which indicates the clusters excluding the group of outliers.
-        clusters : ndarray
-            Array containing the list of the clusters found.
-        cluster_ids : ndarray
-            Contains the cluster_id corresponding to every point.
-        is_seed : ndarray
-            For every point the value is 1 if the point is a seed or an
-            outlier and 0 if it isn't.
-        cluster_points : ndarray of lists
-            Contains, for every cluster, the list of points associated to id.
-        points_per_cluster : ndarray
-            Contains the number of points associated to every cluster.
+        :return: Returns the clusterer object itself.
+        :rtype: Clusterer
 
-        Return
-        ------
-        self
-            Return the clusterer object itself.
+        :raises: Various exceptions if input data is invalid or clustering fails.
         """
 
         self.read_data(data)
@@ -836,140 +767,143 @@ class clusterer:
                     verbose: bool = False,
                     dimensions: Union[list, None] = None) -> np.ndarray:
         """
-        Find the clusters using the CLUE algorithm and return the labels.
+        Run the CLUE clustering algorithm and return the cluster labels.
 
-        Parameters
-        ----------
-        input_data : pandas dataframe
-            The dataframe should contain one column for every coordinate and
-            one column for the weight.
-        input_data : string
-            The string should contain the full path to a csv file containing
-            the data.
-        input_data : dict
-            The dictionary should contain one key for every coordinate and
-            one key for the weight.
-        input_data : array_like
-            The list or numpy array should contain a list of lists for the
-            coordinates and a list for the weight.
-        backend : str, optional
-            The backend to be used for the execution of the algorithm.
-        block_size : int, optional
-            The size of the blocks used for the parallel execution.
-        device_id : int, optional
-            The id of the device on which the algorithm is executed.
-        verbose : bool, optional
-            The verbose option prints the execution time of runCLUE and the number
-            of clusters found.
+        :param data: Input data. Can be a pandas DataFrame, a CSV file path (string),
+                     a dictionary with coordinate keys and weight, or a list/array
+                     containing coordinates and weights.
+        :type data: Union[pd.DataFrame, str, dict, list, np.ndarray]
+        :param backend: Backend to use for the algorithm execution.
+        :type backend: str, optional
+        :param block_size: Block size for parallel execution.
+        :type block_size: int, optional
+        :param device_id: ID of the device to run the algorithm on.
+        :type device_id: int, optional
+        :param verbose: If True, prints execution information.
+        :type verbose: bool, optional
+        :param dimensions: List of dimensions to consider. If None, all are used.
+        :type dimensions: list or None, optional
 
-        Modified attributes
-        -------------------
-        n_clusters : int
-            Number of clusters reconstructed.
-        n_seeds : int
-            Number of seeds found, which indicates the clusters excluding the group of outliers.
-        clusters : ndarray
-            Array containing the list of the clusters found.
-        cluster_ids : ndarray
-            Contains the cluster_id corresponding to every point.
-        is_seed : ndarray
-            For every point the value is 1 if the point is a seed or an
-            outlier and 0 if it isn't.
-        cluster_points : ndarray of lists
-            Contains, for every cluster, the list of points associated to id.
-        points_per_cluster : ndarray
-            Contains the number of points associated to every cluster.
+        :return: Array containing the cluster index for every point.
+        :rtype: np.ndarray
 
-        Return
-        ------
-        np.ndarray 
-            Array containing the label (cluster index) of every point.
+        :raises: Various exceptions if input data is invalid or clustering fails.
         """
+
         self.read_data(data)
         self.run_clue(backend, block_size, device_id, verbose, dimensions)
         return self.cluster_ids
 
-    # getters for the properties of the clusters
-    @property
-    def n_clusters(self) -> int:
-        '''
-        Returns the number of clusters found.
-        '''
 
+
+    def n_clusters(self) -> int:
+        """
+        Return the number of clusters found.
+
+        :returns: Number of clusters reconstructed by CLUE.
+        :rtype: int
+        """
         return self.clust_prop.n_clusters
 
     @property
     def n_seeds(self) -> int:
-        '''
-        Returns the number of seeds found.
-        '''
+        """
+        Number of seeds found.
+
+        :return: Number of seeds.
+        :rtype: int
+        """
 
         return self.clust_prop.n_seeds
 
     @property
     def clusters(self) -> np.ndarray:
-        '''
-        Returns the list of clusters found.
-        '''
+        """
+        List of clusters found.
+
+        :return: Array of cluster identifiers.
+        :rtype: np.ndarray
+        """
 
         return self.clust_prop.clusters
 
     @property
     def cluster_ids(self) -> np.ndarray:
-        '''
-        Returns the index of the cluster to which each point belongs.
-        '''
+        """
+        Index of the cluster to which each point belongs.
+
+        :return: Array mapping each point to its cluster.
+        :rtype: np.ndarray
+        """
+
         return self.clust_prop.cluster_ids
 
     @property
     def labels(self) -> np.ndarray:
-        '''
-        Returns the index of the cluster to which each point belongs.
-        '''
+        """
+        Alias for `cluster_ids`.
+
+        :return: Array mapping each point to its cluster.
+        :rtype: np.ndarray
+        """
+
         return self.clust_prop.cluster_ids
 
     @property
     def is_seed(self) -> np.ndarray:
-        '''
-        Returns an array of integers containing '1' if a point is a seed
-        and '0' if it isn't.
-        '''
+        """
+        Boolean array indicating whether a point is a seed (1) or not (0).
+
+        :return: Array of integers (1 for seed, 0 otherwise).
+        :rtype: np.ndarray
+        """
+
         return self.clust_prop.is_seed
 
     @property
     def cluster_points(self) -> np.ndarray:
-        '''
-        Returns an array containing, for each cluster, the list of its points.
-        '''
+        """
+        List of points for each cluster.
+
+        :return: Array of arrays containing point indices per cluster.
+        :rtype: np.ndarray
+        """
+
         return self.clust_prop.cluster_points
 
     @property
     def points_per_cluster(self) -> np.ndarray:
-        '''
-        Returns an array containing the number of points belonging to each cluster.
-        '''
+        """
+        Number of points in each cluster.
+
+        :return: Array containing the number of points in each cluster.
+        :rtype: np.ndarray
+        """
+
         return self.clust_prop.points_per_cluster
 
     @property
     def output_df(self) -> pd.DataFrame:
-        '''
-        Returns a dafaframe containing the cluster_ids and the is_seed values.
-        '''
+        """
+        DataFrame containing cluster_ids and seed information.
+
+        :return: Pandas DataFrame with cluster assignments and seed flags.
+        :rtype: pd.DataFrame
+        """
+
         return self.clust_prop.output_df
 
     def cluster_centroid(self, cluster_id: int) -> np.ndarray:
-        '''
-        Returns the coordinates of the centroid of a cluster.
+        """
+        Computes the centroid coordinates of a specified cluster.
 
-        Parameters
-        ----------
-        cluster_id : int
-            The id of the cluster for which the centroid is calculated.
+        :param cluster_id: ID of the cluster.
+        :type cluster_id: int
+        :return: Coordinates of the cluster centroid.
+        :rtype: np.ndarray
+        :raises ValueError: If the cluster_id is invalid.
+        """
 
-        Returns
-        -------
-        np.ndarray : The coordinates of the centroid of the cluster.
-        '''
         if cluster_id < 0 or cluster_id >= self.n_clusters:
             raise ValueError("Invalid cluster id. The selected cluster id was"
                              + " not found among the clusters.")
@@ -985,18 +919,13 @@ class clusterer:
         return centroid
 
     def cluster_centroids(self) -> np.ndarray:
-        '''
-        Returns the coordinates of the centroid of a cluster.
+        """
+        Computes the centroids of all clusters.
 
-        Parameters
-        ----------
-        cluster_id : int
-            The id of the cluster for which the centroid is calculated.
+        :return: Array of shape (n_clusters-1, n_dim) containing cluster centroids.
+        :rtype: np.ndarray
+        """
 
-        Returns
-        -------
-        np.ndarray : The coordinates of the centroid of the cluster.
-        '''
         centroids = np.zeros((self.n_clusters-1, self.clust_data.n_dim))
         for i in range(self.n_points):
             if self.cluster_ids[i] != -1:
@@ -1013,51 +942,43 @@ class clusterer:
                       grid_size: float = 0.2, x_ticks=None, y_ticks=None, z_ticks=None,
                       **kwargs) -> None:
         """
-        Plots the points in input.
+        Plots the input points in 1D, 2D, or 3D space.
 
-        Parameters
-        ----------
-        filepath : string, optional
-            The path to the file where the plot should be saved.
-        plot_title : string, optional
-            Title of the plot.
-        title_size : float, optional
-            Size of the plot title.
-        x_label : string, optional
-            Label on x-axis.
-        y_label : string, optional
-            Label on y-axis.
-        z_label : string, optional
-            Label on z-axis.
-        label_size : int, optional
-            Fontsize of the axis labels.
-        pt_size : int, optional
-            Size of the points in the plot.
-        pt_colour : string, optional
-            Colour of the points in the plot.
-        grid : bool, optional
-            If true displays grids in the plot.
-        grid_style : string, optional
-            Style of the grid.
-        grid_size : float, optional
-            Linewidth of the plot grid.
-        x_ticks : list, optional
-            List of ticks for the x axis.
-        y_ticks : list, optional
-            List of ticks for the y axis.
-        z_ticks : list, optional
-            List of ticks for the z axis.
-        kwargs : function objects, optional
-            Functions for converting the used coordinates to cartesian coordinates.
-            The keywords of the arguments are the coordinates names (x0, x1, ...).
+        :param filepath: Path to save the plot. If None, the plot is shown interactively.
+        :type filepath: str or None
+        :param plot_title: Title of the plot.
+        :type plot_title: str
+        :param title_size: Font size of the plot title.
+        :type title_size: float
+        :param x_label: Label for the x-axis.
+        :type x_label: str
+        :param y_label: Label for the y-axis.
+        :type y_label: str
+        :param z_label: Label for the z-axis.
+        :type z_label: str
+        :param label_size: Font size for axis labels.
+        :type label_size: float
+        :param pt_size: Size of the points.
+        :type pt_size: float
+        :param pt_colour: Colour of the points.
+        :type pt_colour: str
+        :param grid: Whether to display a grid.
+        :type grid: bool
+        :param grid_style: Line style of the grid.
+        :type grid_style: str
+        :param grid_size: Line width of the grid.
+        :type grid_size: float
+        :param x_ticks: Custom tick locations for x-axis.
+        :type x_ticks: list or None
+        :param y_ticks: Custom tick locations for y-axis.
+        :type y_ticks: list or None
+        :param z_ticks: Custom tick locations for z-axis (only for 3D plots).
+        :type z_ticks: list or None
+        :param kwargs: Optional functions for converting coordinates.
+        :type kwargs: dict
 
-        Modified attributes
-        -------------------
-        None
-
-        Returns
-        -------
-        None
+        :return: None
+        :rtype: None
         """
 
         if self.clust_data.n_dim == 1:
@@ -1155,56 +1076,45 @@ class clusterer:
                         grid_style: str = '--', grid_size: float = 0.2, x_ticks=None,
                         y_ticks=None, z_ticks=None, **kwargs) -> None:
         """
-        Plots the clusters with a different colour for every cluster.
+        Plots clusters with different colors, seeds as stars, and outliers as gray crosses.
 
-        The points assigned to a cluster are printed as points, the seeds
-        as stars and the outliers as little grey crosses.
+        :param filepath: Path to save the plot. If None, the plot is shown interactively.
+        :type filepath: str or None
+        :param plot_title: Title of the plot.
+        :type plot_title: str
+        :param title_size: Font size of the plot title.
+        :type title_size: float
+        :param x_label: Label for the x-axis.
+        :type x_label: str
+        :param y_label: Label for the y-axis.
+        :type y_label: str
+        :param z_label: Label for the z-axis.
+        :type z_label: str
+        :param label_size: Font size for axis labels.
+        :type label_size: float
+        :param outl_size: Marker size for outliers.
+        :type outl_size: float
+        :param pt_size: Marker size for cluster points.
+        :type pt_size: float
+        :param seed_size: Marker size for seed points.
+        :type seed_size: float
+        :param grid: Whether to display a grid.
+        :type grid: bool
+        :param grid_style: Line style of the grid.
+        :type grid_style: str
+        :param grid_size: Line width of the grid.
+        :type grid_size: float
+        :param x_ticks: Custom tick locations for x-axis.
+        :type x_ticks: list or None
+        :param y_ticks: Custom tick locations for y-axis.
+        :type y_ticks: list or None
+        :param z_ticks: Custom tick locations for z-axis (only for 3D plots).
+        :type z_ticks: list or None
+        :param kwargs: Optional functions for converting coordinates.
+        :type kwargs: dict
 
-        Parameters
-        ----------
-        filepath : string, optional
-            The path to the file where the plot should be saved.
-        plot_title : string, optional
-            Title of the plot.
-        title_size : float, optional
-            Size of the plot title.
-        x_label : string, optional
-            Label on x-axis.
-        y_label : string, optional
-            Label on y-axis.
-        z_label : string, optional
-            Label on z-axis.
-        label_size : int, optional
-            Fontsize of the axis labels.
-        outl_size : int, optional
-            Size of the outliers in the plot.
-        pt_size : int, optional
-            Size of the points in the plot.
-        seed_size : int, optional
-            Size of the seeds in the plot.
-        grid : bool, optional
-            f true displays grids in the plot.
-        grid_style : string, optional
-            Style of the grid.
-        grid_size : float, optional
-            Linewidth of the plot grid.
-        x_ticks : list, optional
-            List of ticks for the x axis.
-        y_ticks : list, optional
-            List of ticks for the y axis.
-        z_ticks : list, optional
-            List of ticks for the z axis.
-        kwargs : function objects, optional
-            Functions for converting the used coordinates to cartesian coordinates.
-            The keywords of the arguments are the coordinates names (x0, x1, ...).
-
-        Modified attributes
-        -------------------
-        None
-
-        Returns
-        -------
-        None
+        :return: None
+        :rtype: None
         """
 
         if self.clust_data.n_dim == 1:
@@ -1329,24 +1239,18 @@ class clusterer:
             else:
                 plt.show()
 
+
     def to_csv(self, output_folder: str, file_name: str) -> None:
         """
-        Creates a file containing the coordinates of all the points, their cluster_ids and is_seed.
+        Creates a file containing the coordinates of all the points, their cluster_ids, and is_seed.
 
-        Parameters
-        ----------
-        output_folder : string
-            Full path to the desired ouput folder.
-        file_name : string
-            Name of the file, with the '.csv' suffix.
+        :param output_folder: Full path to the desired output folder.
+        :type output_folder: str
+        :param file_name: Name of the file, with the '.csv' suffix.
+        :type file_name: str
 
-        Modified attributes
-        -------------------
-        None
-
-        Returns
-        -------
-        None
+        :return: None
+        :rtype: None
         """
 
         if output_folder[-1] != '/':
@@ -1362,29 +1266,22 @@ class clusterer:
         data['is_seed'] = self.clust_prop.is_seed
 
         df_ = pd.DataFrame(data)
-        df_.to_csv(out_path,index=False)
+        df_.to_csv(out_path, index=False)
+
 
     def import_clusterer(self, input_folder: str, file_name: str) -> None:
         """
         Imports the results of a previous clustering.
 
-        Parameters
-        ----------
-        input_folder : string
-            Full path to the folder containing the file.
-        file_name : string
-            Name of the file, with the '.csv' suffix.
+        :param input_folder: Full path to the folder containing the CSV file.
+        :type input_folder: str
+        :param file_name: Name of the file, with the '.csv' suffix.
+        :type file_name: str
 
-        Modified attributes
-        -------------------
-        clust_data : clustering_data
-            Properties of the input data.
-        clust_prop : cluster_properties
-            Properties of the clusters found.
+        :raises ValueError: If the file does not exist or cannot be read correctly.
 
-        Returns
-        -------
-        None
+        :return: None
+        :rtype: None
         """
 
         in_path = input_folder + file_name
@@ -1403,14 +1300,16 @@ class clusterer:
             cluster_points[cluster_ids[i]].append(i)
 
         points_per_cluster = np.array([len(clust) for clust in cluster_points])
-        self.clust_prop = cluster_properties(n_clusters,
-                                             n_seeds,
-                                             clusters,
-                                             cluster_ids,
-                                             is_seed,
-                                             np.asarray(cluster_points, dtype=object),
-                                             points_per_cluster,
-                                             df_)
+        self.clust_prop = cluster_properties(
+            n_clusters,
+            n_seeds,
+            clusters,
+            cluster_ids,
+            is_seed,
+            np.asarray(cluster_points, dtype=object),
+            points_per_cluster,
+            df_
+        )
 
 if __name__ == "__main__":
     c = clusterer(20., 10., 20.)

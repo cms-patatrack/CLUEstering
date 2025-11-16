@@ -25,6 +25,12 @@ jobs:
       - name: Doxygen Action
         uses: mattnotmitt/doxygen-action@edge
 
+      - name: Build Documentation
+        working-directory: ${{ github.workspace }}/docs
+        run: |
+          make html
+          mv source/build/* ./
+
       - name: Set up git
         run: |
           git config --global user.name "${GITHUB_ACTOR}"

@@ -1,5 +1,5 @@
-Clusterer (C++)
-================
+Clusterer
+=========
 
 .. doxygenclass:: clue::Clusterer
    :members:
