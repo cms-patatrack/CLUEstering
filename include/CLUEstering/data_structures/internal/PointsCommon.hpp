@@ -82,13 +82,6 @@ namespace clue {
     }
   };
 
-  namespace concepts {
-
-    template <typename T>
-    concept contiguous_raw_data = std::is_array_v<T> || std::is_pointer_v<T>;
-
-  }  // namespace concepts
-
   // TODO: implement for better cache use
   template <std::size_t Ndim>
   int32_t computeAlignSoASize(int32_t n_points);
