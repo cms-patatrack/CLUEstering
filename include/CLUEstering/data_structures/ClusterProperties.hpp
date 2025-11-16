@@ -6,7 +6,7 @@
 
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/utils/detail/get_clusters.hpp"
-#include <optional>
+#include <ranges>
 #include <vector>
 
 namespace clue {
