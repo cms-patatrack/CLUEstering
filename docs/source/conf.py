@@ -20,7 +20,8 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx_immaterial',
-    'breathe'
+    'breathe',
+    'sphinx.ext.githubpages'
 ]
 
 autodoc_member_order = 'bysource'
@@ -34,10 +35,13 @@ pygments_style = "sphinx"
 
 # html_theme = "sphinx_rtd_theme"
 html_theme = "sphinx_immaterial"
-html_static_path = ['_static']
+html_static_path = ['../_static']
+html_baseurl = "https://cms-patatrack.github.io/CLUEstering/"
 html_theme_options = {
 
     'repo_name': 'CLUEstering',
+
+    "site_url": "https://cms-patatrack.github.io/CLUEstering/",
 
     "palette": [
         {

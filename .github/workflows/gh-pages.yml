@@ -30,6 +30,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install sphinx breathe sphinx_immaterial sphinx-rtd-theme recommonmark
 
+      - name: Build Python modules
+        run: |
+          cmake -B build -DBUILD_PYTHON=ON
+          cmake --build build --parallel
+
       - name: Build Documentation
         working-directory: ${{ github.workspace }}/docs
         run: |
