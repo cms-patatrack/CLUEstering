@@ -3,6 +3,7 @@ Test of the convolutional kernels
 '''
 
 import sys
+import pandas as pd
 import pytest
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
@@ -72,3 +73,37 @@ def test_inexistent_kernel_except():
     # Now we test that if we pass an incorrect set of parameters, an exception is raised
     with pytest.raises(ValueError):
         clust.choose_kernel('polynomial', [1., 2.])
+
+
+@pytest.fixture
+def dataset():
+    '''
+    Returns the dataframe containing the sissa dataset 1000 points
+    '''
+    return pd.read_csv("../data/sissa_1000.csv")
+
+
+def test_gaussian_kernel(dataset):
+    c = clue.clusterer(21., 10., 21.)
+    c.choose_kernel('flat', [0.5])
+    c.fit(dataset)
+
+    # clustering run without errors, test passes
+    assert True
+
+
+def test_gaussian_kernel(dataset):
+    c = clue.clusterer(21., 10., 21.)
+    c.choose_kernel('gaus', [1.0, 0.5, 0.1])
+    c.fit(dataset)
+
+    # clustering run without errors, test passes
+    assert True
+
+def test_exponential_kernel(dataset):
+    c = clue.clusterer(21., 10., 21.)
+    c.choose_kernel('exp', [1.0, 0.5])
+    c.fit(dataset)
+
+    # clustering run without errors, test passes
+    assert True
