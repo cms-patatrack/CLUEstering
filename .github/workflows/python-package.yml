@@ -34,7 +34,6 @@ jobs:
         python -m pip install scikit-learn 
         python -m pip install pandas
         python -m pip install matplotlib
-        sudo apt install -y libboost-dev
         sudo apt install -y libtbb-dev
         sudo apt install libomp-dev
     - name: Compile CLUEstering modules
