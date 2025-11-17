@@ -244,26 +244,26 @@ class clusterer:
     """
 
     def __init__(self, dc: float, rhoc: float, dm: [float, None] = None, seed_dc: [float, None] = None, ppbin: int = 128):
-        self.dc = dc
-        self.rhoc = rhoc
-        self.dm = dm
+        self._dc = dc
+        self._rhoc = rhoc
+        self._dm = dm
         if dm is None:
-            self.dm = dc
-        self.seed_dc = seed_dc
+            self._dm = dc
+        self._seed_dc = seed_dc
         if seed_dc is None:
-            self.seed_dc = dc
-        self.ppbin = ppbin
+            self._seed_dc = dc
+        self._ppbin = ppbin
 
         # Initialize attributes
         ## Data containers
         self.clust_data = None
 
         ## Kernel for calculation of local density
-        self.kernel = clue_kernels.FlatKernel(0.5)
+        self._kernel = clue_kernels.FlatKernel(0.5)
 
         ## Output attributes
         self.clust_prop = None
-        self.elapsed_time = 0.
+        self._elapsed_time = 0.
 
     def set_params(self, dc: float, rhoc: float,
                    dm: [float, None] = None, seed_dc: [float, None] = None, ppbin: int = 128) -> None:
@@ -281,17 +281,17 @@ class clusterer:
         :param ppbin: Average points per tile.
         :type ppbin: int
         """
-        self.dc = dc
-        self.rhoc = rhoc
+        self._dc = dc
+        self._rhoc = rhoc
         if dm is not None:
-            self.dm = dm
+            self._dm = dm
         else:
-            self.dm = dc
+            self._dm = dc
         if seed_dc is not None:
-            self.seed_dc = seed_dc
+            self._seed_dc = seed_dc
         else:
-            self.seed_dc = dc
-        self.ppbin = ppbin
+            self._seed_dc = dc
+        self._ppbin = ppbin
 
     def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
         """
@@ -454,15 +454,15 @@ class clusterer:
         if choice == "flat":
             if len(parameters) != 1:
                 raise ValueError("Wrong number of parameters. The flat kernel requires 1 parameter.")
-            self.kernel = clue_kernels.FlatKernel(parameters[0])
+            self._kernel = clue_kernels.FlatKernel(parameters[0])
         elif choice == "exp":
             if len(parameters) != 2:
                 raise ValueError("Wrong number of parameters. The exponential kernel requires 2 parameters.")
-            self.kernel = clue_kernels.ExponentialKernel(parameters[0], parameters[1])
+            self._kernel = clue_kernels.ExponentialKernel(parameters[0], parameters[1])
         elif choice == "gaus":
             if len(parameters) != 3:
                 raise ValueError("Wrong number of parameters. The gaussian kernel requires 3 parameters.")
-            self.kernel = clue_kernels.GaussianKernel(parameters[0], parameters[1], parameters[2])
+            self._kernel = clue_kernels.GaussianKernel(parameters[0], parameters[1], parameters[2])
         elif choice == "custom":
             if len(parameters) != 0:
                 raise ValueError("Wrong number of parameters. Custom kernels requires 0 parameters.")
@@ -561,53 +561,6 @@ class clusterer:
         else:
             raise ValueError("Invalid backend. Allowed choices are: all, cpu serial, cpu tbb, cpu openmp, gpu cuda, gpu hip.")
 
-    def list_devices(self, backend: str = "all") -> None:
-        """
-        List available devices for the chosen backend.
-
-        :param backend: The backend to list devices for. Options are 'all', 'cpu serial', 
-                        'cpu tbb', 'cpu openmp', 'gpu cuda', 'gpu hip'. Defaults to 'all'.
-        :type backend: str, optional
-
-        :raises ValueError: If the backend is not valid.
-
-        :returns: None
-        """
-        if backend == "all":
-            cpu_serial.listDevices('cpu serial')
-            if tbb_found:
-                cpu_tbb.listDevices('cpu tbb')
-            if omp_found:
-                cpu_omp.listDevices('cpu openmp')
-            if cuda_found:
-                gpu_cuda.listDevices('gpu cuda')
-            if hip_found:
-                gpu_hip.listDevices('gpu hip')
-        elif backend == "cpu serial":
-            cpu_serial.listDevices(backend)
-        elif backend == "cpu tbb":
-            if tbb_found:
-                cpu_tbb.listDevices(backend)
-            else:
-                print("TBB module not found. Please re-compile the library and try again.")
-        elif backend == "cpu openmp":
-            if omp_found:
-                cpu_omp.listDevices(backend)
-            else:
-                print("OpenMP module not found. Please re-compile the library and try again.")
-        elif backend == "gpu cuda":
-            if cuda_found:
-                gpu_cuda.listDevices(backend)
-            else:
-                print("CUDA module not found. Please re-compile the library and try again.")
-        elif backend == "gpu hip":
-            if hip_found:
-                gpu_hip.listDevices(backend)
-            else:
-                print("HIP module not found. Please re-compile the library and try again.")
-        else:
-            raise ValueError("Invalid backend. Allowed choices are: all, cpu serial, cpu tbb, cpu openmp, gpu cuda, gpu hip.")
-
 
     def _partial_dimension_dataset(self, dimensions: list) -> np.ndarray:
         """
@@ -660,39 +613,39 @@ class clusterer:
 
         start = time.time_ns()
         if backend == "cpu serial":
-            cluster_id_is_seed = cpu_serial.mainRun(self.dc, self.rhoc, self.dm, self.seed_dc,
-                                                    self.ppbin, data.coords, data.results,
-                                                    self.kernel, data.n_dim,
+            cluster_id_is_seed = cpu_serial.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
+                                                    self._ppbin, data.coords, data.results,
+                                                    self._kernel, data.n_dim,
                                                     data.n_points, block_size, device_id)
         elif backend == "cpu tbb":
             if tbb_found:
-                cluster_id_is_seed = cpu_tbb.mainRun(self.dc, self.rhoc, self.dm, self.seed_dc,
-                                                     self.ppbin, data.coords, data.results,
-                                                     self.kernel, data.n_dim,
+                cluster_id_is_seed = cpu_tbb.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
+                                                     self._ppbin, data.coords, data.results,
+                                                     self._kernel, data.n_dim,
                                                      data.n_points, block_size, device_id)
             else:
                 print("TBB module not found. Please re-compile the library and try again.")
         elif backend == "cpu openmp":
             if omp_found:
-                cluster_id_is_seed = cpu_omp.mainRun(self.dc, self.rhoc, self.dm, self.seed_dc,
-                                                     self.ppbin, data.coords, data.results,
-                                                     self.kernel, data.n_dim,
+                cluster_id_is_seed = cpu_omp.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
+                                                     self._ppbin, data.coords, data.results,
+                                                     self._kernel, data.n_dim,
                                                      data.n_points, block_size, device_id)
             else:
                 print("OpenMP module not found. Please re-compile the library and try again.")
         elif backend == "gpu cuda":
             if cuda_found:
-                cluster_id_is_seed = gpu_cuda.mainRun(self.dc, self.rhoc, self.dm, self.seed_dc,
-                                                      self.ppbin, data.coords, data.results,
-                                                      self.kernel, data.n_dim,
+                cluster_id_is_seed = gpu_cuda.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
+                                                      self._ppbin, data.coords, data.results,
+                                                      self._kernel, data.n_dim,
                                                       data.n_points, block_size, device_id)
             else:
                 print("CUDA module not found. Please re-compile the library and try again.")
         elif backend == "gpu hip":
             if hip_found:
-                cluster_id_is_seed = gpu_hip.mainRun(self.dc, self.rhoc, self.dm, self.seed_dc,
-                                                     self.ppbin, data.coords, data.results,
-                                                     self.kernel, data.n_dim,
+                cluster_id_is_seed = gpu_hip.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
+                                                     self._ppbin, data.coords, data.results,
+                                                     self._kernel, data.n_dim,
                                                      data.n_points, block_size, device_id)
             else:
                 print("HIP module not found. Please re-compile the library and try again.")
@@ -700,13 +653,14 @@ class clusterer:
         finish = time.time_ns()
         cluster_ids = data.results[0]
         is_seed = data.results[1]
-        clusters = np.unique(cluster_ids)
         n_seeds = np.sum(is_seed)
-        n_clusters = len(clusters)
+        n_clusters = np.max(cluster_ids) + 1
+        clusters = np.arange(n_clusters, dtype=np.int32)
 
         cluster_points = [[] for _ in range(n_clusters)]
         for i in range(self.clust_data.n_points):
-            cluster_points[cluster_ids[i]].append(i)
+            if cluster_ids[i] != -1:
+                cluster_points[cluster_ids[i]].append(i)
 
         points_per_cluster = np.array([len(clust) for clust in cluster_points])
         output_df = pd.DataFrame({'cluster_ids': cluster_ids, 'is_seed': is_seed})
@@ -719,9 +673,9 @@ class clusterer:
                                              np.asarray(cluster_points, dtype=object),
                                              points_per_cluster,
                                              output_df)
-        self.elapsed_time = (finish - start) / 1e6
+        self._elapsed_time = (finish - start) / 1e6
         if verbose:
-            print(f'CLUE executed in {self.elapsed_time} ms')
+            print(f'CLUE executed in {self._elapsed_time} ms')
             print(f'Number of clusters found: {self.clust_prop.n_clusters}')
 
     def fit(self,
@@ -792,10 +746,11 @@ class clusterer:
 
         self.read_data(data)
         self.run_clue(backend, block_size, device_id, verbose, dimensions)
-        return self.cluster_ids
+        return self._cluster_ids
 
 
 
+    @property
     def n_clusters(self) -> int:
         """
         Return the number of clusters found.
@@ -850,17 +805,6 @@ class clusterer:
         return self.clust_prop.cluster_ids
 
     @property
-    def is_seed(self) -> np.ndarray:
-        """
-        Boolean array indicating whether a point is a seed (1) or not (0).
-
-        :return: Array of integers (1 for seed, 0 otherwise).
-        :rtype: np.ndarray
-        """
-
-        return self.clust_prop.is_seed
-
-    @property
     def cluster_points(self) -> np.ndarray:
         """
         List of points for each cluster.
@@ -893,26 +837,22 @@ class clusterer:
 
         return self.clust_prop.output_df
 
-    def cluster_centroid(self, cluster_id: int) -> np.ndarray:
+    def cluster_centroid(self, cluster_index: int) -> np.ndarray:
         """
         Computes the centroid coordinates of a specified cluster.
 
         :param cluster_id: ID of the cluster.
-        :type cluster_id: int
+        :type cluster_index: int
         :return: Coordinates of the cluster centroid.
         :rtype: np.ndarray
         :raises ValueError: If the cluster_id is invalid.
         """
 
-        if cluster_id < 0 or cluster_id >= self.n_clusters:
-            raise ValueError("Invalid cluster id. The selected cluster id was"
-                             + " not found among the clusters.")
-
         centroid = np.zeros(self.clust_data.n_dim)
         counter = 0
-        for i in range(self.n_points):
-            if self.cluster_ids[i] == cluster_id:
-                centroid += self.clust_data.coords[i]
+        for i in range(self.clust_data.n_points):
+            if self.clust_prop.cluster_ids[i] == cluster_index:
+                centroid += self.clust_data.coords.T[i][:-1]
                 counter += 1
         centroid /= counter
 
@@ -926,12 +866,12 @@ class clusterer:
         :rtype: np.ndarray
         """
 
-        centroids = np.zeros((self.n_clusters-1, self.clust_data.n_dim))
-        for i in range(self.n_points):
-            if self.cluster_ids[i] != -1:
-                centroids[self.cluster_ids[i]] += self.clust_data.coords[i]
-        print(self.points_per_cluster[:-1].reshape(-1, 1))
-        centroids /= self.points_per_cluster[:-1].reshape(-1, 1)
+        centroids = np.zeros((self.clust_prop.n_clusters, self.clust_data.n_dim))
+        for i in range(self.clust_data.n_points):
+            if self.clust_prop.cluster_ids[i] != -1:
+                centroids[self.clust_prop.cluster_ids[i]] += self.clust_data.coords.T[i][:-1]
+        print(self.clust_prop.points_per_cluster[:-1].reshape(-1, 1))
+        centroids /= self.clust_prop.points_per_cluster.reshape(-1, 1)
 
         return centroids
 
@@ -1158,8 +1098,8 @@ class clusterer:
         elif self.clust_data.n_dim == 2:
             data = {'x0': self.coords[0],
                     'x1': self.coords[1],
-                    'cluster_ids': self.cluster_ids,
-                    'isSeed': self.is_seed}
+                    'cluster_ids': self._cluster_ids,
+                    'isSeed': self._is_seed}
             df_ = pd.DataFrame(data)
 
             max_clusterid = max(df_["cluster_ids"])
@@ -1291,9 +1231,9 @@ class clusterer:
 
         self._handle_dataframe(df_.iloc[:, :-2])
 
-        clusters = np.unique(cluster_ids)
         n_seeds = np.sum(is_seed)
-        n_clusters = len(clusters)
+        n_clusters = np.max(cluster_ids) + 1
+        clusters = np.arange(n_clusters, dtype=np.int32)
 
         cluster_points = [[] for _ in range(n_clusters)]
         for i in range(self.clust_data.n_points):
@@ -1310,12 +1250,3 @@ class clusterer:
             points_per_cluster,
             df_
         )
-
-if __name__ == "__main__":
-    c = clusterer(20., 10., 20.)
-    c.read_data('./sissa.csv')
-    c.input_plotter()
-    c.run_clue(backend="cpu serial", verbose=True)
-    c.run_clue(backend="cpu tbb", verbose=True)
-    c.run_clue(backend="cpu openmp", verbose=True)
-    c.cluster_plotter()
