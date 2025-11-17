@@ -25,12 +25,10 @@ string(
 set(PYBIND11_FINDPYTHON ON)
 set(PYBIND11_PYTHON_VERSION ">=3.8")
 
-find_package(Boost 1.75.0 REQUIRED)
-
 include(FetchContent)
 FetchContent_Declare(
   alpaka
-  URL https://github.com/alpaka-group/alpaka/archive/refs/tags/1.2.0.tar.gz)
+  URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.0.0.tar.gz)
 FetchContent_MakeAvailable(alpaka)
 
 # create lib directory in CLUEstering folder
