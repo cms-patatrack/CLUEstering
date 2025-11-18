@@ -54,7 +54,7 @@ jobs:
           lcov --remove coverage.info '/usr/*' '*/extern/*' --output-file cpp-coverage.info --ignore-errors unused mismatch
 
       - uses: codecov/codecov-action@v5.4.3
-        if: github.repository == 'cms-patatrack/CLUEstering'
+        if: github.event.repository.full_name == 'cms-patatrack/CLUEstering'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: |
