@@ -11,9 +11,11 @@
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/math/math.hpp"
+#include "CLUEstering/internal/meta/apply.hpp"
 
 #include <array>
 #include <alpaka/core/Common.hpp>
+#include <cstddef>
 #include <cstdint>
 
 namespace clue::detail {
@@ -41,9 +43,8 @@ namespace clue::detail {
         auto coords_j = dev_points[j];
         auto distance_vector = tiles.distance(coords_i, coords_j);
         auto distance = 0.f;
-        for (auto dim = 0u; dim < Ndim; ++dim) {
-          distance += distance_vector[dim] * distance_vector[dim];
-        }
+        meta::apply<Ndim>(
+            [&]<std::size_t Dim>() { distance += distance_vector[Dim] * distance_vector[Dim]; });
 
         auto k = kernel(acc, clue::internal::math::sqrt(distance), point_id, j);
         rho_i += static_cast<int>(distance_vector <= dc) * k * dev_points.weight[j];
@@ -73,10 +74,10 @@ namespace clue::detail {
         auto coords_i = dev_points[i];
 
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-        for (auto dim = 0u; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] =
-              clue::nostd::make_array(coords_i[dim] - dc[dim], coords_i[dim] + dc[dim]);
-        }
+        meta::apply<Ndim>([&]<std::size_t Dim>() {
+          searchbox_extremes[Dim] =
+              clue::nostd::make_array(coords_i[Dim] - dc[Dim], coords_i[Dim] + dc[Dim]);
+        });
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
         dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
@@ -115,9 +116,8 @@ namespace clue::detail {
         auto coords_j = dev_points[j];
         auto distance_vector = tiles.distance(coords_i, coords_j);
         auto distance = 0.f;
-        for (auto dim = 0u; dim < Ndim; ++dim) {
-          distance += distance_vector[dim] * distance_vector[dim];
-        }
+        meta::apply<Ndim>(
+            [&]<std::size_t Dim>() { distance += distance_vector[Dim] * distance_vector[Dim]; });
 
         if (found_higher && distance_vector <= dm) {
           if (distance < delta_i) {
@@ -162,10 +162,10 @@ namespace clue::detail {
         float rho_i = dev_points.rho[i];
 
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-        for (auto dim = 0u; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] =
-              clue::nostd::make_array(coords_i[dim] - dm[dim], coords_i[dim] + dm[dim]);
-        }
+        meta::apply<Ndim>([&]<std::size_t Dim>() {
+          searchbox_extremes[Dim] =
+              clue::nostd::make_array(coords_i[Dim] - dm[Dim], coords_i[Dim] + dm[Dim]);
+        });
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
         dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
