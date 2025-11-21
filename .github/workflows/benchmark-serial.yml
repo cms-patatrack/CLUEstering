@@ -1,0 +1,37 @@
+name: Run benchmarks on CPU backends
+
+# The workflow gets triggered by pushes and pull requests
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  benchmark-serial:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    # checks out the code in the repository
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Install dependencies
+      run: |
+        sudo apt install -y libboost-dev libtbb-dev libomp-dev libbenchmark-dev
+
+    - name: Compile and run benchmark
+      working-directory: ${{ github.workspace }}/benchmark/dataset_size
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --parallel
+        echo "Running serial backend"
+        ./build/serial.out
+        echo "Running TBB backend"
+        ./build/tbb.out
+        echo "Running OpenMP backend"
+        ./build/openmp.out
