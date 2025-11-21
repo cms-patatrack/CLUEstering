@@ -8,6 +8,7 @@
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 #include <array>
+#include <cstddef>
 #include <cstdint>
 #include <alpaka/alpaka.hpp>
 
@@ -51,33 +52,33 @@ namespace clue::internal {
 
     ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords) const {
       int global_bin = 0;
-      for (auto dim = 0u; dim != Ndim - 1; ++dim) {
-        global_bin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) *
-                      getBin(coords[dim], dim);
-      }
+      meta::apply<Ndim - 1>([&]<std::size_t Dim>() {
+        global_bin += internal::math::pow(static_cast<float>(nperdim), Ndim - Dim - 1) *
+                      getBin(coords[Dim], Dim);
+      });
       global_bin += getBin(coords[Ndim - 1], Ndim - 1);
       return global_bin;
     }
 
     ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins) const {
       int32_t globalBin = 0;
-      for (auto dim = 0u; dim != Ndim; ++dim) {
-        auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
-        globalBin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
-      }
+      meta::apply<Ndim>([&]<std::size_t Dim>() {
+        auto bin_i = wrapping[Dim] ? (Bins[Dim] % nperdim) : Bins[Dim];
+        globalBin += internal::math::pow(static_cast<float>(nperdim), Ndim - Dim - 1) * bin_i;
+      });
       return globalBin;
     }
 
     ALPAKA_FN_ACC inline void searchBox(const SearchBoxExtremes<Ndim>& searchbox_extremes,
                                         SearchBoxBins<Ndim>& searchbox_bins) {
-      for (auto dim = 0u; dim != Ndim; ++dim) {
-        auto infBin = getBin(searchbox_extremes[dim][0], dim);
-        auto supBin = getBin(searchbox_extremes[dim][1], dim);
-        if (wrapping[dim] and infBin > supBin)
+      meta::apply<Ndim>([&]<std::size_t Dim>() {
+        auto infBin = getBin(searchbox_extremes[Dim][0], Dim);
+        auto supBin = getBin(searchbox_extremes[Dim][1], Dim);
+        if (wrapping[Dim] and infBin > supBin)
           supBin += nperdim;
 
-        searchbox_bins[dim] = nostd::make_array(infBin, supBin);
-      }
+        searchbox_bins[Dim] = nostd::make_array(infBin, supBin);
+      });
     }
 
     ALPAKA_FN_ACC inline constexpr clue::Span<int32_t> operator[](int32_t globalBinId) {
@@ -100,13 +101,13 @@ namespace clue::internal {
     ALPAKA_FN_ACC inline auto distance(const std::array<float, Ndim>& coord_i,
                                        const std::array<float, Ndim>& coord_j) const {
       std::array<float, Ndim> distance_vector;
-      for (auto dim = 0u; dim != Ndim; ++dim) {
-        if (wrapping[dim])
-          distance_vector[dim] =
-              internal::math::fabs(normalizeCoordinate(coord_i[dim] - coord_j[dim], dim));
+      meta::apply<Ndim>([&]<std::size_t Dim>() {
+        if (wrapping[Dim])
+          distance_vector[Dim] =
+              internal::math::fabs(normalizeCoordinate(coord_i[Dim] - coord_j[Dim], Dim));
         else
-          distance_vector[dim] = internal::math::fabs(coord_i[dim] - coord_j[dim]);
-      }
+          distance_vector[Dim] = internal::math::fabs(coord_i[Dim] - coord_j[Dim]);
+      });
       return distance_vector;
     }
   };
