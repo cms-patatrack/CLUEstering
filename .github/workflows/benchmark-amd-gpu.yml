@@ -1,18 +1,16 @@
-name: Run benchmarks on CPU backends
+name: Run benchmarks on AMD GPU backend
 
-# The workflow gets triggered by pushes and pull requests
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: pull_request
 
 jobs:
-  benchmark-serial:
-
-    runs-on: ubuntu-latest
+  run-tests:
     strategy:
-      fail-fast: false
+      matrix:
+        runner:
+          - cms-patatrack-mi300x
+          - cms-patatrack-w7900
+    runs-on: ${{ matrix.runner }}
+    container: registry.cern.ch/ngt/lxplus-like:9
 
     steps:
     - uses: actions/checkout@v3
@@ -21,7 +19,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt install -y libboost-dev libtbb-dev libomp-dev libbenchmark-dev
+        dnf install epel-release -y
+        dnf makecache -y
+        dnf install -y google-benchmark google-benchmark-devel
 
     - name: Compile and run benchmark
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
@@ -30,7 +30,7 @@ jobs:
         cmake --build build --parallel
         echo "Running serial backend"
         ./build/serial.out
-        echo "Running TBB backend"
-        ./build/tbb.out
         echo "Running OpenMP backend"
         ./build/openmp.out
+        echo "Running CUDA backend"
+        ./build/hip.out
