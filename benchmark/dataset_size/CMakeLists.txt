@@ -21,15 +21,7 @@ set(CMAKE_CXX_FLAGS_RELEASE
 )
 
 find_package(Boost 1.75.0 REQUIRED)
-find_package(pybind11)
-
-if(pybind11_FOUND)
-  set(pybind_link pybind11::embed)
-  add_definitions(-DPYBIND11)
-else()
-  set(pybind_link "")
-  message(STATUS "pybind11 not found, so no plots will be generated.")
-endif()
+find_package(benchmark REQUIRED)
 
 find_package(alpaka)
 if(NOT alpaka_FOUND)

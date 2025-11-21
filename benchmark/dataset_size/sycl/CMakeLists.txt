@@ -7,7 +7,7 @@ target_include_directories(sycl_cpu.out PRIVATE ${oneDPL_DIR})
 target_compile_options(sycl_cpu.out PRIVATE -DALPAKA_ACC_SYCL_ENABLED
                                             -DALPAKA_SYCL_ONEAPI_CPU -fsycl)
 target_link_libraries(sycl_cpu.out PRIVATE alpaka::alpaka Boost::boost
-                                           ${pybind_link} -fsycl)
+                                           benchmark::benchmark -fsycl)
 
 add_executable(sycl_gpu.out ../main.cpp)
 target_include_directories(
@@ -17,4 +17,4 @@ target_include_directories(sycl_gpu.out PRIVATE ${oneDPL_DIR})
 target_compile_options(sycl_gpu.out PRIVATE -DALPAKA_ACC_SYCL_ENABLED
                                             -DALPAKA_SYCL_ONEAPI_GPU -fsycl)
 target_link_libraries(sycl_gpu.out PRIVATE alpaka::alpaka Boost::boost
-                                           ${pybind_link} -fsycl)
+                                           benchmark::benchmark -fsycl)
