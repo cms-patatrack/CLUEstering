@@ -30,7 +30,7 @@ def test_clustering(moons):
     if os.path.isfile('./moons_output.csv'):
         os.remove('./moons_output.csv')
 
-    c = clue.clusterer(50., 5., 120.)
+    c = clue.clusterer(78., 80., 90., 100.)
     c.read_data(moons)
     assert c.n_dim == 2
     c.run_clue()
@@ -41,7 +41,8 @@ def test_clustering(moons):
 
 
 if __name__ == "__main__":
-    c = clue.clusterer(70., 5, 175.)
-    c.read_data("./test_datasets/moons.csv")
+    c = clue.clusterer(78., 80, 90., 100)
+    c.read_data("../data/moons.csv")
     c.run_clue()
     c.cluster_plotter()
+    c.to_csv('../data/truth_files/', 'moons_1000_truth.csv')

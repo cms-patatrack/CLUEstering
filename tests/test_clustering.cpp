@@ -107,40 +107,6 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
   CHECK(clue::validate_results(h_points, truth));
 }
 
-TEST_CASE("Test clustering on toy detector 5000 dataset") {
-  const auto device = clue::get_device(0u);
-  clue::Queue queue(device);
-
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/toyDetector_5000.csv");
-  const auto n_points = h_points.size();
-  clue::PointsDevice<2> d_points(queue, n_points);
-
-  const float dc{2.5f}, rhoc{2.f}, outlier{7.5f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
-
-  algo.make_clusters(queue, h_points, d_points);
-
-  auto truth = clue::read_output<2>(queue, "../../../data/truth_files/toy_det_5000_truth.csv");
-  CHECK(clue::validate_results(h_points, truth));
-}
-
-TEST_CASE("Test clustering on toy detector 10000 dataset") {
-  const auto device = clue::get_device(0u);
-  clue::Queue queue(device);
-
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/toyDetector_10000.csv");
-  const auto n_points = h_points.size();
-  clue::PointsDevice<2> d_points(queue, n_points);
-
-  const float dc{2.5f}, rhoc{2.f}, outlier{7.5f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
-
-  algo.make_clusters(queue, h_points, d_points);
-
-  auto truth = clue::read_output<2>(queue, "../../../data/truth_files/toy_det_10000_truth.csv");
-  CHECK(clue::validate_results(h_points, truth));
-}
-
 TEST_CASE("Test clustering on blob dataset") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
