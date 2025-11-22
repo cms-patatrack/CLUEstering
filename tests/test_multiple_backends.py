@@ -51,6 +51,19 @@ def toy_det():
     '''
     return pd.read_csv("../data/toyDetector_1000.csv")
 
+def test_check_backends():
+    '''
+    Check which backends are available for the test
+    '''
+    if clue.is_tbb_available():
+        print("TBB backend is available")
+    if clue.is_openmp_available():
+        print("OpenMP backend is available")
+    if clue.is_cuda_available():
+        print("CUDA backend is available")
+    if clue.is_hip_available():
+        print("HIP backend is available")
+
 
 def test_blobs_clustering(blobs):
     '''

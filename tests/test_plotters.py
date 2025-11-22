@@ -55,15 +55,15 @@ def test_input_plotter(dataset1d, dataset2d, dataset3d):
 
     c = clue.clusterer(3., 2., 3.)
 
-    xticks = [0, 10, 20, 30, 40, 50, 60]
-    yticks = [0, 10, 20, 30, 40, 50, 60]
-    zticks = [0, 10, 20, 30, 40, 50, 60]
+    x_ticks = [0, 10, 20, 30, 40, 50, 60]
+    y_ticks = [0, 10, 20, 30, 40, 50, 60]
+    z_ticks = [0, 10, 20, 30, 40, 50, 60]
 
     filename = 'dataset1d.png'
     c.read_data(dataset1d)
     assert c.n_dim == 1
     c.input_plotter()
-    c.input_plotter(grid=True, xticks=xticks)
+    c.input_plotter(grid=True, xticks=x_ticks)
     c.input_plotter(filename)
     assert os.path.isfile(filename)
 
@@ -71,7 +71,7 @@ def test_input_plotter(dataset1d, dataset2d, dataset3d):
     c.read_data(dataset2d)
     assert c.n_dim == 2
     c.input_plotter()
-    c.input_plotter(grid=True, xticks=xticks, yticks=yticks)
+    c.input_plotter(grid=True, xticks=x_ticks, yticks=y_ticks)
     c.input_plotter(filename)
     assert os.path.isfile(filename)
 
@@ -79,7 +79,7 @@ def test_input_plotter(dataset1d, dataset2d, dataset3d):
     c.read_data(dataset3d)
     assert c.n_dim == 3
     c.input_plotter()
-    c.input_plotter(grid=True, xticks=xticks, yticks=yticks, zticks=zticks)
+    c.input_plotter(grid=True, xticks=x_ticks, yticks=y_ticks, zticks=z_ticks)
     c.input_plotter(filename)
     assert os.path.isfile(filename)
 
@@ -90,16 +90,16 @@ def test_output_plotter(dataset1d, dataset2d, dataset3d):
 
     c = clue.clusterer(3., 2., 3.)
 
-    xticks = [0, 10, 20, 30, 40, 50, 60]
-    yticks = [0, 10, 20, 30, 40, 50, 60]
-    zticks = [0, 10, 20, 30, 40, 50, 60]
+    x_ticks = [0, 10, 20, 30, 40, 50, 60]
+    y_ticks = [0, 10, 20, 30, 40, 50, 60]
+    z_ticks = [0, 10, 20, 30, 40, 50, 60]
 
     filename = 'output1d.png'
     c.read_data(dataset1d)
     assert c.n_dim == 1
     c.run_clue()
     c.cluster_plotter()
-    c.cluster_plotter(grid=True, xticks=xticks)
+    c.cluster_plotter(grid=True, xticks=x_ticks)
     c.cluster_plotter(filename)
     assert os.path.isfile(filename)
 
@@ -108,7 +108,7 @@ def test_output_plotter(dataset1d, dataset2d, dataset3d):
     assert c.n_dim == 2
     c.run_clue()
     c.cluster_plotter()
-    c.cluster_plotter(grid=True, xticks=xticks, yticks=yticks)
+    c.cluster_plotter(grid=True, xticks=x_ticks, yticks=y_ticks)
     c.cluster_plotter(filename)
     assert os.path.isfile(filename)
 
@@ -117,6 +117,6 @@ def test_output_plotter(dataset1d, dataset2d, dataset3d):
     assert c.n_dim == 3
     c.run_clue()
     c.cluster_plotter()
-    c.cluster_plotter(grid=True, xticks=xticks, yticks=yticks, zticks=zticks)
+    c.cluster_plotter(grid=True, xticks=x_ticks, yticks=y_ticks, zticks=z_ticks)
     c.cluster_plotter(filename)
     assert os.path.isfile(filename)

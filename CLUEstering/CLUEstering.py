@@ -295,38 +295,20 @@ class clusterer:
         :returns: None
         """
         # [[x0, x1, x2, ...], [y0, y1, y2, ...], ... , [weights]]
-        if isinstance(input_data[0][0], (int, float)):
-            if len(input_data) < 2 or len(input_data) > 11:
-                raise ValueError("Inadequate data. The supported dimensions are between" +
-                                 "1 and 10.")
-            npoints = len(input_data[-1])
-            ndim = len(input_data[:-1])
-            coords = np.vstack([input_data[:-1],      # coordinates SoA
-                                input_data[-1]],      # weights
-                                dtype=np.float32)
-            coords = np.ascontiguousarray(coords, dtype=np.float32)
-            results = np.zeros(npoints, dtype=np.int32)    # cluster ids
-            self.clust_data = ClusteringDataSoA(coords,
-                                                results,
-                                                ndim,
-                                                npoints)
-
-        # [[[x0, y0, z0, ...], [x1, y1, z1, ...], ...], [weights]]
-        else:
-            if len(input_data) != 2:
-                raise ValueError("Inadequate data. The data must contain a weight value" +
-                                 "for each point.")
-            npoints = input_data[-1]
-            ndim = input_data[0][0]
-            coords = np.vstack([input_data[:-1].T,    # coordinates SoA
-                                input_data[-1]],        # weights
-                                dtype=np.float32)
-            coords = np.ascontiguousarray(coords, dtype=np.float32)
-            results = np.zeros(npoints, dtype=np.int32)    # cluster ids
-            self.clust_data = ClusteringDataSoA(coords,
-                                                results,
-                                                ndim,
-                                                npoints)
+        if len(input_data) < 2 or len(input_data) > 11:
+            raise ValueError("Inadequate data. The supported dimensions are between" +
+                             "1 and 10.")
+        npoints = len(input_data[-1])
+        ndim = len(input_data[:-1])
+        coords = np.vstack([input_data[:-1],      # coordinates SoA
+                            input_data[-1]],      # weights
+                            dtype=np.float32)
+        coords = np.ascontiguousarray(coords, dtype=np.float32)
+        results = np.zeros(npoints, dtype=np.int32)    # cluster ids
+        self.clust_data = ClusteringDataSoA(coords,
+                                            results,
+                                            ndim,
+                                            npoints)
 
     def _read_string(self, input_data: str) -> Union[pd.DataFrame, None]:
         """
@@ -743,7 +725,7 @@ class clusterer:
 
         self.read_data(data)
         self.run_clue(backend, block_size, device_id, verbose, dimensions)
-        return self._cluster_ids
+        return self.cluster_ids
 
 
 
