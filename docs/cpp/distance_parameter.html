@@ -1,0 +1,1655 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="points_conversion.html">
+      
+      
+        <link rel="next" href="convolutional_kernel.html">
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>Distance parameters - CLUEstering 2.8.0 documentation</title>
+      
+    
+    
+      
+        
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+        <link rel="stylesheet" type="text/css" href="../_static/sphinx_immaterial_theme.acf80fe7f4d9ef9e2.min.css?v=9e56d0d2" />
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_CPPv4I_NSt6size_tEEN4clue17DistanceParameterE" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="CLUEstering 2.8.0 documentation" class="md-header__button md-logo" aria-label="CLUEstering 2.8.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CLUEstering 2.8.0 documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Distance parameters
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="CLUEstering 2.8.0 documentation" class="md-nav__button md-logo" aria-label="CLUEstering 2.8.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    CLUEstering 2.8.0 documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Introduction to CLUEstering</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dependencies.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Supported Backends and Dependencies</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>How to Install</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Getting Started</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>C++ API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            <span>C++ API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="points_host.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Host</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="points_device.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Device</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="points_conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Conversions</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <span>Distance parameters</span>
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Distance parameters</span>
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_CPPv4I_NSt6size_tEEN4clue17DistanceParameterE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Distance<wbr>Parameter</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DistanceParameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Public Functions</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Distance<wbr>Parameter</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DistanceParameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf-p-radius" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::DistanceParameter::radius (C++ function parameter) — The distance threshold to be applied uniformly across all dimensions."><span>radius</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Distance<wbr>Parameter</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DistanceParameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE-p-distances" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::DistanceParameter::distances (C++ function parameter) — An array containing the distance thresholds for each dimension."><span>distances</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Distance<wbr>Parameter</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DistanceParameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-TDistances" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::DistanceParameter::TDistances (C++ non-type template parameter) — A parameter pack representing the distance thresholds for each dimension."><span>TDistances</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-distances" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::DistanceParameter::distances (C++ function parameter) — The distance thresholds for each dimension."><span>distances</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator<wbr>[]</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="operator[]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-p-dim" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::operator[]::dim (C++ function parameter) — The dimension index for which to retrieve the distance parameter."><span>dim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator<wbr>[]</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="operator[]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-p-dim" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::operator[]::dim (C++ function parameter) — The dimension index for which to retrieve the distance parameter."><span>dim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterltEf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator&lt;</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterleEf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator&lt;=</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="convolutional_kernel.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Convolutional Kernels</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="association_map.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association map</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="association_map_view.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Conversions</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cluster_properties.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster properties</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="get_clusters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusters associations</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cluster_centroid.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster centroids</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="read_csv.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>File reading</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="alpaka_utils.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Alpaka utilities</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="scores.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Validation scores</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../python/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>Python API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Python API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python/clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_CPPv4I_NSt6size_tEEN4clue17DistanceParameterE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Distance<wbr>Parameter</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DistanceParameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Public Functions</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Distance<wbr>Parameter</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DistanceParameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf-p-radius" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::DistanceParameter::radius (C++ function parameter) — The distance threshold to be applied uniformly across all dimensions."><span>radius</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Distance<wbr>Parameter</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DistanceParameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE-p-distances" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::DistanceParameter::distances (C++ function parameter) — An array containing the distance thresholds for each dimension."><span>distances</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Distance<wbr>Parameter</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DistanceParameter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-TDistances" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::DistanceParameter::TDistances (C++ non-type template parameter) — A parameter pack representing the distance thresholds for each dimension."><span>TDistances</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-distances" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::DistanceParameter::distances (C++ function parameter) — The distance thresholds for each dimension."><span>distances</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator<wbr>[]</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="operator[]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-p-dim" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::operator[]::dim (C++ function parameter) — The dimension index for which to retrieve the distance parameter."><span>dim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator<wbr>[]</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="operator[]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-p-dim" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::DistanceParameter::operator[]::dim (C++ function parameter) — The dimension index for which to retrieve the distance parameter."><span>dim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterltEf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator&lt;</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue17DistanceParameterleEf" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator&lt;=</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1 id="distance-parameters">Distance parameters<a class="headerlink" href="#distance-parameters" title="Link to this heading">¶</a></h1>
+<dl class="cpp class objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4I_NSt6size_tEEN4clue17DistanceParameterE">
+<span id="_CPPv3I_NSt6size_tEEN4clue17DistanceParameterE"></span><span id="_CPPv2I_NSt6size_tEEN4clue17DistanceParameterE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_NSt6size_tEEN4clue17DistanceParameterE" title="clue::DistanceParameter::Ndim (C++ non-type template parameter)"><span class="n"><span class="pre">Ndim</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1DistanceParameter"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DistanceParameter</span></span></span><a class="headerlink" href="#_CPPv4I_NSt6size_tEEN4clue17DistanceParameterE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>A class that encapsulates distance parameters for the clustering algorithm. It can represent either a uniform distance across all dimensions or dimension-specific distances. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions<a class="headerlink" href="#breathe-section-title-public-functions" title="Permalink to this headline">¶</a></p>
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue17DistanceParameter17DistanceParameterEf">
+<span id="_CPPv3N4clue17DistanceParameter17DistanceParameterEf"></span><span id="_CPPv2N4clue17DistanceParameter17DistanceParameterEf"></span><span id="clue::DistanceParameter::DistanceParameter__floatCE"></span><span class="target" id="classclue_1_1DistanceParameter_1a91af7419a99a4b43c3aeefba22b3a4be"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DistanceParameter</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf-p-radius" title="clue::DistanceParameter::DistanceParameter::radius (C++ function parameter) — The distance threshold to be applied uniformly across all dimensions."><span class="n sig-param"><span class="pre">radius</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Construct a <a class="reference internal" href="#classclue_1_1DistanceParameter"><span class="std std-ref">DistanceParameter</span></a> with the same threshold for all dimensions. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor initializes all dimensions with the same distance value. </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue17DistanceParameter17DistanceParameterEf-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4N4clue17DistanceParameter17DistanceParameterEf-p-radius"><span class="kt">float</span><span class="w"> </span><span class="n sig-param sig-name">radius</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameter17DistanceParameterEf-p-radius" title="Permalink to this definition">¶</a></dt><dd><p>The distance threshold to be applied uniformly across all dimensions. </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE">
+<span id="_CPPv3N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE"></span><span id="_CPPv2N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE"></span><span id="clue::DistanceParameter::DistanceParameter__std::array:float.Ndim:CE"></span><span class="target" id="classclue_1_1DistanceParameter_1a56650179751a21c99a2a4173578f224f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DistanceParameter</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_NSt6size_tEEN4clue17DistanceParameterE" title="clue::DistanceParameter::Ndim (C++ non-type template parameter)"><span class="n"><span class="pre">Ndim</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE-p-distances" title="clue::DistanceParameter::DistanceParameter::distances (C++ function parameter) — An array containing the distance thresholds for each dimension."><span class="n sig-param"><span class="pre">distances</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Construct a <a class="reference internal" href="#classclue_1_1DistanceParameter"><span class="std std-ref">DistanceParameter</span></a> with dimension-specific distances. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor allows for specifying different distance values for each dimension. </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE-p-distances"><span class="n">std</span><span class="p">::</span><span class="n">array</span><span class="p">&lt;</span><span class="kt">float</span><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_NSt6size_tEEN4clue17DistanceParameterE" title="clue::DistanceParameter::Ndim (C++ non-type template parameter)"><span class="n">Ndim</span></a><span class="p">&gt;</span><span class="w"> </span><span class="n sig-param sig-name">distances</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameter17DistanceParameterENSt5arrayIf4NdimEE-p-distances" title="Permalink to this definition">¶</a></dt><dd><p>An array containing the distance thresholds for each dimension. </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances">
+<span id="_CPPv3I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances"></span><span id="_CPPv2I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">floating_point</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-TDistances" title="clue::DistanceParameter::DistanceParameter::TDistances (C++ non-type template parameter) — A parameter pack representing the distance thresholds for each dimension."><span class="n"><span class="pre">TDistances</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1DistanceParameter_1a5012865ab365afca51783f399cb54bdb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DistanceParameter</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-TDistances" title="clue::DistanceParameter::DistanceParameter::TDistances (C++ non-type template parameter) — A parameter pack representing the distance thresholds for each dimension."><span class="n"><span class="pre">TDistances</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-distances" title="clue::DistanceParameter::DistanceParameter::distances (C++ function parameter) — The distance thresholds for each dimension."><span class="n sig-param"><span class="pre">distances</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Construct a <a class="reference internal" href="#classclue_1_1DistanceParameter"><span class="std std-ref">DistanceParameter</span></a> with dimension-specific distances. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This constructor allows for specifying different distance values for each dimension. </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-template-parameters">Template Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-template-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-TDistances"><span class="n">std</span><span class="p">::</span><span class="n">floating_point</span><span class="p">...</span><span class="w"> </span><span class="sig-name descname"><span class="n">TDistances</span></span><a class="headerlink" href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-TDistances" title="Permalink to this definition">¶</a></dt><dd><p>A parameter pack representing the distance thresholds for each dimension. </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-distances"><a class="reference internal" href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-TDistances" title="clue::DistanceParameter::DistanceParameter::TDistances (C++ non-type template parameter) — A parameter pack representing the distance thresholds for each dimension."><span class="n">TDistances</span></a><span class="p">...</span><span class="w"> </span><span class="n sig-param sig-name">distances</span><a class="headerlink" href="#_CPPv4I_DpNSt14floating_pointEEN4clue17DistanceParameter17DistanceParameterEDp10TDistances-p-distances" title="Permalink to this definition">¶</a></dt><dd><p>The distance thresholds for each dimension. </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue17DistanceParameterixENSt6size_tE">
+<span id="_CPPv3NK4clue17DistanceParameterixENSt6size_tE"></span><span id="_CPPv2NK4clue17DistanceParameterixENSt6size_tE"></span><span id="clue::DistanceParameter::subscript-operator__std::sC"></span><span class="target" id="classclue_1_1DistanceParameter_1a5597c5d6ec0354e4b56eec6db9496838"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-p-dim" title="clue::DistanceParameter::operator[]::dim (C++ function parameter) — The dimension index for which to retrieve the distance parameter."><span class="n sig-param"><span class="pre">dim</span></span></a></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Access the distance parameter for a specific dimension. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4NK4clue17DistanceParameterixENSt6size_tE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4NK4clue17DistanceParameterixENSt6size_tE-p-dim"><span class="n">std</span><span class="p">::</span><span class="n">size_t</span><span class="w"> </span><span class="n sig-param sig-name">dim</span><a class="headerlink" href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-p-dim" title="Permalink to this definition">¶</a></dt><dd><p>The dimension index for which to retrieve the distance parameter. </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4NK4clue17DistanceParameterixENSt6size_tE-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue17DistanceParameterixENSt6size_tE-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><p>A reference to the distance parameter for the specified dimension. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue17DistanceParameterixENSt6size_tE">
+<span id="_CPPv3N4clue17DistanceParameterixENSt6size_tE"></span><span id="_CPPv2N4clue17DistanceParameterixENSt6size_tE"></span><span id="clue::DistanceParameter::subscript-operator__std::s"></span><span class="target" id="classclue_1_1DistanceParameter_1a15017249a48a4eede37901689101388e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-p-dim" title="clue::DistanceParameter::operator[]::dim (C++ function parameter) — The dimension index for which to retrieve the distance parameter."><span class="n sig-param"><span class="pre">dim</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Access the distance parameter for a specific dimension. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue17DistanceParameterixENSt6size_tE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4N4clue17DistanceParameterixENSt6size_tE-p-dim"><span class="n">std</span><span class="p">::</span><span class="n">size_t</span><span class="w"> </span><span class="n sig-param sig-name">dim</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-p-dim" title="Permalink to this definition">¶</a></dt><dd><p>The dimension index for which to retrieve the distance parameter. </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4N4clue17DistanceParameterixENSt6size_tE-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameterixENSt6size_tE-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><p>A reference to the distance parameter for the specified dimension. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue17DistanceParameterltEf">
+<span id="_CPPv3N4clue17DistanceParameterltEf"></span><span id="_CPPv2N4clue17DistanceParameterltEf"></span><span id="clue::DistanceParameter::lt-operator__float"></span><span class="target" id="classclue_1_1DistanceParameter_1a945d94f1e4000a65e2f3218aa87f8b01"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4N4clue17DistanceParameterltEf" title="clue::DistanceParameter::operator&lt;::value (C++ function parameter)"><span class="n sig-param"><span class="pre">value</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameterltEf" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue17DistanceParameterleEf">
+<span id="_CPPv3N4clue17DistanceParameterleEf"></span><span id="_CPPv2N4clue17DistanceParameterleEf"></span><span id="clue::DistanceParameter::lte-operator__float"></span><span class="target" id="classclue_1_1DistanceParameter_1a06afdd8dd80075ba99635fc43b0f2f45"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;=</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4N4clue17DistanceParameterleEf" title="clue::DistanceParameter::operator&lt;=::value (C++ function parameter)"><span class="n sig-param"><span class="pre">value</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue17DistanceParameterleEf" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2025, Simone Balducci, Felice Pantaleo, Wahid Redjeb, Marco Rovere, Aurora Perego, Francesco Giacomini.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    8.2.3.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "toc.follow", "search.share", "header.autohide"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="../_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+    
+  </body>
+</html>
