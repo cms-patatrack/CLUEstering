@@ -43,12 +43,10 @@ def test_clusterer_properties(dataset):
     assert nclusters > 0
     cluster_ids = c.cluster_ids
     assert np.max(cluster_ids) + 1 == nclusters
-    clusters = c.clusters
-    assert len(clusters) == nclusters
     labels = c.labels
     assert len(labels) == 999
     assert (cluster_ids == labels).all()
     cluster_points = c.cluster_points
     assert len(cluster_points) == nclusters
     output_df = c.output_df
-    assert output_df.shape == (999, 2)
+    assert output_df.shape == (999, 1)
