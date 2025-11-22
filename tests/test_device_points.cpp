@@ -218,6 +218,7 @@ TEST_CASE("Test reduction of device points column") {
 
   clue::PointsDevice<2> d_points(queue, size);
   clue::copyToDevice(queue, d_points, h_points);
+  alpaka::wait(queue);
 
   CHECK(clue::internal::algorithm::reduce(d_points.weights().begin(), d_points.weights().end()) ==
         499500.0f);

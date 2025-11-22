@@ -261,6 +261,9 @@ class clusterer:
         ## Kernel for calculation of local density
         self._kernel = clue_kernels.FlatKernel(0.5)
 
+        ## Array specifyng which coordinates are periodic (wrapped)
+        self.wrapped = None
+
         ## Output attributes
         self.clust_prop = None
         self._elapsed_time = 0.
@@ -404,7 +407,9 @@ class clusterer:
         self.clust_data = ClusteringDataSoA(coords, results, ndim, npoints)
 
 
-    def read_data(self, input_data: Union[pd.DataFrame, str, dict, list, np.ndarray]) -> None:
+    def read_data(self,
+                  input_data: Union[pd.DataFrame, str, dict, list, np.ndarray],
+                  wrapped_coords: Union[list, np.ndarray, None] = None) -> None:
         """
         Read input data and initialize clustering-related attributes.
 
@@ -413,6 +418,9 @@ class clusterer:
             - string: path to a CSV file containing the data.
             - dict: dictionary with coordinates and weights.
             - list or ndarray: list of coordinate lists plus a weight list.
+        :type input_data: Union[pd.DataFrame, str, dict, list, np.ndarray]
+        :param wrapped_coordinates: List or array indicating which dimensions are periodic.
+        :type wrapped_coordinates: list or np.ndarray
 
         :raises ValueError: If the data format is not supported.
 
@@ -429,6 +437,22 @@ class clusterer:
             df = self._read_dict_df(input_data)
             self._handle_dataframe(df)
 
+        if wrapped_coords is not None:
+            self.wrapped = wrapped_coords
+        else:
+            self.wrapped = [0] * self.clust_data.n_dim
+
+
+    def set_wrapped(self, wrapped_coords: Union[list, np.ndarray]) -> None:
+        """
+        Set which coordinates are periodic (wrapped).
+
+        :param wrapped_coordinates: List or array indicating which dimensions are periodic.
+        :type wrapped_coordinates: list or np.ndarray
+
+        :returns: None
+        """
+        self.wrapped = wrapped_coords
 
     def choose_kernel(self,
                       choice: str,
@@ -614,13 +638,13 @@ class clusterer:
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
-                                                    self._ppbin, data.coords, data.results,
+                                                    self._ppbin, self.wrapped, data.coords, data.results,
                                                     self._kernel, data.n_dim,
                                                     data.n_points, block_size, device_id)
         elif backend == "cpu tbb":
             if tbb_found:
                 cluster_id_is_seed = cpu_tbb.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
-                                                     self._ppbin, data.coords, data.results,
+                                                     self._ppbin, self.wrapped, data.coords, data.results,
                                                      self._kernel, data.n_dim,
                                                      data.n_points, block_size, device_id)
             else:
@@ -628,7 +652,7 @@ class clusterer:
         elif backend == "cpu openmp":
             if omp_found:
                 cluster_id_is_seed = cpu_omp.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
-                                                     self._ppbin, data.coords, data.results,
+                                                     self._ppbin, self.wrapped, data.coords, data.results,
                                                      self._kernel, data.n_dim,
                                                      data.n_points, block_size, device_id)
             else:
@@ -636,7 +660,7 @@ class clusterer:
         elif backend == "gpu cuda":
             if cuda_found:
                 cluster_id_is_seed = gpu_cuda.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
-                                                      self._ppbin, data.coords, data.results,
+                                                      self._ppbin, self.wrapped, data.coords, data.results,
                                                       self._kernel, data.n_dim,
                                                       data.n_points, block_size, device_id)
             else:
@@ -644,7 +668,7 @@ class clusterer:
         elif backend == "gpu hip":
             if hip_found:
                 cluster_id_is_seed = gpu_hip.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
-                                                     self._ppbin, data.coords, data.results,
+                                                     self._ppbin, self.wrapped, data.coords, data.results,
                                                      self._kernel, data.n_dim,
                                                      data.n_points, block_size, device_id)
             else:

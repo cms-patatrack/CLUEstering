@@ -14,6 +14,8 @@
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 
+#include <array>
+#include <concepts>
 #include <cstdint>
 
 namespace clue {
@@ -181,17 +183,15 @@ namespace clue {
     /// @brief Specify which coordinates are periodic
     ///
     /// @param wrappedCoordinates Array of wrapped coordinates, where 1 means periodic and 0 means non-periodic
-    void setWrappedCoordinates(const std::array<uint8_t, Ndim>& wrappedCoordinates);
-    /// @brief Specify which coordinates are periodic
-    ///
-    /// @param wrappedCoordinates Array of wrapped coordinates, where 1 means periodic and 0 means non-periodic
-    void setWrappedCoordinates(std::array<uint8_t, Ndim>&& wrappedCoordinates);
+    template <std::ranges::contiguous_range TRange>
+      requires std::integral<std::ranges::range_value_t<TRange>>
+    void setWrappedCoordinates(const TRange& wrapped_coordinates);
     /// @brief Specify which coordinates are periodic
     ///
     /// @tparam TArgs Types of the wrapped coordinates, should be convertible to uint8_t
     /// @param wrappedCoordinates Wrapped coordinates, where 1 means periodic and 0 means non-periodic
     template <std::integral... TArgs>
-    void setWrappedCoordinates(TArgs... wrappedCoordinates);
+    void setWrappedCoordinates(TArgs... wrapped_coordinates);
 
     /// @brief Get the clusters from the host points
     ///
