@@ -761,17 +761,6 @@ class clusterer:
         return self.clust_prop.n_clusters
 
     @property
-    def n_seeds(self) -> int:
-        """
-        Number of seeds found.
-
-        :return: Number of seeds.
-        :rtype: int
-        """
-
-        return self.clust_prop.n_seeds
-
-    @property
     def clusters(self) -> np.ndarray:
         """
         List of clusters found.
@@ -1088,8 +1077,6 @@ class clusterer:
             # Customization of axis ticks
             if x_ticks is not None:
                 plt.xticks(x_ticks)
-            if y_ticks is not None:
-                plt.yticks(y_ticks)
 
             if filepath is not None:
                 plt.savefig(filepath)
@@ -1098,8 +1085,7 @@ class clusterer:
         elif self.clust_data.n_dim == 2:
             data = {'x0': self.coords[0],
                     'x1': self.coords[1],
-                    'cluster_ids': self._cluster_ids,
-                    'isSeed': self._is_seed}
+                    'cluster_ids': self.cluster_ids}
             df_ = pd.DataFrame(data)
 
             max_clusterid = max(df_["cluster_ids"])
@@ -1109,8 +1095,6 @@ class clusterer:
             for i in range(0, max_clusterid+1):
                 dfi = df_[df_.cluster_ids == i] # ith cluster
                 plt.scatter(dfi.x0, dfi.x1, s=pt_size, marker='.')
-            df_seed = df_[df_.isSeed == 1] # Only Seeds
-            plt.scatter(df_seed.x0, df_seed.x1, s=seed_size, color='r', marker='*')
 
             # Customization of the plot title
             plt.title(plot_title, fontsize=title_size)
