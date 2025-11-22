@@ -157,7 +157,7 @@ class ClusteringDataSoA:
 
     :param coords: Input coordinates including weights.
     :type coords: np.ndarray
-    :param results: Clustering results including cluster IDs and seed flags.
+    :param results: Clustering results including cluster IDs.
     :type results: np.ndarray
     :param n_dim: Number of dimensions.
     :type n_dim: int
@@ -184,27 +184,18 @@ class cluster_properties:
 
     :param n_clusters: Number of clusters constructed.
     :type n_clusters: int
-    :param n_seeds: Number of seeds found (clusters excluding outliers).
-    :type n_seeds: int
-    :param clusters: List of clusters found.
-    :type clusters: np.ndarray
     :param cluster_ids: Cluster ID for each point.
     :type cluster_ids: np.ndarray
-    :param is_seed: Array where 1 indicates a seed and 0 otherwise.
-    :type is_seed: np.ndarray
     :param cluster_points: Lists of point IDs belonging to each cluster.
     :type cluster_points: np.ndarray
     :param points_per_cluster: Number of points per cluster.
     :type points_per_cluster: np.ndarray
-    :param output_df: DataFrame containing is_seed and cluster_ids as columns.
+    :param output_df: DataFrame containing the cluster_ids.
     :type output_df: pd.DataFrame
     """
 
     n_clusters : int
-    n_seeds : int
-    clusters : np.ndarray
     cluster_ids : np.ndarray
-    is_seed : np.ndarray
     cluster_points : np.ndarray
     points_per_cluster : np.ndarray
     output_df : pd.DataFrame
@@ -212,11 +203,7 @@ class cluster_properties:
     def __eq__(self, other):
         if self.n_clusters != other.n_clusters:
             return False
-        if self.n_seeds != other.n_seeds:
-            return False
         if not (self.cluster_ids == other.cluster_ids).all():
-            return False
-        if not (self.is_seed == other.is_seed).all():
             return False
         return True
 
@@ -317,11 +304,8 @@ class clusterer:
             coords = np.vstack([input_data[:-1],      # coordinates SoA
                                 input_data[-1]],      # weights
                                 dtype=np.float32)
-            results = np.vstack([np.zeros(npoints, dtype=np.int32),    # cluster ids
-                                 np.zeros(npoints, dtype=np.int32)],   # is_seed
-                                 dtype=np.int32)
             coords = np.ascontiguousarray(coords, dtype=np.float32)
-            results = np.ascontiguousarray(results, dtype=np.int32)
+            results = np.zeros(npoints, dtype=np.int32)    # cluster ids
             self.clust_data = ClusteringDataSoA(coords,
                                                 results,
                                                 ndim,
@@ -337,11 +321,8 @@ class clusterer:
             coords = np.vstack([input_data[:-1].T,    # coordinates SoA
                                 input_data[-1]],        # weights
                                 dtype=np.float32)
-            results = np.vstack([np.zeros(npoints, dtype=np.int32),    # cluster ids
-                                 np.zeros(npoints, dtype=np.int32)],   # is_seed
-                                 dtype=np.int32)
             coords = np.ascontiguousarray(coords, dtype=np.float32)
-            results = np.ascontiguousarray(results, dtype=np.int32)
+            results = np.zeros(npoints, dtype=np.int32)    # cluster ids
             self.clust_data = ClusteringDataSoA(coords,
                                                 results,
                                                 ndim,
@@ -399,10 +380,8 @@ class clusterer:
         npoints = len(df_.index)
         coords = df_.iloc[:, 0:-1].to_numpy()
         coords = np.vstack([coords.T, df_.iloc[:, -1]], dtype=np.float32)
-        results = np.vstack([np.zeros(npoints, dtype=np.int32),
-                             np.zeros(npoints, dtype=np.int32)], dtype=np.int32)
         coords = np.ascontiguousarray(coords, dtype=np.float32)
-        results = np.ascontiguousarray(results, dtype=np.int32)
+        results = np.zeros(npoints, dtype=np.int32)
 
         self.clust_data = ClusteringDataSoA(coords, results, ndim, npoints)
 
@@ -675,11 +654,8 @@ class clusterer:
                 print("HIP module not found. Please re-compile the library and try again.")
 
         finish = time.time_ns()
-        cluster_ids = data.results[0]
-        is_seed = data.results[1]
-        n_seeds = np.sum(is_seed)
+        cluster_ids = data.results
         n_clusters = np.max(cluster_ids) + 1
-        clusters = np.arange(n_clusters, dtype=np.int32)
 
         cluster_points = [[] for _ in range(n_clusters)]
         for i in range(self.clust_data.n_points):
@@ -687,13 +663,10 @@ class clusterer:
                 cluster_points[cluster_ids[i]].append(i)
 
         points_per_cluster = np.array([len(clust) for clust in cluster_points])
-        output_df = pd.DataFrame({'cluster_ids': cluster_ids, 'is_seed': is_seed})
+        output_df = pd.DataFrame({'cluster_ids': cluster_ids})
 
         self.clust_prop = cluster_properties(n_clusters,
-                                             n_seeds,
-                                             clusters,
                                              cluster_ids,
-                                             is_seed,
                                              np.asarray(cluster_points, dtype=object),
                                              points_per_cluster,
                                              output_df)
@@ -785,17 +758,6 @@ class clusterer:
         return self.clust_prop.n_clusters
 
     @property
-    def clusters(self) -> np.ndarray:
-        """
-        List of clusters found.
-
-        :return: Array of cluster identifiers.
-        :rtype: np.ndarray
-        """
-
-        return self.clust_prop.clusters
-
-    @property
     def cluster_ids(self) -> np.ndarray:
         """
         Index of the cluster to which each point belongs.
@@ -842,9 +804,9 @@ class clusterer:
     @property
     def output_df(self) -> pd.DataFrame:
         """
-        DataFrame containing cluster_ids and seed information.
+        DataFrame containing cluster_ids.
 
-        :return: Pandas DataFrame with cluster assignments and seed flags.
+        :return: Pandas DataFrame with cluster assignments.
         :rtype: pd.DataFrame
         """
 
@@ -1025,11 +987,11 @@ class clusterer:
     def cluster_plotter(self, filepath: Union[str, None] = None, plot_title: str = '',
                         title_size: float = 16, x_label: str = 'x', y_label: str = 'y',
                         z_label: str = 'z', label_size: float = 16, outl_size: float = 10,
-                        pt_size: float = 10, seed_size: float = 25, grid: bool = True,
+                        pt_size: float = 10, grid: bool = True,
                         grid_style: str = '--', grid_size: float = 0.2, x_ticks=None,
                         y_ticks=None, z_ticks=None, **kwargs) -> None:
         """
-        Plots clusters with different colors, seeds as stars, and outliers as gray crosses.
+        Plots clusters with different colors and outliers as gray crosses.
 
         :param filepath: Path to save the plot. If None, the plot is shown interactively.
         :type filepath: str or None
@@ -1049,8 +1011,6 @@ class clusterer:
         :type outl_size: float
         :param pt_size: Marker size for cluster points.
         :type pt_size: float
-        :param seed_size: Marker size for seed points.
-        :type seed_size: float
         :param grid: Whether to display a grid.
         :type grid: bool
         :param grid_style: Line style of the grid.
@@ -1073,8 +1033,7 @@ class clusterer:
         if self.clust_data.n_dim == 1:
             data = {'x0': self.coords[0],
                     'x1': np.zeros(self.clust_data.n_points),
-                    'cluster_ids': self.clust_prop.cluster_ids,
-                    'isSeed': self.clust_prop.is_seed}
+                    'cluster_ids': self.clust_prop.cluster_ids}
             df_ = pd.DataFrame(data)
 
             max_clusterid = max(df_["cluster_ids"])
@@ -1084,8 +1043,6 @@ class clusterer:
             for i in range(0, max_clusterid+1):
                 dfi = df_[df_.cluster_ids == i] # ith cluster
                 plt.scatter(dfi.x0, dfi.x1, s=pt_size, marker='.')
-            df_seed = df_[df_.isSeed == 1] # Only Seeds
-            plt.scatter(df_seed.x0, df_seed.x1, s=seed_size, color='r', marker='*')
 
             # Customization of the plot title
             plt.title(plot_title, fontsize=title_size)
@@ -1145,8 +1102,7 @@ class clusterer:
             data = {'x0': self.coords[0],
                     'x1': self.coords[1],
                     'x2': self.coords[2],
-                    'cluster_ids': self.clust_prop.cluster_ids,
-                    'isSeed': self.clust_prop.is_seed}
+                    'cluster_ids': self.clust_prop.cluster_ids}
             df_ = pd.DataFrame(data)
 
             max_clusterid = max(df_["cluster_ids"])
@@ -1158,9 +1114,6 @@ class clusterer:
             for i in range(0, max_clusterid+1):
                 dfi = df_[df_.cluster_ids == i]
                 ax_.scatter(dfi.x0, dfi.x1, dfi.x2, s=pt_size, marker = '.')
-
-            df_seed = df_[df_.isSeed == 1] # Only Seeds
-            ax_.scatter(df_seed.x0, df_seed.x1, df_seed.x2, s=seed_size, color = 'r', marker = '*')
 
             # Customization of the plot title
             ax_.set_title(plot_title, fontsize=title_size)
@@ -1190,7 +1143,7 @@ class clusterer:
 
     def to_csv(self, output_folder: str, file_name: str) -> None:
         """
-        Creates a file containing the coordinates of all the points, their cluster_ids, and is_seed.
+        Creates a file containing the coordinates of all the points and their cluster_ids.
 
         :param output_folder: Full path to the desired output folder.
         :type output_folder: str
@@ -1211,7 +1164,6 @@ class clusterer:
             data['x' + str(i)] = self.clust_data.coords[i]
         data['weight'] = self.clust_data.coords[-1]
         data['cluster_ids'] = self.clust_prop.cluster_ids
-        data['is_seed'] = self.clust_prop.is_seed
 
         df_ = pd.DataFrame(data)
         df_.to_csv(out_path, index=False)
@@ -1235,13 +1187,10 @@ class clusterer:
         in_path = input_folder + file_name
         df_ = pd.read_csv(in_path, dtype=float)
         cluster_ids = np.asarray(df_["cluster_ids"], dtype=int)
-        is_seed = np.array(df_["is_seed"], dtype=int)
 
         self._handle_dataframe(df_.iloc[:, :-2])
 
-        n_seeds = np.sum(is_seed)
         n_clusters = np.max(cluster_ids) + 1
-        clusters = np.arange(n_clusters, dtype=np.int32)
 
         cluster_points = [[] for _ in range(n_clusters)]
         for i in range(self.clust_data.n_points):
@@ -1250,10 +1199,7 @@ class clusterer:
         points_per_cluster = np.array([len(clust) for clust in cluster_points])
         self.clust_prop = cluster_properties(
             n_clusters,
-            n_seeds,
-            clusters,
             cluster_ids,
-            is_seed,
             np.asarray(cluster_points, dtype=object),
             points_per_cluster,
             df_
