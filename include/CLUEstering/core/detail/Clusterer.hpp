@@ -16,6 +16,7 @@
 #include <alpaka/mem/view/Traits.hpp>
 #include <alpaka/vec/Vec.hpp>
 #include <cmath>
+#include <concepts>
 #include <cstdint>
 #include <ranges>
 #include <vector>
@@ -156,14 +157,10 @@ namespace clue {
   }
 
   template <std::size_t Ndim>
-  inline void Clusterer<Ndim>::setWrappedCoordinates(
-      const std::array<uint8_t, Ndim>& wrappedCoordinates) {
-    m_wrappedCoordinates = wrappedCoordinates;
-  }
-  template <std::size_t Ndim>
-  inline void Clusterer<Ndim>::setWrappedCoordinates(
-      std::array<uint8_t, Ndim>&& wrappedCoordinates) {
-    m_wrappedCoordinates = std::move(wrappedCoordinates);
+  template <std::ranges::contiguous_range TRange>
+    requires std::integral<std::ranges::range_value_t<TRange>>
+  inline void Clusterer<Ndim>::setWrappedCoordinates(const TRange& wrapped_coordinates) {
+    std::ranges::copy(wrapped_coordinates, m_wrappedCoordinates.begin());
   }
   template <std::size_t Ndim>
   template <std::integral... TArgs>

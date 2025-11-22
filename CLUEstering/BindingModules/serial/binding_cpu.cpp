@@ -1,5 +1,8 @@
 
 #include <alpaka/alpaka.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <iostream>
 #include <tuple>
 #include <vector>
 
@@ -22,7 +25,7 @@ namespace alpaka_serial_sync {
       return;
     } else {
       std::cout << backend << " devices found: \n";
-      for (size_t i{}; i < devices.size(); ++i) {
+      for (auto i = 0u; i < devices.size(); ++i) {
         std::cout << tab << "device " << i << ": " << alpaka::getName(devices[i]) << '\n';
       }
     }
@@ -34,22 +37,20 @@ namespace alpaka_serial_sync {
                float dm,
                float seed_dc,
                int pPBin,
+               std::vector<uint8_t> wrapped,
                py::array_t<float> data,
                py::array_t<int> results,
                const Kernel& kernel,
                int Ndim,
                int32_t n_points,
-               size_t block_size,
-               size_t device_id) {
+               std::size_t block_size,
+               std::size_t device_id) {
     auto rData = data.request();
-    float* pData = static_cast<float*>(rData.ptr);
+    auto* pData = static_cast<float*>(rData.ptr);
     auto rResults = results.request();
-    int* pResults = static_cast<int*>(rResults.ptr);
+    auto* pResults = static_cast<int*>(rResults.ptr);
 
-    const auto dev_acc = alpaka::getDevByIdx(clue::Platform{}, device_id);
-
-    // Create the queue
-    clue::Queue queue(dev_acc);
+    auto queue = clue::get_queue(device_id);
 
     // Running the clustering algorithm
     switch (Ndim) {
@@ -59,6 +60,7 @@ namespace alpaka_serial_sync {
                        dm,
                        seed_dc,
                        pPBin,
+                       std::move(wrapped),
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
@@ -71,6 +73,7 @@ namespace alpaka_serial_sync {
                        dm,
                        seed_dc,
                        pPBin,
+                       std::move(wrapped),
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
@@ -83,6 +86,7 @@ namespace alpaka_serial_sync {
                        dm,
                        seed_dc,
                        pPBin,
+                       std::move(wrapped),
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
@@ -95,6 +99,7 @@ namespace alpaka_serial_sync {
                        dm,
                        seed_dc,
                        pPBin,
+                       std::move(wrapped),
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
@@ -107,6 +112,7 @@ namespace alpaka_serial_sync {
                        dm,
                        seed_dc,
                        pPBin,
+                       std::move(wrapped),
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
@@ -119,6 +125,7 @@ namespace alpaka_serial_sync {
                        dm,
                        seed_dc,
                        pPBin,
+                       std::move(wrapped),
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
@@ -131,6 +138,7 @@ namespace alpaka_serial_sync {
                        dm,
                        seed_dc,
                        pPBin,
+                       std::move(wrapped),
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
@@ -143,6 +151,7 @@ namespace alpaka_serial_sync {
                        dm,
                        seed_dc,
                        pPBin,
+                       std::move(wrapped),
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
@@ -155,6 +164,7 @@ namespace alpaka_serial_sync {
                        dm,
                        seed_dc,
                        pPBin,
+                       std::move(wrapped),
                        std::make_tuple(pData, pResults),
                        n_points,
                        kernel,
@@ -167,6 +177,7 @@ namespace alpaka_serial_sync {
                         dm,
                         seed_dc,
                         pPBin,
+                        std::move(wrapped),
                         std::make_tuple(pData, pResults),
                         n_points,
                         kernel,
@@ -188,6 +199,7 @@ namespace alpaka_serial_sync {
                                   float,
                                   float,
                                   int,
+                                  std::vector<uint8_t>,
                                   py::array_t<float>,
                                   py::array_t<int>,
                                   const clue::FlatKernel&,
@@ -202,6 +214,7 @@ namespace alpaka_serial_sync {
                                   float,
                                   float,
                                   int,
+                                  std::vector<uint8_t>,
                                   py::array_t<float>,
                                   py::array_t<int>,
                                   const clue::ExponentialKernel&,
@@ -216,6 +229,7 @@ namespace alpaka_serial_sync {
                                   float,
                                   float,
                                   int,
+                                  std::vector<uint8_t>,
                                   py::array_t<float>,
                                   py::array_t<int>,
                                   const clue::GaussianKernel&,
