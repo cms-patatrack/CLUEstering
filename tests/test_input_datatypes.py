@@ -124,15 +124,13 @@ def lists(dataframe):
 @pytest.fixture
 def arrays(dataframe):
     '''
-    Returns a test dataset as an array of arrays
+    Returns a test dataset as an array with data in Structure of Arrays (SoA) format
     '''
     data_arrays = np.array([np.array(dataframe['x'].values.tolist()),
                             np.array(dataframe['y'].values.tolist()),
                             np.array(dataframe['z'].values.tolist()),
                             np.array(dataframe['weight'].values.tolist())])
     return data_arrays
-
-# Test the different data types singularly, so to make it easier to debug in case of error
 
 
 def test_csv(file):
@@ -181,6 +179,7 @@ def test_ndarray(arrays):
     """
 
     clust = clue.clusterer(1, 5, 1)
+    # test array with data in SoA format
     clust.read_data(arrays)
     clust.run_clue()
 
