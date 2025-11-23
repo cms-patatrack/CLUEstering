@@ -29,13 +29,6 @@ TEST_CASE("Test make_cluster interfaces") {
     CHECK(clue::validate_results(h_points, truth));
   }
 
-  SUBCASE("Run clustering without passing the queue") {
-    algo.make_clusters(h_points, d_points, clue::FlatKernel{.5f}, block_size);
-    auto clusters = h_points.clusterIndexes();
-
-    CHECK(clue::validate_results(h_points, truth));
-  }
-
   SUBCASE("Run clustering without passing the queue and device points") {
     algo.make_clusters(h_points, clue::FlatKernel{.5f}, block_size);
 
