@@ -83,7 +83,7 @@ def dataset():
     return pd.read_csv("../data/sissa_1000.csv")
 
 
-def test_gaussian_kernel(dataset):
+def test_flat_kernel(dataset):
     c = clue.clusterer(21., 10., 21.)
     c.choose_kernel('flat', [0.5])
     c.fit(dataset)
