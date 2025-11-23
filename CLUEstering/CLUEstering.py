@@ -898,8 +898,6 @@ class clusterer:
             # Customization of axis ticks
             if x_ticks is not None:
                 plt.xticks(x_ticks)
-            if y_ticks is not None:
-                plt.yticks(y_ticks)
 
             if filepath is not None:
                 plt.savefig(filepath)
