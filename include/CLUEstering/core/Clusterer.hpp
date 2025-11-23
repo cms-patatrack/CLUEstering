@@ -156,18 +156,6 @@ namespace clue {
                        PointsDevice& dev_points,
                        const Kernel& kernel = FlatKernel{.5f},
                        std::size_t block_size = 256);
-    /// @brief Construct the clusters from host and device points
-    ///
-    /// @param h_points Host points to cluster
-    /// @param dev_points Device points to cluster
-    /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
-    /// @param block_size The size of the blocks to use for clustering, default is 256
-    /// @note This method creates a temporary queue for the operations on the device
-    template <concepts::convolutional_kernel Kernel = FlatKernel>
-    void make_clusters(PointsHost& h_points,
-                       PointsDevice& dev_points,
-                       const Kernel& kernel = FlatKernel{.5f},
-                       std::size_t block_size = 256);
     /// @brief Construct the clusters from device points
     ///
     /// @param queue The queue to use for the device operations
