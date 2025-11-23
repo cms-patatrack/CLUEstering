@@ -17,7 +17,7 @@ namespace clue {
 
     template <typename T>
     struct non_negative {
-      ALPAKA_FN_HOST_ACC constexpr auto operator()(T value) const { return value >= -1; }
+      ALPAKA_FN_HOST_ACC constexpr auto operator()(T value) const { return value > -1; }
     };
 
     inline auto get_clusters(std::span<const int> cluster_ids) {
