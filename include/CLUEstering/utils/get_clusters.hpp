@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
+#include "CLUEstering/detail/concepts.hpp"
+#include <cstddef>
 
 namespace clue {
 
