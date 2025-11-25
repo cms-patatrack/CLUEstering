@@ -7,6 +7,8 @@
 #include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
+#include "CLUEstering/core/detail/SetupFollowers.hpp"
+#include "CLUEstering/core/detail/SetupTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
@@ -16,7 +18,9 @@
 
 #include <array>
 #include <concepts>
+#include <cstddef>
 #include <cstdint>
+#include <optional>
 
 namespace clue {
 
@@ -50,17 +54,11 @@ namespace clue {
     void init_device(Queue& queue);
     void init_device(Queue& queue, TilesDevice* tile_buffer);
 
-    void setupTiles(Queue& queue, const PointsHost& h_points);
-    void setupTiles(Queue& queue, const PointsDevice& d_points);
-
-    void setupFollowers(Queue& queue, int32_t n_points);
-
-    void setupPoints(const PointsHost& h_points, PointsDevice& dev_points, Queue& queue);
-
     void setup(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points) {
-      setupTiles(queue, h_points);
-      setupFollowers(queue, h_points.size());
-      setupPoints(h_points, dev_points, queue);
+      detail::setup_tiles(queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates);
+      detail::setup_followers(queue, m_followers, h_points.size());
+      clue::copyToDevice(queue, dev_points, h_points);
+      alpaka::memset(queue, *m_seeds, 0x00);
     }
 
     template <concepts::convolutional_kernel Kernel>

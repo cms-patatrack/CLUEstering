@@ -15,11 +15,9 @@
 
 #include <alpaka/mem/view/Traits.hpp>
 #include <alpaka/vec/Vec.hpp>
-#include <cmath>
 #include <concepts>
 #include <cstdint>
 #include <ranges>
-#include <vector>
 
 namespace clue {
 
@@ -135,8 +133,8 @@ namespace clue {
                                              PointsDevice& dev_points,
                                              const Kernel& kernel,
                                              std::size_t block_size) {
-    setupTiles(queue, dev_points);
-    setupFollowers(queue, dev_points.size());
+    detail::setup_tiles(queue, m_tiles, dev_points, m_pointsPerTile, m_wrappedCoordinates);
+    detail::setup_followers(queue, m_followers, dev_points.size());
     alpaka::memset(queue, *m_seeds, 0x00);
     make_clusters_impl(dev_points, kernel, queue, block_size);
     alpaka::wait(queue);
@@ -176,84 +174,6 @@ namespace clue {
 
     // load tiles from outside
     m_tiles = *tile_buffer;
-  }
-
-  template <std::size_t Ndim>
-  void Clusterer<Ndim>::setupTiles(Queue& queue, const PointsHost& h_points) {
-    // TODO: reconsider the way that we compute the number of tiles
-    auto nTiles =
-        static_cast<int32_t>(std::ceil(h_points.size() / static_cast<float>(m_pointsPerTile)));
-    const auto nPerDim = static_cast<int32_t>(std::ceil(std::pow(nTiles, 1. / Ndim)));
-    nTiles = static_cast<int32_t>(std::pow(nPerDim, Ndim));
-
-    if (!m_tiles.has_value()) {
-      m_tiles = std::make_optional<TilesDevice>(queue, h_points.size(), nTiles);
-    }
-    // check if tiles are large enough for current data
-    if (!(m_tiles->extents().values >= static_cast<std::size_t>(h_points.size())) or
-        !(m_tiles->extents().keys >= static_cast<std::size_t>(nTiles))) {
-      m_tiles->initialize(h_points.size(), nTiles, nPerDim, queue);
-    } else {
-      m_tiles->reset(h_points.size(), nTiles, nPerDim);
-    }
-
-    auto min_max = clue::make_host_buffer<CoordinateExtremes>(queue);
-    auto tile_sizes = clue::make_host_buffer<float[Ndim]>(queue);
-    detail::compute_tile_size(min_max.data(), tile_sizes.data(), h_points, nPerDim);
-
-    alpaka::memcpy(queue, m_tiles->minMax(), min_max);
-    alpaka::memcpy(queue, m_tiles->tileSize(), tile_sizes);
-    alpaka::memcpy(
-        queue, m_tiles->wrapped(), clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
-  }
-
-  template <std::size_t Ndim>
-  void Clusterer<Ndim>::setupTiles(Queue& queue, const PointsDevice& d_points) {
-    auto nTiles =
-        static_cast<int32_t>(std::ceil(d_points.size() / static_cast<float>(m_pointsPerTile)));
-    const auto nPerDim = static_cast<int32_t>(std::ceil(std::pow(nTiles, 1. / Ndim)));
-    nTiles = static_cast<int32_t>(std::pow(nPerDim, Ndim));
-
-    if (!m_tiles.has_value()) {
-      m_tiles = std::make_optional<TilesDevice>(queue, d_points.size(), nTiles);
-    }
-    // check if tiles are large enough for current data
-    if (!(m_tiles->extents().values >= static_cast<std::size_t>(d_points.size())) or
-        !(m_tiles->extents().keys >= static_cast<std::size_t>(nTiles))) {
-      m_tiles->initialize(d_points.size(), nTiles, nPerDim, queue);
-    } else {
-      m_tiles->reset(d_points.size(), nTiles, nPerDim);
-    }
-
-    auto min_max = clue::make_host_buffer<CoordinateExtremes>(queue);
-    auto tile_sizes = clue::make_host_buffer<float[Ndim]>(queue);
-    detail::compute_tile_size(min_max.data(), tile_sizes.data(), d_points, nPerDim);
-
-    alpaka::memcpy(queue, m_tiles->minMax(), min_max);
-    alpaka::memcpy(queue, m_tiles->tileSize(), tile_sizes);
-    alpaka::memcpy(
-        queue, m_tiles->wrapped(), clue::make_host_view(m_wrappedCoordinates.data(), Ndim));
-  }
-
-  template <std::size_t Ndim>
-  void Clusterer<Ndim>::setupFollowers(Queue& queue, int32_t n_points) {
-    if (!m_followers.has_value()) {
-      m_followers = std::make_optional<FollowersDevice>(n_points, queue);
-    }
-
-    if (!(m_followers->extents() >= n_points)) {
-      m_followers->initialize(n_points, queue);
-    } else {
-      m_followers->reset(n_points);
-    }
-  }
-
-  template <std::size_t Ndim>
-  void Clusterer<Ndim>::setupPoints(const PointsHost& h_points,
-                                    PointsDevice& dev_points,
-                                    Queue& queue) {
-    clue::copyToDevice(queue, dev_points, h_points);
-    alpaka::memset(queue, *m_seeds, 0x00);
   }
 
   template <std::size_t Ndim>
