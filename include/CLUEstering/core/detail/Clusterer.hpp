@@ -97,24 +97,30 @@ namespace clue {
   inline void Clusterer<Ndim>::make_clusters(Queue& queue,
                                              PointsHost& h_points,
                                              const Kernel& kernel,
+                                             std::size_t batch_size,
                                              std::size_t block_size) {
     auto d_points = PointsDevice(queue, h_points.size());
 
+    const auto batches = detail::compute_batches(h_points.size(), batch_size);
+
     setup(queue, h_points, d_points);
-    make_clusters_impl(h_points, d_points, kernel, queue, block_size);
+    make_clusters_impl(h_points, d_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
   template <std::size_t Ndim>
   template <concepts::convolutional_kernel Kernel>
   inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
                                              const Kernel& kernel,
+                                             std::size_t batch_size,
                                              std::size_t block_size) {
     auto device = alpaka::getDevByIdx(Platform{}, 0u);
     Queue queue(device);
     auto d_points = PointsDevice(queue, h_points.size());
 
+    auto batches = detail::compute_batches(h_points.size(), batch_size);
+
     setup(queue, h_points, d_points);
-    make_clusters_impl(h_points, d_points, kernel, queue, block_size);
+    make_clusters_impl(h_points, d_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
   template <std::size_t Ndim>
@@ -123,9 +129,11 @@ namespace clue {
                                              PointsHost& h_points,
                                              PointsDevice& dev_points,
                                              const Kernel& kernel,
+                                             std::size_t batch_size,
                                              std::size_t block_size) {
+    auto batches = detail::compute_batches(h_points.size(), batch_size);
     setup(queue, h_points, dev_points);
-    make_clusters_impl(h_points, dev_points, kernel, queue, block_size);
+    make_clusters_impl(h_points, dev_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
   template <std::size_t Ndim>
@@ -133,10 +141,13 @@ namespace clue {
   inline void Clusterer<Ndim>::make_clusters(Queue& queue,
                                              PointsDevice& dev_points,
                                              const Kernel& kernel,
+                                             std::size_t batch_size,
                                              std::size_t block_size) {
+    auto batches = detail::compute_batches(dev_points.size(), batch_size);
     detail::setup_tiles(queue, m_tiles, dev_points, m_pointsPerTile, m_wrappedCoordinates);
     detail::setup_followers(queue, m_followers, dev_points.size());
-    make_clusters_impl(dev_points, kernel, queue, block_size);
+    auto batches = detail::compute_batches(h_points.size(), batch_size);
+    make_clusters_impl(dev_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
 
@@ -168,6 +179,7 @@ namespace clue {
   void Clusterer<Ndim>::make_clusters_impl(PointsHost& h_points,
                                            PointsDevice& dev_points,
                                            const Kernel& kernel,
+                                           std::size_t batch_size,
                                            Queue& queue,
                                            std::size_t block_size) {
     const auto n_points = h_points.size();
@@ -205,6 +217,7 @@ namespace clue {
   template <concepts::convolutional_kernel Kernel>
   void Clusterer<Ndim>::make_clusters_impl(PointsDevice& dev_points,
                                            const Kernel& kernel,
+                                           std::size_t batch_size,
                                            Queue& queue,
                                            std::size_t block_size) {
     const auto n_points = dev_points.size();

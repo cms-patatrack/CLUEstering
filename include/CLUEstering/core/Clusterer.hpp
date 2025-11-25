@@ -127,6 +127,7 @@ namespace clue {
     void make_clusters(Queue& queue,
                        PointsHost& h_points,
                        const Kernel& kernel = FlatKernel{.5f},
+                       std::size_t batch_size = 0,
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host points
     ///
@@ -137,6 +138,7 @@ namespace clue {
     template <concepts::convolutional_kernel Kernel = FlatKernel>
     void make_clusters(PointsHost& h_points,
                        const Kernel& kernel = FlatKernel{.5f},
+                       std::size_t batch_size = 0,
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host and device points
     ///
@@ -150,6 +152,7 @@ namespace clue {
                        PointsHost& h_points,
                        PointsDevice& dev_points,
                        const Kernel& kernel = FlatKernel{.5f},
+                       std::size_t batch_size = 0,
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from device points
     ///
@@ -161,6 +164,7 @@ namespace clue {
     void make_clusters(Queue& queue,
                        PointsDevice& dev_points,
                        const Kernel& kernel = FlatKernel{.5f},
+                       std::size_t batch_size = 0,
                        std::size_t block_size = 256);
 
     /// @brief Specify which coordinates are periodic
