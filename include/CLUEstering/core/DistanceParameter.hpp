@@ -48,14 +48,12 @@ namespace clue {
     /// @return A reference to the distance parameter for the specified dimension.
     constexpr auto& operator[](std::size_t dim) { return m_parameters[dim]; }
 
-    constexpr bool operator<(float value) {
-      return std::ranges::any_of(m_parameters, [=](auto x) -> bool { return x < value; });
-    }
-    constexpr bool operator<=(float value) {
-      return std::ranges::any_of(m_parameters, [=](auto x) -> bool { return x <= value; });
-    }
-
   private:
+    template <std::size_t Ndim_>
+    friend constexpr bool operator<(const DistanceParameter<Ndim_>&, float);
+    template <std::size_t Ndim_>
+    friend constexpr bool operator<=(const DistanceParameter<Ndim_>&, float);
+
     template <std::size_t Ndim_>
     ALPAKA_FN_ACC friend bool operator<=(const std::array<float, Ndim_>&,
                                          const DistanceParameter<Ndim_>&);
@@ -65,16 +63,31 @@ namespace clue {
   };
 
   template <std::size_t Ndim>
-  ALPAKA_FN_ACC bool operator<=(std::array<float, Ndim>& lhs, const DistanceParameter<Ndim>& rhs) {
+  constexpr bool operator<(const DistanceParameter<Ndim>& lhs, float rhs) {
+    return [&]<std::size_t... Ids>(std::index_sequence<Ids...>) -> bool {
+      return ((lhs[Ids] < rhs) || ...);
+    }(std::make_index_sequence<Ndim>{});
+  }
+  template <std::size_t Ndim>
+  constexpr bool operator<=(const DistanceParameter<Ndim>& lhs, float rhs) {
+    return [&]<std::size_t... Ids>(std::index_sequence<Ids...>) -> bool {
+      return ((lhs[Ids] <= rhs) || ...);
+    }(std::make_index_sequence<Ndim>{});
+  }
+
+  template <std::size_t Ndim>
+  ALPAKA_FN_ACC bool operator<=(const std::array<float, Ndim>& lhs,
+                                const DistanceParameter<Ndim>& rhs) {
     return [&]<std::size_t... Ids>(std::index_sequence<Ids...>) -> bool {
       return ((lhs[Ids] <= rhs[Ids]) && ...);
     }(std::make_index_sequence<Ndim>{});
   }
 
   template <std::size_t Ndim>
-  ALPAKA_FN_ACC bool operator>(std::array<float, Ndim>& lhs, const DistanceParameter<Ndim>& rhs) {
+  ALPAKA_FN_ACC bool operator>(const std::array<float, Ndim>& lhs,
+                               const DistanceParameter<Ndim>& rhs) {
     return [&]<std::size_t... Ids>(std::index_sequence<Ids...>) -> bool {
-      return ((lhs[Ids] > rhs[Ids]) && ...);
+      return ((lhs[Ids] > rhs[Ids]) || ...);
     }(std::make_index_sequence<Ndim>{});
   }
 

@@ -96,7 +96,7 @@ def test_moons_clustering(moons):
         if os.path.isfile(f'./moons_output_{_fill_space(backend)}.csv'):
             os.remove(f'./moons_output_{_fill_space(backend)}.csv')
 
-        c = clue.clusterer(50., 5., 120.)
+        c = clue.clusterer(78., 80., 90., 100.)
         c.read_data(moons)
         c.run_clue(backend=backend)
         c.to_csv('./', f'moons_output_{_fill_space(backend)}.csv')
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     c.run_clue()
     c.cluster_plotter()
 
-    c = clue.clusterer(50., 5., 120.)
+    c = clue.clusterer(78., 80., 90., 100.)
     c.read_data("../data/moons.csv")
     c.run_clue()
     c.cluster_plotter()
