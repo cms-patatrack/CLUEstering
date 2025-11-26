@@ -46,7 +46,7 @@ namespace clue {
   }
 
   template <std::size_t Ndim>
-  inline Clusterer<Ndim>::Clusterer(Queue& queue,
+  inline Clusterer<Ndim>::Clusterer(Queue&,
                                     DistanceParameter<Ndim> dc,
                                     float rhoc,
                                     DistanceParameter<Ndim> dm,
@@ -68,7 +68,6 @@ namespace clue {
     if (seed_dc < 0.f) {
       m_seed_dc = dc;
     }
-    init_device(queue);
   }
 
   template <std::size_t Ndim>
@@ -108,8 +107,6 @@ namespace clue {
                                              std::size_t block_size) {
     auto device = alpaka::getDevByIdx(Platform{}, 0u);
     Queue queue(device);
-    init_device(queue);
-
     auto d_points = PointsDevice(queue, h_points.size());
 
     setup(queue, h_points, d_points);
@@ -135,6 +132,9 @@ namespace clue {
                                              std::size_t block_size) {
     detail::setup_tiles(queue, m_tiles, dev_points, m_pointsPerTile, m_wrappedCoordinates);
     detail::setup_followers(queue, m_followers, dev_points.size());
+    if (!m_seeds.has_value()) {
+      m_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
+    }
     alpaka::memset(queue, *m_seeds, 0x00);
     make_clusters_impl(dev_points, kernel, queue, block_size);
     alpaka::wait(queue);
@@ -161,19 +161,6 @@ namespace clue {
   inline AssociationMap<Device> Clusterer<Ndim>::getClusters(Queue& queue,
                                                              const PointsDevice& d_points) {
     return clue::get_clusters(queue, d_points);
-  }
-
-  template <std::size_t Ndim>
-  void Clusterer<Ndim>::init_device(Queue& queue) {
-    m_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
-  }
-
-  template <std::size_t Ndim>
-  void Clusterer<Ndim>::init_device(Queue& queue, TilesDevice* tile_buffer) {
-    m_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
-
-    // load tiles from outside
-    m_tiles = *tile_buffer;
   }
 
   template <std::size_t Ndim>

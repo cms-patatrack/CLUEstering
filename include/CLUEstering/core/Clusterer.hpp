@@ -51,13 +51,14 @@ namespace clue {
     std::optional<clue::device_buffer<Device, VecArray<int32_t, reserve>>> m_seeds;
     std::optional<FollowersDevice> m_followers;
 
-    void init_device(Queue& queue);
-    void init_device(Queue& queue, TilesDevice* tile_buffer);
-
     void setup(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points) {
       detail::setup_tiles(queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates);
       detail::setup_followers(queue, m_followers, h_points.size());
       clue::copyToDevice(queue, dev_points, h_points);
+
+      if (!m_seeds.has_value()) {
+        m_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
+      }
       alpaka::memset(queue, *m_seeds, 0x00);
     }
 
