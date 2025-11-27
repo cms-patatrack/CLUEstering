@@ -7,10 +7,14 @@
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
+#include "CLUEstering/core/detail/SetupFollowers.hpp"
+#include "CLUEstering/core/detail/SetupSeeds.hpp"
+#include "CLUEstering/core/detail/SetupTiles.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
+#include "CLUEstering/data_structures/internal/SeedArray.hpp"
+#include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/utils/get_clusters.hpp"
 
 #include <alpaka/mem/view/Traits.hpp>
@@ -132,10 +136,6 @@ namespace clue {
                                              std::size_t block_size) {
     detail::setup_tiles(queue, m_tiles, dev_points, m_pointsPerTile, m_wrappedCoordinates);
     detail::setup_followers(queue, m_followers, dev_points.size());
-    if (!m_seeds.has_value()) {
-      m_seeds = clue::make_device_buffer<VecArray<int32_t, reserve>>(queue);
-    }
-    alpaka::memset(queue, *m_seeds, 0x00);
     make_clusters_impl(dev_points, kernel, queue, block_size);
     alpaka::wait(queue);
   }
@@ -178,11 +178,13 @@ namespace clue {
 
     detail::computeLocalDensity<Acc>(
         queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
+    auto seed_candidates = 0ul;
     detail::computeNearestHighers<Acc>(
-        queue, work_division, m_tiles->view(), dev_points.view(), m_dm, n_points);
+        queue, work_division, m_tiles->view(), dev_points.view(), m_dm, seed_candidates, n_points);
+    detail::setup_seeds(queue, m_seeds, seed_candidates);
     detail::findClusterSeeds<Acc>(queue,
                                   work_division,
-                                  m_seeds->data(),
+                                  m_seeds.value(),
                                   m_tiles->view(),
                                   dev_points.view(),
                                   m_seed_dc,
@@ -192,7 +194,7 @@ namespace clue {
     m_followers->template fill<Acc>(queue, dev_points);
 
     detail::assignPointsToClusters<Acc>(
-        queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
+        queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
 
     clue::copyToHost(queue, h_points, dev_points);
     h_points.mark_clustered();
@@ -213,11 +215,13 @@ namespace clue {
 
     detail::computeLocalDensity<Acc>(
         queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
+    auto seed_candidates = 0ul;
     detail::computeNearestHighers<Acc>(
-        queue, work_division, m_tiles->view(), dev_points.view(), m_dm, n_points);
+        queue, work_division, m_tiles->view(), dev_points.view(), m_dm, seed_candidates, n_points);
+    detail::setup_seeds(queue, m_seeds, seed_candidates);
     detail::findClusterSeeds<Acc>(queue,
                                   work_division,
-                                  m_seeds->data(),
+                                  m_seeds.value(),
                                   m_tiles->view(),
                                   dev_points.view(),
                                   m_seed_dc,
@@ -227,7 +231,7 @@ namespace clue {
     m_followers->template fill<Acc>(queue, dev_points);
 
     detail::assignPointsToClusters<Acc>(
-        queue, block_size, m_seeds->data(), m_followers->view(), dev_points.view());
+        queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
 
     alpaka::wait(queue);
     dev_points.mark_clustered();

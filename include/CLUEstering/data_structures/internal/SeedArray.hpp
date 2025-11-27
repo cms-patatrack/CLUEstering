@@ -67,6 +67,7 @@ namespace clue::internal {
       if (!m_size.has_value()) {
         m_size = std::make_optional<std::size_t>();
         alpaka::memcpy(queue, clue::make_host_view(*m_size), m_dsize);
+        alpaka::wait(queue);
       }
       return *m_size;
     }
