@@ -31,13 +31,14 @@ namespace clue::detail {
                                    const std::array<float, Ndim>& coords_i,
                                    float& rho_i,
                                    const DistanceParameter<Ndim>& dc,
-                                   int32_t point_id) {
+                                   int32_t point_id,
+                                   std::size_t batch) {
     if constexpr (N_ == 0) {
-      auto binId = tiles.getGlobalBinByBin(base_vec);
-      auto binSize = tiles[binId].size();
+      auto bin_id = tiles.getGlobalBinByBin(base_vec);
+      auto bin_size = tiles[binId].size();
 
-      for (auto binIter = 0; binIter < binSize; ++binIter) {
-        int32_t j = tiles[binId][binIter];
+      for (auto bin_it = 0; bin_it < bin_size; ++bin_iter) {
+        int32_t j = tiles[bin_id + batch][bin_iter];
 
         auto coords_j = dev_points[j];
         auto distance_vector = tiles.distance(coords_i, coords_j);
@@ -68,8 +69,10 @@ namespace clue::detail {
                                   PointsView<Ndim> dev_points,
                                   const KernelType& kernel,
                                   DistanceParameter<Ndim> dc,
-                                  int32_t n_points) const {
+                                  int32_t n_points,
+                                  std::size_t batch_size) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
+        const auto batch = i / batch_size;
         float rho_i = 0.f;
         auto coords_i = dev_points[i];
 
@@ -108,7 +111,7 @@ namespace clue::detail {
       int binSize = tiles[binId].size();
 
       for (auto binIter = 0; binIter < binSize; ++binIter) {
-        const auto j = tiles[binId][binIter];
+        const auto j = tiles[binId + batch][binIter];
         float rho_j = dev_points.rho[j];
         bool found_higher = (rho_j > rho_i);
         found_higher = found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
@@ -156,7 +159,8 @@ namespace clue::detail {
                                   PointsView<Ndim> dev_points,
                                   DistanceParameter<Ndim> dm,
                                   std::size_t* seed_candidates,
-                                  int32_t n_points) const {
+                                  int32_t n_points,
+                                  std::size_t batch_size) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         float delta_i = std::numeric_limits<float>::max();
         int nh_i = -1;
@@ -201,7 +205,8 @@ namespace clue::detail {
                                   PointsView<Ndim> dev_points,
                                   DistanceParameter<Ndim> seed_dc,
                                   float rhoc,
-                                  int32_t n_points) const {
+                                  int32_t n_points,
+                                  std::size_t batch_size) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         dev_points.cluster_index[i] = -1;
         auto nh = dev_points.nearest_higher[i];
@@ -229,7 +234,8 @@ namespace clue::detail {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
                                   clue::FollowersView followers,
-                                  PointsView<Ndim> dev_points) const {
+                                  PointsView<Ndim> dev_points,
+                                  std::size_t batch_size) const {
       const auto n_seeds = seeds.size();
       for (auto idx_cls : alpaka::uniformElements(acc, n_seeds)) {
         int local_stack[256] = {-1};
@@ -266,7 +272,8 @@ namespace clue::detail {
                                   PointsView<Ndim>& dev_points,
                                   KernelType&& kernel,
                                   const DistanceParameter<Ndim>& dc,
-                                  int32_t size) {
+                                  int32_t size,
+                                  std::size_t batch_size) {
     alpaka::exec<TAcc>(queue,
                        work_division,
                        KernelCalculateLocalDensity{},
@@ -274,7 +281,8 @@ namespace clue::detail {
                        dev_points,
                        std::forward<KernelType>(kernel),
                        dc,
-                       size);
+                       size,
+                       batch_size);
   }
 
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
@@ -284,7 +292,8 @@ namespace clue::detail {
                                     PointsView<Ndim>& dev_points,
                                     const DistanceParameter<Ndim>& dm,
                                     std::size_t& seed_candidates,
-                                    int32_t size) {
+                                    int32_t size,
+                                    std::size_t batch_size) {
     auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
     alpaka::memset(queue, d_seed_candidates, 0u);
     alpaka::exec<TAcc>(queue,
@@ -294,7 +303,8 @@ namespace clue::detail {
                        dev_points,
                        dm,
                        d_seed_candidates.data(),
-                       size);
+                       size,
+                       batch_size);
     alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
     alpaka::wait(queue);
   }
@@ -307,7 +317,8 @@ namespace clue::detail {
                                PointsView<Ndim>& dev_points,
                                const DistanceParameter<Ndim>& seed_dc,
                                float rhoc,
-                               int32_t size) {
+                               int32_t size,
+                               std::size_t batch_size) {
     alpaka::exec<TAcc>(queue,
                        work_division,
                        KernelFindClusters{},
@@ -316,7 +327,8 @@ namespace clue::detail {
                        dev_points,
                        seed_dc,
                        rhoc,
-                       size);
+                       size,
+                       batch_size);
   }
 
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
@@ -324,11 +336,12 @@ namespace clue::detail {
                                      std::size_t block_size,
                                      clue::internal::SeedArray<>& seeds,
                                      clue::FollowersView followers,
-                                     PointsView<Ndim> dev_points) {
+                                     PointsView<Ndim> dev_points,
+                                     std::size_t batch_size) {
     const Idx grid_size = clue::divide_up_by(seeds.size(queue), block_size);
     const auto work_division = clue::make_workdiv<TAcc>(grid_size, block_size);
     alpaka::exec<TAcc>(
-        queue, work_division, KernelAssignClusters{}, seeds.view(), followers, dev_points);
+        queue, work_division, KernelAssignClusters{}, seeds.view(), followers, dev_points, batch_size);
   }
 
 }  // namespace clue::detail

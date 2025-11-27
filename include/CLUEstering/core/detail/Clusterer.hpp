@@ -103,7 +103,7 @@ namespace clue {
 
     const auto batches = detail::compute_batches(h_points.size(), batch_size);
 
-    setup(queue, h_points, d_points);
+    setup(queue, h_points, d_points, batches);
     make_clusters_impl(h_points, d_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
@@ -113,13 +113,13 @@ namespace clue {
                                              const Kernel& kernel,
                                              std::size_t batch_size,
                                              std::size_t block_size) {
-    auto device = alpaka::getDevByIdx(Platform{}, 0u);
+    const auto device = alpaka::getDevByIdx(Platform{}, 0u);
     Queue queue(device);
     auto d_points = PointsDevice(queue, h_points.size());
 
     auto batches = detail::compute_batches(h_points.size(), batch_size);
 
-    setup(queue, h_points, d_points);
+    setup(queue, h_points, d_points, batches);
     make_clusters_impl(h_points, d_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
@@ -131,8 +131,8 @@ namespace clue {
                                              const Kernel& kernel,
                                              std::size_t batch_size,
                                              std::size_t block_size) {
-    auto batches = detail::compute_batches(h_points.size(), batch_size);
-    setup(queue, h_points, dev_points);
+    const auto batches = detail::compute_batches(h_points.size(), batch_size);
+    setup(queue, h_points, dev_points, batches);
     make_clusters_impl(h_points, dev_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
@@ -143,7 +143,7 @@ namespace clue {
                                              const Kernel& kernel,
                                              std::size_t batch_size,
                                              std::size_t block_size) {
-    auto batches = detail::compute_batches(dev_points.size(), batch_size);
+    const auto batches = detail::compute_batches(dev_points.size(), batch_size);
     detail::setup_tiles(queue, m_tiles, dev_points, m_pointsPerTile, m_wrappedCoordinates);
     detail::setup_followers(queue, m_followers, dev_points.size());
     auto batches = detail::compute_batches(h_points.size(), batch_size);
@@ -185,7 +185,8 @@ namespace clue {
     const auto n_points = h_points.size();
     m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
-    const Idx grid_size = clue::divide_up_by(n_points, block_size);
+    const Idx grid_size = (batch_size > 1024) ? clue::divide_up_by(batch_size, block_size)
+                                              : clue::divide_up_by(1, batch_size);
     auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
 
     detail::computeLocalDensity<Acc>(
@@ -223,7 +224,8 @@ namespace clue {
     const auto n_points = dev_points.size();
     m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
-    const Idx grid_size = clue::divide_up_by(n_points, block_size);
+    const Idx grid_size = (batch_size > 1024) ? clue::divide_up_by(batch_size, block_size)
+                                              : clue::divide_up_by(1, batch_size);
     auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
 
     detail::computeLocalDensity<Acc>(

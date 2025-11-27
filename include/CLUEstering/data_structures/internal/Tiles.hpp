@@ -21,13 +21,19 @@ namespace clue::internal {
   class Tiles {
   public:
     template <clue::concepts::queue TQueue>
-    Tiles(TQueue& queue, int32_t n_points, int32_t n_tiles)
-        : m_assoc{AssociationMap<TDev>(n_points, n_tiles, queue)},
+    Tiles(TQueue& queue,
+          int32_t n_points,
+          int32_t n_tiles,
+          std::size_t batches,
+          std::size_t batch_size)
+        : m_assoc{AssociationMap<TDev>(n_points, n_tiles * batches, queue)},
           m_minmax{make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
           m_tilesizes{make_device_buffer<float[Ndim]>(queue)},
           m_wrapped{make_device_buffer<uint8_t[Ndim]>(queue)},
           m_ntiles{n_tiles},
           m_nperdim{static_cast<int32_t>(std::pow(n_tiles, 1.f / Ndim))},
+          batches{batches},
+          batch_size{batch_size},
           m_view{} {
       m_view.indexes = m_assoc.indexes().data();
       m_view.offsets = m_assoc.offsets().data();
@@ -37,14 +43,21 @@ namespace clue::internal {
       m_view.npoints = n_points;
       m_view.ntiles = m_ntiles;
       m_view.nperdim = m_nperdim;
+      m_view.batches = batches;
+      m_view.batch_size = batch_size;
     }
 
     const TilesView<Ndim>& view() const { return m_view; }
     TilesView<Ndim>& view() { return m_view; }
 
     template <clue::concepts::queue TQueue>
-    ALPAKA_FN_HOST void initialize(int32_t npoints, int32_t ntiles, int32_t nperdim, TQueue& queue) {
-      m_assoc.initialize(npoints, ntiles, queue);
+    ALPAKA_FN_HOST void initialize(int32_t npoints,
+                                   int32_t ntiles,
+                                   int32_t nperdim,
+                                   std::size_t batches,
+                                   std::size_t batch_size,
+                                   TQueue& queue) {
+      m_assoc.initialize(npoints, ntiles * batches, queue);
       m_ntiles = ntiles;
       m_nperdim = nperdim;
 
@@ -56,10 +69,16 @@ namespace clue::internal {
       m_view.npoints = npoints;
       m_view.ntiles = ntiles;
       m_view.nperdim = nperdim;
+      m_view.batches = batches;
+      m_view.batch_size = batch_size;
     }
 
-    ALPAKA_FN_HOST void reset(int32_t npoints, int32_t ntiles, int32_t nperdim) {
-      m_assoc.reset(npoints, ntiles);
+    ALPAKA_FN_HOST void reset(int32_t npoints,
+                              int32_t ntiles,
+                              int32_t nperdim,
+                              std::size_t batches,
+                              std::size_t batch_size) {
+      m_assoc.reset(npoints, ntiles * batches);
 
       m_ntiles = ntiles;
       m_nperdim = nperdim;
@@ -71,6 +90,8 @@ namespace clue::internal {
       m_view.npoints = npoints;
       m_view.ntiles = ntiles;
       m_view.nperdim = nperdim;
+      m_view.batches = batches;
+      m_view.batch_size = batch_size;
     }
 
     struct GetGlobalBin {
@@ -118,6 +139,8 @@ namespace clue::internal {
     device_buffer<TDev, uint8_t[Ndim]> m_wrapped;
     int32_t m_ntiles;
     int32_t m_nperdim;
+    std::size_t batches;
+    std::size_t batch_size;
     TilesView<Ndim> m_view;
   };
 

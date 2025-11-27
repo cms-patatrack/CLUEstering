@@ -52,7 +52,7 @@ namespace clue {
     std::optional<clue::internal::SeedArray<>> m_seeds;
     std::optional<FollowersDevice> m_followers;
 
-    void setup(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points) {
+    void setup(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points, std::size_t batches) {
       detail::setup_tiles(queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates);
       detail::setup_followers(queue, m_followers, h_points.size());
       clue::copyToDevice(queue, dev_points, h_points);
