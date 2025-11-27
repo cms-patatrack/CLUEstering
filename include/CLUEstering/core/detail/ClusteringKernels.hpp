@@ -4,10 +4,11 @@
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
+#include "CLUEstering/data_structures/internal/Followers.hpp"
+#include "CLUEstering/data_structures/internal/SearchBox.hpp"
+#include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/data_structures/internal/VecArray.hpp"
-#include "CLUEstering/data_structures/internal/SearchBox.hpp"
-#include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/math/math.hpp"
@@ -154,6 +155,7 @@ namespace clue::detail {
                                   internal::TilesView<Ndim> dev_tiles,
                                   PointsView<Ndim> dev_points,
                                   DistanceParameter<Ndim> dm,
+                                  std::size_t* seed_candidates,
                                   int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         float delta_i = std::numeric_limits<float>::max();
@@ -184,6 +186,9 @@ namespace clue::detail {
                                                        i);
 
         dev_points.nearest_higher[i] = nh_i;
+        if (nh_i == -1) {
+          alpaka::atomicAdd(acc, seed_candidates, 1ul);
+        }
       }
     }
   };
@@ -191,7 +196,7 @@ namespace clue::detail {
   struct KernelFindClusters {
     template <typename TAcc, std::size_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  VecArray<int32_t, reserve>* seeds,
+                                  clue::internal::SeedArrayView seeds,
                                   internal::TilesView<Ndim> tiles,
                                   PointsView<Ndim> dev_points,
                                   DistanceParameter<Ndim> seed_dc,
@@ -211,7 +216,7 @@ namespace clue::detail {
         if (is_seed) {
           dev_points.is_seed[i] = 1;
           dev_points.nearest_higher[i] = -1;
-          seeds->push_back(acc, i);
+          seeds.push_back(acc, i);
         } else {
           dev_points.is_seed[i] = 0;
         }
@@ -222,16 +227,15 @@ namespace clue::detail {
   struct KernelAssignClusters {
     template <typename TAcc, std::size_t Ndim>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  VecArray<int32_t, reserve>* seeds,
+                                  clue::internal::SeedArrayView seeds,
                                   clue::FollowersView followers,
                                   PointsView<Ndim> dev_points) const {
-      const auto& seeds_0 = *seeds;
-      const auto n_seeds = seeds_0.size();
+      const auto n_seeds = seeds.size();
       for (auto idx_cls : alpaka::uniformElements(acc, n_seeds)) {
         int local_stack[256] = {-1};
         int local_stack_size = 0;
 
-        int idx_this_seed = seeds_0[idx_cls];
+        int idx_this_seed = seeds[idx_cls];
         dev_points.cluster_index[idx_this_seed] = idx_cls;
         local_stack[local_stack_size] = idx_this_seed;
         ++local_stack_size;
@@ -279,33 +283,52 @@ namespace clue::detail {
                                     internal::TilesView<Ndim>& tiles,
                                     PointsView<Ndim>& dev_points,
                                     const DistanceParameter<Ndim>& dm,
+                                    std::size_t& seed_candidates,
                                     int32_t size) {
-    alpaka::exec<TAcc>(
-        queue, work_division, KernelCalculateNearestHigher{}, tiles, dev_points, dm, size);
+    auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
+    alpaka::memset(queue, d_seed_candidates, 0u);
+    alpaka::exec<TAcc>(queue,
+                       work_division,
+                       KernelCalculateNearestHigher{},
+                       tiles,
+                       dev_points,
+                       dm,
+                       d_seed_candidates.data(),
+                       size);
+    alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
+    alpaka::wait(queue);
   }
 
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
-                               VecArray<int32_t, reserve>* seeds,
+                               clue::internal::SeedArray<>& seeds,
                                internal::TilesView<Ndim>& tiles,
                                PointsView<Ndim>& dev_points,
                                const DistanceParameter<Ndim>& seed_dc,
                                float rhoc,
                                int32_t size) {
-    alpaka::exec<TAcc>(
-        queue, work_division, KernelFindClusters{}, seeds, tiles, dev_points, seed_dc, rhoc, size);
+    alpaka::exec<TAcc>(queue,
+                       work_division,
+                       KernelFindClusters{},
+                       seeds.view(),
+                       tiles,
+                       dev_points,
+                       seed_dc,
+                       rhoc,
+                       size);
   }
 
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
   inline void assignPointsToClusters(TQueue& queue,
                                      std::size_t block_size,
-                                     VecArray<int32_t, reserve>* seeds,
+                                     clue::internal::SeedArray<>& seeds,
                                      clue::FollowersView followers,
                                      PointsView<Ndim> dev_points) {
-    const Idx grid_size = clue::divide_up_by(reserve, block_size);
+    const Idx grid_size = clue::divide_up_by(seeds.size(queue), block_size);
     const auto work_division = clue::make_workdiv<TAcc>(grid_size, block_size);
-    alpaka::exec<TAcc>(queue, work_division, KernelAssignClusters{}, seeds, followers, dev_points);
+    alpaka::exec<TAcc>(
+        queue, work_division, KernelAssignClusters{}, seeds.view(), followers, dev_points);
   }
 
 }  // namespace clue::detail
