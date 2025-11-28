@@ -57,10 +57,14 @@ namespace clue {
                PointsDevice& dev_points,
                std::size_t batches,
                std::size_t batch_size) {
+      std::cout << __LINE__ << std::endl;
       detail::setup_tiles(
           queue, m_tiles, h_points, batches, batch_size, m_pointsPerTile, m_wrappedCoordinates);
+      std::cout << __LINE__ << std::endl;
       detail::setup_followers(queue, m_followers, h_points.size());
+      std::cout << __LINE__ << std::endl;
       clue::copyToDevice(queue, dev_points, h_points);
+      std::cout << __LINE__ << std::endl;
     }
 
     template <concepts::convolutional_kernel Kernel>
