@@ -247,7 +247,7 @@ namespace clue {
                                                               size_type nbins,
                                                               TQueue& queue) {
     m_indexes = make_device_buffer<int32_t[]>(queue, nelements);
-    m_offsets = make_device_buffer<int32_t[]>(queue, nbins);
+    m_offsets = make_device_buffer<int32_t[]>(queue, nbins + 1);
     m_extents = {nbins, nelements};
 
     m_view.m_indexes = m_indexes.data();
