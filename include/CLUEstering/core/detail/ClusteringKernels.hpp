@@ -36,10 +36,10 @@ namespace clue::detail {
                                    std::size_t batch) {
     if constexpr (N_ == 0) {
       auto bin_id = tiles.getGlobalBinByBin(base_vec);
-      auto bin_size = tiles[bin_id].size();
+      auto bin_size = tiles[bin_id + tiles.ntiles * batch].size();
 
       for (auto bin_it = 0; bin_it < bin_size; ++bin_it) {
-        int32_t j = tiles[bin_id + batch][bin_it];
+        int32_t j = tiles[bin_id + tiles.ntiles * batch][bin_it];
 
         auto coords_j = dev_points[j];
         auto distance_vector = tiles.distance(coords_i, coords_j);
@@ -128,10 +128,10 @@ namespace clue::detail {
                                                   std::size_t batch) {
     if constexpr (N_ == 0) {
       int bin_id = tiles.getGlobalBinByBin(base_vec);
-      int binSize = tiles[bin_id].size();
+      int binSize = tiles[bin_id + tiles.ntiles * batch].size();
 
       for (auto binIter = 0; binIter < binSize; ++binIter) {
-        const auto j = tiles[bin_id + batch][binIter];
+        const auto j = tiles[bin_id + tiles.ntiles * batch][binIter];
         float rho_j = dev_points.rho[j];
         bool found_higher = (rho_j > rho_i);
         found_higher = found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));

@@ -20,14 +20,14 @@ TEST_CASE("Test batched clustering with fixed batch size") {
   algo.make_clusters(queue, h_points, d_points, clue::FlatKernel{.5f}, batch_size);
 
   const auto batches = n_points / batch_size;
-  for (auto batch = 0u; batches < batches; ++batch) {
+  for (auto batch = 0u; batch < batches; ++batch) {
     clue::PointsHost<2> batch_points(queue,
                                      batch_size,
                                      h_points.coords(0).data() + batch * batch_size,
                                      h_points.coords(1).data() + batch * batch_size,
                                      h_points.weights().data() + batch * batch_size,
                                      h_points.clusterIndexes().data() + batch * batch_size);
-    auto truth = clue::read_output<2>(queue, "../../../data/truth_files/data_8192.csv");
+    auto truth = clue::read_output<2>(queue, "../../../data/truth_files/data_8192_truth.csv");
     CHECK(clue::validate_results(batch_points, truth));
   }
 }
