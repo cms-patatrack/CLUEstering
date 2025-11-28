@@ -52,8 +52,13 @@ namespace clue {
     std::optional<clue::internal::SeedArray<>> m_seeds;
     std::optional<FollowersDevice> m_followers;
 
-    void setup(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points, std::size_t batches) {
-      detail::setup_tiles(queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates);
+    void setup(Queue& queue,
+               const PointsHost& h_points,
+               PointsDevice& dev_points,
+               std::size_t batches,
+               std::size_t batch_size) {
+      detail::setup_tiles(
+          queue, m_tiles, h_points, batches, batch_size, m_pointsPerTile, m_wrappedCoordinates);
       detail::setup_followers(queue, m_followers, h_points.size());
       clue::copyToDevice(queue, dev_points, h_points);
     }
@@ -63,11 +68,13 @@ namespace clue {
                             PointsDevice& dev_points,
                             const Kernel& kernel,
                             Queue& queue,
+                            std::size_t batch_size,
                             std::size_t block_size);
     template <concepts::convolutional_kernel Kernel>
     void make_clusters_impl(PointsDevice& dev_points,
                             const Kernel& kernel,
                             Queue& queue,
+                            std::size_t batch_size,
                             std::size_t block_size);
 
   public:

@@ -20,23 +20,22 @@ TEST_CASE("Test make_cluster interfaces") {
 
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
-  const std::size_t block_size{256};
 
   auto truth = clue::read_output<2>(queue, "../../../data/truth_files/data_32768_truth.csv");
   SUBCASE("Run clustering without passing device points") {
-    algo.make_clusters(queue, h_points, clue::FlatKernel{.5f}, block_size);
+    algo.make_clusters(queue, h_points, clue::FlatKernel{.5f});
 
     CHECK(clue::validate_results(h_points, truth));
   }
 
   SUBCASE("Run clustering without passing the queue and device points") {
-    algo.make_clusters(h_points, clue::FlatKernel{.5f}, block_size);
+    algo.make_clusters(h_points, clue::FlatKernel{.5f});
 
     CHECK(clue::validate_results(h_points, truth));
   }
   SUBCASE("Run clustering from device points") {
     clue::copyToDevice(queue, d_points, h_points);
-    algo.make_clusters(queue, d_points, clue::FlatKernel{.5f}, block_size);
+    algo.make_clusters(queue, d_points, clue::FlatKernel{.5f});
     clue::copyToHost(queue, h_points, d_points);
     alpaka::wait(queue);
 

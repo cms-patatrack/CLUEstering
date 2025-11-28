@@ -5,7 +5,9 @@
 #include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
+#include "CLUEstering/core/detail/ComputeGridSize.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
+#include "CLUEstering/core/detail/ComputeBatches.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/core/detail/SetupFollowers.hpp"
 #include "CLUEstering/core/detail/SetupSeeds.hpp"
@@ -20,6 +22,7 @@
 #include <alpaka/mem/view/Traits.hpp>
 #include <alpaka/vec/Vec.hpp>
 #include <concepts>
+#include <cstddef>
 #include <cstdint>
 #include <ranges>
 
@@ -103,7 +106,7 @@ namespace clue {
 
     const auto batches = detail::compute_batches(h_points.size(), batch_size);
 
-    setup(queue, h_points, d_points, batches);
+    setup(queue, h_points, d_points, batches, batch_size);
     make_clusters_impl(h_points, d_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
@@ -119,7 +122,7 @@ namespace clue {
 
     auto batches = detail::compute_batches(h_points.size(), batch_size);
 
-    setup(queue, h_points, d_points, batches);
+    setup(queue, h_points, d_points, batches, batch_size);
     make_clusters_impl(h_points, d_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
@@ -132,7 +135,7 @@ namespace clue {
                                              std::size_t batch_size,
                                              std::size_t block_size) {
     const auto batches = detail::compute_batches(h_points.size(), batch_size);
-    setup(queue, h_points, dev_points, batches);
+    setup(queue, h_points, dev_points, batches, batch_size);
     make_clusters_impl(h_points, dev_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
@@ -144,9 +147,9 @@ namespace clue {
                                              std::size_t batch_size,
                                              std::size_t block_size) {
     const auto batches = detail::compute_batches(dev_points.size(), batch_size);
-    detail::setup_tiles(queue, m_tiles, dev_points, m_pointsPerTile, m_wrappedCoordinates);
+    detail::setup_tiles(
+        queue, m_tiles, dev_points, batches, batch_size, m_pointsPerTile, m_wrappedCoordinates);
     detail::setup_followers(queue, m_followers, dev_points.size());
-    auto batches = detail::compute_batches(h_points.size(), batch_size);
     make_clusters_impl(dev_points, kernel, queue, batch_size, block_size);
     alpaka::wait(queue);
   }
@@ -179,21 +182,32 @@ namespace clue {
   void Clusterer<Ndim>::make_clusters_impl(PointsHost& h_points,
                                            PointsDevice& dev_points,
                                            const Kernel& kernel,
-                                           std::size_t batch_size,
                                            Queue& queue,
+                                           std::size_t batch_size,
                                            std::size_t block_size) {
     const auto n_points = h_points.size();
     m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
-    const Idx grid_size = (batch_size > 1024) ? clue::divide_up_by(batch_size, block_size)
-                                              : clue::divide_up_by(1, batch_size);
+    const auto grid_size = detail::compute_grid_size(n_points, batch_size);
     auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
 
-    detail::computeLocalDensity<Acc>(
-        queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
+    detail::computeLocalDensity<Acc>(queue,
+                                     work_division,
+                                     m_tiles->view(),
+                                     dev_points.view(),
+                                     kernel,
+                                     m_dc,
+                                     n_points,
+                                     batch_size);
     auto seed_candidates = 0ul;
-    detail::computeNearestHighers<Acc>(
-        queue, work_division, m_tiles->view(), dev_points.view(), m_dm, seed_candidates, n_points);
+    detail::computeNearestHighers<Acc>(queue,
+                                       work_division,
+                                       m_tiles->view(),
+                                       dev_points.view(),
+                                       m_dm,
+                                       seed_candidates,
+                                       n_points,
+                                       batch_size);
     detail::setup_seeds(queue, m_seeds, seed_candidates);
     detail::findClusterSeeds<Acc>(queue,
                                   work_division,
@@ -218,21 +232,32 @@ namespace clue {
   template <concepts::convolutional_kernel Kernel>
   void Clusterer<Ndim>::make_clusters_impl(PointsDevice& dev_points,
                                            const Kernel& kernel,
-                                           std::size_t batch_size,
                                            Queue& queue,
+                                           std::size_t batch_size,
                                            std::size_t block_size) {
     const auto n_points = dev_points.size();
     m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
-    const Idx grid_size = (batch_size > 1024) ? clue::divide_up_by(batch_size, block_size)
-                                              : clue::divide_up_by(1, batch_size);
+    const auto grid_size = detail::compute_grid_size(n_points, batch_size);
     auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
 
-    detail::computeLocalDensity<Acc>(
-        queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
+    detail::computeLocalDensity<Acc>(queue,
+                                     work_division,
+                                     m_tiles->view(),
+                                     dev_points.view(),
+                                     kernel,
+                                     m_dc,
+                                     n_points,
+                                     batch_size);
     auto seed_candidates = 0ul;
-    detail::computeNearestHighers<Acc>(
-        queue, work_division, m_tiles->view(), dev_points.view(), m_dm, seed_candidates, n_points);
+    detail::computeNearestHighers<Acc>(queue,
+                                       work_division,
+                                       m_tiles->view(),
+                                       dev_points.view(),
+                                       m_dm,
+                                       seed_candidates,
+                                       n_points,
+                                       batch_size);
     detail::setup_seeds(queue, m_seeds, seed_candidates);
     detail::findClusterSeeds<Acc>(queue,
                                   work_division,

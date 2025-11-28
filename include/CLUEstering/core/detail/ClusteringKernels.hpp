@@ -15,6 +15,7 @@
 
 #include <array>
 #include <alpaka/core/Common.hpp>
+#include <cstddef>
 #include <cstdint>
 
 namespace clue::detail {
@@ -35,10 +36,10 @@ namespace clue::detail {
                                    std::size_t batch) {
     if constexpr (N_ == 0) {
       auto bin_id = tiles.getGlobalBinByBin(base_vec);
-      auto bin_size = tiles[binId].size();
+      auto bin_size = tiles[bin_id].size();
 
-      for (auto bin_it = 0; bin_it < bin_size; ++bin_iter) {
-        int32_t j = tiles[bin_id + batch][bin_iter];
+      for (auto bin_it = 0; bin_it < bin_size; ++bin_it) {
+        int32_t j = tiles[bin_id + batch][bin_it];
 
         auto coords_j = dev_points[j];
         auto distance_vector = tiles.distance(coords_i, coords_j);
@@ -56,8 +57,17 @@ namespace clue::detail {
            i <= search_box[search_box.size() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
-        for_recursion<TAcc, Ndim, N_ - 1>(
-            acc, base_vec, search_box, tiles, dev_points, kernel, coords_i, rho_i, dc, point_id);
+        for_recursion<TAcc, Ndim, N_ - 1>(acc,
+                                          base_vec,
+                                          search_box,
+                                          tiles,
+                                          dev_points,
+                                          kernel,
+                                          coords_i,
+                                          rho_i,
+                                          dc,
+                                          point_id,
+                                          batch);
       }
     }
   }
@@ -72,7 +82,7 @@ namespace clue::detail {
                                   int32_t n_points,
                                   std::size_t batch_size) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
-        const auto batch = i / batch_size;
+        const auto batch = (batch_size == 0) ? 0 : i / batch_size;
         float rho_i = 0.f;
         auto coords_i = dev_points[i];
 
@@ -86,8 +96,17 @@ namespace clue::detail {
         dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
 
         VecArray<int32_t, Ndim> base_vec;
-        for_recursion<TAcc, Ndim, Ndim>(
-            acc, base_vec, searchbox_bins, dev_tiles, dev_points, kernel, coords_i, rho_i, dc, i);
+        for_recursion<TAcc, Ndim, Ndim>(acc,
+                                        base_vec,
+                                        searchbox_bins,
+                                        dev_tiles,
+                                        dev_points,
+                                        kernel,
+                                        coords_i,
+                                        rho_i,
+                                        dc,
+                                        i,
+                                        batch);
 
         dev_points.rho[i] = rho_i;
       }
@@ -105,13 +124,14 @@ namespace clue::detail {
                                                   float& delta_i,
                                                   int& nh_i,
                                                   const DistanceParameter<Ndim>& dm,
-                                                  int32_t point_id) {
+                                                  int32_t point_id,
+                                                  std::size_t batch) {
     if constexpr (N_ == 0) {
-      int binId = tiles.getGlobalBinByBin(base_vec);
-      int binSize = tiles[binId].size();
+      int bin_id = tiles.getGlobalBinByBin(base_vec);
+      int binSize = tiles[bin_id].size();
 
       for (auto binIter = 0; binIter < binSize; ++binIter) {
-        const auto j = tiles[binId + batch][binIter];
+        const auto j = tiles[bin_id + batch][binIter];
         float rho_j = dev_points.rho[j];
         bool found_higher = (rho_j > rho_i);
         found_higher = found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
@@ -147,7 +167,8 @@ namespace clue::detail {
                                                          delta_i,
                                                          nh_i,
                                                          dm,
-                                                         point_id);
+                                                         point_id,
+                                                         batch);
       }
     }
   }
@@ -162,6 +183,7 @@ namespace clue::detail {
                                   int32_t n_points,
                                   std::size_t batch_size) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
+        const auto batch = (batch_size == 0) ? 0 : i / batch_size;
         float delta_i = std::numeric_limits<float>::max();
         int nh_i = -1;
         auto coords_i = dev_points[i];
@@ -187,7 +209,8 @@ namespace clue::detail {
                                                        delta_i,
                                                        nh_i,
                                                        dm,
-                                                       i);
+                                                       i,
+                                                       batch);
 
         dev_points.nearest_higher[i] = nh_i;
         if (nh_i == -1) {
@@ -205,8 +228,7 @@ namespace clue::detail {
                                   PointsView<Ndim> dev_points,
                                   DistanceParameter<Ndim> seed_dc,
                                   float rhoc,
-                                  int32_t n_points,
-                                  std::size_t batch_size) const {
+                                  int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         dev_points.cluster_index[i] = -1;
         auto nh = dev_points.nearest_higher[i];
@@ -234,8 +256,7 @@ namespace clue::detail {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
                                   clue::FollowersView followers,
-                                  PointsView<Ndim> dev_points,
-                                  std::size_t batch_size) const {
+                                  PointsView<Ndim> dev_points) const {
       const auto n_seeds = seeds.size();
       for (auto idx_cls : alpaka::uniformElements(acc, n_seeds)) {
         int local_stack[256] = {-1};
@@ -317,8 +338,7 @@ namespace clue::detail {
                                PointsView<Ndim>& dev_points,
                                const DistanceParameter<Ndim>& seed_dc,
                                float rhoc,
-                               int32_t size,
-                               std::size_t batch_size) {
+                               int32_t size) {
     alpaka::exec<TAcc>(queue,
                        work_division,
                        KernelFindClusters{},
@@ -327,8 +347,7 @@ namespace clue::detail {
                        dev_points,
                        seed_dc,
                        rhoc,
-                       size,
-                       batch_size);
+                       size);
   }
 
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
@@ -336,12 +355,11 @@ namespace clue::detail {
                                      std::size_t block_size,
                                      clue::internal::SeedArray<>& seeds,
                                      clue::FollowersView followers,
-                                     PointsView<Ndim> dev_points,
-                                     std::size_t batch_size) {
+                                     PointsView<Ndim> dev_points) {
     const Idx grid_size = clue::divide_up_by(seeds.size(queue), block_size);
     const auto work_division = clue::make_workdiv<TAcc>(grid_size, block_size);
     alpaka::exec<TAcc>(
-        queue, work_division, KernelAssignClusters{}, seeds.view(), followers, dev_points, batch_size);
+        queue, work_division, KernelAssignClusters{}, seeds.view(), followers, dev_points);
   }
 
 }  // namespace clue::detail

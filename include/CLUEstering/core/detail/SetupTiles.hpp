@@ -57,9 +57,9 @@ namespace clue::detail {
   void setup_tiles(TQueue& queue,
                    std::optional<internal::Tiles<Ndim, TDev>>& tiles,
                    const PointsDevice<Ndim, TDev>& points,
-                   int points_per_tile,
                    std::size_t batches,
                    std::size_t batch_size,
+                   int points_per_tile,
                    const std::array<uint8_t, Ndim>& wrapped_coordinates) {
     auto ntiles =
         static_cast<int32_t>(std::ceil(points.size() / static_cast<float>(points_per_tile)));
@@ -75,7 +75,7 @@ namespace clue::detail {
         (tiles->extents().keys < static_cast<std::size_t>(ntiles))) {
       tiles->initialize(points.size(), ntiles, n_per_dim, batches, batch_size, queue);
     } else {
-      tiles->reset(points.size(), ntiles, n_per_dim, batches, batch_size, );
+      tiles->reset(points.size(), ntiles, n_per_dim, batches, batch_size);
     }
 
     auto min_max = clue::make_host_buffer<internal::CoordinateExtremes<Ndim>>(queue);

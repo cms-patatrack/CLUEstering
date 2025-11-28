@@ -32,8 +32,8 @@ namespace clue::internal {
           m_wrapped{make_device_buffer<uint8_t[Ndim]>(queue)},
           m_ntiles{n_tiles},
           m_nperdim{static_cast<int32_t>(std::pow(n_tiles, 1.f / Ndim))},
-          batches{batches},
-          batch_size{batch_size},
+          m_batches{batches},
+          m_batch_size{batch_size},
           m_view{} {
       m_view.indexes = m_assoc.indexes().data();
       m_view.offsets = m_assoc.offsets().data();
@@ -60,6 +60,8 @@ namespace clue::internal {
       m_assoc.initialize(npoints, ntiles * batches, queue);
       m_ntiles = ntiles;
       m_nperdim = nperdim;
+      m_batches = batches;
+      m_batch_size = batch_size;
 
       m_view.indexes = m_assoc.indexes().data();
       m_view.offsets = m_assoc.offsets().data();
@@ -79,9 +81,11 @@ namespace clue::internal {
                               std::size_t batches,
                               std::size_t batch_size) {
       m_assoc.reset(npoints, ntiles * batches);
-
       m_ntiles = ntiles;
       m_nperdim = nperdim;
+      m_batches = batches;
+      m_batch_size = batch_size;
+
       m_view.indexes = m_assoc.indexes().data();
       m_view.offsets = m_assoc.offsets().data();
       m_view.minmax = m_minmax.data();
@@ -139,8 +143,8 @@ namespace clue::internal {
     device_buffer<TDev, uint8_t[Ndim]> m_wrapped;
     int32_t m_ntiles;
     int32_t m_nperdim;
-    std::size_t batches;
-    std::size_t batch_size;
+    std::size_t m_batches;
+    std::size_t m_batch_size;
     TilesView<Ndim> m_view;
   };
 
