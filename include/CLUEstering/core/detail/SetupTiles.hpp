@@ -32,8 +32,8 @@ namespace clue::detail {
       tiles = std::make_optional<internal::Tiles<Ndim, TDev>>(queue, points.size(), ntiles);
     }
     // check if tiles are large enough for current data
-    if (!(tiles->extents().values >= static_cast<std::size_t>(points.size())) or
-        !(tiles->extents().keys >= static_cast<std::size_t>(ntiles))) {
+    if ((tiles->extents().values < static_cast<std::size_t>(points.size())) or
+        (tiles->extents().keys < static_cast<std::size_t>(ntiles))) {
       tiles->initialize(points.size(), ntiles, n_per_dim, queue);
     } else {
       tiles->reset(points.size(), ntiles, n_per_dim);
@@ -65,8 +65,8 @@ namespace clue::detail {
       tiles = std::make_optional<internal::Tiles<Ndim, TDev>>(queue, points.size(), ntiles);
     }
     // check if tiles are large enough for current data
-    if (!(tiles->extents().values >= static_cast<std::size_t>(points.size())) or
-        !(tiles->extents().keys >= static_cast<std::size_t>(ntiles))) {
+    if ((tiles->extents().values < static_cast<std::size_t>(points.size())) or
+        (tiles->extents().keys < static_cast<std::size_t>(ntiles))) {
       tiles->initialize(points.size(), ntiles, n_per_dim, queue);
     } else {
       tiles->reset(points.size(), ntiles, n_per_dim);
