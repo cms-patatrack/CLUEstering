@@ -23,6 +23,8 @@ namespace clue::internal {
     int32_t npoints;
     int32_t ntiles;
     int32_t nperdim;
+    std::size_t batches;
+    std::size_t batch_size;
 
     ALPAKA_FN_ACC inline constexpr const float* minMax() const { return minmax; }
     ALPAKA_FN_ACC inline constexpr float* minMax() { return minmax; }
@@ -49,27 +51,31 @@ namespace clue::internal {
       return coord_bin;
     }
 
-    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords) const {
+    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords, std::size_t batch) const {
       int global_bin = 0;
       for (auto dim = 0u; dim != Ndim - 1; ++dim) {
         global_bin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) *
                       getBin(coords[dim], dim);
       }
       global_bin += getBin(coords[Ndim - 1], Ndim - 1);
+      global_bin += ntiles * batch;
       return global_bin;
     }
 
-    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins) const {
+    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins,
+                                                         std::size_t batch) const {
       int32_t globalBin = 0;
       for (auto dim = 0u; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
         globalBin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
       }
+      globalBin += ntiles * batch;
       return globalBin;
     }
 
     ALPAKA_FN_ACC inline void searchBox(const SearchBoxExtremes<Ndim>& searchbox_extremes,
-                                        SearchBoxBins<Ndim>& searchbox_bins) {
+                                        SearchBoxBins<Ndim>& searchbox_bins,
+                                        std::size_t batch) {
       for (auto dim = 0u; dim != Ndim; ++dim) {
         auto infBin = getBin(searchbox_extremes[dim][0], dim);
         auto supBin = getBin(searchbox_extremes[dim][1], dim);

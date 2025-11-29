@@ -52,10 +52,19 @@ namespace clue {
     std::optional<clue::internal::SeedArray<>> m_seeds;
     std::optional<FollowersDevice> m_followers;
 
-    void setup(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points) {
-      detail::setup_tiles(queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates);
+    void setup(Queue& queue,
+               const PointsHost& h_points,
+               PointsDevice& dev_points,
+               std::size_t batches,
+               std::size_t batch_size) {
+      std::cout << __LINE__ << std::endl;
+      detail::setup_tiles(
+          queue, m_tiles, h_points, batches, batch_size, m_pointsPerTile, m_wrappedCoordinates);
+      std::cout << __LINE__ << std::endl;
       detail::setup_followers(queue, m_followers, h_points.size());
+      std::cout << __LINE__ << std::endl;
       clue::copyToDevice(queue, dev_points, h_points);
+      std::cout << __LINE__ << std::endl;
     }
 
     template <concepts::convolutional_kernel Kernel>
@@ -63,11 +72,13 @@ namespace clue {
                             PointsDevice& dev_points,
                             const Kernel& kernel,
                             Queue& queue,
+                            std::size_t batch_size,
                             std::size_t block_size);
     template <concepts::convolutional_kernel Kernel>
     void make_clusters_impl(PointsDevice& dev_points,
                             const Kernel& kernel,
                             Queue& queue,
+                            std::size_t batch_size,
                             std::size_t block_size);
 
   public:
@@ -127,6 +138,7 @@ namespace clue {
     void make_clusters(Queue& queue,
                        PointsHost& h_points,
                        const Kernel& kernel = FlatKernel{.5f},
+                       std::size_t batch_size = 0,
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host points
     ///
@@ -137,6 +149,7 @@ namespace clue {
     template <concepts::convolutional_kernel Kernel = FlatKernel>
     void make_clusters(PointsHost& h_points,
                        const Kernel& kernel = FlatKernel{.5f},
+                       std::size_t batch_size = 0,
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host and device points
     ///
@@ -150,6 +163,7 @@ namespace clue {
                        PointsHost& h_points,
                        PointsDevice& dev_points,
                        const Kernel& kernel = FlatKernel{.5f},
+                       std::size_t batch_size = 0,
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from device points
     ///
@@ -161,6 +175,7 @@ namespace clue {
     void make_clusters(Queue& queue,
                        PointsDevice& dev_points,
                        const Kernel& kernel = FlatKernel{.5f},
+                       std::size_t batch_size = 0,
                        std::size_t block_size = 256);
 
     /// @brief Specify which coordinates are periodic
