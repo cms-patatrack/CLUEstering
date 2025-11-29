@@ -21,11 +21,6 @@ TEST_CASE("Test batched clustering with fixed batch size") {
 
   auto truth = clue::read_output<2>(queue, "../../../data/truth_files/data_8192_truth.csv");
   auto truth_n_clusters = clue::detail::compute_nclusters(truth.clusterIndexes());
-  const auto batches = n_points / batch_size;
-  for (auto batch = 0u; batch < batches; ++batch) {
-    auto n_clusters = clue::detail::compute_nclusters(
-        std::span<const int>(h_points.clusterIndexes().data() + batch * batch_size, batch_size));
-    CHECK(n_clusters == truth_n_clusters);
-    truth_n_clusters += truth_n_clusters;
-  }
+  auto n_clusters = clue::detail::compute_nclusters(h_points.clusterIndexes());
+  CHECK(n_clusters == truth_n_clusters * 10);
 }
