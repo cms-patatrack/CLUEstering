@@ -35,7 +35,7 @@ namespace clue::detail {
                                    int32_t point_id,
                                    std::size_t batch) {
     if constexpr (N_ == 0) {
-      auto bin_id = tiles.getGlobalBinByBin(base_vec);
+      auto bin_id = tiles.getGlobalBinByBin(base_vec, batch);
       auto bin_size = tiles[bin_id + tiles.ntiles * batch].size();
 
       for (auto bin_it = 0; bin_it < bin_size; ++bin_it) {
@@ -93,7 +93,7 @@ namespace clue::detail {
         }
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
-        dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
+        dev_tiles.searchBox(searchbox_extremes, searchbox_bins, batch);
 
         VecArray<int32_t, Ndim> base_vec;
         for_recursion<TAcc, Ndim, Ndim>(acc,
@@ -127,7 +127,7 @@ namespace clue::detail {
                                                   int32_t point_id,
                                                   std::size_t batch) {
     if constexpr (N_ == 0) {
-      int bin_id = tiles.getGlobalBinByBin(base_vec);
+      int bin_id = tiles.getGlobalBinByBin(base_vec, batch);
       int binSize = tiles[bin_id + tiles.ntiles * batch].size();
 
       for (auto binIter = 0; binIter < binSize; ++binIter) {
@@ -196,7 +196,7 @@ namespace clue::detail {
         }
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
-        dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
+        dev_tiles.searchBox(searchbox_extremes, searchbox_bins, batch);
 
         VecArray<int32_t, Ndim> base_vec{};
         for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,

@@ -107,8 +107,9 @@ namespace clue::internal {
         for (auto dim = 0u; dim < Ndim; ++dim) {
           coords[dim] = pointsView.coords[dim][index];
         }
+        auto batch = index / tilesView.batch_size;
 
-        auto bin = tilesView.getGlobalBin(coords);
+        auto bin = tilesView.getGlobalBin(coords, batch);
         return bin;
       }
     };
