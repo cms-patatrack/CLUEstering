@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.abspath('../../CLUEstering'))
 project = 'CLUEstering'
 copyright = '2025, Simone Balducci, Felice Pantaleo, Wahid Redjeb, Marco Rovere, Aurora Perego, Francesco Giacomini'
 author = 'Simone Balducci'
-release = '2.8.0'
+release = '2.9.0'
 
 extensions = [
     'sphinx.ext.autodoc',

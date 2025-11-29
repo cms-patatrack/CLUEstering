@@ -4,7 +4,7 @@ from pathlib import Path
 from setuptools import setup
 import subprocess
 
-__version__ = "2.8.0"
+__version__ = "2.9.0"
 
 this_directory = Path(__file__).parent
 long_description = (this_directory/'README.md').read_text()
