@@ -51,23 +51,6 @@ namespace clue::internal {
       return coord_bin;
     }
 
-    ALPAKA_FN_ACC inline constexpr int getBin(float coord, int dim, std::size_t batch) const {
-      int coord_bin;
-      if (wrapping[dim]) {
-        coord_bin =
-            static_cast<int>((normalizeCoordinate(coord, dim) - minmax->min(dim)) / tilesizes[dim]);
-      } else {
-        coord_bin = static_cast<int>((coord - minmax->min(dim)) / tilesizes[dim]);
-      }
-
-      // Address the cases of underflow and overflow
-      coord_bin = internal::math::min(coord_bin, nperdim - 1);
-      coord_bin = internal::math::max(coord_bin, 0);
-	  coord_bin += nperdim * batch;
-
-      return coord_bin;
-    }
-
     ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords, std::size_t batch) const {
       int global_bin = 0;
       for (auto dim = 0u; dim != Ndim - 1; ++dim) {
@@ -75,27 +58,27 @@ namespace clue::internal {
                       getBin(coords[dim], dim);
       }
       global_bin += getBin(coords[Ndim - 1], Ndim - 1);
-	  global_bin += ntiles * batch;
+      global_bin += ntiles * batch;
       return global_bin;
     }
 
-
-    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins, std::size_t batch) const {
+    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins,
+                                                         std::size_t batch) const {
       int32_t globalBin = 0;
       for (auto dim = 0u; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
         globalBin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
       }
-	  globalBin += ntiles * batch;
+      globalBin += ntiles * batch;
       return globalBin;
     }
 
     ALPAKA_FN_ACC inline void searchBox(const SearchBoxExtremes<Ndim>& searchbox_extremes,
                                         SearchBoxBins<Ndim>& searchbox_bins,
-										std::size_t batch) {
+                                        std::size_t batch) {
       for (auto dim = 0u; dim != Ndim; ++dim) {
-        auto infBin = getBin(searchbox_extremes[dim][0], dim, batch);
-        auto supBin = getBin(searchbox_extremes[dim][1], dim, batch);
+        auto infBin = getBin(searchbox_extremes[dim][0], dim);
+        auto supBin = getBin(searchbox_extremes[dim][1], dim);
         if (wrapping[dim] and infBin > supBin)
           supBin += nperdim;
 

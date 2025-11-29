@@ -185,15 +185,12 @@ namespace clue {
                                            Queue& queue,
                                            std::size_t batch_size,
                                            std::size_t block_size) {
-	std::cout << __LINE__ << std::endl;
     const auto n_points = h_points.size();
     m_tiles->template fill<Acc>(queue, dev_points, n_points);
-	std::cout << __LINE__ << std::endl;
 
     const auto grid_size = detail::compute_grid_size(n_points, batch_size);
     auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
 
-	std::cout << __LINE__ << std::endl;
     detail::computeLocalDensity<Acc>(queue,
                                      work_division,
                                      m_tiles->view(),
@@ -202,7 +199,6 @@ namespace clue {
                                      m_dc,
                                      n_points,
                                      batch_size);
-	std::cout << __LINE__ << std::endl;
     auto seed_candidates = 0ul;
     detail::computeNearestHighers<Acc>(queue,
                                        work_division,
@@ -212,9 +208,7 @@ namespace clue {
                                        seed_candidates,
                                        n_points,
                                        batch_size);
-	std::cout << __LINE__ << std::endl;
     detail::setup_seeds(queue, m_seeds, seed_candidates);
-	std::cout << __LINE__ << std::endl;
     detail::findClusterSeeds<Acc>(queue,
                                   work_division,
                                   m_seeds.value(),
@@ -223,17 +217,13 @@ namespace clue {
                                   m_seed_dc,
                                   m_rhoc,
                                   n_points);
-	std::cout << __LINE__ << std::endl;
 
     m_followers->template fill<Acc>(queue, dev_points);
-	std::cout << __LINE__ << std::endl;
 
     detail::assignPointsToClusters<Acc>(
         queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
-	std::cout << __LINE__ << std::endl;
 
     clue::copyToHost(queue, h_points, dev_points);
-	std::cout << __LINE__ << std::endl;
     h_points.mark_clustered();
     dev_points.mark_clustered();
   }
