@@ -17,7 +17,8 @@ namespace clue {
   private:
     ALPAKA_FN_HOST_ACC constexpr auto distance(const std::array<float, Ndim>& lhs,
                                                const std::array<float, Ndim>& rhs) const {
-      return meta::accumulate<Ndim>([&]<std::size_t Dim>() { return lhs[Dim] - rhs[Dim]; });
+      return meta::accumulate<Ndim>(
+          [&]<std::size_t Dim>() { return (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]); });
     }
 
     friend class internal::MetricInterface<EuclidianMetric<Ndim>, Ndim>;
