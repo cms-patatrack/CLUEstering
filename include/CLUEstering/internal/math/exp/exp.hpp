@@ -10,7 +10,7 @@
 #include <cmath>
 #endif
 
-namespace clue::internal::math {
+namespace clue::math {
 
   ALPAKA_FN_ACC inline constexpr float exp(float x) {
 #if defined(CUDA_DEVICE_FN)
@@ -51,4 +51,4 @@ namespace clue::internal::math {
     return exp(static_cast<double>(x));
   }
 
-}  // namespace clue::internal::math
+}  // namespace clue::math

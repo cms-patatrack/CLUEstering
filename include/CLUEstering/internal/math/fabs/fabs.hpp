@@ -6,7 +6,7 @@
 
 #include "CLUEstering/internal/math/defines.hpp"
 
-namespace clue::internal::math {
+namespace clue::math {
 
   ALPAKA_FN_ACC inline constexpr float fabs(float arg) {
 #if defined(CUDA_DEVICE_FN)
@@ -34,4 +34,4 @@ namespace clue::internal::math {
 #endif
   }
 
-}  // namespace clue::internal::math
+}  // namespace clue::math

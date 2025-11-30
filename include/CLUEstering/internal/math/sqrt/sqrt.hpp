@@ -10,7 +10,7 @@
 #include <cmath>
 #endif
 
-namespace clue::internal::math {
+namespace clue::math {
 
   ALPAKA_FN_ACC inline constexpr float sqrt(float x) {
 #if defined(CUDA_DEVICE_FN)
@@ -51,4 +51,4 @@ namespace clue::internal::math {
     return sqrt(static_cast<double>(x));
   }
 
-}  // namespace clue::internal::math
+}  // namespace clue::math

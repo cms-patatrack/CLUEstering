@@ -10,7 +10,7 @@
 #include <algorithm>
 #endif
 
-namespace clue::internal::math {
+namespace clue::math {
 
   template <clue::concepts::Numeric T>
   ALPAKA_FN_ACC inline constexpr T min(const T& a, const T& b) {
@@ -46,4 +46,4 @@ namespace clue::internal::math {
 #endif
   }
 
-}  // namespace clue::internal::math
+}  // namespace clue::math

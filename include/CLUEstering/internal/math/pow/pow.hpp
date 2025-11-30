@@ -9,7 +9,7 @@
 #include <cmath>
 #endif
 
-namespace clue::internal::math {
+namespace clue::math {
 
   ALPAKA_FN_ACC inline constexpr float pow(float base, float exp) {
 #if defined(CUDA_DEVICE_FN)
@@ -45,4 +45,4 @@ namespace clue::internal::math {
 
   ALPAKA_FN_ACC inline constexpr float powf(float base, float exp) { return pow(base, exp); }
 
-}  // namespace clue::internal::math
+}  // namespace clue::math
