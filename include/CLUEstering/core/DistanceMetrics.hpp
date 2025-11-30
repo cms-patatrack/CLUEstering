@@ -12,7 +12,6 @@ namespace clue {
   template <std::size_t Ndim>
   class EuclidianMetric : public internal::MetricInterface<EuclidianMetric<Ndim>, Ndim> {
   public:
-    using DistanceType = float;
     ALPAKA_FN_HOST_ACC constexpr EuclidianMetric() = default;
 
   private:
