@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
-#include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"

@@ -3,6 +3,7 @@
 
 #include "CLUEstering/internal/meta/accumulate.hpp"
 #include "CLUEstering/core/internal/MetricInterface.hpp"
+#include "CLUEstering/internal/math/math.hpp"
 #include <alpaka/alpaka.hpp>
 #include <array>
 #include <cstddef>
@@ -10,13 +11,16 @@
 namespace clue {
 
   template <std::size_t Ndim>
+  using Point = std::array<float, Ndim + 1>;
+
+  template <std::size_t Ndim>
   class EuclidianMetric : public internal::MetricInterface<EuclidianMetric<Ndim>, Ndim> {
   public:
     ALPAKA_FN_HOST_ACC constexpr EuclidianMetric() = default;
 
   private:
-    ALPAKA_FN_HOST_ACC constexpr auto distance(const std::array<float, Ndim>& lhs,
-                                               const std::array<float, Ndim>& rhs) const {
+    ALPAKA_FN_HOST_ACC constexpr auto distance(const Point<Ndim>& lhs,
+                                               const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>(
           [&]<std::size_t Dim>() { return (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]); });
       return math::sqrt(distance2);
@@ -38,8 +42,8 @@ namespace clue {
         : m_weights{std::move(weights)} {}
 
   private:
-    ALPAKA_FN_HOST_ACC constexpr auto distance(const std::array<float, Ndim>& lhs,
-                                               const std::array<float, Ndim>& rhs) const {
+    ALPAKA_FN_HOST_ACC constexpr auto distance(const Point<Ndim>& lhs,
+                                               const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
         return m_weights[Dim] * (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]);
       });
@@ -55,10 +59,10 @@ namespace clue {
     ALPAKA_FN_HOST_ACC constexpr ManhattanMetric() = default;
 
   private:
-    ALPAKA_FN_HOST_ACC constexpr auto distance(const std::array<float, Ndim>& lhs,
-                                               const std::array<float, Ndim>& rhs) const {
+    ALPAKA_FN_HOST_ACC constexpr auto distance(const Point<Ndim>& lhs,
+                                               const Point<Ndim>& rhs) const {
       return meta::accumulate<Ndim>(
-          [&]<std::size_t Dim>() { return math::abs(lhs[Dim] - rhs[Dim]); });
+          [&]<std::size_t Dim>() { return math::fabs(lhs[Dim] - rhs[Dim]); });
     }
 
     friend class internal::MetricInterface<ManhattanMetric<Ndim>, Ndim>;
