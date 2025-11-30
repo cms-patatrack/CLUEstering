@@ -10,8 +10,7 @@ namespace clue::internal {
   template <typename TMetric, std::size_t Ndim>
   struct MetricInterface {
   private:
-    using Point = std::array<float, Ndim>;
-    // using DistanceType = TMetric::DistanceType;
+    using Point = std::array<float, Ndim + 1>;
 
   public:
     ALPAKA_FN_HOST_ACC constexpr auto operator()(const Point& lhs, const Point& rhs) const {

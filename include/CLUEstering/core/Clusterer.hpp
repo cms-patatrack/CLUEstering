@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"

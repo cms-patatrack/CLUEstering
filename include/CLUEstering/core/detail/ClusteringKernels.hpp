@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
-#include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
@@ -216,7 +215,6 @@ namespace clue::detail {
     template <typename TAcc, std::size_t Ndim, typename DistanceMetric>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
-                                  internal::TilesView<Ndim> tiles,
                                   PointsView<Ndim> dev_points,
                                   float seed_dc,
                                   DistanceMetric metric,
@@ -337,7 +335,6 @@ namespace clue::detail {
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
                                clue::internal::SeedArray<>& seeds,
-                               internal::TilesView<Ndim>& tiles,
                                PointsView<Ndim>& dev_points,
                                float seed_dc,
                                const DistanceMetric& metric,
@@ -347,7 +344,6 @@ namespace clue::detail {
                        work_division,
                        KernelFindClusters{},
                        seeds.view(),
-                       tiles,
                        dev_points,
                        seed_dc,
                        metric,

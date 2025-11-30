@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CLUEstering/core/Clusterer.hpp"
-#include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
@@ -184,7 +183,6 @@ namespace clue {
     detail::findClusterSeeds<Acc>(queue,
                                   work_division,
                                   m_seeds.value(),
-                                  m_tiles->view(),
                                   dev_points.view(),
                                   m_seed_dc,
                                   metric,
@@ -229,7 +227,6 @@ namespace clue {
     detail::findClusterSeeds<Acc>(queue,
                                   work_division,
                                   m_seeds.value(),
-                                  m_tiles->view(),
                                   dev_points.view(),
                                   m_seed_dc,
                                   metric,
