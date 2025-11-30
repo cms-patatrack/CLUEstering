@@ -23,5 +23,5 @@ void run(float dc,
   clue::PointsHost<Ndim> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
   clue::PointsDevice<Ndim> d_points(queue, n_points);
 
-  algo.make_clusters(queue, h_points, d_points, kernel, block_size);
+  algo.make_clusters(queue, h_points, d_points, clue::EuclidianMetric<Ndim>{}, kernel, block_size);
 }
