@@ -45,8 +45,8 @@ namespace clue::detail {
         auto coords_j = dev_points[j];
         auto distance = metric(coords_i, coords_j);
 
-        auto k = kernel(acc, math::sqrt(distance), point_id, j);
-        rho_i += static_cast<int>(distance <= dc * dc) * k * dev_points.weight[j];
+        auto k = kernel(acc, distance, point_id, j);
+        rho_i += static_cast<int>(distance <= dc) * k * dev_points.weight[j];
       }
       return;
     } else {
@@ -137,7 +137,7 @@ namespace clue::detail {
         auto coords_j = dev_points[j];
         auto distance = metric(coords_i, coords_j);
 
-        if (found_higher && distance <= dm * dm) {
+        if (found_higher && distance <= dm) {
           if (distance < delta_i) {
             delta_i = distance;
             nh_i = j;
@@ -231,7 +231,7 @@ namespace clue::detail {
         auto distance = metric(coords_i, coords_nh);
 
         float rho_i = dev_points.rho[i];
-        bool is_seed = (distance > seed_dc * seed_dc) && (rho_i >= rhoc);
+        bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
 
         if (is_seed) {
           dev_points.is_seed[i] = 1;

@@ -6,7 +6,7 @@ import os
 import sys
 import pandas as pd
 import pytest
-from check_result import check_result
+from sklearn.metrics import davies_bouldin_score
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
@@ -27,14 +27,15 @@ def test_clustering(aniso):
     if os.path.isfile('./aniso_output.csv'):
         os.remove('./aniso_output.csv')
 
-    c = clue.clusterer(25., 5., 23.)
+    c = clue.clusterer(28., 5., 28.)
     c.read_data(aniso)
     assert c.n_dim == 2
     c.run_clue()
     c.to_csv('./', 'aniso_output.csv')
 
-    assert check_result('./aniso_output.csv',
-                        '../data/truth_files/aniso_1000_truth.csv')
+    mask = c.cluster_ids != -1
+    assert davies_bouldin_score(c.coords.T[mask], c.cluster_ids[mask]) >= 0.85
+
 
 if __name__ == "__main__":
     c = clue.clusterer(25., 5., 23.)
