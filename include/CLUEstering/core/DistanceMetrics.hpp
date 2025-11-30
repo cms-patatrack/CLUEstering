@@ -19,7 +19,7 @@ namespace clue {
                                                const std::array<float, Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>(
           [&]<std::size_t Dim>() { return (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]); });
-      return clue::internal::math::sqrt(distance2);
+      return math::sqrt(distance2);
     }
 
     friend class internal::MetricInterface<EuclidianMetric<Ndim>, Ndim>;
@@ -43,7 +43,7 @@ namespace clue {
       const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
         return m_weights[Dim] * (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]);
       });
-      return clue::internal::math::sqrt(distance2);
+      return math::sqrt(distance2);
     }
 
     friend class internal::MetricInterface<WeightedEuclidianMetric<Ndim>, Ndim>;
@@ -58,7 +58,7 @@ namespace clue {
     ALPAKA_FN_HOST_ACC constexpr auto distance(const std::array<float, Ndim>& lhs,
                                                const std::array<float, Ndim>& rhs) const {
       return meta::accumulate<Ndim>(
-          [&]<std::size_t Dim>() { return clue::internal::math::abs(lhs[Dim] - rhs[Dim]); });
+          [&]<std::size_t Dim>() { return math::abs(lhs[Dim] - rhs[Dim]); });
     }
 
     friend class internal::MetricInterface<ManhattanMetric<Ndim>, Ndim>;
