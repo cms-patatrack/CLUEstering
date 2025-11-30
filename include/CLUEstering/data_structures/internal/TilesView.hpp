@@ -43,8 +43,8 @@ namespace clue::internal {
       }
 
       // Address the cases of underflow and overflow
-      coord_bin = internal::math::min(coord_bin, nperdim - 1);
-      coord_bin = internal::math::max(coord_bin, 0);
+      coord_bin = math::min(coord_bin, nperdim - 1);
+      coord_bin = math::max(coord_bin, 0);
 
       return coord_bin;
     }
@@ -52,8 +52,8 @@ namespace clue::internal {
     ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords) const {
       int global_bin = 0;
       for (auto dim = 0u; dim != Ndim - 1; ++dim) {
-        global_bin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) *
-                      getBin(coords[dim], dim);
+        global_bin +=
+            math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * getBin(coords[dim], dim);
       }
       global_bin += getBin(coords[Ndim - 1], Ndim - 1);
       return global_bin;
@@ -63,7 +63,7 @@ namespace clue::internal {
       int32_t globalBin = 0;
       for (auto dim = 0u; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
-        globalBin += internal::math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
+        globalBin += math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
       }
       return globalBin;
     }
@@ -102,10 +102,9 @@ namespace clue::internal {
       std::array<float, Ndim> distance_vector;
       for (auto dim = 0u; dim != Ndim; ++dim) {
         if (wrapping[dim])
-          distance_vector[dim] =
-              internal::math::fabs(normalizeCoordinate(coord_i[dim] - coord_j[dim], dim));
+          distance_vector[dim] = math::fabs(normalizeCoordinate(coord_i[dim] - coord_j[dim], dim));
         else
-          distance_vector[dim] = internal::math::fabs(coord_i[dim] - coord_j[dim]);
+          distance_vector[dim] = math::fabs(coord_i[dim] - coord_j[dim]);
       }
       return distance_vector;
     }

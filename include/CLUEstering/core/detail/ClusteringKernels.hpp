@@ -46,7 +46,7 @@ namespace clue::detail {
           distance += distance_vector[dim] * distance_vector[dim];
         }
 
-        auto k = kernel(acc, clue::internal::math::sqrt(distance), point_id, j);
+        auto k = kernel(acc, math::sqrt(distance), point_id, j);
         rho_i += static_cast<int>(distance_vector <= dc) * k * dev_points.weight[j];
       }
       return;

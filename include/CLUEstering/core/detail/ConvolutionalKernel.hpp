@@ -41,9 +41,8 @@ namespace clue {
     if (point_id == j) {
       return 1.f;
     } else {
-      return m_gaus_amplitude *
-             clue::internal::math::exp(-(dist_ij - m_gaus_avg) * (dist_ij - m_gaus_avg) /
-                                       (2 * m_gaus_std * m_gaus_std));
+      return m_gaus_amplitude * math::exp(-(dist_ij - m_gaus_avg) * (dist_ij - m_gaus_avg) /
+                                          (2 * m_gaus_std * m_gaus_std));
     }
   }
 
@@ -62,7 +61,7 @@ namespace clue {
     if (point_id == j) {
       return 1.f;
     } else {
-      return (m_exp_amplitude * clue::internal::math::exp(-m_exp_avg * dist_ij));
+      return (m_exp_amplitude * math::exp(-m_exp_avg * dist_ij));
     }
   }
 
