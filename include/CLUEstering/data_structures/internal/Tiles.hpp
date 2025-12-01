@@ -21,13 +21,14 @@ namespace clue::internal {
   class Tiles {
   public:
     template <clue::concepts::queue TQueue>
-    Tiles(TQueue& queue, int32_t n_points, int32_t n_tiles)
-        : m_assoc{AssociationMap<TDev>(n_points, n_tiles, queue)},
+    Tiles(TQueue& queue, int32_t n_points, int32_t n_tiles, std::size_t batch_size = 1)
+        : m_assoc{AssociationMap<TDev>(n_points, n_tiles * batch_size, queue)},
           m_minmax{make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
           m_tilesizes{make_device_buffer<float[Ndim]>(queue)},
           m_wrapped{make_device_buffer<uint8_t[Ndim]>(queue)},
           m_ntiles{n_tiles},
           m_nperdim{static_cast<int32_t>(std::pow(n_tiles, 1.f / Ndim))},
+          m_batch_size{batch_size},
           m_view{} {
       m_view.indexes = m_assoc.indexes().data();
       m_view.offsets = m_assoc.offsets().data();
@@ -43,10 +44,15 @@ namespace clue::internal {
     TilesView<Ndim>& view() { return m_view; }
 
     template <clue::concepts::queue TQueue>
-    ALPAKA_FN_HOST void initialize(TQueue& queue, int32_t npoints, int32_t ntiles, int32_t nperdim) {
-      m_assoc.initialize(npoints, ntiles, queue);
+    ALPAKA_FN_HOST void initialize(TQueue& queue,
+                                   int32_t npoints,
+                                   int32_t ntiles,
+                                   int32_t nperdim,
+                                   std::size_t batch_size = 1) {
+      m_assoc.initialize(npoints, ntiles * batch_size, queue);
       m_ntiles = ntiles;
       m_nperdim = nperdim;
+      m_batch_size = batch_size;
 
       m_view.indexes = m_assoc.indexes().data();
       m_view.offsets = m_assoc.offsets().data();
@@ -58,11 +64,15 @@ namespace clue::internal {
       m_view.nperdim = nperdim;
     }
 
-    ALPAKA_FN_HOST void reset(int32_t npoints, int32_t ntiles, int32_t nperdim) {
-      m_assoc.reset(npoints, ntiles);
+    ALPAKA_FN_HOST void reset(int32_t npoints,
+                              int32_t ntiles,
+                              int32_t nperdim,
+                              std::size_t batch_size = 1) {
+      m_assoc.reset(npoints, ntiles * batch_size);
 
       m_ntiles = ntiles;
       m_nperdim = nperdim;
+      m_batch_size = batch_size;
       m_view.indexes = m_assoc.indexes().data();
       m_view.offsets = m_assoc.offsets().data();
       m_view.minmax = m_minmax.data();
@@ -77,13 +87,13 @@ namespace clue::internal {
       PointsView<Ndim> pointsView;
       TilesView<Ndim> tilesView;
 
-      ALPAKA_FN_ACC int32_t operator()(int32_t index) const {
+      ALPAKA_FN_ACC int32_t operator()(int32_t index, std::size_t event = 0) const {
         float coords[Ndim];
         for (auto dim = 0u; dim < Ndim; ++dim) {
           coords[dim] = pointsView.coords[dim][index];
         }
 
-        auto bin = tilesView.getGlobalBin(coords);
+        auto bin = tilesView.getGlobalBin(coords, event);
         return bin;
       }
     };
@@ -93,6 +103,18 @@ namespace clue::internal {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
       m_assoc.template fill<TAcc>(size, GetGlobalBin{pointsView, m_view}, queue);
+    }
+
+    template <clue::concepts::accelerator TAcc, clue::concepts::queue TQueue>
+    ALPAKA_FN_HOST void fill_batch(TQueue& queue,
+                                   PointsDevice<Ndim, TDev>& d_points,
+                                   size_t size,
+                                   const auto& event_offsets,
+                                   std::size_t max_event_size) {
+      auto dev = alpaka::getDev(queue);
+      auto pointsView = d_points.view();
+      m_assoc.template fill_batch<TAcc>(
+          queue, size, GetGlobalBin{pointsView, m_view}, event_offsets, max_event_size);
     }
 
     ALPAKA_FN_HOST inline clue::device_buffer<TDev, CoordinateExtremes<Ndim>> minMax() const {
@@ -118,6 +140,7 @@ namespace clue::internal {
     device_buffer<TDev, uint8_t[Ndim]> m_wrapped;
     int32_t m_ntiles;
     int32_t m_nperdim;
+    std::size_t m_batch_size;
     TilesView<Ndim> m_view;
   };
 

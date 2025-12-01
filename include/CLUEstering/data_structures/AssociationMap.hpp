@@ -189,6 +189,12 @@ namespace clue {
       requires std::same_as<TDev, alpaka::DevCpu>;
     template <concepts::accelerator TAcc, concepts::queue TQueue>
     ALPAKA_FN_HOST void fill(size_type size, std::span<const key_type> associations, TQueue& queue);
+    template <concepts::accelerator TAcc, concepts::queue TQueue, typename TFunc>
+    ALPAKA_FN_HOST void fill_batch(TQueue& queue,
+                                   size_type size,
+                                   TFunc func,
+                                   const auto& event_offsets,
+                                   std::size_t max_event_size);
 
     ALPAKA_FN_HOST const auto& indexes() const;
     ALPAKA_FN_HOST auto& indexes();
