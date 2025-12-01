@@ -43,7 +43,7 @@ namespace clue::internal {
     TilesView<Ndim>& view() { return m_view; }
 
     template <clue::concepts::queue TQueue>
-    ALPAKA_FN_HOST void initialize(int32_t npoints, int32_t ntiles, int32_t nperdim, TQueue& queue) {
+    ALPAKA_FN_HOST void initialize(TQueue& queue, int32_t npoints, int32_t ntiles, int32_t nperdim) {
       m_assoc.initialize(npoints, ntiles, queue);
       m_ntiles = ntiles;
       m_nperdim = nperdim;
