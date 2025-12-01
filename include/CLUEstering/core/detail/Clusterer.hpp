@@ -141,6 +141,18 @@ namespace clue {
   }
 
   template <std::size_t Ndim>
+  template <concepts::convolutional_kernel Kernel>
+  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
+                                             PointsHost& h_points,
+                                             PointsDevice& dev_points,
+                                             std::span<const std::size_t> batch_item_sizes,
+                                             const Kernel& kernel,
+                                             std::size_t block_size) {
+    const auto batch_size = batch_item_sizes.size();
+    setup_batch(queue, h_points, dev_points, batch_size);
+  }
+
+  template <std::size_t Ndim>
   template <std::ranges::contiguous_range TRange>
     requires std::integral<std::ranges::range_value_t<TRange>>
   inline void Clusterer<Ndim>::setWrappedCoordinates(const TRange& wrapped_coordinates) {
