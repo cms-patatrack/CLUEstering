@@ -14,4 +14,9 @@ namespace clue::detail {
         std::ceil(static_cast<float>(n_points) / static_cast<float>(batch_size)));
   }
 
+  auto compute_batch_blocks(std::size_t max_batch_item_size, std::size_t block_size) {
+    return static_cast<std::size_t>(
+        std::ceil(static_cast<float>(max_batch_item_size) / static_cast<float>(block_size)));
+  }
+
 }  // namespace clue::detail

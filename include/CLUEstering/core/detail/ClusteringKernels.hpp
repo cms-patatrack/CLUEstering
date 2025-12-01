@@ -80,35 +80,36 @@ namespace clue::detail {
                                   const KernelType& kernel,
                                   DistanceParameter<Ndim> dc,
                                   int32_t n_points,
-                                  std::size_t batch_size) const {
-      for (auto i : alpaka::uniformElements(acc, n_points)) {
-        const auto batch = (batch_size == 0) ? 0 : i / batch_size;
-        float rho_i = 0.f;
-        auto coords_i = dev_points[i];
+                                  const std::size_t* batch_item_sizes) const {
+      for (auto [idx, batch] : alpaka::uniformElementsND(acc, n_points)) {
+        if (idx < batch_item_sizes[batch]) {
+          auto rho_i = 0.f;
+          auto coords_i = dev_points[idx];
 
-        clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-        for (auto dim = 0u; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] =
-              clue::nostd::make_array(coords_i[dim] - dc[dim], coords_i[dim] + dc[dim]);
+          clue::SearchBoxExtremes<Ndim> searchbox_extremes;
+          for (auto dim = 0u; dim != Ndim; ++dim) {
+            searchbox_extremes[dim] =
+                clue::nostd::make_array(coords_i[dim] - dc[dim], coords_i[dim] + dc[dim]);
+          }
+
+          clue::SearchBoxBins<Ndim> searchbox_bins;
+          dev_tiles.searchBox(searchbox_extremes, searchbox_bins, batch);
+
+          VecArray<int32_t, Ndim> base_vec;
+          for_recursion<TAcc, Ndim, Ndim>(acc,
+                                          base_vec,
+                                          searchbox_bins,
+                                          dev_tiles,
+                                          dev_points,
+                                          kernel,
+                                          coords_i,
+                                          rho_i,
+                                          dc,
+                                          idx,
+                                          batch);
+
+          dev_points.rho[idx] = rho_i;
         }
-
-        clue::SearchBoxBins<Ndim> searchbox_bins;
-        dev_tiles.searchBox(searchbox_extremes, searchbox_bins, batch);
-
-        VecArray<int32_t, Ndim> base_vec;
-        for_recursion<TAcc, Ndim, Ndim>(acc,
-                                        base_vec,
-                                        searchbox_bins,
-                                        dev_tiles,
-                                        dev_points,
-                                        kernel,
-                                        coords_i,
-                                        rho_i,
-                                        dc,
-                                        i,
-                                        batch);
-
-        dev_points.rho[i] = rho_i;
       }
     }
   };
@@ -181,40 +182,41 @@ namespace clue::detail {
                                   DistanceParameter<Ndim> dm,
                                   std::size_t* seed_candidates,
                                   int32_t n_points,
-                                  std::size_t batch_size) const {
-      for (auto i : alpaka::uniformElements(acc, n_points)) {
-        const auto batch = (batch_size == 0) ? 0 : i / batch_size;
-        float delta_i = std::numeric_limits<float>::max();
-        int nh_i = -1;
-        auto coords_i = dev_points[i];
-        float rho_i = dev_points.rho[i];
+                                  const std::size_t* batch_item_sizes) const {
+      for (auto [idx, batch] : alpaka::uniformElementsND(acc, n_points)) {
+        if (idx < batch_item_sizes[batch]) {
+          float delta_i = std::numeric_limits<float>::max();
+          int nh_i = -1;
+          auto coords_i = dev_points[idx];
+          float rho_i = dev_points.rho[idx];
 
-        clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-        for (auto dim = 0u; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] =
-              clue::nostd::make_array(coords_i[dim] - dm[dim], coords_i[dim] + dm[dim]);
-        }
+          clue::SearchBoxExtremes<Ndim> searchbox_extremes;
+          for (auto dim = 0u; dim != Ndim; ++dim) {
+            searchbox_extremes[dim] =
+                clue::nostd::make_array(coords_i[dim] - dm[dim], coords_i[dim] + dm[dim]);
+          }
 
-        clue::SearchBoxBins<Ndim> searchbox_bins;
-        dev_tiles.searchBox(searchbox_extremes, searchbox_bins, batch);
+          clue::SearchBoxBins<Ndim> searchbox_bins;
+          dev_tiles.searchBox(searchbox_extremes, searchbox_bins, batch);
 
-        VecArray<int32_t, Ndim> base_vec{};
-        for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
-                                                       base_vec,
-                                                       searchbox_bins,
-                                                       dev_tiles,
-                                                       dev_points,
-                                                       coords_i,
-                                                       rho_i,
-                                                       delta_i,
-                                                       nh_i,
-                                                       dm,
-                                                       i,
-                                                       batch);
+          VecArray<int32_t, Ndim> base_vec{};
+          for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
+                                                         base_vec,
+                                                         searchbox_bins,
+                                                         dev_tiles,
+                                                         dev_points,
+                                                         coords_i,
+                                                         rho_i,
+                                                         delta_i,
+                                                         nh_i,
+                                                         dm,
+                                                         idx,
+                                                         batch);
 
-        dev_points.nearest_higher[i] = nh_i;
-        if (nh_i == -1) {
-          alpaka::atomicAdd(acc, seed_candidates, 1ul);
+          dev_points.nearest_higher[idx] = nh_i;
+          if (nh_i == -1) {
+            alpaka::atomicAdd(acc, seed_candidates, 1ul);
+          }
         }
       }
     }
@@ -288,13 +290,13 @@ namespace clue::detail {
 
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim, typename KernelType>
   inline void computeLocalDensity(TQueue& queue,
-                                  const WorkDiv& work_division,
+                                  const auto& work_division,
                                   internal::TilesView<Ndim>& tiles,
                                   PointsView<Ndim>& dev_points,
                                   KernelType&& kernel,
                                   const DistanceParameter<Ndim>& dc,
                                   int32_t size,
-                                  std::size_t batch_size) {
+                                  const auto& batch_item_sizes) {
     alpaka::exec<TAcc>(queue,
                        work_division,
                        KernelCalculateLocalDensity{},
@@ -303,18 +305,18 @@ namespace clue::detail {
                        std::forward<KernelType>(kernel),
                        dc,
                        size,
-                       batch_size);
+                       batch_item_sizes.data());
   }
 
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
   inline void computeNearestHighers(TQueue& queue,
-                                    const WorkDiv& work_division,
+                                    const auto& work_division,
                                     internal::TilesView<Ndim>& tiles,
                                     PointsView<Ndim>& dev_points,
                                     const DistanceParameter<Ndim>& dm,
                                     std::size_t& seed_candidates,
                                     int32_t size,
-                                    std::size_t batch_size) {
+                                    const auto& batch_item_sizes) {
     auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
     alpaka::memset(queue, d_seed_candidates, 0u);
     alpaka::exec<TAcc>(queue,
@@ -325,7 +327,7 @@ namespace clue::detail {
                        dm,
                        d_seed_candidates.data(),
                        size,
-                       batch_size);
+                       batch_item_sizes.data());
     alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
     alpaka::wait(queue);
   }

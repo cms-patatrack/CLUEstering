@@ -186,7 +186,11 @@ namespace clue {
     ALPAKA_FN_HOST void reset(size_type nelements, size_type nbins);
 
     template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
-    ALPAKA_FN_HOST void fill(size_type size, TFunc func, TQueue& queue);
+    ALPAKA_FN_HOST void fill(size_type size,
+                             TFunc func,
+                             TQueue& queue,
+                             std::size_t max_batch_item_size = 0,
+                             const std::size_t* cumulative_batch_item_sizes = nullptr);
     ALPAKA_FN_HOST void fill(std::span<const key_type> associations)
       requires std::same_as<TDev, alpaka::DevCpu>;
     template <concepts::accelerator TAcc, concepts::queue TQueue>

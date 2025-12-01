@@ -24,7 +24,6 @@ namespace clue::internal {
     int32_t ntiles;
     int32_t nperdim;
     std::size_t batches;
-    std::size_t batch_size;
 
     ALPAKA_FN_ACC inline constexpr const float* minMax() const { return minmax; }
     ALPAKA_FN_ACC inline constexpr float* minMax() { return minmax; }

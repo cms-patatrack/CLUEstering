@@ -21,7 +21,6 @@ namespace clue::detail {
                    std::optional<internal::Tiles<Ndim, TDev>>& tiles,
                    const PointsHost<Ndim>& points,
                    std::size_t batches,
-                   std::size_t batch_size,
                    int points_per_tile,
                    const std::array<uint8_t, Ndim>& wrapped_coordinates) {
     // TODO: reconsider the way that we compute the number of tiles
@@ -31,15 +30,15 @@ namespace clue::detail {
     ntiles = static_cast<int32_t>(std::pow(n_per_dim, Ndim));
 
     if (!tiles.has_value()) {
-      tiles = std::make_optional<internal::Tiles<Ndim, TDev>>(
-          queue, points.size(), ntiles, batches, batch_size);
+      tiles =
+          std::make_optional<internal::Tiles<Ndim, TDev>>(queue, points.size(), ntiles, batches);
     }
     // check if tiles are large enough for current data
     if ((tiles->extents().values < static_cast<std::size_t>(points.size())) or
         (tiles->extents().keys < static_cast<std::size_t>(ntiles))) {
-      tiles->initialize(points.size(), ntiles, n_per_dim, batches, batch_size, queue);
+      tiles->initialize(points.size(), ntiles, n_per_dim, batches, queue);
     } else {
-      tiles->reset(points.size(), ntiles, n_per_dim, batches, batch_size);
+      tiles->reset(points.size(), ntiles, n_per_dim, batches);
     }
 
     auto min_max = clue::make_host_buffer<internal::CoordinateExtremes<Ndim>>(queue);
@@ -58,7 +57,6 @@ namespace clue::detail {
                    std::optional<internal::Tiles<Ndim, TDev>>& tiles,
                    const PointsDevice<Ndim, TDev>& points,
                    std::size_t batches,
-                   std::size_t batch_size,
                    int points_per_tile,
                    const std::array<uint8_t, Ndim>& wrapped_coordinates) {
     auto ntiles =
@@ -67,15 +65,15 @@ namespace clue::detail {
     ntiles = static_cast<int32_t>(std::pow(n_per_dim, Ndim));
 
     if (!tiles.has_value()) {
-      tiles = std::make_optional<internal::Tiles<Ndim, TDev>>(
-          queue, points.size(), ntiles, batches, batch_size);
+      tiles =
+          std::make_optional<internal::Tiles<Ndim, TDev>>(queue, points.size(), ntiles, batches);
     }
     // check if tiles are large enough for current data
     if ((tiles->extents().values < static_cast<std::size_t>(points.size())) or
         (tiles->extents().keys < static_cast<std::size_t>(ntiles))) {
-      tiles->initialize(points.size(), ntiles, n_per_dim, batches, batch_size, queue);
+      tiles->initialize(points.size(), ntiles, n_per_dim, batches, queue);
     } else {
-      tiles->reset(points.size(), ntiles, n_per_dim, batches, batch_size);
+      tiles->reset(points.size(), ntiles, n_per_dim, batches);
     }
 
     auto min_max = clue::make_host_buffer<internal::CoordinateExtremes<Ndim>>(queue);

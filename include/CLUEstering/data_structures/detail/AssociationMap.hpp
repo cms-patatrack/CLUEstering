@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/core/detail/ComputeBatches.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/AssociationMapView.hpp"
 #include "CLUEstering/data_structures/internal/Span.hpp"
@@ -20,12 +21,27 @@ namespace clue {
     template <typename TFunc>
     struct KernelComputeAssociations {
       template <typename TAcc>
+        requires(alpaka::Dim<TAcc>::value == 1)
       ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                     size_t size,
                                     int32_t* associations,
                                     TFunc func) const {
         for (auto i : alpaka::uniformElements(acc, size)) {
           associations[i] = func(i);
+        }
+      }
+
+      template <typename TAcc>
+        requires(alpaka::Dim<TAcc>::value == 2)
+      ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                    size_t size,
+                                    int32_t* associations,
+                                    TFunc func,
+                                    const std::size_t* cumulative_batch_item_sizes) const {
+        for (auto [idx, batch] : alpaka::uniformElementsND(acc, size)) {
+          if (idx < cumulative_batch_item_sizes[batch]) {
+            associations[idx] = func(idx, batch);
+          }
         }
       }
     };
@@ -282,18 +298,40 @@ namespace clue {
 
   template <concepts::device TDev>
   template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
-  ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size, TFunc func, TQueue& queue) {
+  ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(
+      size_type size,
+      TFunc func,
+      TQueue& queue,
+      std::size_t max_batch_item_size,
+      const std::size_t* cumulative_batch_item_sizes) {
     if (m_extents.keys == 0)
       return;
 
     auto bin_buffer = make_device_buffer<int32_t[]>(queue, size);
 
+    if constexpr (alpaka::Dim<TAcc>::value == 1) {
+      const auto blocksize = 512;
+      const auto gridsize = divide_up_by(size, blocksize);
+      const auto workdiv = make_workdiv<TAcc>(gridsize, blocksize);
+      alpaka::exec<TAcc>(
+          queue, workdiv, detail::KernelComputeAssociations<TFunc>{}, size, bin_buffer.data(), func);
+    } else if constexpr (alpaka::Dim<TAcc>::value == 2) {
+      const auto blocksize = 512;
+      const auto gridsize = divide_up_by(size, blocksize);
+      const auto blocks_per_batch = detail::compute_batch_blocks(max_batch_item_size, blocksize);
+      const auto workdiv = make_workdiv<TAcc>({gridsize, gridsize}, {blocksize, blocks_per_batch});
+      alpaka::exec<TAcc>(queue,
+                         workdiv,
+                         detail::KernelComputeAssociations<TFunc>{},
+                         size,
+                         bin_buffer.data(),
+                         func,
+                         cumulative_batch_item_sizes);
+    }
+
     const auto blocksize = 512;
     const auto gridsize = divide_up_by(size, blocksize);
     const auto workdiv = make_workdiv<TAcc>(gridsize, blocksize);
-    alpaka::exec<TAcc>(
-        queue, workdiv, detail::KernelComputeAssociations<TFunc>{}, size, bin_buffer.data(), func);
-
     auto sizes_buffer = make_device_buffer<int32_t[]>(queue, m_extents.keys);
     alpaka::memset(queue, sizes_buffer, 0);
     alpaka::exec<TAcc>(queue,
