@@ -34,7 +34,7 @@ namespace clue::detail {
     // check if tiles are large enough for current data
     if ((tiles->extents().values < static_cast<std::size_t>(points.size())) or
         (tiles->extents().keys < static_cast<std::size_t>(ntiles))) {
-      tiles->initialize(points.size(), ntiles, n_per_dim, queue);
+      tiles->initialize(queue, points.size(), ntiles, n_per_dim);
     } else {
       tiles->reset(points.size(), ntiles, n_per_dim);
     }
@@ -67,7 +67,7 @@ namespace clue::detail {
     // check if tiles are large enough for current data
     if ((tiles->extents().values < static_cast<std::size_t>(points.size())) or
         (tiles->extents().keys < static_cast<std::size_t>(ntiles))) {
-      tiles->initialize(points.size(), ntiles, n_per_dim, queue);
+      tiles->initialize(queue, points.size(), ntiles, n_per_dim);
     } else {
       tiles->reset(points.size(), ntiles, n_per_dim);
     }
