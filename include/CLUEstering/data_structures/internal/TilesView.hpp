@@ -49,13 +49,15 @@ namespace clue::internal {
       return coord_bin;
     }
 
-    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords) const {
+    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords,
+                                                    std::size_t event = 0) const {
       int global_bin = 0;
       for (auto dim = 0u; dim != Ndim - 1; ++dim) {
         global_bin +=
             math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * getBin(coords[dim], dim);
       }
       global_bin += getBin(coords[Ndim - 1], Ndim - 1);
+      global_bin += event * ntiles;
       return global_bin;
     }
 
