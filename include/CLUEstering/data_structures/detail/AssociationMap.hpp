@@ -41,8 +41,6 @@ namespace clue {
         for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
           for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
             auto global_idx = event_offsets[event] + local_idx;
-            // std::cout << "event: " << event << " local idx: " << local_idx
-            //           << " global_idx: " << global_idx << "\n";
             associations[global_idx] = func(global_idx, event);
           }
         }
@@ -448,8 +446,6 @@ namespace clue {
     const auto blocksize = 256;
     const auto blocks_per_event = divide_up_by(max_event_size, blocksize);
     const auto batch_size = event_offsets.size() - 1;
-    // std::cout << "Batch size: " << batch_size << " Blocks per event: " << blocks_per_event
-    //           << " Max event size: " << max_event_size << " size: " << size << "\n";
     const auto batch_workdiv =
         make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, blocksize});
     alpaka::exec<internal::Acc2D>(queue,
@@ -460,9 +456,6 @@ namespace clue {
                                   event_offsets.data(),
                                   max_event_size,
                                   blocks_per_event);
-    // for (auto i = 0u; i < size; ++i) {
-    //   std::cout << "Bin buffer[" << i << "] = " << bin_buffer[i] << std::endl;
-    // }
 
     auto sizes_buffer = make_device_buffer<int32_t[]>(queue, m_extents.keys);
     const auto workdiv = make_workdiv<TAcc>(size, blocksize);

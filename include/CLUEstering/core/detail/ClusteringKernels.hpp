@@ -54,8 +54,17 @@ namespace clue::detail {
            i <= search_box[search_box.size() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
-        for_recursion<TAcc, Ndim, N_ - 1>(
-            acc, base_vec, search_box, tiles, dev_points, kernel, coords_i, rho_i, dc, point_id);
+        for_recursion<TAcc, Ndim, N_ - 1>(acc,
+                                          base_vec,
+                                          search_box,
+                                          tiles,
+                                          dev_points,
+                                          kernel,
+                                          coords_i,
+                                          rho_i,
+                                          dc,
+                                          point_id,
+                                          event);
       }
     }
   }
@@ -191,7 +200,8 @@ namespace clue::detail {
                                                          delta_i,
                                                          nh_i,
                                                          dm,
-                                                         point_id);
+                                                         point_id,
+                                                         event);
       }
     }
   }
@@ -256,7 +266,6 @@ namespace clue::detail {
       for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
         for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
           const auto global_idx = event_offsets[event] + local_idx;
-          std::cout << "global_idx: " << global_idx << "\n";
 
           float delta_i = std::numeric_limits<float>::max();
           int nh_i = -1;
@@ -459,7 +468,6 @@ namespace clue::detail {
                        blocks_per_event);
     alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
     alpaka::wait(queue);
-    std::cout << "Seed candidates: " << seed_candidates << std::endl;
   }
 
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
