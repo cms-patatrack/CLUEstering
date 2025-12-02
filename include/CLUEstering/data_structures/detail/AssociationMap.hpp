@@ -15,17 +15,6 @@
 
 namespace clue {
 
-  // for (auto idx : alpaka::uniformElementsND(acc, {blocks_per_event, max_event_size})) {
-  //   auto event = alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc).y();
-  //   alpaka::Vec<alpaka::DimInt<2u>, unsigned> v = {blocks_per_event, max_event_size};
-  //   auto global_idx = alpaka::mapIdx<1u>(idx, v);
-  //   std::cout << "thx " << idx.x() << " thy " << idx.y() << " global_idx: " << global_idx[0]
-  //             << "\n";
-  //   if (global_idx[0] < event_offsets[event + 1] - event_offsets[event]) {
-  //     associations[global_idx[0]] = func(global_idx[0]);
-  //   }
-  // }
-
   namespace detail {
 
     template <typename TFunc>
@@ -48,6 +37,7 @@ namespace clue {
                                     const auto* event_offsets,
                                     std::size_t max_event_size,
                                     std::size_t blocks_per_event) const {
+        // todo: add bound checking
         for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
           for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
             auto global_idx = event_offsets[event] + local_idx;

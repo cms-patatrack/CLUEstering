@@ -61,12 +61,14 @@ namespace clue::internal {
       return global_bin;
     }
 
-    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins) const {
+    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins,
+                                                         std::size_t event = 0) const {
       int32_t globalBin = 0;
       for (auto dim = 0u; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
         globalBin += math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
       }
+      globalBin += event * ntiles;
       return globalBin;
     }
 

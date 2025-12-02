@@ -165,32 +165,44 @@ namespace clue {
     std::cout << "ntiles = " << m_tiles->view().ntiles << std::endl;
     m_tiles->template fill_batch<Acc>(queue, dev_points, n_points, d_event_offsets, max_event_size);
 
-    // const Idx grid_size = clue::divide_up_by(n_points, block_size);
-    // auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
+    detail::computeLocalDensityBatched<internal::Acc2D>(queue,
+                                                        m_tiles->view(),
+                                                        dev_points.view(),
+                                                        kernel,
+                                                        m_dc,
+                                                        d_event_offsets,
+                                                        max_event_size,
+                                                        block_size);
+    auto seed_candidates = 0ul;
+    detail::computeNearestHighersBatched<internal::Acc2D>(queue,
+                                                          m_tiles->view(),
+                                                          dev_points.view(),
+                                                          m_dm,
+                                                          seed_candidates,
+                                                          d_event_offsets,
+                                                          max_event_size,
+                                                          block_size);
+    detail::setup_seeds(queue, m_seeds, seed_candidates);
 
-    // detail::computeLocalDensity<Acc>(
-    //     queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, n_points);
-    // auto seed_candidates = 0ul;
-    // detail::computeNearestHighers<Acc>(
-    //     queue, work_division, m_tiles->view(), dev_points.view(), m_dm, seed_candidates, n_points);
-    // detail::setup_seeds(queue, m_seeds, seed_candidates);
-    // detail::findClusterSeeds<Acc>(queue,
-    //                               work_division,
-    //                               m_seeds.value(),
-    //                               m_tiles->view(),
-    //                               dev_points.view(),
-    //                               m_seed_dc,
-    //                               m_rhoc,
-    //                               n_points);
+    const Idx grid_size = clue::divide_up_by(n_points, block_size);
+    auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
+    detail::findClusterSeeds<Acc>(queue,
+                                  work_division,
+                                  m_seeds.value(),
+                                  m_tiles->view(),
+                                  dev_points.view(),
+                                  m_seed_dc,
+                                  m_rhoc,
+                                  n_points);
 
-    // m_followers->template fill<Acc>(queue, dev_points);
+    m_followers->template fill<Acc>(queue, dev_points);
 
-    // detail::assignPointsToClusters<Acc>(
-    //     queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
+    detail::assignPointsToClusters<Acc>(
+        queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
 
-    // clue::copyToHost(queue, h_points, dev_points);
-    // h_points.mark_clustered();
-    // dev_points.mark_clustered();
+    clue::copyToHost(queue, h_points, dev_points);
+    h_points.mark_clustered();
+    dev_points.mark_clustered();
   }
 
   template <std::size_t Ndim>
