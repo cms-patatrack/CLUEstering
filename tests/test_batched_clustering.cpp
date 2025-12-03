@@ -19,6 +19,7 @@ TEST_CASE("Test batched clustering with fixed batch size") {
 
   std::vector<std::size_t> event_sizes(10, batch_size);
   algo.make_clusters(queue, h_points, d_points, event_sizes, clue::FlatKernel{.5f});
+  alpaka::wait(queue);
 
   auto truth = clue::read_output<2>(queue, "../../../data/truth_files/data_1024_truth.csv");
   auto truth_n_clusters = clue::detail::compute_nclusters(truth.clusterIndexes());
