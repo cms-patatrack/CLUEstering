@@ -1,0 +1,332 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.13.2" xml:lang="en-US">
+  <compounddef id="classclue_1_1DistanceParameter" kind="class" language="C++" prot="public">
+    <compoundname>clue::DistanceParameter</compoundname>
+    <includes refid="DistanceParameter_8hpp" local="no">DistanceParameter.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1DistanceParameter_1ac39444bc61190818d665e4b81f4cf576" prot="private" static="no" mutable="no">
+        <type>std::array&lt; float, Ndim &gt;</type>
+        <definition>std::array&lt;float, Ndim&gt; clue::DistanceParameter&lt; Ndim &gt;::m_parameters</definition>
+        <argsstring></argsstring>
+        <name>m_parameters</name>
+        <qualifiedname>clue::DistanceParameter::m_parameters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="20" column="16" bodyfile="include/CLUEstering/core/DistanceParameter.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1DistanceParameter_1a91af7419a99a4b43c3aeefba22b3a4be" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>clue::DistanceParameter&lt; Ndim &gt;::DistanceParameter</definition>
+        <argsstring>(float radius)</argsstring>
+        <name>DistanceParameter</name>
+        <qualifiedname>clue::DistanceParameter::DistanceParameter</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>radius</declname>
+        </param>
+        <briefdescription>
+<para>Construct a <ref refid="classclue_1_1DistanceParameter" kindref="compound">DistanceParameter</ref> with the same threshold for all dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance threshold to be applied uniformly across all dimensions. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>This constructor initializes all dimensions with the same distance value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="26" column="15" bodyfile="include/CLUEstering/core/DistanceParameter.hpp" bodystart="26" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1DistanceParameter_1a56650179751a21c99a2a4173578f224f" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>clue::DistanceParameter&lt; Ndim &gt;::DistanceParameter</definition>
+        <argsstring>(std::array&lt; float, Ndim &gt; distances)</argsstring>
+        <name>DistanceParameter</name>
+        <qualifiedname>clue::DistanceParameter::DistanceParameter</qualifiedname>
+        <param>
+          <type>std::array&lt; float, Ndim &gt;</type>
+          <declname>distances</declname>
+        </param>
+        <briefdescription>
+<para>Construct a <ref refid="classclue_1_1DistanceParameter" kindref="compound">DistanceParameter</ref> with dimension-specific distances. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>distances</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An array containing the distance thresholds for each dimension. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>This constructor allows for specifying different distance values for each dimension. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="32" column="15" bodyfile="include/CLUEstering/core/DistanceParameter.hpp" bodystart="32" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1DistanceParameter_1a5012865ab365afca51783f399cb54bdb" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point...</type>
+            <declname>TDistances</declname>
+            <defname>TDistances</defname>
+          </param>
+        </templateparamlist>
+        <type>constexpr</type>
+        <definition>clue::DistanceParameter&lt; Ndim &gt;::DistanceParameter</definition>
+        <argsstring>(TDistances... distances)</argsstring>
+        <name>DistanceParameter</name>
+        <qualifiedname>clue::DistanceParameter::DistanceParameter</qualifiedname>
+        <param>
+          <type>TDistances...</type>
+          <declname>distances</declname>
+        </param>
+    <requiresclause>(sizeof...(TDistances) == Ndim)    </requiresclause>
+        <briefdescription>
+<para>Construct a <ref refid="classclue_1_1DistanceParameter" kindref="compound">DistanceParameter</ref> with dimension-specific distances. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TDistances</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A parameter pack representing the distance thresholds for each dimension. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>distances</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance thresholds for each dimension. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>This constructor allows for specifying different distance values for each dimension. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="40" column="15" bodyfile="include/CLUEstering/core/DistanceParameter.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1DistanceParameter_1a5597c5d6ec0354e4b56eec6db9496838" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; clue::DistanceParameter&lt; Ndim &gt;::operator[]</definition>
+        <argsstring>(std::size_t dim) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>clue::DistanceParameter::operator[]</qualifiedname>
+        <param>
+          <type>std::size_t</type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+<para>Access the distance parameter for a specific dimension. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dimension index for which to retrieve the distance parameter. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A reference to the distance parameter for the specified dimension. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="45" column="26" bodyfile="include/CLUEstering/core/DistanceParameter.hpp" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1DistanceParameter_1a15017249a48a4eede37901689101388e" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; clue::DistanceParameter&lt; Ndim &gt;::operator[]</definition>
+        <argsstring>(std::size_t dim)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>clue::DistanceParameter::operator[]</qualifiedname>
+        <param>
+          <type>std::size_t</type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+<para>Access the distance parameter for a specific dimension. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dimension index for which to retrieve the distance parameter. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A reference to the distance parameter for the specified dimension. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="49" column="20" bodyfile="include/CLUEstering/core/DistanceParameter.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classclue_1_1DistanceParameter_1a2469e6179da3a6baf34bbe9f5b578f1c" prot="private" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim_</declname>
+            <defname>Ndim_</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator&lt;</definition>
+        <argsstring>(const DistanceParameter&lt; Ndim_ &gt; &amp;, float)</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>clue::DistanceParameter::operator&lt;</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1DistanceParameter" kindref="compound">DistanceParameter</ref>&lt; Ndim_ &gt; &amp;</type>
+        </param>
+        <param>
+          <type>float</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="53" column="22"/>
+      </memberdef>
+      <memberdef kind="friend" id="classclue_1_1DistanceParameter_1aad58e46587d1f4c2c7d862ac2c6ffea1" prot="private" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim_</declname>
+            <defname>Ndim_</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator&lt;=</definition>
+        <argsstring>(const DistanceParameter&lt; Ndim_ &gt; &amp;, float)</argsstring>
+        <name>operator&lt;=</name>
+        <qualifiedname>clue::DistanceParameter::operator&lt;=</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1DistanceParameter" kindref="compound">DistanceParameter</ref>&lt; Ndim_ &gt; &amp;</type>
+        </param>
+        <param>
+          <type>float</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="55" column="22"/>
+      </memberdef>
+      <memberdef kind="friend" id="classclue_1_1DistanceParameter_1a22cd08788e82badd0d3e6054edce0550" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim_</declname>
+            <defname>Ndim_</defname>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_ACC friend bool</type>
+        <definition>ALPAKA_FN_ACC friend bool operator&lt;=</definition>
+        <argsstring>(const std::array&lt; float, Ndim_ &gt; &amp;, const DistanceParameter&lt; Ndim_ &gt; &amp;)</argsstring>
+        <name>operator&lt;=</name>
+        <qualifiedname>clue::DistanceParameter::operator&lt;=</qualifiedname>
+        <param>
+          <type>const std::array&lt; float, Ndim_ &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1DistanceParameter" kindref="compound">DistanceParameter</ref>&lt; Ndim_ &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="58" column="26"/>
+      </memberdef>
+      <memberdef kind="friend" id="classclue_1_1DistanceParameter_1a9564d7e4619bf7ce34774e96f6f23da7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim_</declname>
+            <defname>Ndim_</defname>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_ACC friend bool</type>
+        <definition>ALPAKA_FN_ACC friend bool operator&gt;</definition>
+        <argsstring>(const std::array&lt; float, Ndim_ &gt; &amp;, const DistanceParameter&lt; Ndim_ &gt; &amp;)</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>clue::DistanceParameter::operator&gt;</qualifiedname>
+        <param>
+          <type>const std::array&lt; float, Ndim_ &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1DistanceParameter" kindref="compound">DistanceParameter</ref>&lt; Ndim_ &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceParameter.hpp" line="61" column="31"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>A class that encapsulates distance parameters for the clustering algorithm. It can represent either a uniform distance across all dimensions or dimension-specific distances. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceParameter.hpp" line="18" column="3" bodyfile="include/CLUEstering/core/DistanceParameter.hpp" bodystart="18" bodyend="63"/>
+    <listofallmembers>
+      <member refid="classclue_1_1DistanceParameter_1a91af7419a99a4b43c3aeefba22b3a4be" prot="public" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>DistanceParameter</name></member>
+      <member refid="classclue_1_1DistanceParameter_1a56650179751a21c99a2a4173578f224f" prot="public" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>DistanceParameter</name></member>
+      <member refid="classclue_1_1DistanceParameter_1a5012865ab365afca51783f399cb54bdb" prot="public" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>DistanceParameter</name></member>
+      <member refid="classclue_1_1DistanceParameter_1ac39444bc61190818d665e4b81f4cf576" prot="private" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>m_parameters</name></member>
+      <member refid="classclue_1_1DistanceParameter_1a2469e6179da3a6baf34bbe9f5b578f1c" prot="private" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>operator&lt;</name></member>
+      <member refid="classclue_1_1DistanceParameter_1aad58e46587d1f4c2c7d862ac2c6ffea1" prot="private" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>operator&lt;=</name></member>
+      <member refid="classclue_1_1DistanceParameter_1a22cd08788e82badd0d3e6054edce0550" prot="private" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>operator&lt;=</name></member>
+      <member refid="classclue_1_1DistanceParameter_1a9564d7e4619bf7ce34774e96f6f23da7" prot="private" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>operator&gt;</name></member>
+      <member refid="classclue_1_1DistanceParameter_1a5597c5d6ec0354e4b56eec6db9496838" prot="public" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>operator[]</name></member>
+      <member refid="classclue_1_1DistanceParameter_1a15017249a48a4eede37901689101388e" prot="public" virt="non-virtual"><scope>clue::DistanceParameter</scope><name>operator[]</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
