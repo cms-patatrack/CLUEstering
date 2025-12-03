@@ -57,8 +57,12 @@ namespace clue {
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
-    void setup_batch(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points, std::size_t batch_size) {
-      detail::setup_tiles(queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates, batch_size);
+    void setup_batch(Queue& queue,
+                     const PointsHost& h_points,
+                     PointsDevice& dev_points,
+                     std::size_t batch_size) {
+      detail::setup_tiles(
+          queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates, batch_size);
       detail::setup_followers(queue, m_followers, h_points.size());
       clue::copyToDevice(queue, dev_points, h_points);
     }
