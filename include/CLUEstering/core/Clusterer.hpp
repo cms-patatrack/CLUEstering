@@ -39,7 +39,6 @@ namespace clue {
     using TilesDevice = clue::internal::Tiles<Ndim, clue::Device>;
     using FollowersDevice = clue::Followers<clue::Device>;
     using Acc = internal::Acc;
-    inline static constexpr auto reserve = detail::reserve;
 
     DistanceParameter<Ndim> m_dc;
     DistanceParameter<Ndim> m_seed_dc;
