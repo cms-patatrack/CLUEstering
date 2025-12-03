@@ -74,10 +74,11 @@ namespace clue {
 
     ALPAKA_FN_HOST_ACC auto operator[](int i) const {
       if (i == -1)
-        return clue::nostd::make_array<float, Ndim>(std::numeric_limits<float>::max());
+        return clue::nostd::make_array<float, Ndim + 1>(std::numeric_limits<float>::max());
 
-      std::array<float, Ndim> point;
+      std::array<float, Ndim + 1> point;
       meta::apply<Ndim>([&]<std::size_t Dim>() { point[Dim] = coords[Dim][i]; });
+      point[Ndim] = weight[i];
       return point;
     }
   };

@@ -97,8 +97,8 @@ namespace clue::internal {
       return remainder;
     }
 
-    ALPAKA_FN_ACC inline auto distance(const std::array<float, Ndim>& coord_i,
-                                       const std::array<float, Ndim>& coord_j) const {
+    ALPAKA_FN_ACC inline auto distance(const std::array<float, Ndim + 1>& coord_i,
+                                       const std::array<float, Ndim + 1>& coord_j) const {
       std::array<float, Ndim> distance_vector;
       for (auto dim = 0u; dim != Ndim; ++dim) {
         if (wrapping[dim])

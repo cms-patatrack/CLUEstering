@@ -26,7 +26,7 @@ namespace clue::detail {
                                    internal::TilesView<Ndim>& tiles,
                                    PointsView<Ndim>& dev_points,
                                    const KernelType& kernel,
-                                   const std::array<float, Ndim>& coords_i,
+                                   const std::array<float, Ndim + 1>& coords_i,
                                    float& rho_i,
                                    const DistanceParameter<Ndim>& dc,
                                    int32_t point_id) {
@@ -95,7 +95,7 @@ namespace clue::detail {
                                                   const clue::SearchBoxBins<Ndim>& search_box,
                                                   internal::TilesView<Ndim>& tiles,
                                                   PointsView<Ndim>& dev_points,
-                                                  const std::array<float, Ndim>& coords_i,
+                                                  const std::array<float, Ndim + 1>& coords_i,
                                                   float rho_i,
                                                   float& delta_i,
                                                   int& nh_i,
