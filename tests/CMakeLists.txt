@@ -31,23 +31,24 @@ if(NOT alpaka_FOUND)
   FetchContent_MakeAvailable(alpaka)
 endif()
 
-# doctest
-FetchContent_Declare(
-  doctest
-  GIT_REPOSITORY https://github.com/doctest/doctest.git
-  GIT_TAG dev)
-FetchContent_GetProperties(doctest)
-if(NOT doctest_POPULATED)
+find_package(doctest 2.4.12)
+if(NOT doctest_FOUND)
+  FetchContent_Declare(
+    doctest
+    GIT_REPOSITORY https://github.com/doctest/doctest.git
+    GIT_TAG dev)
   FetchContent_MakeAvailable(doctest)
 endif()
 
-# fmt
-FetchContent_Declare(
-  fmt
-  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-  GIT_TAG 10.2.1 # or another stable version
-)
-FetchContent_MakeAvailable(fmt)
+find_package(fmt 10.2.1)
+if(NOT fmt_FOUND)
+  FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG 10.2.1 # or another stable version
+  )
+  FetchContent_MakeAvailable(fmt)
+endif()
 
 option(COVERAGE "Enable code coverage" OFF)
 
