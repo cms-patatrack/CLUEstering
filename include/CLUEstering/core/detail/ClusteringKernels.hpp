@@ -19,8 +19,6 @@
 
 namespace clue::detail {
 
-  constexpr int32_t reserve = 1000000;
-
   template <typename TAcc, std::size_t Ndim, std::size_t N_, concepts::convolutional_kernel KernelType>
   ALPAKA_FN_ACC void for_recursion(const TAcc& acc,
                                    VecArray<int32_t, Ndim>& base_vec,
