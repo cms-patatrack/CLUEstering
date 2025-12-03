@@ -420,7 +420,7 @@ namespace clue {
 
     const auto blocksize = 256;
     const auto blocks_per_event = divide_up_by(max_event_size, blocksize);
-    const auto batch_size = event_offsets.size() - 1;
+    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
     const auto batch_workdiv =
         make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, blocksize});
     alpaka::exec<internal::Acc2D>(queue,

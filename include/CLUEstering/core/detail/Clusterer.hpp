@@ -151,7 +151,6 @@ namespace clue {
     alpaka::wait(queue);
 
     const auto n_points = h_points.size();
-    std::cout << "ntiles = " << m_tiles->view().ntiles << std::endl;
     m_tiles->template fill_batch<Acc>(queue, dev_points, n_points, d_event_offsets, max_event_size);
 
     detail::computeLocalDensityBatched<internal::Acc2D>(queue,

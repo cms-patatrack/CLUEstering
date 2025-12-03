@@ -432,7 +432,7 @@ namespace clue::detail {
                                          std::size_t max_event_size,
                                          std::size_t block_size) {
     const auto blocks_per_event = divide_up_by(max_event_size, block_size);
-    const auto batch_size = event_offsets.size() - 1;
+    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
     const Idx grid_size = clue::divide_up_by(max_event_size, block_size);
     const auto work_division =
         make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
@@ -495,7 +495,7 @@ namespace clue::detail {
     alpaka::memset(queue, d_seed_candidates, 0u);
 
     const auto blocks_per_event = divide_up_by(max_event_size, block_size);
-    const auto batch_size = event_offsets.size() - 1;
+    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
     const Idx grid_size = clue::divide_up_by(max_event_size, block_size);
     const auto work_division =
         make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
