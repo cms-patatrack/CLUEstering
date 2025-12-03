@@ -29,9 +29,10 @@ namespace clue::detail {
                                    const std::array<float, Ndim + 1>& coords_i,
                                    float& rho_i,
                                    const DistanceParameter<Ndim>& dc,
-                                   int32_t point_id) {
+                                   int32_t point_id,
+                                   std::size_t event = 0) {
     if constexpr (N_ == 0) {
-      auto binId = tiles.getGlobalBinByBin(base_vec);
+      auto binId = tiles.getGlobalBinByBin(base_vec, event);
       auto binSize = tiles[binId].size();
 
       for (auto binIter = 0; binIter < binSize; ++binIter) {
@@ -53,14 +54,24 @@ namespace clue::detail {
            i <= search_box[search_box.size() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
-        for_recursion<TAcc, Ndim, N_ - 1>(
-            acc, base_vec, search_box, tiles, dev_points, kernel, coords_i, rho_i, dc, point_id);
+        for_recursion<TAcc, Ndim, N_ - 1>(acc,
+                                          base_vec,
+                                          search_box,
+                                          tiles,
+                                          dev_points,
+                                          kernel,
+                                          coords_i,
+                                          rho_i,
+                                          dc,
+                                          point_id,
+                                          event);
       }
     }
   }
 
   struct KernelCalculateLocalDensity {
     template <typename TAcc, std::size_t Ndim, concepts::convolutional_kernel KernelType>
+      requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim> dev_tiles,
                                   PointsView<Ndim> dev_points,
@@ -89,6 +100,52 @@ namespace clue::detail {
     }
   };
 
+  struct KernelCalculateLocalDensityBatched {
+    template <typename TAcc, std::size_t Ndim, concepts::convolutional_kernel KernelType>
+      requires(alpaka::Dim<TAcc>::value == 2)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  internal::TilesView<Ndim> dev_tiles,
+                                  PointsView<Ndim> dev_points,
+                                  const KernelType& kernel,
+                                  DistanceParameter<Ndim> dc,
+                                  const auto* event_offsets,
+                                  std::size_t max_event_size,
+                                  std::size_t blocks_per_event) const {
+      // todo: add bound checking
+      for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
+        for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
+          const auto global_idx = event_offsets[event] + local_idx;
+          float rho_i = 0.f;
+          auto coords_i = dev_points[global_idx];
+
+          clue::SearchBoxExtremes<Ndim> searchbox_extremes;
+          for (auto dim = 0u; dim != Ndim; ++dim) {
+            searchbox_extremes[dim] =
+                clue::nostd::make_array(coords_i[dim] - dc[dim], coords_i[dim] + dc[dim]);
+          }
+
+          clue::SearchBoxBins<Ndim> searchbox_bins;
+          dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
+
+          VecArray<int32_t, Ndim> base_vec;
+          for_recursion<TAcc, Ndim, Ndim>(acc,
+                                          base_vec,
+                                          searchbox_bins,
+                                          dev_tiles,
+                                          dev_points,
+                                          kernel,
+                                          coords_i,
+                                          rho_i,
+                                          dc,
+                                          global_idx,
+                                          event);
+
+          dev_points.rho[global_idx] = rho_i;
+        }
+      }
+    }
+  };
+
   template <typename TAcc, std::size_t Ndim, std::size_t N_>
   ALPAKA_FN_ACC void for_recursion_nearest_higher(const TAcc& acc,
                                                   VecArray<int32_t, Ndim>& base_vec,
@@ -100,9 +157,10 @@ namespace clue::detail {
                                                   float& delta_i,
                                                   int& nh_i,
                                                   const DistanceParameter<Ndim>& dm,
-                                                  int32_t point_id) {
+                                                  int32_t point_id,
+                                                  std::size_t event = 0) {
     if constexpr (N_ == 0) {
-      int binId = tiles.getGlobalBinByBin(base_vec);
+      int binId = tiles.getGlobalBinByBin(base_vec, event);
       int binSize = tiles[binId].size();
 
       for (auto binIter = 0; binIter < binSize; ++binIter) {
@@ -142,13 +200,15 @@ namespace clue::detail {
                                                          delta_i,
                                                          nh_i,
                                                          dm,
-                                                         point_id);
+                                                         point_id,
+                                                         event);
       }
     }
   }
 
   struct KernelCalculateNearestHigher {
     template <typename TAcc, std::size_t Ndim>
+      requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim> dev_tiles,
                                   PointsView<Ndim> dev_points,
@@ -186,6 +246,59 @@ namespace clue::detail {
         dev_points.nearest_higher[i] = nh_i;
         if (nh_i == -1) {
           alpaka::atomicAdd(acc, seed_candidates, 1ul);
+        }
+      }
+    }
+  };
+
+  struct KernelCalculateNearestHigherBatched {
+    template <typename TAcc, std::size_t Ndim>
+      requires(alpaka::Dim<TAcc>::value == 2)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  internal::TilesView<Ndim> dev_tiles,
+                                  PointsView<Ndim> dev_points,
+                                  DistanceParameter<Ndim> dm,
+                                  std::size_t* seed_candidates,
+                                  const auto* event_offsets,
+                                  std::size_t max_event_size,
+                                  std::size_t blocks_per_event) const {
+      // todo: add bound checking
+      for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
+        for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
+          const auto global_idx = event_offsets[event] + local_idx;
+
+          float delta_i = std::numeric_limits<float>::max();
+          int nh_i = -1;
+          auto coords_i = dev_points[global_idx];
+          float rho_i = dev_points.rho[global_idx];
+
+          clue::SearchBoxExtremes<Ndim> searchbox_extremes;
+          for (auto dim = 0u; dim != Ndim; ++dim) {
+            searchbox_extremes[dim] =
+                clue::nostd::make_array(coords_i[dim] - dm[dim], coords_i[dim] + dm[dim]);
+          }
+
+          clue::SearchBoxBins<Ndim> searchbox_bins;
+          dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
+
+          VecArray<int32_t, Ndim> base_vec{};
+          for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
+                                                         base_vec,
+                                                         searchbox_bins,
+                                                         dev_tiles,
+                                                         dev_points,
+                                                         coords_i,
+                                                         rho_i,
+                                                         delta_i,
+                                                         nh_i,
+                                                         dm,
+                                                         global_idx,
+                                                         event);
+
+          dev_points.nearest_higher[global_idx] = nh_i;
+          if (nh_i == -1) {
+            alpaka::atomicAdd(acc, seed_candidates, 1ul);
+          }
         }
       }
     }
@@ -275,7 +388,35 @@ namespace clue::detail {
                        size);
   }
 
+  template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim, typename KernelType>
+    requires(alpaka::Dim<TAcc>::value == 2)
+  inline void computeLocalDensityBatched(TQueue& queue,
+                                         internal::TilesView<Ndim>& tiles,
+                                         PointsView<Ndim>& dev_points,
+                                         KernelType&& kernel,
+                                         const DistanceParameter<Ndim>& dc,
+                                         const auto& event_offsets,
+                                         std::size_t max_event_size,
+                                         std::size_t block_size) {
+    const auto blocks_per_event = divide_up_by(max_event_size, block_size);
+    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
+    const Idx grid_size = clue::divide_up_by(max_event_size, block_size);
+    const auto work_division =
+        make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
+    alpaka::exec<TAcc>(queue,
+                       work_division,
+                       KernelCalculateLocalDensityBatched{},
+                       tiles,
+                       dev_points,
+                       std::forward<KernelType>(kernel),
+                       dc,
+                       event_offsets.data(),
+                       max_event_size,
+                       blocks_per_event);
+  }
+
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
+    requires(alpaka::Dim<TAcc>::value == 1)
   inline void computeNearestHighers(TQueue& queue,
                                     const WorkDiv& work_division,
                                     internal::TilesView<Ndim>& tiles,
@@ -293,6 +434,38 @@ namespace clue::detail {
                        dm,
                        d_seed_candidates.data(),
                        size);
+    alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
+    alpaka::wait(queue);
+  }
+
+  template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
+    requires(alpaka::Dim<TAcc>::value == 2)
+  inline void computeNearestHighersBatched(TQueue& queue,
+                                           internal::TilesView<Ndim>& tiles,
+                                           PointsView<Ndim>& dev_points,
+                                           const DistanceParameter<Ndim>& dm,
+                                           std::size_t& seed_candidates,
+                                           const auto& event_offsets,
+                                           std::size_t max_event_size,
+                                           std::size_t block_size) {
+    auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
+    alpaka::memset(queue, d_seed_candidates, 0u);
+
+    const auto blocks_per_event = divide_up_by(max_event_size, block_size);
+    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
+    const Idx grid_size = clue::divide_up_by(max_event_size, block_size);
+    const auto work_division =
+        make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
+    alpaka::exec<TAcc>(queue,
+                       work_division,
+                       KernelCalculateNearestHigherBatched{},
+                       tiles,
+                       dev_points,
+                       dm,
+                       d_seed_candidates.data(),
+                       event_offsets.data(),
+                       max_event_size,
+                       blocks_per_event);
     alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
     alpaka::wait(queue);
   }

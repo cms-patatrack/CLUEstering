@@ -57,6 +57,16 @@ namespace clue {
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
+    void setup_batch(Queue& queue,
+                     const PointsHost& h_points,
+                     PointsDevice& dev_points,
+                     std::size_t batch_size) {
+      detail::setup_tiles(
+          queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates, batch_size);
+      detail::setup_followers(queue, m_followers, h_points.size());
+      clue::copyToDevice(queue, dev_points, h_points);
+    }
+
     template <concepts::convolutional_kernel Kernel>
     void make_clusters_impl(PointsHost& h_points,
                             PointsDevice& dev_points,
@@ -159,6 +169,14 @@ namespace clue {
     template <concepts::convolutional_kernel Kernel = FlatKernel>
     void make_clusters(Queue& queue,
                        PointsDevice& dev_points,
+                       const Kernel& kernel = FlatKernel{.5f},
+                       std::size_t block_size = 256);
+
+    template <concepts::convolutional_kernel Kernel = FlatKernel>
+    void make_clusters(Queue& queue,
+                       PointsHost& h_points,
+                       PointsDevice& dev_points,
+                       std::span<const std::size_t> batch_item_sizes,
                        const Kernel& kernel = FlatKernel{.5f},
                        std::size_t block_size = 256);
 

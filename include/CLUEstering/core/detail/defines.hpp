@@ -14,6 +14,7 @@ namespace clue {
 
     using namespace alpaka_common;
     using Acc = ALPAKA_BACKEND::Acc1D;
+    using Acc2D = ALPAKA_BACKEND::Acc2D;
 
   }  // namespace internal
 
