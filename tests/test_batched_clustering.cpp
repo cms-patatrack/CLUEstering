@@ -17,8 +17,8 @@ TEST_CASE("Test batched clustering with fixed batch size") {
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
   const std::size_t batch_size = 1024;
 
-  std::vector<std::size_t> event_sizes(10, batch_size);
-  algo.make_clusters(queue, h_points, d_points, event_sizes, clue::FlatKernel{.5f});
+  std::vector<uint32_t> event_sizes(10, batch_size);
+  algo.make_clusters(queue, h_points, d_points, event_sizes);
   alpaka::wait(queue);
 
   auto truth = clue::read_output<2>(queue, "../../../data/truth_files/data_1024_truth.csv");

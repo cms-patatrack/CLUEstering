@@ -13,6 +13,7 @@
 #include "CLUEstering/internal/math/math.hpp"
 
 #include <array>
+#include <cstddef>
 #include <alpaka/core/Common.hpp>
 #include <cstdint>
 
@@ -127,8 +128,8 @@ namespace clue::detail {
                                   DistanceMetric metric,
                                   const auto* event_offsets,
                                   std::size_t max_event_size,
-                                  std::size_t blocks_per_event) const {
-      // todo: add bound checking
+                                  std::size_t /* blocks_per_event */) const {
+      // TODO: add bound checking
       for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
         for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
           const auto global_idx = event_offsets[event] + local_idx;
@@ -185,7 +186,7 @@ namespace clue::detail {
       int binId = tiles.getGlobalBinByBin(base_vec, event);
       int binSize = tiles[binId].size();
 
-      for (auto binIter = 0u; binIter < binSize; ++binIter) {
+      for (auto binIter = 0; binIter < binSize; ++binIter) {
         const auto j = tiles[binId][binIter];
         float rho_j = dev_points.rho[j];
         bool found_higher = (rho_j > rho_i);
@@ -282,8 +283,8 @@ namespace clue::detail {
                                   std::size_t* seed_candidates,
                                   const auto* event_offsets,
                                   std::size_t max_event_size,
-                                  std::size_t blocks_per_event) const {
-      // todo: add bound checking
+                                  std::size_t /* blocks_per_event */) const {
+      // TODO: add bound checking
       for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
         for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
           const auto global_idx = event_offsets[event] + local_idx;
@@ -433,7 +434,6 @@ namespace clue::detail {
                                          std::size_t block_size) {
     const auto blocks_per_event = divide_up_by(max_event_size, block_size);
     const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
-    const Idx grid_size = clue::divide_up_by(max_event_size, block_size);
     const auto work_division =
         make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
     alpaka::exec<TAcc>(queue,
@@ -496,7 +496,6 @@ namespace clue::detail {
 
     const auto blocks_per_event = divide_up_by(max_event_size, block_size);
     const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
-    const Idx grid_size = clue::divide_up_by(max_event_size, block_size);
     const auto work_division =
         make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
     alpaka::exec<TAcc>(queue,

@@ -24,6 +24,7 @@
 #include <numeric>
 #include <optional>
 #include <ranges>
+#include <span>
 #include <stdexcept>
 
 namespace clue {
@@ -130,18 +131,19 @@ namespace clue {
   }
 
   template <std::size_t Ndim>
-  template <concepts::convolutional_kernel Kernel>
+  template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
   inline void Clusterer<Ndim>::make_clusters(Queue& queue,
                                              PointsHost& h_points,
                                              PointsDevice& dev_points,
-                                             std::span<const std::size_t> batch_item_sizes,
+                                             std::span<const uint32_t> batch_item_sizes,
+                                             const DistanceMetric& metric,
                                              const Kernel& kernel,
                                              std::size_t block_size) {
     const auto batch_size = batch_item_sizes.size();
     setup_batch(queue, h_points, dev_points, batch_size);
 
     const auto max_event_size = std::reduce(
-        batch_item_sizes.begin(), batch_item_sizes.end(), 0ul, nostd::maximum<std::size_t>{});
+        batch_item_sizes.begin(), batch_item_sizes.end(), 0u, nostd::maximum<uint32_t>{});
 
     auto event_offsets = clue::make_host_buffer<std::size_t[]>(batch_size + 1);
     event_offsets[0] = 0;
@@ -158,6 +160,7 @@ namespace clue {
                                                         dev_points.view(),
                                                         kernel,
                                                         m_dc,
+                                                        metric,
                                                         d_event_offsets,
                                                         max_event_size,
                                                         block_size);
@@ -166,6 +169,7 @@ namespace clue {
                                                           m_tiles->view(),
                                                           dev_points.view(),
                                                           m_dm,
+                                                          metric,
                                                           seed_candidates,
                                                           d_event_offsets,
                                                           max_event_size,
@@ -177,9 +181,9 @@ namespace clue {
     detail::findClusterSeeds<Acc>(queue,
                                   work_division,
                                   m_seeds.value(),
-                                  m_tiles->view(),
                                   dev_points.view(),
                                   m_seed_dc,
+                                  metric,
                                   m_rhoc,
                                   n_points);
 
@@ -190,6 +194,70 @@ namespace clue {
 
     clue::copyToHost(queue, h_points, dev_points);
     h_points.mark_clustered();
+    dev_points.mark_clustered();
+  }
+
+  template <std::size_t Ndim>
+  template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
+  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
+                                             PointsDevice& dev_points,
+                                             std::span<const uint32_t> batch_item_sizes,
+                                             const DistanceMetric& metric,
+                                             const Kernel& kernel,
+                                             std::size_t block_size) {
+    const auto batch_size = batch_item_sizes.size();
+    setup_batch(queue, dev_points, batch_size);
+
+    const auto max_event_size = std::reduce(
+        batch_item_sizes.begin(), batch_item_sizes.end(), 0u, nostd::maximum<uint32_t>{});
+
+    auto event_offsets = clue::make_host_buffer<std::size_t[]>(batch_size + 1);
+    event_offsets[0] = 0;
+    std::inclusive_scan(batch_item_sizes.begin(), batch_item_sizes.end(), event_offsets.data() + 1);
+    auto d_event_offsets = clue::make_device_buffer<std::size_t[]>(queue, batch_size + 1);
+    alpaka::memcpy(queue, d_event_offsets, event_offsets);
+    alpaka::wait(queue);
+
+    const auto n_points = dev_points.size();
+    m_tiles->template fill_batch<Acc>(queue, dev_points, n_points, d_event_offsets, max_event_size);
+
+    detail::computeLocalDensityBatched<internal::Acc2D>(queue,
+                                                        m_tiles->view(),
+                                                        dev_points.view(),
+                                                        kernel,
+                                                        m_dc,
+                                                        metric,
+                                                        d_event_offsets,
+                                                        max_event_size,
+                                                        block_size);
+    auto seed_candidates = 0ul;
+    detail::computeNearestHighersBatched<internal::Acc2D>(queue,
+                                                          m_tiles->view(),
+                                                          dev_points.view(),
+                                                          m_dm,
+                                                          metric,
+                                                          seed_candidates,
+                                                          d_event_offsets,
+                                                          max_event_size,
+                                                          block_size);
+    detail::setup_seeds(queue, m_seeds, seed_candidates);
+
+    const Idx grid_size = clue::divide_up_by(n_points, block_size);
+    auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
+    detail::findClusterSeeds<Acc>(queue,
+                                  work_division,
+                                  m_seeds.value(),
+                                  dev_points.view(),
+                                  m_seed_dc,
+                                  metric,
+                                  m_rhoc,
+                                  n_points);
+
+    m_followers->template fill<Acc>(queue, dev_points);
+
+    detail::assignPointsToClusters<Acc>(
+        queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
+
     dev_points.mark_clustered();
   }
 
