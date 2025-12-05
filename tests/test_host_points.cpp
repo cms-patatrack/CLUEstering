@@ -465,7 +465,7 @@ TEST_CASE("Test cluster properties accessors") {
 
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
-  algo.make_clusters(queue, h_points, clue::FlatKernel{.5f});
+  algo.make_clusters(queue, h_points);
 
   SUBCASE("Test get number of clusters") {
     const auto n_clusters = h_points.n_clusters();
