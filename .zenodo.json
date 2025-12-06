@@ -32,10 +32,22 @@
 	  "affiliation": "INFN-CNAF",
 	  "orcid": "0000-0002-3129-2814"
 	},
+  ],
+  "contributors": [
  	{
 	  "name": "Holzer, Markus",
 	  "affiliation": "CERN",
 	  "orcid": "0000-0001-5499-5857"
+	},
+	{
+	  "name": "Pancaldi, Francesco Orso",
+	  "affiliation": "University of Bologna",
+	  "orcid": "0009-0008-5382-2653"
+	},
+	{
+	  "name": "Helsens, Clement",
+	  "affiliation": "EPFL",
+	  "orcid": "0000-0002-9243-7554"
 	},
   ],
   "access_right": "open",
@@ -43,7 +55,7 @@
     "C++20",
     "Clustering",
     "HPC",
-    "Alpaka",
+    "alpaka",
     "GPU",
     "heterogeneous computing",
     "performance portability"
