@@ -12,6 +12,8 @@ TEST_CASE("Test validation scores on toy detector dataset") {
 
   SUBCASE("Test computation of silhouette score on all points singularly") {
     for (auto i = 0; i < points.size(); ++i) {
+      if (points[i].cluster_index() < 0)  // Skip noise points
+        continue;
       const auto silhouette = clue::silhouette(points, i);
       CHECK(silhouette >= -1.f);
       CHECK(silhouette <= 1.f);
