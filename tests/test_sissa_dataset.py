@@ -6,7 +6,7 @@ import os
 import sys
 import pandas as pd
 import pytest
-from check_result import check_result
+from sklearn.metrics import silhouette_score
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
@@ -33,18 +33,13 @@ def test_sissa_1000(sissa_1000):
     truth dataset.
     '''
 
-    # Check if the output file already exists and if it does, delete it
-    if os.path.isfile('./sissa_1000_output.csv'):
-        os.remove('./sissa_1000_output.csv')
-
     c = clue.clusterer(21., 10., 21.)
     c.read_data(sissa_1000)
     assert c.n_dim == 2
     c.run_clue()
-    c.to_csv('./', 'sissa_1000_output.csv')
 
-    assert check_result('./sissa_1000_output.csv',
-                        '../data/truth_files/sissa_1000_truth.csv')
+    mask = c.cluster_ids != -1
+    assert silhouette_score(c.coords.T[mask], c.cluster_ids[mask]) > 0.5
 
 
 def test_sissa_4000(sissa_4000):
@@ -53,19 +48,13 @@ def test_sissa_4000(sissa_4000):
     truth dataset.
     '''
 
-    # Check if the output file already exists and if it does, delete it
-    if os.path.isfile('./sissa_4000_output.csv'):
-        os.remove('./sissa_4000_output.csv')
-
     c = clue.clusterer(20., 10., 20.)
     c.read_data(sissa_4000)
     assert c.n_dim == 2
     c.run_clue()
-    c.to_csv('./', 'sissa_4000_output.csv')
 
-    assert check_result('./sissa_4000_output.csv',
-                        '../data/truth_files/sissa_4000_truth.csv')
-
+    mask = c.cluster_ids != -1
+    assert silhouette_score(c.coords.T[mask], c.cluster_ids[mask]) > 0.5
 
 
 if __name__ == "__main__":

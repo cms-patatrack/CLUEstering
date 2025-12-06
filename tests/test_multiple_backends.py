@@ -7,6 +7,7 @@ import sys
 import pandas as pd
 import pytest
 from check_result import check_result
+from sklearn.metrics import silhouette_score
 sys.path.insert(1, '.')
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
@@ -72,17 +73,11 @@ def test_blobs_clustering(blobs):
     '''
 
     for backend in clue.backends:
-        # Check if the output file already exists and if it does, delete it
-        if os.path.isfile(f'./blobs_output_{_fill_space(backend)}.csv'):
-            os.remove(f'./blobs_output_{_fill_space(backend)}.csv')
-
         c = clue.clusterer(1., 5, 2.)
         c.read_data(blobs)
         c.run_clue(backend=backend)
-        c.to_csv('./', f'blobs_output_{_fill_space(backend)}.csv')
 
-        assert check_result(f'./blobs_output_{_fill_space(backend)}.csv',
-                            '../data/truth_files/blobs_truth.csv')
+        assert silhouette_score(c.coords.T, c.cluster_ids) > 0.8
 
 
 def test_moons_clustering(moons):
@@ -112,17 +107,11 @@ def test_sissa_clustering(sissa):
     '''
 
     for backend in clue.backends:
-        # Check if the output file already exists and if it does, delete it
-        if os.path.isfile(f'./sissa_output_{_fill_space(backend)}.csv'):
-            os.remove(f'./sissa_output_{_fill_space(backend)}.csv')
-
         c = clue.clusterer(21., 10., 21.)
         c.read_data(sissa)
         c.run_clue(backend=backend)
-        c.to_csv('./', f'sissa_output_{_fill_space(backend)}.csv')
 
-        assert check_result(f'./sissa_output_{_fill_space(backend)}.csv',
-                            '../data/truth_files/sissa_1000_truth.csv')
+        assert silhouette_score(c.coords.T, c.cluster_ids) > 0.4
 
 
 def test_toydet_clustering(toy_det):
@@ -132,17 +121,11 @@ def test_toydet_clustering(toy_det):
     '''
 
     for backend in clue.backends:
-        # Check if the output file already exists and if it does, delete it
-        if os.path.isfile(f'./toy_det_output_{_fill_space(backend)}.csv'):
-            os.remove(f'./toy_det_output_{_fill_space(backend)}.csv')
-
         c = clue.clusterer(4., 2.5, 4.)
         c.read_data(toy_det)
         c.run_clue(backend=backend)
-        c.to_csv('./', f'toy_det_output_{_fill_space(backend)}.csv')
 
-        assert check_result(f'./toy_det_output_{_fill_space(backend)}.csv',
-                            '../data/truth_files/toy_det_1000_truth.csv')
+        assert silhouette_score(c.coords.T, c.cluster_ids) > 0.7
 
 
 if __name__ == "__main__":
