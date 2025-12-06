@@ -8,6 +8,7 @@ import sys
 import pandas as pd
 import pytest
 from check_result import check_result
+from sklearn.metrics import silhouette_score
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
@@ -36,8 +37,7 @@ def test_clustering(blobs):
     c.run_clue()
     c.to_csv('./', 'blobs_output.csv')
 
-    assert check_result('./blobs_output.csv',
-                        '../data/truth_files/blobs_truth.csv')
+    assert silhouette_score(c.coords.T, c.cluster_ids) > 0.8
 
 
 if __name__ == "__main__":

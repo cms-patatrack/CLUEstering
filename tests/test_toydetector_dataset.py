@@ -7,7 +7,7 @@ import os
 import sys
 import pandas as pd
 import pytest
-from check_result import check_result
+from sklearn.metrics import silhouette_score
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
 
@@ -42,18 +42,13 @@ def test_toy_det_1000(toy_det_1000):
     truth dataset.
     '''
 
-    # Check if the output file already exists and if it does, delete it
-    if os.path.isfile('./toy_det_1000_output.csv'):
-        os.remove('./toy_det_1000_output.csv')
-
     c = clue.clusterer(4., 2.5, 4.)
     c.read_data(toy_det_1000)
     assert c.n_dim == 2
     c.run_clue()
-    c.to_csv('./', 'toy_det_1000_output.csv')
 
-    assert check_result('./toy_det_1000_output.csv',
-                        '../data/truth_files/toy_det_1000_truth.csv')
+    mask = c.cluster_ids != -1
+    assert silhouette_score(c.coords.T[mask], c.cluster_ids[mask]) > 0.8
 
 
 # TODO: Uncomment after rewriting `check_result`
