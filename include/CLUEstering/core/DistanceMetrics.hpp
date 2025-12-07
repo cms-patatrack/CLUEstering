@@ -5,13 +5,23 @@
 #pragma once
 
 #include "CLUEstering/internal/meta/accumulate.hpp"
-#include "CLUEstering/core/internal/MetricInterface.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 #include <alpaka/alpaka.hpp>
 #include <array>
 #include <cstddef>
 
 namespace clue {
+
+  namespace concepts {
+
+    template <typename TMetric, std::size_t Ndim>
+    concept distance_metric = requires(TMetric&& metric) {
+      {
+        metric(std::array<float, Ndim + 1>{}, std::array<float, Ndim + 1>{})
+      } -> std::same_as<float>;
+    };
+
+  }  // namespace concepts
 
   template <std::size_t Ndim>
   using Point = std::array<float, Ndim + 1>;
@@ -21,19 +31,16 @@ namespace clue {
   ///
   /// @tparam Ndim Number of dimensions
   template <std::size_t Ndim>
-  class EuclidianMetric : public internal::MetricInterface<EuclidianMetric<Ndim>, Ndim> {
+  class EuclidianMetric {
   public:
     ALPAKA_FN_HOST_ACC constexpr EuclidianMetric() = default;
 
-  private:
-    ALPAKA_FN_HOST_ACC constexpr auto distance(const Point<Ndim>& lhs,
-                                               const Point<Ndim>& rhs) const {
+    ALPAKA_FN_HOST_ACC constexpr auto operator()(const Point<Ndim>& lhs,
+                                                 const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>(
           [&]<std::size_t Dim>() { return (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]); });
       return math::sqrt(distance2);
     }
-
-    friend class internal::MetricInterface<EuclidianMetric<Ndim>, Ndim>;
   };
 
   /// @brief Weighted Euclidian distance metric
@@ -41,8 +48,7 @@ namespace clue {
   ///
   /// @tparam Ndim Number of dimensions
   template <std::size_t Ndim>
-  class WeightedEuclidianMetric
-      : public internal::MetricInterface<WeightedEuclidianMetric<Ndim>, Ndim> {
+  class WeightedEuclidianMetric {
   private:
     std::array<float, Ndim> m_weights;
 
@@ -52,16 +58,13 @@ namespace clue {
     ALPAKA_FN_HOST_ACC constexpr WeightedEuclidianMetric(std::array<float, Ndim>&& weights)
         : m_weights{std::move(weights)} {}
 
-  private:
-    ALPAKA_FN_HOST_ACC constexpr auto distance(const Point<Ndim>& lhs,
-                                               const Point<Ndim>& rhs) const {
+    ALPAKA_FN_HOST_ACC constexpr auto operator()(const Point<Ndim>& lhs,
+                                                 const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
         return m_weights[Dim] * (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]);
       });
       return math::sqrt(distance2);
     }
-
-    friend class internal::MetricInterface<WeightedEuclidianMetric<Ndim>, Ndim>;
   };
 
   /// @brief Manhattan distance metric
@@ -69,18 +72,15 @@ namespace clue {
   ///
   /// @tparam Ndim Number of dimensions
   template <std::size_t Ndim>
-  class ManhattanMetric : public internal::MetricInterface<ManhattanMetric<Ndim>, Ndim> {
+  class ManhattanMetric {
   public:
     ALPAKA_FN_HOST_ACC constexpr ManhattanMetric() = default;
 
-  private:
-    ALPAKA_FN_HOST_ACC constexpr auto distance(const Point<Ndim>& lhs,
-                                               const Point<Ndim>& rhs) const {
+    ALPAKA_FN_HOST_ACC constexpr auto operator()(const Point<Ndim>& lhs,
+                                                 const Point<Ndim>& rhs) const {
       return meta::accumulate<Ndim>(
           [&]<std::size_t Dim>() { return math::fabs(lhs[Dim] - rhs[Dim]); });
     }
-
-    friend class internal::MetricInterface<ManhattanMetric<Ndim>, Ndim>;
   };
 
   namespace metrics {

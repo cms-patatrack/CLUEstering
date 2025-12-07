@@ -80,7 +80,7 @@ namespace clue {
   }
 
   template <std::size_t Ndim>
-  template <concepts::convolutional_kernel Kernel, typename DistanceMetric>
+  template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
   inline void Clusterer<Ndim>::make_clusters(Queue& queue,
                                              PointsHost& h_points,
                                              const DistanceMetric& metric,
@@ -93,7 +93,7 @@ namespace clue {
     alpaka::wait(queue);
   }
   template <std::size_t Ndim>
-  template <concepts::convolutional_kernel Kernel, typename DistanceMetric>
+  template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
   inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
                                              const DistanceMetric& metric,
                                              const Kernel& kernel,
@@ -107,7 +107,7 @@ namespace clue {
     alpaka::wait(queue);
   }
   template <std::size_t Ndim>
-  template <concepts::convolutional_kernel Kernel, typename DistanceMetric>
+  template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
   inline void Clusterer<Ndim>::make_clusters(Queue& queue,
                                              PointsHost& h_points,
                                              PointsDevice& dev_points,
@@ -119,7 +119,7 @@ namespace clue {
     alpaka::wait(queue);
   }
   template <std::size_t Ndim>
-  template <concepts::convolutional_kernel Kernel, typename DistanceMetric>
+  template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
   inline void Clusterer<Ndim>::make_clusters(Queue& queue,
                                              PointsDevice& dev_points,
                                              const DistanceMetric& metric,
@@ -155,7 +155,7 @@ namespace clue {
   }
 
   template <std::size_t Ndim>
-  template <concepts::convolutional_kernel Kernel, typename DistanceMetric>
+  template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
   void Clusterer<Ndim>::make_clusters_impl(PointsHost& h_points,
                                            PointsDevice& dev_points,
                                            const DistanceMetric& metric,
@@ -200,7 +200,7 @@ namespace clue {
   }
 
   template <std::size_t Ndim>
-  template <concepts::convolutional_kernel Kernel, typename DistanceMetric>
+  template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
   void Clusterer<Ndim>::make_clusters_impl(PointsDevice& dev_points,
                                            const DistanceMetric& metric,
                                            const Kernel& kernel,
