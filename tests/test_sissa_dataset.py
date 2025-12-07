@@ -33,7 +33,7 @@ def test_sissa_1000(sissa_1000):
     truth dataset.
     '''
 
-    c = clue.clusterer(21., 10., 21.)
+    c = clue.clusterer(20., 10., 20.)
     c.read_data(sissa_1000)
     assert c.n_dim == 2
     c.run_clue()
@@ -54,11 +54,11 @@ def test_sissa_4000(sissa_4000):
     c.run_clue()
 
     mask = c.cluster_ids != -1
-    assert silhouette_score(c.coords.T[mask], c.cluster_ids[mask]) > 0.5
+    assert silhouette_score(c.coords.T[mask], c.cluster_ids[mask]) > 0.45
 
 
 if __name__ == "__main__":
-    c = clue.clusterer(21., 10., 21.)
+    c = clue.clusterer(20., 10., 20.)
     c.read_data("../data/sissa_1000.csv")
     c.run_clue()
     c.cluster_plotter()

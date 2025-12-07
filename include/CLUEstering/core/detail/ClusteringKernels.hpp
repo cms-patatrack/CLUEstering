@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
-#include "CLUEstering/core/DistanceParameter.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
@@ -19,7 +18,11 @@
 
 namespace clue::detail {
 
-  template <typename TAcc, std::size_t Ndim, std::size_t N_, concepts::convolutional_kernel KernelType>
+  template <typename TAcc,
+            std::size_t Ndim,
+            std::size_t N_,
+            concepts::convolutional_kernel KernelType,
+            typename DistanceMetric>
   ALPAKA_FN_ACC void for_recursion(const TAcc& acc,
                                    VecArray<int32_t, Ndim>& base_vec,
                                    const clue::SearchBoxBins<Ndim>& search_box,
@@ -28,7 +31,8 @@ namespace clue::detail {
                                    const KernelType& kernel,
                                    const std::array<float, Ndim + 1>& coords_i,
                                    float& rho_i,
-                                   const DistanceParameter<Ndim>& dc,
+                                   float dc,
+                                   const DistanceMetric& metric,
                                    int32_t point_id) {
     if constexpr (N_ == 0) {
       auto binId = tiles.getGlobalBinByBin(base_vec);
@@ -38,14 +42,10 @@ namespace clue::detail {
         int32_t j = tiles[binId][binIter];
 
         auto coords_j = dev_points[j];
-        auto distance_vector = tiles.distance(coords_i, coords_j);
-        auto distance = 0.f;
-        for (auto dim = 0u; dim < Ndim; ++dim) {
-          distance += distance_vector[dim] * distance_vector[dim];
-        }
+        auto distance = metric(coords_i, coords_j);
 
-        auto k = kernel(acc, math::sqrt(distance), point_id, j);
-        rho_i += static_cast<int>(distance_vector <= dc) * k * dev_points.weight[j];
+        auto k = kernel(acc, distance, point_id, j);
+        rho_i += static_cast<int>(distance <= dc) * k * dev_points.weight[j];
       }
       return;
     } else {
@@ -53,19 +53,32 @@ namespace clue::detail {
            i <= search_box[search_box.size() - N_][1];
            ++i) {
         base_vec[base_vec.capacity() - N_] = i;
-        for_recursion<TAcc, Ndim, N_ - 1>(
-            acc, base_vec, search_box, tiles, dev_points, kernel, coords_i, rho_i, dc, point_id);
+        for_recursion<TAcc, Ndim, N_ - 1>(acc,
+                                          base_vec,
+                                          search_box,
+                                          tiles,
+                                          dev_points,
+                                          kernel,
+                                          coords_i,
+                                          rho_i,
+                                          dc,
+                                          metric,
+                                          point_id);
       }
     }
   }
 
   struct KernelCalculateLocalDensity {
-    template <typename TAcc, std::size_t Ndim, concepts::convolutional_kernel KernelType>
+    template <typename TAcc,
+              std::size_t Ndim,
+              concepts::convolutional_kernel KernelType,
+              typename DistanceMetric>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim> dev_tiles,
                                   PointsView<Ndim> dev_points,
                                   const KernelType& kernel,
-                                  DistanceParameter<Ndim> dc,
+                                  float dc,
+                                  DistanceMetric metric,
                                   int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         float rho_i = 0.f;
@@ -73,23 +86,31 @@ namespace clue::detail {
 
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] =
-              clue::nostd::make_array(coords_i[dim] - dc[dim], coords_i[dim] + dc[dim]);
+          searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - dc, coords_i[dim] + dc);
         }
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
         dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
 
         VecArray<int32_t, Ndim> base_vec;
-        for_recursion<TAcc, Ndim, Ndim>(
-            acc, base_vec, searchbox_bins, dev_tiles, dev_points, kernel, coords_i, rho_i, dc, i);
+        for_recursion<TAcc, Ndim, Ndim>(acc,
+                                        base_vec,
+                                        searchbox_bins,
+                                        dev_tiles,
+                                        dev_points,
+                                        kernel,
+                                        coords_i,
+                                        rho_i,
+                                        dc,
+                                        metric,
+                                        i);
 
         dev_points.rho[i] = rho_i;
       }
     }
   };
 
-  template <typename TAcc, std::size_t Ndim, std::size_t N_>
+  template <typename TAcc, std::size_t Ndim, std::size_t N_, typename DistanceMetric>
   ALPAKA_FN_ACC void for_recursion_nearest_higher(const TAcc& acc,
                                                   VecArray<int32_t, Ndim>& base_vec,
                                                   const clue::SearchBoxBins<Ndim>& search_box,
@@ -99,7 +120,8 @@ namespace clue::detail {
                                                   float rho_i,
                                                   float& delta_i,
                                                   int& nh_i,
-                                                  const DistanceParameter<Ndim>& dm,
+                                                  float dm,
+                                                  const DistanceMetric& metric,
                                                   int32_t point_id) {
     if constexpr (N_ == 0) {
       int binId = tiles.getGlobalBinByBin(base_vec);
@@ -112,13 +134,9 @@ namespace clue::detail {
         found_higher = found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
 
         auto coords_j = dev_points[j];
-        auto distance_vector = tiles.distance(coords_i, coords_j);
-        auto distance = 0.f;
-        for (auto dim = 0u; dim < Ndim; ++dim) {
-          distance += distance_vector[dim] * distance_vector[dim];
-        }
+        auto distance = metric(coords_i, coords_j);
 
-        if (found_higher && distance_vector <= dm) {
+        if (found_higher && distance <= dm) {
           if (distance < delta_i) {
             delta_i = distance;
             nh_i = j;
@@ -142,17 +160,19 @@ namespace clue::detail {
                                                          delta_i,
                                                          nh_i,
                                                          dm,
+                                                         metric,
                                                          point_id);
       }
     }
   }
 
   struct KernelCalculateNearestHigher {
-    template <typename TAcc, std::size_t Ndim>
+    template <typename TAcc, std::size_t Ndim, typename DistanceMetric>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim> dev_tiles,
                                   PointsView<Ndim> dev_points,
-                                  DistanceParameter<Ndim> dm,
+                                  float dm,
+                                  DistanceMetric metric,
                                   std::size_t* seed_candidates,
                                   int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
@@ -163,8 +183,7 @@ namespace clue::detail {
 
         clue::SearchBoxExtremes<Ndim> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] =
-              clue::nostd::make_array(coords_i[dim] - dm[dim], coords_i[dim] + dm[dim]);
+          searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - dm, coords_i[dim] + dm);
         }
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
@@ -181,6 +200,7 @@ namespace clue::detail {
                                                        delta_i,
                                                        nh_i,
                                                        dm,
+                                                       metric,
                                                        i);
 
         dev_points.nearest_higher[i] = nh_i;
@@ -192,12 +212,12 @@ namespace clue::detail {
   };
 
   struct KernelFindClusters {
-    template <typename TAcc, std::size_t Ndim>
+    template <typename TAcc, std::size_t Ndim, typename DistanceMetric>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
-                                  internal::TilesView<Ndim> tiles,
                                   PointsView<Ndim> dev_points,
-                                  DistanceParameter<Ndim> seed_dc,
+                                  float seed_dc,
+                                  DistanceMetric metric,
                                   float rhoc,
                                   int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
@@ -206,10 +226,10 @@ namespace clue::detail {
 
         auto coords_i = dev_points[i];
         auto coords_nh = dev_points[nh];
-        auto distance_vector = tiles.distance(coords_i, coords_nh);
+        auto distance = metric(coords_i, coords_nh);
 
         float rho_i = dev_points.rho[i];
-        bool is_seed = (distance_vector > seed_dc) && (rho_i >= rhoc);
+        bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
 
         if (is_seed) {
           dev_points.is_seed[i] = 1;
@@ -257,13 +277,18 @@ namespace clue::detail {
 
   using WorkDiv = clue::WorkDiv<clue::Dim1D>;
 
-  template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim, typename KernelType>
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            std::size_t Ndim,
+            typename KernelType,
+            typename DistanceMetric>
   inline void computeLocalDensity(TQueue& queue,
                                   const WorkDiv& work_division,
                                   internal::TilesView<Ndim>& tiles,
                                   PointsView<Ndim>& dev_points,
                                   KernelType&& kernel,
-                                  const DistanceParameter<Ndim>& dc,
+                                  float dc,
+                                  const DistanceMetric& metric,
                                   int32_t size) {
     alpaka::exec<TAcc>(queue,
                        work_division,
@@ -272,15 +297,20 @@ namespace clue::detail {
                        dev_points,
                        std::forward<KernelType>(kernel),
                        dc,
+                       metric,
                        size);
   }
 
-  template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            std::size_t Ndim,
+            typename DistanceMetric>
   inline void computeNearestHighers(TQueue& queue,
                                     const WorkDiv& work_division,
                                     internal::TilesView<Ndim>& tiles,
                                     PointsView<Ndim>& dev_points,
-                                    const DistanceParameter<Ndim>& dm,
+                                    float dm,
+                                    const DistanceMetric& metric,
                                     std::size_t& seed_candidates,
                                     int32_t size) {
     auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
@@ -291,28 +321,32 @@ namespace clue::detail {
                        tiles,
                        dev_points,
                        dm,
+                       metric,
                        d_seed_candidates.data(),
                        size);
     alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
     alpaka::wait(queue);
   }
 
-  template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            std::size_t Ndim,
+            typename DistanceMetric>
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
                                clue::internal::SeedArray<>& seeds,
-                               internal::TilesView<Ndim>& tiles,
                                PointsView<Ndim>& dev_points,
-                               const DistanceParameter<Ndim>& seed_dc,
+                               float seed_dc,
+                               const DistanceMetric& metric,
                                float rhoc,
                                int32_t size) {
     alpaka::exec<TAcc>(queue,
                        work_division,
                        KernelFindClusters{},
                        seeds.view(),
-                       tiles,
                        dev_points,
                        seed_dc,
+                       metric,
                        rhoc,
                        size);
   }

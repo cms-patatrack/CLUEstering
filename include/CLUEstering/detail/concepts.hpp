@@ -33,4 +33,7 @@ namespace clue::concepts {
         { k(acc, d, i, j) } -> std::same_as<float>;
       };
 
+  // template <typename TMetric>
+  // concept distance_metric = std::is_base_of_v<clue::internal::MetricInterface<TMetric, detail::Ndim>, TMetric>;
+
 }  // namespace clue::concepts
