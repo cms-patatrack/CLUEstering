@@ -5,6 +5,7 @@
 #pragma once
 
 #include "CLUEstering/internal/meta/accumulate.hpp"
+#include "CLUEstering/internal/meta/maximum.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 #include <alpaka/alpaka.hpp>
 #include <array>
@@ -35,8 +36,8 @@ namespace clue {
   public:
     ALPAKA_FN_HOST_ACC constexpr EuclidianMetric() = default;
 
-    ALPAKA_FN_HOST_ACC constexpr auto operator()(const Point<Ndim>& lhs,
-                                                 const Point<Ndim>& rhs) const {
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
+                                                        const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>(
           [&]<std::size_t Dim>() { return (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]); });
       return math::sqrt(distance2);
@@ -58,8 +59,8 @@ namespace clue {
     ALPAKA_FN_HOST_ACC constexpr WeightedEuclidianMetric(std::array<float, Ndim>&& weights)
         : m_weights{std::move(weights)} {}
 
-    ALPAKA_FN_HOST_ACC constexpr auto operator()(const Point<Ndim>& lhs,
-                                                 const Point<Ndim>& rhs) const {
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
+                                                        const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
         return m_weights[Dim] * (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]);
       });
@@ -76,10 +77,48 @@ namespace clue {
   public:
     ALPAKA_FN_HOST_ACC constexpr ManhattanMetric() = default;
 
-    ALPAKA_FN_HOST_ACC constexpr auto operator()(const Point<Ndim>& lhs,
-                                                 const Point<Ndim>& rhs) const {
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
+                                                        const Point<Ndim>& rhs) const {
       return meta::accumulate<Ndim>(
           [&]<std::size_t Dim>() { return math::fabs(lhs[Dim] - rhs[Dim]); });
+    }
+  };
+
+  /// @brief Chebyshev distance metric
+  /// This class implements the Chebyshev distance metric in Ndim dimensions.
+  ///
+  /// @tparam Ndim Number of dimensions
+  template <std::size_t Ndim>
+  class ChebyshevMetric {
+  public:
+    ALPAKA_FN_HOST_ACC constexpr ChebyshevMetric() = default;
+
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
+                                                        const Point<Ndim>& rhs) const {
+      return meta::maximum<Ndim>(
+          [&]<std::size_t Dim>() { return math::fabs(lhs[Dim] - rhs[Dim]); });
+    }
+  };
+
+  /// @brief Weighted Chebyshev distance metric
+  /// This class implements the weighted Chebyshev distance metric in Ndim dimensions.
+  ///
+  /// @tparam Ndim Number of dimensions
+  template <std::size_t Ndim>
+  class WeightedChebyshevMetric {
+  private:
+    std::array<float, Ndim> m_weights;
+
+  public:
+    ALPAKA_FN_HOST_ACC constexpr WeightedChebyshevMetric(const std::array<float, Ndim>& weights)
+        : m_weights{weights} {}
+    ALPAKA_FN_HOST_ACC constexpr WeightedChebyshevMetric(std::array<float, Ndim>&& weights)
+        : m_weights{std::move(weights)} {}
+
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
+                                                        const Point<Ndim>& rhs) const {
+      return meta::maximum<Ndim>(
+          [&]<std::size_t Dim>() { return m_weights[Dim] * math::fabs(lhs[Dim] - rhs[Dim]); });
     }
   };
 
@@ -96,6 +135,14 @@ namespace clue {
     /// @brief Alias for Manhattan distance metric
     template <std::size_t Ndim>
     using Manhattan = clue::ManhattanMetric<Ndim>;
+
+    /// @brief Alias for Chebyshev distance metric
+    template <std::size_t Ndim>
+    using Chebyshev = clue::ChebyshevMetric<Ndim>;
+
+    /// @brief Alias for Weighted Chebyshev distance metric
+    template <std::size_t Ndim>
+    using WeightedChebyshev = clue::WeightedChebyshevMetric<Ndim>;
 
   }  // namespace metrics
 
