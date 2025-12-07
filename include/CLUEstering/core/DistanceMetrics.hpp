@@ -1,6 +1,6 @@
 /// @file DistanceMetrics.hpp
 /// @author Simone Balducci
-/// @brief Implementation of common distance metrics
+/// @brief Implementations of common distance metrics
 
 #pragma once
 
@@ -34,8 +34,16 @@ namespace clue {
   template <std::size_t Ndim>
   class EuclidianMetric {
   public:
+    /// @brief Default constructor
+    ///
+    /// @return EuclidianMetric object
     ALPAKA_FN_HOST_ACC constexpr EuclidianMetric() = default;
 
+    /// @brief Compute the Euclidian distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Euclidian distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>(
@@ -54,11 +62,24 @@ namespace clue {
     std::array<float, Ndim> m_weights;
 
   public:
+    /// @brief Constructor euclidian metric with weights
+    ///
+    /// @param weights Weights for each dimension
+    /// @return WeightedEuclidianMetric object
     ALPAKA_FN_HOST_ACC constexpr WeightedEuclidianMetric(const std::array<float, Ndim>& weights)
         : m_weights{weights} {}
+    /// @brief Move constructor euclidian metric with weights
+    ///
+    /// @param weights Weights for each dimension
+    /// @return WeightedEuclidianMetric object
     ALPAKA_FN_HOST_ACC constexpr WeightedEuclidianMetric(std::array<float, Ndim>&& weights)
         : m_weights{std::move(weights)} {}
 
+    /// @brief Compute the Weighted Euclidian distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Weighted Euclidian distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
@@ -75,8 +96,14 @@ namespace clue {
   template <std::size_t Ndim>
   class ManhattanMetric {
   public:
+    /// @brief Default constructor
     ALPAKA_FN_HOST_ACC constexpr ManhattanMetric() = default;
 
+    /// @brief Compute the Manhattan distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Manhattan distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
       return meta::accumulate<Ndim>(
@@ -91,8 +118,14 @@ namespace clue {
   template <std::size_t Ndim>
   class ChebyshevMetric {
   public:
+    /// @brief Default constructor
     ALPAKA_FN_HOST_ACC constexpr ChebyshevMetric() = default;
 
+    /// @brief Compute the Chebyshev distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Chebyshev distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
       return meta::maximum<Ndim>(
@@ -110,11 +143,24 @@ namespace clue {
     std::array<float, Ndim> m_weights;
 
   public:
+    /// @brief Constructor weighted chebyshev metric with weights
+    ///
+    /// @param weights Weights for each dimension
+    /// @return WeightedChebyshevMetric object
     ALPAKA_FN_HOST_ACC constexpr WeightedChebyshevMetric(const std::array<float, Ndim>& weights)
         : m_weights{weights} {}
+    /// @brief Move constructor weighted chebyshev metric with weights
+    ///
+    /// @param weights Weights for each dimension
+    /// @return WeightedChebyshevMetric object
     ALPAKA_FN_HOST_ACC constexpr WeightedChebyshevMetric(std::array<float, Ndim>&& weights)
         : m_weights{std::move(weights)} {}
 
+    /// @brief Compute the Weighted Chebyshev distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Weighted Chebyshev distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
       return meta::maximum<Ndim>(
