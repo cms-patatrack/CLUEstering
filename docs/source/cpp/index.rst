@@ -8,7 +8,7 @@ C++ API Reference
    points_host
    points_device
    points_conversion
-   distance_parameter
+   distance_metrics
    convolutional_kernel
    association_map
    association_map_view
