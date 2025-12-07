@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "CLUEstering/core/detail/defines.hpp"
 #include <alpaka/alpaka.hpp>
 
 namespace clue::concepts {
@@ -26,11 +25,5 @@ namespace clue::concepts {
     std::is_arithmetic_v<T>;
     requires sizeof(T) <= 8;
   };
-
-  template <typename TKernel>
-  concept convolutional_kernel =
-      requires(TKernel&& k, const internal::Acc& acc, float d, int i, int j) {
-        { k(acc, d, i, j) } -> std::same_as<float>;
-      };
 
 }  // namespace clue::concepts
