@@ -22,7 +22,7 @@ namespace clue::detail {
             std::size_t Ndim,
             std::size_t N_,
             concepts::convolutional_kernel KernelType,
-            typename DistanceMetric>
+            concepts::distance_metric<Ndim> DistanceMetric>
   ALPAKA_FN_ACC void for_recursion(const TAcc& acc,
                                    VecArray<int32_t, Ndim>& base_vec,
                                    const clue::SearchBoxBins<Ndim>& search_box,
@@ -72,7 +72,7 @@ namespace clue::detail {
     template <typename TAcc,
               std::size_t Ndim,
               concepts::convolutional_kernel KernelType,
-              typename DistanceMetric>
+              concepts::distance_metric<Ndim> DistanceMetric>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim> dev_tiles,
                                   PointsView<Ndim> dev_points,
@@ -110,7 +110,10 @@ namespace clue::detail {
     }
   };
 
-  template <typename TAcc, std::size_t Ndim, std::size_t N_, typename DistanceMetric>
+  template <typename TAcc,
+            std::size_t Ndim,
+            std::size_t N_,
+            concepts::distance_metric<Ndim> DistanceMetric>
   ALPAKA_FN_ACC void for_recursion_nearest_higher(const TAcc& acc,
                                                   VecArray<int32_t, Ndim>& base_vec,
                                                   const clue::SearchBoxBins<Ndim>& search_box,
@@ -167,7 +170,7 @@ namespace clue::detail {
   }
 
   struct KernelCalculateNearestHigher {
-    template <typename TAcc, std::size_t Ndim, typename DistanceMetric>
+    template <typename TAcc, std::size_t Ndim, concepts::distance_metric<Ndim> DistanceMetric>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim> dev_tiles,
                                   PointsView<Ndim> dev_points,
@@ -212,7 +215,7 @@ namespace clue::detail {
   };
 
   struct KernelFindClusters {
-    template <typename TAcc, std::size_t Ndim, typename DistanceMetric>
+    template <typename TAcc, std::size_t Ndim, concepts::distance_metric<Ndim> DistanceMetric>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
                                   PointsView<Ndim> dev_points,
@@ -280,8 +283,8 @@ namespace clue::detail {
   template <concepts::accelerator TAcc,
             concepts::queue TQueue,
             std::size_t Ndim,
-            typename KernelType,
-            typename DistanceMetric>
+            concepts::convolutional_kernel KernelType,
+            concepts::distance_metric<Ndim> DistanceMetric>
   inline void computeLocalDensity(TQueue& queue,
                                   const WorkDiv& work_division,
                                   internal::TilesView<Ndim>& tiles,
@@ -304,7 +307,7 @@ namespace clue::detail {
   template <concepts::accelerator TAcc,
             concepts::queue TQueue,
             std::size_t Ndim,
-            typename DistanceMetric>
+            concepts::distance_metric<Ndim> DistanceMetric>
   inline void computeNearestHighers(TQueue& queue,
                                     const WorkDiv& work_division,
                                     internal::TilesView<Ndim>& tiles,
@@ -331,7 +334,7 @@ namespace clue::detail {
   template <concepts::accelerator TAcc,
             concepts::queue TQueue,
             std::size_t Ndim,
-            typename DistanceMetric>
+            concepts::distance_metric<Ndim> DistanceMetric>
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
                                clue::internal::SeedArray<>& seeds,
