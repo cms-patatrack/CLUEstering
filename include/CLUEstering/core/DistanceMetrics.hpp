@@ -27,23 +27,23 @@ namespace clue {
   template <std::size_t Ndim>
   using Point = std::array<float, Ndim + 1>;
 
-  /// @brief Euclidian distance metric
-  //// This class implements the Euclidian distance metric in Ndim dimensions.
+  /// @brief Euclidean distance metric
+  //// This class implements the Euclidean distance metric in Ndim dimensions.
   ///
   /// @tparam Ndim Number of dimensions
   template <std::size_t Ndim>
-  class EuclidianMetric {
+  class EuclideanMetric {
   public:
     /// @brief Default constructor
     ///
-    /// @return EuclidianMetric object
-    ALPAKA_FN_HOST_ACC constexpr EuclidianMetric() = default;
+    /// @return EuclideanMetric object
+    ALPAKA_FN_HOST_ACC constexpr EuclideanMetric() = default;
 
-    /// @brief Compute the Euclidian distance between two points
+    /// @brief Compute the Euclidean distance between two points
     ///
     /// @param lhs First point
     /// @param rhs Second point
-    /// @return Euclidian distance between the two points
+    /// @return Euclidean distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>(
@@ -52,12 +52,12 @@ namespace clue {
     }
   };
 
-  /// @brief Weighted Euclidian distance metric
-  /// This class implements the Weighted Euclidian distance metric in Ndim dimensions.
+  /// @brief Weighted Euclidean distance metric
+  /// This class implements the Weighted Euclidean distance metric in Ndim dimensions.
   ///
   /// @tparam Ndim Number of dimensions
   template <std::size_t Ndim>
-  class WeightedEuclidianMetric {
+  class WeightedEuclideanMetric {
   private:
     std::array<float, Ndim> m_weights;
 
@@ -65,21 +65,21 @@ namespace clue {
     /// @brief Constructor euclidian metric with weights
     ///
     /// @param weights Weights for each dimension
-    /// @return WeightedEuclidianMetric object
-    ALPAKA_FN_HOST_ACC constexpr WeightedEuclidianMetric(const std::array<float, Ndim>& weights)
+    /// @return WeightedEuclideanMetric object
+    ALPAKA_FN_HOST_ACC constexpr WeightedEuclideanMetric(const std::array<float, Ndim>& weights)
         : m_weights{weights} {}
     /// @brief Move constructor euclidian metric with weights
     ///
     /// @param weights Weights for each dimension
-    /// @return WeightedEuclidianMetric object
-    ALPAKA_FN_HOST_ACC constexpr WeightedEuclidianMetric(std::array<float, Ndim>&& weights)
+    /// @return WeightedEuclideanMetric object
+    ALPAKA_FN_HOST_ACC constexpr WeightedEuclideanMetric(std::array<float, Ndim>&& weights)
         : m_weights{std::move(weights)} {}
 
-    /// @brief Compute the Weighted Euclidian distance between two points
+    /// @brief Compute the Weighted Euclidean distance between two points
     ///
     /// @param lhs First point
     /// @param rhs Second point
-    /// @return Weighted Euclidian distance between the two points
+    /// @return Weighted Euclidean distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
@@ -170,13 +170,13 @@ namespace clue {
 
   namespace metrics {
 
-    /// @brief Alias for Euclidian distance metric
+    /// @brief Alias for Euclidean distance metric
     template <std::size_t Ndim>
-    using Euclidian = clue::EuclidianMetric<Ndim>;
+    using Euclidean = clue::EuclideanMetric<Ndim>;
 
-    /// @brief Alias for Weighted Euclidian distance metric
+    /// @brief Alias for Weighted Euclidean distance metric
     template <std::size_t Ndim>
-    using WeightedEuclidian = clue::WeightedEuclidianMetric<Ndim>;
+    using WeightedEuclidean = clue::WeightedEuclideanMetric<Ndim>;
 
     /// @brief Alias for Manhattan distance metric
     template <std::size_t Ndim>
