@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include <algorithm>
@@ -20,32 +21,24 @@ namespace clue {
     template <std::size_t Ndim>
     using Point = typename clue::PointsHost<Ndim>::Point;
 
-    template <std::size_t Ndim>
-    inline auto distance(const Point<Ndim>& lhs, const Point<Ndim>& rhs) {
-      auto dist = 0.f;
-      for (auto dim = 0u; dim < Ndim; ++dim) {
-        dist += (lhs[dim] - rhs[dim]) * (lhs[dim] - rhs[dim]);
-      }
-      return std::sqrt(dist);
-    }
-
-    template <std::size_t Ndim>
+    template <std::size_t Ndim,
+              concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim>>
     inline auto silhouette(const clue::host_associator& clusters,
                            const clue::PointsHost<Ndim>& points,
-                           int point) {
+                           int point,
+                           const DistanceMetric& metric = clue::EuclideanMetric<Ndim>{}) {
       auto a = 0.f;
       std::vector<float> b_values;
       b_values.reserve(clusters.size() - 1);
 
-      a +=
-          std::accumulate(clusters.lower_bound(points[point].cluster_index()),
-                          clusters.upper_bound(points[point].cluster_index()),
-                          0.f,
-                          [&](float acc, int other_point) {
-                            if (other_point == point)
-                              return acc;
-                            return acc + detail::distance<Ndim>(points[point], points[other_point]);
-                          });
+      a += std::accumulate(clusters.lower_bound(points[point].cluster_index()),
+                           clusters.upper_bound(points[point].cluster_index()),
+                           0.f,
+                           [&](float acc, int other_point) {
+                             if (other_point == point)
+                               return acc;
+                             return acc + metric(points[point], points[other_point]);
+                           });
       a /= static_cast<float>(clusters.count(points[point].cluster_index()) - 1);
       for (auto cluster_idx = 0; cluster_idx < static_cast<int32_t>(clusters.size());
            ++cluster_idx) {
@@ -56,8 +49,7 @@ namespace clue {
                              clusters.upper_bound(cluster_idx),
                              0.f,
                              [&](float acc, int other_point) {
-                               return acc +
-                                      detail::distance<Ndim>(points[point], points[other_point]);
+                               return acc + metric(points[point], points[other_point]);
                              });
         b /= static_cast<float>(clusters.count(cluster_idx));
         b_values.push_back(b);
@@ -72,15 +64,17 @@ namespace clue {
 
   }  // namespace detail
 
-  template <std::size_t Ndim>
-  inline auto silhouette(const clue::PointsHost<Ndim>& points, int point) {
+  template <std::size_t Ndim, concepts::distance_metric<Ndim> DistanceMetric>
+  inline auto silhouette(const clue::PointsHost<Ndim>& points,
+                         int point,
+                         const DistanceMetric& metric) {
     const auto clusters = clue::get_clusters(points);
 
-    return detail::silhouette<Ndim>(clusters, points, point);
+    return detail::silhouette<Ndim>(clusters, points, point, metric);
   }
 
-  template <std::size_t Ndim>
-  inline auto silhouette(const clue::PointsHost<Ndim>& points) {
+  template <std::size_t Ndim, concepts::distance_metric<Ndim> DistanceMetric>
+  inline auto silhouette(const clue::PointsHost<Ndim>& points, const DistanceMetric& metric) {
     const auto clusters = clue::get_clusters(points);
     std::vector<float> scores;
     auto valid_point = [&](int point) -> bool { return points[point].cluster_index() != -1; };
@@ -88,7 +82,7 @@ namespace clue {
       return clusters.count(points[point].cluster_index()) >= 2;
     };
     auto compute_silhouette = [&](std::size_t point) -> float {
-      return detail::silhouette(clusters, points, point);
+      return detail::silhouette(clusters, points, point, metric);
     };
     std::ranges::copy(std::views::iota(0) | std::views::take(points.size()) |
                           std::views::filter(valid_point) | std::views::filter(valid_cluster) |
