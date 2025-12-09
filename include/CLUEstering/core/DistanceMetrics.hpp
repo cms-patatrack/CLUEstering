@@ -89,6 +89,51 @@ namespace clue {
     }
   };
 
+  /// @brief Periodic Euclidean distance metric
+  /// This class implements the Euclidean distance metric in Ndim dimensions for coordinate systems
+  /// where one or more coordinates are defined in a periodic domain. The distance is then computed
+  /// by treating the coordinates as euclidean..
+  ///  This metric expects a period for each dimension, where a period equal to 0 means that the coordinate
+  ///  is not periodic. The periodic coordinates are expected to be defined in the range [0, period).
+  ///
+  /// @tparam Ndim Number of dimensions
+  template <std::size_t Ndim>
+  class PeriodicEuclideanMetric {
+  private:
+    std::array<float, Ndim> m_periods;
+
+  public:
+    /// @brief Constructor periodic euclidian metric with periods
+    ///
+    /// @param periods Periods for each dimension
+    /// If a coordinate is not periodic, the corresponding period should be set to 0.f
+    /// @return PeriodicEuclideanMetric object
+    ALPAKA_FN_HOST_ACC constexpr PeriodicEuclideanMetric(const std::array<float, Ndim>& periods)
+        : m_periods{periods} {}
+    /// @brief Move constructor periodic euclidian metric with periods
+    ///
+    /// @param periods Periods for each dimension
+    /// If a coordinate is not periodic, the corresponding period should be set to 0.f
+    /// @return PeriodicEuclideanMetric object
+    ALPAKA_FN_HOST_ACC constexpr PeriodicEuclideanMetric(std::array<float, Ndim>&& periods)
+        : m_periods{std::move(periods)} {}
+
+    /// @brief Compute the Periodic Euclidean distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Periodic Euclidean distance between the two points
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
+                                                        const Point<Ndim>& rhs) const {
+      const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
+        const auto diff = math::fabs(lhs[Dim] - rhs[Dim]);
+        const auto periodic_diff = math::min(diff, m_periods[Dim] - diff);
+        return periodic_diff * periodic_diff;
+      });
+      return math::sqrt(distance2);
+    }
+  };
+
   /// @brief Manhattan distance metric
   /// This class implements the Manhattan distance metric in Ndim dimensions.
   ///
@@ -177,6 +222,10 @@ namespace clue {
     /// @brief Alias for Weighted Euclidean distance metric
     template <std::size_t Ndim>
     using WeightedEuclidean = clue::WeightedEuclideanMetric<Ndim>;
+
+    /// @brief Alias for Periodic Euclidean distance metric
+    template <std::size_t Ndim>
+    using PeriodicEuclidean = clue::PeriodicEuclideanMetric<Ndim>;
 
     /// @brief Alias for Manhattan distance metric
     template <std::size_t Ndim>
