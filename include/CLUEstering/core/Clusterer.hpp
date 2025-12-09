@@ -110,8 +110,11 @@ namespace clue {
 
     /// @brief Construct the clusters from host points
     ///
+    /// @tparam Kernel The type of convolutional kernel to use
+    /// @tparam DistanceMetric The type of distance metric to use
     /// @param queue The queue to use for the device operations
     /// @param h_points Host points to cluster
+    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     template <concepts::convolutional_kernel Kernel = FlatKernel,
@@ -123,7 +126,10 @@ namespace clue {
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host points
     ///
+    /// @tparam Kernel The type of convolutional kernel to use
+    /// @tparam DistanceMetric The type of distance metric to use
     /// @param h_points Host points to cluster
+    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     /// @note This method creates a temporary queue for the operations on the device
@@ -135,9 +141,12 @@ namespace clue {
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host and device points
     ///
+    /// @tparam Kernel The type of convolutional kernel to use
+    /// @tparam DistanceMetric The type of distance metric to use
     /// @param queue The queue to use for the device operations
     /// @param h_points Host points to cluster
     /// @param dev_points Device points to cluster
+    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     template <concepts::convolutional_kernel Kernel = FlatKernel,
@@ -150,8 +159,11 @@ namespace clue {
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from device points
     ///
+    /// @tparam Kernel The type of convolutional kernel to use
+    /// @tparam DistanceMetric The type of distance metric to use
     /// @param queue The queue to use for the device operations
     /// @param dev_points Device points to cluster
+    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     template <concepts::convolutional_kernel Kernel = FlatKernel,
