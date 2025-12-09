@@ -2,6 +2,7 @@
 #include "CLUEstering/CLUEstering.hpp"
 #include "CLUEstering/utils/validation.hpp"
 
+#include <numbers>
 #include <ranges>
 
 #include <fmt/core.h>
@@ -124,7 +125,10 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
   algo.setWrappedCoordinates(0, 1);
-  algo.make_clusters(queue, points);
+  algo.make_clusters(
+      queue,
+      points,
+      clue::metrics::PeriodicEuclidean(std::array<float, 2>{0.f, 2.f * std::numbers::pi_v<float>}));
   // TODO: reimplement wrapped coordinates before 2.9.0
-  // CHECK(points.n_clusters() == 1);
+  CHECK(points.n_clusters() == 1);
 }
