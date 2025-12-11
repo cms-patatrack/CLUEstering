@@ -27,7 +27,7 @@ if(NOT alpaka_FOUND)
   # alpaka
   FetchContent_Declare(
     alpaka
-    URL https://github.com/alpaka-group/alpaka/archive/refs/tags/1.2.0.tar.gz)
+    URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.0.0.tar.gz)
   FetchContent_MakeAvailable(alpaka)
 endif()
 
