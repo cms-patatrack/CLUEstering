@@ -21,8 +21,8 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt install -y libboost-dev libtbb-dev libomp-dev
-        git clone https://github.com/alpaka-group/alpaka && cd alpaka
-        git switch release-2.0.0
+        wget https://github.com/alpaka-group/alpaka/archive/refs/tags/2.0.0.tar.gz 
+        tar -xvf 2.0.0.tar.gz && cd alpaka-2.0.0
         cmake -B build && sudo cmake --install build
 
     - name: Install CLUEstering
