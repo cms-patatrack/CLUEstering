@@ -9,10 +9,12 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     # checks out the code in the repository
@@ -21,10 +23,16 @@ jobs:
         submodules: true
 
     - name: Install dependencies
+      if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt install -y libboost-dev
         sudo apt install -y libtbb-dev
         sudo apt install libomp-dev
+
+    - name: Install dependencies
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew install boost tbb libomp
 
     - name: Compile and run tests
       working-directory: ${{ github.workspace }}/tests
