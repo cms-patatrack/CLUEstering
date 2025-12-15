@@ -827,7 +827,6 @@ class clusterer:
         for i in range(self.clust_data.n_points):
             if self.clust_prop.cluster_ids[i] != -1:
                 centroids[self.clust_prop.cluster_ids[i]] += self.clust_data.coords.T[i][:-1]
-        print(self.clust_prop.points_per_cluster[:-1].reshape(-1, 1))
         centroids /= self.clust_prop.points_per_cluster.reshape(-1, 1)
 
         return centroids
