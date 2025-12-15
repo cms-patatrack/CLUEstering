@@ -6,7 +6,7 @@
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://cms-patatrack.github.io/CLUEstering/)
 [![codecov](https://codecov.io/gh/cms-patatrack/CLUEstering/graph/badge.svg?token=JV53J6IUJ3)](https://codecov.io/gh/cms-patatrack/CLUEstering)
 ![PyPI](https://img.shields.io/pypi/v/CLUEstering)
-[![Platforms](https://img.shields.io/badge/platform-linux-blue.svg)](https://github.com/cms-patatrack/CLUEstering)
+[![Platforms](https://img.shields.io/badge/platform-linux%20%7C%20mac-blue.svg)](https://github.com/cms-patatrack/CLUEstering)
 [![License](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
 
 <p align="center">
