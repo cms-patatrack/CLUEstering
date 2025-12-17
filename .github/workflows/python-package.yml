@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.8", "3.10", "3.12", "3.13"]
 
     runs-on: ${{ matrix.os }}
@@ -39,6 +39,11 @@ jobs:
       if: matrix.os == 'macos-latest'
       run: |
         brew install boost tbb libomp
+
+    - name: Install dependencies
+      if: matrix.os == 'windows-latest'
+      run: |
+        vcpkg install 
 
     - name: Install Python dependencies
       run: |
