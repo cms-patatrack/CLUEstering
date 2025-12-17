@@ -20,7 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt install -y libboost-dev
+        sudo apt install -y libboost-atomic-dev
 
     - name: Compile the tests in debug mode
       working-directory: ${{ github.workspace }}/tests
