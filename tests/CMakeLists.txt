@@ -18,7 +18,7 @@ set(CMAKE_CXX_FLAGS_RELEASE
     " -O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
 )
 
-find_package(Boost 1.75.0 REQUIRED COMPONENTS atomic)
+find_package(Boost CONFIG REQUIRED COMPONENTS atomic)
 
 include(FetchContent)
 
