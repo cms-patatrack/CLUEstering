@@ -6,9 +6,9 @@ find_package(hip)
 set(hip_BASE "${hip_INCLUDE_DIRS}/..")
 set(CMAKE_CXX_COMPILER "${hip_BASE}/bin/hipcc")
 pybind11_add_module(CLUE_GPU_HIP SHARED binding_gpu_hip.cpp)
-target_include_directories(
-  CLUE_GPU_HIP PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
-                       ${alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+target_include_directories(CLUE_GPU_HIP
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
+target_link_libraries(CLUE_GPU_HIP PRIVATE alpaka::alpaka Boost::atomic)
 target_compile_definitions(CLUE_GPU_HIP PRIVATE ALPAKA_ACC_GPU_HIP_ENABLED
                                                 CLUE_ENABLE_CACHING_ALLOCATOR)
 target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_INCLUDE_DIRS})

@@ -8,7 +8,7 @@ foreach(source ${sources})
   add_test(NAME ${target} COMMAND ${CMAKE_BINARY_DIR}/serial/${test_name})
   target_include_directories(${target} PRIVATE ${CMAKE_SOURCE_DIR}/../include
                                                ${doctest_SOURCE_DIR}/doctest)
-  target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::boost fmt::fmt)
+  target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt)
   target_compile_definitions(
     ${target} PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
                       CLUE_ENABLE_CACHING_ALLOCATOR)
@@ -32,7 +32,7 @@ if(TBB_FOUND AND NOT COVERAGE)
     add_test(NAME ${target} COMMAND ${CMAKE_BINARY_DIR}/tbb/${test_name})
     target_include_directories(${target} PRIVATE ${CMAKE_SOURCE_DIR}/../include
                                                  ${doctest_SOURCE_DIR}/doctest)
-    target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::boost
+    target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic
                                             TBB::tbb fmt::fmt)
     target_compile_definitions(
       ${target} PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
@@ -52,7 +52,7 @@ if(OpenMP_CXX_FOUND AND NOT COVERAGE)
     add_test(NAME ${target} COMMAND ${CMAKE_BINARY_DIR}/openmp/${test_name})
     target_include_directories(${target} PRIVATE ${CMAKE_SOURCE_DIR}/../include
                                                  ${doctest_SOURCE_DIR}/doctest)
-    target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::boost
+    target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic
                                             OpenMP::OpenMP_CXX fmt::fmt)
     target_compile_definitions(
       ${target} PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED

@@ -15,7 +15,7 @@ foreach(source ${sources})
   target_include_directories(
     ${target} PRIVATE ${CMAKE_SOURCE_DIR}/../include
                       ${doctest_SOURCE_DIR}/doctest ${HIP_INCLUDE_DIR})
-  target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::boost fmt::fmt)
+  target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt)
   target_compile_definitions(${target} PRIVATE ALPAKA_ACC_GPU_HIP_ENABLED
                                                CLUE_ENABLE_CACHING_ALLOCATOR)
   set_target_properties(

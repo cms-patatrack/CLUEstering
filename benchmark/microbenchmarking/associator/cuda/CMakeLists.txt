@@ -11,7 +11,7 @@ set_source_files_properties(${CMAKE_SOURCE_DIR}/associator_build.cpp
 add_executable(cuda.out ${CMAKE_SOURCE_DIR}/associator_build.cpp)
 target_include_directories(cuda.out
                            PRIVATE ${CMAKE_SOURCE_DIR}/../../../include)
-target_link_libraries(cuda.out PRIVATE alpaka::alpaka Boost::boost
+target_link_libraries(cuda.out PRIVATE alpaka::alpaka Boost::atomic
                                        benchmark::benchmark)
 target_compile_definitions(cuda.out PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED
                                             CLUE_ENABLE_CACHING_ALLOCATOR)

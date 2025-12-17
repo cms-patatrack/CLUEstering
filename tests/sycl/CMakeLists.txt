@@ -13,7 +13,7 @@ foreach(source ${sources})
   target_include_directories(${target} PRIVATE ${oneDPL_DIR})
   target_compile_options(${target} PRIVATE -DALPAKA_ACC_SYCL_ENABLED
                                            -DALPAKA_SYCL_ONEAPI_CPU -fsycl)
-  target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::boost fmt::fmt
+  target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt
                                           -fsycl)
   set_target_properties(
     ${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/sycl/cpu
@@ -31,7 +31,7 @@ foreach(source ${sources})
   target_include_directories(${target} PRIVATE ${oneDPL_DIR})
   target_compile_options(${target} PRIVATE -DALPAKA_ACC_SYCL_ENABLED
                                            -DALPAKA_SYCL_ONEAPI_GPU -fsycl)
-  target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::boost fmt::fmt
+  target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt
                                           -fsycl)
   set_target_properties(
     ${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/sycl/gpu
