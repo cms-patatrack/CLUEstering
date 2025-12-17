@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         working-directory: ${{github.workspace}}/tests
         run: |
-          sudo apt install -y libboost-dev libtbb-dev
+          sudo apt install -y libboost-atomic-dev libtbb-dev
           python -m pip install --upgrade pip
           python -m pip install pytest scikit-learn pandas matplotlib coverage
 

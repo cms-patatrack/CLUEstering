@@ -25,7 +25,7 @@ jobs:
     - name: Install dependencies
       if: matrix.os == 'ubuntu-latest'
       run: |
-        sudo apt install -y libboost-dev
+        sudo apt install -y libboost-atomic-dev
         sudo apt install -y libtbb-dev
         sudo apt install libomp-dev
 

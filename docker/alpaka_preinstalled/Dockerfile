@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
 		python3-pip \
 		cmake \
 		g++ \
-		libboost-all-dev \
+		libboost-atomic-dev \
 		git
 
 RUN git clone https://github.com/alpaka-group/alpaka.git \
