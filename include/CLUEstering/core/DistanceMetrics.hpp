@@ -66,6 +66,14 @@ namespace clue {
     ///
     /// @param weights Weights for each dimension
     /// @return WeightedEuclideanMetric object
+    template <std::floating_point... TValues>
+      requires(sizeof...(TValues) == Ndim)
+    ALPAKA_FN_HOST_ACC constexpr WeightedEuclideanMetric(TValues... weights)
+        : m_weights{weights...} {}
+    /// @brief Constructor euclidian metric with weights
+    ///
+    /// @param weights Weights for each dimension
+    /// @return WeightedEuclideanMetric object
     ALPAKA_FN_HOST_ACC constexpr WeightedEuclideanMetric(const std::array<float, Ndim>& weights)
         : m_weights{weights} {}
     /// @brief Move constructor euclidian metric with weights
@@ -188,6 +196,14 @@ namespace clue {
     std::array<float, Ndim> m_weights;
 
   public:
+    /// @brief Constructor weighted chebyshev metric with weights
+    ///
+    /// @param weights Weights for each dimension
+    /// @return WeightedChebyshevMetric object
+    template <std::floating_point... TValues>
+      requires(sizeof...(TValues) == Ndim)
+    ALPAKA_FN_HOST_ACC constexpr WeightedChebyshevMetric(TValues... weights)
+        : m_weights{weights...} {}
     /// @brief Constructor weighted chebyshev metric with weights
     ///
     /// @param weights Weights for each dimension
