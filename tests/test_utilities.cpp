@@ -58,6 +58,46 @@ TEST_CASE("Test clue::get_queue utility") {
     auto d_points2 = clue::PointsDevice<2>(queue2, points2.size());
     CHECK(1);
   }
+
+#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
+  SUBCASE("Create queue using CUDA stream") {
+    cudaStream_t stream;
+    cudaStreamCreate(&stream);
+
+    {
+      auto queue = clue::get_queue(stream);
+      static_assert(std::is_same_v<decltype(queue), clue::Queue>, "Expected type clue::Queue");
+      CHECK(alpaka::getDev(queue) == alpaka::getDevByIdx(clue::Platform{}, 0u));
+
+      // check if data allocation works
+      clue::PointsHost<2> points1(queue, 1000);
+      auto d_points1 = clue::PointsDevice<2>(queue, points1.size());
+      CHECK(1);
+    }
+
+    cudaStreamDestroy(stream);
+  }
+#endif
+
+#ifdef ALPAKA_ACC_GPU_HIP_ENABLED
+  SUBCASE("Create queue using HIP stream") {
+    hipStream_t stream;
+    hipStreamCreate(&stream);
+
+    {
+      auto queue = clue::get_queue(stream);
+      static_assert(std::is_same_v<decltype(queue), clue::Queue>, "Expected type clue::Queue");
+      CHECK(alpaka::getDev(queue) == alpaka::getDevByIdx(clue::Platform{}, 0u));
+
+      // check if data allocation works
+      clue::PointsHost<2> points1(queue, 1000);
+      auto d_points1 = clue::PointsDevice<2>(queue, points1.size());
+      CHECK(1);
+    }
+
+    hipStreamDestroy(stream);
+  }
+#endif
 }
 
 TEST_CASE("Test get_clusters host function") {
