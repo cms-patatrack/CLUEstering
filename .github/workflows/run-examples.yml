@@ -21,8 +21,8 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt install -y libboost-dev libtbb-dev libomp-dev
-        wget https://github.com/alpaka-group/alpaka/archive/refs/tags/2.0.0.tar.gz 
-        tar -xvf 2.0.0.tar.gz && cd alpaka-2.0.0
+        wget https://github.com/alpaka-group/alpaka/archive/refs/tags/2.1.0.tar.gz 
+        tar -xvf 2.1.0.tar.gz && cd alpaka-2.1.0
         cmake -B build && sudo cmake --install build
 
     - name: Install CLUEstering
@@ -30,7 +30,7 @@ jobs:
         cmake -B build && sudo cmake --install build
 
     - name: Compile and run examples
-      working-directory: ${{ github.workspace }}/examples
+      working-directory: ${{ github.workspace }}/examples/basic
       run: |
         cmake -B build/serial -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED=ON -DCMAKE_BUILD_TYPE=Release
         cmake -B build/tbb -DALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED=ON -DCMAKE_BUILD_TYPE=Release
