@@ -14,14 +14,14 @@ TEST_CASE("Test make_cluster interfaces") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/data_32768.csv");
+  const auto test_file_path = std::string(TEST_DATA_DIR) + "/data_32768.csv";
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
-  auto truth = clue::read_output<2>(queue, "../../../data/truth_files/data_32768_truth.csv");
   SUBCASE("Run clustering without passing device points") {
     algo.make_clusters(queue, h_points);
 

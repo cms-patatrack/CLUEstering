@@ -10,8 +10,10 @@ foreach(source ${sources})
                                                ${doctest_SOURCE_DIR}/doctest)
   target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt)
   target_compile_definitions(
-    ${target} PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
-                      CLUE_ENABLE_CACHING_ALLOCATOR)
+    ${target}
+    PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
+            CLUE_ENABLE_CACHING_ALLOCATOR
+            TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../data")
   set_target_properties(
     ${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/serial
                          OUTPUT_NAME ${test_name})
@@ -35,8 +37,10 @@ if(TBB_FOUND AND NOT COVERAGE)
     target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic
                                             TBB::tbb fmt::fmt)
     target_compile_definitions(
-      ${target} PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
-                        CLUE_ENABLE_CACHING_ALLOCATOR)
+      ${target}
+      PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
+              CLUE_ENABLE_CACHING_ALLOCATOR
+              TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../data")
     set_target_properties(
       ${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tbb
                            OUTPUT_NAME ${test_name})
@@ -55,8 +59,10 @@ if(OpenMP_CXX_FOUND AND NOT COVERAGE)
     target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic
                                             OpenMP::OpenMP_CXX fmt::fmt)
     target_compile_definitions(
-      ${target} PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
-                        CLUE_ENABLE_CACHING_ALLOCATOR)
+      ${target}
+      PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
+              CLUE_ENABLE_CACHING_ALLOCATOR
+              TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../data")
     set_target_properties(
       ${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/openmp
                            OUTPUT_NAME ${test_name})
