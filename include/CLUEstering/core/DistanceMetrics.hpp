@@ -37,7 +37,7 @@ namespace clue {
     /// @brief Default constructor
     ///
     /// @return EuclideanMetric object
-    ALPAKA_FN_HOST_ACC constexpr EuclideanMetric() = default;
+    ALPAKA_FN_HOST_ACC constexpr EuclideanMetric() {}
 
     /// @brief Compute the Euclidean distance between two points
     ///
@@ -150,7 +150,7 @@ namespace clue {
   class ManhattanMetric {
   public:
     /// @brief Default constructor
-    ALPAKA_FN_HOST_ACC constexpr ManhattanMetric() = default;
+    ALPAKA_FN_HOST_ACC constexpr ManhattanMetric() {}
 
     /// @brief Compute the Manhattan distance between two points
     ///
@@ -172,7 +172,7 @@ namespace clue {
   class ChebyshevMetric {
   public:
     /// @brief Default constructor
-    ALPAKA_FN_HOST_ACC constexpr ChebyshevMetric() = default;
+    ALPAKA_FN_HOST_ACC constexpr ChebyshevMetric() {}
 
     /// @brief Compute the Chebyshev distance between two points
     ///
