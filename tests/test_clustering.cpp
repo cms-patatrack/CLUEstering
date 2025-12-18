@@ -21,8 +21,9 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     const auto device = clue::get_device(0u);
     clue::Queue queue(device);
 
-    clue::PointsHost<2> h_points =
-        clue::read_csv<2>(queue, fmt::format("../../../data/data_{}.csv", std::pow(2, i)));
+    const auto test_file_path =
+        std::string(TEST_DATA_DIR) + fmt::format("/data_{}.csv", std::pow(2, i));
+    clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
     const auto n_points = h_points.size();
     clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -39,7 +40,8 @@ TEST_CASE("Test clustering on aniso dataset") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/aniso_1000.csv");
+  const auto test_file_path = std::string(TEST_DATA_DIR) + "/aniso_1000.csv";
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -56,7 +58,8 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/sissa_1000.csv");
+  const auto test_file_path = std::string(TEST_DATA_DIR) + "/sissa_1000.csv";
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -72,7 +75,8 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/sissa_4000.csv");
+  const auto test_file_path = std::string(TEST_DATA_DIR) + "/sissa_4000.csv";
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -88,7 +92,8 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/toyDetector_1000.csv");
+  const auto test_file_path = std::string(TEST_DATA_DIR) + "/toyDetector_1000.csv";
+  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -104,7 +109,8 @@ TEST_CASE("Test clustering on blob dataset") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<3> h_points = clue::read_csv<3>(queue, "../../../data/blob.csv");
+  const auto test_file_path = std::string(TEST_DATA_DIR) + "/blob.csv";
+  clue::PointsHost<3> h_points = clue::read_csv<3>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<3> d_points(queue, n_points);
 
@@ -120,7 +126,8 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  clue::PointsHost<2> points = clue::read_csv<2>(queue, "../../../data/opposite_angles.csv");
+  const auto test_file_path = std::string(TEST_DATA_DIR) + "/opposite_angles.csv";
+  clue::PointsHost<2> points = clue::read_csv<2>(queue, test_file_path);
   const float dc{.2f}, rhoc{5.f}, outlier{.2f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 

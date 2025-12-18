@@ -16,8 +16,9 @@ foreach(source ${sources})
     ${target} PRIVATE ${CMAKE_SOURCE_DIR}/../include
                       ${doctest_SOURCE_DIR}/doctest ${HIP_INCLUDE_DIR})
   target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt)
-  target_compile_definitions(${target} PRIVATE ALPAKA_ACC_GPU_HIP_ENABLED
-                                               CLUE_ENABLE_CACHING_ALLOCATOR)
+  target_compile_definitions(
+    ${target} PRIVATE ALPAKA_ACC_GPU_HIP_ENABLED CLUE_ENABLE_CACHING_ALLOCATOR
+                      TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../data")
   set_target_properties(
     ${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/hip
                          OUTPUT_NAME ${test_name})
