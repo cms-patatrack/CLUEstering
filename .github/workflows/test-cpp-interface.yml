@@ -12,31 +12,81 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        include:
+          - name: linux-gcc-12
+            os: ubuntu-latest
+            container: almalinux:9
+            compiler: gcc-toolset-12
+          - name: linux-gcc-13
+            os: ubuntu-latest
+            container: almalinux:9
+            compiler: gcc-toolset-13
+          - name: linux-gcc-14
+            os: ubuntu-latest
+            container: almalinux:9
+            compiler: gcc-toolset-14
+          - name: linux-gcc-15
+            os: ubuntu-latest
+            container: almalinux:9
+            compiler: gcc-toolset-15
+          - name: linux-clang-15
+            os: ubuntu-latest
+            container: fedora:42
+            compiler: clang-15
+          - name: linux-clang-17
+            os: ubuntu-latest
+            container: fedora:42
+            compiler: clang-17
+          - name: linux-clang-18
+            os: ubuntu-latest
+            container: fedora:42
+            compiler: clang-18
+          - name: linux-clang-19
+            os: ubuntu-latest
+            container: fedora:42
+            compiler: clang-19
+          - name: macos-clang
+            os: macos-latest
 
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
 
     steps:
-    # checks out the code in the repository
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
+    - name: Install dependencies
+      if: matrix.container == 'fedora:42'
+      run: |
+        dnf install -y ${{ matrix.compiler }}
+        dnf install -y git cmake boost-devel tbb libomp.x86_64
 
     - name: Install dependencies
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.container == 'almalinux:9'
       run: |
-        sudo apt install -y libboost-atomic-dev
-        sudo apt install -y libtbb-dev
-        sudo apt install libomp-dev
+        dnf install -y ${{ matrix.compiler }}
+        source /opt/rh/${{ matrix.compiler }}/enable
+        dnf install -y git cmake boost-devel tbb libomp.x86_64
 
     - name: Install dependencies
       if: matrix.os == 'macos-latest'
       run: |
         brew install boost tbb libomp
 
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+
     - name: Compile and run tests
+      if: matrix.container != 'almalinux:9'
       working-directory: ${{ github.workspace }}/tests
       run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --parallel
+        ctest --test-dir build --output-on-failure
+
+    - name: Compile and run tests
+      if: matrix.container == 'almalinux:9'
+      working-directory: ${{ github.workspace }}/tests
+      run: |
+        source /opt/rh/${{ matrix.compiler }}/enable
         cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build --parallel
         ctest --test-dir build --output-on-failure
