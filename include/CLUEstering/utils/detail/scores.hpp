@@ -117,17 +117,19 @@ namespace clue {
     }
     std::vector<std::vector<float>> clusters_separation(
         cluster_centroids.size(), std::vector<float>(cluster_centroids.size(), 0.f));
-    for (auto i = 0; i < cluster_centroids.size(); ++i) {
-      for (auto j = 0; j < cluster_centroids.size(); ++j) {
+    for (auto i = 0u; i < cluster_centroids.size(); ++i) {
+      for (auto j = 0u; j < cluster_centroids.size(); ++j) {
         if (i == j)
           continue;
-        clusters_separation[i].push_back(metric(cluster_centroids[i], cluster_centroids[j]));
+        clusters_separation[i][j] = metric(cluster_centroids[i], cluster_centroids[j]);
       }
     }
 
     std::vector<float> R_values(cluster_centroids.size(), 0.f);
-    for (auto i = 0; i < cluster_centroids.size(); ++i) {
-      for (auto j = 0; j < clusters_separation[i].size(); ++j) {
+    for (auto i = 0u; i < cluster_centroids.size(); ++i) {
+      for (auto j = 0u; j < clusters_separation[i].size(); ++j) {
+        if (i == j)
+          continue;
         R_values[i] = std::max(
             R_values[i], (clusters_scatter[i] + clusters_scatter[j]) / clusters_separation[i][j]);
       }
