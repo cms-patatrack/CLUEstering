@@ -20,63 +20,61 @@
 #include <alpaka/mem/view/Traits.hpp>
 #include <alpaka/vec/Vec.hpp>
 #include <concepts>
+#include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <ranges>
+#include <stdexcept>
 
 namespace clue {
 
   template <std::size_t Ndim>
-  Clusterer<Ndim>::Clusterer(float dc, float rhoc, float dm, float seed_dc, int pPBin)
+  Clusterer<Ndim>::Clusterer(
+      float dc, float rhoc, std::optional<float> dm, std::optional<float> seed_dc, int pPBin)
       : m_dc{dc},
-        m_seed_dc{seed_dc},
+        m_seed_dc{seed_dc.value_or(dc)},
         m_rhoc{rhoc},
-        m_dm{dm},
+        m_dm{dm.value_or(dc)},
         m_pointsPerTile{pPBin},
         m_wrappedCoordinates{} {
-    if (dc <= 0.f || rhoc <= 0.f || pPBin <= 0) {
+    if (m_dc <= 0.f || m_rhoc < 0.f || m_dm <= 0.f || m_seed_dc <= 0.f || m_pointsPerTile <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
-    }
-    if (dm <= 0.f) {
-      m_dm = dc;
-    }
-    if (seed_dc < 0.f) {
-      m_seed_dc = dc;
     }
   }
 
   template <std::size_t Ndim>
-  inline Clusterer<Ndim>::Clusterer(Queue&, float dc, float rhoc, float dm, float seed_dc, int pPBin)
+  inline Clusterer<Ndim>::Clusterer(Queue&,
+                                    float dc,
+                                    float rhoc,
+                                    std::optional<float> dm,
+                                    std::optional<float> seed_dc,
+                                    int pPBin)
       : m_dc{dc},
-        m_seed_dc{seed_dc},
+        m_seed_dc{seed_dc.value_or(dc)},
         m_rhoc{rhoc},
-        m_dm{dm},
+        m_dm{dm.value_or(dc)},
         m_pointsPerTile{pPBin},
         m_wrappedCoordinates{} {
-    if (dc <= 0.f || rhoc <= 0.f || pPBin <= 0) {
+    if (m_dc <= 0.f || m_rhoc < 0.f || m_dm <= 0.f || m_seed_dc <= 0.f || m_pointsPerTile <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
-    }
-    if (dm <= 0.f) {
-      m_dm = dc;
-    }
-    if (seed_dc < 0.f) {
-      m_seed_dc = dc;
     }
   }
 
   template <std::size_t Ndim>
-  void Clusterer<Ndim>::setParameters(float dc, float rhoc, float dm, float seed_dc, int pPBin) {
-    if (dc <= 0.f || rhoc < 0.f || pPBin <= 0) {
-      throw std::invalid_argument(
-          "Invalid clustering parameters. The parameters must be positive.");
-    }
+  void Clusterer<Ndim>::setParameters(
+      float dc, float rhoc, std::optional<float> dm, std::optional<float> seed_dc, int pPBin) {
     m_dc = dc;
-    m_dm = dm < 0.f ? dc : dm;
-    m_seed_dc = seed_dc < 0.f ? dc : seed_dc;
+    m_dm = dm.value_or(dc);
+    m_seed_dc = seed_dc.value_or(dc);
     m_rhoc = rhoc;
-    m_dm = dm < 0.f ? dc : dm;
     m_pointsPerTile = pPBin;
+
+    if (m_dc <= 0.f || m_rhoc < 0.f || m_dm <= 0.f || m_seed_dc <= 0.f || m_pointsPerTile <= 0) {
+      throw std::invalid_argument(
+          "Invalid clustering parameters. The parameters must be positive.");
+    }
   }
 
   template <std::size_t Ndim>
