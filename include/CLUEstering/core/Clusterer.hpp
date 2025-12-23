@@ -77,36 +77,42 @@ namespace clue {
     /// @brief Constuct a Clusterer object
     ///
     /// @param dc Distance threshold for clustering.
-    /// This parameter can be a single float or an array of floats specifying the distance threshold for each dimension.
     /// @param rhoc Density threshold for clustering
-    /// @param dm Minimum distance between clusters.
-    /// This parameter can be a single float or an array of floats specifying the distance threshold for each dimension.
-    /// @param seed_dc Distance threshold for seed points, if -1.f, dc is used.
-    /// This parameter can be a single float or an array of floats specifying the distance threshold for each dimension.
+    /// @param dm Minimum distance between clusters. This parameter is optional and by default dc is used.
+    /// @param seed_dc Distance threshold for seed points. This parameter is optional and by default dc is used.
     /// @param pPBin Number of points per bin, used to determine the tile size
-    Clusterer(float dc, float rhoc, float dm = -1.f, float seed_dc = -1.f, int pPBin = 128);
+    Clusterer(float dc,
+              float rhoc,
+              std::optional<float> dm = std::nullopt,
+              std::optional<float> seed_dc = std::nullopt,
+              int pPBin = 128);
     /// @brief Constuct a Clusterer object
     ///
     /// @param queue The queue to use for the device operations
     /// @param dc Distance threshold for clustering.
-    /// This parameter can be a single float or an array of floats specifying the distance threshold for each dimension.
     /// @param rhoc Density threshold for clustering
-    /// @param dm Minimum distance between clusters.
-    /// This parameter can be a single float or an array of floats specifying the distance threshold for each dimension.
-    /// @param seed_dc Distance threshold for seed points, if the default value -1.f, dc is used.
-    /// This parameter can be a single float or an array of floats specifying the distance threshold for each dimension.
+    /// @param dm Minimum distance between clusters. This parameter is optional and by default dc is used.
+    /// @param seed_dc Distance threshold for seed points. This parameter is optional and by default dc is used.
     /// @param pPBin Number of points per bin, used to determine the tile size
-    Clusterer(
-        Queue& queue, float dc, float rhoc, float dm = -1.f, float seed_dc = -1.f, int pPBin = 128);
+    Clusterer(Queue& queue,
+              float dc,
+              float rhoc,
+              std::optional<float> dm = std::nullopt,
+              std::optional<float> seed_dc = std::nullopt,
+              int pPBin = 128);
 
     /// @brief Set the parameters for the clustering algorithm
     ///
     /// @param dc Distance threshold for clustering
     /// @param rhoc Density threshold for clustering
-    /// @param dm Minimum distance between clusters
-    /// @param seed_dc Distance threshold for seed points, if the defualt value -1.f, dc is used
+    /// @param dm Minimum distance between clusters. This parameter is optional and by default dc is used.
+    /// @param seed_dc Distance threshold for seed points. This parameter is optional and by default dc is used.
     /// @param pPBin Number of points per bin, used to determine the tile size
-    void setParameters(float dc, float rhoc, float dm = -1.f, float seed_dc = -1.f, int pPBin = 128);
+    void setParameters(float dc,
+                       float rhoc,
+                       std::optional<float> dm = std::nullopt,
+                       std::optional<float> seed_dc = std::nullopt,
+                       int pPBin = 128);
 
     /// @brief Construct the clusters from host points
     ///
