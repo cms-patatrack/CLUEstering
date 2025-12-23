@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.13.2" xml:lang="en-US">
+  <compounddef id="namespaceclue_1_1metrics" kind="namespace" language="C++">
+    <compoundname>clue::metrics</compoundname>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1acd21831096a9efe948c34a74376cb107" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt; Ndim &gt;</type>
+        <definition>using clue::metrics::Euclidean =  clue::EuclideanMetric&lt;Ndim&gt;</definition>
+        <argsstring></argsstring>
+        <name>Euclidean</name>
+        <qualifiedname>clue::metrics::Euclidean</qualifiedname>
+        <briefdescription>
+<para>Alias for <ref refid="DistanceMetrics_8hpp_1acd21831096a9efe948c34a74376cb107" kindref="member">Euclidean</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="236" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1ad1b2f037e5e1ecd77ac1ed2d89edf13e" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1WeightedEuclideanMetric" kindref="compound">clue::WeightedEuclideanMetric</ref>&lt; Ndim &gt;</type>
+        <definition>using clue::metrics::WeightedEuclidean =  clue::WeightedEuclideanMetric&lt;Ndim&gt;</definition>
+        <argsstring></argsstring>
+        <name>WeightedEuclidean</name>
+        <qualifiedname>clue::metrics::WeightedEuclidean</qualifiedname>
+        <briefdescription>
+<para>Alias for Weighted <ref refid="DistanceMetrics_8hpp_1acd21831096a9efe948c34a74376cb107" kindref="member">Euclidean</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="240" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="240" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1a5f7e5edbd3b3f6aa47e2fbc971b16951" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1PeriodicEuclideanMetric" kindref="compound">clue::PeriodicEuclideanMetric</ref>&lt; Ndim &gt;</type>
+        <definition>using clue::metrics::PeriodicEuclidean =  clue::PeriodicEuclideanMetric&lt;Ndim&gt;</definition>
+        <argsstring></argsstring>
+        <name>PeriodicEuclidean</name>
+        <qualifiedname>clue::metrics::PeriodicEuclidean</qualifiedname>
+        <briefdescription>
+<para>Alias for Periodic <ref refid="DistanceMetrics_8hpp_1acd21831096a9efe948c34a74376cb107" kindref="member">Euclidean</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="244" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="244" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1a02602bf5756d72b746eafdcbddfca610" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1ManhattanMetric" kindref="compound">clue::ManhattanMetric</ref>&lt; Ndim &gt;</type>
+        <definition>using clue::metrics::Manhattan =  clue::ManhattanMetric&lt;Ndim&gt;</definition>
+        <argsstring></argsstring>
+        <name>Manhattan</name>
+        <qualifiedname>clue::metrics::Manhattan</qualifiedname>
+        <briefdescription>
+<para>Alias for <ref refid="DistanceMetrics_8hpp_1a02602bf5756d72b746eafdcbddfca610" kindref="member">Manhattan</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="248" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="248" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1aa198538b83c3998df77ea89f5c69b196" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1ChebyshevMetric" kindref="compound">clue::ChebyshevMetric</ref>&lt; Ndim &gt;</type>
+        <definition>using clue::metrics::Chebyshev =  clue::ChebyshevMetric&lt;Ndim&gt;</definition>
+        <argsstring></argsstring>
+        <name>Chebyshev</name>
+        <qualifiedname>clue::metrics::Chebyshev</qualifiedname>
+        <briefdescription>
+<para>Alias for <ref refid="DistanceMetrics_8hpp_1aa198538b83c3998df77ea89f5c69b196" kindref="member">Chebyshev</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="252" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="252" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1a6a1124c643472d917d2608a7c4c5483a" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1WeightedChebyshevMetric" kindref="compound">clue::WeightedChebyshevMetric</ref>&lt; Ndim &gt;</type>
+        <definition>using clue::metrics::WeightedChebyshev =  clue::WeightedChebyshevMetric&lt;Ndim&gt;</definition>
+        <argsstring></argsstring>
+        <name>WeightedChebyshev</name>
+        <qualifiedname>clue::metrics::WeightedChebyshev</qualifiedname>
+        <briefdescription>
+<para>Alias for Weighted <ref refid="DistanceMetrics_8hpp_1aa198538b83c3998df77ea89f5c69b196" kindref="member">Chebyshev</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="256" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="256" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="232" column="3"/>
+  </compounddef>
+</doxygen>
