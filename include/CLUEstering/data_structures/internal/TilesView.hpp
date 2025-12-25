@@ -80,11 +80,11 @@ namespace clue::internal {
       }
     }
 
-    ALPAKA_FN_ACC inline constexpr clue::Span<int32_t> operator[](int32_t globalBinId) {
+    ALPAKA_FN_ACC inline constexpr auto operator[](int32_t globalBinId) {
       const auto size = offsets[globalBinId + 1] - offsets[globalBinId];
       const auto offset = offsets[globalBinId];
       int32_t* buf_ptr = indexes + offset;
-      return clue::Span<int32_t>{buf_ptr, size};
+      return std::span<int32_t>{buf_ptr, static_cast<std::size_t>(size)};
     }
 
     ALPAKA_FN_ACC inline constexpr float normalizeCoordinate(float coord, int dim) const {
