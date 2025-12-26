@@ -56,14 +56,14 @@ jobs:
       if: matrix.container == 'fedora:42'
       run: |
         dnf install -y ${{ matrix.compiler }}
-        dnf install -y git cmake boost-devel tbb libomp.x86_64
+        dnf install -y git cmake boost-devel tbb libomp.x86_64 python3-devel python3-pip
 
     - name: Install dependencies
       if: matrix.container == 'almalinux:9'
       run: |
         dnf install -y ${{ matrix.compiler }}
         source /opt/rh/${{ matrix.compiler }}/enable
-        dnf install -y git cmake boost-devel tbb libomp.x86_64
+        dnf install -y git cmake boost-devel tbb libomp.x86_64 python3-devel python3-pip
 
     - name: Install dependencies
       if: matrix.os == 'macos-latest'
