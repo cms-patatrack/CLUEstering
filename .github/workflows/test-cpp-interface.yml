@@ -1,6 +1,5 @@
 name: Test C++ interface
 
-# The workflow gets triggered by pushes and pull requests
 on:
   push:
     branches: [ "main" ]
