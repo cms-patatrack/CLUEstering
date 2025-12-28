@@ -63,7 +63,7 @@ jobs:
       run: |
         dnf install -y ${{ matrix.compiler }}
         source /opt/rh/${{ matrix.compiler }}/enable
-        dnf install -y git cmake boost-devel tbb libomp.x86_64 python3.11-devel python3-pip
+        dnf install -y git cmake boost-devel tbb libomp.x86_64 python3.11-devel python3.11-pip
 
     - name: Install dependencies
       if: matrix.os == 'macos-latest'
@@ -82,7 +82,7 @@ jobs:
     - name: Install Python dependencies
       run: |
         python3 -m pip install --upgrade pip
-        python3 -m pip install pytest scikit-learn pandas matplotlib numpy
+        python3 -m pip install pytest scikit-learn pandas matplotlib
 
     - name: Compile CLUEstering modules
       if: matrix.container != 'almalinux:9'
