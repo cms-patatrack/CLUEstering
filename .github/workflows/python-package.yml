@@ -82,10 +82,7 @@ jobs:
     - name: Install Python dependencies
       run: |
         python3 -m pip install --upgrade pip
-        python3 -m pip install pytest
-        python3 -m pip install scikit-learn 
-        python3 -m pip install pandas
-        python3 -m pip install matplotlib
+        python3 -m pip install pytest scikit-learn pandas matplotlib numpy
 
     - name: Compile CLUEstering modules
       if: matrix.container != 'almalinux:9'
