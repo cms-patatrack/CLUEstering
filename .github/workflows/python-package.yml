@@ -89,14 +89,14 @@ jobs:
 
     - name: Compile CLUEstering modules
       if: matrix.container != 'almalinux:9'
-      working-directory: ${{ github.workspace }}/tests
+      working-directory: ${{ github.workspace }}
       run: |
         cmake -S . -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release
         cmake --build build --parallel
 
     - name: Compile CLUEstering modules
       if: matrix.container == 'almalinux:9'
-      working-directory: ${{ github.workspace }}/tests
+      working-directory: ${{ github.workspace }}
       run: |
         source /opt/rh/${{ matrix.compiler }}/enable
         cmake -S . -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release
