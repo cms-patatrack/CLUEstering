@@ -8,8 +8,10 @@
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 #include <array>
+#include <cstddef>
 #include <cstdint>
 #include <alpaka/alpaka.hpp>
+#include <span>
 
 namespace clue::internal {
 
