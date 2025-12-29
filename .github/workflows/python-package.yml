@@ -75,14 +75,22 @@ jobs:
         submodules: true
 
     - name: Set up Python ${{ matrix.python-version }}
+      if: matrix.os == 'macos-latest'
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
 
     - name: Install Python dependencies
+      if: matrix.container == 'fedora:42'
       run: |
         python3 -m pip install --upgrade pip
         python3 -m pip install pytest scikit-learn pandas matplotlib
+
+    - name: Install Python dependencies
+      if: matrix.container == 'almalinux:9'
+      run: |
+        python3.11 -m pip install --upgrade pip
+        python3.11 -m pip install pytest scikit-learn pandas matplotlib
 
     - name: Compile CLUEstering modules
       if: matrix.container != 'almalinux:9'
@@ -96,7 +104,7 @@ jobs:
       working-directory: ${{ github.workspace }}
       run: |
         source /opt/rh/${{ matrix.compiler }}/enable
-        cmake -S . -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release
+        cmake -S . -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE=/usr/bin/python3.11
         cmake --build build --parallel
 
     - name: Run tests of the Python library
