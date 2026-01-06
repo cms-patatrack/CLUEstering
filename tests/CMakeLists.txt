@@ -57,13 +57,38 @@ enable_testing()
 add_subdirectory(cpu)
 
 include(CheckLanguage)
+
+execute_process(
+  COMMAND nvidia-smi --query-gpu=name --format=csv,noheader
+  OUTPUT_VARIABLE GPU_LIST
+  ERROR_QUIET
+  RESULT_VARIABLE SMI_STATUS)
+
+if(SMI_STATUS EQUAL 0 AND NOT GPU_LIST STREQUAL "")
+  set(NVIDIA_GPU_PRESENT TRUE)
+else()
+  set(NVIDIA_GPU_PRESENT FALSE)
+endif()
+
 check_language(CUDA)
-if(CMAKE_CUDA_COMPILER)
+if(CMAKE_CUDA_COMPILER AND NVIDIA_GPU_PRESENT)
   add_subdirectory(cuda)
 endif()
 
+execute_process(
+  COMMAND rocm-smi --showproductname
+  OUTPUT_VARIABLE AMD_GPU_LIST
+  ERROR_QUIET
+  RESULT_VARIABLE SMI_STATUS)
+
+if(SMI_STATUS EQUAL 0 AND NOT AMD_GPU_LIST STREQUAL "")
+  set(AMD_GPU_PRESENT TRUE)
+else()
+  set(AMD_GPU_PRESENT FALSE)
+endif()
+
 check_language(HIP)
-if(CMAKE_HIP_COMPILER)
+if(CMAKE_HIP_COMPILER AND AMD_GPU_PRESENT)
   add_subdirectory(hip)
 endif()
 
