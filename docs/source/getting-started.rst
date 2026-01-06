@@ -101,7 +101,7 @@ Example CMake file:
       set_source_files_properties(main.cpp PROPERTIES LANGUAGE CUDA)
       add_executable(cuda.out main.cpp)
       target_compile_definitions(cuda.out PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
-      set_target_properties(cuda.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON CUDA_ARCHITECTURES "50;60;61;62;70;80;90")
+      set_target_properties(cuda.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON CUDA_ARCHITECTURES native)
     endif()
 
 Using the Python Interface

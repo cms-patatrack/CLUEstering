@@ -26,7 +26,7 @@ foreach(source ${sources})
                       TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../data")
   target_compile_options(${target} PRIVATE --expt-relaxed-constexpr)
   set_target_properties(${target} PROPERTIES CUDA_SEPARABLE_COMPILATION ON
-                                             CUDA_ARCHITECTURES "75;80;90")
+                                             CUDA_ARCHITECTURES native)
   set_target_properties(
     ${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/cuda
                          OUTPUT_NAME ${test_name})

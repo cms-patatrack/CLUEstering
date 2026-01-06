@@ -57,7 +57,7 @@ if(ALPAKA_ACC_GPU_CUDA_ENABLED)
     target_compile_definitions(cuda.out PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
     target_compile_options(cuda.out PRIVATE --expt-relaxed-constexpr)
     set_target_properties(cuda.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON
-                                              CUDA_ARCHITECTURES "75;80;90")
+                                              CUDA_ARCHITECTURES native)
   else()
     message(FATAL_ERROR "CUDA not found. Please install it.")
   endif()
