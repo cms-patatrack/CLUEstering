@@ -1,6 +1,5 @@
 name: Python package
 
-# The workflow gets triggered by pushes and pull requests
 on:
   push:
     branches: [ "main" ]
@@ -13,45 +12,62 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        python-version: ["3.8", "3.10", "3.12", "3.13"]
+        include:
+          - name: linux-clang-15
+            os: ubuntu-latest
+            container: fedora:42
+            compiler: clang-15
+          - name: linux-clang-17
+            os: ubuntu-latest
+            container: fedora:42
+            compiler: clang-17
+          - name: linux-clang-18
+            os: ubuntu-latest
+            container: fedora:42
+            compiler: clang-18
+          - name: linux-clang-19
+            os: ubuntu-latest
+            container: fedora:42
+            compiler: clang-19
+          - name: macos-clang
+            os: macos-latest
 
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
 
     steps:
-    - uses: actions/checkout@v3
-      with: 
-        submodules: true
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install build dependencies
-      if: matrix.os == 'ubuntu-latest'
+    - name: Install dependencies
+      if: matrix.container == 'fedora:42'
       run: |
-        sudo apt install -y libboost-atomic-dev
-        sudo apt install -y libtbb-dev
-        sudo apt install libomp-dev
+        dnf install -y ${{ matrix.compiler }}
+        dnf install -y git cmake boost-devel tbb libomp.x86_64 python3-devel python3-pip
 
-    - name: Install build dependencies
+    - name: Install dependencies
       if: matrix.os == 'macos-latest'
       run: |
         brew install boost tbb libomp
 
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Set up Python ${{ matrix.python-version }}
+      if: matrix.os == 'macos-latest'
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
     - name: Install Python dependencies
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install pytest
-        python -m pip install scikit-learn 
-        python -m pip install pandas
-        python -m pip install matplotlib
+        python3 -m pip install --upgrade pip --break-system-packages
+        python3 -m pip install pytest scikit-learn pandas matplotlib --break-system-packages
 
     - name: Compile CLUEstering modules
-      working-directory: ${{github.workspace}}
+      working-directory: ${{ github.workspace }}
       run: |
-        cmake -S . -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build -- -j 4
+        cmake -S . -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --parallel
+
     - name: Run tests of the Python library
       working-directory: ${{github.workspace}}/tests
       run: |
