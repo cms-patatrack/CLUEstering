@@ -58,7 +58,9 @@ namespace clue::internal {
           m_dsize{clue::make_device_buffer<std::size_t>(queue)},
           m_size{std::nullopt},
           m_capacity{size},
-          m_view{m_buffer.data(), m_dsize.data(), m_capacity} {}
+          m_view{m_buffer.data(), m_dsize.data(), m_capacity} {
+      alpaka::memset(queue, m_dsize, 0u);
+    }
 
     ALPAKA_FN_HOST constexpr auto capacity() const { return m_capacity; }
 
