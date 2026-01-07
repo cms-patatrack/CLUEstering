@@ -23,9 +23,9 @@ if(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
   target_link_libraries(serial.out PRIVATE CLUEstering::CLUEstering
                                            alpaka::alpaka)
 endif()
+
 if(ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
   find_package(TBB REQUIRED)
-
   if(NOT TARGET TBB::tbb)
     message(FATAL_ERROR "TBB not found. Please install it.")
   endif()
@@ -34,9 +34,9 @@ if(ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
   target_link_libraries(tbb.out PRIVATE CLUEstering::CLUEstering alpaka::alpaka
                                         TBB::tbb)
 endif()
+
 if(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
   find_package(OpenMP REQUIRED)
-
   if(NOT TARGET OpenMP::OpenMP_CXX)
     message(FATAL_ERROR "OpenMP not found. Please install it.")
   endif()
@@ -46,6 +46,7 @@ if(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
   target_link_libraries(openmp.out PRIVATE CLUEstering::CLUEstering
                                            alpaka::alpaka OpenMP::OpenMP_CXX)
 endif()
+
 if(ALPAKA_ACC_GPU_CUDA_ENABLED)
   include(CheckLanguage)
   check_language(CUDA)
@@ -57,7 +58,7 @@ if(ALPAKA_ACC_GPU_CUDA_ENABLED)
     target_compile_definitions(cuda.out PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
     target_compile_options(cuda.out PRIVATE --expt-relaxed-constexpr)
     set_target_properties(cuda.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON
-                                              CUDA_ARCHITECTURES "75;80;90")
+                                              CUDA_ARCHITECTURES native)
   else()
     message(FATAL_ERROR "CUDA not found. Please install it.")
   endif()
