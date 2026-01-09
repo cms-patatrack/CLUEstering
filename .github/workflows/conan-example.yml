@@ -36,5 +36,5 @@ jobs:
     - name: Compile and run example
       working-directory: ${{ github.workspace }}/examples/conan
       run: |
-        cmake -B build -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build
+        cmake -B build -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake && cmake --build build
         ./build/serial.out
