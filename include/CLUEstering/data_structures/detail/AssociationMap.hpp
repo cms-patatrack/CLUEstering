@@ -306,8 +306,10 @@ namespace clue {
 
     auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_extents.keys + 1);
     alpaka::memset(queue, temp_offsets, 0u, 1u);
+	alpaka::wait(queue);
     internal::algorithm::inclusive_scan(
         sizes_buffer.data(), sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
+	alpaka::wait(queue);
     alpaka::memcpy(queue,
                    make_device_view(alpaka::getDev(queue), m_offsets.data(), m_extents.keys + 1),
                    temp_offsets);
@@ -369,8 +371,11 @@ namespace clue {
 
     auto temp_offsets = make_device_buffer<key_type[]>(queue, m_extents.keys + 1);
     alpaka::memset(queue, temp_offsets, 0u, 1u);
+
+	alpaka::wait(queue);
     internal::algorithm::inclusive_scan(
         sizes_buffer.data(), sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
+	alpaka::wait(queue);
 
     alpaka::memcpy(queue,
                    make_device_view(alpaka::getDev(queue), m_offsets.data(), m_extents.keys + 1),
