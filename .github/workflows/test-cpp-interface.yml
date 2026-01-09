@@ -78,7 +78,7 @@ jobs:
     - name: Install dependencies
       if: matrix.os == 'windows-latest'
       run: |
-        vcpkg install 
+        vcpkg install --feature-flags=manifests --triplet x64-windows
 
     - name: Compile and run tests
       if: matrix.container != 'almalinux:9'
