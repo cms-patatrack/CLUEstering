@@ -30,6 +30,7 @@ jobs:
     - name: Install CLUEsterin with conan
       working-directory: ${{ github.workspace }}/examples/conan
       run: |
+        conan profile detect --force
         conan install . --output-folder=build --build=missing -s compiler.cppstd=20
 
     - name: Compile and run example
