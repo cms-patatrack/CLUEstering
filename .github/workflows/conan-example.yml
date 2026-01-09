@@ -1,4 +1,4 @@
-name: Run the examples
+name: Run exaple with Conan
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-conan-example:
 
     runs-on: ubuntu-latest
     strategy:
