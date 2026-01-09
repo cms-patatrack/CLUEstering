@@ -1,0 +1,6 @@
+[requires]
+cluestering/2.9.0
+
+[generators]
+CMakeDeps
+CMakeToolchain

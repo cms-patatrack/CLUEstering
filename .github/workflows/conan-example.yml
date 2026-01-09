@@ -1,0 +1,40 @@
+name: Run exaple with Conan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-conan-example:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Install Conan
+      run: |
+        sudo apt-get update -y && sudo apt install -y python3-pip
+        pip3 install conan --break-system-packages
+
+    - name: Install build dependencies
+      run: |
+        sudo apt install -y libboost-dev libtbb-dev libomp-dev
+
+    - name: Install CLUEsterin with conan
+      working-directory: ${{ github.workspace }}/examples/conan
+      run: |
+        conan profile detect --force
+        conan install . --output-folder=build --build=missing -s compiler.cppstd=20
+
+    - name: Compile and run example
+      working-directory: ${{ github.workspace }}/examples/conan
+      run: |
+        cmake -B build -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake && cmake --build build
+        ./build/serial.out
