@@ -46,6 +46,8 @@ jobs:
             compiler: clang-19
           - name: macos-clang
             os: macos-latest
+          - name: windows
+            os: windows-latest
 
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
@@ -68,6 +70,11 @@ jobs:
       if: matrix.os == 'macos-latest'
       run: |
         brew install boost tbb libomp
+
+    - name: Install dependencies
+      if: matrix.os == 'windows-latest'
+      run: |
+        vcpkg install 
 
     - uses: actions/checkout@v4
       with:
