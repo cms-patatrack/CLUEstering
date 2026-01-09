@@ -25,9 +25,8 @@ if(CMAKE_CUDA_COMPILER)
   target_compile_definitions(native_cuda.out
                              PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
   target_compile_options(native_cuda.out PRIVATE --expt-relaxed-constexpr)
-  set_target_properties(
-    native_cuda.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON CUDA_ARCHITECTURES
-                                                             native)
+  set_target_properties(native_cuda.out PROPERTIES CUDA_SEPARABLE_COMPILATION ON
+                                                   CUDA_ARCHITECTURES native)
 else()
   message(FATAL_ERROR "CUDA not found. Please install it.")
 endif()
