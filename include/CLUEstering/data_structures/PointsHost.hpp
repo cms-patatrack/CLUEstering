@@ -64,6 +64,9 @@ namespace clue {
 
       float weight() const;
       float cluster_index() const;
+
+      operator std::array<float, Ndim>() { return m_coordinates; }
+	  // operator std::array<float, Ndim + 1>() {}
     };
 
     /// @brief Constructs a container for the points allocated on the host

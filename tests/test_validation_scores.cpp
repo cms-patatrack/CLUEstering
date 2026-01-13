@@ -26,4 +26,10 @@ TEST_CASE("Test validation scores on toy detector dataset") {
     CHECK(silhouette >= -1.f);
     CHECK(silhouette <= 1.f);
   }
+
+  SUBCASE("Test computation of davies-bouldin score") {
+    const auto davies_bouldin = clue::davies_bouldin(points);
+	std::cout << "Davies-Bouldin score: " << davies_bouldin << std::endl;
+    CHECK(davies_bouldin >= 0.f);
+  }
 }

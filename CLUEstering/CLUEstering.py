@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import davies_bouldin_score
 from os.path import dirname, exists, join
 path = dirname(__file__)
 sys.path.insert(1, join(path, 'lib'))
@@ -1183,3 +1184,9 @@ class clusterer:
             points_per_cluster,
             df_
         )
+
+if __name__ == "__main__":
+    c = clusterer(4, 2.5, 4)
+    c.read_data('../data/toyDetector_1000.csv')
+    c.run_clue()
+    print(davies_bouldin_score(c.coords.T, c.cluster_ids))
