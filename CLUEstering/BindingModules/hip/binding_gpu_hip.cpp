@@ -17,182 +17,12 @@ namespace py = pybind11;
 
 namespace alpaka_rocm_async {
 
-  void listDevices(const std::string& backend) {
-    const char tab = '\t';
-    const std::vector<Device> devices = alpaka::getDevs(clue::Platform{});
-    if (devices.empty()) {
-      std::cout << "No devices found for the " << backend << " backend." << std::endl;
-      return;
-    } else {
-      std::cout << backend << " devices found: \n";
-      for (auto i = 0u; i < devices.size(); ++i) {
-        std::cout << tab << "device " << i << ": " << alpaka::getName(devices[i]) << '\n';
-      }
-    }
-  }
-
-  template <clue::concepts::convolutional_kernel Kernel>
-  void mainRun(float dc,
-               float rhoc,
-               float dm,
-               float seed_dc,
-               int pPBin,
-               std::vector<uint8_t> wrapped,
-               py::array_t<float> data,
-               py::array_t<int> results,
-               const Kernel& kernel,
-               int Ndim,
-               int32_t n_points,
-               size_t block_size,
-               size_t device_id) {
-    auto rData = data.request();
-    auto* pData = static_cast<float*>(rData.ptr);
-    auto rResults = results.request();
-    auto* pResults = static_cast<int*>(rResults.ptr);
-
-    auto queue = clue::get_queue(device_id);
-
-    // Running the clustering algorithm //
-    switch (Ndim) {
-      [[unlikely]] case (1):
-        run<1, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
-        return;
-      [[likely]] case (2):
-        run<2, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
-        return;
-      [[likely]] case (3):
-        run<3, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
-        return;
-      [[unlikely]] case (4):
-        run<4, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
-        return;
-      [[unlikely]] case (5):
-        run<5, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
-        return;
-      [[unlikely]] case (6):
-        run<6, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
-        return;
-      [[unlikely]] case (7):
-        run<7, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
-        return;
-      [[unlikely]] case (8):
-        run<8, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
-        return;
-      [[unlikely]] case (9):
-        run<9, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
-        return;
-      [[unlikely]] case (10):
-        run<10, Kernel>(dc,
-                        rhoc,
-                        dm,
-                        seed_dc,
-                        pPBin,
-                        std::move(wrapped),
-                        std::make_tuple(pData, pResults),
-                        n_points,
-                        kernel,
-                        queue,
-                        block_size);
-        return;
-      [[unlikely]] default:
-        std::cout << "This library only works up to 10 dimensions\n";
-    }
-  }
-
   PYBIND11_MODULE(CLUE_GPU_HIP, m) {
     m.doc() = "Binding of the CLUE algorithm running on AMD GPUs";
 
-    m.def("listDevices", &listDevices, "List the available devices for the HIP/ROCm backend");
+    m.def("listDevices",
+          &alpaka_rocm_async::listDevices,
+          "List the available devices for the HIP/ROCm backend");
     m.def("mainRun",
           pybind11::overload_cast<float,
                                   float,
@@ -206,7 +36,7 @@ namespace alpaka_rocm_async {
                                   int,
                                   int32_t,
                                   size_t,
-                                  size_t>(&mainRun<clue::FlatKernel>),
+                                  size_t>(&alpaka_rocm_async::mainRun<clue::FlatKernel>),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -221,7 +51,7 @@ namespace alpaka_rocm_async {
                                   int,
                                   int32_t,
                                   size_t,
-                                  size_t>(&mainRun<clue::ExponentialKernel>),
+                                  size_t>(&alpaka_rocm_async::mainRun<clue::ExponentialKernel>),
           "mainRun");
     m.def("mainRun",
           pybind11::overload_cast<float,
@@ -236,7 +66,7 @@ namespace alpaka_rocm_async {
                                   int,
                                   int32_t,
                                   size_t,
-                                  size_t>(&mainRun<clue::GaussianKernel>),
+                                  size_t>(&alpaka_rocm_async::mainRun<clue::GaussianKernel>),
           "mainRun");
   }
 };  // namespace alpaka_rocm_async
