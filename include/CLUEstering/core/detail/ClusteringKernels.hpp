@@ -4,12 +4,14 @@
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
+#include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/data_structures/internal/VecArray.hpp"
 #include "CLUEstering/detail/make_array.hpp"
+#include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 
@@ -369,7 +371,7 @@ namespace clue::detail {
                                   float seed_dc,
                                   DistanceMetric metric,
                                   float rhoc,
-								  int32_t* event_associations,
+                                  int32_t* event_associations,
                                   const auto* event_offsets,
                                   std::size_t max_event_size) const {
       for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
@@ -390,6 +392,7 @@ namespace clue::detail {
             dev_points.is_seed[global_idx] = 1;
             dev_points.nearest_higher[global_idx] = -1;
             seeds.push_back(acc, global_idx);
+            event_associations[global_idx] = event;
           } else {
             dev_points.is_seed[global_idx] = 0;
           }
@@ -557,6 +560,7 @@ namespace clue::detail {
             concepts::queue TQueue,
             std::size_t Ndim,
             concepts::distance_metric<Ndim> DistanceMetric>
+    requires(alpaka::Dim<TAcc>::value == 1)
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
                                clue::internal::SeedArray<>& seeds,
@@ -574,6 +578,38 @@ namespace clue::detail {
                        metric,
                        rhoc,
                        size);
+  }
+
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            std::size_t Ndim,
+            concepts::distance_metric<Ndim> DistanceMetric>
+    requires(alpaka::Dim<TAcc>::value == 2)
+  inline void findClusterSeedsBatched(TQueue& queue,
+                                      clue::internal::SeedArray<>& seeds,
+                                      PointsView<Ndim>& dev_points,
+                                      float seed_dc,
+                                      const DistanceMetric& metric,
+                                      float rhoc,
+                                      const auto& event_offsets,
+                                      std::size_t max_event_size,
+                                      std::int32_t* event_associations,
+									  std::size_t block_size) {
+    const auto blocks_per_event = divide_up_by(max_event_size, block_size);
+    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
+    const auto work_division =
+        make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
+    alpaka::exec<TAcc>(queue,
+                       work_division,
+                       KernelFindClustersBatched{},
+                       seeds.view(),
+                       dev_points,
+                       seed_dc,
+                       metric,
+                       rhoc,
+                       event_associations,
+                       event_offsets.data(),
+                       max_event_size);
   }
 
   template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>

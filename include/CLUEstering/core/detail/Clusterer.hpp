@@ -175,17 +175,18 @@ namespace clue {
                                                           max_event_size,
                                                           block_size);
     detail::setup_seeds(queue, m_seeds, seed_candidates);
+    m_event_associations = make_device_buffer<std::int32_t[]>(queue, seed_candidates);
 
-    const Idx grid_size = clue::divide_up_by(n_points, block_size);
-    auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
-    detail::findClusterSeeds<Acc>(queue,
-                                  work_division,
-                                  m_seeds.value(),
-                                  dev_points.view(),
-                                  m_seed_dc,
-                                  metric,
-                                  m_rhoc,
-                                  n_points);
+    detail::findClusterSeedsBatched<internal::Acc2D>(queue,
+                                                     m_seeds.value(),
+                                                     dev_points.view(),
+                                                     m_seed_dc,
+                                                     metric,
+                                                     m_rhoc,
+                                                     d_event_offsets,
+                                                     max_event_size,
+                                                     m_event_associations->data(),
+                                                     block_size);
 
     m_followers->template fill<Acc>(queue, dev_points);
 
@@ -241,17 +242,18 @@ namespace clue {
                                                           max_event_size,
                                                           block_size);
     detail::setup_seeds(queue, m_seeds, seed_candidates);
+    m_event_associations = make_device_buffer<std::int32_t[]>(queue, seed_candidates);
 
-    const Idx grid_size = clue::divide_up_by(n_points, block_size);
-    auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
-    detail::findClusterSeeds<Acc>(queue,
-                                  work_division,
-                                  m_seeds.value(),
-                                  dev_points.view(),
-                                  m_seed_dc,
-                                  metric,
-                                  m_rhoc,
-                                  n_points);
+    detail::findClusterSeedsBatched<internal::Acc2D>(queue,
+                                              m_seeds.value(),
+                                              dev_points.view(),
+                                              m_seed_dc,
+                                              metric,
+                                              m_rhoc,
+                                              d_event_offsets,
+                                              max_event_size,
+                                              m_event_associations->data(),
+                                              block_size);
 
     m_followers->template fill<Acc>(queue, dev_points);
 
