@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
+#include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
@@ -329,6 +330,7 @@ namespace clue::detail {
 
   struct KernelFindClusters {
     template <typename TAcc, std::size_t Ndim, concepts::distance_metric<Ndim> DistanceMetric>
+      requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
                                   PointsView<Ndim> dev_points,
@@ -353,6 +355,44 @@ namespace clue::detail {
           seeds.push_back(acc, i);
         } else {
           dev_points.is_seed[i] = 0;
+        }
+      }
+    }
+  };
+
+  struct KernelFindClustersBatched {
+    template <typename TAcc, std::size_t Ndim, concepts::distance_metric<Ndim> DistanceMetric>
+      requires(alpaka::Dim<TAcc>::value == 2)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  clue::internal::SeedArrayView seeds,
+                                  PointsView<Ndim> dev_points,
+                                  float seed_dc,
+                                  DistanceMetric metric,
+                                  float rhoc,
+								  int32_t* event_associations,
+                                  const auto* event_offsets,
+                                  std::size_t max_event_size) const {
+      for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
+        for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
+          const auto global_idx = event_offsets[event] + local_idx;
+
+          dev_points.cluster_index[global_idx] = -1;
+          auto nh = dev_points.nearest_higher[global_idx];
+
+          auto coords_i = dev_points[global_idx];
+          auto coords_nh = dev_points[nh];
+          auto distance = metric(coords_i, coords_nh);
+
+          float rho_i = dev_points.rho[global_idx];
+          bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
+
+          if (is_seed) {
+            dev_points.is_seed[global_idx] = 1;
+            dev_points.nearest_higher[global_idx] = -1;
+            seeds.push_back(acc, global_idx);
+          } else {
+            dev_points.is_seed[global_idx] = 0;
+          }
         }
       }
     }
