@@ -18,12 +18,29 @@ namespace clue {
     template <typename TFunc>
     struct KernelComputeAssociations {
       template <typename TAcc>
+        requires(alpaka::Dim<TAcc>::value == 1)
       ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                     size_t size,
                                     int32_t* associations,
                                     TFunc func) const {
         for (auto i : alpaka::uniformElements(acc, size)) {
           associations[i] = func(i);
+        }
+      }
+      template <typename TAcc>
+        requires(alpaka::Dim<TAcc>::value == 2)
+      ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                    int32_t* associations,
+                                    TFunc func,
+                                    const auto* event_offsets,
+                                    std::size_t max_event_size,
+                                    std::size_t /* blocks_per_event */) const {
+        // TODO: add bound checking
+        for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
+          for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
+            auto global_idx = event_offsets[event] + local_idx;
+            associations[global_idx] = func(global_idx, event);
+          }
         }
       }
     };
@@ -385,6 +402,64 @@ namespace clue {
                        detail::KernelFillAssociator{},
                        m_indexes.data(),
                        associations.data(),
+                       temp_offsets.data(),
+                       size);
+  }
+
+  template <concepts::device TDev>
+  template <concepts::accelerator TAcc, concepts::queue TQueue, typename TFunc>
+  ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
+                                                              size_type size,
+                                                              TFunc func,
+                                                              const auto& event_offsets,
+                                                              std::size_t max_event_size) {
+    if (m_extents.keys == 0)
+      return;
+
+    auto bin_buffer = make_device_buffer<int32_t[]>(queue, size);
+
+    const auto blocksize = 256;
+    const auto blocks_per_event = divide_up_by(max_event_size, blocksize);
+    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
+    const auto batch_workdiv =
+        make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, blocksize});
+    alpaka::exec<internal::Acc2D>(queue,
+                                  batch_workdiv,
+                                  detail::KernelComputeAssociations<TFunc>{},
+                                  bin_buffer.data(),
+                                  func,
+                                  event_offsets.data(),
+                                  max_event_size,
+                                  blocks_per_event);
+
+    auto sizes_buffer = make_device_buffer<int32_t[]>(queue, m_extents.keys);
+    const auto workdiv = make_workdiv<TAcc>(size, blocksize);
+    alpaka::memset(queue, sizes_buffer, 0);
+    alpaka::exec<TAcc>(queue,
+                       workdiv,
+                       detail::KernelComputeAssociationSizes{},
+                       bin_buffer.data(),
+                       sizes_buffer.data(),
+                       size);
+
+    auto block_counter = make_device_buffer<int32_t>(queue);
+    alpaka::memset(queue, block_counter, 0);
+
+    auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_extents.keys + 1);
+    alpaka::memset(queue, temp_offsets, 0u, 1u);
+    alpaka::wait(queue);
+
+    internal::algorithm::inclusive_scan(
+        sizes_buffer.data(), sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
+
+    alpaka::memcpy(queue,
+                   make_device_view(alpaka::getDev(queue), m_offsets.data(), m_extents.keys + 1),
+                   temp_offsets);
+    alpaka::exec<TAcc>(queue,
+                       workdiv,
+                       detail::KernelFillAssociator{},
+                       m_indexes.data(),
+                       bin_buffer.data(),
                        temp_offsets.data(),
                        size);
   }
