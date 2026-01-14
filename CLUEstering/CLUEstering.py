@@ -31,11 +31,11 @@ if omp_found:
     import CLUE_CPU_OMP as cpu_omp
     backends.append("cpu openmp")
 cuda_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))))
-if cuda_found:
+if cuda_found:  # pragma: no cover
     import CLUE_GPU_CUDA as gpu_cuda
     backends.append("gpu cuda")
 hip_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_HIP*.so'))))
-if hip_found:
+if hip_found:   # pragma: no cover
     import CLUE_GPU_HIP as gpu_hip
     backends.append("gpu hip")
 
@@ -60,7 +60,7 @@ def is_openmp_available():
     return omp_found
 
 
-def is_cuda_available():
+def is_cuda_available():    # pragma: no cover
     """
     Check if the library is compiled with CUDA support.
 
@@ -70,7 +70,7 @@ def is_cuda_available():
     return cuda_found
 
 
-def is_hip_available():
+def is_hip_available():     # pragma: no cover
     """
     Check if the library is compiled with HIP support.
 
@@ -533,12 +533,12 @@ class clusterer:
                 cpu_omp.listDevices(backend)
             else:
                 print("OpenMP module not found. Please re-compile the library and try again.")
-        elif backend == "gpu cuda":
+        elif backend == "gpu cuda":     # pragma: no cover
             if cuda_found:
                 gpu_cuda.listDevices(backend)
             else:
                 print("CUDA module not found. Please re-compile the library and try again.")
-        elif backend == "gpu hip":
+        elif backend == "gpu hip":      # pragma: no cover
             if hip_found:
                 gpu_hip.listDevices(backend)
             else:
@@ -602,31 +602,31 @@ class clusterer:
                                                     self._ppbin, self.wrapped, data.coords, data.results,
                                                     self._kernel, data.n_dim,
                                                     data.n_points, block_size, device_id)
-        elif backend == "cpu tbb":
-            if tbb_found:
+        elif backend == "cpu tbb":  # pragma: no cover
+            if tbb_found:   
                 cluster_id_is_seed = cpu_tbb.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
                                                      self._ppbin, self.wrapped, data.coords, data.results,
                                                      self._kernel, data.n_dim,
                                                      data.n_points, block_size, device_id)
             else:
                 print("TBB module not found. Please re-compile the library and try again.")
-        elif backend == "cpu openmp":
-            if omp_found:
+        elif backend == "cpu openmp":   # pragma: no cover
+            if omp_found:   
                 cluster_id_is_seed = cpu_omp.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
                                                      self._ppbin, self.wrapped, data.coords, data.results,
                                                      self._kernel, data.n_dim,
                                                      data.n_points, block_size, device_id)
             else:
                 print("OpenMP module not found. Please re-compile the library and try again.")
-        elif backend == "gpu cuda":
-            if cuda_found:
+        elif backend == "gpu cuda":     # pragma: no cover
+            if cuda_found:  
                 cluster_id_is_seed = gpu_cuda.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
                                                       self._ppbin, self.wrapped, data.coords, data.results,
                                                       self._kernel, data.n_dim,
                                                       data.n_points, block_size, device_id)
             else:
                 print("CUDA module not found. Please re-compile the library and try again.")
-        elif backend == "gpu hip":
+        elif backend == "gpu hip":      # pragma: no cover
             if hip_found:
                 cluster_id_is_seed = gpu_hip.mainRun(self._dc, self._rhoc, self._dm, self._seed_dc,
                                                      self._ppbin, self.wrapped, data.coords, data.results,
