@@ -51,7 +51,7 @@ namespace clue {
     std::optional<TilesDevice> m_tiles;
     std::optional<internal::SeedArray<>> m_seeds;
     std::optional<FollowersDevice> m_followers;
-	std::optional<device_buffer<Device, std::int32_t[]>> m_event_associations;
+    std::optional<device_buffer<Device, std::int32_t[]>> m_event_associations;
 
     void setup(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points) {
       detail::setup_tiles(queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates);
@@ -264,6 +264,17 @@ namespace clue {
     /// @param d_points Device points
     /// @return An associator mapping clusters and points
     AssociationMap<Device> getClusters(Queue& queue, const PointsDevice& d_points);
+
+    /// @brief Get the sample-to-cluster associations for batched clustering
+    ///
+    /// @param queue The queue to use for the device operations
+    /// @return A device buffer containing the event associations
+    host_associator getSampleAssociations(Queue& queue, const PointsHost& h_points);
+    /// @brief Get the sample-to-cluster associations for batched clustering
+    ///
+    /// @param queue The queue to use for the device operations
+    /// @return A device buffer containing the event associations
+    AssociationMap<Device> getSampleAssociations(Queue& queue, const PointsDevice& d_points);
   };
 
 }  // namespace clue

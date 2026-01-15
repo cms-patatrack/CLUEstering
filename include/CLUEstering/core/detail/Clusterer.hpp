@@ -245,15 +245,15 @@ namespace clue {
     m_event_associations = make_device_buffer<std::int32_t[]>(queue, seed_candidates);
 
     detail::findClusterSeedsBatched<internal::Acc2D>(queue,
-                                              m_seeds.value(),
-                                              dev_points.view(),
-                                              m_seed_dc,
-                                              metric,
-                                              m_rhoc,
-                                              d_event_offsets,
-                                              max_event_size,
-                                              m_event_associations->data(),
-                                              block_size);
+                                                     m_seeds.value(),
+                                                     dev_points.view(),
+                                                     m_seed_dc,
+                                                     metric,
+                                                     m_rhoc,
+                                                     d_event_offsets,
+                                                     max_event_size,
+                                                     m_event_associations->data(),
+                                                     block_size);
 
     m_followers->template fill<Acc>(queue, dev_points);
 
@@ -284,6 +284,21 @@ namespace clue {
   inline AssociationMap<Device> Clusterer<Ndim>::getClusters(Queue& queue,
                                                              const PointsDevice& d_points) {
     return clue::get_clusters(queue, d_points);
+  }
+
+  template <std::size_t Ndim>
+  inline host_associator Clusterer<Ndim>::getSampleAssociations(Queue& queue,
+                                                                const PointsHost& h_points) {
+    auto event_associations = make_host_buffer<std::int32_t[]>(h_points.n_clusters());
+    alpaka::memcpy(queue, event_associations, m_event_associations->data());
+    alpaka::wait(queue);
+    return internal::make_associator(event_associations, h_points.n_clusters());
+  }
+
+  template <std::size_t Ndim>
+  inline AssociationMap<Device> Clusterer<Ndim>::getSampleAssociations(
+      Queue& queue, const PointsDevice& d_points) {
+    internal::make_associator(queue, m_event_associations->data(), d_points.n_clusters());
   }
 
   template <std::size_t Ndim>
