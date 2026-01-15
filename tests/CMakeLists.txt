@@ -1,5 +1,15 @@
 cmake_minimum_required(VERSION 3.16.0)
 
+project(CLUEsteringTests LANGUAGES CXX)
+
+# Set CMake policies for compatibility
+if(POLICY CMP0057)
+  cmake_policy(SET CMP0057 NEW) # Support new IN_LIST if() operator
+endif()
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW) # Use BoostConfig.cmake instead of FindBoost.cmake
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
