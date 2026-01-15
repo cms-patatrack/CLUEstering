@@ -9,6 +9,9 @@ build/
 # Shared library files
 *.so
 
+# Python wheel files
+*.whl
+
 # Profiling files
 *out*
 vgcore.*
