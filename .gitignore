@@ -9,6 +9,9 @@ build/
 # Shared library files
 *.so
 
+# Python wheel files
+*.whl
+
 # Profiling files
 *out*
 vgcore.*
@@ -33,6 +36,8 @@ docs/*.js
 docs/*.css
 docs/*.html
 docs/*.svg
+docs/xml
+docs/build
 
 # cache folders
 *.cache

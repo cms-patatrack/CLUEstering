@@ -43,6 +43,8 @@ html_theme_options = {
 
     "site_url": "https://cms-patatrack.github.io/CLUEstering/",
 
+    "font": False,
+
     "palette": [
         {
             "scheme": "slate",

@@ -37,7 +37,8 @@ jobs:
 
       - name: Install sphinx
         run: |
-          pip install sphinx breathe sphinx_immaterial sphinx-rtd-theme recommonmark
+          pip install 'sphinx<9.0'
+          pip install breathe sphinx_immaterial sphinx-rtd-theme recommonmark
 
       - name: Build Python modules
         run: |
