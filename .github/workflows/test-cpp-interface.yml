@@ -75,6 +75,12 @@ jobs:
       with:
         submodules: true
 
+    - name: Set up vcpkg
+      if: matrix.os == 'windows-latest'
+      run: |
+        echo "VCPKG_ROOT=C:/vcpkg" >> $env:GITHUB_ENV
+        echo "CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
+
     - name: Compile and run tests
       if: matrix.container != 'almalinux:9' && matrix.os != 'windows-latest'
       working-directory: ${{ github.workspace }}/tests
@@ -96,6 +102,6 @@ jobs:
       if: matrix.os == 'windows-latest'
       working-directory: ${{ github.workspace }}/tests
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_PATH/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:CMAKE_TOOLCHAIN_FILE" -DVCPKG_TARGET_TRIPLET=x64-windows
         cmake --build build --parallel --config Release
         ctest --test-dir build --output-on-failure --build-config Release
