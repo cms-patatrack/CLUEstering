@@ -1,5 +1,15 @@
 cmake_minimum_required(VERSION 3.16.0)
 
+project(CLUEsteringTests LANGUAGES CXX)
+
+# Set CMake policies for compatibility
+if(POLICY CMP0057)
+  cmake_policy(SET CMP0057 NEW) # Support new IN_LIST if() operator
+endif()
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW) # Use BoostConfig.cmake instead of FindBoost.cmake
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -18,7 +28,10 @@ set(CMAKE_CXX_FLAGS_RELEASE
     " -O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
 )
 
-find_package(Boost 1.75.0 REQUIRED COMPONENTS atomic)
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+
+find_package(Boost REQUIRED COMPONENTS atomic)
 
 include(FetchContent)
 
