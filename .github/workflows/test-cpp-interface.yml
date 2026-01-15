@@ -80,6 +80,8 @@ jobs:
       run: |
         echo "VCPKG_ROOT=C:/vcpkg" >> $env:GITHUB_ENV
         echo "CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
+        cd C:/vcpkg
+        ./vcpkg install boost-atomic:x64-windows alpaka:x64-windows
 
     - name: Compile and run tests
       if: matrix.container != 'almalinux:9' && matrix.os != 'windows-latest'
@@ -102,6 +104,6 @@ jobs:
       if: matrix.os == 'windows-latest'
       working-directory: ${{ github.workspace }}/tests
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:CMAKE_TOOLCHAIN_FILE" -DVCPKG_TARGET_TRIPLET=x64-windows
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:CMAKE_TOOLCHAIN_FILE" -DVCPKG_TARGET_TRIPLET=x64-windows -DVCPKG_MANIFEST_DIR="${{ github.workspace }}"
         cmake --build build --parallel --config Release
         ctest --test-dir build --output-on-failure --build-config Release
