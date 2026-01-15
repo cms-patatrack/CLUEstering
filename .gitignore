@@ -33,6 +33,8 @@ docs/*.js
 docs/*.css
 docs/*.html
 docs/*.svg
+docs/xml
+docs/build
 
 # cache folders
 *.cache
