@@ -3,6 +3,8 @@ name: GitHub Pages
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build-and-deploy:
@@ -17,6 +19,7 @@ jobs:
           ref: main
 
       - name: Switch to gh-pages branch and rebase
+        if: github.event_name == 'push'
         run: |
           git fetch
           git checkout gh-pages
@@ -48,11 +51,13 @@ jobs:
           mv build/html/* ./
 
       - name: Set up git
+        if: github.event_name == 'push'
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
         
       - name: Switch to gh-pages branch and rebase
+        if: github.event_name == 'push'
         run: |
           git add ./docs --force
           git commit -m "Auto-deploy documentation"
