@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classclue_1_1WeightedEuclideanMetric" kind="class" language="C++" prot="public">
+    <compoundname>clue::WeightedEuclideanMetric</compoundname>
+    <includes refid="DistanceMetrics_8hpp" local="no">DistanceMetrics.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1WeightedEuclideanMetric_1ae972adae494995e0c4e8eec0e444a2f4" prot="private" static="no" mutable="no">
+        <type>std::array&lt; float, Ndim &gt;</type>
+        <definition>std::array&lt;float, Ndim&gt; clue::WeightedEuclideanMetric&lt; Ndim &gt;::m_weights</definition>
+        <argsstring></argsstring>
+        <name>m_weights</name>
+        <qualifiedname>clue::WeightedEuclideanMetric::m_weights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="62" column="16" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1WeightedEuclideanMetric_1a124acfa597548c24267f6734b9e31388" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point...</type>
+            <declname>TValues</declname>
+            <defname>TValues</defname>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::WeightedEuclideanMetric&lt; Ndim &gt;::WeightedEuclideanMetric</definition>
+        <argsstring>(TValues... weights)</argsstring>
+        <name>WeightedEuclideanMetric</name>
+        <qualifiedname>clue::WeightedEuclideanMetric::WeightedEuclideanMetric</qualifiedname>
+        <param>
+          <type>TValues...</type>
+          <declname>weights</declname>
+        </param>
+    <requiresclause>(sizeof...(TValues) == Ndim)    </requiresclause>
+        <briefdescription>
+<para>Constructor euclidian metric with weights. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>weights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weights for each dimension </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classclue_1_1WeightedEuclideanMetric" kindref="compound">WeightedEuclideanMetric</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="71" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="71" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1WeightedEuclideanMetric_1a9df5c45ea2cd89d6c18850df17336139" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::WeightedEuclideanMetric&lt; Ndim &gt;::WeightedEuclideanMetric</definition>
+        <argsstring>(const std::array&lt; float, Ndim &gt; &amp;weights)</argsstring>
+        <name>WeightedEuclideanMetric</name>
+        <qualifiedname>clue::WeightedEuclideanMetric::WeightedEuclideanMetric</qualifiedname>
+        <param>
+          <type>const std::array&lt; float, Ndim &gt; &amp;</type>
+          <declname>weights</declname>
+        </param>
+        <briefdescription>
+<para>Constructor euclidian metric with weights. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>weights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weights for each dimension </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classclue_1_1WeightedEuclideanMetric" kindref="compound">WeightedEuclideanMetric</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="77" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="77" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1WeightedEuclideanMetric_1a17875fc0557f48db8f643884e34a33c3" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::WeightedEuclideanMetric&lt; Ndim &gt;::WeightedEuclideanMetric</definition>
+        <argsstring>(std::array&lt; float, Ndim &gt; &amp;&amp;weights)</argsstring>
+        <name>WeightedEuclideanMetric</name>
+        <qualifiedname>clue::WeightedEuclideanMetric::WeightedEuclideanMetric</qualifiedname>
+        <param>
+          <type>std::array&lt; float, Ndim &gt; &amp;&amp;</type>
+          <declname>weights</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor euclidian metric with weights. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>weights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weights for each dimension </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classclue_1_1WeightedEuclideanMetric" kindref="compound">WeightedEuclideanMetric</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="83" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="83" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1WeightedEuclideanMetric_1a1d7d09e6ca2b185566ff9a3393235948" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr auto</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr auto clue::WeightedEuclideanMetric&lt; Ndim &gt;::operator()</definition>
+        <argsstring>(const Point&lt; Ndim &gt; &amp;lhs, const Point&lt; Ndim &gt; &amp;rhs) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>clue::WeightedEuclideanMetric::operator()</qualifiedname>
+        <param>
+          <type>const Point&lt; Ndim &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const Point&lt; Ndim &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Compute the Weighted Euclidean distance between two points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>lhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>First point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Second point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Weighted Euclidean distance between the two points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="91" column="46" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="91" bodyend="97"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Weighted Euclidean distance metric This class implements the Weighted Euclidean distance metric in Ndim dimensions. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of dimensions </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="60" column="3" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="60" bodyend="98"/>
+    <listofallmembers>
+      <member refid="classclue_1_1WeightedEuclideanMetric_1ae972adae494995e0c4e8eec0e444a2f4" prot="private" virt="non-virtual"><scope>clue::WeightedEuclideanMetric</scope><name>m_weights</name></member>
+      <member refid="classclue_1_1WeightedEuclideanMetric_1a1d7d09e6ca2b185566ff9a3393235948" prot="public" virt="non-virtual"><scope>clue::WeightedEuclideanMetric</scope><name>operator()</name></member>
+      <member refid="classclue_1_1WeightedEuclideanMetric_1a124acfa597548c24267f6734b9e31388" prot="public" virt="non-virtual"><scope>clue::WeightedEuclideanMetric</scope><name>WeightedEuclideanMetric</name></member>
+      <member refid="classclue_1_1WeightedEuclideanMetric_1a9df5c45ea2cd89d6c18850df17336139" prot="public" virt="non-virtual"><scope>clue::WeightedEuclideanMetric</scope><name>WeightedEuclideanMetric</name></member>
+      <member refid="classclue_1_1WeightedEuclideanMetric_1a17875fc0557f48db8f643884e34a33c3" prot="public" virt="non-virtual"><scope>clue::WeightedEuclideanMetric</scope><name>WeightedEuclideanMetric</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

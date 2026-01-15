@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structclue_1_1AssociationMapView_1_1Extents" kind="struct" language="C++" prot="public">
+    <compoundname>clue::AssociationMapView::Extents</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structclue_1_1AssociationMapView_1_1Extents_1aa99aad2fdc21acea5446118a557d6c6c" prot="public" static="no" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t clue::AssociationMapView::Extents::keys</definition>
+        <argsstring></argsstring>
+        <name>keys</name>
+        <qualifiedname>clue::AssociationMapView::Extents::keys</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="23" column="19" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structclue_1_1AssociationMapView_1_1Extents_1a8d112a7a835abfcc74c602dfb904bccb" prot="public" static="no" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t clue::AssociationMapView::Extents::values</definition>
+        <argsstring></argsstring>
+        <name>values</name>
+        <qualifiedname>clue::AssociationMapView::Extents::values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="24" column="19" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="22" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="22" bodyend="25"/>
+    <listofallmembers>
+      <member refid="structclue_1_1AssociationMapView_1_1Extents_1aa99aad2fdc21acea5446118a557d6c6c" prot="public" virt="non-virtual"><scope>clue::AssociationMapView::Extents</scope><name>keys</name></member>
+      <member refid="structclue_1_1AssociationMapView_1_1Extents_1a8d112a7a835abfcc74c602dfb904bccb" prot="public" virt="non-virtual"><scope>clue::AssociationMapView::Extents</scope><name>values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceclue" kind="namespace" language="C++">
+    <compoundname>clue</compoundname>
+    <innerclass refid="classclue_1_1AssociationMap" prot="public">clue::AssociationMap</innerclass>
+    <innerclass refid="classclue_1_1AssociationMapView" prot="public">clue::AssociationMapView</innerclass>
+    <innerclass refid="classclue_1_1ChebyshevMetric" prot="public">clue::ChebyshevMetric</innerclass>
+    <innerclass refid="classclue_1_1Clusterer" prot="public">clue::Clusterer</innerclass>
+    <innerclass refid="classclue_1_1ClusterProperties" prot="public">clue::ClusterProperties</innerclass>
+    <innerclass refid="classclue_1_1EuclideanMetric" prot="public">clue::EuclideanMetric</innerclass>
+    <innerclass refid="classclue_1_1ExponentialKernel" prot="public">clue::ExponentialKernel</innerclass>
+    <innerclass refid="classclue_1_1FlatKernel" prot="public">clue::FlatKernel</innerclass>
+    <innerclass refid="classclue_1_1GaussianKernel" prot="public">clue::GaussianKernel</innerclass>
+    <innerclass refid="classclue_1_1ManhattanMetric" prot="public">clue::ManhattanMetric</innerclass>
+    <innerclass refid="classclue_1_1PeriodicEuclideanMetric" prot="public">clue::PeriodicEuclideanMetric</innerclass>
+    <innerclass refid="classclue_1_1PointsDevice" prot="public">clue::PointsDevice</innerclass>
+    <innerclass refid="classclue_1_1PointsHost" prot="public">clue::PointsHost</innerclass>
+    <innerclass refid="classclue_1_1WeightedChebyshevMetric" prot="public">clue::WeightedChebyshevMetric</innerclass>
+    <innerclass refid="classclue_1_1WeightedEuclideanMetric" prot="public">clue::WeightedEuclideanMetric</innerclass>
+    <innernamespace refid="namespaceclue_1_1concepts">clue::concepts</innernamespace>
+    <innernamespace refid="namespaceclue_1_1internal">clue::internal</innernamespace>
+    <innernamespace refid="namespaceclue_1_1metrics">clue::metrics</innernamespace>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1a13b772992acf198c34141140b52467cd" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::array&lt; float, Ndim+1 &gt;</type>
+        <definition>using clue::Point = typedef std::array&lt;float, Ndim + 1&gt;</definition>
+        <argsstring></argsstring>
+        <name>Point</name>
+        <qualifiedname>clue::Point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="28" column="3" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="AssociationMap_8hpp_1a7ca628138c98db08ea25b92cf67655cf" prot="public" static="no">
+        <type><ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref>&lt; alpaka::DevCpu &gt;</type>
+        <definition>using clue::host_associator = typedef AssociationMap&lt;alpaka::DevCpu&gt;</definition>
+        <argsstring></argsstring>
+        <name>host_associator</name>
+        <qualifiedname>clue::host_associator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="217" column="3" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="cluster__centroid_8hpp_1acd0a12d88ce054fdf823482a0f11d9f7" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::array&lt; float, Ndim &gt;</type>
+        <definition>using clue::Centroid = typedef std::array&lt;float, Ndim&gt;</definition>
+        <argsstring></argsstring>
+        <name>Centroid</name>
+        <qualifiedname>clue::Centroid</qualifiedname>
+        <briefdescription>
+<para>Type alias for a centroid in Ndim dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/cluster_centroid.hpp" line="15" column="3" bodyfile="include/CLUEstering/utils/cluster_centroid.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="cluster__centroid_8hpp_1a219972eb54fccac3fe9c955d8865e10e" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type>std::vector&lt; <ref refid="cluster__centroid_8hpp_1acd0a12d88ce054fdf823482a0f11d9f7" kindref="member">Centroid</ref>&lt; Ndim &gt; &gt;</type>
+        <definition>using clue::Centroids = typedef std::vector&lt;Centroid&lt;Ndim&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>Centroids</name>
+        <qualifiedname>clue::Centroids</qualifiedname>
+        <briefdescription>
+<para>Type alias for a collection of centroids in Ndim dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/cluster_centroid.hpp" line="19" column="3" bodyfile="include/CLUEstering/utils/cluster_centroid.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="PointsConversion_8hpp_1a8a04297f270347312e9c671f1cd8e4d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>concepts::device</type>
+            <declname>TDev</declname>
+            <defname>TDev</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::copyToHost</definition>
+        <argsstring>(TQueue &amp;queue, PointsHost&lt; Ndim &gt; &amp;h_points, const PointsDevice&lt; Ndim, TDev &gt; &amp;d_points)</argsstring>
+        <name>copyToHost</name>
+        <qualifiedname>clue::copyToHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref>&lt; Ndim, TDev &gt; &amp;</type>
+          <declname>d_points</declname>
+        </param>
+        <briefdescription>
+<para>Copies the results of the clustering from the device points to the host points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TQueue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the queue for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TDev</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of device that the points are allocated on </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue used for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>h_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The points allocated on the host, where the clustering results will be saved </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>d_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The points allocated on the device, where the clustering has been run </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsConversion.hpp" line="24" column="8" declfile="include/CLUEstering/data_structures/PointsConversion.hpp" declline="24" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="PointsConversion_8hpp_1aec943a385e071a43b44c77d0782c2e8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>concepts::device</type>
+            <declname>TDev</declname>
+            <defname>TDev</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto clue::copyToHost</definition>
+        <argsstring>(TQueue &amp;queue, const PointsDevice&lt; Ndim, TDev &gt; &amp;d_points)</argsstring>
+        <name>copyToHost</name>
+        <qualifiedname>clue::copyToHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref>&lt; Ndim, TDev &gt; &amp;</type>
+          <declname>d_points</declname>
+        </param>
+        <briefdescription>
+<para>Copies the results of the clustering from the device points to the host points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TQueue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the queue for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TDev</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of device that the points are allocated on </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue used for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>h_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The points allocated on the host, where the clustering results will be saved </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>d_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The points allocated on the device, where the clustering has been run </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsConversion.hpp" line="38" column="8" declfile="include/CLUEstering/data_structures/PointsConversion.hpp" declline="38" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="PointsConversion_8hpp_1a30775cb06fceac61c8f5598d3d00472f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>concepts::device</type>
+            <declname>TDev</declname>
+            <defname>TDev</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::copyToDevice</definition>
+        <argsstring>(TQueue &amp;queue, PointsDevice&lt; Ndim, TDev &gt; &amp;d_points, const PointsHost&lt; Ndim &gt; &amp;h_points)</argsstring>
+        <name>copyToDevice</name>
+        <qualifiedname>clue::copyToDevice</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref>&lt; Ndim, TDev &gt; &amp;</type>
+          <declname>d_points</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <briefdescription>
+<para>Copies the coordinates and weights of the points from the host to the device. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TQueue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the queue for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TDev</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of device that the points are allocated on </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue used for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>d_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The empty points allocated on the device </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>h_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The points allocated on the host, containing the points&apos; coordinates and weights </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsConversion.hpp" line="50" column="8" declfile="include/CLUEstering/data_structures/PointsConversion.hpp" declline="50" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="PointsConversion_8hpp_1a9fed5d801c035607555dd68f6ae03a60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>concepts::device</type>
+            <declname>TDev</declname>
+            <defname>TDev</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto clue::copyToDevice</definition>
+        <argsstring>(TQueue &amp;queue, const PointsHost&lt; Ndim &gt; &amp;h_points)</argsstring>
+        <name>copyToDevice</name>
+        <qualifiedname>clue::copyToDevice</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <briefdescription>
+<para>Copies the coordinates and weights of the points from the host to the device. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TQueue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the queue for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TDev</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of device that the points are allocated on </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue used for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>d_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The empty points allocated on the device </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>h_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The points allocated on the host, containing the points&apos; coordinates and weights </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsConversion.hpp" line="64" column="8" declfile="include/CLUEstering/data_structures/PointsConversion.hpp" declline="64" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="PointsHost_8hpp_1afe205accfe32d205cf43fe173f425717" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>NDim</declname>
+            <defname>NDim</defname>
+          </param>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; NDim &gt;</type>
+        <definition>clue::PointsHost&lt; NDim &gt; clue::read_output</definition>
+        <argsstring>(TQueue &amp;queue, const std::string &amp;file_path)</argsstring>
+        <name>read_output</name>
+        <qualifiedname>clue::read_output</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file_path</declname>
+        </param>
+        <briefdescription>
+<para>Read output points from a CSV file into a <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>NDim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TQueue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the queue to use for reading the file </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for reading the file </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>file_path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The path to the CSV file to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> object containing the output points read from the file </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="23" column="20" declfile="include/CLUEstering/data_structures/PointsHost.hpp" declline="23" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="cluster__centroid_8hpp_1abca25ac04540d64e77efa59cb2e0e767" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="cluster__centroid_8hpp_1acd0a12d88ce054fdf823482a0f11d9f7" kindref="member">Centroid</ref>&lt; Ndim &gt;</type>
+        <definition>Centroid&lt; Ndim &gt; clue::cluster_centroid</definition>
+        <argsstring>(const clue::PointsHost&lt; Ndim &gt; &amp;points, std::size_t cluster_id)</argsstring>
+        <name>cluster_centroid</name>
+        <qualifiedname>clue::cluster_centroid</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>cluster_id</declname>
+        </param>
+        <briefdescription>
+<para>Compute the centroid of a specific cluster from the given Points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> object containing the points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cluster_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ID of the cluster for which to compute the centroid </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The centroid of the specified cluster as an array of floats </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/cluster_centroid.hpp" line="28" column="19" declfile="include/CLUEstering/utils/cluster_centroid.hpp" declline="28" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="cluster__centroid_8hpp_1ad3bc64f403b79d70088bdb2cf942cf12" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="cluster__centroid_8hpp_1a219972eb54fccac3fe9c955d8865e10e" kindref="member">Centroids</ref>&lt; Ndim &gt;</type>
+        <definition>Centroids&lt; Ndim &gt; clue::cluster_centroids</definition>
+        <argsstring>(const clue::PointsHost&lt; Ndim &gt; &amp;points)</argsstring>
+        <name>cluster_centroids</name>
+        <qualifiedname>clue::cluster_centroids</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>points</declname>
+        </param>
+        <briefdescription>
+<para>Compute the centroids of all clusters from the given Points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> object containing the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A vector of centroids, one for each cluster </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/cluster_centroid.hpp" line="37" column="20" declfile="include/CLUEstering/utils/cluster_centroid.hpp" declline="37" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="get__clusters_8hpp_1aad493e426cb845dfda53c3ee77e52152" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto clue::get_clusters</definition>
+        <argsstring>(const PointsHost&lt; Ndim &gt; &amp;points)</argsstring>
+        <name>get_clusters</name>
+        <qualifiedname>clue::get_clusters</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>points</declname>
+        </param>
+        <briefdescription>
+<para>Construct a map associating clusters to points This overload works on host points and returns a map allocated on the host. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The points for which to get the clusters </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An <ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref> where each key is a cluster index and the associated values are the indices of the points belonging to that cluster </para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/get_clusters.hpp" line="22" column="15" declfile="include/CLUEstering/utils/get_clusters.hpp" declline="22" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="get__clusters_8hpp_1a04d2f523d00eb98fc192a37b042f31cc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto clue::get_clusters</definition>
+        <argsstring>(TQueue &amp;queue, const PointsDevice&lt; Ndim &gt; &amp;points)</argsstring>
+        <name>get_clusters</name>
+        <qualifiedname>clue::get_clusters</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>points</declname>
+        </param>
+        <briefdescription>
+<para>Construct a map associating clusters to points This overload works on device points and returns a map allocated on the device. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The points for which to get the clusters </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An <ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref> where each key is a cluster index and the associated values are the indices of the points belonging to that cluster </para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TQueue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of queue to use for device computations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/get_clusters.hpp" line="33" column="15" declfile="include/CLUEstering/utils/get_clusters.hpp" declline="33" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="get__device_8hpp_1a8aaf8c1e70914c5c931e44be18f0b505" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>clue::Device</type>
+        <definition>clue::Device clue::get_device</definition>
+        <argsstring>(uint32_t device_id)</argsstring>
+        <name>get_device</name>
+        <qualifiedname>clue::get_device</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>device_id</declname>
+        </param>
+        <briefdescription>
+<para>Get the alpaka device corresponding to a given index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>device_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the device </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The alpaka device corresponding to the given index </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/get_device.hpp" line="16" column="23" bodyfile="include/CLUEstering/utils/get_device.hpp" bodystart="16" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="get__queue_8hpp_1a1d26fcef2af702b8eb156bc42054ee1f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::integral</type>
+            <declname>TIdx</declname>
+            <defname>TIdx</defname>
+          </param>
+        </templateparamlist>
+        <type>clue::Queue</type>
+        <definition>clue::Queue clue::get_queue</definition>
+        <argsstring>(TIdx device_id=TIdx{})</argsstring>
+        <name>get_queue</name>
+        <qualifiedname>clue::get_queue</qualifiedname>
+        <param>
+          <type>TIdx</type>
+          <declname>device_id</declname>
+          <defval>TIdx{}</defval>
+        </param>
+        <briefdescription>
+<para>Get an alpaka queue created from a device correspoding to a given index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TIdx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the device index, must be an integral type </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>device_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the device </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An alpaka queue created from the device corresponding to the given index </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/get_queue.hpp" line="20" column="22" bodyfile="include/CLUEstering/utils/get_queue.hpp" bodystart="20" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="get__queue_8hpp_1a7903e09bb594960cbc75d10d17830934" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::device</type>
+            <declname>TDevice</declname>
+            <defname>TDevice</defname>
+          </param>
+        </templateparamlist>
+        <type>clue::Queue</type>
+        <definition>clue::Queue clue::get_queue</definition>
+        <argsstring>(const TDevice &amp;device)</argsstring>
+        <name>get_queue</name>
+        <qualifiedname>clue::get_queue</qualifiedname>
+        <param>
+          <type>const TDevice &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Get an alpaka queue created from a given device. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TDevice</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the device, must satisfy the <computeroutput>concepts::device</computeroutput> concept </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The device to create the queue from </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An alpaka queue created from the given device </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/get_queue.hpp" line="31" column="22" bodyfile="include/CLUEstering/utils/get_queue.hpp" bodystart="31" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="read__csv_8hpp_1a8559835368e00aab58dc190045b39582" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>NDim</declname>
+            <defname>NDim</defname>
+          </param>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; NDim &gt;</type>
+        <definition>clue::PointsHost&lt; NDim &gt; clue::read_csv</definition>
+        <argsstring>(TQueue &amp;queue, const std::string &amp;file_path)</argsstring>
+        <name>read_csv</name>
+        <qualifiedname>clue::read_csv</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file_path</declname>
+        </param>
+        <briefdescription>
+<para>Read points from a CSV file into a <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>NDim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TQueue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the queue to use for reading the file </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for reading the file </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>file_path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The path to the CSV file to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> object containing the points read from the file </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/read_csv.hpp" line="22" column="27" declfile="include/CLUEstering/utils/read_csv.hpp" declline="22" declcolumn="27"/>
+      </memberdef>
+      <memberdef kind="function" id="scores_8hpp_1a740ce5ed73c4f2580dec16a5ce825f6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto clue::silhouette</definition>
+        <argsstring>(const clue::PointsHost&lt; Ndim &gt; &amp;points, std::size_t point)</argsstring>
+        <name>silhouette</name>
+        <qualifiedname>clue::silhouette</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Compute the silhouette score for a specific point in the dataset. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dataset containing the points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the point for which to compute the silhouette score </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The silhouette score of the specified point </para>
+</simplesect>
+<simplesect kind="note"><para>This function currently only works for points with non-periodic coordinates. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/scores.hpp" line="19" column="8" declfile="include/CLUEstering/utils/scores.hpp" declline="19" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="scores_8hpp_1a91deb69925b13096801f6ebb0924890e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto clue::silhouette</definition>
+        <argsstring>(const clue::PointsHost&lt; Ndim &gt; &amp;points)</argsstring>
+        <name>silhouette</name>
+        <qualifiedname>clue::silhouette</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>points</declname>
+        </param>
+        <briefdescription>
+<para>Compute the average silhouette score for the entire dataset. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dataset containing the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The average silhouette score of the dataset </para>
+</simplesect>
+<simplesect kind="note"><para>This function currently only works for points with non-periodic coordinates. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/scores.hpp" line="28" column="8" declfile="include/CLUEstering/utils/scores.hpp" declline="28" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="validation_8hpp_1ad2daa2d8b6c3befb6bbaae7d090f0438" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool clue::validate_results</definition>
+        <argsstring>(PointsHost&lt; Ndim &gt; &amp;results, PointsHost&lt; Ndim &gt; &amp;truth)</argsstring>
+        <name>validate_results</name>
+        <qualifiedname>clue::validate_results</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>results</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>&lt; Ndim &gt; &amp;</type>
+          <declname>truth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/utils/validation.hpp" line="15" column="15" bodyfile="include/CLUEstering/utils/validation.hpp" bodystart="15" bodyend="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/Clusterer.hpp" line="27" column="1"/>
+  </compounddef>
+</doxygen>

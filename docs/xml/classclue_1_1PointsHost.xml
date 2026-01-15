@@ -1,0 +1,1379 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classclue_1_1PointsHost" kind="class" language="C++" prot="public">
+    <compoundname>clue::PointsHost</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">internal::points_interface&lt; PointsHost&lt; Ndim &gt; &gt;</basecompoundref>
+    <includes refid="PointsHost_8hpp" local="no">PointsHost.hpp</includes>
+    <innerclass refid="classclue_1_1PointsHost_1_1Point" prot="public">clue::PointsHost::Point</innerclass>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1a7ba91823479143614321657edb69d9a2" prot="private" static="no" mutable="no">
+        <type>std::optional&lt; host_buffer&lt; std::byte[]&gt; &gt;</type>
+        <definition>std::optional&lt;host_buffer&lt;std::byte[]&gt; &gt; clue::PointsHost&lt; Ndim &gt;::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>clue::PointsHost::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="48" column="19" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1a9a192f7be000fe0e6c5eec715e89b78f" prot="private" static="no" mutable="no">
+        <type>PointsView&lt; Ndim &gt;</type>
+        <definition>PointsView&lt;Ndim&gt; clue::PointsHost&lt; Ndim &gt;::m_view</definition>
+        <argsstring></argsstring>
+        <name>m_view</name>
+        <qualifiedname>clue::PointsHost::m_view</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="49" column="16" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1ab1f99fc045b77632cf204195a8013d58" prot="private" static="no" mutable="no">
+        <type>std::optional&lt; <ref refid="classclue_1_1ClusterProperties" kindref="compound">ClusterProperties</ref> &gt;</type>
+        <definition>std::optional&lt;ClusterProperties&gt; clue::PointsHost&lt; Ndim &gt;::m_clusterProperties</definition>
+        <argsstring></argsstring>
+        <name>m_clusterProperties</name>
+        <qualifiedname>clue::PointsHost::m_clusterProperties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="50" column="19" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1af1ae4ae19c26efdd7844f907f45bd7ee" prot="private" static="no" mutable="no">
+        <type>std::optional&lt; std::size_t &gt;</type>
+        <definition>std::optional&lt;std::size_t&gt; clue::PointsHost&lt; Ndim &gt;::m_nclusters</definition>
+        <argsstring></argsstring>
+        <name>m_nclusters</name>
+        <qualifiedname>clue::PointsHost::m_nclusters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="51" column="19" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1adb029c11ac90d728484d4c02e22d922b" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t clue::PointsHost&lt; Ndim &gt;::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>clue::PointsHost::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="52" column="13" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1a71a187dd13938fb29cceb72ed1b4e226" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool clue::PointsHost&lt; Ndim &gt;::m_clustered</definition>
+        <argsstring></argsstring>
+        <name>m_clustered</name>
+        <qualifiedname>clue::PointsHost::m_clustered</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="53" column="10" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1a32f9755fc005ac39121041e3e97689da" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t clue::PointsHost&lt; Ndim &gt;::Ndim_</definition>
+        <argsstring></argsstring>
+        <name>Ndim_</name>
+        <qualifiedname>clue::PointsHost::Ndim_</qualifiedname>
+        <initializer>= Ndim</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="217" column="41" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classclue_1_1PointsHost_1a071d69c974bed929b8b4ba1020f60cb2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>_Ndim</declname>
+            <defname>_Ndim</defname>
+          </param>
+        </templateparamlist>
+        <type>class</type>
+        <definition>friend class Clusterer</definition>
+        <argsstring></argsstring>
+        <name>Clusterer</name>
+        <qualifiedname>clue::PointsHost::Clusterer</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1Clusterer" kindref="compound">Clusterer</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="222" column="18" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="222" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="classclue_1_1PointsHost_1a9fc67cdd012053647046f1ad9e094cab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct</type>
+        <definition>friend struct internal::points_interface&lt; PointsHost&lt; Ndim &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>internal::points_interface&lt; PointsHost&lt; Ndim &gt; &gt;</name>
+        <qualifiedname>clue::PointsHost::points_interface&lt; PointsHost&lt; Ndim &gt; &gt;</qualifiedname>
+        <param>
+          <type>internal::points_interface&lt; <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>&lt; Ndim &gt; &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="228" column="17" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="classclue_1_1PointsHost_1a19c916464a1e66f4b3181a7a5f0ffef3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>_TQueue</declname>
+            <defname>_TQueue</defname>
+          </param>
+          <param>
+            <type>std::size_t</type>
+            <declname>_Ndim</declname>
+            <defname>_Ndim</defname>
+          </param>
+          <param>
+            <type>concepts::device</type>
+            <declname>_TDev</declname>
+            <defname>_TDev</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void copyToHost</definition>
+        <argsstring>(_TQueue &amp;queue, PointsHost&lt; _Ndim &gt; &amp;h_points, const PointsDevice&lt; _Ndim, _TDev &gt; &amp;d_points)</argsstring>
+        <name>copyToHost</name>
+        <qualifiedname>clue::PointsHost::copyToHost</qualifiedname>
+        <param>
+          <type>_TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>&lt; _Ndim &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref>&lt; _Ndim, _TDev &gt; &amp;</type>
+          <declname>d_points</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="224" column="17"/>
+      </memberdef>
+      <memberdef kind="friend" id="classclue_1_1PointsHost_1a68c983dd906a42eaefa2a56b42cac971" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>_TQueue</declname>
+            <defname>_TQueue</defname>
+          </param>
+          <param>
+            <type>std::size_t</type>
+            <declname>_Ndim</declname>
+            <defname>_Ndim</defname>
+          </param>
+          <param>
+            <type>concepts::device</type>
+            <declname>_TDev</declname>
+            <defname>_TDev</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void copyToDevice</definition>
+        <argsstring>(_TQueue &amp;queue, PointsDevice&lt; _Ndim, _TDev &gt; &amp;d_points, const PointsHost&lt; _Ndim &gt; &amp;h_points)</argsstring>
+        <name>copyToDevice</name>
+        <qualifiedname>clue::PointsHost::copyToDevice</qualifiedname>
+        <param>
+          <type>_TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref>&lt; _Ndim, _TDev &gt; &amp;</type>
+          <declname>d_points</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>&lt; _Ndim &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="228" column="17"/>
+      </memberdef>
+      <memberdef kind="friend" id="classclue_1_1PointsHost_1ab7aa18007a957b8324b73fd441b3cb04" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>NDim</declname>
+            <defname>NDim</defname>
+          </param>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; NDim &gt;</type>
+        <definition>clue::PointsHost&lt; NDim &gt; read_output</definition>
+        <argsstring>(TQueue &amp;queue, const std::string &amp;file_path)</argsstring>
+        <name>read_output</name>
+        <qualifiedname>clue::PointsHost::read_output</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file_path</declname>
+        </param>
+        <briefdescription>
+<para>Read output points from a CSV file into a <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>NDim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TQueue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of the queue to use for reading the file </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for reading the file </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>file_path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The path to the CSV file to read </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> object containing the output points read from the file </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="233" column="29"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a7e05851d0357d1e4da45ae74d0cb6ef4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(TQueue &amp;queue, int32_t n_points)</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the host. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points to allocate </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="74" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1adb32310c16af9ed6c7a5cdd86e283bd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(TQueue &amp;queue, int32_t n_points, std::span&lt; std::byte &gt; buffer)</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>std::span&lt; std::byte &gt;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the host using a pre-allocated buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer to use for the points data </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="82" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a888a78c876179f2c4122d88174c04c8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(TQueue &amp;queue, int32_t n_points, std::span&lt; float &gt; input, std::span&lt; int &gt; output)</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>std::span&lt; float &gt;</type>
+          <declname>input</declname>
+        </param>
+        <param>
+          <type>std::span&lt; int &gt;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the host using interleaved data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>input_buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing interleaved coordinates and weights </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>output_buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer to store the cluster indexes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The input buffer must contain the coordinates and weights in an SoA format </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="92" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1af2ccf6cb428728cd6f52c410f5c2ffcd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(TQueue &amp;queue, int32_t n_points, std::span&lt; float &gt; coordinates, std::span&lt; float &gt; weights, std::span&lt; int &gt; output)</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>std::span&lt; float &gt;</type>
+          <declname>coordinates</declname>
+        </param>
+        <param>
+          <type>std::span&lt; float &gt;</type>
+          <declname>weights</declname>
+        </param>
+        <param>
+          <type>std::span&lt; int &gt;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the host using separate coordinate and weight buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coordinates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing the coordinates </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>weights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing the weights </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>output</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer to store the cluster indexes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The coordinates buffer must have a size of n_points * Ndim </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="103" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a2076e867e700bb6d8a4bb547377bd2cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>std::ranges::contiguous_range...</type>
+            <declname>TBuffers</declname>
+            <defname>TBuffers</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(TQueue &amp;queue, int32_t n_points, TBuffers &amp;&amp;... buffers)</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>TBuffers &amp;&amp;...</type>
+          <declname>buffers</declname>
+        </param>
+    <requiresclause>(sizeof...(TBuffers) == Ndim + 2 and Ndim &gt; 1)    </requiresclause>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the host using multiple pre-allocated buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>buffers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffers to use for the points data </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="116" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a99ca5246e4125283b2cb68340487b5f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(TQueue &amp;queue, int32_t n_points, float *input, int *output)</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>input</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the host using interleaved data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>input_buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing interleaved coordinates and weights </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>output_buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer to store the cluster indexes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The input buffer must contain the coordinates and weights in an SoA format </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="126" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a1f7111d7f384d8444bb931fc2e661e13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(TQueue &amp;queue, int32_t n_points, float *coordinates, float *weights, int *output)</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>coordinates</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>weights</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the host using separate coordinate and weight buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coordinates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing the coordinates </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>weights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing the weights </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>output</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer to store the cluster indexes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The coordinates buffer must have a size of n_points * Ndim </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="137" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1aa0df4446b703b54f6b36dad9b8c89496" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>concepts::pointer...</type>
+            <declname>TBuffers</declname>
+            <defname>TBuffers</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(TQueue &amp;queue, int32_t n_points, TBuffers... buffers)</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>TBuffers...</type>
+          <declname>buffers</declname>
+        </param>
+    <requiresclause>(sizeof...(TBuffers) == Ndim + 2 and Ndim &gt; 1)    </requiresclause>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the host using multiple pre-allocated buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>buffers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffers to use for the points data </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="146" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1aa3ae2b7317d756d1be7729fbd7432f69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(const PointsHost &amp;)=delete</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="148" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a97d2127715691a6a93b024ea2a91e674" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> &amp;</type>
+        <definition>PointsHost &amp; clue::PointsHost&lt; Ndim &gt;::operator=</definition>
+        <argsstring>(const PointsHost &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>clue::PointsHost::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="149" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1afd3cb863ddb3b4256409c225e017519f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::PointsHost</definition>
+        <argsstring>(PointsHost &amp;&amp;)=default</argsstring>
+        <name>PointsHost</name>
+        <qualifiedname>clue::PointsHost::PointsHost</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="150" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1aeaa96364ab479226982df622b9a73308" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> &amp;</type>
+        <definition>PointsHost &amp; clue::PointsHost&lt; Ndim &gt;::operator=</definition>
+        <argsstring>(PointsHost &amp;&amp;)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>clue::PointsHost::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="151" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a8e7c5a013ea7ecf9216a1c34fcd26211" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim &gt;::~PointsHost</definition>
+        <argsstring>()=default</argsstring>
+        <name>~PointsHost</name>
+        <qualifiedname>clue::PointsHost::~PointsHost</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="152" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a777e519a4750fd15392eb6f41d8d5e9d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST int32_t</type>
+        <definition>ALPAKA_FN_HOST int32_t clue::PointsHost&lt; Ndim &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>clue::PointsHost::size</qualifiedname>
+        <briefdescription>
+<para>Returns the number of points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="157" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a9cac2b63914d0a797a79f55063e14743" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsHost&lt; Ndim &gt;::coords</definition>
+        <argsstring>(size_t dim) const</argsstring>
+        <name>coords</name>
+        <qualifiedname>clue::PointsHost::coords</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+<para>Returns the coordinates of the points for a specific dimension as a const span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dimension for which to get the coordinates </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A const span of the coordinates for the specified dimension </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="161" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a3531ee8b139c768ff5bc6121d21cbe33" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsHost&lt; Ndim &gt;::coords</definition>
+        <argsstring>(size_t dim)</argsstring>
+        <name>coords</name>
+        <qualifiedname>clue::PointsHost::coords</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+<para>Returns the coordinates of the points for a specific dimension as a span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dimension for which to get the coordinates </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A span of the coordinates for the specified dimension </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="165" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1af11d00db2d8c3aa6f78a1716b8e58eba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsHost&lt; Ndim &gt;::weights</definition>
+        <argsstring>() const</argsstring>
+        <name>weights</name>
+        <qualifiedname>clue::PointsHost::weights</qualifiedname>
+        <briefdescription>
+<para>Returns the weights of the points as a const span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const span of the weights of the points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="168" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1ad272397dcd8721d3464a65ac23cc35ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsHost&lt; Ndim &gt;::weights</definition>
+        <argsstring>()</argsstring>
+        <name>weights</name>
+        <qualifiedname>clue::PointsHost::weights</qualifiedname>
+        <briefdescription>
+<para>Returns the weights of the points as a span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A span of the weights of the points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="171" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1abba71ff3b7cf2b5b8a80211dd60fa875" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsHost&lt; Ndim &gt;::clusterIndexes</definition>
+        <argsstring>() const</argsstring>
+        <name>clusterIndexes</name>
+        <qualifiedname>clue::PointsHost::clusterIndexes</qualifiedname>
+        <briefdescription>
+<para>Returns the cluster indexes of the points as a const span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const span of the cluster indexes of the points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="174" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a50ed2f199e805b872efe6b8ad28056d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsHost&lt; Ndim &gt;::clusterIndexes</definition>
+        <argsstring>()</argsstring>
+        <name>clusterIndexes</name>
+        <qualifiedname>clue::PointsHost::clusterIndexes</qualifiedname>
+        <briefdescription>
+<para>Returns the cluster indexes of the points as a span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A span of the cluster indexes of the points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="177" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1ad565fc4c67d31868c52c2bdd6d2cb7a7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsHost&lt; Ndim &gt;::clustered</definition>
+        <argsstring>() const</argsstring>
+        <name>clustered</name>
+        <qualifiedname>clue::PointsHost::clustered</qualifiedname>
+        <briefdescription>
+<para>Indicates whether the points have been clustered. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>True if the points have been clustered, false otherwise </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="180" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a564b6660ffd9ba06a8b32d9351b1cbbc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST const auto &amp;</type>
+        <definition>ALPAKA_FN_HOST const auto &amp; clue::PointsHost&lt; Ndim &gt;::view</definition>
+        <argsstring>() const</argsstring>
+        <name>view</name>
+        <qualifiedname>clue::PointsHost::view</qualifiedname>
+        <briefdescription>
+<para>Returns the view of the points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const reference to the PointsView structure containing the points data </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="183" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a6770abdf4bc53f3363a7fc6960aafa38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto &amp;</type>
+        <definition>ALPAKA_FN_HOST auto &amp; clue::PointsHost&lt; Ndim &gt;::view</definition>
+        <argsstring>()</argsstring>
+        <name>view</name>
+        <qualifiedname>clue::PointsHost::view</qualifiedname>
+        <briefdescription>
+<para>Returns the view of the points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A reference to the PointsView structure containing the points data </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="186" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1ad8c1560268bb5cf8b5b18970514bc8d7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classclue_1_1PointsHost_1_1Point" kindref="compound">Point</ref></type>
+        <definition>Point clue::PointsHost&lt; Ndim &gt;::operator[]</definition>
+        <argsstring>(std::size_t idx) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>clue::PointsHost::operator[]</qualifiedname>
+        <param>
+          <type>std::size_t</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+<para>Returns the <ref refid="classclue_1_1PointsHost_1_1Point" kindref="compound">Point</ref> object at the specified index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the point to retrieve </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The <ref refid="classclue_1_1PointsHost_1_1Point" kindref="compound">Point</ref> object at the specified index </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="193" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a75cda73d4783776322cba7a6f61c8e25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; clue::PointsHost&lt; Ndim &gt;::n_clusters</definition>
+        <argsstring>()</argsstring>
+        <name>n_clusters</name>
+        <qualifiedname>clue::PointsHost::n_clusters</qualifiedname>
+        <briefdescription>
+<para>Teturns the cluster properties of the points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of clusters reconstructed </para>
+</simplesect>
+<simplesect kind="note"><para>This value is lazily evaluated and cached upon the first call </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="199" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a88797d1a4dab31fb9fabf96f06b1a842" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; clue::PointsHost&lt; Ndim &gt;::clusters</definition>
+        <argsstring>()</argsstring>
+        <name>clusters</name>
+        <qualifiedname>clue::PointsHost::clusters</qualifiedname>
+        <briefdescription>
+<para>Returns the associator mapping clusters to their associated points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An host_associator mapping clusters to points </para>
+</simplesect>
+<simplesect kind="note"><para>This object is lazily evaluated and cached upon the first call </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="204" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1aed4304e3701b6b607a5260051b698340" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; clue::PointsHost&lt; Ndim &gt;::cluster_sizes</definition>
+        <argsstring>()</argsstring>
+        <name>cluster_sizes</name>
+        <qualifiedname>clue::PointsHost::cluster_sizes</qualifiedname>
+        <briefdescription>
+<para>Returns a vector containing the sizes of each cluster. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A vector of containing the sizes of each cluster </para>
+</simplesect>
+<simplesect kind="note"><para>This vector is lazily evaluated and cached upon the first call </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="209" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1a1571049fbdb9cf2b0e870fe0dcf9f362" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; clue::PointsHost&lt; Ndim &gt;::cluster_properties</definition>
+        <argsstring>()</argsstring>
+        <name>cluster_properties</name>
+        <qualifiedname>clue::PointsHost::cluster_properties</qualifiedname>
+        <briefdescription>
+<para>Returns the <ref refid="classclue_1_1ClusterProperties" kindref="compound">ClusterProperties</ref> object containing the properties of the clusters. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The <ref refid="classclue_1_1ClusterProperties" kindref="compound">ClusterProperties</ref> object </para>
+</simplesect>
+<simplesect kind="note"><para>This object is lazily evaluated and cached upon the first call </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="214" column="16"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classclue_1_1PointsHost_1adb6402ac1f36a6862ab638f2a1140627" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void clue::PointsHost&lt; Ndim &gt;::mark_clustered</definition>
+        <argsstring>()</argsstring>
+        <name>mark_clustered</name>
+        <qualifiedname>clue::PointsHost::mark_clustered</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="219" column="10" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="219" bodyend="219"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>The <ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref> class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points to manage </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>clue::PointsHost&lt; Ndim &gt;</label>
+        <link refid="classclue_1_1PointsHost"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>internal::points_interface&lt; PointsHost&lt; Ndim &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>clue::PointsHost&lt; Ndim &gt;</label>
+        <link refid="classclue_1_1PointsHost"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>internal::points_interface&lt; PointsHost&lt; Ndim &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="46" column="3" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="46" bodyend="234"/>
+    <listofallmembers>
+      <member refid="classclue_1_1PointsHost_1a1571049fbdb9cf2b0e870fe0dcf9f362" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>cluster_properties</name></member>
+      <member refid="classclue_1_1PointsHost_1aed4304e3701b6b607a5260051b698340" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>cluster_sizes</name></member>
+      <member refid="classclue_1_1PointsHost_1ad565fc4c67d31868c52c2bdd6d2cb7a7" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>clustered</name></member>
+      <member refid="classclue_1_1PointsHost_1a071d69c974bed929b8b4ba1020f60cb2" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>Clusterer</name></member>
+      <member refid="classclue_1_1PointsHost_1abba71ff3b7cf2b5b8a80211dd60fa875" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>clusterIndexes</name></member>
+      <member refid="classclue_1_1PointsHost_1a50ed2f199e805b872efe6b8ad28056d7" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>clusterIndexes</name></member>
+      <member refid="classclue_1_1PointsHost_1a88797d1a4dab31fb9fabf96f06b1a842" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>clusters</name></member>
+      <member refid="classclue_1_1PointsHost_1a9cac2b63914d0a797a79f55063e14743" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>coords</name></member>
+      <member refid="classclue_1_1PointsHost_1a3531ee8b139c768ff5bc6121d21cbe33" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>coords</name></member>
+      <member refid="classclue_1_1PointsHost_1a68c983dd906a42eaefa2a56b42cac971" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>copyToDevice</name></member>
+      <member refid="classclue_1_1PointsHost_1a19c916464a1e66f4b3181a7a5f0ffef3" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>copyToHost</name></member>
+      <member refid="classclue_1_1PointsHost_1a9fc67cdd012053647046f1ad9e094cab" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>internal::points_interface&lt; PointsHost&lt; Ndim &gt; &gt;</name></member>
+      <member refid="classclue_1_1PointsHost_1a7ba91823479143614321657edb69d9a2" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>m_buffer</name></member>
+      <member refid="classclue_1_1PointsHost_1a71a187dd13938fb29cceb72ed1b4e226" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>m_clustered</name></member>
+      <member refid="classclue_1_1PointsHost_1ab1f99fc045b77632cf204195a8013d58" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>m_clusterProperties</name></member>
+      <member refid="classclue_1_1PointsHost_1af1ae4ae19c26efdd7844f907f45bd7ee" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>m_nclusters</name></member>
+      <member refid="classclue_1_1PointsHost_1adb029c11ac90d728484d4c02e22d922b" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>m_size</name></member>
+      <member refid="classclue_1_1PointsHost_1a9a192f7be000fe0e6c5eec715e89b78f" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>m_view</name></member>
+      <member refid="classclue_1_1PointsHost_1adb6402ac1f36a6862ab638f2a1140627" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>mark_clustered</name></member>
+      <member refid="classclue_1_1PointsHost_1a75cda73d4783776322cba7a6f61c8e25" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>n_clusters</name></member>
+      <member refid="classclue_1_1PointsHost_1a32f9755fc005ac39121041e3e97689da" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>Ndim_</name></member>
+      <member refid="classclue_1_1PointsHost_1a97d2127715691a6a93b024ea2a91e674" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>operator=</name></member>
+      <member refid="classclue_1_1PointsHost_1aeaa96364ab479226982df622b9a73308" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>operator=</name></member>
+      <member refid="classclue_1_1PointsHost_1ad8c1560268bb5cf8b5b18970514bc8d7" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>operator[]</name></member>
+      <member refid="classclue_1_1PointsHost_1a7e05851d0357d1e4da45ae74d0cb6ef4" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1adb32310c16af9ed6c7a5cdd86e283bd7" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1a888a78c876179f2c4122d88174c04c8c" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1af2ccf6cb428728cd6f52c410f5c2ffcd" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1a2076e867e700bb6d8a4bb547377bd2cf" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1a99ca5246e4125283b2cb68340487b5f4" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1a1f7111d7f384d8444bb931fc2e661e13" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1aa0df4446b703b54f6b36dad9b8c89496" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1aa3ae2b7317d756d1be7729fbd7432f69" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1afd3cb863ddb3b4256409c225e017519f" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>PointsHost</name></member>
+      <member refid="classclue_1_1PointsHost_1ab7aa18007a957b8324b73fd441b3cb04" prot="private" virt="non-virtual"><scope>clue::PointsHost</scope><name>read_output</name></member>
+      <member refid="classclue_1_1PointsHost_1a777e519a4750fd15392eb6f41d8d5e9d" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>size</name></member>
+      <member refid="classclue_1_1PointsHost_1a564b6660ffd9ba06a8b32d9351b1cbbc" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>view</name></member>
+      <member refid="classclue_1_1PointsHost_1a6770abdf4bc53f3363a7fc6960aafa38" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>view</name></member>
+      <member refid="classclue_1_1PointsHost_1af11d00db2d8c3aa6f78a1716b8e58eba" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>weights</name></member>
+      <member refid="classclue_1_1PointsHost_1ad272397dcd8721d3464a65ac23cc35ba" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>weights</name></member>
+      <member refid="classclue_1_1PointsHost_1a8e7c5a013ea7ecf9216a1c34fcd26211" prot="public" virt="non-virtual"><scope>clue::PointsHost</scope><name>~PointsHost</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

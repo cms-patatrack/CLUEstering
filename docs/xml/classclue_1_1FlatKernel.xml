@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classclue_1_1FlatKernel" kind="class" language="C++" prot="public">
+    <compoundname>clue::FlatKernel</compoundname>
+    <includes refid="ConvolutionalKernel_8hpp" local="no">ConvolutionalKernel.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1FlatKernel_1adb41142667cbd1d4afe80da8b10cc676" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float clue::FlatKernel::m_flat</definition>
+        <argsstring></argsstring>
+        <name>m_flat</name>
+        <qualifiedname>clue::FlatKernel::m_flat</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="17" column="11" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1FlatKernel_1ae4acc8580ae8aa6ed90dbb10a468a5af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::FlatKernel::FlatKernel</definition>
+        <argsstring>(float flat)</argsstring>
+        <name>FlatKernel</name>
+        <qualifiedname>clue::FlatKernel::FlatKernel</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>flat</declname>
+        </param>
+        <briefdescription>
+<para>Construct a <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>flat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The flat value for the kernel </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="23" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1FlatKernel_1a04ed04e0c787cfa1968f9d0dfa44a36b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TAcc</type>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_ACC float</type>
+        <definition>ALPAKA_FN_ACC float clue::FlatKernel::operator()</definition>
+        <argsstring>(const TAcc &amp;acc, float dist_ij, int point_id, int j) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>clue::FlatKernel::operator()</qualifiedname>
+        <param>
+          <type>const TAcc &amp;</type>
+          <declname>acc</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>dist_ij</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>point_id</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+<para>Computes the kernel value between two points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>acc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The accelerator to use for the computation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dist_ij</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance between the two points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>point_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the first point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the second point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The computed kernel value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="33" column="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>The <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> class implements a flat kernel for convolution. It returns a constant value for the kernel, regardless of the distance between points. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="15" column="3" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="15" bodyend="34"/>
+    <listofallmembers>
+      <member refid="classclue_1_1FlatKernel_1ae4acc8580ae8aa6ed90dbb10a468a5af" prot="public" virt="non-virtual"><scope>clue::FlatKernel</scope><name>FlatKernel</name></member>
+      <member refid="classclue_1_1FlatKernel_1adb41142667cbd1d4afe80da8b10cc676" prot="private" virt="non-virtual"><scope>clue::FlatKernel</scope><name>m_flat</name></member>
+      <member refid="classclue_1_1FlatKernel_1a04ed04e0c787cfa1968f9d0dfa44a36b" prot="public" virt="non-virtual"><scope>clue::FlatKernel</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

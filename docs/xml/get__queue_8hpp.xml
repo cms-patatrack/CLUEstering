@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="get__queue_8hpp" kind="file" language="C++">
+    <compoundname>get_queue.hpp</compoundname>
+    <includes local="yes">CLUEstering/core/detail/defines.hpp</includes>
+    <includes local="yes">CLUEstering/detail/concepts.hpp</includes>
+    <includes local="no">concepts</includes>
+    <includes local="no">alpaka/alpaka.hpp</includes>
+    <includedby refid="CLUEstering_8hpp" local="yes">include/CLUEstering/CLUEstering.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/CLUEstering/utils/get_queue.hpp</label>
+        <link refid="get__queue_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>CLUEstering/core/detail/defines.hpp</label>
+      </node>
+      <node id="3">
+        <label>CLUEstering/detail/concepts.hpp</label>
+      </node>
+      <node id="5">
+        <label>alpaka/alpaka.hpp</label>
+      </node>
+      <node id="4">
+        <label>concepts</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>include/CLUEstering/CLUEstering.hpp</label>
+        <link refid="CLUEstering_8hpp"/>
+      </node>
+      <node id="1">
+        <label>include/CLUEstering/utils/get_queue.hpp</label>
+        <link refid="get__queue_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="namespaceclue">clue</innernamespace>
+    <briefdescription>
+<para>Provides functions to get an alpaka queue from a device index or a device object. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="authors"><para>Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/core/detail/defines.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/detail/concepts.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;concepts&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;alpaka/alpaka.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">clue<sp/>{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">egral<sp/>TIdx&gt;</highlight></codeline>
+<codeline lineno="20" refid="get__queue_8hpp_1a1d26fcef2af702b8eb156bc42054ee1f" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>clue::Queue<sp/><ref refid="get__queue_8hpp_1a1d26fcef2af702b8eb156bc42054ee1f" kindref="member">get_queue</ref>(TIdx<sp/>device_id<sp/>=<sp/>TIdx{})<sp/>{</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>device<sp/>=<sp/>alpaka::getDevByIdx(clue::Platform{},<sp/>device_id);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>clue::Queue{device};</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::device<sp/>TDevice&gt;</highlight></codeline>
+<codeline lineno="31" refid="get__queue_8hpp_1a7903e09bb594960cbc75d10d17830934" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>clue::Queue<sp/><ref refid="get__queue_8hpp_1a1d26fcef2af702b8eb156bc42054ee1f" kindref="member">get_queue</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TDevice&amp;<sp/>device)<sp/>{</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>clue::Queue{device};</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal">}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>clue</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="include/CLUEstering/utils/get_queue.hpp"/>
+  </compounddef>
+</doxygen>

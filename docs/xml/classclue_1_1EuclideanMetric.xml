@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classclue_1_1EuclideanMetric" kind="class" language="C++" prot="public">
+    <compoundname>clue::EuclideanMetric</compoundname>
+    <includes refid="DistanceMetrics_8hpp" local="no">DistanceMetrics.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1EuclideanMetric_1aa811abf349d4af1e6739e0ad19f2e022" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::EuclideanMetric&lt; Ndim &gt;::EuclideanMetric</definition>
+        <argsstring>()</argsstring>
+        <name>EuclideanMetric</name>
+        <qualifiedname>clue::EuclideanMetric::EuclideanMetric</qualifiedname>
+        <briefdescription>
+<para>Default constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="classclue_1_1EuclideanMetric" kindref="compound">EuclideanMetric</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="40" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1EuclideanMetric_1aff891c65a97950d3ae09befebe1bb74b" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr auto</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr auto clue::EuclideanMetric&lt; Ndim &gt;::operator()</definition>
+        <argsstring>(const Point&lt; Ndim &gt; &amp;lhs, const Point&lt; Ndim &gt; &amp;rhs) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>clue::EuclideanMetric::operator()</qualifiedname>
+        <param>
+          <type>const Point&lt; Ndim &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const Point&lt; Ndim &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Compute the Euclidean distance between two points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>lhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>First point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Second point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Euclidean distance between the two points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="47" column="46" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="47" bodyend="52"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Euclidean distance metric. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This class implements the Euclidean distance metric in Ndim dimensions.</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of dimensions </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="35" column="3" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="35" bodyend="53"/>
+    <listofallmembers>
+      <member refid="classclue_1_1EuclideanMetric_1aa811abf349d4af1e6739e0ad19f2e022" prot="public" virt="non-virtual"><scope>clue::EuclideanMetric</scope><name>EuclideanMetric</name></member>
+      <member refid="classclue_1_1EuclideanMetric_1aff891c65a97950d3ae09befebe1bb74b" prot="public" virt="non-virtual"><scope>clue::EuclideanMetric</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

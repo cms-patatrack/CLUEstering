@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classclue_1_1WeightedChebyshevMetric" kind="class" language="C++" prot="public">
+    <compoundname>clue::WeightedChebyshevMetric</compoundname>
+    <includes refid="DistanceMetrics_8hpp" local="no">DistanceMetrics.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1WeightedChebyshevMetric_1aa1e5757251be07681e0a25501e06cf55" prot="private" static="no" mutable="no">
+        <type>std::array&lt; float, Ndim &gt;</type>
+        <definition>std::array&lt;float, Ndim&gt; clue::WeightedChebyshevMetric&lt; Ndim &gt;::m_weights</definition>
+        <argsstring></argsstring>
+        <name>m_weights</name>
+        <qualifiedname>clue::WeightedChebyshevMetric::m_weights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="196" column="16" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="196" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1WeightedChebyshevMetric_1aa49bef09e5c694f3e06bd1188762a34b" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point...</type>
+            <declname>TValues</declname>
+            <defname>TValues</defname>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::WeightedChebyshevMetric&lt; Ndim &gt;::WeightedChebyshevMetric</definition>
+        <argsstring>(TValues... weights)</argsstring>
+        <name>WeightedChebyshevMetric</name>
+        <qualifiedname>clue::WeightedChebyshevMetric::WeightedChebyshevMetric</qualifiedname>
+        <param>
+          <type>TValues...</type>
+          <declname>weights</declname>
+        </param>
+    <requiresclause>(sizeof...(TValues) == Ndim)    </requiresclause>
+        <briefdescription>
+<para>Constructor weighted chebyshev metric with weights. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>weights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weights for each dimension </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classclue_1_1WeightedChebyshevMetric" kindref="compound">WeightedChebyshevMetric</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="205" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="205" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1WeightedChebyshevMetric_1ab1cef0f005303602b6f2a53cd32c8702" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::WeightedChebyshevMetric&lt; Ndim &gt;::WeightedChebyshevMetric</definition>
+        <argsstring>(const std::array&lt; float, Ndim &gt; &amp;weights)</argsstring>
+        <name>WeightedChebyshevMetric</name>
+        <qualifiedname>clue::WeightedChebyshevMetric::WeightedChebyshevMetric</qualifiedname>
+        <param>
+          <type>const std::array&lt; float, Ndim &gt; &amp;</type>
+          <declname>weights</declname>
+        </param>
+        <briefdescription>
+<para>Constructor weighted chebyshev metric with weights. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>weights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weights for each dimension </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classclue_1_1WeightedChebyshevMetric" kindref="compound">WeightedChebyshevMetric</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="211" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="211" bodyend="212"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1WeightedChebyshevMetric_1a7b56395d68999ad45cd41dea4e0ec123" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::WeightedChebyshevMetric&lt; Ndim &gt;::WeightedChebyshevMetric</definition>
+        <argsstring>(std::array&lt; float, Ndim &gt; &amp;&amp;weights)</argsstring>
+        <name>WeightedChebyshevMetric</name>
+        <qualifiedname>clue::WeightedChebyshevMetric::WeightedChebyshevMetric</qualifiedname>
+        <param>
+          <type>std::array&lt; float, Ndim &gt; &amp;&amp;</type>
+          <declname>weights</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor weighted chebyshev metric with weights. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>weights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Weights for each dimension </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classclue_1_1WeightedChebyshevMetric" kindref="compound">WeightedChebyshevMetric</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="217" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="217" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1WeightedChebyshevMetric_1af2f13e7d2eaf0f687e36edcde39385c2" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr auto</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr auto clue::WeightedChebyshevMetric&lt; Ndim &gt;::operator()</definition>
+        <argsstring>(const Point&lt; Ndim &gt; &amp;lhs, const Point&lt; Ndim &gt; &amp;rhs) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>clue::WeightedChebyshevMetric::operator()</qualifiedname>
+        <param>
+          <type>const Point&lt; Ndim &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const Point&lt; Ndim &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Compute the Weighted Chebyshev distance between two points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>lhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>First point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Second point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Weighted Chebyshev distance between the two points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="225" column="46" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="225" bodyend="229"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Weighted Chebyshev distance metric This class implements the weighted Chebyshev distance metric in Ndim dimensions. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of dimensions </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="194" column="3" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="194" bodyend="230"/>
+    <listofallmembers>
+      <member refid="classclue_1_1WeightedChebyshevMetric_1aa1e5757251be07681e0a25501e06cf55" prot="private" virt="non-virtual"><scope>clue::WeightedChebyshevMetric</scope><name>m_weights</name></member>
+      <member refid="classclue_1_1WeightedChebyshevMetric_1af2f13e7d2eaf0f687e36edcde39385c2" prot="public" virt="non-virtual"><scope>clue::WeightedChebyshevMetric</scope><name>operator()</name></member>
+      <member refid="classclue_1_1WeightedChebyshevMetric_1aa49bef09e5c694f3e06bd1188762a34b" prot="public" virt="non-virtual"><scope>clue::WeightedChebyshevMetric</scope><name>WeightedChebyshevMetric</name></member>
+      <member refid="classclue_1_1WeightedChebyshevMetric_1ab1cef0f005303602b6f2a53cd32c8702" prot="public" virt="non-virtual"><scope>clue::WeightedChebyshevMetric</scope><name>WeightedChebyshevMetric</name></member>
+      <member refid="classclue_1_1WeightedChebyshevMetric_1a7b56395d68999ad45cd41dea4e0ec123" prot="public" virt="non-virtual"><scope>clue::WeightedChebyshevMetric</scope><name>WeightedChebyshevMetric</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

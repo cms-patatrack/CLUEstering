@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classclue_1_1AssociationMapView" kind="class" language="C++" prot="public">
+    <compoundname>clue::AssociationMapView</compoundname>
+    <includes refid="AssociationMapView_8hpp" local="no">AssociationMapView.hpp</includes>
+    <innerclass refid="structclue_1_1AssociationMapView_1_1Extents" prot="public">clue::AssociationMapView::Extents</innerclass>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1AssociationMapView_1ae3a2e54654ece6a26e6b8cbcf2afd004" prot="private" static="no" mutable="no">
+        <type>int32_t *</type>
+        <definition>int32_t* clue::AssociationMapView::m_indexes</definition>
+        <argsstring></argsstring>
+        <name>m_indexes</name>
+        <qualifiedname>clue::AssociationMapView::m_indexes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="28" column="13" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1AssociationMapView_1afcd3796b533504f41ae2d53c86522336" prot="private" static="no" mutable="no">
+        <type>int32_t *</type>
+        <definition>int32_t* clue::AssociationMapView::m_offsets</definition>
+        <argsstring></argsstring>
+        <name>m_offsets</name>
+        <qualifiedname>clue::AssociationMapView::m_offsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="29" column="13" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1AssociationMapView_1a56310e7898910ae9ed2e5eaf6d4bb324" prot="private" static="no" mutable="no">
+        <type><ref refid="structclue_1_1AssociationMapView_1_1Extents" kindref="compound">Extents</ref></type>
+        <definition>Extents clue::AssociationMapView::m_extents</definition>
+        <argsstring></argsstring>
+        <name>m_extents</name>
+        <qualifiedname>clue::AssociationMapView::m_extents</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="30" column="13" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="classclue_1_1AssociationMapView_1aa9090b5d1cc9c691efef1a389c6929d7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::device</type>
+            <declname>TDev</declname>
+            <defname>TDev</defname>
+          </param>
+        </templateparamlist>
+        <type>class</type>
+        <definition>friend class AssociationMap</definition>
+        <argsstring></argsstring>
+        <name>AssociationMap</name>
+        <qualifiedname>clue::AssociationMapView::AssociationMap</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="37" column="18" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classclue_1_1AssociationMapView_1a95d1a0cdc33b9c9d3204fc83a803426e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::AssociationMapView::AssociationMapView</definition>
+        <argsstring>()=default</argsstring>
+        <name>AssociationMapView</name>
+        <qualifiedname>clue::AssociationMapView::AssociationMapView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="32" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMapView_1ab9e508e970dfa68ce1a6316e4be73529" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>clue::AssociationMapView::AssociationMapView</definition>
+        <argsstring>(int32_t *indexes, int32_t *offsets, std::size_t nvalues, std::size_t nkeys)</argsstring>
+        <name>AssociationMapView</name>
+        <qualifiedname>clue::AssociationMapView::AssociationMapView</qualifiedname>
+        <param>
+          <type>int32_t *</type>
+          <declname>indexes</declname>
+        </param>
+        <param>
+          <type>int32_t *</type>
+          <declname>offsets</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>nvalues</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>nkeys</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="33" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="33" bodyend="34"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1AssociationMapView_1a4001c97106648a9d371abafb2fa01020" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_ACC auto</type>
+        <definition>ALPAKA_FN_ACC auto clue::AssociationMapView::extents</definition>
+        <argsstring>() const</argsstring>
+        <name>extents</name>
+        <qualifiedname>clue::AssociationMapView::extents</qualifiedname>
+        <briefdescription>
+<para>Get the extents of the association map. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An <ref refid="structclue_1_1AssociationMapView_1_1Extents" kindref="compound">Extents</ref> struct containing the number of values and keys in the association map. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="42" column="24" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMapView_1a79f75504e9a1eb11973d3713999b0bb9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_ACC auto</type>
+        <definition>ALPAKA_FN_ACC auto clue::AssociationMapView::operator[]</definition>
+        <argsstring>(size_t key)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>clue::AssociationMapView::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Get the associated values for a given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key for which to get the associated values. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A span containing the values associated with the given key. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="48" column="24" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="48" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMapView_1af1ceb56184b34a25d4f4f25f0efb76b6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_ACC auto</type>
+        <definition>ALPAKA_FN_ACC auto clue::AssociationMapView::operator[]</definition>
+        <argsstring>(size_t key) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>clue::AssociationMapView::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Get the associated values for a given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key for which to get the associated values. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A span containing the values associated with the given key. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="57" column="24" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="57" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMapView_1aeb61737c8bc2583e9488348dfcd0bc52" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_ACC auto</type>
+        <definition>ALPAKA_FN_ACC auto clue::AssociationMapView::count</definition>
+        <argsstring>(std::size_t key) const</argsstring>
+        <name>count</name>
+        <qualifiedname>clue::AssociationMapView::count</qualifiedname>
+        <param>
+          <type>std::size_t</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Get the number of associated values for a given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key for which to get the count of associated values. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The number of values associated with the given key. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="66" column="24" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMapView_1ac5e6f97791d272ffa7db643aaa545a87" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_ACC bool</type>
+        <definition>ALPAKA_FN_ACC bool clue::AssociationMapView::contains</definition>
+        <argsstring>(std::size_t key) const</argsstring>
+        <name>contains</name>
+        <qualifiedname>clue::AssociationMapView::contains</qualifiedname>
+        <param>
+          <type>std::size_t</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Check if there are any associated values for a given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key to check for associated values. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>True if there are associated values for the given key, false otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="71" column="24" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="71" bodyend="73"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>A view into an association map data structure that can be passed to kernels. The <ref refid="classclue_1_1AssociationMapView" kindref="compound">AssociationMapView</ref> provides access to the underlying data of an <ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref> without owning it. It allows for efficient retrieval of associated values for given keys, making it suitable for use inside kernels. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/data_structures/AssociationMapView.hpp" line="20" column="3" bodyfile="include/CLUEstering/data_structures/AssociationMapView.hpp" bodystart="20" bodyend="74"/>
+    <listofallmembers>
+      <member refid="classclue_1_1AssociationMapView_1aa9090b5d1cc9c691efef1a389c6929d7" prot="private" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>AssociationMap</name></member>
+      <member refid="classclue_1_1AssociationMapView_1a95d1a0cdc33b9c9d3204fc83a803426e" prot="private" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>AssociationMapView</name></member>
+      <member refid="classclue_1_1AssociationMapView_1ab9e508e970dfa68ce1a6316e4be73529" prot="private" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>AssociationMapView</name></member>
+      <member refid="classclue_1_1AssociationMapView_1ac5e6f97791d272ffa7db643aaa545a87" prot="public" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>contains</name></member>
+      <member refid="classclue_1_1AssociationMapView_1aeb61737c8bc2583e9488348dfcd0bc52" prot="public" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>count</name></member>
+      <member refid="classclue_1_1AssociationMapView_1a4001c97106648a9d371abafb2fa01020" prot="public" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>extents</name></member>
+      <member refid="classclue_1_1AssociationMapView_1a56310e7898910ae9ed2e5eaf6d4bb324" prot="private" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>m_extents</name></member>
+      <member refid="classclue_1_1AssociationMapView_1ae3a2e54654ece6a26e6b8cbcf2afd004" prot="private" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>m_indexes</name></member>
+      <member refid="classclue_1_1AssociationMapView_1afcd3796b533504f41ae2d53c86522336" prot="private" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>m_offsets</name></member>
+      <member refid="classclue_1_1AssociationMapView_1a79f75504e9a1eb11973d3713999b0bb9" prot="public" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>operator[]</name></member>
+      <member refid="classclue_1_1AssociationMapView_1af1ceb56184b34a25d4f4f25f0efb76b6" prot="public" virt="non-virtual"><scope>clue::AssociationMapView</scope><name>operator[]</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

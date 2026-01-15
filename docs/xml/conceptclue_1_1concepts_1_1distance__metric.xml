@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="conceptclue_1_1concepts_1_1distance__metric" kind="concept">
+    <compoundname>clue::concepts::distance_metric</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename TMetric</type>
+      </param>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;typename TMetric, std::size_t Ndim&gt;
+concept <ref refid="conceptclue_1_1concepts_1_1distance__metric" kindref="compound">clue::concepts::distance_metric</ref> =  requires(TMetric&amp;&amp; metric) {
+      {
+        metric(std::array&lt;float, Ndim + 1&gt;{}, std::array&lt;float, Ndim + 1&gt;{})
+      } -&gt; std::same_as&lt;float&gt;;
+    }    </initializer>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="19" column="5"/>
+  </compounddef>
+</doxygen>

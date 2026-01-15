@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="read__csv_8hpp" kind="file" language="C++">
+    <compoundname>read_csv.hpp</compoundname>
+    <includes refid="PointsHost_8hpp" local="yes">CLUEstering/data_structures/PointsHost.hpp</includes>
+    <includes local="yes">CLUEstering/detail/concepts.hpp</includes>
+    <includes local="no">string</includes>
+    <includes local="yes">CLUEstering/utils/detail/read_csv.hpp</includes>
+    <includedby refid="CLUEstering_8hpp" local="yes">include/CLUEstering/CLUEstering.hpp</includedby>
+    <incdepgraph>
+      <node id="4">
+        <label>CLUEstering/data_structures/AssociationMap.hpp</label>
+        <link refid="AssociationMap_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>CLUEstering/data_structures/AssociationMapView.hpp</label>
+        <link refid="AssociationMapView_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>CLUEstering/data_structures/ClusterProperties.hpp</label>
+        <link refid="ClusterProperties_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>CLUEstering/data_structures/PointsHost.hpp</label>
+        <link refid="PointsHost_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/CLUEstering/utils/read_csv.hpp</label>
+        <link refid="read__csv_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>CLUEstering/core/detail/defines.hpp</label>
+      </node>
+      <node id="11">
+        <label>CLUEstering/data_structures/detail/AssociationMap.hpp</label>
+      </node>
+      <node id="21">
+        <label>CLUEstering/data_structures/detail/Point.hpp</label>
+      </node>
+      <node id="20">
+        <label>CLUEstering/data_structures/detail/PointsHost.hpp</label>
+      </node>
+      <node id="15">
+        <label>CLUEstering/data_structures/internal/PointsCommon.hpp</label>
+      </node>
+      <node id="7">
+        <label>CLUEstering/detail/concepts.hpp</label>
+      </node>
+      <node id="10">
+        <label>CLUEstering/internal/alpaka/memory.hpp</label>
+      </node>
+      <node id="12">
+        <label>CLUEstering/utils/detail/get_clusters.hpp</label>
+      </node>
+      <node id="22">
+        <label>CLUEstering/utils/detail/read_csv.hpp</label>
+      </node>
+      <node id="9">
+        <label>alpaka/alpaka.hpp</label>
+      </node>
+      <node id="16">
+        <label>cstddef</label>
+      </node>
+      <node id="17">
+        <label>cstdint</label>
+      </node>
+      <node id="18">
+        <label>optional</label>
+      </node>
+      <node id="13">
+        <label>ranges</label>
+      </node>
+      <node id="8">
+        <label>span</label>
+      </node>
+      <node id="19">
+        <label>string</label>
+      </node>
+      <node id="14">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>include/CLUEstering/CLUEstering.hpp</label>
+        <link refid="CLUEstering_8hpp"/>
+      </node>
+      <node id="1">
+        <label>include/CLUEstering/utils/read_csv.hpp</label>
+        <link refid="read__csv_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="namespaceclue">clue</innernamespace>
+    <briefdescription>
+<para>Provides functions to read points from a CSV file into a PointsHost object. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="authors"><para>Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="PointsHost_8hpp" kindref="compound">CLUEstering/data_structures/PointsHost.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/detail/concepts.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">clue<sp/>{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>NDim,<sp/>concepts::queue<sp/>TQueue&gt;</highlight></codeline>
+<codeline lineno="22" refid="read__csv_8hpp_1a8559835368e00aab58dc190045b39582" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost&lt;NDim&gt;</ref><sp/><ref refid="read__csv_8hpp_1a8559835368e00aab58dc190045b39582" kindref="member">read_csv</ref>(TQueue&amp;<sp/>queue,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>file_path);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>NDim,<sp/>concepts::queue<sp/>TQueue&gt;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost&lt;NDim&gt;</ref><sp/><ref refid="PointsHost_8hpp_1afe205accfe32d205cf43fe173f425717" kindref="member">read_output</ref>(TQueue&amp;<sp/>queue,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string&amp;<sp/>file_path);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal">}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>clue</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/utils/detail/read_csv.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="include/CLUEstering/utils/read_csv.hpp"/>
+  </compounddef>
+</doxygen>
