@@ -75,13 +75,8 @@ jobs:
       with:
         submodules: true
 
-    - name: Install dependencies
-      if: matrix.os == 'windows-latest'
-      run: |
-        vcpkg install --feature-flags=manifests --triplet x64-windows
-
     - name: Compile and run tests
-      if: matrix.container != 'almalinux:9'
+      if: matrix.container != 'almalinux:9' && matrix.os != 'windows-latest'
       working-directory: ${{ github.workspace }}/tests
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -101,6 +96,6 @@ jobs:
       if: matrix.os == 'windows-latest'
       working-directory: ${{ github.workspace }}/tests
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake"
-        cmake --build build --parallel
-        ctest --test-dir build --output-on-failure
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_PATH/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
+        cmake --build build --parallel --config Release
+        ctest --test-dir build --output-on-failure --build-config Release
