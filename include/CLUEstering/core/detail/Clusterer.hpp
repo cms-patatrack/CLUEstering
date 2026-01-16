@@ -290,15 +290,23 @@ namespace clue {
   inline host_associator Clusterer<Ndim>::getSampleAssociations(Queue& queue,
                                                                 PointsHost& h_points) {
     auto event_associations = make_host_buffer<std::int32_t[]>(h_points.n_clusters());
-    alpaka::memcpy(queue, event_associations, m_event_associations->data());
+    alpaka::memcpy(queue,
+                   event_associations,
+                   make_device_view(
+                       alpaka::getDev(queue), m_event_associations->data(), h_points.n_clusters()));
     alpaka::wait(queue);
-    return internal::make_associator(event_associations, h_points.n_clusters());
+    return internal::make_associator(
+        std::span<const std::int32_t>{event_associations.data(), h_points.n_clusters()},
+        h_points.n_clusters());
   }
 
   template <std::size_t Ndim>
   inline AssociationMap<Device> Clusterer<Ndim>::getSampleAssociations(Queue& queue,
                                                                        PointsDevice& d_points) {
-    return internal::make_associator(queue, m_event_associations->data(), d_points.n_clusters());
+    return internal::make_associator(
+        queue,
+        std::span<const std::int32_t>{m_event_associations->data(), d_points.n_clusters()},
+        d_points.n_clusters());
   }
 
   template <std::size_t Ndim>
