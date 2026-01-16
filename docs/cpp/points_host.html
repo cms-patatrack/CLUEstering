@@ -1,0 +1,3777 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="clusterer.html">
+      
+      
+        <link rel="next" href="points_device.html">
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>Points Host - CLUEstering 2.9.0 documentation</title>
+      
+    
+    
+      
+        
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+        <link rel="stylesheet" type="text/css" href="../_static/sphinx_immaterial_theme.cf2c65c97ee1b6f01.min.css?v=0a68cab4" />
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="CLUEstering 2.9.0 documentation" class="md-header__button md-logo" aria-label="CLUEstering 2.9.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CLUEstering 2.9.0 documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Points Host
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="CLUEstering 2.9.0 documentation" class="md-nav__button md-logo" aria-label="CLUEstering 2.9.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    CLUEstering 2.9.0 documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Introduction to CLUEstering</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dependencies.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Supported Backends and Dependencies</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>How to Install</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Getting Started</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>C++ API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            <span>C++ API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Host</span>
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Host</span>
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points to manage"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Public Functions</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points to allocate"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-buffer" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::buffer (C++ function parameter) — The pre-allocated buffer to use for the points data"><span>buffer</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-coordinates" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::coordinates (C++ function parameter) — The pre-allocated buffer containing the coordinates"><span>coordinates</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-weights" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::weights (C++ function parameter) — The pre-allocated buffer containing the weights"><span>weights</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-output" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::output (C++ function parameter) — The pre-allocated buffer to store the cluster indexes"><span>output</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-buffers" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::buffers (C++ function parameter) — The pre-allocated buffers to use for the points data"><span>buffers</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-coordinates" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::coordinates (C++ function parameter) — The pre-allocated buffer containing the coordinates"><span>coordinates</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-weights" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::weights (C++ function parameter) — The pre-allocated buffer containing the weights"><span>weights</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-output" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::output (C++ function parameter) — The pre-allocated buffer to store the cluster indexes"><span>output</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-buffers" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::buffers (C++ function parameter) — The pre-allocated buffers to use for the points data"><span>buffers</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost10PointsHostERK10PointsHost" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHostaSERK10PointsHost" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator=</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost10PointsHostERR10PointsHost" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHostaSERR10PointsHost" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator=</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHostD0Ev" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>~Points<wbr>Host</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost4sizeEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>size</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="size">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost4sizeEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost6coordsE6size_t" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>coords</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="coords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-p-dim" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::coords::dim (C++ function parameter) — The dimension for which to get the coordinates"><span>dim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost6coordsE6size_t" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>coords</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="coords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost6coordsE6size_t-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost6coordsE6size_t-p-dim" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::coords::dim (C++ function parameter) — The dimension for which to get the coordinates"><span>dim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost6coordsE6size_t-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost7weightsEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>weights</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="weights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost7weightsEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost7weightsEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>weights</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="weights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost7weightsEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost14clusterIndexesEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster<wbr>Indexes</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clusterIndexes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost14clusterIndexesEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost14clusterIndexesEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster<wbr>Indexes</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clusterIndexes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost14clusterIndexesEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost9clusteredEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>clustered</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clustered">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost9clusteredEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost4viewEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>view</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="view">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost4viewEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost4viewEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>view</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="view">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost4viewEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHostixENSt6size_tE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator<wbr>[]</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="operator[]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-p-idx" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::operator[]::idx (C++ function parameter) — The index of the point to retrieve"><span>idx</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost10n_clustersEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>n_<wbr>clusters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="n_clusters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost10n_clustersEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost8clustersEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>clusters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clusters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost8clustersEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost13cluster_sizesEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster_<wbr>sizes</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cluster_sizes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost13cluster_sizesEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost18cluster_propertiesEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster_<wbr>properties</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cluster_properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost18cluster_propertiesEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-friends" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Friends</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost5PointE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Point</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Point">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Public Functions</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost5Point5PointERKNSt5arrayIf4NdimEEfi" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Point</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost5PointixE6size_t" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator<wbr>[]</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost5Point6weightEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>weight</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost5Point13cluster_indexEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster_<wbr>index</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="points_device.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Device</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="points_conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Conversions</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="distance_metrics.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Distance metrics</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="convolutional_kernel.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Convolutional Kernels</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="association_map.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association map</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="association_map_view.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Conversions</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cluster_properties.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster properties</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="get_clusters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusters associations</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cluster_centroid.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster centroids</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="read_csv.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>File reading</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="alpaka_utils.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Alpaka utilities</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="scores.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Validation scores</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../python/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>Python API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Python API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python/clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points to manage"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Public Functions</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points to allocate"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-buffer" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::buffer (C++ function parameter) — The pre-allocated buffer to use for the points data"><span>buffer</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-coordinates" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::coordinates (C++ function parameter) — The pre-allocated buffer containing the coordinates"><span>coordinates</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-weights" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::weights (C++ function parameter) — The pre-allocated buffer containing the weights"><span>weights</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-output" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::output (C++ function parameter) — The pre-allocated buffer to store the cluster indexes"><span>output</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-buffers" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::buffers (C++ function parameter) — The pre-allocated buffers to use for the points data"><span>buffers</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-coordinates" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::coordinates (C++ function parameter) — The pre-allocated buffer containing the coordinates"><span>coordinates</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-weights" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::weights (C++ function parameter) — The pre-allocated buffer containing the weights"><span>weights</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-output" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::output (C++ function parameter) — The pre-allocated buffer to store the cluster indexes"><span>output</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointsHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-n_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span>n_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-buffers" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::PointsHost::buffers (C++ function parameter) — The pre-allocated buffers to use for the points data"><span>buffers</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost10PointsHostERK10PointsHost" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHostaSERK10PointsHost" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator=</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost10PointsHostERR10PointsHost" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Points<wbr>Host</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHostaSERR10PointsHost" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator=</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHostD0Ev" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>~Points<wbr>Host</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost4sizeEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>size</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="size">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost4sizeEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost6coordsE6size_t" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>coords</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="coords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-p-dim" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::coords::dim (C++ function parameter) — The dimension for which to get the coordinates"><span>dim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost6coordsE6size_t" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>coords</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="coords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost6coordsE6size_t-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost6coordsE6size_t-p-dim" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::coords::dim (C++ function parameter) — The dimension for which to get the coordinates"><span>dim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost6coordsE6size_t-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost7weightsEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>weights</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="weights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost7weightsEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost7weightsEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>weights</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="weights">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost7weightsEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost14clusterIndexesEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster<wbr>Indexes</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clusterIndexes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost14clusterIndexesEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost14clusterIndexesEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster<wbr>Indexes</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clusterIndexes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost14clusterIndexesEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost9clusteredEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>clustered</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clustered">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost9clusteredEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost4viewEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>view</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="view">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost4viewEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost4viewEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>view</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="view">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost4viewEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHostixENSt6size_tE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator<wbr>[]</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="operator[]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-p-idx" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::PointsHost::operator[]::idx (C++ function parameter) — The index of the point to retrieve"><span>idx</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost10n_clustersEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>n_<wbr>clusters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="n_clusters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost10n_clustersEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost8clustersEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>clusters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clusters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost8clustersEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost13cluster_sizesEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster_<wbr>sizes</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cluster_sizes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost13cluster_sizesEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost18cluster_propertiesEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster_<wbr>properties</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cluster_properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost18cluster_propertiesEv-returns" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Returns</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-friends" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Friends</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost5PointE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Point</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Point">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-public-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Public Functions</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4N4clue10PointsHost5Point5PointERKNSt5arrayIf4NdimEEfi" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Point</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost5PointixE6size_t" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>operator<wbr>[]</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost5Point6weightEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>weight</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4NK4clue10PointsHost5Point13cluster_indexEv" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>cluster_<wbr>index</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1 id="points-host">Points Host<a class="headerlink" href="#points-host" title="Link to this heading">¶</a></h1>
+<dl class="cpp class objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_NSt6size_tEEN4clue10PointsHostE">
+<span id="_CPPv3I_NSt6size_tEEN4clue10PointsHostE"></span><span id="_CPPv2I_NSt6size_tEEN4clue10PointsHostE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE-p-Ndim" title="clue::PointsHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points to manage"><span class="n"><span class="pre">Ndim</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1PointsHost"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">internal</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">points_interface</span></span><span class="p"><span class="pre">&lt;</span></span><a class="desctype reference internal" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n"><span class="pre">PointsHost</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE-p-Ndim" title="clue::PointsHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points to manage"><span class="n"><span class="pre">Ndim</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>The <a class="reference internal" href="#classclue_1_1PointsHost"><span class="std std-ref">PointsHost</span></a> class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_NSt6size_tEEN4clue10PointsHostE-template-parameters">Template Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE-template-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_NSt6size_tEEN4clue10PointsHostE-p-Ndim"><span class="n">std</span><span class="p">::</span><span class="n">size_t</span><span class="w"> </span><span class="sig-name descname"><span class="n">Ndim</span></span><a class="headerlink" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE-p-Ndim" title="Permalink to this definition">¶</a></dt><dd><p>The number of dimensions of the points to manage </p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions<a class="headerlink" href="#breathe-section-title-public-functions" title="Permalink to this headline">¶</a></p>
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t">
+<span id="_CPPv3I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t"></span><span id="_CPPv2I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1PointsHost_1a7e05851d0357d1e4da45ae74d0cb6ef4"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-queue" title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-n_points" title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points to allocate"><span class="n sig-param"><span class="pre">n_points</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a container for the points allocated on the host. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue to use for memory allocation </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-n_points"><span class="n">int32_t</span><span class="w"> </span><span class="n sig-param sig-name">n_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_t-p-n_points" title="Permalink to this definition">¶</a></dt><dd><p>The number of points to allocate </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE">
+<span id="_CPPv3I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE"></span><span id="_CPPv2I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1PointsHost_1adb32310c16af9ed6c7a5cdd86e283bd7"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-queue" title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-n_points" title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span class="n sig-param"><span class="pre">n_points</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">byte</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-buffer" title="clue::PointsHost::PointsHost::buffer (C++ function parameter) — The pre-allocated buffer to use for the points data"><span class="n sig-param"><span class="pre">buffer</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a container for the points allocated on the host using a pre-allocated buffers. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue to use for memory allocation </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-n_points"><span class="n">int32_t</span><span class="w"> </span><span class="n sig-param sig-name">n_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-n_points" title="Permalink to this definition">¶</a></dt><dd><p>The number of points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-buffer"><span class="n">std</span><span class="p">::</span><span class="n">span</span><span class="p">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">byte</span><span class="p">&gt;</span><span class="w"> </span><span class="n sig-param sig-name">buffer</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanINSt4byteEEE-p-buffer" title="Permalink to this definition">¶</a></dt><dd><p>The pre-allocated buffer to use for the points data </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE">
+<span id="_CPPv3I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE"></span><span id="_CPPv2I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1PointsHost_1a888a78c876179f2c4122d88174c04c8c"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-queue" title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-n_points" title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span class="n sig-param"><span class="pre">n_points</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE" title="clue::PointsHost::PointsHost::input (C++ function parameter)"><span class="n sig-param"><span class="pre">input</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE" title="clue::PointsHost::PointsHost::output (C++ function parameter)"><span class="n sig-param"><span class="pre">output</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a container for the points allocated on the host using interleaved data. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input buffer must contain the coordinates and weights in an SoA format </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue to use for memory allocation </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-n_points"><span class="n">int32_t</span><span class="w"> </span><span class="n sig-param sig-name">n_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIiEE-p-n_points" title="Permalink to this definition">¶</a></dt><dd><p>The number of points </p>
+</dd>
+<dt><span class="sig-name descname">input_buffer</span></dt><dd><p>The pre-allocated buffer containing interleaved coordinates and weights </p>
+</dd>
+<dt><span class="sig-name descname">output_buffer</span></dt><dd><p>The pre-allocated buffer to store the cluster indexes </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE">
+<span id="_CPPv3I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE"></span><span id="_CPPv2I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1PointsHost_1af2ccf6cb428728cd6f52c410f5c2ffcd"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-queue" title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-n_points" title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span class="n sig-param"><span class="pre">n_points</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-coordinates" title="clue::PointsHost::PointsHost::coordinates (C++ function parameter) — The pre-allocated buffer containing the coordinates"><span class="n sig-param"><span class="pre">coordinates</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-weights" title="clue::PointsHost::PointsHost::weights (C++ function parameter) — The pre-allocated buffer containing the weights"><span class="n sig-param"><span class="pre">weights</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">span</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-output" title="clue::PointsHost::PointsHost::output (C++ function parameter) — The pre-allocated buffer to store the cluster indexes"><span class="n sig-param"><span class="pre">output</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a container for the points allocated on the host using separate coordinate and weight buffers. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The coordinates buffer must have a size of n_points * Ndim </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue to use for memory allocation </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-n_points"><span class="n">int32_t</span><span class="w"> </span><span class="n sig-param sig-name">n_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-n_points" title="Permalink to this definition">¶</a></dt><dd><p>The number of points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-coordinates"><span class="n">std</span><span class="p">::</span><span class="n">span</span><span class="p">&lt;</span><span class="kt">float</span><span class="p">&gt;</span><span class="w"> </span><span class="n sig-param sig-name">coordinates</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-coordinates" title="Permalink to this definition">¶</a></dt><dd><p>The pre-allocated buffer containing the coordinates </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-weights"><span class="n">std</span><span class="p">::</span><span class="n">span</span><span class="p">&lt;</span><span class="kt">float</span><span class="p">&gt;</span><span class="w"> </span><span class="n sig-param sig-name">weights</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-weights" title="Permalink to this definition">¶</a></dt><dd><p>The pre-allocated buffer containing the weights </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-output"><span class="n">std</span><span class="p">::</span><span class="n">span</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span><span class="w"> </span><span class="n sig-param sig-name">output</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tNSt4spanIfEENSt4spanIfEENSt4spanIiEE-p-output" title="Permalink to this definition">¶</a></dt><dd><p>The pre-allocated buffer to store the cluster indexes </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers">
+<span id="_CPPv3I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers"></span><span id="_CPPv2I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ranges</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">contiguous_range</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers" title="clue::PointsHost::PointsHost::TBuffers (C++ non-type template parameter)"><span class="n"><span class="pre">TBuffers</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1PointsHost_1a2076e867e700bb6d8a4bb547377bd2cf"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-queue" title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-n_points" title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span class="n sig-param"><span class="pre">n_points</span></span></a>, </span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers" title="clue::PointsHost::PointsHost::TBuffers (C++ non-type template parameter)"><span class="n"><span class="pre">TBuffers</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-buffers" title="clue::PointsHost::PointsHost::buffers (C++ function parameter) — The pre-allocated buffers to use for the points data"><span class="n sig-param"><span class="pre">buffers</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a container for the points allocated on the host using multiple pre-allocated buffers. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue to use for memory allocation </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-n_points"><span class="n">int32_t</span><span class="w"> </span><span class="n sig-param sig-name">n_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-n_points" title="Permalink to this definition">¶</a></dt><dd><p>The number of points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-buffers"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers" title="clue::PointsHost::PointsHost::TBuffers (C++ non-type template parameter)"><span class="n">TBuffers</span></a><span class="p">&amp;</span><span class="p">&amp;</span><span class="p">...</span><span class="w"> </span><span class="n sig-param sig-name">buffers</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpNSt6ranges16contiguous_rangeEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDpRR8TBuffers-p-buffers" title="Permalink to this definition">¶</a></dt><dd><p>The pre-allocated buffers to use for the points data </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi">
+<span id="_CPPv3I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi"></span><span id="_CPPv2I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1PointsHost_1a99ca5246e4125283b2cb68340487b5f4"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-queue" title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-n_points" title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span class="n sig-param"><span class="pre">n_points</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi" title="clue::PointsHost::PointsHost::input (C++ function parameter)"><span class="n sig-param"><span class="pre">input</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi" title="clue::PointsHost::PointsHost::output (C++ function parameter)"><span class="n sig-param"><span class="pre">output</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a container for the points allocated on the host using interleaved data. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input buffer must contain the coordinates and weights in an SoA format </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue to use for memory allocation </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-n_points"><span class="n">int32_t</span><span class="w"> </span><span class="n sig-param sig-name">n_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPi-p-n_points" title="Permalink to this definition">¶</a></dt><dd><p>The number of points </p>
+</dd>
+<dt><span class="sig-name descname">input_buffer</span></dt><dd><p>The pre-allocated buffer containing interleaved coordinates and weights </p>
+</dd>
+<dt><span class="sig-name descname">output_buffer</span></dt><dd><p>The pre-allocated buffer to store the cluster indexes </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi">
+<span id="_CPPv3I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi"></span><span id="_CPPv2I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1PointsHost_1a1f7111d7f384d8444bb931fc2e661e13"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-queue" title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-n_points" title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span class="n sig-param"><span class="pre">n_points</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-coordinates" title="clue::PointsHost::PointsHost::coordinates (C++ function parameter) — The pre-allocated buffer containing the coordinates"><span class="n sig-param"><span class="pre">coordinates</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-weights" title="clue::PointsHost::PointsHost::weights (C++ function parameter) — The pre-allocated buffer containing the weights"><span class="n sig-param"><span class="pre">weights</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-output" title="clue::PointsHost::PointsHost::output (C++ function parameter) — The pre-allocated buffer to store the cluster indexes"><span class="n sig-param"><span class="pre">output</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a container for the points allocated on the host using separate coordinate and weight buffers. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The coordinates buffer must have a size of n_points * Ndim </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue to use for memory allocation </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-n_points"><span class="n">int32_t</span><span class="w"> </span><span class="n sig-param sig-name">n_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-n_points" title="Permalink to this definition">¶</a></dt><dd><p>The number of points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-coordinates"><span class="kt">float</span><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">coordinates</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-coordinates" title="Permalink to this definition">¶</a></dt><dd><p>The pre-allocated buffer containing the coordinates </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-weights"><span class="kt">float</span><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">weights</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-weights" title="Permalink to this definition">¶</a></dt><dd><p>The pre-allocated buffer containing the weights </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-output"><span class="kt">int</span><span class="w"> </span><span class="p">*</span><span class="n sig-param sig-name">output</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueEEN4clue10PointsHost10PointsHostER6TQueue7int32_tPfPfPi-p-output" title="Permalink to this definition">¶</a></dt><dd><p>The pre-allocated buffer to store the cluster indexes </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers">
+<span id="_CPPv3I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers"></span><span id="_CPPv2I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pointer</span></span><span class="p"><span class="pre">...</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers" title="clue::PointsHost::PointsHost::TBuffers (C++ non-type template parameter)"><span class="n"><span class="pre">TBuffers</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classclue_1_1PointsHost_1aa0df4446b703b54f6b36dad9b8c89496"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-queue" title="clue::PointsHost::PointsHost::queue (C++ function parameter) — The queue to use for memory allocation"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-n_points" title="clue::PointsHost::PointsHost::n_points (C++ function parameter) — The number of points"><span class="n sig-param"><span class="pre">n_points</span></span></a>, </span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers" title="clue::PointsHost::PointsHost::TBuffers (C++ non-type template parameter)"><span class="n"><span class="pre">TBuffers</span></span></a><span class="p"><span class="pre">...</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-buffers" title="clue::PointsHost::PointsHost::buffers (C++ function parameter) — The pre-allocated buffers to use for the points data"><span class="n sig-param"><span class="pre">buffers</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a container for the points allocated on the host using multiple pre-allocated buffers. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers" title="clue::PointsHost::PointsHost::TQueue (C++ non-type template parameter)"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue to use for memory allocation </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-n_points"><span class="n">int32_t</span><span class="w"> </span><span class="n sig-param sig-name">n_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-n_points" title="Permalink to this definition">¶</a></dt><dd><p>The number of points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-buffers"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers" title="clue::PointsHost::PointsHost::TBuffers (C++ non-type template parameter)"><span class="n">TBuffers</span></a><span class="p">...</span><span class="w"> </span><span class="n sig-param sig-name">buffers</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_DpN8concepts7pointerEEN4clue10PointsHost10PointsHostER6TQueue7int32_tDp8TBuffers-p-buffers" title="Permalink to this definition">¶</a></dt><dd><p>The pre-allocated buffers to use for the points data </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost10PointsHostERK10PointsHost">
+<span id="_CPPv3N4clue10PointsHost10PointsHostERK10PointsHost"></span><span id="_CPPv2N4clue10PointsHost10PointsHostERK10PointsHost"></span><span id="clue::PointsHost::PointsHost__PointsHostCR"></span><span class="target" id="classclue_1_1PointsHost_1aa3ae2b7317d756d1be7729fbd7432f69"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4clue10PointsHost10PointsHostERK10PointsHost" title="clue::PointsHost::PointsHost (C++ function)"><span class="n"><span class="pre">PointsHost</span></span></a><span class="p"><span class="pre">&amp;</span></span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N4clue10PointsHost10PointsHostERK10PointsHost" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHostaSERK10PointsHost">
+<span id="_CPPv3N4clue10PointsHostaSERK10PointsHost"></span><span id="_CPPv2N4clue10PointsHostaSERK10PointsHost"></span><span id="clue::PointsHost::assign-operator__PointsHostCR"></span><span class="target" id="classclue_1_1PointsHost_1a97d2127715691a6a93b024ea2a91e674"></span><a class="desctype reference internal" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n"><span class="pre">PointsHost</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="desctype reference internal" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n"><span class="pre">PointsHost</span></span></a><span class="p"><span class="pre">&amp;</span></span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">delete</span></span><a class="headerlink" href="#_CPPv4N4clue10PointsHostaSERK10PointsHost" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost10PointsHostERR10PointsHost">
+<span id="_CPPv3N4clue10PointsHost10PointsHostERR10PointsHost"></span><span id="_CPPv2N4clue10PointsHost10PointsHostERR10PointsHost"></span><span id="clue::PointsHost::PointsHost__PointsHostRR"></span><span class="target" id="classclue_1_1PointsHost_1afd3cb863ddb3b4256409c225e017519f"></span><span class="sig-name descname"><span class="n"><span class="pre">PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4N4clue10PointsHost10PointsHostERR10PointsHost" title="clue::PointsHost::PointsHost (C++ function)"><span class="n"><span class="pre">PointsHost</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N4clue10PointsHost10PointsHostERR10PointsHost" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHostaSERR10PointsHost">
+<span id="_CPPv3N4clue10PointsHostaSERR10PointsHost"></span><span id="_CPPv2N4clue10PointsHostaSERR10PointsHost"></span><span id="clue::PointsHost::assign-operator__PointsHostRR"></span><span class="target" id="classclue_1_1PointsHost_1aeaa96364ab479226982df622b9a73308"></span><a class="desctype reference internal" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n"><span class="pre">PointsHost</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="desctype reference internal" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n"><span class="pre">PointsHost</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N4clue10PointsHostaSERR10PointsHost" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHostD0Ev">
+<span id="_CPPv3N4clue10PointsHostD0Ev"></span><span id="_CPPv2N4clue10PointsHostD0Ev"></span><span id="clue::PointsHost::~PointsHost"></span><span class="target" id="classclue_1_1PointsHost_1a8e7c5a013ea7ecf9216a1c34fcd26211"></span><span class="sig-name descname"><span class="n"><span class="pre">~PointsHost</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N4clue10PointsHostD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHost4sizeEv">
+<span id="_CPPv3NK4clue10PointsHost4sizeEv"></span><span id="_CPPv2NK4clue10PointsHost4sizeEv"></span><span id="clue::PointsHost::sizeC"></span><span class="target" id="classclue_1_1PointsHost_1a777e519a4750fd15392eb6f41d8d5e9d"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost4sizeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the number of points. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4NK4clue10PointsHost4sizeEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost4sizeEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>The number of points </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHost6coordsE6size_t">
+<span id="_CPPv3NK4clue10PointsHost6coordsE6size_t"></span><span id="_CPPv2NK4clue10PointsHost6coordsE6size_t"></span><span id="clue::PointsHost::coords__sC"></span><span class="target" id="classclue_1_1PointsHost_1a9cac2b63914d0a797a79f55063e14743"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coords</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-p-dim" title="clue::PointsHost::coords::dim (C++ function parameter) — The dimension for which to get the coordinates"><span class="n sig-param"><span class="pre">dim</span></span></a></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost6coordsE6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the coordinates of the points for a specific dimension as a const span. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4NK4clue10PointsHost6coordsE6size_t-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4NK4clue10PointsHost6coordsE6size_t-p-dim"><span class="n">size_t</span><span class="w"> </span><span class="n sig-param sig-name">dim</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-p-dim" title="Permalink to this definition">¶</a></dt><dd><p>The dimension for which to get the coordinates </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4NK4clue10PointsHost6coordsE6size_t-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost6coordsE6size_t-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><p>A const span of the coordinates for the specified dimension </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost6coordsE6size_t">
+<span id="_CPPv3N4clue10PointsHost6coordsE6size_t"></span><span id="_CPPv2N4clue10PointsHost6coordsE6size_t"></span><span id="clue::PointsHost::coords__s"></span><span class="target" id="classclue_1_1PointsHost_1a3531ee8b139c768ff5bc6121d21cbe33"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coords</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4N4clue10PointsHost6coordsE6size_t-p-dim" title="clue::PointsHost::coords::dim (C++ function parameter) — The dimension for which to get the coordinates"><span class="n sig-param"><span class="pre">dim</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost6coordsE6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the coordinates of the points for a specific dimension as a span. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue10PointsHost6coordsE6size_t-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost6coordsE6size_t-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4N4clue10PointsHost6coordsE6size_t-p-dim"><span class="n">size_t</span><span class="w"> </span><span class="n sig-param sig-name">dim</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost6coordsE6size_t-p-dim" title="Permalink to this definition">¶</a></dt><dd><p>The dimension for which to get the coordinates </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4N4clue10PointsHost6coordsE6size_t-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost6coordsE6size_t-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><p>A span of the coordinates for the specified dimension </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHost7weightsEv">
+<span id="_CPPv3NK4clue10PointsHost7weightsEv"></span><span id="_CPPv2NK4clue10PointsHost7weightsEv"></span><span id="clue::PointsHost::weightsC"></span><span class="target" id="classclue_1_1PointsHost_1af11d00db2d8c3aa6f78a1716b8e58eba"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">weights</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost7weightsEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the weights of the points as a const span. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4NK4clue10PointsHost7weightsEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost7weightsEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>A const span of the weights of the points </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost7weightsEv">
+<span id="_CPPv3N4clue10PointsHost7weightsEv"></span><span id="_CPPv2N4clue10PointsHost7weightsEv"></span><span id="clue::PointsHost::weights"></span><span class="target" id="classclue_1_1PointsHost_1ad272397dcd8721d3464a65ac23cc35ba"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">weights</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost7weightsEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the weights of the points as a span. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue10PointsHost7weightsEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost7weightsEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>A span of the weights of the points </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHost14clusterIndexesEv">
+<span id="_CPPv3NK4clue10PointsHost14clusterIndexesEv"></span><span id="_CPPv2NK4clue10PointsHost14clusterIndexesEv"></span><span id="clue::PointsHost::clusterIndexesC"></span><span class="target" id="classclue_1_1PointsHost_1abba71ff3b7cf2b5b8a80211dd60fa875"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clusterIndexes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost14clusterIndexesEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the cluster indexes of the points as a const span. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4NK4clue10PointsHost14clusterIndexesEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost14clusterIndexesEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>A const span of the cluster indexes of the points </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost14clusterIndexesEv">
+<span id="_CPPv3N4clue10PointsHost14clusterIndexesEv"></span><span id="_CPPv2N4clue10PointsHost14clusterIndexesEv"></span><span id="clue::PointsHost::clusterIndexes"></span><span class="target" id="classclue_1_1PointsHost_1a50ed2f199e805b872efe6b8ad28056d7"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clusterIndexes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost14clusterIndexesEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the cluster indexes of the points as a span. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue10PointsHost14clusterIndexesEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost14clusterIndexesEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>A span of the cluster indexes of the points </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHost9clusteredEv">
+<span id="_CPPv3NK4clue10PointsHost9clusteredEv"></span><span id="_CPPv2NK4clue10PointsHost9clusteredEv"></span><span id="clue::PointsHost::clusteredC"></span><span class="target" id="classclue_1_1PointsHost_1ad565fc4c67d31868c52c2bdd6d2cb7a7"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clustered</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost9clusteredEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Indicates whether the points have been clustered. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4NK4clue10PointsHost9clusteredEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost9clusteredEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>True if the points have been clustered, false otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHost4viewEv">
+<span id="_CPPv3NK4clue10PointsHost4viewEv"></span><span id="_CPPv2NK4clue10PointsHost4viewEv"></span><span id="clue::PointsHost::viewC"></span><span class="target" id="classclue_1_1PointsHost_1a564b6660ffd9ba06a8b32d9351b1cbbc"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">view</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost4viewEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the view of the points. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4NK4clue10PointsHost4viewEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost4viewEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>A const reference to the PointsView structure containing the points data </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost4viewEv">
+<span id="_CPPv3N4clue10PointsHost4viewEv"></span><span id="_CPPv2N4clue10PointsHost4viewEv"></span><span id="clue::PointsHost::view"></span><span class="target" id="classclue_1_1PointsHost_1a6770abdf4bc53f3363a7fc6960aafa38"></span><span class="pre">ALPAKA_FN_HOST</span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">view</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost4viewEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the view of the points. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue10PointsHost4viewEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost4viewEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>A reference to the PointsView structure containing the points data </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHostixENSt6size_tE">
+<span id="_CPPv3NK4clue10PointsHostixENSt6size_tE"></span><span id="_CPPv2NK4clue10PointsHostixENSt6size_tE"></span><span id="clue::PointsHost::subscript-operator__std::sC"></span><span class="target" id="classclue_1_1PointsHost_1ad8c1560268bb5cf8b5b18970514bc8d7"></span><a class="desctype reference internal" href="#_CPPv4N4clue10PointsHost5PointE" title="clue::PointsHost::Point (C++ class) — Public Functions    Point(const std::array&lt;float, Ndim&gt; &amp;coordinates, float weight, int cluster_index)      float operator[](size_t dim) const      float weight() const      float cluster_index() const"><span class="n"><span class="pre">Point</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-p-idx" title="clue::PointsHost::operator[]::idx (C++ function parameter) — The index of the point to retrieve"><span class="n sig-param"><span class="pre">idx</span></span></a></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHostixENSt6size_tE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the <a class="reference internal" href="#classclue_1_1PointsHost_1_1Point"><span class="std std-ref">Point</span></a> object at the specified index. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4NK4clue10PointsHostixENSt6size_tE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4NK4clue10PointsHostixENSt6size_tE-p-idx"><span class="n">std</span><span class="p">::</span><span class="n">size_t</span><span class="w"> </span><span class="n sig-param sig-name">idx</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-p-idx" title="Permalink to this definition">¶</a></dt><dd><p>The index of the point to retrieve </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4NK4clue10PointsHostixENSt6size_tE-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4NK4clue10PointsHostixENSt6size_tE-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><p>The <a class="reference internal" href="#classclue_1_1PointsHost_1_1Point"><span class="std std-ref">Point</span></a> object at the specified index </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost10n_clustersEv">
+<span id="_CPPv3N4clue10PointsHost10n_clustersEv"></span><span id="_CPPv2N4clue10PointsHost10n_clustersEv"></span><span id="clue::PointsHost::n_clusters"></span><span class="target" id="classclue_1_1PointsHost_1a75cda73d4783776322cba7a6f61c8e25"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">n_clusters</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost10n_clustersEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Teturns the cluster properties of the points. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This value is lazily evaluated and cached upon the first call </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue10PointsHost10n_clustersEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost10n_clustersEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>The number of clusters reconstructed </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost8clustersEv">
+<span id="_CPPv3N4clue10PointsHost8clustersEv"></span><span id="_CPPv2N4clue10PointsHost8clustersEv"></span><span id="clue::PointsHost::clusters"></span><span class="target" id="classclue_1_1PointsHost_1a88797d1a4dab31fb9fabf96f06b1a842"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">clusters</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost8clustersEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the associator mapping clusters to their associated points. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This object is lazily evaluated and cached upon the first call </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue10PointsHost8clustersEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost8clustersEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>An host_associator mapping clusters to points </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost13cluster_sizesEv">
+<span id="_CPPv3N4clue10PointsHost13cluster_sizesEv"></span><span id="_CPPv2N4clue10PointsHost13cluster_sizesEv"></span><span id="clue::PointsHost::cluster_sizes"></span><span class="target" id="classclue_1_1PointsHost_1aed4304e3701b6b607a5260051b698340"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">cluster_sizes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost13cluster_sizesEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns a vector containing the sizes of each cluster. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This vector is lazily evaluated and cached upon the first call </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue10PointsHost13cluster_sizesEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost13cluster_sizesEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>A vector of containing the sizes of each cluster </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost18cluster_propertiesEv">
+<span id="_CPPv3N4clue10PointsHost18cluster_propertiesEv"></span><span id="_CPPv2N4clue10PointsHost18cluster_propertiesEv"></span><span id="clue::PointsHost::cluster_properties"></span><span class="target" id="classclue_1_1PointsHost_1a1571049fbdb9cf2b0e870fe0dcf9f362"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">cluster_properties</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost18cluster_propertiesEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Returns the <a class="reference internal" href="cluster_properties.html#classclue_1_1ClusterProperties"><span class="std std-ref">ClusterProperties</span></a> object containing the properties of the clusters. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This object is lazily evaluated and cached upon the first call </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4N4clue10PointsHost18cluster_propertiesEv-returns">Returns<span class="colon">:</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost18cluster_propertiesEv-returns" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><p>The <a class="reference internal" href="cluster_properties.html#classclue_1_1ClusterProperties"><span class="std std-ref">ClusterProperties</span></a> object </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends<a class="headerlink" href="#breathe-section-title-friends" title="Permalink to this headline">¶</a></p>
+<dl class="objdesc">
+<dt class="sig sig-object highlight cpp">
+<em class="property"><span class="pre">friend</span> <span class="pre">struct</span></em> <span class="pre">internal::points_interface&lt;</span> <span class="pre">PointsHost&lt;</span> <span class="pre">Ndim</span> <span class="pre">&gt;</span> <span class="pre">&gt;</span></dt>
+</dl>
+
+</div>
+<dl class="cpp class objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4N4clue10PointsHost5PointE">
+<span id="_CPPv3N4clue10PointsHost5PointE"></span><span id="_CPPv2N4clue10PointsHost5PointE"></span><span id="clue::PointsHost::Point"></span><span class="target" id="classclue_1_1PointsHost_1_1Point"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Point</span></span></span><a class="headerlink" href="#_CPPv4N4clue10PointsHost5PointE" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions<a class="headerlink" href="#breathe-section-title-public-functions" title="Permalink to this headline">¶</a></p>
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4N4clue10PointsHost5Point5PointERKNSt5arrayIf4NdimEEfi">
+<span id="_CPPv3N4clue10PointsHost5Point5PointERKNSt5arrayIf4NdimEEfi"></span><span id="_CPPv2N4clue10PointsHost5Point5PointERKNSt5arrayIf4NdimEEfi"></span><span id="clue::PointsHost::Point::Point__std::array:float.Ndim:CR.float.i"></span><span class="target" id="classclue_1_1PointsHost_1_1Point_1aef8ec46ff886ee6fc907aa1ecbd7115c"></span><span class="sig-name descname"><span class="n"><span class="pre">Point</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_NSt6size_tEEN4clue10PointsHostE-p-Ndim" title="clue::PointsHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points to manage"><span class="n"><span class="pre">Ndim</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4N4clue10PointsHost5Point5PointERKNSt5arrayIf4NdimEEfi" title="clue::PointsHost::Point::Point::coordinates (C++ function parameter)"><span class="n sig-param"><span class="pre">coordinates</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">float</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4N4clue10PointsHost5Point5PointERKNSt5arrayIf4NdimEEfi" title="clue::PointsHost::Point::Point::weight (C++ function parameter)"><span class="n sig-param"><span class="pre">weight</span></span></a>, </span><span class="sig-param-decl"><span class="kt"><span class="pre">int</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4N4clue10PointsHost5Point5PointERKNSt5arrayIf4NdimEEfi" title="clue::PointsHost::Point::Point::cluster_index (C++ function parameter)"><span class="n sig-param"><span class="pre">cluster_index</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4clue10PointsHost5Point5PointERKNSt5arrayIf4NdimEEfi" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHost5PointixE6size_t">
+<span id="_CPPv3NK4clue10PointsHost5PointixE6size_t"></span><span id="_CPPv2NK4clue10PointsHost5PointixE6size_t"></span><span id="clue::PointsHost::Point::subscript-operator__sC"></span><span class="target" id="classclue_1_1PointsHost_1_1Point_1af0b86c1578db11b531dfad5993d1018f"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><a class="n sig-param reference internal" href="#_CPPv4NK4clue10PointsHost5PointixE6size_t" title="clue::PointsHost::Point::operator[]::dim (C++ function parameter)"><span class="n sig-param"><span class="pre">dim</span></span></a></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost5PointixE6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHost5Point6weightEv">
+<span id="_CPPv3NK4clue10PointsHost5Point6weightEv"></span><span id="_CPPv2NK4clue10PointsHost5Point6weightEv"></span><span id="clue::PointsHost::Point::weightC"></span><span class="target" id="classclue_1_1PointsHost_1_1Point_1a42efeca3248ee5504093031f504d7e27"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">weight</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost5Point6weightEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv4NK4clue10PointsHost5Point13cluster_indexEv">
+<span id="_CPPv3NK4clue10PointsHost5Point13cluster_indexEv"></span><span id="_CPPv2NK4clue10PointsHost5Point13cluster_indexEv"></span><span id="clue::PointsHost::Point::cluster_indexC"></span><span class="target" id="classclue_1_1PointsHost_1_1Point_1a1c93abaea7f453f47c1638bb8f156ae7"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cluster_index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4clue10PointsHost5Point13cluster_indexEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2025, Simone Balducci, Felice Pantaleo, Wahid Redjeb, Marco Rovere, Aurora Perego, Francesco Giacomini.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    8.2.3.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "toc.follow", "search.share", "header.autohide"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="../_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+    
+  </body>
+</html>
