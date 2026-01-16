@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include <alpaka/alpaka.hpp>
@@ -79,6 +80,9 @@ namespace clue::internal {
       m_size = std::nullopt;
       alpaka::memset(queue, m_dsize, 0u);
     }
+
+    ALPAKA_FN_HOST const auto* data() const { return m_buffer.data(); }
+    ALPAKA_FN_HOST auto* data() { return m_buffer.data(); }
 
     ALPAKA_FN_HOST const auto& view() const { return m_view; }
     ALPAKA_FN_HOST auto& view() { return m_view; }
