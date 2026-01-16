@@ -298,7 +298,7 @@ namespace clue {
   template <std::size_t Ndim>
   inline AssociationMap<Device> Clusterer<Ndim>::getSampleAssociations(
       Queue& queue, const PointsDevice& d_points) {
-    internal::make_associator(queue, m_event_associations->data(), d_points.n_clusters());
+    return internal::make_associator(queue, m_event_associations->data(), d_points.n_clusters());
   }
 
   template <std::size_t Ndim>
