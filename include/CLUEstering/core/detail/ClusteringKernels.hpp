@@ -393,7 +393,7 @@ namespace clue::detail {
             dev_points.is_seed[global_idx] = 1;
             dev_points.nearest_higher[global_idx] = -1;
             seeds.push_back(acc, global_idx);
-            event_associations[global_idx] = event;
+            event_associations.push_back(acc, event);
           } else {
             dev_points.is_seed[global_idx] = 0;
           }
