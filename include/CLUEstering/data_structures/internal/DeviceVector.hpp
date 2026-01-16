@@ -81,8 +81,8 @@ namespace clue::internal {
       alpaka::memset(queue, m_dsize, 0u);
     }
 
-	ALPAKA_FN_HOST const auto* data() const { return m_buffer.data(); }
-	ALPAKA_FN_HOST auto* data() { return m_buffer.data(); }
+    ALPAKA_FN_HOST const auto* data() const { return m_buffer.data(); }
+    ALPAKA_FN_HOST auto* data() { return m_buffer.data(); }
 
     ALPAKA_FN_HOST const auto& view() const { return m_view; }
     ALPAKA_FN_HOST auto& view() { return m_view; }
