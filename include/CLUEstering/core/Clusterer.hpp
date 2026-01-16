@@ -270,12 +270,12 @@ namespace clue {
     ///
     /// @param queue The queue to use for the device operations
     /// @return A device buffer containing the event associations
-    host_associator getSampleAssociations(Queue& queue, const PointsHost& h_points);
+    host_associator getSampleAssociations(Queue& queue, PointsHost& h_points);
     /// @brief Get the sample-to-cluster associations for batched clustering
     ///
     /// @param queue The queue to use for the device operations
     /// @return A device buffer containing the event associations
-    AssociationMap<Device> getSampleAssociations(Queue& queue, const PointsDevice& d_points);
+    AssociationMap<Device> getSampleAssociations(Queue& queue, PointsDevice& d_points);
   };
 
 }  // namespace clue
