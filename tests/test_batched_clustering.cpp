@@ -26,6 +26,9 @@ TEST_CASE("Test batched clustering with fixed batch size") {
     auto truth_n_clusters = clue::detail::compute_nclusters(truth.clusterIndexes());
     auto n_clusters = clue::detail::compute_nclusters(h_points.clusterIndexes());
     CHECK(n_clusters == truth_n_clusters * 10);
+
+    auto sample_cluster_associations = algo.getSampleAssociations(queue, h_points);
+    CHECK(sample_cluster_associations.size() == 10);
   }
   SUBCASE("Test from device points") {
     const auto device = clue::get_device(0u);
@@ -52,5 +55,8 @@ TEST_CASE("Test batched clustering with fixed batch size") {
     auto truth_n_clusters = clue::detail::compute_nclusters(truth.clusterIndexes());
     auto n_clusters = clue::detail::compute_nclusters(h_points.clusterIndexes());
     CHECK(n_clusters == truth_n_clusters * 10);
+
+    auto sample_cluster_associations = algo.getSampleAssociations(queue, d_points);
+    CHECK(sample_cluster_associations.size() == 10);
   }
 }
