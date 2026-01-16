@@ -5,6 +5,7 @@
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
+#include "CLUEstering/data_structures/internal/DeviceVector.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
@@ -371,7 +372,7 @@ namespace clue::detail {
                                   float seed_dc,
                                   DistanceMetric metric,
                                   float rhoc,
-                                  int32_t* event_associations,
+                                  clue::internal::DeviceVectorView event_associations,
                                   const auto* event_offsets,
                                   std::size_t max_event_size) const {
       for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
@@ -593,8 +594,8 @@ namespace clue::detail {
                                       float rhoc,
                                       const auto& event_offsets,
                                       std::size_t max_event_size,
-                                      std::int32_t* event_associations,
-									  std::size_t block_size) {
+                                      const clue::internal::DeviceVectorView& event_associations,
+                                      std::size_t block_size) {
     const auto blocks_per_event = divide_up_by(max_event_size, block_size);
     const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
     const auto work_division =

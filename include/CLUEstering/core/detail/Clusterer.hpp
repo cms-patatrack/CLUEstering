@@ -175,7 +175,7 @@ namespace clue {
                                                           max_event_size,
                                                           block_size);
     detail::setup_seeds(queue, m_seeds, seed_candidates);
-    m_event_associations = make_device_buffer<std::int32_t[]>(queue, seed_candidates);
+    m_event_associations = clue::internal::SeedArray<>(queue, seed_candidates);
 
     detail::findClusterSeedsBatched<internal::Acc2D>(queue,
                                                      m_seeds.value(),
@@ -185,7 +185,7 @@ namespace clue {
                                                      m_rhoc,
                                                      d_event_offsets,
                                                      max_event_size,
-                                                     m_event_associations->data(),
+                                                     m_event_associations->view(),
                                                      block_size);
 
     m_followers->template fill<Acc>(queue, dev_points);
@@ -242,7 +242,7 @@ namespace clue {
                                                           max_event_size,
                                                           block_size);
     detail::setup_seeds(queue, m_seeds, seed_candidates);
-    m_event_associations = make_device_buffer<std::int32_t[]>(queue, seed_candidates);
+    m_event_associations = clue::internal::SeedArray<>(queue, seed_candidates);
 
     detail::findClusterSeedsBatched<internal::Acc2D>(queue,
                                                      m_seeds.value(),
@@ -252,7 +252,7 @@ namespace clue {
                                                      m_rhoc,
                                                      d_event_offsets,
                                                      max_event_size,
-                                                     m_event_associations->data(),
+                                                     m_event_associations->view(),
                                                      block_size);
 
     m_followers->template fill<Acc>(queue, dev_points);

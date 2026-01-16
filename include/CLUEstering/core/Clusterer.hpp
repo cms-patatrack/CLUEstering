@@ -13,6 +13,7 @@
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
+#include "CLUEstering/data_structures/internal/DeviceVector.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
@@ -51,7 +52,7 @@ namespace clue {
     std::optional<TilesDevice> m_tiles;
     std::optional<internal::SeedArray<>> m_seeds;
     std::optional<FollowersDevice> m_followers;
-    std::optional<device_buffer<Device, std::int32_t[]>> m_event_associations;
+    std::optional<internal::DeviceVector<>> m_event_associations;
 
     void setup(Queue& queue, const PointsHost& h_points, PointsDevice& dev_points) {
       detail::setup_tiles(queue, m_tiles, h_points, m_pointsPerTile, m_wrappedCoordinates);
