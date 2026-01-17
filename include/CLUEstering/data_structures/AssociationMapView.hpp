@@ -33,8 +33,10 @@ namespace clue {
     AssociationMapView(int32_t* indexes, int32_t* offsets, std::size_t nvalues, std::size_t nkeys)
         : m_indexes(indexes), m_offsets(offsets), m_extents{nvalues, nkeys} {}
 
+#ifndef CLUE_BUILD_DOXYGEN
     template <concepts::device TDev>
     friend class AssociationMap;
+#endif
 
   public:
     /// @brief Get the extents of the association map.
