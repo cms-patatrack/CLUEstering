@@ -45,9 +45,11 @@ namespace clue {
     /// @return The number of clusters
     const auto& n_clusters() const { return m_nclusters; }
 
+#ifndef CLUE_BUILD_DOXYGEN
   private:
     template <std::size_t Ndim>
     friend class PointsHost;
+#endif
   };
 
 }  // namespace clue

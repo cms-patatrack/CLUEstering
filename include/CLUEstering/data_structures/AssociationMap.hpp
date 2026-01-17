@@ -202,6 +202,7 @@ namespace clue {
     ALPAKA_FN_HOST const device_buffer<TDev, int32_t[]>& offsets() const;
     ALPAKA_FN_HOST device_buffer<TDev, int32_t[]>& offsets();
 
+#ifndef CLUE_BUILD_DOXYGEN
     template <concepts::device _TDev>
     friend class Followers;
 
@@ -212,6 +213,7 @@ namespace clue {
     friend auto clue::internal::make_associator(_TQueue&, std::span<const int32_t>, int32_t);
     friend auto clue::internal::make_associator(std::span<const int32_t>, int32_t)
         -> AssociationMap<alpaka::DevCpu>;
+#endif
   };
 
   using host_associator = AssociationMap<alpaka::DevCpu>;
