@@ -176,6 +176,7 @@ namespace clue {
 
     void mark_clustered() { m_clustered = true; }
 
+#ifndef CLUE_BUILD_DOXYGEN
     template <std::size_t _Ndim>
     friend class Clusterer;
     template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
@@ -187,6 +188,7 @@ namespace clue {
                              PointsDevice<_Ndim, _TDev>& d_points,
                              const PointsHost<_Ndim>& h_points);
     friend struct internal::points_interface<PointsDevice<Ndim, TDev>>;
+#endif
   };
 
 }  // namespace clue
