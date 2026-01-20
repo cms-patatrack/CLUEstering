@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include "CLUEstering/data_structures/PointsHost.hpp"
 
 namespace clue {

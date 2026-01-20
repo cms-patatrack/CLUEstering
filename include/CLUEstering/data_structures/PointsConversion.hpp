@@ -64,3 +64,5 @@ namespace clue {
   auto copyToDevice(TQueue& queue, const PointsHost<Ndim>& h_points);
 
 }  // namespace clue
+
+#include "CLUEstering/data_structures/detail/PointsConversion.hpp"
