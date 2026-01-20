@@ -91,6 +91,14 @@ namespace clue {
                             const Kernel& kernel,
                             Queue& queue,
                             std::size_t block_size);
+    template <concepts::convolutional_kernel Kernel = FlatKernel,
+              concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim>>
+    void make_clusters_batched(PointsDevice& dev_points,
+                               std::span<const uint32_t> batch_item_sizes,
+                               const DistanceMetric& metric,
+                               const Kernel& kernel,
+                               Queue& queue,
+                               std::size_t block_size);
 
   public:
     /// @brief Constuct a Clusterer object
