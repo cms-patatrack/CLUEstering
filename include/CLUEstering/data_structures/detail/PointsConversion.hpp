@@ -7,6 +7,7 @@
 #include "CLUEstering/internal/meta/apply.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include <alpaka/alpaka.hpp>
+#include <cstddef>
 
 namespace clue {
 
@@ -38,11 +39,11 @@ namespace clue {
   inline void copyToDevice(TQueue& queue,
                            PointsDevice<Ndim, TDev>& d_points,
                            const PointsHost<Ndim>& h_points) {
-    meta::apply<Ndim>([&]<std::size_t Dim> {
+    meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
       alpaka::memcpy(
           queue,
           make_device_view(alpaka::getDev(queue), d_points.m_view.coords[Dim], h_points.size()),
-          make_host_view(h_points.m_view.coords[Dim], Ndim * h_points.size()));
+          make_host_view(h_points.m_view.coords[Dim], h_points.size()));
     });
     alpaka::memcpy(queue,
                    make_device_view(alpaka::getDev(queue), d_points.m_view.weight, h_points.size()),
@@ -53,11 +54,11 @@ namespace clue {
   inline auto copyToDevice(TQueue& queue, const PointsHost<Ndim>& h_points) {
     PointsDevice<Ndim, TDev> d_points(queue, h_points.size());
 
-    meta::apply<Ndim>([&]<std::size_t Dim> {
+    meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
       alpaka::memcpy(
           queue,
           make_device_view(alpaka::getDev(queue), d_points.m_view.coords[Dim], h_points.size()),
-          make_host_view(h_points.m_view.coords[Dim], Ndim * h_points.size()));
+          make_host_view(h_points.m_view.coords[Dim], h_points.size()));
     });
     alpaka::memcpy(queue,
                    make_device_view(alpaka::getDev(queue), d_points.m_view.weight, h_points.size()),

@@ -5,6 +5,12 @@
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/meta/apply.hpp"
+#include <array>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <limits>
+#include <stdexcept>
 #include <span>
 
 namespace clue {
@@ -86,34 +92,5 @@ namespace clue {
   // TODO: implement for better cache use
   template <std::size_t Ndim>
   int32_t computeAlignSoASize(int32_t n_points);
-
-  template <std::size_t Ndim>
-  class PointsHost;
-  template <std::size_t Ndim, concepts::device TDev>
-  class PointsDevice;
-
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
-  void copyToHost(TQueue& queue,
-                  PointsHost<Ndim>& h_points,
-                  const PointsDevice<Ndim, TDev>& d_points) {
-    alpaka::memcpy(
-        queue,
-        make_host_view(h_points.m_view.cluster_index, h_points.size()),
-        make_device_view(alpaka::getDev(queue), d_points.m_view.cluster_index, h_points.size()));
-    h_points.mark_clustered();
-  }
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
-  void copyToDevice(TQueue& queue,
-                    PointsDevice<Ndim, TDev>& d_points,
-                    const PointsHost<Ndim>& h_points) {
-    // TODO: copy each coordinate column separately
-    alpaka::memcpy(
-        queue,
-        make_device_view(alpaka::getDev(queue), d_points.m_view.coords[0], Ndim * h_points.size()),
-        make_host_view(h_points.m_view.coords[0], Ndim * h_points.size()));
-    alpaka::memcpy(queue,
-                   make_device_view(alpaka::getDev(queue), d_points.m_view.weight, h_points.size()),
-                   make_host_view(h_points.m_view.weight, h_points.size()));
-  }
 
 }  // namespace clue

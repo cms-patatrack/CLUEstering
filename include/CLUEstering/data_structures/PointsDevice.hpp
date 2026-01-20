@@ -17,6 +17,11 @@
 
 namespace clue {
 
+  template <std::size_t Ndim>
+  class PointsHost;
+  template <std::size_t Ndim, concepts::device TDev>
+  class PointsDevice;
+
   template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
   void copyToHost(TQueue& queue,
                   PointsHost<Ndim>& h_points,
