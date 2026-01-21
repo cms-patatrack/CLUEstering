@@ -6,9 +6,12 @@
 #include "CLUEstering/utils/read_csv.hpp"
 
 #include <algorithm>
+#include <cstddef>
 #include <fstream>
+#include <iterator>
 #include <sstream>
 #include <string>
+#include <stdexcept>
 
 namespace clue {
   template <std::size_t NDim, concepts::queue TQueue>
@@ -56,6 +59,7 @@ namespace clue {
         1;
     clue::PointsHost<NDim> points(queue, n_points);
     points.mark_clustered();
+    auto& view = points.view();
 
     file = std::fstream(file_path);
     // discard the header
@@ -68,12 +72,12 @@ namespace clue {
 
       for (size_t dim = 0; dim < NDim; ++dim) {
         getline(buffer_stream, value, ',');
-        points.coords(dim)[point_id] = std::stof(value);
+        view.coords[dim][point_id] = std::stof(value);
       }
       getline(buffer_stream, value, ',');
-      points.weights()[point_id] = std::stof(value);
+      view.weight[point_id] = std::stof(value);
       getline(buffer_stream, value, ',');
-      points.clusterIndexes()[point_id] = std::stoi(value);
+      view.cluster_index[point_id] = std::stoi(value);
 
       ++point_id;
     }

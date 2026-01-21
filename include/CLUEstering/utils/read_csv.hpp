@@ -7,6 +7,7 @@
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
+#include <cstddef>
 #include <string>
 
 namespace clue {
