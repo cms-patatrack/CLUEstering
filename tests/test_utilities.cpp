@@ -89,3 +89,20 @@ TEST_CASE("Test get_clusters device function") {
   algo.make_clusters(queue, h_points, d_points);
   auto clusters = clue::get_clusters(queue, d_points);
 }
+
+TEST_CASE("Test I/O with non-existent file") {
+  SUBCASE("read_csv with non-existent file") {
+    auto queue = clue::get_queue(0u);
+
+    const std::string invalid_file_path = "non_existent_file.csv";
+
+    CHECK_THROWS_AS(clue::read_csv<2>(queue, invalid_file_path), std::runtime_error);
+  }
+  SUBCASE("read_output with non-existent file") {
+    auto queue = clue::get_queue(0u);
+
+    const std::string invalid_file_path = "non_existent_file.csv";
+
+    CHECK_THROWS_AS(clue::read_output<2>(queue, invalid_file_path), std::runtime_error);
+  }
+}

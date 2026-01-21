@@ -51,12 +51,6 @@ namespace clue {
         auto& view = static_cast<const TPoints*>(this)->m_view;
         return std::span<const int>(view.cluster_index, view.n);
       }
-      ALPAKA_FN_HOST auto clusterIndexes() {
-        assert(static_cast<const TPoints&>(*this).m_clustered &&
-               "The points have not been clustered yet, so the cluster indexes cannot be accessed");
-        auto& view = static_cast<TPoints*>(this)->m_view;
-        return std::span<int>(view.cluster_index, view.n);
-      }
 
       ALPAKA_FN_HOST auto clustered() const {
         return static_cast<const TPoints&>(*this).m_clustered;
@@ -72,19 +66,19 @@ namespace clue {
   struct PointsView {
     std::array<float*, Ndim> coords;
     float* weight;
-    int* cluster_index;
-    int* is_seed;
+    std::int32_t* cluster_index;
+    std::int32_t* is_seed;
     float* rho;
-    int* nearest_higher;
-    int32_t n;
+    std::int32_t* nearest_higher;
+    std::int32_t n;
 
-    ALPAKA_FN_HOST_ACC auto operator[](int i) const {
-      if (i == -1)
+    ALPAKA_FN_HOST_ACC auto operator[](int index) const {
+      if (index == -1)
         return clue::nostd::make_array<float, Ndim + 1>(std::numeric_limits<float>::max());
 
       std::array<float, Ndim + 1> point;
-      meta::apply<Ndim>([&]<std::size_t Dim>() { point[Dim] = coords[Dim][i]; });
-      point[Ndim] = weight[i];
+      meta::apply<Ndim>([&]<std::size_t Dim>() -> void { point[Dim] = coords[Dim][index]; });
+      point[Ndim] = weight[index];
       return point;
     }
   };
