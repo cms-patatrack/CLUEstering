@@ -1,8 +1,10 @@
 
 #pragma once
 
+#include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
+#include "CLUEstering/utils/cluster_centroid.hpp"
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -96,6 +98,44 @@ namespace clue {
                       std::back_inserter(scores));
 
     return std::reduce(scores.begin(), scores.end(), 0.f) / static_cast<float>(scores.size());
+  }
+
+  template <std::size_t Ndim, concepts::distance_metric<Ndim> DistanceMetric>
+  auto davies_bouldin(const clue::PointsHost<Ndim>& points, const DistanceMetric& metric) {
+    auto cluster_centroids = clue::cluster_centroids(points);
+    auto clusters = clue::get_clusters(points);
+
+    std::vector<float> clusters_scatter(cluster_centroids.size(), 0.f);
+    for (auto i = 0; i < points.size(); ++i) {
+      auto cluster_id = points[i].cluster_index();
+      if (cluster_id == -1)
+        continue;
+      clusters_scatter[cluster_id] += metric(points[i], cluster_centroids[cluster_id]);
+    }
+    for (auto i = 0; i < cluster_centroids.size(); ++i) {
+      clusters_scatter[i] /= static_cast<float>(clusters.count(i));
+    }
+    std::vector<std::vector<float>> clusters_separation(
+        cluster_centroids.size(), std::vector<float>(cluster_centroids.size(), 0.f));
+    for (auto i = 0u; i < cluster_centroids.size(); ++i) {
+      for (auto j = 0u; j < cluster_centroids.size(); ++j) {
+        if (i == j)
+          continue;
+        clusters_separation[i][j] = metric(cluster_centroids[i], cluster_centroids[j]);
+      }
+    }
+
+    std::vector<float> R_values(cluster_centroids.size(), 0.f);
+    for (auto i = 0u; i < cluster_centroids.size(); ++i) {
+      for (auto j = 0u; j < clusters_separation[i].size(); ++j) {
+        if (i == j)
+          continue;
+        R_values[i] = std::max(
+            R_values[i], (clusters_scatter[i] + clusters_scatter[j]) / clusters_separation[i][j]);
+      }
+    }
+
+    return std::reduce(R_values.begin(), R_values.end(), 0.f) / static_cast<float>(R_values.size());
   }
 
 }  // namespace clue

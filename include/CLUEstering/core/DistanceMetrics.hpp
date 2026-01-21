@@ -25,7 +25,10 @@ namespace clue {
   }  // namespace concepts
 
   template <std::size_t Ndim>
-  using Point = std::array<float, Ndim + 1>;
+  using Point = std::array<float, Ndim>;
+
+  template <std::size_t Ndim>
+  using WeightedPoint = std::array<float, Ndim + 1>;
 
   /// @brief Euclidean distance metric
   //// This class implements the Euclidean distance metric in Ndim dimensions.
@@ -46,6 +49,18 @@ namespace clue {
     /// @return Euclidean distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
+      const auto distance2 = meta::accumulate<Ndim>(
+          [&]<std::size_t Dim>() { return (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]); });
+      return math::sqrt(distance2);
+    }
+    /// @brief Compute the Euclidean distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Euclidean distance between the two points
+    /// NOTE: The weight is not used in the computation of the distance
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const WeightedPoint<Ndim>& lhs,
+                                                        const WeightedPoint<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>(
           [&]<std::size_t Dim>() { return (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]); });
       return math::sqrt(distance2);
@@ -90,6 +105,19 @@ namespace clue {
     /// @return Weighted Euclidean distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
+      const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
+        return m_weights[Dim] * (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]);
+      });
+      return math::sqrt(distance2);
+    }
+    /// @brief Compute the Weighted Euclidean distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Weighted Euclidean distance between the two points
+    /// NOTE: The weight is not used in the computation of the distance
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const WeightedPoint<Ndim>& lhs,
+                                                        const WeightedPoint<Ndim>& rhs) const {
       const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
         return m_weights[Dim] * (lhs[Dim] - rhs[Dim]) * (lhs[Dim] - rhs[Dim]);
       });
@@ -140,6 +168,21 @@ namespace clue {
       });
       return math::sqrt(distance2);
     }
+    /// @brief Compute the Periodic Euclidean distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Periodic Euclidean distance between the two points
+    /// NOTE: The weight is not used in the computation of the distance
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const WeightedPoint<Ndim>& lhs,
+                                                        const WeightedPoint<Ndim>& rhs) const {
+      const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
+        const auto diff = math::fabs(lhs[Dim] - rhs[Dim]);
+        const auto periodic_diff = math::min(diff, m_periods[Dim] - diff);
+        return periodic_diff * periodic_diff;
+      });
+      return math::sqrt(distance2);
+    }
   };
 
   /// @brief Manhattan distance metric
@@ -162,6 +205,17 @@ namespace clue {
       return meta::accumulate<Ndim>(
           [&]<std::size_t Dim>() { return math::fabs(lhs[Dim] - rhs[Dim]); });
     }
+    /// @brief Compute the Manhattan distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Manhattan distance between the two points
+    /// NOTE: The weight is not used in the computation of the distance
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const WeightedPoint<Ndim>& lhs,
+                                                        const WeightedPoint<Ndim>& rhs) const {
+      return meta::accumulate<Ndim>(
+          [&]<std::size_t Dim>() { return math::fabs(lhs[Dim] - rhs[Dim]); });
+    }
   };
 
   /// @brief Chebyshev distance metric
@@ -181,6 +235,17 @@ namespace clue {
     /// @return Chebyshev distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
+      return meta::maximum<Ndim>(
+          [&]<std::size_t Dim>() { return math::fabs(lhs[Dim] - rhs[Dim]); });
+    }
+    /// @brief Compute the Chebyshev distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Chebyshev distance between the two points
+    /// NOTE: The weight is not used in the computation of the distance
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const WeightedPoint<Ndim>& lhs,
+                                                        const WeightedPoint<Ndim>& rhs) const {
       return meta::maximum<Ndim>(
           [&]<std::size_t Dim>() { return math::fabs(lhs[Dim] - rhs[Dim]); });
     }
@@ -224,6 +289,17 @@ namespace clue {
     /// @return Weighted Chebyshev distance between the two points
     ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim>& lhs,
                                                         const Point<Ndim>& rhs) const {
+      return meta::maximum<Ndim>(
+          [&]<std::size_t Dim>() { return m_weights[Dim] * math::fabs(lhs[Dim] - rhs[Dim]); });
+    }
+    /// @brief Compute the Weighted Chebyshev distance between two points
+    ///
+    /// @param lhs First point
+    /// @param rhs Second point
+    /// @return Weighted Chebyshev distance between the two points
+    /// NOTE: The weight is not used in the computation of the distance
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const WeightedPoint<Ndim>& lhs,
+                                                        const WeightedPoint<Ndim>& rhs) const {
       return meta::maximum<Ndim>(
           [&]<std::size_t Dim>() { return m_weights[Dim] * math::fabs(lhs[Dim] - rhs[Dim]); });
     }

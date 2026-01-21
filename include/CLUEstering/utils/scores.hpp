@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 
 namespace clue {
@@ -26,6 +27,11 @@ namespace clue {
   /// @note This function currently only works for points with non-periodic coordinates.
   template <std::size_t Ndim>
   auto silhouette(const clue::PointsHost<Ndim>& points);
+
+  template <std::size_t Ndim,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim>>
+  auto davies_bouldin(const clue::PointsHost<Ndim>& points,
+                      const DistanceMetric& metric = clue::EuclideanMetric<Ndim>());
 
 }  // namespace clue
 
