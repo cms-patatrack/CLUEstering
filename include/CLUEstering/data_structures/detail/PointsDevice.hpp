@@ -230,33 +230,6 @@ namespace clue {
   }
 
   template <std::size_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::rho() const {
-    return std::span<const float>(m_view.rho, m_size);
-  }
-  template <std::size_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::rho() {
-    return std::span<float>(m_view.rho, m_size);
-  }
-
-  template <std::size_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::nearestHigher() const {
-    return std::span<const int>(m_view.nearest_higher, m_size);
-  }
-  template <std::size_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::nearestHigher() {
-    return std::span<int>(m_view.nearest_higher, m_size);
-  }
-
-  template <std::size_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::isSeed() const {
-    return std::span<const int>(m_view.is_seed, m_size);
-  }
-  template <std::size_t Ndim, concepts::device TDev>
-  ALPAKA_FN_HOST inline auto PointsDevice<Ndim, TDev>::isSeed() {
-    return std::span<int>(m_view.is_seed, m_size);
-  }
-
-  template <std::size_t Ndim, concepts::device TDev>
   ALPAKA_FN_HOST inline const auto& PointsDevice<Ndim, TDev>::n_clusters() {
     assert(m_clustered &&
            "The points have to be clustered before the cluster properties can be accessed");
