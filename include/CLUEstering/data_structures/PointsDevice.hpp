@@ -158,18 +158,6 @@ namespace clue {
     ALPAKA_FN_HOST auto& view();
 #endif
 
-    ALPAKA_FN_HOST auto rho() const;
-    ALPAKA_FN_HOST auto rho();
-
-    ALPAKA_FN_HOST auto delta() const;
-    ALPAKA_FN_HOST auto delta();
-
-    ALPAKA_FN_HOST auto nearestHigher() const;
-    ALPAKA_FN_HOST auto nearestHigher();
-
-    ALPAKA_FN_HOST auto isSeed() const;
-    ALPAKA_FN_HOST auto isSeed();
-
     /// @brief Teturns the cluster properties of the points
     ///
     /// @return The number of clusters reconstructed

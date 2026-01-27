@@ -2,7 +2,11 @@
 #pragma once
 
 #include "CLUEstering/data_structures/AssociationMap.hpp"
+#include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+
+#include <cstdint>
+#include <span>
 
 namespace clue {
 
@@ -25,7 +29,11 @@ namespace clue {
 
     template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
     ALPAKA_FN_HOST void fill(TQueue& queue, const PointsDevice<Ndim, TDev>& d_points) {
-      m_assoc.template fill<TAcc>(d_points.size(), d_points.nearestHigher(), queue);
+      m_assoc.template fill<TAcc>(
+          d_points.size(),
+          std::span<const std::int32_t>{d_points.view().nearest_higher,
+                                        static_cast<std::size_t>(d_points.size())},
+          queue);
     }
 
     ALPAKA_FN_HOST inline constexpr int32_t extents() const { return m_assoc.extents().values; }
