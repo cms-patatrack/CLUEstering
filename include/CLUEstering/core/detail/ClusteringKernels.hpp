@@ -14,6 +14,7 @@
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
+#include "CLUEstering/internal/nostd/ceil_div.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 
 #include <array>
@@ -476,7 +477,7 @@ namespace clue::detail {
                                          const auto& event_offsets,
                                          std::size_t max_event_size,
                                          std::size_t block_size) {
-    const auto blocks_per_event = divide_up_by(max_event_size, block_size);
+    const auto blocks_per_event = nostd::ceil_div(max_event_size, block_size);
     const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
     const auto work_division =
         make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
@@ -538,7 +539,7 @@ namespace clue::detail {
     auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
     alpaka::memset(queue, d_seed_candidates, 0u);
 
-    const auto blocks_per_event = divide_up_by(max_event_size, block_size);
+    const auto blocks_per_event = nostd::ceil_div(max_event_size, block_size);
     const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
     const auto work_division =
         make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
@@ -596,7 +597,7 @@ namespace clue::detail {
                                       std::size_t max_event_size,
                                       const clue::internal::DeviceVectorView& event_associations,
                                       std::size_t block_size) {
-    const auto blocks_per_event = divide_up_by(max_event_size, block_size);
+    const auto blocks_per_event = nostd::ceil_div(max_event_size, block_size);
     const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
     const auto work_division =
         make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
@@ -619,7 +620,7 @@ namespace clue::detail {
                                      clue::internal::SeedArray<>& seeds,
                                      clue::FollowersView followers,
                                      PointsView<Ndim> dev_points) {
-    const Idx grid_size = clue::divide_up_by(seeds.size(queue), block_size);
+    const Idx grid_size = nostd::ceil_div(seeds.size(queue), block_size);
     const auto work_division = clue::make_workdiv<TAcc>(grid_size, block_size);
     alpaka::exec<TAcc>(
         queue, work_division, KernelAssignClusters{}, seeds.view(), followers, dev_points);

@@ -6,6 +6,7 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include "CLUEstering/internal/nostd/ceil_div.hpp"
 #include <array>
 #include <cmath>
 #include <cstddef>
@@ -24,8 +25,7 @@ namespace clue::detail {
                    const std::array<uint8_t, Ndim>& wrapped_coordinates,
                    std::size_t batch_size = 1) {
     // TODO: reconsider the way that we compute the number of tiles
-    auto ntiles =
-        static_cast<int32_t>(std::ceil(points.size() / static_cast<float>(points_per_tile)));
+    auto ntiles = nostd::ceil_div(points.size(), points_per_tile);
     const auto n_per_dim = static_cast<int32_t>(std::ceil(std::pow(ntiles, 1. / Ndim)));
     ntiles = static_cast<int32_t>(std::pow(n_per_dim, Ndim));
 
@@ -59,8 +59,7 @@ namespace clue::detail {
                    int points_per_tile,
                    const std::array<uint8_t, Ndim>& wrapped_coordinates,
                    std::size_t batch_size = 1) {
-    auto ntiles =
-        static_cast<int32_t>(std::ceil(points.size() / static_cast<float>(points_per_tile)));
+    auto ntiles = nostd::ceil_div(points.size(), points_per_tile);
     const auto n_per_dim = static_cast<int32_t>(std::ceil(std::pow(ntiles, 1. / Ndim)));
     ntiles = static_cast<int32_t>(std::pow(n_per_dim, Ndim));
 
