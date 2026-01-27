@@ -31,7 +31,8 @@ namespace clue {
     ALPAKA_FN_HOST void fill(TQueue& queue, const PointsDevice<Ndim, TDev>& d_points) {
       m_assoc.template fill<TAcc>(
           d_points.size(),
-          std::span<const std::int32_t>{d_points.view().nearest_higher, static_cast<std::size_t>(d_points.size())},
+          std::span<const std::int32_t>{d_points.view().nearest_higher,
+                                        static_cast<std::size_t>(d_points.size())},
           queue);
     }
 
