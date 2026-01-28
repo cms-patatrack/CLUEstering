@@ -15,6 +15,7 @@
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
+#include "CLUEstering/internal/nostd/ceil_div.hpp"
 #include "CLUEstering/utils/get_clusters.hpp"
 
 #include <alpaka/alpaka.hpp>
@@ -215,7 +216,7 @@ namespace clue {
     const auto n_points = h_points.size();
     m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
-    const Idx grid_size = clue::divide_up_by(n_points, block_size);
+    const Idx grid_size = nostd::ceil_div(n_points, block_size);
     auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
 
     detail::computeLocalDensity<Acc>(
@@ -259,7 +260,7 @@ namespace clue {
     const auto n_points = dev_points.size();
     m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
-    const Idx grid_size = clue::divide_up_by(n_points, block_size);
+    const Idx grid_size = nostd::ceil_div(n_points, block_size);
     auto work_division = clue::make_workdiv<Acc>(grid_size, block_size);
 
     detail::computeLocalDensity<Acc>(
