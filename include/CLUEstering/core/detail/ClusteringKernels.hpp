@@ -134,37 +134,38 @@ namespace clue::detail {
                                   const auto* event_offsets,
                                   std::size_t max_event_size,
                                   std::size_t /* blocks_per_event */) const {
-      // TODO: add bound checking
       for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
         for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
           const auto global_idx = event_offsets[event] + local_idx;
-          float rho_i = 0.f;
-          auto coords_i = dev_points[global_idx];
+          if (global_idx < event_offsets[event + 1]) {
+            float rho_i = 0.f;
+            auto coords_i = dev_points[global_idx];
 
-          clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-          for (auto dim = 0u; dim != Ndim; ++dim) {
-            searchbox_extremes[dim] =
-                clue::nostd::make_array(coords_i[dim] - dc, coords_i[dim] + dc);
+            clue::SearchBoxExtremes<Ndim> searchbox_extremes;
+            for (auto dim = 0u; dim != Ndim; ++dim) {
+              searchbox_extremes[dim] =
+                  clue::nostd::make_array(coords_i[dim] - dc, coords_i[dim] + dc);
+            }
+
+            clue::SearchBoxBins<Ndim> searchbox_bins;
+            dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
+
+            VecArray<int32_t, Ndim> base_vec;
+            for_recursion<TAcc, Ndim, Ndim>(acc,
+                                            base_vec,
+                                            searchbox_bins,
+                                            dev_tiles,
+                                            dev_points,
+                                            kernel,
+                                            coords_i,
+                                            rho_i,
+                                            dc,
+                                            metric,
+                                            global_idx,
+                                            event);
+
+            dev_points.rho[global_idx] = rho_i;
           }
-
-          clue::SearchBoxBins<Ndim> searchbox_bins;
-          dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
-
-          VecArray<int32_t, Ndim> base_vec;
-          for_recursion<TAcc, Ndim, Ndim>(acc,
-                                          base_vec,
-                                          searchbox_bins,
-                                          dev_tiles,
-                                          dev_points,
-                                          kernel,
-                                          coords_i,
-                                          rho_i,
-                                          dc,
-                                          metric,
-                                          global_idx,
-                                          event);
-
-          dev_points.rho[global_idx] = rho_i;
         }
       }
     }
@@ -289,43 +290,43 @@ namespace clue::detail {
                                   const auto* event_offsets,
                                   std::size_t max_event_size,
                                   std::size_t /* blocks_per_event */) const {
-      // TODO: add bound checking
       for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
         for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
           const auto global_idx = event_offsets[event] + local_idx;
+          if (global_idx < event_offsets[event + 1]) {
+            float delta_i = std::numeric_limits<float>::max();
+            int nh_i = -1;
+            auto coords_i = dev_points[global_idx];
+            float rho_i = dev_points.rho[global_idx];
 
-          float delta_i = std::numeric_limits<float>::max();
-          int nh_i = -1;
-          auto coords_i = dev_points[global_idx];
-          float rho_i = dev_points.rho[global_idx];
+            clue::SearchBoxExtremes<Ndim> searchbox_extremes;
+            for (auto dim = 0u; dim != Ndim; ++dim) {
+              searchbox_extremes[dim] =
+                  clue::nostd::make_array(coords_i[dim] - dm, coords_i[dim] + dm);
+            }
 
-          clue::SearchBoxExtremes<Ndim> searchbox_extremes;
-          for (auto dim = 0u; dim != Ndim; ++dim) {
-            searchbox_extremes[dim] =
-                clue::nostd::make_array(coords_i[dim] - dm, coords_i[dim] + dm);
-          }
+            clue::SearchBoxBins<Ndim> searchbox_bins;
+            dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
 
-          clue::SearchBoxBins<Ndim> searchbox_bins;
-          dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
+            VecArray<int32_t, Ndim> base_vec{};
+            for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
+                                                           base_vec,
+                                                           searchbox_bins,
+                                                           dev_tiles,
+                                                           dev_points,
+                                                           coords_i,
+                                                           rho_i,
+                                                           delta_i,
+                                                           nh_i,
+                                                           dm,
+                                                           metric,
+                                                           global_idx,
+                                                           event);
 
-          VecArray<int32_t, Ndim> base_vec{};
-          for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
-                                                         base_vec,
-                                                         searchbox_bins,
-                                                         dev_tiles,
-                                                         dev_points,
-                                                         coords_i,
-                                                         rho_i,
-                                                         delta_i,
-                                                         nh_i,
-                                                         dm,
-                                                         metric,
-                                                         global_idx,
-                                                         event);
-
-          dev_points.nearest_higher[global_idx] = nh_i;
-          if (nh_i == -1) {
-            alpaka::atomicAdd(acc, seed_candidates, 1ul);
+            dev_points.nearest_higher[global_idx] = nh_i;
+            if (nh_i == -1) {
+              alpaka::atomicAdd(acc, seed_candidates, 1ul);
+            }
           }
         }
       }
@@ -379,24 +380,25 @@ namespace clue::detail {
       for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
         for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
           const auto global_idx = event_offsets[event] + local_idx;
+          if (global_idx < event_offsets[event + 1]) {
+            dev_points.cluster_index[global_idx] = -1;
+            auto nh = dev_points.nearest_higher[global_idx];
 
-          dev_points.cluster_index[global_idx] = -1;
-          auto nh = dev_points.nearest_higher[global_idx];
+            auto coords_i = dev_points[global_idx];
+            auto coords_nh = dev_points[nh];
+            auto distance = metric(coords_i, coords_nh);
 
-          auto coords_i = dev_points[global_idx];
-          auto coords_nh = dev_points[nh];
-          auto distance = metric(coords_i, coords_nh);
+            float rho_i = dev_points.rho[global_idx];
+            bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
 
-          float rho_i = dev_points.rho[global_idx];
-          bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
-
-          if (is_seed) {
-            dev_points.is_seed[global_idx] = 1;
-            dev_points.nearest_higher[global_idx] = -1;
-            seeds.push_back(acc, global_idx);
-            event_associations.push_back(acc, event);
-          } else {
-            dev_points.is_seed[global_idx] = 0;
+            if (is_seed) {
+              dev_points.is_seed[global_idx] = 1;
+              dev_points.nearest_higher[global_idx] = -1;
+              seeds.push_back(acc, global_idx);
+              event_associations.push_back(acc, event);
+            } else {
+              dev_points.is_seed[global_idx] = 0;
+            }
           }
         }
       }
