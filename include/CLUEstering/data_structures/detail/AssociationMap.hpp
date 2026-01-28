@@ -35,11 +35,11 @@ namespace clue {
                                     const auto* event_offsets,
                                     std::size_t max_event_size,
                                     std::size_t /* blocks_per_event */) const {
-        // TODO: add bound checking
         for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
           for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
             auto global_idx = event_offsets[event] + local_idx;
-            associations[global_idx] = func(global_idx, event);
+            if (global_idx < event_offsets[event + 1])
+              associations[global_idx] = func(global_idx, event);
           }
         }
       }
