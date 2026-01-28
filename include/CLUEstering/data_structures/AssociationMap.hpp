@@ -9,18 +9,20 @@
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
-#include <span>
 #include <alpaka/alpaka.hpp>
+#include <concepts>
 #include <span>
 
 namespace clue {
 
   template <concepts::device TDev>
   class AssociationMap;
+  template <concepts::device TDev>
+  class Followers;
 
   namespace internal {
 
-    template <std::size_t Ndim, clue::concepts::device TDev>
+    template <std::size_t Ndim, std::floating_point TData, clue::concepts::device TDev>
     class Tiles;
 
     template <clue::concepts::queue TQueue>
@@ -203,10 +205,9 @@ namespace clue {
     ALPAKA_FN_HOST device_buffer<TDev, int32_t[]>& offsets();
 
 #ifndef CLUE_BUILD_DOXYGEN
-    template <concepts::device _TDev>
-    friend class Followers;
+    friend class Followers<TDev>;
 
-    template <std::size_t Ndim, concepts::device _TDev>
+    template <std::size_t Ndim, std::floating_point TData, concepts::device _TDev>
     friend class internal::Tiles;
 
     template <concepts::queue _TQueue>

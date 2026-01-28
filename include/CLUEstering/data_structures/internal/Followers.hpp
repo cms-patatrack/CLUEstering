@@ -5,6 +5,8 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
+#include <concepts>
+#include <cstddef>
 #include <cstdint>
 #include <span>
 
@@ -27,8 +29,11 @@ namespace clue {
     }
     ALPAKA_FN_HOST void reset(int32_t npoints) { m_assoc.reset(npoints, npoints); }
 
-    template <concepts::accelerator TAcc, concepts::queue TQueue, std::size_t Ndim>
-    ALPAKA_FN_HOST void fill(TQueue& queue, const PointsDevice<Ndim, TDev>& d_points) {
+    template <concepts::accelerator TAcc,
+              concepts::queue TQueue,
+              std::size_t Ndim,
+              std::floating_point TData>
+    ALPAKA_FN_HOST void fill(TQueue& queue, const PointsDevice<Ndim, TData, TDev>& d_points) {
       m_assoc.template fill<TAcc>(
           d_points.size(),
           std::span<const std::int32_t>{d_points.view().nearest_higher,

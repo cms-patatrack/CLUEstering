@@ -6,12 +6,15 @@
 
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/utils/detail/get_clusters.hpp"
+#include <cstddef>
+#include <concepts>
+#include <span>
 #include <ranges>
 #include <vector>
 
 namespace clue {
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   class PointsHost;
 
   /// @brief The ClusterProperties class provides access to the properties of clusters
@@ -47,7 +50,7 @@ namespace clue {
 
 #ifndef CLUE_BUILD_DOXYGEN
   private:
-    template <std::size_t Ndim>
+    template <std::size_t Ndim, std::floating_point TData>
     friend class PointsHost;
 #endif
   };

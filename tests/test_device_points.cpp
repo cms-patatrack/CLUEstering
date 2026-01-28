@@ -86,7 +86,7 @@ TEST_CASE("Test device points with external allocation of whole buffer") {
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  const auto bytes = clue::soa::device::computeSoASize<2>(size);
+  const auto bytes = clue::soa::device::computeSoASize<2, float>(size);
   auto buffer = clue::make_device_buffer<std::byte[]>(queue, bytes);
 
   clue::PointsDevice<2> d_points(queue, size, std::span(buffer.data(), bytes));
@@ -250,7 +250,7 @@ TEST_CASE("Test coordinate getter throwing conditions") {
 TEST_CASE("Test n_cluster getter") {
   auto queue = clue::get_queue(0u);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../../data/data_32768.csv");
+  clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, "../../../data/data_32768.csv");
   clue::PointsDevice<2> d_points(queue, h_points.size());
 
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};

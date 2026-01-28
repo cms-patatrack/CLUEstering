@@ -26,7 +26,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
   for (auto i = range.first; i < range.second; ++i) {
     const auto test_file_path =
         std::string(TEST_DATA_DIR) + fmt::format("/data_{}.csv", std::pow(2, i));
-    clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
+    clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
     const auto n_points = h_points.size();
     clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -41,7 +41,7 @@ TEST_CASE("Test clustering on aniso dataset") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/aniso_1000.csv";
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
+  clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -59,7 +59,7 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/sissa_1000.csv";
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
+  clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -76,7 +76,7 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/sissa_4000.csv";
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
+  clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -93,7 +93,7 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/toyDetector_1000.csv";
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
+  clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -110,7 +110,7 @@ TEST_CASE("Test clustering on blob dataset") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/blob.csv";
-  clue::PointsHost<3> h_points = clue::read_csv<3>(queue, test_file_path);
+  clue::PointsHost<3> h_points = clue::read_csv<3, float>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<3> d_points(queue, n_points);
 
@@ -127,7 +127,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/opposite_angles.csv";
-  clue::PointsHost<2> points = clue::read_csv<2>(queue, test_file_path);
+  clue::PointsHost<2> points = clue::read_csv<2, float>(queue, test_file_path);
   const float dc{.2f}, rhoc{5.f}, outlier{.2f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 

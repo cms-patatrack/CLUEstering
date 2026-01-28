@@ -9,6 +9,7 @@
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
+#include <concepts>
 #include <cstddef>
 #include <cstdint>
 #include <optional>
@@ -17,33 +18,39 @@
 
 namespace clue {
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
+  class Clusterer;
+  template <std::size_t Ndim, std::floating_point TData>
   class PointsHost;
-  template <std::size_t Ndim, concepts::device TDev>
+  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   class PointsDevice;
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   void copyToHost(TQueue& queue,
-                  PointsHost<Ndim>& h_points,
-                  const PointsDevice<Ndim, TDev>& d_points);
+                  PointsHost<Ndim, TData>& h_points,
+                  const PointsDevice<Ndim, TData, TDev>& d_points);
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   void copyToDevice(TQueue& queue,
-                    PointsDevice<Ndim, TDev>& d_points,
-                    const PointsHost<Ndim>& h_points);
+                    PointsDevice<Ndim, TData, TDev>& d_points,
+                    const PointsHost<Ndim, TData>& h_points);
 
   /// @brief The PointsDevice class is a data structure that manages points on a device.
   /// It provides methods to allocate, access, and manipulate points in device memory.
   ///
   /// @tparam Ndim The number of dimensions of the points to manage
+  /// @tparam TData The data type for the point coordinates and weights
   /// @tparam TDev The device type to use for the allocation. Defaults to clue::Device.
-  template <std::size_t Ndim, concepts::device TDev = clue::Device>
-  class PointsDevice : public internal::points_interface<PointsDevice<Ndim, TDev>> {
+  template <std::size_t Ndim, std::floating_point TData = float, concepts::device TDev = clue::Device>
+  class PointsDevice : public internal::points_interface<PointsDevice<Ndim, TData, TDev>> {
+  public:
+    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+
   private:
     device_buffer<TDev, std::byte[]> m_buffer;
-    PointsView<Ndim> m_view;
+    PointsView<Ndim, value_type> m_view;
     std::optional<std::size_t> m_nclusters;
-    int32_t m_size;
+    std::int32_t m_size;
     bool m_clustered = false;
 
   public:
@@ -52,7 +59,7 @@ namespace clue {
     /// @param queue The queue to use for the device operations
     /// @param n_points The number of points to allocate
     template <concepts::queue TQueue>
-    PointsDevice(TQueue& queue, int32_t n_points);
+    PointsDevice(TQueue& queue, std::int32_t n_points);
 
     /// @brief Construct a PointsDevice object with a pre-allocated buffer
     ///
@@ -60,7 +67,7 @@ namespace clue {
     /// @param n_points The number of points to allocate
     /// @param buffer The buffer to use for the points
     template <concepts::queue TQueue>
-    PointsDevice(TQueue& queue, int32_t n_points, std::span<std::byte> buffer);
+    PointsDevice(TQueue& queue, std::int32_t n_points, std::span<std::byte> buffer);
 
     /// @brief Constructs a container for the points allocated on the device using interleaved data
     ///
@@ -70,7 +77,10 @@ namespace clue {
     /// @param output_buffer The pre-allocated buffer to store the cluster indexes
     /// @note The input buffer must contain the coordinates and weights in an SoA format
     template <concepts::queue TQueue>
-    PointsDevice(TQueue& queue, int32_t n_points, std::span<float> input, std::span<int> output);
+    PointsDevice(TQueue& queue,
+                 std::int32_t n_points,
+                 std::span<value_type> input,
+                 std::span<int> output);
 
     /// @brief Constructs a container for the points allocated on the device using separate coordinate and weight buffers
     ///
@@ -82,9 +92,9 @@ namespace clue {
     /// @note The coordinates buffer must have a size of n_points * Ndim
     template <concepts::queue TQueue>
     PointsDevice(TQueue& queue,
-                 int32_t n_points,
-                 std::span<float> coordinates,
-                 std::span<float> weights,
+                 std::int32_t n_points,
+                 std::span<value_type> coordinates,
+                 std::span<value_type> weights,
                  std::span<int> output);
 
     /// @brief Constructs a container for the points allocated on the device using interleaved data
@@ -95,7 +105,7 @@ namespace clue {
     /// @param output_buffer The pre-allocated buffer to store the cluster indexes
     /// @note The input buffer must contain the coordinates and weights in an SoA format
     template <concepts::queue TQueue>
-    PointsDevice(TQueue& queue, int32_t n_points, float* input, int* output);
+    PointsDevice(TQueue& queue, std::int32_t n_points, value_type* input, int* output);
 
     /// @brief Constructs a container for the points allocated on the device using separate coordinate and weight buffers
     ///
@@ -106,7 +116,11 @@ namespace clue {
     /// @param output The pre-allocated buffer to store the cluster indexes
     /// @note The coordinates buffer must have a size of n_points * Ndim
     template <concepts::queue TQueue>
-    PointsDevice(TQueue& queue, int32_t n_points, float* coordinates, float* weights, int* output);
+    PointsDevice(TQueue& queue,
+                 std::int32_t n_points,
+                 value_type* coordinates,
+                 value_type* weights,
+                 int* output);
 
     /// @brief Construct a PointsDevice object with a pre-allocated buffer
     ///
@@ -115,7 +129,7 @@ namespace clue {
     /// @param buffers The buffers to use for the points
     template <concepts::queue TQueue, concepts::pointer... TBuffers>
       requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
-    PointsDevice(TQueue& queue, int32_t n_points, TBuffers... buffers);
+    PointsDevice(TQueue& queue, std::int32_t n_points, TBuffers... buffers);
 
     PointsDevice(const PointsDevice&) = delete;
     PointsDevice& operator=(const PointsDevice&) = delete;
@@ -126,7 +140,7 @@ namespace clue {
 #ifdef CLUE_BUILD_DOXYGEN
     /// @brief Returns the number of points
     /// @return The number of points
-    ALPAKA_FN_HOST int32_t size() const;
+    ALPAKA_FN_HOST auto size() const;
     /// @brief Returns the coordinates of the points for a specific dimension as a const span
     /// @param dim The dimension for which to get the coordinates
     /// @return A const span of the coordinates for the specified dimension
@@ -170,17 +184,19 @@ namespace clue {
     void mark_clustered() { m_clustered = true; }
 
 #ifndef CLUE_BUILD_DOXYGEN
-    template <std::size_t _Ndim>
-    friend class Clusterer;
-    template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
-    friend void copyToHost(_TQueue& queue,
-                           PointsHost<_Ndim>& h_points,
-                           const PointsDevice<_Ndim, _TDev>& d_points);
-    template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
-    friend void copyToDevice(_TQueue& queue,
-                             PointsDevice<_Ndim, _TDev>& d_points,
-                             const PointsHost<_Ndim>& h_points);
-    friend struct internal::points_interface<PointsDevice<Ndim, TDev>>;
+    friend class Clusterer<Ndim, TData>;
+
+    template <concepts::queue TQueue, std::size_t N, std::floating_point Data, concepts::device Dev>
+    friend void copyToHost(TQueue& queue,
+                           PointsHost<N, Data>& h_points,
+                           const PointsDevice<N, Data, Dev>& d_points);
+
+    template <concepts::queue TQueue, std::size_t N, std::floating_point Data, concepts::device Dev>
+    friend void copyToDevice(TQueue& queue,
+                             PointsDevice<N, Data, Dev>& d_points,
+                             const PointsHost<N, Data>& h_points);
+
+    friend struct internal::points_interface<PointsDevice<Ndim, TData, TDev>>;
 #endif
   };
 

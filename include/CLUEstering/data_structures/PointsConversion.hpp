@@ -20,10 +20,10 @@ namespace clue {
   /// @param queue The queue used for the device operations
   /// @param h_points The points allocated on the host, where the clustering results will be saved
   /// @param d_points The points allocated on the device, where the clustering has been run
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   void copyToHost(TQueue& queue,
-                  PointsHost<Ndim>& h_points,
-                  const PointsDevice<Ndim, TDev>& d_points);
+                  PointsHost<Ndim, TData>& h_points,
+                  const PointsDevice<Ndim, TData, TDev>& d_points);
 
   /// @brief Copies the results of the clustering from the device points to
   /// the host points
@@ -34,8 +34,8 @@ namespace clue {
   /// @param queue The queue used for the device operations
   /// @param h_points The points allocated on the host, where the clustering results will be saved
   /// @param d_points The points allocated on the device, where the clustering has been run
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
-  auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TDev>& d_points);
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TData, TDev>& d_points);
 
   /// @brief Copies the coordinates and weights of the points from the host to the device
   ///
@@ -46,10 +46,10 @@ namespace clue {
   /// @param d_points The empty points allocated on the device
   /// @param h_points The points allocated on the host, containing the points' coordinates
   /// and weights
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   void copyToDevice(TQueue& queue,
-                    PointsDevice<Ndim, TDev>& d_points,
-                    const PointsHost<Ndim>& h_points);
+                    PointsDevice<Ndim, TData, TDev>& d_points,
+                    const PointsHost<Ndim, TData>& h_points);
 
   /// @brief Copies the coordinates and weights of the points from the host to the device
   ///
@@ -60,8 +60,8 @@ namespace clue {
   /// @param d_points The empty points allocated on the device
   /// @param h_points The points allocated on the host, containing the points' coordinates
   /// and weights
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
-  auto copyToDevice(TQueue& queue, const PointsHost<Ndim>& h_points);
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TData>& h_points);
 
 }  // namespace clue
 

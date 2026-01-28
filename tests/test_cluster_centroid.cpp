@@ -17,7 +17,7 @@ TEST_CASE("Test computation of cluster centroid") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/data_32768.csv";
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
+  clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -40,7 +40,7 @@ TEST_CASE("Test computation of all cluster centroids") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/data_32768.csv";
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
+  clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 

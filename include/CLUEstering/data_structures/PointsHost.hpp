@@ -9,6 +9,7 @@
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
+#include <concepts>
 #include <cstddef>
 #include <cstdint>
 #include <optional>
@@ -19,51 +20,58 @@
 
 namespace clue {
 
-  template <std::size_t NDim, concepts::queue TQueue>
-  clue::PointsHost<NDim> read_output(TQueue& queue, const std::string& file_path);
+  template <std::size_t Ndim, std::floating_point TData>
+  class Clusterer;
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
+  clue::PointsHost<NDim, TData> read_output(TQueue& queue, const std::string& file_path);
+
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   void copyToHost(TQueue& queue,
-                  PointsHost<Ndim>& h_points,
-                  const PointsDevice<Ndim, TDev>& d_points);
+                  PointsHost<Ndim, TData>& h_points,
+                  const PointsDevice<Ndim, TData, TDev>& d_points);
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
-  auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TDev>& d_points);
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TData, TDev>& d_points);
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   void copyToDevice(TQueue& queue,
-                    PointsDevice<Ndim, TDev>& d_points,
-                    const PointsHost<Ndim>& h_points);
+                    PointsDevice<Ndim, TData, TDev>& d_points,
+                    const PointsHost<Ndim, TData>& h_points);
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
-  auto copyToDevice(TQueue& queue, const PointsHost<Ndim>& h_points);
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TData>& h_points);
 
   /// @brief The PointsHost class is a data structure that manages points in host memory.
   /// It provides methods to allocate, access, and manipulate points in host memory.
   ///
   /// @tparam Ndim The number of dimensions of the points to manage
-  template <std::size_t Ndim>
+  /// @tparam TData The data type for the point coordinates and weights
+  template <std::size_t Ndim, std::floating_point TData = float>
   class PointsHost : public internal::points_interface<PointsHost<Ndim>> {
+  public:
+    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+
   private:
     std::optional<host_buffer<std::byte[]>> m_buffer;
-    PointsView<Ndim> m_view;
+    PointsView<Ndim, value_type> m_view;
     std::optional<ClusterProperties> m_clusterProperties;
     std::optional<std::size_t> m_nclusters;
-    int32_t m_size;
+    std::int32_t m_size;
     bool m_clustered = false;
 
   public:
     class Point {
-      std::array<float, Ndim> m_coordinates;
-      float m_weight;
+      std::array<value_type, Ndim> m_coordinates;
+      value_type m_weight;
       int m_clusterIndex;
 
     public:
-      Point(const std::array<float, Ndim>& coordinates, float weight, int cluster_index);
-      float operator[](size_t dim) const;
+      Point(const std::array<value_type, Ndim>& coordinates, value_type weight, int cluster_index);
+      auto operator[](size_t dim) const;
 
-      float weight() const;
-      float cluster_index() const;
+      auto weight() const;
+      auto cluster_index() const;
     };
 
     /// @brief Constructs a container for the points allocated on the host
@@ -89,7 +97,7 @@ namespace clue {
     /// @param output_buffer The pre-allocated buffer to store the cluster indexes
     /// @note The input buffer must contain the coordinates and weights in an SoA format
     template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, int32_t n_points, std::span<float> input, std::span<int> output);
+    PointsHost(TQueue& queue, int32_t n_points, std::span<value_type> input, std::span<int> output);
 
     /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
     ///
@@ -102,8 +110,8 @@ namespace clue {
     template <concepts::queue TQueue>
     PointsHost(TQueue& queue,
                int32_t n_points,
-               std::span<float> coordinates,
-               std::span<float> weights,
+               std::span<value_type> coordinates,
+               std::span<value_type> weights,
                std::span<int> output);
 
     /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
@@ -123,7 +131,7 @@ namespace clue {
     /// @param output_buffer The pre-allocated buffer to store the cluster indexes
     /// @note The input buffer must contain the coordinates and weights in an SoA format
     template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, int32_t n_points, float* input, int* output);
+    PointsHost(TQueue& queue, int32_t n_points, value_type* input, int* output);
 
     /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
     ///
@@ -134,7 +142,8 @@ namespace clue {
     /// @param output The pre-allocated buffer to store the cluster indexes
     /// @note The coordinates buffer must have a size of n_points * Ndim
     template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, int32_t n_points, float* coordinates, float* weights, int* output);
+    PointsHost(
+        TQueue& queue, int32_t n_points, value_type* coordinates, value_type* weights, int* output);
 
     /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
     ///
@@ -154,7 +163,7 @@ namespace clue {
 #ifdef CLUE_BUILD_DOXYGEN
     /// @brief Returns the number of points
     /// @return The number of points
-    ALPAKA_FN_HOST int32_t size() const;
+    ALPAKA_FN_HOST auto size() const;
     /// @brief Returns the coordinates of the points for a specific dimension as a const span
     /// @param dim The dimension for which to get the coordinates
     /// @return A const span of the coordinates for the specified dimension
@@ -219,19 +228,22 @@ namespace clue {
     void mark_clustered() { m_clustered = true; }
 
 #ifndef CLUE_BUILD_DOXYGEN
-    template <std::size_t _Ndim>
-    friend class Clusterer;
-    template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
-    friend void copyToHost(_TQueue& queue,
-                           PointsHost<_Ndim>& h_points,
-                           const PointsDevice<_Ndim, _TDev>& d_points);
-    template <concepts::queue _TQueue, std::size_t _Ndim, concepts::device _TDev>
-    friend void copyToDevice(_TQueue& queue,
-                             PointsDevice<_Ndim, _TDev>& d_points,
-                             const PointsHost<_Ndim>& h_points);
-    friend struct internal::points_interface<PointsHost<Ndim>>;
-    template <std::size_t NDim, concepts::queue TQueue>
-    friend clue::PointsHost<NDim> read_output(TQueue& queue, const std::string& file_path);
+    friend class Clusterer<Ndim, TData>;
+
+    template <concepts::queue TQueue, std::size_t N, std::floating_point Data, concepts::device TDev>
+    friend void copyToHost(TQueue& queue,
+                           PointsHost<N, Data>& h_points,
+                           const PointsDevice<N, Data, TDev>& d_points);
+
+    template <concepts::queue TQueue, std::size_t N, std::floating_point Data, concepts::device TDev>
+    friend void copyToDevice(TQueue& queue,
+                             PointsDevice<N, Data, TDev>& d_points,
+                             const PointsHost<N, Data>& h_points);
+
+    friend struct internal::points_interface<PointsHost<Ndim, TData>>;
+
+    template <std::size_t N, std::floating_point Data, concepts::queue TQueue>
+    friend clue::PointsHost<N, Data> read_output(TQueue& queue, const std::string& file_path);
 #endif
   };
 

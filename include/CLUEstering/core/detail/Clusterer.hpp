@@ -30,27 +30,11 @@
 
 namespace clue {
 
-  template <std::size_t Ndim>
-  Clusterer<Ndim>::Clusterer(
-      float dc, float rhoc, std::optional<float> dm, std::optional<float> seed_dc, int pPBin)
-      : m_dc{dc},
-        m_seed_dc{seed_dc.value_or(dc)},
-        m_rhoc{rhoc},
-        m_dm{dm.value_or(dc)},
-        m_pointsPerTile{pPBin},
-        m_wrappedCoordinates{} {
-    if (m_dc <= 0.f || m_rhoc < 0.f || m_dm <= 0.f || m_seed_dc <= 0.f || m_pointsPerTile <= 0) {
-      throw std::invalid_argument(
-          "Invalid clustering parameters. The parameters must be positive.");
-    }
-  }
-
-  template <std::size_t Ndim>
-  inline Clusterer<Ndim>::Clusterer(Queue&,
-                                    float dc,
-                                    float rhoc,
-                                    std::optional<float> dm,
-                                    std::optional<float> seed_dc,
+  template <std::size_t Ndim, std::floating_point TData>
+  Clusterer<Ndim, TData>::Clusterer(value_type dc,
+                                    value_type rhoc,
+                                    std::optional<value_type> dm,
+                                    std::optional<value_type> seed_dc,
                                     int pPBin)
       : m_dc{dc},
         m_seed_dc{seed_dc.value_or(dc)},
@@ -58,46 +42,74 @@ namespace clue {
         m_dm{dm.value_or(dc)},
         m_pointsPerTile{pPBin},
         m_wrappedCoordinates{} {
-    if (m_dc <= 0.f || m_rhoc < 0.f || m_dm <= 0.f || m_seed_dc <= 0.f || m_pointsPerTile <= 0) {
+    if (m_dc <= static_cast<value_type>(0.) || m_rhoc < static_cast<value_type>(0.) ||
+        m_dm <= static_cast<value_type>(0.) || m_seed_dc <= static_cast<value_type>(0.) ||
+        m_pointsPerTile <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
   }
 
-  template <std::size_t Ndim>
-  void Clusterer<Ndim>::setParameters(
-      float dc, float rhoc, std::optional<float> dm, std::optional<float> seed_dc, int pPBin) {
+  template <std::size_t Ndim, std::floating_point TData>
+  inline Clusterer<Ndim, TData>::Clusterer(Queue&,
+                                           value_type dc,
+                                           value_type rhoc,
+                                           std::optional<value_type> dm,
+                                           std::optional<value_type> seed_dc,
+                                           int pPBin)
+      : m_dc{dc},
+        m_seed_dc{seed_dc.value_or(dc)},
+        m_rhoc{rhoc},
+        m_dm{dm.value_or(dc)},
+        m_pointsPerTile{pPBin},
+        m_wrappedCoordinates{} {
+    if (m_dc <= static_cast<value_type>(0.) || m_rhoc < static_cast<value_type>(0.) ||
+        m_dm <= static_cast<value_type>(0.) || m_seed_dc <= static_cast<value_type>(0.) ||
+        m_pointsPerTile <= 0) {
+      throw std::invalid_argument(
+          "Invalid clustering parameters. The parameters must be positive.");
+    }
+  }
+
+  template <std::size_t Ndim, std::floating_point TData>
+  void Clusterer<Ndim, TData>::setParameters(value_type dc,
+                                             value_type rhoc,
+                                             std::optional<value_type> dm,
+                                             std::optional<value_type> seed_dc,
+                                             int pPBin) {
     m_dc = dc;
     m_dm = dm.value_or(dc);
     m_seed_dc = seed_dc.value_or(dc);
     m_rhoc = rhoc;
     m_pointsPerTile = pPBin;
 
-    if (m_dc <= 0.f || m_rhoc < 0.f || m_dm <= 0.f || m_seed_dc <= 0.f || m_pointsPerTile <= 0) {
+    if (m_dc <= static_cast<value_type>(0.) || m_rhoc < static_cast<value_type>(0.) ||
+        m_dm <= static_cast<value_type>(0.) || m_seed_dc <= static_cast<value_type>(0.) ||
+        m_pointsPerTile <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
   }
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
-  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
-                                             PointsHost& h_points,
-                                             const DistanceMetric& metric,
-                                             const Kernel& kernel,
-                                             std::size_t block_size) {
+  inline void Clusterer<Ndim, TData>::make_clusters(Queue& queue,
+                                                    PointsHost& h_points,
+                                                    const DistanceMetric& metric,
+                                                    const Kernel& kernel,
+                                                    std::size_t block_size) {
     auto d_points = PointsDevice(queue, h_points.size());
 
     setup(queue, h_points, d_points);
     make_clusters_impl(h_points, d_points, metric, kernel, queue, block_size);
     alpaka::wait(queue);
   }
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
-  inline void Clusterer<Ndim>::make_clusters(PointsHost& h_points,
-                                             const DistanceMetric& metric,
-                                             const Kernel& kernel,
-                                             std::size_t block_size) {
+  inline void Clusterer<Ndim, TData>::make_clusters(PointsHost& h_points,
+                                                    const DistanceMetric& metric,
+                                                    const Kernel& kernel,
+                                                    std::size_t block_size) {
     auto device = alpaka::getDevByIdx(Platform{}, 0u);
     Queue queue(device);
     auto d_points = PointsDevice(queue, h_points.size());
@@ -106,85 +118,85 @@ namespace clue {
     make_clusters_impl(h_points, d_points, metric, kernel, queue, block_size);
     alpaka::wait(queue);
   }
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
-  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
-                                             PointsHost& h_points,
-                                             PointsDevice& dev_points,
-                                             const DistanceMetric& metric,
-                                             const Kernel& kernel,
-                                             std::size_t block_size) {
+  inline void Clusterer<Ndim, TData>::make_clusters(Queue& queue,
+                                                    PointsHost& h_points,
+                                                    PointsDevice& dev_points,
+                                                    const DistanceMetric& metric,
+                                                    const Kernel& kernel,
+                                                    std::size_t block_size) {
     setup(queue, h_points, dev_points);
     make_clusters_impl(h_points, dev_points, metric, kernel, queue, block_size);
     alpaka::wait(queue);
   }
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
-  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
-                                             PointsDevice& dev_points,
-                                             const DistanceMetric& metric,
-                                             const Kernel& kernel,
-                                             std::size_t block_size) {
+  inline void Clusterer<Ndim, TData>::make_clusters(Queue& queue,
+                                                    PointsDevice& dev_points,
+                                                    const DistanceMetric& metric,
+                                                    const Kernel& kernel,
+                                                    std::size_t block_size) {
     detail::setup_tiles(queue, m_tiles, dev_points, m_pointsPerTile, m_wrappedCoordinates);
     detail::setup_followers(queue, m_followers, dev_points.size());
     make_clusters_impl(dev_points, metric, kernel, queue, block_size);
     alpaka::wait(queue);
   }
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
-  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
-                                             PointsHost& h_points,
-                                             PointsDevice& dev_points,
-                                             std::span<const uint32_t> batch_item_sizes,
-                                             const DistanceMetric& metric,
-                                             const Kernel& kernel,
-                                             std::size_t block_size) {
+  inline void Clusterer<Ndim, TData>::make_clusters(Queue& queue,
+                                                    PointsHost& h_points,
+                                                    PointsDevice& dev_points,
+                                                    std::span<const uint32_t> batch_item_sizes,
+                                                    const DistanceMetric& metric,
+                                                    const Kernel& kernel,
+                                                    std::size_t block_size) {
     const auto batch_size = batch_item_sizes.size();
     setup_batch(queue, h_points, dev_points, batch_size);
     make_clusters_batched(dev_points, batch_item_sizes, metric, kernel, queue, block_size);
     clue::copyToHost(queue, h_points, dev_points);
   }
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
-  inline void Clusterer<Ndim>::make_clusters(Queue& queue,
-                                             PointsDevice& dev_points,
-                                             std::span<const uint32_t> batch_item_sizes,
-                                             const DistanceMetric& metric,
-                                             const Kernel& kernel,
-                                             std::size_t block_size) {
+  inline void Clusterer<Ndim, TData>::make_clusters(Queue& queue,
+                                                    PointsDevice& dev_points,
+                                                    std::span<const uint32_t> batch_item_sizes,
+                                                    const DistanceMetric& metric,
+                                                    const Kernel& kernel,
+                                                    std::size_t block_size) {
     const auto batch_size = batch_item_sizes.size();
     setup_batch(queue, dev_points, batch_size);
     make_clusters_batched(dev_points, batch_item_sizes, metric, kernel, queue, block_size);
   }
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <std::ranges::contiguous_range TRange>
     requires std::integral<std::ranges::range_value_t<TRange>>
-  inline void Clusterer<Ndim>::setWrappedCoordinates(const TRange& wrapped_coordinates) {
+  inline void Clusterer<Ndim, TData>::setWrappedCoordinates(const TRange& wrapped_coordinates) {
     std::ranges::copy(wrapped_coordinates, m_wrappedCoordinates.begin());
   }
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <std::integral... TArgs>
-  inline void Clusterer<Ndim>::setWrappedCoordinates(TArgs... wrappedCoordinates) {
+  inline void Clusterer<Ndim, TData>::setWrappedCoordinates(TArgs... wrappedCoordinates) {
     m_wrappedCoordinates = {static_cast<uint8_t>(wrappedCoordinates)...};
   }
 
-  template <std::size_t Ndim>
-  inline host_associator Clusterer<Ndim>::getClusters(const PointsHost& h_points) {
+  template <std::size_t Ndim, std::floating_point TData>
+  inline host_associator Clusterer<Ndim, TData>::getClusters(const PointsHost& h_points) {
     return clue::get_clusters(h_points);
   }
 
-  template <std::size_t Ndim>
-  inline AssociationMap<Device> Clusterer<Ndim>::getClusters(Queue& queue,
-                                                             const PointsDevice& d_points) {
+  template <std::size_t Ndim, std::floating_point TData>
+  inline AssociationMap<Device> Clusterer<Ndim, TData>::getClusters(Queue& queue,
+                                                                    const PointsDevice& d_points) {
     return clue::get_clusters(queue, d_points);
   }
 
-  template <std::size_t Ndim>
-  inline host_associator Clusterer<Ndim>::getSampleAssociations(Queue& queue,
-                                                                PointsHost& h_points) {
+  template <std::size_t Ndim, std::floating_point TData>
+  inline host_associator Clusterer<Ndim, TData>::getSampleAssociations(Queue& queue,
+                                                                       PointsHost& h_points) {
     auto event_associations = make_host_buffer<std::int32_t[]>(h_points.n_clusters());
     alpaka::memcpy(queue,
                    event_associations,
@@ -196,23 +208,23 @@ namespace clue {
         h_points.n_clusters());
   }
 
-  template <std::size_t Ndim>
-  inline AssociationMap<Device> Clusterer<Ndim>::getSampleAssociations(Queue& queue,
-                                                                       PointsDevice& d_points) {
+  template <std::size_t Ndim, std::floating_point TData>
+  inline AssociationMap<Device> Clusterer<Ndim, TData>::getSampleAssociations(
+      Queue& queue, PointsDevice& d_points) {
     return internal::make_associator(
         queue,
         std::span<const std::int32_t>{m_event_associations->data(), d_points.n_clusters()},
         d_points.n_clusters());
   }
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
-  void Clusterer<Ndim>::make_clusters_impl(PointsHost& h_points,
-                                           PointsDevice& dev_points,
-                                           const DistanceMetric& metric,
-                                           const Kernel& kernel,
-                                           Queue& queue,
-                                           std::size_t block_size) {
+  void Clusterer<Ndim, TData>::make_clusters_impl(PointsHost& h_points,
+                                                  PointsDevice& dev_points,
+                                                  const DistanceMetric& metric,
+                                                  const Kernel& kernel,
+                                                  Queue& queue,
+                                                  std::size_t block_size) {
     const auto n_points = h_points.size();
     m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
@@ -250,13 +262,13 @@ namespace clue {
     dev_points.mark_clustered();
   }
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
-  void Clusterer<Ndim>::make_clusters_impl(PointsDevice& dev_points,
-                                           const DistanceMetric& metric,
-                                           const Kernel& kernel,
-                                           Queue& queue,
-                                           std::size_t block_size) {
+  void Clusterer<Ndim, TData>::make_clusters_impl(PointsDevice& dev_points,
+                                                  const DistanceMetric& metric,
+                                                  const Kernel& kernel,
+                                                  Queue& queue,
+                                                  std::size_t block_size) {
     const auto n_points = dev_points.size();
     m_tiles->template fill<Acc>(queue, dev_points, n_points);
 
@@ -293,14 +305,14 @@ namespace clue {
     dev_points.mark_clustered();
   }
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   template <concepts::convolutional_kernel Kernel, concepts::distance_metric<Ndim> DistanceMetric>
-  void Clusterer<Ndim>::make_clusters_batched(PointsDevice& dev_points,
-                                              std::span<const uint32_t> batch_item_sizes,
-                                              const DistanceMetric& metric,
-                                              const Kernel& kernel,
-                                              Queue& queue,
-                                              std::size_t block_size) {
+  void Clusterer<Ndim, TData>::make_clusters_batched(PointsDevice& dev_points,
+                                                     std::span<const uint32_t> batch_item_sizes,
+                                                     const DistanceMetric& metric,
+                                                     const Kernel& kernel,
+                                                     Queue& queue,
+                                                     std::size_t block_size) {
     const auto batch_size = batch_item_sizes.size();
     setup_batch(queue, dev_points, batch_size);
 

@@ -16,7 +16,7 @@ static void BM_SingleEvents(benchmark::State& state) {
   std::ranges::transform(std::views::iota(0u) | std::views::take(1000),
                          std::back_inserter(host_points),
                          [&](const auto i) {
-                           return clue::read_csv<2>(
+                           return clue::read_csv<2, float>(
                                queue, "../../data/small_event_" + std::to_string(i) + ".csv");
                          });
   clue::PointsDevice<2> d_points(queue, host_points[0].size());
@@ -33,7 +33,8 @@ static void BM_SingleEvents(benchmark::State& state) {
 static void BM_Batched(benchmark::State& state) {
   auto queue = clue::get_queue(0u);
 
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../data/small_events_batch.csv");
+  clue::PointsHost<2> h_points =
+      clue::read_csv<2, float>(queue, "../../data/small_events_batch.csv");
   const size_t n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
   const auto dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
