@@ -23,7 +23,7 @@ namespace clue {
 
     template <std::size_t Ndim, std::floating_point TData>
     inline auto distance(const Point<Ndim, TData>& lhs, const Point<Ndim, TData>& rhs) {
-      auto dist = 0.f;
+      auto dist = TData{0};
       for (auto dim = 0u; dim < Ndim; ++dim) {
         dist += (lhs[dim] - rhs[dim]) * (lhs[dim] - rhs[dim]);
       }
@@ -34,13 +34,13 @@ namespace clue {
     inline auto silhouette(const clue::host_associator& clusters,
                            const clue::PointsHost<Ndim, TData>& points,
                            int point) {
-      auto a = 0.f;
+      auto a = TData{0};
       std::vector<TData> b_values;
       b_values.reserve(clusters.size() - 1);
 
       a += std::accumulate(clusters.lower_bound(points[point].cluster_index()),
                            clusters.upper_bound(points[point].cluster_index()),
-                           0.f,
+                           TData{0},
                            [&](TData acc, int other_point) {
                              if (other_point == point)
                                return acc;
@@ -52,10 +52,10 @@ namespace clue {
            ++cluster_idx) {
         if (cluster_idx == points[point].cluster_index())
           continue;
-        auto b = 0.f;
+        auto b = TData{0};
         b += std::accumulate(clusters.lower_bound(cluster_idx),
                              clusters.upper_bound(cluster_idx),
-                             0.f,
+                             TData{0},
                              [&](TData acc, int other_point) {
                                return acc + detail::distance<Ndim, TData>(points[point],
                                                                           points[other_point]);
@@ -68,7 +68,7 @@ namespace clue {
                                  std::numeric_limits<TData>::max(),
                                  [](auto acc, auto val) { return std::min(acc, val); });
 
-      return (b - a) / std::max(a, b);
+      return (b - a) / std::max<TData>(a, b);
     }
 
   }  // namespace detail
@@ -96,7 +96,7 @@ namespace clue {
                           std::views::transform(compute_silhouette),
                       std::back_inserter(scores));
 
-    return std::reduce(scores.begin(), scores.end(), 0.f) / static_cast<TData>(scores.size());
+    return std::reduce(scores.begin(), scores.end(), TData{0}) / static_cast<TData>(scores.size());
   }
 
 }  // namespace clue

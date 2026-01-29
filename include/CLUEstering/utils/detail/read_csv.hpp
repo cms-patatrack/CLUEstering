@@ -38,10 +38,22 @@ namespace clue {
 
       for (auto dim = 0u; dim < NDim; ++dim) {
         getline(buffer_stream, value, ',');
-        points.coords(dim)[point_id] = std::stof(value);
+        if constexpr (std::is_same_v<TData, float>) {
+          points.coords(dim)[point_id] = std::stof(value);
+        } else if constexpr (std::is_same_v<TData, double>) {
+          points.coords(dim)[point_id] = std::stod(value);
+        } else {
+          points.coords(dim)[point_id] = std::stold(value);
+        }
       }
       getline(buffer_stream, value);
-      points.weights()[point_id] = std::stof(value);
+      if constexpr (std::is_same_v<TData, float>) {
+        points.weights()[point_id] = std::stof(value);
+      } else if constexpr (std::is_same_v<TData, double>) {
+        points.weights()[point_id] = std::stod(value);
+      } else {
+        points.weights()[point_id] = std::stold(value);
+      }
       ++point_id;
     }
     file.close();
@@ -58,7 +70,7 @@ namespace clue {
     auto n_points =
         std::count(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') -
         1;
-    clue::PointsHost<NDim> points(queue, n_points);
+    clue::PointsHost<NDim, TData> points(queue, n_points);
     points.mark_clustered();
     auto& view = points.view();
 
@@ -73,10 +85,22 @@ namespace clue {
 
       for (auto dim = 0u; dim < NDim; ++dim) {
         getline(buffer_stream, value, ',');
-        view.coords[dim][point_id] = std::stof(value);
+        if constexpr (std::is_same_v<TData, float>) {
+          view.coords[dim][point_id] = std::stof(value);
+        } else if constexpr (std::is_same_v<TData, double>) {
+          view.coords[dim][point_id] = std::stod(value);
+        } else {
+          view.coords[dim][point_id] = std::stold(value);
+        }
       }
       getline(buffer_stream, value, ',');
-      view.weight[point_id] = std::stof(value);
+      if constexpr (std::is_same_v<TData, float>) {
+        view.weight[point_id] = std::stof(value);
+      } else if constexpr (std::is_same_v<TData, double>) {
+        view.weight[point_id] = std::stod(value);
+      } else {
+        view.weight[point_id] = std::stold(value);
+      }
       getline(buffer_stream, value, ',');
       view.cluster_index[point_id] = std::stoi(value);
 
