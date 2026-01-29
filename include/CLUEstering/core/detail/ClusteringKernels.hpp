@@ -141,7 +141,7 @@ namespace clue::detail {
         for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
           const auto global_idx = event_offsets[event] + local_idx;
           if (global_idx < event_offsets[event + 1]) {
-            auto rho_i = 0.f;
+            auto rho_i = TData{0};
             auto coords_i = dev_points[global_idx];
 
             clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
@@ -200,7 +200,7 @@ namespace clue::detail {
         const auto j = tiles[binId][binIter];
         auto rho_j = dev_points.rho[j];
         bool found_higher = (rho_j > rho_i);
-        found_higher = found_higher || ((rho_j == rho_i) && (rho_j > 0.f) && (j > point_id));
+        found_higher = found_higher || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
 
         auto coords_j = dev_points[j];
         auto distance = metric(coords_i, coords_j);
