@@ -8,6 +8,7 @@
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 #include <array>
+#include <concepts>
 #include <cstddef>
 #include <cstdint>
 #include <alpaka/alpaka.hpp>
@@ -15,27 +16,27 @@
 
 namespace clue::internal {
 
-  template <std::size_t Ndim>
+  template <std::size_t Ndim, std::floating_point TData>
   struct TilesView {
     int32_t* indexes;
     int32_t* offsets;
-    CoordinateExtremes<Ndim>* minmax;
-    float* tilesizes;
+    CoordinateExtremes<Ndim, TData>* minmax;
+    TData* tilesizes;
     uint8_t* wrapping;
     int32_t npoints;
     int32_t ntiles;
     int32_t nperdim;
 
-    ALPAKA_FN_ACC inline constexpr const float* minMax() const { return minmax; }
-    ALPAKA_FN_ACC inline constexpr float* minMax() { return minmax; }
+    ALPAKA_FN_ACC inline constexpr const auto* minMax() const { return minmax; }
+    ALPAKA_FN_ACC inline constexpr auto* minMax() { return minmax; }
 
-    ALPAKA_FN_ACC inline constexpr const float* tileSize() const { return tilesizes; }
-    ALPAKA_FN_ACC inline constexpr float* tileSize() { return tilesizes; }
+    ALPAKA_FN_ACC inline constexpr const auto* tileSize() const { return tilesizes; }
+    ALPAKA_FN_ACC inline constexpr auto* tileSize() { return tilesizes; }
 
-    ALPAKA_FN_ACC inline constexpr const uint8_t* wrapped() const { return wrapping; }
-    ALPAKA_FN_ACC inline constexpr uint8_t* wrapped() { return wrapping; }
+    ALPAKA_FN_ACC inline constexpr const auto* wrapped() const { return wrapping; }
+    ALPAKA_FN_ACC inline constexpr auto* wrapped() { return wrapping; }
 
-    ALPAKA_FN_ACC inline constexpr int getBin(float coord, int dim) const {
+    ALPAKA_FN_ACC inline constexpr auto getBin(TData coord, int dim) const {
       int coord_bin;
       if (wrapping[dim]) {
         coord_bin =
@@ -51,12 +52,12 @@ namespace clue::internal {
       return coord_bin;
     }
 
-    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const float* coords,
+    ALPAKA_FN_ACC inline constexpr int getGlobalBin(const TData* coords,
                                                     std::size_t event = 0) const {
       int global_bin = 0;
       for (auto dim = 0u; dim != Ndim - 1; ++dim) {
         global_bin +=
-            math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * getBin(coords[dim], dim);
+            math::pow(static_cast<TData>(nperdim), Ndim - dim - 1) * getBin(coords[dim], dim);
       }
       global_bin += getBin(coords[Ndim - 1], Ndim - 1);
       global_bin += event * ntiles;
@@ -68,13 +69,13 @@ namespace clue::internal {
       int32_t globalBin = 0;
       for (auto dim = 0u; dim != Ndim; ++dim) {
         auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
-        globalBin += math::pow(static_cast<float>(nperdim), Ndim - dim - 1) * bin_i;
+        globalBin += math::pow(static_cast<TData>(nperdim), Ndim - dim - 1) * bin_i;
       }
       globalBin += event * ntiles;
       return globalBin;
     }
 
-    ALPAKA_FN_ACC inline void searchBox(const SearchBoxExtremes<Ndim>& searchbox_extremes,
+    ALPAKA_FN_ACC inline void searchBox(const SearchBoxExtremes<Ndim, TData>& searchbox_extremes,
                                         SearchBoxBins<Ndim>& searchbox_bins) {
       for (auto dim = 0u; dim != Ndim; ++dim) {
         auto infBin = getBin(searchbox_extremes[dim][0], dim);
@@ -93,9 +94,9 @@ namespace clue::internal {
       return std::span<int32_t>{buf_ptr, static_cast<std::size_t>(size)};
     }
 
-    ALPAKA_FN_ACC inline constexpr float normalizeCoordinate(float coord, int dim) const {
-      const float range = minmax->range(dim);
-      float remainder = coord - static_cast<int>(coord / range) * range;
+    ALPAKA_FN_ACC inline constexpr auto normalizeCoordinate(TData coord, int dim) const {
+      const auto range = minmax->range(dim);
+      auto remainder = coord - static_cast<int>(coord / range) * range;
       if (remainder >= minmax->max(dim))
         remainder -= range;
       else if (remainder < minmax->min(dim))
@@ -103,9 +104,9 @@ namespace clue::internal {
       return remainder;
     }
 
-    ALPAKA_FN_ACC inline auto distance(const std::array<float, Ndim + 1>& coord_i,
-                                       const std::array<float, Ndim + 1>& coord_j) const {
-      std::array<float, Ndim> distance_vector;
+    ALPAKA_FN_ACC inline auto distance(const std::array<TData, Ndim + 1>& coord_i,
+                                       const std::array<TData, Ndim + 1>& coord_j) const {
+      std::array<TData, Ndim> distance_vector;
       for (auto dim = 0u; dim != Ndim; ++dim) {
         if (wrapping[dim])
           distance_vector[dim] = math::fabs(normalizeCoordinate(coord_i[dim] - coord_j[dim], dim));

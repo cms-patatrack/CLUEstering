@@ -65,7 +65,7 @@ TEST_CASE("Test get_clusters host function") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/data_32768.csv";
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
+  clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -80,7 +80,7 @@ TEST_CASE("Test get_clusters device function") {
   clue::Queue queue(device);
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/data_32768.csv";
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, test_file_path);
+  clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
@@ -95,14 +95,16 @@ TEST_CASE("Test I/O with non-existent file") {
     auto queue = clue::get_queue(0u);
 
     const std::string invalid_file_path = "non_existent_file.csv";
+    auto invalid_call = [&] { clue::read_csv<2, float>(queue, invalid_file_path); };
 
-    CHECK_THROWS_AS(clue::read_csv<2>(queue, invalid_file_path), std::runtime_error);
+    CHECK_THROWS_AS(invalid_call(), std::runtime_error);
   }
   SUBCASE("read_output with non-existent file") {
     auto queue = clue::get_queue(0u);
 
     const std::string invalid_file_path = "non_existent_file.csv";
+    auto invalid_call = [&] { clue::read_csv<2, float>(queue, invalid_file_path); };
 
-    CHECK_THROWS_AS(clue::read_output<2>(queue, invalid_file_path), std::runtime_error);
+    CHECK_THROWS_AS(invalid_call(), std::runtime_error);
   }
 }

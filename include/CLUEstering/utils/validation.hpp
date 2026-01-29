@@ -5,14 +5,15 @@
 #include "CLUEstering/data_structures/internal/MakeAssociator.hpp"
 #include "CLUEstering/utils/detail/get_clusters.hpp"
 #include <algorithm>
+#include <concepts>
 #include <ranges>
 #include <span>
 #include <vector>
 
 namespace clue {
 
-  template <std::size_t Ndim>
-  inline bool validate_results(PointsHost<Ndim>& results, PointsHost<Ndim>& truth) {
+  template <std::size_t Ndim, std::floating_point TData = float>
+  inline bool validate_results(PointsHost<Ndim, TData>& results, PointsHost<Ndim, TData>& truth) {
     auto result_clusters_sizes = results.cluster_sizes();
     auto truth_clusters_sizes = truth.cluster_sizes();
     std::ranges::sort(result_clusters_sizes);

@@ -7,13 +7,14 @@
 #include "CLUEstering/utils/get_clusters.hpp"
 #include <algorithm>
 #include <array>
+#include <concepts>
 #include <vector>
 
 namespace clue {
 
-  template <std::size_t Ndim>
-  inline Centroid<Ndim> cluster_centroid(const clue::PointsHost<Ndim>& points,
-                                         std::size_t cluster_id) {
+  template <std::size_t Ndim, std::floating_point TData>
+  inline Centroid<Ndim, TData> cluster_centroid(const clue::PointsHost<Ndim, TData>& points,
+                                                std::size_t cluster_id) {
     assert(points.clustered());
     auto cluster_ids = points.clusterIndexes();
     auto clusters = get_clusters(points);
@@ -31,14 +32,14 @@ namespace clue {
                           centroid[dim] += coord;
                         }
                       });
-      centroid[dim] /= static_cast<float>(size);
+      centroid[dim] /= static_cast<TData>(size);
     }
 
     return centroid;
   }
 
-  template <std::size_t Ndim>
-  inline Centroids<Ndim> cluster_centroids(const clue::PointsHost<Ndim>& points) {
+  template <std::size_t Ndim, std::floating_point TData>
+  inline Centroids<Ndim, TData> cluster_centroids(const clue::PointsHost<Ndim, TData>& points) {
     assert(points.clustered());
     auto cluster_ids = points.clusterIndexes();
     auto clusters = get_clusters(points);
@@ -57,7 +58,7 @@ namespace clue {
                       });
       std::ranges::for_each(centroids, [&, dim, cl = 0](auto& centroid) mutable {
         const auto size = clusters.count(cl);
-        centroid[dim] /= static_cast<float>(size);
+        centroid[dim] /= static_cast<TData>(size);
         ++cl;
       });
     }

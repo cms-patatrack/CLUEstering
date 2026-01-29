@@ -14,8 +14,9 @@
 #include <stdexcept>
 
 namespace clue {
-  template <std::size_t NDim, concepts::queue TQueue>
-  inline clue::PointsHost<NDim> read_csv(TQueue& queue, const std::string& file_path) {
+
+  template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
+  inline clue::PointsHost<NDim, TData> read_csv(TQueue& queue, const std::string& file_path) {
     std::fstream file(file_path);
     if (!file.is_open()) {
       throw std::runtime_error("Could not open file: " + file_path);
@@ -24,7 +25,7 @@ namespace clue {
         std::count(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') -
         1;
 
-    clue::PointsHost<NDim> points(queue, n_points);
+    clue::PointsHost<NDim, TData> points(queue, n_points);
 
     file = std::fstream(file_path);
     // discard the header
@@ -35,7 +36,7 @@ namespace clue {
       std::stringstream buffer_stream(buffer);
       std::string value;
 
-      for (size_t dim = 0; dim < NDim; ++dim) {
+      for (auto dim = 0u; dim < NDim; ++dim) {
         getline(buffer_stream, value, ',');
         points.coords(dim)[point_id] = std::stof(value);
       }
@@ -48,8 +49,8 @@ namespace clue {
     return points;
   }
 
-  template <std::size_t NDim, concepts::queue TQueue>
-  inline clue::PointsHost<NDim> read_output(TQueue& queue, const std::string& file_path) {
+  template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
+  inline clue::PointsHost<NDim, TData> read_output(TQueue& queue, const std::string& file_path) {
     std::fstream file(file_path);
     if (!file.is_open()) {
       throw std::runtime_error("Could not open file: " + file_path);
@@ -70,7 +71,7 @@ namespace clue {
       std::stringstream buffer_stream(buffer);
       std::string value;
 
-      for (size_t dim = 0; dim < NDim; ++dim) {
+      for (auto dim = 0u; dim < NDim; ++dim) {
         getline(buffer_stream, value, ',');
         view.coords[dim][point_id] = std::stof(value);
       }
@@ -85,4 +86,5 @@ namespace clue {
 
     return points;
   }
+
 }  // namespace clue

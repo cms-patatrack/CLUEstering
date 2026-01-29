@@ -14,25 +14,26 @@
 
 namespace py = pybind11;
 
-template <std::size_t Ndim, clue::concepts::convolutional_kernel Kernel>
-void run(float dc,
-         float rhoc,
-         float dm,
-         float seed_dc,
+template <std::floating_point TData, std::size_t Ndim, clue::concepts::convolutional_kernel Kernel>
+void run(TData dc,
+         TData rhoc,
+         TData dm,
+         TData seed_dc,
          int pPBin,
          std::vector<uint8_t>&& wrapped,
-         std::tuple<float*, int*>&& pData,
+         std::tuple<TData*, int*>&& pData,
          int32_t n_points,
          const Kernel& kernel,
          clue::Queue queue,
          size_t block_size) {
-  clue::Clusterer<Ndim> algo(queue, dc, rhoc, dm, seed_dc, pPBin);
+  clue::Clusterer<Ndim, TData> algo(queue, dc, rhoc, dm, seed_dc, pPBin);
   algo.setWrappedCoordinates(std::move(wrapped));
 
-  clue::PointsHost<Ndim> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
-  clue::PointsDevice<Ndim> d_points(queue, n_points);
+  clue::PointsHost<Ndim, TData> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
+  clue::PointsDevice<Ndim, TData> d_points(queue, n_points);
 
-  algo.make_clusters(queue, h_points, d_points, clue::EuclideanMetric<Ndim>{}, kernel, block_size);
+  algo.make_clusters(
+      queue, h_points, d_points, clue::EuclideanMetric<Ndim, TData>{}, kernel, block_size);
 }
 
 namespace ALPAKA_BACKEND {
@@ -51,14 +52,14 @@ namespace ALPAKA_BACKEND {
     }
   }
 
-  template <clue::concepts::convolutional_kernel Kernel>
-  void mainRun(float dc,
-               float rhoc,
-               float dm,
-               float seed_dc,
+  template <std::floating_point TData, clue::concepts::convolutional_kernel Kernel>
+  void mainRun(TData dc,
+               TData rhoc,
+               TData dm,
+               TData seed_dc,
                int pPBin,
                std::vector<uint8_t> wrapped,
-               py::array_t<float> data,
+               py::array_t<TData> data,
                py::array_t<int> results,
                const Kernel& kernel,
                int Ndim,
@@ -66,7 +67,7 @@ namespace ALPAKA_BACKEND {
                size_t block_size,
                size_t device_id) {
     auto rData = data.request();
-    auto* pData = static_cast<float*>(rData.ptr);
+    auto* pData = static_cast<TData*>(rData.ptr);
     auto rResults = results.request();
     auto* pResults = static_cast<int*>(rResults.ptr);
 
@@ -75,134 +76,134 @@ namespace ALPAKA_BACKEND {
     // Running the clustering algorithm //
     switch (Ndim) {
       [[unlikely]] case (1):
-        run<1, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
+        run<TData, 1, Kernel>(dc,
+                              rhoc,
+                              dm,
+                              seed_dc,
+                              pPBin,
+                              std::move(wrapped),
+                              std::make_tuple(pData, pResults),
+                              n_points,
+                              kernel,
+                              queue,
+                              block_size);
         return;
       [[likely]] case (2):
-        run<2, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
+        run<TData, 2, Kernel>(dc,
+                              rhoc,
+                              dm,
+                              seed_dc,
+                              pPBin,
+                              std::move(wrapped),
+                              std::make_tuple(pData, pResults),
+                              n_points,
+                              kernel,
+                              queue,
+                              block_size);
         return;
       [[likely]] case (3):
-        run<3, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
+        run<TData, 3, Kernel>(dc,
+                              rhoc,
+                              dm,
+                              seed_dc,
+                              pPBin,
+                              std::move(wrapped),
+                              std::make_tuple(pData, pResults),
+                              n_points,
+                              kernel,
+                              queue,
+                              block_size);
         return;
       [[unlikely]] case (4):
-        run<4, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
+        run<TData, 4, Kernel>(dc,
+                              rhoc,
+                              dm,
+                              seed_dc,
+                              pPBin,
+                              std::move(wrapped),
+                              std::make_tuple(pData, pResults),
+                              n_points,
+                              kernel,
+                              queue,
+                              block_size);
         return;
       [[unlikely]] case (5):
-        run<5, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
+        run<TData, 5, Kernel>(dc,
+                              rhoc,
+                              dm,
+                              seed_dc,
+                              pPBin,
+                              std::move(wrapped),
+                              std::make_tuple(pData, pResults),
+                              n_points,
+                              kernel,
+                              queue,
+                              block_size);
         return;
       [[unlikely]] case (6):
-        run<6, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
+        run<TData, 6, Kernel>(dc,
+                              rhoc,
+                              dm,
+                              seed_dc,
+                              pPBin,
+                              std::move(wrapped),
+                              std::make_tuple(pData, pResults),
+                              n_points,
+                              kernel,
+                              queue,
+                              block_size);
         return;
       [[unlikely]] case (7):
-        run<7, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
+        run<TData, 7, Kernel>(dc,
+                              rhoc,
+                              dm,
+                              seed_dc,
+                              pPBin,
+                              std::move(wrapped),
+                              std::make_tuple(pData, pResults),
+                              n_points,
+                              kernel,
+                              queue,
+                              block_size);
         return;
       [[unlikely]] case (8):
-        run<8, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
+        run<TData, 8, Kernel>(dc,
+                              rhoc,
+                              dm,
+                              seed_dc,
+                              pPBin,
+                              std::move(wrapped),
+                              std::make_tuple(pData, pResults),
+                              n_points,
+                              kernel,
+                              queue,
+                              block_size);
         return;
       [[unlikely]] case (9):
-        run<9, Kernel>(dc,
-                       rhoc,
-                       dm,
-                       seed_dc,
-                       pPBin,
-                       std::move(wrapped),
-                       std::make_tuple(pData, pResults),
-                       n_points,
-                       kernel,
-                       queue,
-                       block_size);
+        run<TData, 9, Kernel>(dc,
+                              rhoc,
+                              dm,
+                              seed_dc,
+                              pPBin,
+                              std::move(wrapped),
+                              std::make_tuple(pData, pResults),
+                              n_points,
+                              kernel,
+                              queue,
+                              block_size);
         return;
       [[unlikely]] case (10):
-        run<10, Kernel>(dc,
-                        rhoc,
-                        dm,
-                        seed_dc,
-                        pPBin,
-                        std::move(wrapped),
-                        std::make_tuple(pData, pResults),
-                        n_points,
-                        kernel,
-                        queue,
-                        block_size);
+        run<TData, 10, Kernel>(dc,
+                               rhoc,
+                               dm,
+                               seed_dc,
+                               pPBin,
+                               std::move(wrapped),
+                               std::make_tuple(pData, pResults),
+                               n_points,
+                               kernel,
+                               queue,
+                               block_size);
         return;
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";

@@ -8,9 +8,9 @@
 PYBIND11_MODULE(CLUE_Convolutional_Kernels, m) {
   m.doc() = "Binding of the convolutional kernels used in the CLUE algorithm.";
 
-  pybind11::class_<clue::FlatKernel>(m, "FlatKernel").def(pybind11::init<float>());
-  pybind11::class_<clue::ExponentialKernel>(m, "ExponentialKernel")
+  pybind11::class_<clue::FlatKernel<float>>(m, "FlatKernel").def(pybind11::init<float>());
+  pybind11::class_<clue::ExponentialKernel<float>>(m, "ExponentialKernel")
       .def(pybind11::init<float, float>());
-  pybind11::class_<clue::GaussianKernel>(m, "GaussianKernel")
+  pybind11::class_<clue::GaussianKernel<float>>(m, "GaussianKernel")
       .def(pybind11::init<float, float, float>());
 }

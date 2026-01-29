@@ -9,6 +9,7 @@
 #include "CLUEstering/utils/get_clusters.hpp"
 #include <algorithm>
 #include <cassert>
+#include <concepts>
 #include <cstddef>
 #include <span>
 
@@ -34,14 +35,14 @@ namespace clue {
 
   }  // namespace detail
 
-  template <std::size_t Ndim>
-  inline auto get_clusters(const PointsHost<Ndim>& points) {
+  template <std::size_t Ndim, std::floating_point TData>
+  inline auto get_clusters(const PointsHost<Ndim, TData>& points) {
     assert(points.clustered());
     return detail::get_clusters(points.clusterIndexes());
   }
 
-  template <concepts::queue TQueue, std::size_t Ndim>
-  inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim>& points) {
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData>
+  inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim, TData>& points) {
     assert(points.clustered());
     return detail::get_clusters(queue, points.clusterIndexes());
   }

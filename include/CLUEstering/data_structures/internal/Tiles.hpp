@@ -10,21 +10,23 @@
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
+#include <concepts>
 #include <cstddef>
-#include <cstdint>
 #include <cstdint>
 #include <alpaka/alpaka.hpp>
 
 namespace clue::internal {
 
-  template <std::size_t Ndim, clue::concepts::device TDev>
+  template <std::size_t Ndim, std::floating_point TData, clue::concepts::device TDev>
   class Tiles {
   public:
+    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+
     template <clue::concepts::queue TQueue>
     Tiles(TQueue& queue, int32_t n_points, int32_t n_tiles, std::size_t batch_size = 1)
         : m_assoc{AssociationMap<TDev>(n_points, n_tiles * batch_size, queue)},
-          m_minmax{make_device_buffer<CoordinateExtremes<Ndim>>(queue)},
-          m_tilesizes{make_device_buffer<float[Ndim]>(queue)},
+          m_minmax{make_device_buffer<CoordinateExtremes<Ndim, value_type>>(queue)},
+          m_tilesizes{make_device_buffer<value_type[Ndim]>(queue)},
           m_wrapped{make_device_buffer<uint8_t[Ndim]>(queue)},
           m_ntiles{n_tiles},
           m_nperdim{static_cast<int32_t>(std::pow(n_tiles, 1.f / Ndim))},
@@ -40,8 +42,8 @@ namespace clue::internal {
       m_view.nperdim = m_nperdim;
     }
 
-    const TilesView<Ndim>& view() const { return m_view; }
-    TilesView<Ndim>& view() { return m_view; }
+    const auto& view() const { return m_view; }
+    auto& view() { return m_view; }
 
     template <clue::concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(TQueue& queue,
@@ -84,11 +86,11 @@ namespace clue::internal {
     }
 
     struct GetGlobalBin {
-      PointsView<Ndim> pointsView;
-      TilesView<Ndim> tilesView;
+      PointsView<Ndim, TData> pointsView;
+      TilesView<Ndim, TData> tilesView;
 
       ALPAKA_FN_ACC int32_t operator()(int32_t index, std::size_t event = 0) const {
-        float coords[Ndim];
+        value_type coords[Ndim];
         for (auto dim = 0u; dim < Ndim; ++dim) {
           coords[dim] = pointsView.coords[dim][index];
         }
@@ -99,7 +101,10 @@ namespace clue::internal {
     };
 
     template <clue::concepts::accelerator TAcc, clue::concepts::queue TQueue>
-    ALPAKA_FN_HOST void fill(TQueue& queue, PointsDevice<Ndim, TDev>& d_points, size_t size) {
+
+    ALPAKA_FN_HOST void fill(TQueue& queue,
+                             PointsDevice<Ndim, TData, TDev>& d_points,
+                             size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
       m_assoc.template fill<TAcc>(size, GetGlobalBin{pointsView, m_view}, queue);
@@ -107,7 +112,7 @@ namespace clue::internal {
 
     template <clue::concepts::accelerator TAcc, clue::concepts::queue TQueue>
     ALPAKA_FN_HOST void fill_batch(TQueue& queue,
-                                   PointsDevice<Ndim, TDev>& d_points,
+                                   PointsDevice<Ndim, TData, TDev>& d_points,
                                    size_t size,
                                    const auto& event_offsets,
                                    std::size_t max_event_size) {
@@ -117,10 +122,11 @@ namespace clue::internal {
           queue, size, GetGlobalBin{pointsView, m_view}, event_offsets, max_event_size);
     }
 
-    ALPAKA_FN_HOST inline clue::device_buffer<TDev, CoordinateExtremes<Ndim>> minMax() const {
+    ALPAKA_FN_HOST inline clue::device_buffer<TDev, CoordinateExtremes<Ndim, value_type>> minMax()
+        const {
       return m_minmax;
     }
-    ALPAKA_FN_HOST inline clue::device_buffer<TDev, float[Ndim]> tileSize() const {
+    ALPAKA_FN_HOST inline clue::device_buffer<TDev, value_type[Ndim]> tileSize() const {
       return m_tilesizes;
     }
     ALPAKA_FN_HOST inline clue::device_buffer<TDev, uint8_t[Ndim]> wrapped() const {
@@ -135,13 +141,13 @@ namespace clue::internal {
 
   private:
     AssociationMap<TDev> m_assoc;
-    device_buffer<TDev, CoordinateExtremes<Ndim>> m_minmax;
-    device_buffer<TDev, float[Ndim]> m_tilesizes;
+    device_buffer<TDev, CoordinateExtremes<Ndim, value_type>> m_minmax;
+    device_buffer<TDev, value_type[Ndim]> m_tilesizes;
     device_buffer<TDev, uint8_t[Ndim]> m_wrapped;
     int32_t m_ntiles;
     int32_t m_nperdim;
     std::size_t m_batch_size;
-    TilesView<Ndim> m_view;
+    TilesView<Ndim, value_type> m_view;
   };
 
 }  // namespace clue::internal

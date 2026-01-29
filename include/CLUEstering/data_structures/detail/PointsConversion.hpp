@@ -7,14 +7,15 @@
 #include "CLUEstering/internal/meta/apply.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include <alpaka/alpaka.hpp>
+#include <concepts>
 #include <cstddef>
 
 namespace clue {
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   inline void copyToHost(TQueue& queue,
-                         PointsHost<Ndim>& h_points,
-                         const PointsDevice<Ndim, TDev>& d_points) {
+                         PointsHost<Ndim, TData>& h_points,
+                         const PointsDevice<Ndim, TData, TDev>& d_points) {
     alpaka::memcpy(
         queue,
         make_host_view(h_points.m_view.cluster_index, h_points.size()),
@@ -22,9 +23,9 @@ namespace clue {
     h_points.mark_clustered();
   }
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
-  inline auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TDev>& d_points) {
-    PointsHost<Ndim> h_points(queue, d_points.size());
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  inline auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TData, TDev>& d_points) {
+    PointsHost<Ndim, TData> h_points(queue, d_points.size());
 
     alpaka::memcpy(
         queue,
@@ -35,10 +36,10 @@ namespace clue {
     return h_points;
   }
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   inline void copyToDevice(TQueue& queue,
-                           PointsDevice<Ndim, TDev>& d_points,
-                           const PointsHost<Ndim>& h_points) {
+                           PointsDevice<Ndim, TData, TDev>& d_points,
+                           const PointsHost<Ndim, TData>& h_points) {
     meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
       alpaka::memcpy(
           queue,
@@ -50,9 +51,9 @@ namespace clue {
                    make_host_view(h_points.m_view.weight, h_points.size()));
   }
 
-  template <concepts::queue TQueue, std::size_t Ndim, concepts::device TDev>
-  inline auto copyToDevice(TQueue& queue, const PointsHost<Ndim>& h_points) {
-    PointsDevice<Ndim, TDev> d_points(queue, h_points.size());
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  inline auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TData>& h_points) {
+    PointsDevice<Ndim, TData, TDev> d_points(queue, h_points.size());
 
     meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
       alpaka::memcpy(

@@ -11,7 +11,7 @@ void run(const std::string& input_file) {
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);
 
-  auto h_points = clue::read_csv<2>(queue, input_file);
+  auto h_points = clue::read_csv<2, float>(queue, input_file);
   clue::PointsDevice<2> d_points(queue, h_points.size());
 
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};

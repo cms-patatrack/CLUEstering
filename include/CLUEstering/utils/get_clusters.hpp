@@ -7,6 +7,7 @@
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include <concepts>
 #include <cstddef>
 
 namespace clue {
@@ -18,8 +19,9 @@ namespace clue {
   /// @return An AssociationMap where each key is a cluster index and the associated values
   /// are the indices of the points belonging to that cluster
   /// @tparam Ndim The number of dimensions of the points
-  template <std::size_t Ndim>
-  inline auto get_clusters(const PointsHost<Ndim>& points);
+  /// @tparam TData The data type for the point coordinates and weights
+  template <std::size_t Ndim, std::floating_point TData = float>
+  inline auto get_clusters(const PointsHost<Ndim, TData>& points);
 
   /// @brief Construct a map associating clusters to points
   /// This overload works on device points and returns a map allocated on the device.
@@ -29,8 +31,9 @@ namespace clue {
   /// are the indices of the points belonging to that cluster
   /// @tparam TQueue The type of queue to use for device computations
   /// @tparam Ndim The number of dimensions of the points
-  template <concepts::queue TQueue, std::size_t Ndim>
-  inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim>& points);
+  /// @tparam TData The data type for the point coordinates and weights
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData = float>
+  inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim, TData>& points);
 
 }  // namespace clue
 

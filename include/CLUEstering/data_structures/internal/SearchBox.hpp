@@ -18,8 +18,8 @@ namespace clue {
     std::array<std::array<T, 2>, Ndim> m_extremes;
   };
 
-  template <std::size_t Ndim>
-  using SearchBoxExtremes = SearchBox<Ndim, float>;
+  template <std::size_t Ndim, std::floating_point TData = float>
+  using SearchBoxExtremes = SearchBox<Ndim, std::remove_cv_t<std::remove_reference_t<TData>>>;
 
   template <std::size_t Ndim>
   using SearchBoxBins = SearchBox<Ndim, int32_t>;
