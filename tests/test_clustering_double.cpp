@@ -29,7 +29,8 @@ TEST_CASE("Test clustering on benchmarking datasets with double precision") {
     const auto n_points = h_points.size();
     clue::PointsDevice<2, double> d_points(queue, n_points);
 
-    algo.make_clusters(queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
+    algo.template make_clusters<clue::FlatKernel<double>, clue::EuclideanMetric<2, double>>(
+        queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
 
     CHECK(clue::silhouette(h_points) >= 0.9);
   }
@@ -47,7 +48,8 @@ TEST_CASE("Test clustering on aniso dataset with double precision") {
   const double dc{25.}, rhoc{5.}, outlier{23.};
   clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
-  algo.make_clusters(queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
+  algo.template make_clusters<clue::FlatKernel<double>, clue::EuclideanMetric<2, double>>(
+      queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
   // TODO: use a better metric for anisotropic data
   // like Davies-Bouldin index
   // CHECK(clue::silhouette(h_points) >= 0.9);
@@ -65,7 +67,8 @@ TEST_CASE("Test clustering on sissa 1000 dataset with double precision") {
   const double dc{20.}, rhoc{10.}, outlier{20.};
   clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
-  algo.make_clusters(queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
+  algo.template make_clusters<clue::FlatKernel<double>, clue::EuclideanMetric<2, double>>(
+      queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
 
   CHECK(clue::silhouette(h_points) >= 0.5);
 }
@@ -82,7 +85,8 @@ TEST_CASE("Test clustering on sissa 4000 dataset with double precision") {
   const double dc{20.}, rhoc{10.}, outlier{20.};
   clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
-  algo.make_clusters(queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
+  algo.template make_clusters<clue::FlatKernel<double>, clue::EuclideanMetric<2, double>>(
+      queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
 
   CHECK(clue::silhouette(h_points) >= 0.45);
 }
@@ -99,7 +103,8 @@ TEST_CASE("Test clustering on toy detector 1000 dataset with double precision") 
   const double dc{4.}, rhoc{2.5}, outlier{4.};
   clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
-  algo.make_clusters(queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
+  algo.template make_clusters<clue::FlatKernel<double>, clue::EuclideanMetric<2, double>>(
+      queue, h_points, d_points, clue::EuclideanMetric<2, double>{}, clue::FlatKernel<double>{0.5});
 
   CHECK(clue::silhouette(h_points) >= 0.8);
 }
@@ -116,7 +121,8 @@ TEST_CASE("Test clustering on blob dataset with double precision") {
   const double dc{1.}, rhoc{5.}, outlier{2.};
   clue::Clusterer<3, double> algo(queue, dc, rhoc, outlier);
 
-  algo.make_clusters(queue, h_points, d_points, clue::EuclideanMetric<3, double>{}, clue::FlatKernel<double>{0.5});
+  algo.template make_clusters<clue::FlatKernel<double>, clue::EuclideanMetric<3, double>>(
+      queue, h_points, d_points, clue::EuclideanMetric<3, double>{}, clue::FlatKernel<double>{0.5});
 
   CHECK(clue::silhouette(h_points) >= 0.8);
 }
@@ -131,7 +137,7 @@ TEST_CASE("Test clustering on data with periodic coordinates and double precisio
   clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
   algo.setWrappedCoordinates(0, 1);
-  algo.make_clusters(
+  algo.template make_clusters<clue::FlatKernel<double>, clue::metrics::PeriodicEuclidean<2, double>>(
       queue,
       points,
       clue::metrics::PeriodicEuclidean<2, double>(std::array<double, 2>{0., 2. * std::numbers::pi_v<double>}),
