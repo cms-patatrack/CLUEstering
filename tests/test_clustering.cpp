@@ -262,7 +262,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
     algo.setWrappedCoordinates(0, 1);
     algo.make_clusters(queue,
                        points,
-                       clue::metrics::PeriodicEuclidean(
+                       clue::metrics::PeriodicEuclidean<double>(
                            std::array<double, 2>{0., 2. * std::numbers::pi_v<double>}));
     CHECK(points.n_clusters() == 1);
   }
