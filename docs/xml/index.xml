@@ -1,0 +1,355 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.13.2" xml:lang="en-US">
+  <compound refid="classclue_1_1AssociationMap" kind="class"><name>clue::AssociationMap</name>
+    <member refid="classclue_1_1AssociationMap_1ab7640a3b2e0c7c968b4d96f3c9203eef" kind="typedef"><name>key_type</name></member>
+    <member refid="classclue_1_1AssociationMap_1aeda3d00e89348a20597393103e8fab43" kind="typedef"><name>mapped_type</name></member>
+    <member refid="classclue_1_1AssociationMap_1af5dad821ac129041c18b62acd305b03a" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1AssociationMap_1a274be1f44715ada258492974b84cbeb8" kind="typedef"><name>size_type</name></member>
+    <member refid="classclue_1_1AssociationMap_1abf09e578b4ae2f5504856a47b71b4efd" kind="typedef"><name>iterator</name></member>
+    <member refid="classclue_1_1AssociationMap_1aff156b743cfa5f17e130378603481da1" kind="typedef"><name>const_iterator</name></member>
+    <member refid="classclue_1_1AssociationMap_1a6868e4cac62702a4b124b197a6d8f8f0" kind="typedef"><name>keys_container_type</name></member>
+    <member refid="classclue_1_1AssociationMap_1a2259bd09b88cfa6010f69b8561d2d027" kind="typedef"><name>mapped_container_type</name></member>
+    <member refid="classclue_1_1AssociationMap_1a08340c9ec72b744086973f04f4fa8568" kind="variable"><name>m_indexes</name></member>
+    <member refid="classclue_1_1AssociationMap_1a9e0159751b5c56dbd793ee5ffca18bfb" kind="variable"><name>m_offsets</name></member>
+    <member refid="classclue_1_1AssociationMap_1a667249d57ed8b6329bb085a3c7971a80" kind="variable"><name>m_view</name></member>
+    <member refid="classclue_1_1AssociationMap_1a330bab3eea82e864cd7502b071884d5d" kind="variable"><name>m_extents</name></member>
+    <member refid="classclue_1_1AssociationMap_1a210ee89c60e4669813bdda9f0ae36517" kind="function"><name>AssociationMap</name></member>
+    <member refid="classclue_1_1AssociationMap_1a9d63d31754a9c934ab97b66b683facf3" kind="function"><name>AssociationMap</name></member>
+    <member refid="classclue_1_1AssociationMap_1a03a2b802bb2f948a05814ee2b638f49b" kind="function"><name>AssociationMap</name></member>
+    <member refid="classclue_1_1AssociationMap_1a5cc1c5519c84188e267a29a2b4be50b1" kind="function"><name>size</name></member>
+    <member refid="classclue_1_1AssociationMap_1aa1b1c333ac2590236db9f3fc539b5780" kind="function"><name>extents</name></member>
+    <member refid="classclue_1_1AssociationMap_1ae1aca74e7f7052a25e9fbd52dc19dc8b" kind="function"><name>begin</name></member>
+    <member refid="classclue_1_1AssociationMap_1ac80051f92121b9f57b60969c5f8cfd06" kind="function"><name>begin</name></member>
+    <member refid="classclue_1_1AssociationMap_1af590d7a186ba7b7768099cbf0765413b" kind="function"><name>cbegin</name></member>
+    <member refid="classclue_1_1AssociationMap_1a9223f5b3a1b20eaed9480f20a3dac039" kind="function"><name>end</name></member>
+    <member refid="classclue_1_1AssociationMap_1a21cf216ee48cb9f0d8a2eda98f7fb0f0" kind="function"><name>end</name></member>
+    <member refid="classclue_1_1AssociationMap_1aa299c6c9bbf293d0a018be2756f1a67b" kind="function"><name>cend</name></member>
+    <member refid="classclue_1_1AssociationMap_1ac58d89f41fa4b09035328c16860b36da" kind="function"><name>find</name></member>
+    <member refid="classclue_1_1AssociationMap_1ab0e38574ba06a3c68eeefa13b2ef8d4a" kind="function"><name>find</name></member>
+    <member refid="classclue_1_1AssociationMap_1a392897b0e8b8f2b86a0c26b7099da4f6" kind="function"><name>count</name></member>
+    <member refid="classclue_1_1AssociationMap_1afd8e4452830c44c34e4c2893955054c9" kind="function"><name>contains</name></member>
+    <member refid="classclue_1_1AssociationMap_1ad31e53571666e30eef68510e903d3363" kind="function"><name>lower_bound</name></member>
+    <member refid="classclue_1_1AssociationMap_1a54f37798de3521f0c92244cd9f900785" kind="function"><name>lower_bound</name></member>
+    <member refid="classclue_1_1AssociationMap_1ad641bc369531f62767066885e39e62fe" kind="function"><name>upper_bound</name></member>
+    <member refid="classclue_1_1AssociationMap_1ac947d4704dd03f397a682a6c587df758" kind="function"><name>upper_bound</name></member>
+    <member refid="classclue_1_1AssociationMap_1a2214fead94f7cef09fdfddb4cc4d1467" kind="function"><name>equal_range</name></member>
+    <member refid="classclue_1_1AssociationMap_1a0e68e83e21a54ec60e6ddbcb0d2ebc04" kind="function"><name>equal_range</name></member>
+    <member refid="classclue_1_1AssociationMap_1a45f92263d3374178b84b626e44aa24fa" kind="function"><name>extract</name></member>
+    <member refid="classclue_1_1AssociationMap_1aeb715d905c892d88023a567e178f342b" kind="function"><name>view</name></member>
+    <member refid="classclue_1_1AssociationMap_1adf9012b51041bbf607a6780a54074954" kind="function"><name>view</name></member>
+    <member refid="classclue_1_1AssociationMap_1a7d1c2b76f6d8c55275199d43d6374032" kind="function"><name>initialize</name></member>
+    <member refid="classclue_1_1AssociationMap_1a6b41c241092381df6744c41bb5c567af" kind="function"><name>initialize</name></member>
+    <member refid="classclue_1_1AssociationMap_1ae8bdd29191e460f14da5bc5e883848b8" kind="function"><name>reset</name></member>
+    <member refid="classclue_1_1AssociationMap_1a2372a7435326ffdc8ebcc9b9c609835c" kind="function"><name>fill</name></member>
+    <member refid="classclue_1_1AssociationMap_1a4ed4e85ae193f45531a2219d0b3e4f84" kind="function"><name>fill</name></member>
+    <member refid="classclue_1_1AssociationMap_1aa65517595b3debee558c1698bca046ed" kind="function"><name>fill</name></member>
+    <member refid="classclue_1_1AssociationMap_1ab2a7f9bade598959612fc3c9acb4e5a4" kind="function"><name>fill_batch</name></member>
+    <member refid="classclue_1_1AssociationMap_1a21749e604b0bad9f81cf354c58b796bc" kind="function"><name>indexes</name></member>
+    <member refid="classclue_1_1AssociationMap_1a609c8abb7e698a8bb9b7a92460f96575" kind="function"><name>indexes</name></member>
+    <member refid="classclue_1_1AssociationMap_1a888af7761de4f63c6ba84dd9f8a06102" kind="function"><name>offsets</name></member>
+    <member refid="classclue_1_1AssociationMap_1a97dedc4455a78389ba5c6eaccecfbd2d" kind="function"><name>offsets</name></member>
+  </compound>
+  <compound refid="classclue_1_1AssociationMapView" kind="class"><name>clue::AssociationMapView</name>
+    <member refid="classclue_1_1AssociationMapView_1ae3a2e54654ece6a26e6b8cbcf2afd004" kind="variable"><name>m_indexes</name></member>
+    <member refid="classclue_1_1AssociationMapView_1afcd3796b533504f41ae2d53c86522336" kind="variable"><name>m_offsets</name></member>
+    <member refid="classclue_1_1AssociationMapView_1a56310e7898910ae9ed2e5eaf6d4bb324" kind="variable"><name>m_extents</name></member>
+    <member refid="classclue_1_1AssociationMapView_1a95d1a0cdc33b9c9d3204fc83a803426e" kind="function"><name>AssociationMapView</name></member>
+    <member refid="classclue_1_1AssociationMapView_1ab9e508e970dfa68ce1a6316e4be73529" kind="function"><name>AssociationMapView</name></member>
+    <member refid="classclue_1_1AssociationMapView_1a4001c97106648a9d371abafb2fa01020" kind="function"><name>extents</name></member>
+    <member refid="classclue_1_1AssociationMapView_1a79f75504e9a1eb11973d3713999b0bb9" kind="function"><name>operator[]</name></member>
+    <member refid="classclue_1_1AssociationMapView_1af1ceb56184b34a25d4f4f25f0efb76b6" kind="function"><name>operator[]</name></member>
+    <member refid="classclue_1_1AssociationMapView_1aeb61737c8bc2583e9488348dfcd0bc52" kind="function"><name>count</name></member>
+    <member refid="classclue_1_1AssociationMapView_1ac5e6f97791d272ffa7db643aaa545a87" kind="function"><name>contains</name></member>
+  </compound>
+  <compound refid="classclue_1_1ChebyshevMetric" kind="class"><name>clue::ChebyshevMetric</name>
+    <member refid="classclue_1_1ChebyshevMetric_1adcc4bd7cae3d27b24e33d84abdfa4f9d" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1ChebyshevMetric_1adc9b62c51366176c2cc0641352a412a7" kind="function"><name>ChebyshevMetric</name></member>
+    <member refid="classclue_1_1ChebyshevMetric_1ac4ed577525b38edd29f1e416b4ac0930" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classclue_1_1Clusterer" kind="class"><name>clue::Clusterer</name>
+    <member refid="classclue_1_1Clusterer_1a4fd2e7d01467653d422abb69ea1857da" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1Clusterer_1a041fd21a35c86519d9a161f2ab866c67" kind="typedef"><name>CoordinateExtremes</name></member>
+    <member refid="classclue_1_1Clusterer_1af2c676de6358b68ab6b8ae75bd48cffc" kind="typedef"><name>PointsHost</name></member>
+    <member refid="classclue_1_1Clusterer_1a3182a4105642650f0087120c8aa59bce" kind="typedef"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1Clusterer_1af546be1742ceef0a87424d949b7bc930" kind="typedef"><name>TilesDevice</name></member>
+    <member refid="classclue_1_1Clusterer_1a6d628c5ae0c0329dfa35633be479e7f4" kind="typedef"><name>FollowersDevice</name></member>
+    <member refid="classclue_1_1Clusterer_1ac356cc57efa8ab7f69ba044366f078dc" kind="typedef"><name>Acc</name></member>
+    <member refid="classclue_1_1Clusterer_1ab23371d543a2698744f6da16e068c301" kind="variable"><name>m_dc</name></member>
+    <member refid="classclue_1_1Clusterer_1a12b51be5e95be9ad7e431e7a334cfe54" kind="variable"><name>m_seed_dc</name></member>
+    <member refid="classclue_1_1Clusterer_1abb75e6e26868e57c5a8fc83e166b0d5b" kind="variable"><name>m_rhoc</name></member>
+    <member refid="classclue_1_1Clusterer_1adb4469f350f3e160044fb8c6820e0f94" kind="variable"><name>m_dm</name></member>
+    <member refid="classclue_1_1Clusterer_1a605eef9f4ea5fe119fd1cbf965d6bea0" kind="variable"><name>m_pointsPerTile</name></member>
+    <member refid="classclue_1_1Clusterer_1a06cb6866a02e3bda5f4b0e649a5ec79a" kind="variable"><name>m_wrappedCoordinates</name></member>
+    <member refid="classclue_1_1Clusterer_1a7637f132776ae6a17689f5824d5a7cfa" kind="variable"><name>m_tiles</name></member>
+    <member refid="classclue_1_1Clusterer_1ac587ae59ce4bc56328913537e442fc03" kind="variable"><name>m_seeds</name></member>
+    <member refid="classclue_1_1Clusterer_1aabf626d9aeec437f0a2cf5021c5cb07a" kind="variable"><name>m_followers</name></member>
+    <member refid="classclue_1_1Clusterer_1af85df48eab30f6b466b40878620f06ef" kind="variable"><name>m_event_associations</name></member>
+    <member refid="classclue_1_1Clusterer_1a87de51435b9fe0395b13008458bc27cf" kind="function"><name>setup</name></member>
+    <member refid="classclue_1_1Clusterer_1ae7434a77dc9ae9d120ef0ee7aa25408d" kind="function"><name>setup_batch</name></member>
+    <member refid="classclue_1_1Clusterer_1ad7de0728b2fe1428782cf74f17b6f4f0" kind="function"><name>setup_batch</name></member>
+    <member refid="classclue_1_1Clusterer_1a8959725b10353f5931012b26e8d6c696" kind="function"><name>make_clusters_impl</name></member>
+    <member refid="classclue_1_1Clusterer_1ade5de0c02f6f18638fc26a9849f77fa5" kind="function"><name>make_clusters_impl</name></member>
+    <member refid="classclue_1_1Clusterer_1ab8b33d21e27fbc72d1a9a0d0a4108856" kind="function"><name>make_clusters_batched</name></member>
+    <member refid="classclue_1_1Clusterer_1a74db15038b0b81a524bc7d85d0ee08e2" kind="function"><name>Clusterer</name></member>
+    <member refid="classclue_1_1Clusterer_1a1dd82e649ad84c44cff7695a03d78210" kind="function"><name>Clusterer</name></member>
+    <member refid="classclue_1_1Clusterer_1aa838d42a2f7e400cd10041657f3160c5" kind="function"><name>setParameters</name></member>
+    <member refid="classclue_1_1Clusterer_1a7f9e33f8a38f222c140dfbed6bc84303" kind="function"><name>make_clusters</name></member>
+    <member refid="classclue_1_1Clusterer_1af235d2170c145eb9826672db90bc1396" kind="function"><name>make_clusters</name></member>
+    <member refid="classclue_1_1Clusterer_1adec96106ffb248f7f0718133202a5c38" kind="function"><name>make_clusters</name></member>
+    <member refid="classclue_1_1Clusterer_1a754166552c117f5a1eabecefd6820af9" kind="function"><name>make_clusters</name></member>
+    <member refid="classclue_1_1Clusterer_1a9960711d4c3cead1a381dbeb0c8edcf4" kind="function"><name>make_clusters</name></member>
+    <member refid="classclue_1_1Clusterer_1af3969728b3eef008a725229fb9c36f44" kind="function"><name>make_clusters</name></member>
+    <member refid="classclue_1_1Clusterer_1abc0a7239ed80a497f9984f031b0b84f4" kind="function"><name>setWrappedCoordinates</name></member>
+    <member refid="classclue_1_1Clusterer_1a7d464ac8431869b2ea961e61a49fa094" kind="function"><name>setWrappedCoordinates</name></member>
+    <member refid="classclue_1_1Clusterer_1a9ab0af5450bf69329b6b61a3afbed53e" kind="function"><name>getClusters</name></member>
+    <member refid="classclue_1_1Clusterer_1ac7809e6cc2b8febadaa365e8a747c96a" kind="function"><name>getClusters</name></member>
+    <member refid="classclue_1_1Clusterer_1a8695b2561d11ca5576e8a16a2eaa20da" kind="function"><name>getSampleAssociations</name></member>
+    <member refid="classclue_1_1Clusterer_1a5bd4e93bc5722efbd99f36d315b19fa6" kind="function"><name>getSampleAssociations</name></member>
+  </compound>
+  <compound refid="classclue_1_1ClusterProperties" kind="class"><name>clue::ClusterProperties</name>
+    <member refid="classclue_1_1ClusterProperties_1af69aaba43521008ef661a94af7dea8ae" kind="variable"><name>m_clusters_to_points</name></member>
+    <member refid="classclue_1_1ClusterProperties_1a409a725979925df47dd37aa9d783bdf2" kind="variable"><name>m_cluster_sizes</name></member>
+    <member refid="classclue_1_1ClusterProperties_1a365610ebb2692dea8b27861a26af37fe" kind="variable"><name>m_nclusters</name></member>
+    <member refid="classclue_1_1ClusterProperties_1ae71458b5280efe95bd41975c8f3d992c" kind="function"><name>ClusterProperties</name></member>
+    <member refid="classclue_1_1ClusterProperties_1a96fa8095683f30afe94c8a4adcf6e285" kind="function"><name>cluster_sizes</name></member>
+    <member refid="classclue_1_1ClusterProperties_1ad74e511195db4b296cdfd25555984238" kind="function"><name>clusters</name></member>
+    <member refid="classclue_1_1ClusterProperties_1a0221d05133958263121670b9fc976eca" kind="function"><name>n_clusters</name></member>
+  </compound>
+  <compound refid="structclue_1_1AssociationMap_1_1Containers" kind="struct"><name>clue::AssociationMap::Containers</name>
+    <member refid="structclue_1_1AssociationMap_1_1Containers_1ac53bae6a09b1cdc49c28e39fe5a8533d" kind="variable"><name>keys</name></member>
+    <member refid="structclue_1_1AssociationMap_1_1Containers_1a263a2e8703e660a8d448bdb15728ccfe" kind="variable"><name>values</name></member>
+  </compound>
+  <compound refid="classclue_1_1EuclideanMetric" kind="class"><name>clue::EuclideanMetric</name>
+    <member refid="classclue_1_1EuclideanMetric_1a0ce90cfe0e1fe965ae47b4c3d64eae90" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1EuclideanMetric_1a3ff344da8df8fa97d8b0f44055ad6c61" kind="function"><name>EuclideanMetric</name></member>
+    <member refid="classclue_1_1EuclideanMetric_1a29189a8742a0a4e89275e669c36a7b66" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classclue_1_1ExponentialKernel" kind="class"><name>clue::ExponentialKernel</name>
+    <member refid="classclue_1_1ExponentialKernel_1ae93f6febb88ff326d18641067e77ebb9" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1ExponentialKernel_1a4385444ff512b00d3d3634459abdbfc0" kind="variable"><name>m_exp_avg</name></member>
+    <member refid="classclue_1_1ExponentialKernel_1aaf65149411580e218f5a3293bd9dc658" kind="variable"><name>m_exp_amplitude</name></member>
+    <member refid="classclue_1_1ExponentialKernel_1a8be995a46df8263ea09dedf9bc0b03b7" kind="function"><name>ExponentialKernel</name></member>
+    <member refid="classclue_1_1ExponentialKernel_1ae21e79f1fdb240caed86b36d7135b97f" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structclue_1_1AssociationMap_1_1Extents" kind="struct"><name>clue::AssociationMap::Extents</name>
+    <member refid="structclue_1_1AssociationMap_1_1Extents_1a2102a2e7343c5d7c9e5e4df3bfaa05e5" kind="variable"><name>keys</name></member>
+    <member refid="structclue_1_1AssociationMap_1_1Extents_1af75e063d38c9f213821f0f8450765459" kind="variable"><name>values</name></member>
+  </compound>
+  <compound refid="structclue_1_1AssociationMapView_1_1Extents" kind="struct"><name>clue::AssociationMapView::Extents</name>
+    <member refid="structclue_1_1AssociationMapView_1_1Extents_1aa99aad2fdc21acea5446118a557d6c6c" kind="variable"><name>keys</name></member>
+    <member refid="structclue_1_1AssociationMapView_1_1Extents_1a8d112a7a835abfcc74c602dfb904bccb" kind="variable"><name>values</name></member>
+  </compound>
+  <compound refid="classclue_1_1FlatKernel" kind="class"><name>clue::FlatKernel</name>
+    <member refid="classclue_1_1FlatKernel_1abff1f845c29664cbb40b82a3e0a88b88" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1FlatKernel_1aa46469ec13d7c16d5e9ac86c8c0fe13a" kind="variable"><name>m_flat</name></member>
+    <member refid="classclue_1_1FlatKernel_1aad675ebe4796ac4525af1102cc7425d6" kind="function"><name>FlatKernel</name></member>
+    <member refid="classclue_1_1FlatKernel_1acd17cb86148f4b948a09c52a3787948c" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classclue_1_1Followers" kind="class"><name>clue::Followers</name>
+  </compound>
+  <compound refid="classclue_1_1GaussianKernel" kind="class"><name>clue::GaussianKernel</name>
+    <member refid="classclue_1_1GaussianKernel_1a7d6d190a04ca95460710cae9ea3e2c6c" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1GaussianKernel_1a2d578f72df31f832e17b74b169cdb184" kind="variable"><name>m_gaus_avg</name></member>
+    <member refid="classclue_1_1GaussianKernel_1a5b75ab73b9cd864bcbe916508d9630d6" kind="variable"><name>m_gaus_std</name></member>
+    <member refid="classclue_1_1GaussianKernel_1aa6e97f0c347e268c3bd927b6a72d1870" kind="variable"><name>m_gaus_amplitude</name></member>
+    <member refid="classclue_1_1GaussianKernel_1a41ec947ef34f699be131662948998040" kind="function"><name>GaussianKernel</name></member>
+    <member refid="classclue_1_1GaussianKernel_1a1ce68adbf808f00fee8f38f2f84fd5b5" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classclue_1_1ManhattanMetric" kind="class"><name>clue::ManhattanMetric</name>
+    <member refid="classclue_1_1ManhattanMetric_1a7b584eb16586942c9c9628856405e53d" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1ManhattanMetric_1acd79e167d0d1f798bfb21bbd32d06db3" kind="function"><name>ManhattanMetric</name></member>
+    <member refid="classclue_1_1ManhattanMetric_1a09a1cf4150e6c4cf5c04d296dcce6967" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classclue_1_1PeriodicEuclideanMetric" kind="class"><name>clue::PeriodicEuclideanMetric</name>
+    <member refid="classclue_1_1PeriodicEuclideanMetric_1ada5df85a61229a17cd3d2ec664e6a24c" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1PeriodicEuclideanMetric_1aba00b999556844110ce01066c57ebd00" kind="variable"><name>m_periods</name></member>
+    <member refid="classclue_1_1PeriodicEuclideanMetric_1a6006f273a33da892b18d02f565e56c21" kind="function"><name>PeriodicEuclideanMetric</name></member>
+    <member refid="classclue_1_1PeriodicEuclideanMetric_1a3cef7a7b1c366b093b2696925180e003" kind="function"><name>PeriodicEuclideanMetric</name></member>
+    <member refid="classclue_1_1PeriodicEuclideanMetric_1a2ae5e025928e66940826acd6dcb9655a" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classclue_1_1PointsHost_1_1Point" kind="class"><name>clue::PointsHost::Point</name>
+    <member refid="classclue_1_1PointsHost_1_1Point_1a879644aebd7121e624ab6331124b6e13" kind="variable"><name>m_coordinates</name></member>
+    <member refid="classclue_1_1PointsHost_1_1Point_1a12c75a623973a079f76d2039578343ec" kind="variable"><name>m_weight</name></member>
+    <member refid="classclue_1_1PointsHost_1_1Point_1aae3f06022ceb4bacb3092dbbf71bf2c6" kind="variable"><name>m_clusterIndex</name></member>
+    <member refid="classclue_1_1PointsHost_1_1Point_1ab68fc65297961d215c6af18c29f4dff3" kind="function"><name>Point</name></member>
+    <member refid="classclue_1_1PointsHost_1_1Point_1ae1a0f5d769d359edaff2f982e8812874" kind="function"><name>operator[]</name></member>
+    <member refid="classclue_1_1PointsHost_1_1Point_1aa329a3a11e0728230d9c535e3591c47a" kind="function"><name>weight</name></member>
+    <member refid="classclue_1_1PointsHost_1_1Point_1a347ffcbd5357e2033d9fcfed4fa99217" kind="function"><name>cluster_index</name></member>
+  </compound>
+  <compound refid="classclue_1_1PointsDevice" kind="class"><name>clue::PointsDevice</name>
+    <member refid="classclue_1_1PointsDevice_1a53873662f344c5d024f1ee6cbac59175" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1PointsDevice_1afbfb9335a40ddfb8f1a9e58927ff2a4d" kind="variable"><name>m_buffer</name></member>
+    <member refid="classclue_1_1PointsDevice_1ac87206647cc4c68a8462f774ae91f0a0" kind="variable"><name>m_view</name></member>
+    <member refid="classclue_1_1PointsDevice_1a7e99787978a52068fcd2cc89c01600bc" kind="variable"><name>m_nclusters</name></member>
+    <member refid="classclue_1_1PointsDevice_1a83877281919774b19ee3af57e211bad3" kind="variable"><name>m_size</name></member>
+    <member refid="classclue_1_1PointsDevice_1aaeb18b41d0ffd26f3e58224b577844c2" kind="variable"><name>m_clustered</name></member>
+    <member refid="classclue_1_1PointsDevice_1af1b1622b393e284d6a4fe70b1019b27a" kind="variable"><name>Ndim_</name></member>
+    <member refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kind="function"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1a3a5da1a2de532106ea59ab2d8bae1acc" kind="function"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1ad60a3cba33627b97b1ea57194166c940" kind="function"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1abf255c010da801b29dc0c70c6cf39f39" kind="function"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1aeb2688ff1086832b3aa687e2f2bc6aaa" kind="function"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1a4e7afc9be0af8709cf374393fc504ce8" kind="function"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1a8a77404df3995b891df8cadf7de6fd33" kind="function"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1a8150025232cba39dc29c91621df94665" kind="function"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1ae713abeadff7921f2f281845d2dae24a" kind="function"><name>operator=</name></member>
+    <member refid="classclue_1_1PointsDevice_1a19e0f93c0817ee4f126ef9f7be2e53df" kind="function"><name>PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1a8b4c78bfcbd907556fb5eb5c314cb542" kind="function"><name>operator=</name></member>
+    <member refid="classclue_1_1PointsDevice_1ac97cbd0e999dcb06838825298578e812" kind="function"><name>~PointsDevice</name></member>
+    <member refid="classclue_1_1PointsDevice_1a9906318d58a619f7f32e2851428a08d4" kind="function"><name>size</name></member>
+    <member refid="classclue_1_1PointsDevice_1a499ee6836f0c06372b6863bcb55afac7" kind="function"><name>coords</name></member>
+    <member refid="classclue_1_1PointsDevice_1a2bb67928f7d28118f838f0891e6fc0a0" kind="function"><name>coords</name></member>
+    <member refid="classclue_1_1PointsDevice_1ad9fbfbf03191af649b751c71d64ae30e" kind="function"><name>weights</name></member>
+    <member refid="classclue_1_1PointsDevice_1a5513a7bcc18c08e1a5c455c464111478" kind="function"><name>weights</name></member>
+    <member refid="classclue_1_1PointsDevice_1a54314bd97f709e1e0a443f8e435a692f" kind="function"><name>clusterIndexes</name></member>
+    <member refid="classclue_1_1PointsDevice_1a6db6082e3e3abff32f940d3266af4b64" kind="function"><name>clusterIndexes</name></member>
+    <member refid="classclue_1_1PointsDevice_1aeb73ee6a2b71317836d60375c16ccf8b" kind="function"><name>clustered</name></member>
+    <member refid="classclue_1_1PointsDevice_1a5b337783d80be5be78437fd79766e0f2" kind="function"><name>view</name></member>
+    <member refid="classclue_1_1PointsDevice_1a4c7fb3df945321890165fdbda8479b27" kind="function"><name>view</name></member>
+    <member refid="classclue_1_1PointsDevice_1a61d44891e6fe9180339cc98dd6cc65cf" kind="function"><name>n_clusters</name></member>
+    <member refid="classclue_1_1PointsDevice_1a0608f3dbc54b72b176670f0cdfe2a4fd" kind="function"><name>mark_clustered</name></member>
+  </compound>
+  <compound refid="classclue_1_1PointsHost" kind="class"><name>clue::PointsHost</name>
+    <member refid="classclue_1_1PointsHost_1a6b9d8b30fa4f7727fccd9f7260acf8c6" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1PointsHost_1a5f3bfd5e0109a06ab290102e62c3d3c6" kind="variable"><name>m_buffer</name></member>
+    <member refid="classclue_1_1PointsHost_1abe5105b4a6ec86d451a840cb0d685859" kind="variable"><name>m_view</name></member>
+    <member refid="classclue_1_1PointsHost_1a28269b5199fb4f1ed92c43979ee60e96" kind="variable"><name>m_clusterProperties</name></member>
+    <member refid="classclue_1_1PointsHost_1ac73dc538cbc855b4c7d768e76f020bf9" kind="variable"><name>m_nclusters</name></member>
+    <member refid="classclue_1_1PointsHost_1a3747b1c198ca8655cfbddf8bdbb0db8f" kind="variable"><name>m_size</name></member>
+    <member refid="classclue_1_1PointsHost_1a5ce90cdf0bba9d56b171ce7205078112" kind="variable"><name>m_clustered</name></member>
+    <member refid="classclue_1_1PointsHost_1a59c4b189ed2ca3e97d625cfa3c3fd523" kind="variable"><name>Ndim_</name></member>
+    <member refid="classclue_1_1PointsHost_1a4a3ab3de2be56623257e13a17637ce4f" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1ae2cc60aaa004d93eef43859e2f2163f0" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1a209e4d40e9b57c783aac92dd79d35ed8" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1aba29538668cd412f297ae6c4c259bec9" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1a62c0f5479255180ebf002b5a1f0c1094" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1ad8efc13367c28b6dc8e9ee895cc885b8" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1a438860be077fd4d1f3e4f38ee7ff3b35" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1a7afc004bf023105d29ea70a3d642782a" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1af5655a9170b324fd335a12821db7841f" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1ab833ca1337735332444a3a9ea091e805" kind="function"><name>operator=</name></member>
+    <member refid="classclue_1_1PointsHost_1a4b6d00b8a0dd09f3a8203f176e1833b9" kind="function"><name>PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1a29c3d270e484c61a89af817e3e0b7211" kind="function"><name>operator=</name></member>
+    <member refid="classclue_1_1PointsHost_1ad2934d06711ce1b7e4b86a3fb672129a" kind="function"><name>~PointsHost</name></member>
+    <member refid="classclue_1_1PointsHost_1abad86716646001e7b31606f1c1ca0fa1" kind="function"><name>size</name></member>
+    <member refid="classclue_1_1PointsHost_1a5cc8b2d4028f1e617542c0602e467585" kind="function"><name>coords</name></member>
+    <member refid="classclue_1_1PointsHost_1a83ec2b4dbcb7d5b366e5ca5e72610316" kind="function"><name>coords</name></member>
+    <member refid="classclue_1_1PointsHost_1adb5d9d5c9be894decfcd6e6620f65332" kind="function"><name>weights</name></member>
+    <member refid="classclue_1_1PointsHost_1a96dbad7ba3d15ff93b02a037a1ee7225" kind="function"><name>weights</name></member>
+    <member refid="classclue_1_1PointsHost_1ac3f0a179d4b8b8de704a0cdf8cab0f85" kind="function"><name>clusterIndexes</name></member>
+    <member refid="classclue_1_1PointsHost_1a771840bd606fac095d467ed86b2754d2" kind="function"><name>clusterIndexes</name></member>
+    <member refid="classclue_1_1PointsHost_1ab2575277a65df08fa08e15ebca3fb641" kind="function"><name>clustered</name></member>
+    <member refid="classclue_1_1PointsHost_1acebcde1dec21fb74be106653c834c55b" kind="function"><name>view</name></member>
+    <member refid="classclue_1_1PointsHost_1a15fa031fa53769b169c03882b801f4ba" kind="function"><name>view</name></member>
+    <member refid="classclue_1_1PointsHost_1a8e4d93b1845e21011a3914cb88140bba" kind="function"><name>operator[]</name></member>
+    <member refid="classclue_1_1PointsHost_1ade6ae6b1c4ae299a7fb77dd176453730" kind="function"><name>n_clusters</name></member>
+    <member refid="classclue_1_1PointsHost_1a347b21e61a558588c4c0e56e14483045" kind="function"><name>clusters</name></member>
+    <member refid="classclue_1_1PointsHost_1abca944d0cac47fa35c9c69a24efd4977" kind="function"><name>cluster_sizes</name></member>
+    <member refid="classclue_1_1PointsHost_1a7a3e531ad27be1039c2628e7f30a1e08" kind="function"><name>cluster_properties</name></member>
+    <member refid="classclue_1_1PointsHost_1aae40bcef86f8faaa6bb441c778da6d92" kind="function"><name>mark_clustered</name></member>
+  </compound>
+  <compound refid="classclue_1_1internal_1_1Tiles" kind="class"><name>clue::internal::Tiles</name>
+  </compound>
+  <compound refid="classclue_1_1WeightedChebyshevMetric" kind="class"><name>clue::WeightedChebyshevMetric</name>
+    <member refid="classclue_1_1WeightedChebyshevMetric_1a38c49dbcd5d40550fea98c1223f7e7f5" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1WeightedChebyshevMetric_1a512d4598a5bf81c29fc6574075737a5b" kind="variable"><name>m_weights</name></member>
+    <member refid="classclue_1_1WeightedChebyshevMetric_1a2033ebb4cbbf85191b2061669b4c81aa" kind="function"><name>WeightedChebyshevMetric</name></member>
+    <member refid="classclue_1_1WeightedChebyshevMetric_1ae486b32f3c877f2ca22d527607f25251" kind="function"><name>WeightedChebyshevMetric</name></member>
+    <member refid="classclue_1_1WeightedChebyshevMetric_1afd2b2efdf0aeda55c49a28b5770e5037" kind="function"><name>WeightedChebyshevMetric</name></member>
+    <member refid="classclue_1_1WeightedChebyshevMetric_1ab531897a4a5a5aa7b98db2498c1928dd" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classclue_1_1WeightedEuclideanMetric" kind="class"><name>clue::WeightedEuclideanMetric</name>
+    <member refid="classclue_1_1WeightedEuclideanMetric_1add3ff7108eba4f554d3deca11b34372e" kind="typedef"><name>value_type</name></member>
+    <member refid="classclue_1_1WeightedEuclideanMetric_1aed11b1f3ba9445688f3f47a2caea322b" kind="variable"><name>m_weights</name></member>
+    <member refid="classclue_1_1WeightedEuclideanMetric_1a566b5556bef04675aa2a4cfe7ee1cce3" kind="function"><name>WeightedEuclideanMetric</name></member>
+    <member refid="classclue_1_1WeightedEuclideanMetric_1a80b2ba5c5ab34317bcd88f3480658ba1" kind="function"><name>WeightedEuclideanMetric</name></member>
+    <member refid="classclue_1_1WeightedEuclideanMetric_1a48543e6770c4d9cb19b159506e4822d7" kind="function"><name>WeightedEuclideanMetric</name></member>
+    <member refid="classclue_1_1WeightedEuclideanMetric_1ae070c37e521a9c54e1b9512d8b91bad3" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="conceptclue_1_1concepts_1_1convolutional__kernel" kind="concept"><name>clue::concepts::convolutional_kernel</name>
+  </compound>
+  <compound refid="conceptclue_1_1concepts_1_1distance__metric" kind="concept"><name>clue::concepts::distance_metric</name>
+  </compound>
+  <compound refid="namespaceclue" kind="namespace"><name>clue</name>
+    <member refid="DistanceMetrics_8hpp_1a8eb27f0d5cf330d011c69e7cc047479b" kind="typedef"><name>Point</name></member>
+    <member refid="AssociationMap_8hpp_1a05c1af2820110db93d9a31621f97dbcd" kind="typedef"><name>host_associator</name></member>
+    <member refid="cluster__centroid_8hpp_1a4f927bf3f250d4c209e11a5a9015eedc" kind="typedef"><name>Centroid</name></member>
+    <member refid="cluster__centroid_8hpp_1a7c3e402fce1c5dccc09c0f73d6f36e59" kind="typedef"><name>Centroids</name></member>
+    <member refid="PointsConversion_8hpp_1ab8422c3a89e539d23ff7609b8d0c3d16" kind="function"><name>copyToHost</name></member>
+    <member refid="PointsConversion_8hpp_1aa2c9251502e4b0e11c9fcd72bf6810d2" kind="function"><name>copyToHost</name></member>
+    <member refid="PointsConversion_8hpp_1aab33b3837e556403e91abd46482fd64a" kind="function"><name>copyToDevice</name></member>
+    <member refid="PointsConversion_8hpp_1a5e58d593328608482676490361399b71" kind="function"><name>copyToDevice</name></member>
+    <member refid="PointsHost_8hpp_1a0fd852296655e617b7716c618508d80b" kind="function"><name>read_output</name></member>
+    <member refid="cluster__centroid_8hpp_1a5fe17de5ca11af2cd7bb1b0af51217f6" kind="function"><name>cluster_centroid</name></member>
+    <member refid="cluster__centroid_8hpp_1a8dcd93bd8d159ade242736d46195382a" kind="function"><name>cluster_centroids</name></member>
+    <member refid="get__clusters_8hpp_1a9118659d8f53d33fc05409a08ef8e9cf" kind="function"><name>get_clusters</name></member>
+    <member refid="get__clusters_8hpp_1ae16a79dd62bc176f82060ce8454cf482" kind="function"><name>get_clusters</name></member>
+    <member refid="get__device_8hpp_1a8aaf8c1e70914c5c931e44be18f0b505" kind="function"><name>get_device</name></member>
+    <member refid="get__queue_8hpp_1a1d26fcef2af702b8eb156bc42054ee1f" kind="function"><name>get_queue</name></member>
+    <member refid="get__queue_8hpp_1a7903e09bb594960cbc75d10d17830934" kind="function"><name>get_queue</name></member>
+    <member refid="read__csv_8hpp_1adba35b56309fbaf9dce21f81f11922d5" kind="function"><name>read_csv</name></member>
+    <member refid="scores_8hpp_1a14aabd990748b02a57a754aadf502d0a" kind="function"><name>silhouette</name></member>
+    <member refid="scores_8hpp_1a037aadda3f99814409f3c38ef41c31ea" kind="function"><name>silhouette</name></member>
+    <member refid="validation_8hpp_1ad698e451f2642deb1128f522e017aa50" kind="function"><name>validate_results</name></member>
+  </compound>
+  <compound refid="namespaceclue_1_1concepts" kind="namespace"><name>clue::concepts</name>
+  </compound>
+  <compound refid="namespaceclue_1_1internal" kind="namespace"><name>clue::internal</name>
+    <member refid="AssociationMap_8hpp_1ace098326cd1af84878f916ed6399a2bb" kind="function"><name>make_associator</name></member>
+    <member refid="AssociationMap_8hpp_1a69ab433e3e105cf699f4446624822631" kind="function"><name>make_associator</name></member>
+  </compound>
+  <compound refid="namespaceclue_1_1metrics" kind="namespace"><name>clue::metrics</name>
+    <member refid="DistanceMetrics_8hpp_1aea0148eb0315ba1666b1334050faec75" kind="typedef"><name>Euclidean</name></member>
+    <member refid="DistanceMetrics_8hpp_1afd3a710949c9b0d5843143d7b3024097" kind="typedef"><name>WeightedEuclidean</name></member>
+    <member refid="DistanceMetrics_8hpp_1a549d106bb329ac020d56976c77791b45" kind="typedef"><name>PeriodicEuclidean</name></member>
+    <member refid="DistanceMetrics_8hpp_1ac3b0439ab384b3aa149f74f298ca8833" kind="typedef"><name>Manhattan</name></member>
+    <member refid="DistanceMetrics_8hpp_1a6995bf55bdeda1d303a7ca9cb9b355b0" kind="typedef"><name>Chebyshev</name></member>
+    <member refid="DistanceMetrics_8hpp_1aded3f1fd03c18afb8dc2391aa9373a17" kind="typedef"><name>WeightedChebyshev</name></member>
+  </compound>
+  <compound refid="namespaceinternal" kind="namespace"><name>internal</name>
+  </compound>
+  <compound refid="CLUEstering_8hpp" kind="file"><name>CLUEstering.hpp</name>
+  </compound>
+  <compound refid="Clusterer_8hpp" kind="file"><name>Clusterer.hpp</name>
+  </compound>
+  <compound refid="ConvolutionalKernel_8hpp" kind="file"><name>ConvolutionalKernel.hpp</name>
+  </compound>
+  <compound refid="DistanceMetrics_8hpp" kind="file"><name>DistanceMetrics.hpp</name>
+  </compound>
+  <compound refid="AssociationMap_8hpp" kind="file"><name>AssociationMap.hpp</name>
+  </compound>
+  <compound refid="AssociationMapView_8hpp" kind="file"><name>AssociationMapView.hpp</name>
+  </compound>
+  <compound refid="ClusterProperties_8hpp" kind="file"><name>ClusterProperties.hpp</name>
+  </compound>
+  <compound refid="PointsConversion_8hpp" kind="file"><name>PointsConversion.hpp</name>
+  </compound>
+  <compound refid="PointsDevice_8hpp" kind="file"><name>PointsDevice.hpp</name>
+  </compound>
+  <compound refid="PointsHost_8hpp" kind="file"><name>PointsHost.hpp</name>
+  </compound>
+  <compound refid="cluster__centroid_8hpp" kind="file"><name>cluster_centroid.hpp</name>
+  </compound>
+  <compound refid="get__clusters_8hpp" kind="file"><name>get_clusters.hpp</name>
+  </compound>
+  <compound refid="get__device_8hpp" kind="file"><name>get_device.hpp</name>
+  </compound>
+  <compound refid="get__queue_8hpp" kind="file"><name>get_queue.hpp</name>
+  </compound>
+  <compound refid="read__csv_8hpp" kind="file"><name>read_csv.hpp</name>
+  </compound>
+  <compound refid="scores_8hpp" kind="file"><name>scores.hpp</name>
+  </compound>
+  <compound refid="validation_8hpp" kind="file"><name>validation.hpp</name>
+  </compound>
+  <compound refid="dir_8dff6c10bf0afdabd1dec894b4deddc1" kind="dir"><name>include/CLUEstering</name>
+  </compound>
+  <compound refid="dir_43d3417ceeb7eaaa370c8b0ba7d75225" kind="dir"><name>include/CLUEstering/core</name>
+  </compound>
+  <compound refid="dir_fa28860a501df7f6b51401a4b34c9f09" kind="dir"><name>include/CLUEstering/data_structures</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+  <compound refid="dir_4d002444c984ff1eb7009e06d7cb4d26" kind="dir"><name>include/CLUEstering/utils</name>
+  </compound>
+</doxygenindex>
