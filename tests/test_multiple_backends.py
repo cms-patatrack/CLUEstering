@@ -94,7 +94,7 @@ def test_moons_clustering(moons):
         c = clue.clusterer(78., 80., 90., 100.)
         c.read_data(moons)
         c.run_clue(backend=backend)
-        c.to_csv('./', f'moons_output_{_fill_space(backend)}.csv')
+        c.to_csv('.', f'moons_output_{_fill_space(backend)}')
 
         assert True
 
