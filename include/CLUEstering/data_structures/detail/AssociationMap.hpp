@@ -124,6 +124,9 @@ namespace clue {
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
     m_view.m_extents = {nbins, nelements};
+
+    alpaka::memset(queue, m_indexes, 0);
+    alpaka::memset(queue, m_offsets, 0);
   }
 
   template <concepts::device TDev>
