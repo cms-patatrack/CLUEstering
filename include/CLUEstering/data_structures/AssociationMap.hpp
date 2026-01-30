@@ -69,13 +69,6 @@ namespace clue {
     ///
     /// @param nelements The number of elements to allocate
     /// @param nbins The number of bins to allocate
-    /// @param dev The device to use for the allocation
-    AssociationMap(size_type nelements, size_type nbins, const TDev& dev);
-
-    /// @brief Construct an AssociationMap with a specific number of elements and bins
-    ///
-    /// @param nelements The number of elements to allocate
-    /// @param nbins The number of bins to allocate
     /// @param queue The queue to use for the allocation
     template <concepts::queue TQueue>
     AssociationMap(size_type nelements, size_type nbins, TQueue& queue);

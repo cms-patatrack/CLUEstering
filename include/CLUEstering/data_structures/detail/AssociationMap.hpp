@@ -96,21 +96,6 @@ namespace clue {
   }
 
   template <concepts::device TDev>
-  inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins, const TDev& dev)
-      : m_indexes{make_device_buffer<mapped_type[]>(dev, nelements)},
-        m_offsets{make_device_buffer<key_type[]>(dev, nbins + 1)},
-        m_view{},
-        m_extents{nbins, nelements} {
-    if (nelements == 0) {
-      throw std::invalid_argument(
-          "Number of bins and elements must be positive in AssociationMap constructor");
-    }
-    m_view.m_indexes = m_indexes.data();
-    m_view.m_offsets = m_offsets.data();
-    m_view.m_extents = {nbins, nelements};
-  }
-
-  template <concepts::device TDev>
   template <concepts::queue TQueue>
   inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins, TQueue& queue)
       : m_indexes{make_device_buffer<mapped_type[]>(queue, nelements)},
