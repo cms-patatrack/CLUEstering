@@ -368,7 +368,7 @@ namespace clue {
 
   template <concepts::device TDev>
   template <concepts::accelerator TAcc, concepts::queue TQueue>
-  ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size,
+  ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type,
                                                         std::span<const key_type> associations,
                                                         TQueue& queue) {
     if (m_extents.keys == 0)

@@ -190,7 +190,7 @@ namespace clue {
     ALPAKA_FN_HOST void fill(std::span<const key_type> associations)
       requires std::same_as<TDev, alpaka::DevCpu>;
     template <concepts::accelerator TAcc, concepts::queue TQueue>
-    ALPAKA_FN_HOST void fill(size_type size, std::span<const key_type> associations, TQueue& queue);
+    ALPAKA_FN_HOST void fill(size_type, std::span<const key_type> associations, TQueue& queue);
     template <concepts::accelerator TAcc, concepts::queue TQueue, typename TFunc>
     ALPAKA_FN_HOST void fill_batch(TQueue& queue,
                                    size_type size,
