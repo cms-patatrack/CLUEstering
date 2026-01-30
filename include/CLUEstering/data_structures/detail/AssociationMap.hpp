@@ -374,7 +374,7 @@ namespace clue {
     if (m_extents.keys == 0)
       return;
     const auto blocksize = 512;
-    const auto gridsize = divide_up_by(size, blocksize);
+    const auto gridsize = divide_up_by(associations.size(), blocksize);
     const auto workdiv = make_workdiv<TAcc>(gridsize, blocksize);
 
     auto sizes_buffer = make_device_buffer<key_type[]>(queue, m_extents.keys);
@@ -384,7 +384,7 @@ namespace clue {
                        detail::KernelComputeAssociationSizes{},
                        associations.data(),
                        sizes_buffer.data(),
-                       size);
+                       associations.size());
 
     auto block_counter = make_device_buffer<int32_t>(queue);
     alpaka::memset(queue, block_counter, 0);
@@ -406,7 +406,7 @@ namespace clue {
                        m_indexes.data(),
                        associations.data(),
                        temp_offsets.data(),
-                       size);
+                       associations.size());
   }
 
   template <concepts::device TDev>
