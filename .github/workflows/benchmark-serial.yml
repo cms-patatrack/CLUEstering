@@ -21,6 +21,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt-get update -y
         sudo apt install -y libboost-atomic-dev libtbb-dev libomp-dev libbenchmark-dev
 
     - name: Compile and run benchmark
