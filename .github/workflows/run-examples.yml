@@ -20,6 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt-get update -y
         sudo apt install -y libboost-dev libtbb-dev libomp-dev
         wget https://github.com/alpaka-group/alpaka/archive/refs/tags/2.1.0.tar.gz 
         tar -xvf 2.1.0.tar.gz && cd alpaka-2.1.0
