@@ -1,4 +1,4 @@
-Points Conversions
+AssociationMapView
 ==================
 
 .. doxygenclass:: clue::AssociationMapView
