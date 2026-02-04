@@ -30,6 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: | 
+          sudo apt-get update -y
           sudo apt install -y libboost-atomic-dev
           python -m pip install --upgrade pip
           python -m pip install scikit-learn pandas matplotlib
