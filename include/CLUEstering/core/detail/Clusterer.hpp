@@ -4,6 +4,7 @@
 #include "CLUEstering/core/Clusterer.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
+#include "CLUEstering/core/detail/BatchedClusteringKernels.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
