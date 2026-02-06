@@ -8,3 +8,9 @@
 #elif defined(__SYCL_DEVICE_ONLY__)
 #define SYCL_DEVICE_FN
 #endif
+
+#if defined(_MSC_VER)
+#define MATH_FN_CONSTEXPR
+#else
+#define MATH_FN_CONSTEXPR constexpr
+#endif

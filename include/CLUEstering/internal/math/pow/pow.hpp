@@ -11,38 +11,32 @@
 
 namespace clue::math {
 
-  ALPAKA_FN_ACC inline constexpr float pow(float base, float exp) {
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float pow(float base, float exp) {
 #if defined(CUDA_DEVICE_FN)
-    // CUDA device code
     return ::pow(base, exp);
 #elif defined(HIP_DEVICE_FN)
-    // HIP/ROCm device code
     return ::pow(base, exp);
 #elif defined(SYCL_DEVICE_FN)
-    // SYCL device code
     return sycl::pow(base, exp);
 #else
-    // standard C++ code
     return std::pow(base, exp);
 #endif
   }
 
-  ALPAKA_FN_ACC inline constexpr double pow(double base, double exp) {
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline double pow(double base, double exp) {
 #if defined(CUDA_DEVICE_FN)
-    // CUDA device code
     return ::pow(base, exp);
 #elif defined(HIP_DEVICE_FN)
-    // HIP/ROCm device code
     return ::pow(base, exp);
 #elif defined(SYCL_DEVICE_FN)
-    // SYCL device code
     return sycl::pow(base, exp);
 #else
-    // standard C++ code
     return std::pow(base, exp);
 #endif
   }
 
-  ALPAKA_FN_ACC inline constexpr float powf(float base, float exp) { return pow(base, exp); }
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float powf(float base, float exp) {
+    return pow(base, exp);
+  }
 
 }  // namespace clue::math
