@@ -12,42 +12,34 @@
 
 namespace clue::math {
 
-  ALPAKA_FN_ACC inline constexpr float sqrt(float x) {
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float sqrt(float x) {
 #if defined(CUDA_DEVICE_FN)
-    // CUDA device code
     return ::sqrt(x);
 #elif defined(HIP_DEVICE_FN)
-    // HIP/ROCm device code
     return ::sqrt(x);
 #elif defined(SYCL_DEVICE_FN)
-    // SYCL device code
     return sycl::sqrt(x);
 #else
-    // standard C++ code
     return std::sqrt(x);
 #endif
   }
 
-  ALPAKA_FN_ACC inline constexpr double sqrt(double x) {
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline double sqrt(double x) {
 #if defined(CUDA_DEVICE_FN)
-    // CUDA device code
     return ::sqrt(x);
 #elif defined(HIP_DEVICE_FN)
-    // HIP/ROCm device code
     return ::sqrt(x);
 #elif defined(SYCL_DEVICE_FN)
-    // SYCL device code
     return sycl::sqrt(x);
 #else
-    // standard C++ code
     return std::sqrt(x);
 #endif
   }
 
-  ALPAKA_FN_ACC inline constexpr float sqrtf(float x) { return sqrt(x); }
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float sqrtf(float x) { return sqrt(x); }
 
   template <std::integral T>
-  ALPAKA_FN_ACC inline constexpr double sqrt(T x) {
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline double sqrt(T x) {
     return sqrt(static_cast<double>(x));
   }
 
