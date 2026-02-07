@@ -22,12 +22,12 @@ string(
 find_package(Boost 1.75.0 REQUIRED COMPONENTS atomic)
 find_package(benchmark REQUIRED)
 
-find_package(alpaka)
+find_package(alpaka 2.1.0)
 if(NOT alpaka_FOUND)
   include(FetchContent)
   FetchContent_Declare(
     alpaka
-    URL https://github.com/alpaka-group/alpaka/archive/refs/tags/1.2.0.tar.gz)
+    URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.1.0.tar.gz)
   FetchContent_MakeAvailable(alpaka)
 endif()
 

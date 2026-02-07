@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(CLUEstering REQUIRED)
-find_package(alpaka REQUIRED)
+find_package(alpaka 2.1.0 REQUIRED)
 if(NOT CLUEstering_FOUND)
   message(
     FATAL_ERROR
