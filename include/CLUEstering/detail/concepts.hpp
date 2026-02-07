@@ -12,7 +12,7 @@ namespace clue::concepts {
   concept device = alpaka::isDevice<T>;
 
   template <typename T>
-  concept accelerator = alpaka::isAccelerator<T>;
+  concept accelerator = alpaka::concepts::Acc<T>;
 
   template <typename T>
   concept platform = alpaka::isPlatform<T>;
