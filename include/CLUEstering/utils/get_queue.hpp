@@ -17,9 +17,9 @@ namespace clue {
   /// @param device_id The index of the device
   /// @return An alpaka queue created from the device corresponding to the given index
   template <std::integral TIdx>
-  inline clue::Queue get_queue(TIdx device_id = TIdx{}) {
+  inline auto get_queue(TIdx device_id = TIdx{}) {
     auto device = alpaka::getDevByIdx(clue::Platform{}, device_id);
-    return clue::Queue{device};
+    return clue::Queue(device);
   }
 
   /// @brief Get an alpaka queue created from a given device
@@ -28,8 +28,24 @@ namespace clue {
   /// @param device The device to create the queue from
   /// @return An alpaka queue created from the given device
   template <concepts::device TDevice>
-  inline clue::Queue get_queue(const TDevice& device) {
-    return clue::Queue{device};
+  inline auto get_queue(const TDevice& device) {
+    return clue::Queue(device);
   }
+
+#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
+  /// @brief Get an alpaka queue wrapping a CUDA stream
+  ///
+  /// @param stream The CUDA stream to wrap inside the alpaka queue
+  /// @return An alpaka queue wrapping the given CUDA stream
+  inline auto get_queue(cudaStream_t& stream) { return clue::Queue(stream); }
+#endif
+
+#ifdef ALPAKA_ACC_GPU_HIP_ENABLED
+  /// @brief Get an alpaka queue wrapping a HIP stream
+  ///
+  /// @param stream The HIP stream to wrap inside the alpaka queue
+  /// @return An alpaka queue wrapping the given HIP stream
+  inline auto get_queue(hipStream_t& stream) { return clue::Queue(stream); }
+#endif
 
 }  // namespace clue

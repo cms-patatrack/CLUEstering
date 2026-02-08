@@ -23,7 +23,7 @@ void compute_clusters(TQueue& queue, std::vector<int>& cluster_indexes) {
 int main() {
   hipStream_t stream;
   hipStreamCreate(&stream);
-  clue::Queue queue(stream);
+  auto queue = clue::get_queue(stream);
 
   std::vector<int> cluster_indexes;
   compute_clusters(queue, cluster_indexes);
