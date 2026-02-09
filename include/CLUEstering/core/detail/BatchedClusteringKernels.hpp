@@ -128,7 +128,7 @@ namespace clue::detail {
 
             dev_points.nearest_higher[global_idx] = nh_i;
             if (nh_i == -1) {
-              alpaka::atomicAdd(acc, seed_candidates, 1ul);
+              alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
             }
           }
         }
