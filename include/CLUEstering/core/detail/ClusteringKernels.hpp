@@ -121,59 +121,6 @@ namespace clue::detail {
     }
   };
 
-  struct KernelCalculateLocalDensityBatched {
-    template <typename TAcc,
-              std::size_t Ndim,
-              std::floating_point TData,
-              concepts::convolutional_kernel KernelType,
-              concepts::distance_metric<Ndim> DistanceMetric>
-      requires(alpaka::Dim<TAcc>::value == 2)
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  internal::TilesView<Ndim, TData> dev_tiles,
-                                  PointsView<Ndim, TData> dev_points,
-                                  const KernelType& kernel,
-                                  TData dc,
-                                  DistanceMetric metric,
-                                  const auto* event_offsets,
-                                  std::size_t max_event_size,
-                                  std::size_t /* blocks_per_event */) const {
-      for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
-        for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
-          const auto global_idx = event_offsets[event] + local_idx;
-          if (global_idx < event_offsets[event + 1]) {
-            auto rho_i = TData{0};
-            auto coords_i = dev_points[global_idx];
-
-            clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
-            for (auto dim = 0u; dim != Ndim; ++dim) {
-              searchbox_extremes[dim] =
-                  clue::nostd::make_array(coords_i[dim] - dc, coords_i[dim] + dc);
-            }
-
-            clue::SearchBoxBins<Ndim> searchbox_bins;
-            dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
-
-            VecArray<int32_t, Ndim> base_vec;
-            for_recursion<TAcc, Ndim, Ndim>(acc,
-                                            base_vec,
-                                            searchbox_bins,
-                                            dev_tiles,
-                                            dev_points,
-                                            kernel,
-                                            coords_i,
-                                            rho_i,
-                                            dc,
-                                            metric,
-                                            global_idx,
-                                            event);
-
-            dev_points.rho[global_idx] = rho_i;
-          }
-        }
-      }
-    }
-  };
-
   template <typename TAcc,
             std::size_t Ndim,
             std::size_t N_,
@@ -285,64 +232,6 @@ namespace clue::detail {
     }
   };
 
-  struct KernelCalculateNearestHigherBatched {
-    template <typename TAcc,
-              std::size_t Ndim,
-              std::floating_point TData,
-              concepts::distance_metric<Ndim> DistanceMetric>
-      requires(alpaka::Dim<TAcc>::value == 2)
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  internal::TilesView<Ndim, TData> dev_tiles,
-                                  PointsView<Ndim, TData> dev_points,
-                                  TData dm,
-                                  DistanceMetric metric,
-                                  std::size_t* seed_candidates,
-                                  const auto* event_offsets,
-                                  std::size_t max_event_size,
-                                  std::size_t /* blocks_per_event */) const {
-      for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
-        for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
-          const auto global_idx = event_offsets[event] + local_idx;
-          if (global_idx < event_offsets[event + 1]) {
-            auto delta_i = std::numeric_limits<TData>::max();
-            int nh_i = -1;
-            auto coords_i = dev_points[global_idx];
-            auto rho_i = dev_points.rho[global_idx];
-
-            clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
-            for (auto dim = 0u; dim != Ndim; ++dim) {
-              searchbox_extremes[dim] =
-                  clue::nostd::make_array(coords_i[dim] - dm, coords_i[dim] + dm);
-            }
-
-            clue::SearchBoxBins<Ndim> searchbox_bins;
-            dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
-
-            VecArray<int32_t, Ndim> base_vec{};
-            for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
-                                                           base_vec,
-                                                           searchbox_bins,
-                                                           dev_tiles,
-                                                           dev_points,
-                                                           coords_i,
-                                                           rho_i,
-                                                           delta_i,
-                                                           nh_i,
-                                                           dm,
-                                                           metric,
-                                                           global_idx,
-                                                           event);
-
-            dev_points.nearest_higher[global_idx] = nh_i;
-            if (nh_i == -1) {
-              alpaka::atomicAdd(acc, seed_candidates, 1ul);
-            }
-          }
-        }
-      }
-    }
-  };
-
   struct KernelFindClusters {
     template <typename TAcc,
               std::size_t Ndim,
@@ -373,49 +262,6 @@ namespace clue::detail {
           seeds.push_back(acc, i);
         } else {
           dev_points.is_seed[i] = 0;
-        }
-      }
-    }
-  };
-
-  struct KernelFindClustersBatched {
-    template <typename TAcc,
-              std::size_t Ndim,
-              std::floating_point TData,
-              concepts::distance_metric<Ndim> DistanceMetric>
-      requires(alpaka::Dim<TAcc>::value == 2)
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  clue::internal::SeedArrayView seeds,
-                                  PointsView<Ndim, TData> dev_points,
-                                  TData seed_dc,
-                                  DistanceMetric metric,
-                                  TData rhoc,
-                                  clue::internal::DeviceVectorView event_associations,
-                                  const auto* event_offsets,
-                                  std::size_t max_event_size) const {
-      for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
-        for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
-          const auto global_idx = event_offsets[event] + local_idx;
-          if (global_idx < event_offsets[event + 1]) {
-            dev_points.cluster_index[global_idx] = -1;
-            auto nh = dev_points.nearest_higher[global_idx];
-
-            auto coords_i = dev_points[global_idx];
-            auto coords_nh = dev_points[nh];
-            auto distance = metric(coords_i, coords_nh);
-
-            auto rho_i = dev_points.rho[global_idx];
-            bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
-
-            if (is_seed) {
-              dev_points.is_seed[global_idx] = 1;
-              dev_points.nearest_higher[global_idx] = -1;
-              seeds.push_back(acc, global_idx);
-              event_associations.push_back(acc, event);
-            } else {
-              dev_points.is_seed[global_idx] = 0;
-            }
-          }
         }
       }
     }
@@ -485,39 +331,6 @@ namespace clue::detail {
             concepts::queue TQueue,
             std::size_t Ndim,
             std::floating_point TData,
-            concepts::convolutional_kernel KernelType,
-            concepts::distance_metric<Ndim> DistanceMetric>
-    requires(alpaka::Dim<TAcc>::value == 2)
-  inline void computeLocalDensityBatched(TQueue& queue,
-                                         internal::TilesView<Ndim, TData>& tiles,
-                                         PointsView<Ndim, TData>& dev_points,
-                                         KernelType&& kernel,
-                                         TData dc,
-                                         const DistanceMetric& metric,
-                                         const auto& event_offsets,
-                                         std::size_t max_event_size,
-                                         std::size_t block_size) {
-    const auto blocks_per_event = nostd::ceil_div(max_event_size, block_size);
-    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
-    const auto work_division =
-        make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
-    alpaka::exec<TAcc>(queue,
-                       work_division,
-                       KernelCalculateLocalDensityBatched{},
-                       tiles,
-                       dev_points,
-                       std::forward<KernelType>(kernel),
-                       dc,
-                       metric,
-                       event_offsets.data(),
-                       max_event_size,
-                       blocks_per_event);
-  }
-
-  template <concepts::accelerator TAcc,
-            concepts::queue TQueue,
-            std::size_t Ndim,
-            std::floating_point TData,
             concepts::distance_metric<Ndim> DistanceMetric>
     requires(alpaka::Dim<TAcc>::value == 1)
   inline void computeNearestHighers(TQueue& queue,
@@ -548,43 +361,6 @@ namespace clue::detail {
             std::size_t Ndim,
             std::floating_point TData,
             concepts::distance_metric<Ndim> DistanceMetric>
-    requires(alpaka::Dim<TAcc>::value == 2)
-  inline void computeNearestHighersBatched(TQueue& queue,
-                                           internal::TilesView<Ndim, TData>& tiles,
-                                           PointsView<Ndim, TData>& dev_points,
-                                           TData dm,
-                                           const DistanceMetric& metric,
-                                           std::size_t& seed_candidates,
-                                           const auto& event_offsets,
-                                           std::size_t max_event_size,
-                                           std::size_t block_size) {
-    auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
-    alpaka::memset(queue, d_seed_candidates, 0u);
-
-    const auto blocks_per_event = nostd::ceil_div(max_event_size, block_size);
-    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
-    const auto work_division =
-        make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
-    alpaka::exec<TAcc>(queue,
-                       work_division,
-                       KernelCalculateNearestHigherBatched{},
-                       tiles,
-                       dev_points,
-                       dm,
-                       metric,
-                       d_seed_candidates.data(),
-                       event_offsets.data(),
-                       max_event_size,
-                       blocks_per_event);
-    alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
-    alpaka::wait(queue);
-  }
-
-  template <concepts::accelerator TAcc,
-            concepts::queue TQueue,
-            std::size_t Ndim,
-            std::floating_point TData,
-            concepts::distance_metric<Ndim> DistanceMetric>
     requires(alpaka::Dim<TAcc>::value == 1)
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
@@ -603,39 +379,6 @@ namespace clue::detail {
                        metric,
                        rhoc,
                        size);
-  }
-
-  template <concepts::accelerator TAcc,
-            concepts::queue TQueue,
-            std::size_t Ndim,
-            std::floating_point TData,
-            concepts::distance_metric<Ndim> DistanceMetric>
-    requires(alpaka::Dim<TAcc>::value == 2)
-  inline void findClusterSeedsBatched(TQueue& queue,
-                                      clue::internal::SeedArray<>& seeds,
-                                      PointsView<Ndim, TData>& dev_points,
-                                      TData seed_dc,
-                                      const DistanceMetric& metric,
-                                      TData rhoc,
-                                      const auto& event_offsets,
-                                      std::size_t max_event_size,
-                                      const clue::internal::DeviceVectorView& event_associations,
-                                      std::size_t block_size) {
-    const auto blocks_per_event = nostd::ceil_div(max_event_size, block_size);
-    const auto batch_size = alpaka::getExtents(event_offsets)[0] - 1;
-    const auto work_division =
-        make_workdiv<internal::Acc2D>({batch_size, blocks_per_event}, {1, block_size});
-    alpaka::exec<TAcc>(queue,
-                       work_division,
-                       KernelFindClustersBatched{},
-                       seeds.view(),
-                       dev_points,
-                       seed_dc,
-                       metric,
-                       rhoc,
-                       event_associations,
-                       event_offsets.data(),
-                       max_event_size);
   }
 
   template <concepts::accelerator TAcc,
