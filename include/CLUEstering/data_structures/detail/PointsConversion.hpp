@@ -12,6 +12,7 @@
 
 namespace clue {
 
+  // TODO: separate template parameters for input and output points, and add static asserts for constness
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   inline void copyToHost(TQueue& queue,
                          PointsHost<Ndim, TData>& h_points,
@@ -23,6 +24,7 @@ namespace clue {
     h_points.mark_clustered();
   }
 
+  // TODO: separate template parameters for input and output points, and add static asserts for constness
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   inline auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TData, TDev>& d_points) {
     PointsHost<Ndim, TData> h_points(queue, d_points.size());
@@ -36,6 +38,7 @@ namespace clue {
     return h_points;
   }
 
+  // TODO: separate template parameters for input and output points, and add static asserts for constness
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   inline void copyToDevice(TQueue& queue,
                            PointsDevice<Ndim, TData, TDev>& d_points,
@@ -51,6 +54,7 @@ namespace clue {
                    make_host_view(h_points.m_view.weight, h_points.size()));
   }
 
+  // TODO: separate template parameters for input and output points, and add static asserts for constness
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   inline auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TData>& h_points) {
     PointsDevice<Ndim, TData, TDev> d_points(queue, h_points.size());
