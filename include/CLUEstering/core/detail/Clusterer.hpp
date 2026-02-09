@@ -234,7 +234,7 @@ namespace clue {
 
     detail::computeLocalDensity<Acc>(
         queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, metric, n_points);
-    auto seed_candidates = 0ul;
+    auto seed_candidates = static_cast<std::size_t>(0);
     detail::computeNearestHighers<Acc>(queue,
                                        work_division,
                                        m_tiles->view(),
