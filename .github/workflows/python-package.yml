@@ -61,7 +61,6 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        python3 -m pip install --upgrade pip
         python3 -m pip install pytest scikit-learn pandas matplotlib --break-system-packages
 
     - name: Compile CLUEstering modules
