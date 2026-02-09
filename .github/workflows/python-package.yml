@@ -45,6 +45,8 @@ jobs:
     - name: Install dependencies
       if: matrix.os == 'macos-latest'
       run: |
+        brew update
+        # brew upgrade python
         brew install boost tbb libomp
 
     - uses: actions/checkout@v4
@@ -59,7 +61,6 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        python3 -m pip install --upgrade pip --break-system-packages
         python3 -m pip install pytest scikit-learn pandas matplotlib --break-system-packages
 
     - name: Compile CLUEstering modules
