@@ -45,6 +45,8 @@ jobs:
     - name: Install dependencies
       if: matrix.os == 'macos-latest'
       run: |
+        brew update
+        brew upgrade python
         brew install boost tbb libomp
 
     - uses: actions/checkout@v4
