@@ -234,7 +234,7 @@ namespace clue {
 
     detail::computeLocalDensity<Acc>(
         queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, metric, n_points);
-    auto seed_candidates = 0ul;
+    auto seed_candidates = std::size_t{0};
     detail::computeNearestHighers<Acc>(queue,
                                        work_division,
                                        m_tiles->view(),
@@ -278,7 +278,7 @@ namespace clue {
 
     detail::computeLocalDensity<Acc>(
         queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, metric, n_points);
-    auto seed_candidates = 0ul;
+    auto seed_candidates = std::size_t{0};
     detail::computeNearestHighers<Acc>(queue,
                                        work_division,
                                        m_tiles->view(),
@@ -339,7 +339,7 @@ namespace clue {
                                                         d_event_offsets,
                                                         max_event_size,
                                                         block_size);
-    auto seed_candidates = 0ul;
+    auto seed_candidates = std::size_t{0};
     detail::computeNearestHighersBatched<internal::Acc2D>(queue,
                                                           m_tiles->view(),
                                                           dev_points.view(),
