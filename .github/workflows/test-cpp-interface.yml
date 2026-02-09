@@ -46,6 +46,8 @@ jobs:
             compiler: clang-19
           - name: macos-clang
             os: macos-latest
+          - name: windows
+            os: windows-latest
 
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
@@ -73,8 +75,16 @@ jobs:
       with:
         submodules: true
 
+    - name: Set up vcpkg
+      if: matrix.os == 'windows-latest'
+      run: |
+        echo "VCPKG_ROOT=C:/vcpkg" >> $env:GITHUB_ENV
+        echo "CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
+        cd C:/vcpkg
+        ./vcpkg install boost-atomic:x64-windows alpaka:x64-windows
+
     - name: Compile and run tests
-      if: matrix.container != 'almalinux:9'
+      if: matrix.container != 'almalinux:9' && matrix.os != 'windows-latest'
       working-directory: ${{ github.workspace }}/tests
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -89,3 +99,11 @@ jobs:
         cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build --parallel
         ctest --test-dir build --output-on-failure
+
+    - name: Compile and run tests
+      if: matrix.os == 'windows-latest'
+      working-directory: ${{ github.workspace }}/tests
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:CMAKE_TOOLCHAIN_FILE" -DVCPKG_TARGET_TRIPLET=x64-windows -DVCPKG_MANIFEST_DIR="${{ github.workspace }}"
+        cmake --build build --parallel --config Release
+        ctest --test-dir build --output-on-failure --build-config Release
