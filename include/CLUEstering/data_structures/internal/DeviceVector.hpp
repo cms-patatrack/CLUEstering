@@ -34,11 +34,11 @@ namespace clue::internal {
 
     template <clue::concepts::accelerator TAcc>
     ALPAKA_FN_ACC constexpr void push_back(const TAcc& acc, int32_t value) {
-      auto prev = alpaka::atomicAdd(acc, m_size, 1ul);
+      auto prev = alpaka::atomicAdd(acc, m_size, std::size_t{1});
       if (prev < m_capacity) {
         m_data[prev] = value;
       } else {
-        alpaka::atomicSub(acc, m_size, 1ul);
+        alpaka::atomicSub(acc, m_size, std::size_t{1});
       }
     }
   };
