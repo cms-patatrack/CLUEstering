@@ -40,7 +40,7 @@ namespace clue::internal {
       } else {
         alpaka::atomicSub(acc, m_size, std::size_t{1});
       }
-	  return prev;
+      return prev;
     }
   };
 
