@@ -25,5 +25,9 @@ static void BM_clustering(benchmark::State& state) {
   }
 }
 
-BENCHMARK(BM_clustering)->RangeMultiplier(2)->Range(1 << 1, 1 << 14)->Unit(benchmark::kMillisecond)->Iterations(10);
+BENCHMARK(BM_clustering)
+    ->RangeMultiplier(2)
+    ->Range(1 << 1, 1 << 14)
+    ->Unit(benchmark::kMillisecond)
+    ->Iterations(10);
 BENCHMARK_MAIN();
