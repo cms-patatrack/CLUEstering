@@ -7,6 +7,7 @@
 #include "CLUEstering/core/detail/defines.hpp"
 #include <alpaka/alpaka.hpp>
 #include <concepts>
+#include <type_traits>
 
 namespace clue {
 
@@ -113,9 +114,7 @@ namespace clue {
                  typename std::remove_cvref_t<TKernel>::value_type distance,
                  int point_i,
                  int point_j) {
-          {
-            kernel(acc, distance, point_i, point_j)
-          } -> std::same_as<typename std::remove_cvref_t<TKernel>::value_type>;
+          { kernel(acc, distance, point_i, point_j) };
         };
 
   }  // namespace concepts
