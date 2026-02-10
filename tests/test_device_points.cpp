@@ -31,11 +31,11 @@ struct KernelCompareDevicePoints {
   }
 };
 
-template <std::ranges::range TRange, std::size_t Ndim>
+template <std::ranges::range TRange, std::size_t Ndim, std::floating_point TData>
 ALPAKA_FN_HOST bool compareDevicePoints(clue::Queue queue,
                                         TRange&& h_coords,
                                         TRange&& h_weights,
-                                        clue::PointsDevice<Ndim>& d_points,
+                                        clue::PointsDevice<Ndim, TData>& d_points,
                                         uint32_t size) {
   auto h_points = clue::PointsHost<Ndim>(queue, size);
   std::ranges::copy(h_coords, h_points.coords(0).begin());
@@ -177,6 +177,81 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
       std::views::iota(0) | std::views::take(size) | std::views::transform(to_float),
       d_points,
       size));
+}
+
+TEST_CASE("Test const device points") {
+  auto queue = clue::get_queue(0u);
+
+  const auto size = 1000u;
+  SUBCASE("Two external buffers") {
+    auto h_input = clue::make_host_buffer<float[]>(queue, 3 * size);
+    auto h_output = clue::make_host_buffer<int[]>(queue, size);
+    std::iota(h_input.data(), h_input.data() + 3 * size, 0.f);
+    std::fill(h_output.data(), h_output.data() + size, 1);
+
+    auto d_input = clue::make_device_buffer<float[]>(queue, 3 * size);
+    auto d_output = clue::make_device_buffer<int[]>(queue, size);
+    alpaka::memcpy(queue, d_input, h_input);
+    alpaka::memcpy(queue, d_output, h_output);
+    alpaka::wait(queue);
+
+    clue::ConstPointsDevice<2> points_1(queue, size, d_input.data(), d_output.data());
+    clue::ConstPointsDevice<2> points_2(
+        queue, size, std::span{d_input.data(), 3 * size}, std::span{d_output.data(), size});
+
+    CHECK(true);
+  }
+  SUBCASE("Three external buffers") {
+    auto h_coords = clue::make_host_buffer<float[]>(queue, 2 * size);
+    auto h_weights = clue::make_host_buffer<float[]>(queue, size);
+    auto h_cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+    std::iota(h_coords.data(), h_coords.data() + 2 * size, 0.f);
+    std::fill(h_weights.data(), h_weights.data() + size, 1.f);
+    std::fill(h_cluster_ids.data(), h_cluster_ids.data() + size, 1);
+
+    auto d_coords = clue::make_device_buffer<float[]>(queue, 2 * size);
+    auto d_weights = clue::make_device_buffer<float[]>(queue, size);
+    auto d_cluster_ids = clue::make_device_buffer<int[]>(queue, size);
+    alpaka::memcpy(queue, d_coords, h_coords);
+    alpaka::memcpy(queue, d_weights, h_weights);
+    alpaka::memcpy(queue, d_cluster_ids, h_cluster_ids);
+    alpaka::wait(queue);
+
+    clue::ConstPointsDevice<2> points_1(
+        queue, size, d_coords.data(), d_weights.data(), d_cluster_ids.data());
+    clue::ConstPointsDevice<2> points_2(queue,
+                                        size,
+                                        std::span{d_coords.data(), 2 * size},
+                                        std::span{d_weights.data(), size},
+                                        std::span{d_cluster_ids.data(), size});
+
+    CHECK(true);
+  }
+  SUBCASE("Four external buffers") {
+    auto h_x0 = clue::make_host_buffer<float[]>(queue, size);
+    auto h_x1 = clue::make_host_buffer<float[]>(queue, size);
+    auto h_weights = clue::make_host_buffer<float[]>(queue, size);
+    auto h_cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+    std::iota(h_x0.data(), h_x0.data() + size, 0.f);
+    std::iota(h_x1.data(), h_x1.data() + size, 1000.f);
+    std::fill(h_weights.data(), h_weights.data() + size, 1.f);
+    std::fill(h_cluster_ids.data(), h_cluster_ids.data() + size, -1);
+
+    auto d_x0 = clue::make_device_buffer<float[]>(queue, size);
+    auto d_x1 = clue::make_device_buffer<float[]>(queue, size);
+    auto d_weights = clue::make_device_buffer<float[]>(queue, size);
+    auto d_cluster_ids = clue::make_device_buffer<int[]>(queue, size);
+    alpaka::memcpy(queue, d_x0, h_x0);
+    alpaka::memcpy(queue, d_x1, h_x1);
+    alpaka::memcpy(queue, d_weights, h_weights);
+    alpaka::memcpy(queue, d_cluster_ids, h_cluster_ids);
+    alpaka::wait(queue);
+
+    clue::ConstPointsDevice<2> points_1(
+        queue, size, d_x0.data(), d_x1.data(), d_weights.data(), d_cluster_ids.data());
+
+    CHECK(true);
+  }
 }
 
 TEST_CASE("Test extrema functions on device points column") {

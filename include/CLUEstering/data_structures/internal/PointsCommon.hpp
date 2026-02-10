@@ -63,21 +63,25 @@ namespace clue {
 
   }  // namespace internal
 
-  template <std::size_t Ndim, std::floating_point TData = float>
+  template <std::size_t Ndim, std::floating_point TElement = float>
   struct PointsView {
-    std::array<TData*, Ndim> coords;
-    TData* weight;
+    using element_type = TElement;
+    using value_type = std::remove_cv_t<TElement>;
+
+    std::array<element_type*, Ndim> coords;
+    element_type* weight;
     std::int32_t* cluster_index;
     std::int32_t* is_seed;
-    TData* rho;
+    value_type* rho;
     std::int32_t* nearest_higher;
     std::int32_t n;
 
     ALPAKA_FN_HOST_ACC auto operator[](int index) const {
       if (index == -1)
-        return clue::nostd::make_array<TData, Ndim + 1>(std::numeric_limits<TData>::max());
+        return clue::nostd::make_array<value_type, Ndim + 1>(
+            std::numeric_limits<value_type>::max());
 
-      std::array<TData, Ndim + 1> point;
+      std::array<value_type, Ndim + 1> point;
       meta::apply<Ndim>([&]<std::size_t Dim>() -> void { point[Dim] = coords[Dim][index]; });
       point[Ndim] = weight[index];
       return point;

@@ -50,11 +50,15 @@ namespace clue {
   template <std::size_t Ndim, std::floating_point TData = float>
   class PointsHost : public internal::points_interface<PointsHost<Ndim>> {
   public:
-    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+    static_assert(std::is_same_v<TData, std::remove_reference_t<TData>>,
+                  "Points' data must be a non-reference type");
+
+    using element_type = TData;
+    using value_type = std::remove_cv_t<TData>;
 
   private:
     std::optional<host_buffer<std::byte[]>> m_buffer;
-    PointsView<Ndim, value_type> m_view;
+    PointsView<Ndim, element_type> m_view;
     std::optional<ClusterProperties> m_clusterProperties;
     std::optional<std::size_t> m_nclusters;
     std::int32_t m_size;
@@ -97,7 +101,10 @@ namespace clue {
     /// @param output_buffer The pre-allocated buffer to store the cluster indexes
     /// @note The input buffer must contain the coordinates and weights in an SoA format
     template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, int32_t n_points, std::span<value_type> input, std::span<int> output);
+    PointsHost(TQueue& queue,
+               int32_t n_points,
+               std::span<element_type> input,
+               std::span<int> output);
 
     /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
     ///
@@ -110,8 +117,8 @@ namespace clue {
     template <concepts::queue TQueue>
     PointsHost(TQueue& queue,
                int32_t n_points,
-               std::span<value_type> coordinates,
-               std::span<value_type> weights,
+               std::span<element_type> coordinates,
+               std::span<element_type> weights,
                std::span<int> output);
 
     /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
@@ -131,7 +138,7 @@ namespace clue {
     /// @param output_buffer The pre-allocated buffer to store the cluster indexes
     /// @note The input buffer must contain the coordinates and weights in an SoA format
     template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, int32_t n_points, value_type* input, int* output);
+    PointsHost(TQueue& queue, int32_t n_points, element_type* input, int* output);
 
     /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
     ///
@@ -142,8 +149,11 @@ namespace clue {
     /// @param output The pre-allocated buffer to store the cluster indexes
     /// @note The coordinates buffer must have a size of n_points * Ndim
     template <concepts::queue TQueue>
-    PointsHost(
-        TQueue& queue, int32_t n_points, value_type* coordinates, value_type* weights, int* output);
+    PointsHost(TQueue& queue,
+               int32_t n_points,
+               element_type* coordinates,
+               element_type* weights,
+               int* output);
 
     /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
     ///
@@ -246,6 +256,9 @@ namespace clue {
     friend clue::PointsHost<N, Data> read_output(TQueue& queue, const std::string& file_path);
 #endif
   };
+
+  template <std::size_t Ndim, std::floating_point TData = float>
+  using ConstPointsHost = PointsHost<Ndim, std::add_const_t<TData>>;
 
 }  // namespace clue
 
