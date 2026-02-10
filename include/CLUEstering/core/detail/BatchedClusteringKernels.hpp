@@ -151,8 +151,8 @@ namespace clue::detail {
                                   clue::internal::DeviceVectorView event_associations,
                                   const auto* event_offsets,
                                   std::size_t max_event_size) const {
-      for (auto event : alpaka::uniformElementsAlong<0u>(acc)) {
-        for (auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
+      for (const auto event : alpaka::uniformElementsAlong<0u>(acc)) {
+        for (const auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
           const auto global_idx = event_offsets[event] + local_idx;
           if (global_idx < event_offsets[event + 1]) {
             dev_points.cluster_index[global_idx] = -1;
@@ -168,8 +168,8 @@ namespace clue::detail {
             if (is_seed) {
               dev_points.is_seed[global_idx] = 1;
               dev_points.nearest_higher[global_idx] = -1;
-              seeds.push_back(acc, global_idx);
-              event_associations.push_back(acc, event);
+              const auto prev = seeds.push_back(acc, global_idx);
+              event_associations[prev] = event;
             } else {
               dev_points.is_seed[global_idx] = 0;
             }
