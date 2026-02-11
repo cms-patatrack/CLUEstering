@@ -414,6 +414,63 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
   }
 }
 
+TEST_CASE("Test const device points") {
+  auto queue = clue::get_queue(0u);
+
+  const auto size = 1000u;
+  SUBCASE("Two external buffers") {
+    auto input = clue::make_host_buffer<float[]>(queue, 3 * size);
+    auto output = clue::make_host_buffer<int[]>(queue, size);
+    std::iota(input.data(), input.data() + 3 * size, 0.f);
+    std::fill(output.data(), output.data() + size, 1);
+
+    clue::ConstPointsHost<2> points_1(queue, size, input.data(), output.data());
+    clue::ConstPointsHost<2> points_2(
+        queue, size, std::span{input.data(), 3 * size}, std::span{output.data(), size});
+
+    CHECK(true);
+  }
+  SUBCASE("Three external buffers") {
+    auto coords = clue::make_host_buffer<float[]>(queue, 2 * size);
+    auto weights = clue::make_host_buffer<float[]>(queue, size);
+    auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+    std::iota(coords.data(), coords.data() + 2 * size, 0.f);
+    std::fill(weights.data(), weights.data() + size, 1.f);
+    std::fill(cluster_ids.data(), cluster_ids.data() + size, 1);
+
+    clue::ConstPointsHost<2> points_1(
+        queue, size, coords.data(), weights.data(), cluster_ids.data());
+    clue::ConstPointsHost<2> points_2(queue,
+                                      size,
+                                      std::span{coords.data(), 2 * size},
+                                      std::span{weights.data(), size},
+                                      std::span{cluster_ids.data(), size});
+
+    CHECK(true);
+  }
+  SUBCASE("Four external buffers") {
+    auto x0 = clue::make_host_buffer<float[]>(queue, size);
+    auto x1 = clue::make_host_buffer<float[]>(queue, size);
+    auto weights = clue::make_host_buffer<float[]>(queue, size);
+    auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+    std::iota(x0.data(), x0.data() + size, 0.f);
+    std::iota(x1.data(), x1.data() + size, 1000.f);
+    std::fill(weights.data(), weights.data() + size, 1.f);
+    std::fill(cluster_ids.data(), cluster_ids.data() + size, -1);
+
+    clue::ConstPointsHost<2> points_1(
+        queue, size, x0.data(), x1.data(), weights.data(), cluster_ids.data());
+    clue::ConstPointsHost<2> points_2(queue,
+                                      size,
+                                      std::span{x0.data(), size},
+                                      std::span{x1.data(), size},
+                                      std::span{weights.data(), size},
+                                      std::span{cluster_ids.data(), size});
+
+    CHECK(true);
+  }
+}
+
 TEST_CASE("Test point accessor") {
   auto queue = clue::get_queue(0u);
   const uint32_t size = 1000;

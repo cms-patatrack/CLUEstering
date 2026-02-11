@@ -99,10 +99,10 @@ namespace clue::soa::host {
     auto buffers_tuple = std::forward_as_tuple(std::forward<TBuffers>(buffers)...);
 
     meta::apply<Ndim>([&]<std::size_t Dim>() {
-      view.coords[Dim] = std::get<0>(buffers_tuple).data() + Dim * n_points;
+      view.coords[Dim] = std::get<Dim>(buffers_tuple).data() + Dim * n_points;
     });
-    view.weight = std::get<0>(buffers_tuple).data() + Ndim * n_points;
-    view.cluster_index = std::get<1>(buffers_tuple).data();
+    view.weight = std::get<Ndim>(buffers_tuple).data() + Ndim * n_points;
+    view.cluster_index = std::get<Ndim + 1>(buffers_tuple).data();
     view.n = n_points;
   }
 
