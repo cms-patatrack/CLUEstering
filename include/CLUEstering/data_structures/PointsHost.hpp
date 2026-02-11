@@ -48,7 +48,7 @@ namespace clue {
   /// @tparam Ndim The number of dimensions of the points to manage
   /// @tparam TData The data type for the point coordinates and weights
   template <std::size_t Ndim, std::floating_point TData = float>
-  class PointsHost : public internal::points_interface<PointsHost<Ndim>> {
+  class PointsHost : public internal::points_interface<PointsHost<Ndim, TData>> {
   public:
     static_assert(std::is_same_v<TData, std::remove_reference_t<TData>>,
                   "Points' data must be a non-reference type");

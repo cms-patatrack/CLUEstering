@@ -26,8 +26,8 @@ TEST_CASE("Test host points with internal allocation") {
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -75,8 +75,8 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -113,7 +113,7 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
   std::vector<float> input(3 * size);
   std::vector<int> output(2 * size);
 
-  clue::ConstPointsHost<2> h_points(
+  clue::PointsHost<2> h_points(
       queue, size, std::span(input.data(), input.size()), std::span(output.data(), output.size()));
   auto view = h_points.view();
 
@@ -126,8 +126,8 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -164,7 +164,7 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
   std::vector<float> input(3 * size);
   std::vector<int> output(2 * size);
 
-  clue::ConstPointsHost<2> h_points(queue, size, input, output);
+  clue::PointsHost<2> h_points(queue, size, input, output);
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -176,8 +176,8 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -214,7 +214,7 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
   std::vector<float> input(3 * size);
   std::vector<int> output(2 * size);
 
-  clue::ConstPointsHost<2> h_points(queue, size, input.data(), output.data());
+  clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -226,8 +226,8 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -265,12 +265,11 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
   std::vector<float> weights_vector(size);
   std::vector<int> cluster_ids_vector(size);
 
-  clue::ConstPointsHost<2> h_points(
-      queue,
-      size,
-      std::span(coords_vector.data(), coords_vector.size()),
-      std::span(weights_vector.data(), weights_vector.size()),
-      std::span(cluster_ids_vector.data(), cluster_ids_vector.size()));
+  clue::PointsHost<2> h_points(queue,
+                               size,
+                               std::span(coords_vector.data(), coords_vector.size()),
+                               std::span(weights_vector.data(), weights_vector.size()),
+                               std::span(cluster_ids_vector.data(), cluster_ids_vector.size()));
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -282,8 +281,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -321,7 +320,7 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
   std::vector<float> weights_vector(size);
   std::vector<int> cluster_ids_vector(size);
 
-  clue::ConstPointsHost<2> h_points(queue, size, coords_vector, weights_vector, cluster_ids_vector);
+  clue::PointsHost<2> h_points(queue, size, coords_vector, weights_vector, cluster_ids_vector);
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -333,8 +332,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -372,7 +371,7 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
   std::vector<float> weights_vector(size);
   std::vector<int> cluster_ids_vector(size);
 
-  clue::ConstPointsHost<2> h_points(
+  clue::PointsHost<2> h_points(
       queue, size, coords_vector.data(), weights_vector.data(), cluster_ids_vector.data());
   auto view = h_points.view();
 
@@ -385,8 +384,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -412,6 +411,63 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
         std::span(coords, size),
         std::views::iota(2000) | std::views::take(size) | std::views::transform(to_float)));
     std::ranges::for_each(std::span(weights, size), [](auto x) { CHECK(x == 2.f); });
+  }
+}
+
+TEST_CASE("Test const device points") {
+  auto queue = clue::get_queue(0u);
+
+  const auto size = 1000u;
+  SUBCASE("Two external buffers") {
+    auto input = clue::make_host_buffer<float[]>(queue, 3 * size);
+    auto output = clue::make_host_buffer<int[]>(queue, size);
+    std::iota(input.data(), input.data() + 3 * size, 0.f);
+    std::fill(output.data(), output.data() + size, 1);
+
+    clue::ConstPointsHost<2> points_1(queue, size, input.data(), output.data());
+    clue::ConstPointsHost<2> points_2(
+        queue, size, std::span{input.data(), 3 * size}, std::span{output.data(), size});
+
+    CHECK(true);
+  }
+  SUBCASE("Three external buffers") {
+    auto coords = clue::make_host_buffer<float[]>(queue, 2 * size);
+    auto weights = clue::make_host_buffer<float[]>(queue, size);
+    auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+    std::iota(coords.data(), coords.data() + 2 * size, 0.f);
+    std::fill(weights.data(), weights.data() + size, 1.f);
+    std::fill(cluster_ids.data(), cluster_ids.data() + size, 1);
+
+    clue::ConstPointsHost<2> points_1(
+        queue, size, coords.data(), weights.data(), cluster_ids.data());
+    clue::ConstPointsHost<2> points_2(queue,
+                                      size,
+                                      std::span{coords.data(), 2 * size},
+                                      std::span{weights.data(), size},
+                                      std::span{cluster_ids.data(), size});
+
+    CHECK(true);
+  }
+  SUBCASE("Four external buffers") {
+    auto x0 = clue::make_host_buffer<float[]>(queue, size);
+    auto x1 = clue::make_host_buffer<float[]>(queue, size);
+    auto weights = clue::make_host_buffer<float[]>(queue, size);
+    auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+    std::iota(x0.data(), x0.data() + size, 0.f);
+    std::iota(x1.data(), x1.data() + size, 1000.f);
+    std::fill(weights.data(), weights.data() + size, 1.f);
+    std::fill(cluster_ids.data(), cluster_ids.data() + size, -1);
+
+    clue::ConstPointsHost<2> points_1(
+        queue, size, x0.data(), x1.data(), weights.data(), cluster_ids.data());
+    clue::ConstPointsHost<2> points_2(queue,
+                                      size,
+                                      std::span{x0.data(), size},
+                                      std::span{x1.data(), size},
+                                      std::span{weights.data(), size},
+                                      std::span{cluster_ids.data(), size});
+
+    CHECK(true);
   }
 }
 
@@ -443,14 +499,14 @@ TEST_CASE("Test constructor throwing conditions") {
 }
 
 TEST_CASE("Test coordinate getter throwing conditions") {
-  SUBCASE("Const points") {
+  SUBCASE("Non-const points") {
     const uint32_t size = 1000;
     auto queue = clue::get_queue(0u);
     clue::PointsHost<2> points(queue, size);
     CHECK_THROWS(points.coords(3));
     CHECK_THROWS(points.coords(10));
   }
-  SUBCASE("Non-const points") {
+  SUBCASE("Const points") {
     const uint32_t size = 1000;
     auto queue = clue::get_queue(0u);
     const clue::PointsHost<2> points(queue, size);
