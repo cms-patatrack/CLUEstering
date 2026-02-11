@@ -13,6 +13,7 @@
 #include <limits>
 #include <stdexcept>
 #include <span>
+#include <type_traits>
 
 namespace clue {
 
@@ -29,7 +30,10 @@ namespace clue {
         auto& view = static_cast<const TPoints*>(this)->m_view;
         return std::span<const typename TPoints::value_type>(view.coords[dim], view.n);
       }
-      ALPAKA_FN_HOST auto coords(std::size_t dim) {
+      ALPAKA_FN_HOST auto coords(std::size_t dim)
+        requires std::same_as<typename TPoints::element_type,
+                              std::remove_cv_t<typename TPoints::element_type>>
+      {
         if (dim >= TPoints::Ndim_) {
           throw std::out_of_range("Dimension out of range in call to coords.");
         }
@@ -41,7 +45,10 @@ namespace clue {
         auto& view = static_cast<const TPoints*>(this)->m_view;
         return std::span<const typename TPoints::value_type>(view.weight, view.n);
       }
-      ALPAKA_FN_HOST auto weights() {
+      ALPAKA_FN_HOST auto weights()
+        requires std::same_as<typename TPoints::element_type,
+                              std::remove_cv_t<typename TPoints::element_type>>
+      {
         auto& view = static_cast<TPoints*>(this)->m_view;
         return std::span<typename TPoints::value_type>(view.weight, view.n);
       }

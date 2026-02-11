@@ -26,8 +26,8 @@ TEST_CASE("Test host points with internal allocation") {
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -75,8 +75,8 @@ TEST_CASE("Test host points with external allocation of whole buffer") {
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -113,7 +113,7 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
   std::vector<float> input(3 * size);
   std::vector<int> output(2 * size);
 
-  clue::ConstPointsHost<2> h_points(
+  clue::PointsHost<2> h_points(
       queue, size, std::span(input.data(), input.size()), std::span(output.data(), output.size()));
   auto view = h_points.view();
 
@@ -126,8 +126,8 @@ TEST_CASE("Test host points with external allocation passing two buffers as span
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -164,7 +164,7 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
   std::vector<float> input(3 * size);
   std::vector<int> output(2 * size);
 
-  clue::ConstPointsHost<2> h_points(queue, size, input, output);
+  clue::PointsHost<2> h_points(queue, size, input, output);
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -176,8 +176,8 @@ TEST_CASE("Test host points with external allocation passing two buffers as vect
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -214,7 +214,7 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
   std::vector<float> input(3 * size);
   std::vector<int> output(2 * size);
 
-  clue::ConstPointsHost<2> h_points(queue, size, input.data(), output.data());
+  clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -226,8 +226,8 @@ TEST_CASE("Test host points with external allocation passing two buffers as poin
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -265,12 +265,11 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
   std::vector<float> weights_vector(size);
   std::vector<int> cluster_ids_vector(size);
 
-  clue::ConstPointsHost<2> h_points(
-      queue,
-      size,
-      std::span(coords_vector.data(), coords_vector.size()),
-      std::span(weights_vector.data(), weights_vector.size()),
-      std::span(cluster_ids_vector.data(), cluster_ids_vector.size()));
+  clue::PointsHost<2> h_points(queue,
+                               size,
+                               std::span(coords_vector.data(), coords_vector.size()),
+                               std::span(weights_vector.data(), weights_vector.size()),
+                               std::span(cluster_ids_vector.data(), cluster_ids_vector.size()));
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -282,8 +281,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as spa
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -321,7 +320,7 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
   std::vector<float> weights_vector(size);
   std::vector<int> cluster_ids_vector(size);
 
-  clue::ConstPointsHost<2> h_points(queue, size, coords_vector, weights_vector, cluster_ids_vector);
+  clue::PointsHost<2> h_points(queue, size, coords_vector, weights_vector, cluster_ids_vector);
   auto view = h_points.view();
 
   CHECK(view.n == size);
@@ -333,8 +332,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as vec
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -372,7 +371,7 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
   std::vector<float> weights_vector(size);
   std::vector<int> cluster_ids_vector(size);
 
-  clue::ConstPointsHost<2> h_points(
+  clue::PointsHost<2> h_points(
       queue, size, coords_vector.data(), weights_vector.data(), cluster_ids_vector.data());
   auto view = h_points.view();
 
@@ -385,8 +384,8 @@ TEST_CASE("Test host points with external allocation passing four buffers as poi
     std::fill(weights.begin(), weights.end(), 1.f);
 
     // compare with content of the view
-    CHECK(std::ranges::equal(coords, std::span<float>(view.coords[0], size)));
-    CHECK(std::ranges::equal(weights, std::span<float>(view.weight, size)));
+    CHECK(std::ranges::equal(coords, std::span(view.coords[0], size)));
+    CHECK(std::ranges::equal(weights, std::span(view.weight, size)));
 
     // check content
     auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -443,14 +442,14 @@ TEST_CASE("Test constructor throwing conditions") {
 }
 
 TEST_CASE("Test coordinate getter throwing conditions") {
-  SUBCASE("Const points") {
+  SUBCASE("Non-const points") {
     const uint32_t size = 1000;
     auto queue = clue::get_queue(0u);
     clue::PointsHost<2> points(queue, size);
     CHECK_THROWS(points.coords(3));
     CHECK_THROWS(points.coords(10));
   }
-  SUBCASE("Non-const points") {
+  SUBCASE("Const points") {
     const uint32_t size = 1000;
     auto queue = clue::get_queue(0u);
     const clue::PointsHost<2> points(queue, size);
