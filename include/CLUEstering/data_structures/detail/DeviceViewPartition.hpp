@@ -32,10 +32,12 @@ namespace clue::soa::device {
     view.weight = reinterpret_cast<value_type*>(buffer + Ndim * n_points * sizeof(value_type));
     view.cluster_index =
         reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(value_type));
-    view.is_seed = reinterpret_cast<int*>(buffer + (Ndim + 2) * n_points * sizeof(value_type));
-    view.rho = reinterpret_cast<value_type*>(buffer + (Ndim + 3) * n_points * sizeof(value_type));
-    view.nearest_higher =
-        reinterpret_cast<int*>(buffer + (Ndim + 4) * n_points * sizeof(value_type));
+    view.is_seed =
+        reinterpret_cast<int*>(buffer + n_points * ((Ndim + 1) * sizeof(value_type) + sizeof(int)));
+    view.rho = reinterpret_cast<value_type*>(
+        buffer + n_points * ((Ndim + 1) * sizeof(value_type) + 2 * sizeof(int)));
+    view.nearest_higher = reinterpret_cast<int*>(
+        buffer + n_points * ((Ndim + 2) * sizeof(value_type) + 2 * sizeof(int)));
     view.n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -53,8 +55,9 @@ namespace clue::soa::device {
     view.cluster_index =
         reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(value_type));
     view.is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(value_type));
+    view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(int));
+    view.nearest_higher =
+        reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -72,7 +75,8 @@ namespace clue::soa::device {
     view.cluster_index = output.data();
     view.is_seed = reinterpret_cast<int*>(alloc_buffer);
     view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(value_type));
+    view.nearest_higher =
+        reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -88,7 +92,8 @@ namespace clue::soa::device {
     view.cluster_index = output.data();
     view.is_seed = reinterpret_cast<int*>(alloc_buffer);
     view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(value_type));
+    view.nearest_higher =
+        reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.n = n_points;
   }
 
@@ -106,7 +111,8 @@ namespace clue::soa::device {
     view.cluster_index = output;
     view.is_seed = reinterpret_cast<int*>(alloc_buffer);
     view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(value_type));
+    view.nearest_higher =
+        reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -122,7 +128,8 @@ namespace clue::soa::device {
     view.cluster_index = output;
     view.is_seed = reinterpret_cast<int*>(alloc_buffer);
     view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(value_type));
+    view.nearest_higher =
+        reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement, concepts::pointer... TBuffers>
@@ -141,7 +148,8 @@ namespace clue::soa::device {
     view.cluster_index = std::get<Ndim + 1>(buffers_tuple);
     view.is_seed = reinterpret_cast<int*>(alloc_buffer);
     view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher = reinterpret_cast<int*>(alloc_buffer + 2 * n_points * sizeof(value_type));
+    view.nearest_higher =
+        reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.n = n_points;
   }
 
