@@ -7,7 +7,7 @@
 #include <vector>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "doctest.h"
+#include <doctest/doctest.h>
 
 TEST_CASE("Test host points with internal allocation") {
   const auto device = clue::get_device(0u);

@@ -13,7 +13,7 @@ foreach(source ${sources})
   add_executable(${target} ${source})
   add_test(NAME ${target} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/hip/${test_name})
   target_include_directories(
-    ${target} PRIVATE ${CMAKE_SOURCE_DIR}/include ${doctest_SOURCE_DIR}/doctest
+    ${target} PRIVATE ${CMAKE_SOURCE_DIR}/include ${doctest_SOURCE_DIR}
                       ${HIP_INCLUDE_DIR})
   target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt)
   target_compile_definitions(

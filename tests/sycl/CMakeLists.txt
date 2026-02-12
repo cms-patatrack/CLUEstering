@@ -9,7 +9,7 @@ foreach(source ${sources})
   add_executable(${target} ${sources})
   add_test(NAME ${target} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/sycl/${test_name})
   target_include_directories(${target} PRIVATE ${CMAKE_SOURCE_DIR}/include
-                                               ${doctest_SOURCE_DIR}/doctest)
+                                               ${doctest_SOURCE_DIR})
   target_include_directories(${target} PRIVATE ${oneDPL_DIR})
   target_compile_options(${target} PRIVATE -DALPAKA_ACC_SYCL_ENABLED
                                            -DALPAKA_SYCL_ONEAPI_CPU -fsycl)
@@ -30,7 +30,7 @@ foreach(source ${sources})
   add_executable(${target} ${sources})
   add_test(NAME ${target} COMMAND ${CMAKE_CURRENT_BINARY_DIR}/sycl/${test_name})
   target_include_directories(${target} PRIVATE ${CMAKE_SOURCE_DIR}/include
-                                               ${doctest_SOURCE_DIR}/doctest)
+                                               ${doctest_SOURCE_DIR})
   target_include_directories(${target} PRIVATE ${oneDPL_DIR})
   target_compile_options(${target} PRIVATE -DALPAKA_ACC_SYCL_ENABLED
                                            -DALPAKA_SYCL_ONEAPI_GPU -fsycl)

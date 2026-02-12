@@ -3,7 +3,7 @@
 #include "CLUEstering/utils/detail/get_cluster_properties.hpp"
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "doctest.h"
+#include <doctest/doctest.h>
 
 TEST_CASE("Test batched clustering with fixed batch size") {
   SUBCASE("Test from host points") {
