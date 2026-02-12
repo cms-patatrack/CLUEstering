@@ -25,15 +25,23 @@ namespace clue {
   template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   class PointsDevice;
 
-  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  template <concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point THostInput,
+            std::floating_point TDeviceInput,
+            concepts::device TDev>
   void copyToHost(TQueue& queue,
-                  PointsHost<Ndim, TData>& h_points,
-                  const PointsDevice<Ndim, TData, TDev>& d_points);
+                  PointsHost<Ndim, THostInput>& h_points,
+                  const PointsDevice<Ndim, TDeviceInput, TDev>& d_points);
 
-  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  template <concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TDeviceInput,
+            concepts::device TDev,
+            std::floating_point THostInput>
   void copyToDevice(TQueue& queue,
-                    PointsDevice<Ndim, TData, TDev>& d_points,
-                    const PointsHost<Ndim, TData>& h_points);
+                    PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
+                    const PointsHost<Ndim, THostInput>& h_points);
 
   /// @brief The PointsDevice class is a data structure that manages points on a device.
   /// It provides methods to allocate, access, and manipulate points in device memory.
@@ -190,15 +198,23 @@ namespace clue {
 #ifndef CLUE_BUILD_DOXYGEN
     friend class Clusterer<Ndim, TData>;
 
-    template <concepts::queue TQueue, std::size_t N, std::floating_point Data, concepts::device Dev>
+    template <concepts::queue TQueue,
+              std::size_t N,
+              std::floating_point THostInput,
+              std::floating_point TDeviceInput,
+              concepts::device Dev>
     friend void copyToHost(TQueue& queue,
-                           PointsHost<N, Data>& h_points,
-                           const PointsDevice<N, Data, Dev>& d_points);
+                           PointsHost<N, THostInput>& h_points,
+                           const PointsDevice<N, TDeviceInput, Dev>& d_points);
 
-    template <concepts::queue TQueue, std::size_t N, std::floating_point Data, concepts::device Dev>
+    template <concepts::queue TQueue,
+              std::size_t N,
+              std::floating_point TDeviceInput,
+              concepts::device Dev,
+              std::floating_point THostInput>
     friend void copyToDevice(TQueue& queue,
-                             PointsDevice<N, Data, Dev>& d_points,
-                             const PointsHost<N, Data>& h_points);
+                             PointsDevice<N, TDeviceInput, Dev>& d_points,
+                             const PointsHost<N, THostInput>& h_points);
 
     friend struct internal::points_interface<PointsDevice<Ndim, TData, TDev>>;
 #endif
