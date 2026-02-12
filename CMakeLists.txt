@@ -63,3 +63,9 @@ configure_package_config_file(
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfig.cmake"
               "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfigVersion.cmake"
         DESTINATION lib/cmake/CLUEstering)
+
+if(BUILD_TESTING)
+  option(COVERAGE "Enable code coverage" OFF)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
