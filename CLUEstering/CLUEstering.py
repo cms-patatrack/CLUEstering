@@ -22,19 +22,19 @@ import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
 
 backends = ["cpu serial"]
-tbb_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
+tbb_found = bool((glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
 if tbb_found:
     import CLUE_CPU_TBB as cpu_tbb
     backends.append("cpu tbb")
-omp_found = exists(str(*glob(join(path, 'lib/CLUE_CPU_OMP*.so'))))
+omp_found = bool((glob(join(path, 'lib/CLUE_CPU_OMP*.so'))))
 if omp_found:
     import CLUE_CPU_OMP as cpu_omp
     backends.append("cpu openmp")
-cuda_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))))
+cuda_found = bool((glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))))
 if cuda_found:  # pragma: no cover
     import CLUE_GPU_CUDA as gpu_cuda
     backends.append("gpu cuda")
-hip_found = exists(str(*glob(join(path, 'lib/CLUE_GPU_HIP*.so'))))
+hip_found = bool((glob(join(path, 'lib/CLUE_GPU_HIP*.so'))))
 if hip_found:   # pragma: no cover
     import CLUE_GPU_HIP as gpu_hip
     backends.append("gpu hip")
