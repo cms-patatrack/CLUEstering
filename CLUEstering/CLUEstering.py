@@ -300,15 +300,15 @@ class clusterer:
         ndim = len(input_data[:-1])
         coords = np.vstack([input_data[:-1],      # coordinates SoA
                             input_data[-1]],      # weights
-                            dtype=np.float32)
-        coords = np.ascontiguousarray(coords, dtype=np.float32)
+                            dtype=type(input_data[0][0]))
+        coords = np.ascontiguousarray(coords, dtype=type(input_data[0][0]))
         results = np.zeros(npoints, dtype=np.int32)    # cluster ids
         self.clust_data = ClusteringDataSoA(coords,
                                             results,
                                             ndim,
                                             npoints)
 
-    def _read_string(self, input_data: str) -> Union[pd.DataFrame, None]:
+    def _read_string(self, input_data: str, dtype: Union[np.float32, np.float64] = np.float32) -> Union[pd.DataFrame, None]:
         """
         Read input data from a CSV file.
 
@@ -322,11 +322,11 @@ class clusterer:
         """
         if not input_data.endswith('.csv'):
             raise ValueError('Wrong type of file. The file is not a csv file.')
-        df_ = pd.read_csv(input_data, dtype=np.float32)
+        df_ = pd.read_csv(input_data, dtype=dtype)
         return df_
 
 
-    def _read_dict_df(self, input_data: Union[dict, pd.DataFrame]) -> pd.DataFrame:
+    def _read_dict_df(self, input_data: Union[dict, pd.DataFrame], dtype: Union[np.float32, np.float64] = np.float32) -> pd.DataFrame:
         """
         Read input data from a dictionary or pandas DataFrame.
 
@@ -336,7 +336,7 @@ class clusterer:
         :returns: DataFrame containing the input data.
         :rtype: pd.DataFrame
         """
-        df_ = pd.DataFrame(input_data, copy=False, dtype=np.float32)
+        df_ = pd.DataFrame(input_data, copy=False, dtype=dtype)
         return df_
 
 
@@ -359,8 +359,8 @@ class clusterer:
         ndim = len(df_.columns) - 1
         npoints = len(df_.index)
         coords = df_.iloc[:, 0:-1].to_numpy()
-        coords = np.vstack([coords.T, df_.iloc[:, -1]], dtype=np.float32)
-        coords = np.ascontiguousarray(coords, dtype=np.float32)
+        coords = np.vstack([coords.T, df_.iloc[:, -1]], dtype=df_.dtypes.iloc[0])
+        coords = np.ascontiguousarray(coords, dtype=df_.dtypes.iloc[0])
         results = np.zeros(npoints, dtype=np.int32)
 
         self.clust_data = ClusteringDataSoA(coords, results, ndim, npoints)
@@ -560,7 +560,7 @@ class clusterer:
         """
         coords = [np.copy(self.clust_data.coords[dim]) for dim in dimensions]
         coords.append(np.copy(self.clust_data.coords[-1]))
-        return np.ascontiguousarray(coords, dtype=np.float32)
+        return np.ascontiguousarray(coords, dtype=type(self.clust_data.coords[0][0]))
 
 
     def run_clue(self,

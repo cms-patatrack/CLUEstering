@@ -23,56 +23,12 @@ namespace alpaka_rocm_async {
     m.def("listDevices",
           &alpaka_rocm_async::listDevices,
           "List the available devices for the HIP/ROCm backend");
-    m.def("mainRun", &alpaka_rocm_async::mainRun<float, clue::FlatKernel<float>>, "mainRun");
-    m.def("mainRun", &alpaka_rocm_async::mainRun<float, clue::ExponentialKernel<float>>, "mainRun");
-    m.def("mainRun", &alpaka_rocm_async::mainRun<float, clue::GaussianKernel<float>>, "mainRun");
-    // m.def("mainRun",
-    //       pybind11::overload_cast<double,
-    //                               double,
-    //                               double,
-    //                               double,
-    //                               int,
-    //                               std::vector<uint8_t>,
-    //                               py::array_t<double>,
-    //                               py::array_t<int>,
-    //                               const clue::FlatKernel<double>&,
-    //                               int,
-    //                               int32_t,
-    //                               size_t,
-    //                               size_t>(
-    //           &alpaka_rocm_async::mainRun<double, clue::FlatKernel<double>>),
-    //       "mainRun");
-    // m.def("mainRun",
-    //       pybind11::overload_cast<double,
-    //                               double,
-    //                               double,
-    //                               double,
-    //                               int,
-    //                               std::vector<uint8_t>,
-    //                               py::array_t<double>,
-    //                               py::array_t<int>,
-    //                               const clue::ExponentialKernel<double>&,
-    //                               int,
-    //                               int32_t,
-    //                               size_t,
-    //                               size_t>(
-    //           &alpaka_rocm_async::mainRun<double, clue::ExponentialKernel<double>>),
-    //       "mainRun");
-    // m.def("mainRun",
-    //       pybind11::overload_cast<double,
-    //                               double,
-    //                               double,
-    //                               double,
-    //                               int,
-    //                               std::vector<uint8_t>,
-    //                               py::array_t<double>,
-    //                               py::array_t<int>,
-    //                               const clue::GaussianKernel<double>&,
-    //                               int,
-    //                               int32_t,
-    //                               size_t,
-    //                               size_t>(
-    //           &alpaka_rocm_async::mainRun<double, clue::GaussianKernel<double>>),
-    //       "mainRun");
+    m.def("mainRun", &alpaka_rocm_async::mainRun<float, clue::FlatKernel>);
+    m.def("mainRun", &alpaka_rocm_async::mainRun<float, clue::ExponentialKernel>);
+    m.def("mainRun", &alpaka_rocm_async::mainRun<float, clue::GaussianKernel>);
+
+    m.def("mainRun", &alpaka_rocm_async::mainRun<double, clue::FlatKernel>);
+    m.def("mainRun", &alpaka_rocm_async::mainRun<double, clue::ExponentialKernel>);
+    m.def("mainRun", &alpaka_rocm_async::mainRun<double, clue::GaussianKernel>);
   }
 };  // namespace alpaka_rocm_async
