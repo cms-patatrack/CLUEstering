@@ -23,9 +23,9 @@ namespace alpaka_tbb_async {
     m.def("listDevices",
           &alpaka_tbb_async::listDevices,
           "List the available devices for the TBB backend");
-    m.def("mainRun", &alpaka_tbb_async::mainRun<float, clue::FlatKernel<float>>, "mainRun");
-    m.def("mainRun", &alpaka_tbb_async::mainRun<float, clue::ExponentialKernel<float>>, "mainRun");
-    m.def("mainRun", &alpaka_tbb_async::mainRun<float, clue::GaussianKernel<float>>, "mainRun");
+    m.def("mainRun", &alpaka_tbb_async::mainRun<float, clue::FlatKernel>, "mainRun");
+    m.def("mainRun", &alpaka_tbb_async::mainRun<float, clue::ExponentialKernel>, "mainRun");
+    m.def("mainRun", &alpaka_tbb_async::mainRun<float, clue::GaussianKernel>, "mainRun");
     // m.def("mainRun",
     //       pybind11::overload_cast<double,
     //                               double,
