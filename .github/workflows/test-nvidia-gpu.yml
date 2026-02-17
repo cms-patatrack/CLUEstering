@@ -16,6 +16,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install alpaka
+        run: |
+          wget https://github.com/alpaka-group/alpaka/archive/refs/tags/2.1.1.tar.gz
+          tar -xzf 2.1.1.tar.gz && cd alpaka-2.1.1
+          cmake -B build -DCMAKE_INSTALL_PREFIX=/usr/local
+          sudo cmake --install build
+
       - name: Compile and run benchmark
         working-directory: ${{ github.workspace }}
         run: |
