@@ -20,5 +20,5 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release
-          cmake --build build --parallel
+          cmake --build build --parallel -v
           ctest --test-dir build/cuda --output-on-failure
