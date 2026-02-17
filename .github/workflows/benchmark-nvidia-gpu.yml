@@ -27,7 +27,7 @@ jobs:
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build --parallel
+        cmake --build build --parallel --verbose
         echo "Running serial backend"
         ./build/serial.out
         echo "Running OpenMP backend"
