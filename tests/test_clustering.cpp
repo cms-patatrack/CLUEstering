@@ -267,3 +267,132 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
     CHECK(points.n_clusters() == 1);
   }
 }
+
+TEST_CASE("Test clustering from constant host points") {
+  auto queue = clue::get_queue(0u);
+
+  SUBCASE("single-precision floating point data") {
+    const auto size = 1000u;
+    const float dc{.2f}, rhoc{5.f}, outlier{.2f};
+    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    SUBCASE("Two external buffers") {
+      auto input = clue::make_host_buffer<float[]>(queue, 3 * size);
+      auto output = clue::make_host_buffer<int[]>(queue, size);
+      std::iota(input.data(), input.data() + 3 * size, 0.f);
+      std::fill(output.data(), output.data() + size, 1);
+
+      clue::ConstPointsHost<2> points_1(queue, size, input.data(), output.data());
+      clue::ConstPointsHost<2> points_2(
+          queue, size, std::span{input.data(), 3 * size}, std::span{output.data(), size});
+      algo.make_clusters(queue, points_1);
+      algo.make_clusters(queue, points_2);
+
+      CHECK(true);
+    }
+    SUBCASE("Three external buffers") {
+      auto coords = clue::make_host_buffer<float[]>(queue, 2 * size);
+      auto weights = clue::make_host_buffer<float[]>(queue, size);
+      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      std::iota(coords.data(), coords.data() + 2 * size, 0.f);
+      std::fill(weights.data(), weights.data() + size, 1.f);
+      std::fill(cluster_ids.data(), cluster_ids.data() + size, 1);
+
+      clue::ConstPointsHost<2> points_1(
+          queue, size, coords.data(), weights.data(), cluster_ids.data());
+      clue::ConstPointsHost<2> points_2(queue,
+                                        size,
+                                        std::span{coords.data(), 2 * size},
+                                        std::span{weights.data(), size},
+                                        std::span{cluster_ids.data(), size});
+      algo.make_clusters(queue, points_1);
+      algo.make_clusters(queue, points_2);
+
+      CHECK(true);
+    }
+    SUBCASE("Four external buffers") {
+      auto x0 = clue::make_host_buffer<float[]>(queue, size);
+      auto x1 = clue::make_host_buffer<float[]>(queue, size);
+      auto weights = clue::make_host_buffer<float[]>(queue, size);
+      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      std::iota(x0.data(), x0.data() + size, 0.f);
+      std::iota(x1.data(), x1.data() + size, 1000.f);
+      std::fill(weights.data(), weights.data() + size, 1.f);
+      std::fill(cluster_ids.data(), cluster_ids.data() + size, -1);
+
+      clue::ConstPointsHost<2> points_1(
+          queue, size, x0.data(), x1.data(), weights.data(), cluster_ids.data());
+      clue::ConstPointsHost<2> points_2(queue,
+                                        size,
+                                        std::span{x0.data(), size},
+                                        std::span{x1.data(), size},
+                                        std::span{weights.data(), size},
+                                        std::span{cluster_ids.data(), size});
+      algo.make_clusters(queue, points_1);
+      algo.make_clusters(queue, points_2);
+
+      CHECK(true);
+    }
+  }
+  SUBCASE("double-precision floating point data") {
+    const auto size = 1000u;
+    const auto dc{.2}, rhoc{5.}, outlier{.2};
+    clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+    SUBCASE("Two external buffers") {
+      auto input = clue::make_host_buffer<double[]>(queue, 3 * size);
+      auto output = clue::make_host_buffer<int[]>(queue, size);
+      std::iota(input.data(), input.data() + 3 * size, 0.f);
+      std::fill(output.data(), output.data() + size, 1);
+
+      clue::ConstPointsHost<2, double> points_1(queue, size, input.data(), output.data());
+      clue::ConstPointsHost<2, double> points_2(
+          queue, size, std::span{input.data(), 3 * size}, std::span{output.data(), size});
+      algo.make_clusters(queue, points_1);
+      algo.make_clusters(queue, points_2);
+
+      CHECK(true);
+    }
+    SUBCASE("Three external buffers") {
+      auto coords = clue::make_host_buffer<double[]>(queue, 2 * size);
+      auto weights = clue::make_host_buffer<double[]>(queue, size);
+      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      std::iota(coords.data(), coords.data() + 2 * size, 0.f);
+      std::fill(weights.data(), weights.data() + size, 1.f);
+      std::fill(cluster_ids.data(), cluster_ids.data() + size, 1);
+
+      clue::ConstPointsHost<2, double> points_1(
+          queue, size, coords.data(), weights.data(), cluster_ids.data());
+      clue::ConstPointsHost<2, double> points_2(queue,
+                                                size,
+                                                std::span{coords.data(), 2 * size},
+                                                std::span{weights.data(), size},
+                                                std::span{cluster_ids.data(), size});
+      algo.make_clusters(queue, points_1);
+      algo.make_clusters(queue, points_2);
+
+      CHECK(true);
+    }
+    SUBCASE("Four external buffers") {
+      auto x0 = clue::make_host_buffer<double[]>(queue, size);
+      auto x1 = clue::make_host_buffer<double[]>(queue, size);
+      auto weights = clue::make_host_buffer<double[]>(queue, size);
+      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      std::iota(x0.data(), x0.data() + size, 0.f);
+      std::iota(x1.data(), x1.data() + size, 1000.f);
+      std::fill(weights.data(), weights.data() + size, 1.f);
+      std::fill(cluster_ids.data(), cluster_ids.data() + size, -1);
+
+      clue::ConstPointsHost<2, double> points_1(
+          queue, size, x0.data(), x1.data(), weights.data(), cluster_ids.data());
+      clue::ConstPointsHost<2, double> points_2(queue,
+                                                size,
+                                                std::span{x0.data(), size},
+                                                std::span{x1.data(), size},
+                                                std::span{weights.data(), size},
+                                                std::span{cluster_ids.data(), size});
+      algo.make_clusters(queue, points_1);
+      algo.make_clusters(queue, points_2);
+
+      CHECK(true);
+    }
+  }
+}

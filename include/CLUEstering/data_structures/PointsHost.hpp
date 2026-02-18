@@ -246,7 +246,7 @@ namespace clue {
     void mark_clustered() { m_clustered = true; }
 
 #ifndef CLUE_BUILD_DOXYGEN
-    friend class Clusterer<Ndim, TData>;
+    friend class Clusterer<Ndim, std::remove_cv_t<TData>>;
 
     template <concepts::queue TQueue,
               std::size_t N,
