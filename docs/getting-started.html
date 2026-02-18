@@ -1,0 +1,1128 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="installation.html">
+      
+      
+        <link rel="next" href="cpp/index.html">
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>Getting Started - CLUEstering 2.9.0 documentation</title>
+      
+    
+    
+      
+        
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+        <link rel="stylesheet" type="text/css" href="_static/sphinx_immaterial_theme.cf2c65c97ee1b6f01.min.css?v=0a68cab4" />
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#using-the-c-interface" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="CLUEstering 2.9.0 documentation" class="md-header__button md-logo" aria-label="CLUEstering 2.9.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CLUEstering 2.9.0 documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Getting Started
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="CLUEstering 2.9.0 documentation" class="md-nav__button md-logo" aria-label="CLUEstering 2.9.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    CLUEstering 2.9.0 documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Introduction to CLUEstering</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dependencies.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Supported Backends and Dependencies</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="installation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>How to Install</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <span>Getting Started</span>
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Getting Started</span>
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-c-interface" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Using the C++ Interface</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compiling-the-code" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Compiling the Code</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-python-interface" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Using the Python Interface</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-format" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Data Format</span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="cpp/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>C++ API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            <span>C++ API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/points_host.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Host</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/points_device.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Device</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/points_conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Conversions</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/distance_metrics.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Distance metrics</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/convolutional_kernel.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Convolutional Kernels</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/association_map.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association map</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/association_map_view.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association<wbr>Map<wbr>View</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/cluster_properties.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster properties</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/get_clusters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusters associations</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/cluster_centroid.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster centroids</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/read_csv.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>File reading</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/alpaka_utils.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Alpaka utilities</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/scores.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Validation scores</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="python/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>Python API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Python API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="python/clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-c-interface" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Using the C++ Interface</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compiling-the-code" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Compiling the Code</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-python-interface" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Using the Python Interface</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-format" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Data Format</span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h1>
+<p>In this section we see how to write minimal code that clusters data using CLUEstering.</p>
+<h2 id="using-the-c-interface">Using the C++ Interface<a class="headerlink" href="#using-the-c-interface" title="Link to this heading">¶</a></h2>
+<p>Below is a simple C++ code snippet, which can also be found, along with the CMake file for build, in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;CLUEstering/CLUEstering.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Obtain the queue, which is used for allocations and kernel launches.</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clue</span><span class="o">::</span><span class="n">get_queue</span><span class="p">(</span><span class="mi">0u</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Allocate the points on the host and device.</span>
+<span class="w">    </span><span class="n">clue</span><span class="o">::</span><span class="n">PointsHost</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">h_points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clue</span><span class="o">::</span><span class="n">read_csv</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path-to-data.csv&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">clue</span><span class="o">::</span><span class="n">PointsDevice</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d_points</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">h_points</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+<span class="w">    </span><span class="c1">// Define the parameters for the clustering and construct the clusterer.</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">dc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">20.f</span><span class="p">,</span><span class="w"> </span><span class="n">rhoc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.f</span><span class="p">,</span><span class="w"> </span><span class="n">outlier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">20.f</span><span class="p">;</span>
+<span class="w">    </span><span class="n">clue</span><span class="o">::</span><span class="n">Clusterer</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">algo</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">dc</span><span class="p">,</span><span class="w"> </span><span class="n">rhoc</span><span class="p">,</span><span class="w"> </span><span class="n">outlier</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Launch the clustering</span>
+<span class="w">    </span><span class="c1">// The results will be stored in the `clue::PointsHost` object</span>
+<span class="w">    </span><span class="n">algo</span><span class="p">.</span><span class="n">make_clusters</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">h_points</span><span class="p">,</span><span class="w"> </span><span class="n">d_points</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Read the data from the host points</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">clusters_indexes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h_points</span><span class="p">.</span><span class="n">clusterIndexes</span><span class="p">();</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">clusters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clue</span><span class="o">::</span><span class="n">get_clusters</span><span class="p">(</span><span class="n">h_points</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>The first step is to create the <code class="docutils literal notranslate"><span class="pre">Queue</span></code> object. A <code class="docutils literal notranslate"><span class="pre">Queue</span></code> can be thought of as a <code class="docutils literal notranslate"><span class="pre">std::thread</span></code> or as a stream of CUDA/HIP, and represents a queue of operations to be executed on a specific device. The queue will be used to allocate memory and launch kernels on the device.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">clue::get_queue</span></code> function provides a convenient way to obtain a queue from a specific device:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">device</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clue</span><span class="o">::</span><span class="n">get_device</span><span class="p">(</span><span class="mi">0u</span><span class="p">);</span><span class="w">      </span><span class="c1">// Get the device with index 0</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clue</span><span class="o">::</span><span class="n">get_queue</span><span class="p">(</span><span class="n">device</span><span class="p">);</span><span class="w">    </span><span class="c1">// Create a queue from the device</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">another_queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clue</span><span class="o">::</span><span class="n">Queue</span><span class="p">(</span><span class="n">device</span><span class="p">);</span><span class="c1">// Or call Queue constructor directly</span>
+</code></pre></div>
+</div>
+<p>Next, create the containers for the device points. CLUEstering provides <code class="docutils literal notranslate"><span class="pre">clue::PointsHost</span></code> and <code class="docutils literal notranslate"><span class="pre">clue::PointsDevice</span></code> containers, representing data allocated on the host and on the device. Data is read from a CSV file using <code class="docutils literal notranslate"><span class="pre">clue::read_csv</span></code>, returning a <code class="docutils literal notranslate"><span class="pre">PointsHost</span></code> object, then an empty <code class="docutils literal notranslate"><span class="pre">PointsDevice</span></code> is created.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">clue::Clusterer</span></code> handles internal allocations and contains the algorithm logic. It requires CLUE algorithm parameters to be passed.</p>
+<p>Finally, launch the algorithm with <code class="docutils literal notranslate"><span class="pre">make_clusters</span></code>, which copies input data from host to device, executes on the device, and copies results back to the host. Results can be read from the host points:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">clue::PointsHost::clusterIndexes</span></code> → span of integers for cluster index per point</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clue::PointsHost::isSeed</span></code> → boolean array for cluster seeds</p></li>
+</ul>
+<h2 id="compiling-the-code">Compiling the Code<a class="headerlink" href="#compiling-the-code" title="Link to this heading">¶</a></h2>
+<p>To compile code using CLUEstering:</p>
+<ol class="arabic simple">
+<li><p>Include the library headers (via source, submodule, CMake <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code>, or installed path)</p></li>
+<li><p>Include/link backend-specific libraries/compilers</p></li>
+<li><p>Specify the Alpaka backend to use</p></li>
+</ol>
+<p>Example CMake file:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><code><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.16.0</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">CLUEsteringExample</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span><span class="w"> </span><span class="s">20</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span><span class="w"> </span><span class="s">ON</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_EXTENSIONS</span><span class="w"> </span><span class="s">OFF</span><span class="p">)</span>
+
+<span class="nb">find_package</span><span class="p">(</span><span class="s">CLUEstering</span><span class="p">)</span>
+<span class="nb">if</span><span class="p">(</span><span class="s">NOT</span><span class="w"> </span><span class="s">CLUEstering_FOUND</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">message</span><span class="p">(</span><span class="s">FATAL_ERROR</span><span class="w"> </span><span class="s2">&quot;CLUEstering not found. Please install it.&quot;</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">add_executable</span><span class="p">(</span><span class="s">serial.out</span><span class="w"> </span><span class="s">main.cpp</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">serial.out</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">find_package</span><span class="p">(</span><span class="s">TBB</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">add_executable</span><span class="p">(</span><span class="s">tbb.out</span><span class="w"> </span><span class="s">main.cpp</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">tbb.out</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">tbb.out</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">TBB::tbb</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">find_package</span><span class="p">(</span><span class="s">OpenMP</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">add_executable</span><span class="p">(</span><span class="s">openmp.out</span><span class="w"> </span><span class="s">main.cpp</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">openmp.out</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">openmp.out</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">OpenMP::OpenMP_CXX</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">ALPAKA_ACC_GPU_CUDA_ENABLED</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">include</span><span class="p">(</span><span class="s">CheckLanguage</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">check_language</span><span class="p">(</span><span class="s">CUDA</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">set_source_files_properties</span><span class="p">(</span><span class="s">main.cpp</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">LANGUAGE</span><span class="w"> </span><span class="s">CUDA</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">add_executable</span><span class="p">(</span><span class="s">cuda.out</span><span class="w"> </span><span class="s">main.cpp</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">cuda.out</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">ALPAKA_ACC_GPU_CUDA_ENABLED</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">set_target_properties</span><span class="p">(</span><span class="s">cuda.out</span><span class="w"> </span><span class="s">PROPERTIES</span><span class="w"> </span><span class="s">CUDA_SEPARABLE_COMPILATION</span><span class="w"> </span><span class="s">ON</span><span class="w"> </span><span class="s">CUDA_ARCHITECTURES</span><span class="w"> </span><span class="s">native</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<h2 id="using-the-python-interface">Using the Python Interface<a class="headerlink" href="#using-the-python-interface" title="Link to this heading">¶</a></h2>
+<p>Minimal example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">CLUEstering</span> <span class="k">as</span> <span class="nn">clue</span>
+
+<span class="n">clust</span> <span class="o">=</span> <span class="n">clue</span><span class="o">.</span><span class="n">clusterer</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">run_clue</span><span class="p">()</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;./output/&#39;</span><span class="p">,</span> <span class="s1">&#39;data_results.csv&#39;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<ul class="simple">
+<li><p>Parameters can be updated with <code class="docutils literal notranslate"><span class="pre">clusterer.set_params</span></code></p></li>
+<li><p>Input data can be pandas DataFrame, Python list, NumPy array, dict, or CSV path</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_clue</span></code> accepts backends: <code class="docutils literal notranslate"><span class="pre">&quot;cpu</span> <span class="pre">serial&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cpu</span> <span class="pre">tbb&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cpu</span> <span class="pre">openmp&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;gpu</span> <span class="pre">cuda&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;gpu</span> <span class="pre">hip&quot;</span></code></p></li>
+</ul>
+<p>Access results:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="n">clust</span><span class="o">.</span><span class="n">n_clusters</span>         <span class="c1"># number of clusters</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">n_seeds</span>            <span class="c1"># number of seeds</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">clusters</span>           <span class="c1"># list of clusters</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">cluster_ids</span>        <span class="c1"># array of cluster indexes</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">is_seed</span>            <span class="c1"># boolean array for seeds</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">cluster_points</span>     <span class="c1"># nested arrays with cluster points</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">points_per_cluster</span> <span class="c1"># array with number of points per cluster</span>
+<span class="n">clust</span><span class="o">.</span><span class="n">output_df</span>          <span class="c1"># dataframe with input + clustering results</span>
+</code></pre></div>
+</div>
+<p>Plotting:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">clusterer.input_plotter</span></code> → plots input data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clusterer.cluster_plotter</span></code> → plots clustered data</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/input-plotter.png"><img alt="Data plotted with the input plotter" src="_images/input-plotter.png" style="width: 500px;" />
+</a>
+<a class="reference internal image-reference" href="images/docs/getting-started/output-plotter.png"><img alt="Data plotted with the cluster plotter" src="images/docs/getting-started/output-plotter.png" style="width: 500px;" />
+</a>
+<h2 id="data-format">Data Format<a class="headerlink" href="#data-format" title="Link to this heading">¶</a></h2>
+<p>### CSV Files</p>
+<p>Each row contains coordinates followed by weight:</p>
+<p>### Passing Data to <code class="docutils literal notranslate"><span class="pre">PointsHost</span></code> and <code class="docutils literal notranslate"><span class="pre">PointsDevice</span></code></p>
+<ul class="simple">
+<li><p>Host and device containers expect <strong>SoA format</strong> (coordinates of all points in each dimension adjacent in memory).</p></li>
+<li><p>Data from external containers can be passed via pointers, <code class="docutils literal notranslate"><span class="pre">std::span</span></code>, or any contiguous container.</p></li>
+<li><p>Two buffer format: coordinates+weights + results</p></li>
+<li><p>Four buffer format: coordinates, weights + results</p></li>
+</ul>
+<p>Python SoA / AoS example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="n">data_aos</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">],</span> <span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">],</span> <span class="p">[</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span><span class="p">],</span> <span class="p">[</span><span class="n">w0</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">]]</span>
+<span class="n">data_soa</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="p">[</span><span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="p">[</span><span class="n">z0</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">]],</span> <span class="p">[</span><span class="n">w0</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">]]</span>
+</code></pre></div>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2025, Simone Balducci, Felice Pantaleo, Wahid Redjeb, Marco Rovere, Aurora Perego, Francesco Giacomini.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    8.2.3.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.top", "toc.follow", "search.share", "header.autohide"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+    
+  </body>
+</html>
