@@ -77,7 +77,7 @@ namespace ALPAKA_BACKEND {
 
     auto queue = clue::get_queue(device_id);
 
-    auto call = [&]<std::size_t N>() {
+    auto dispatch = [&]<std::size_t N>() {
       run<TInput, N, Kernel<TInput>>(dc,
                                      rhoc,
                                      dm,
@@ -92,34 +92,34 @@ namespace ALPAKA_BACKEND {
     };
     switch (Ndim) {
       [[unlikely]] case (1):
-        call.template operator()<1>();
+        dispatch.template operator()<1>();
         return;
       [[likely]] case (2):
-        call.template operator()<3>();
+        dispatch.template operator()<3>();
         return;
       [[likely]] case (3):
-        call.template operator()<3>();
+        dispatch.template operator()<3>();
         return;
       [[unlikely]] case (4):
-        call.template operator()<4>();
+        dispatch.template operator()<4>();
         return;
       [[unlikely]] case (5):
-        call.template operator()<5>();
+        dispatch.template operator()<5>();
         return;
       [[unlikely]] case (6):
-        call.template operator()<6>();
+        dispatch.template operator()<6>();
         return;
       [[unlikely]] case (7):
-        call.template operator()<7>();
+        dispatch.template operator()<7>();
         return;
       [[unlikely]] case (8):
-        call.template operator()<8>();
+        dispatch.template operator()<8>();
         return;
       [[unlikely]] case (9):
-        call.template operator()<9>();
+        dispatch.template operator()<9>();
         return;
       [[unlikely]] case (10):
-        call.template operator()<10>();
+        dispatch.template operator()<10>();
         return;
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";
