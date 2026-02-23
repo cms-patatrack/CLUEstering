@@ -95,7 +95,7 @@ namespace ALPAKA_BACKEND {
         dispatch.template operator()<1>();
         return;
       [[likely]] case (2):
-        dispatch.template operator()<3>();
+        dispatch.template operator()<2>();
         return;
       [[likely]] case (3):
         dispatch.template operator()<3>();
