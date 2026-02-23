@@ -98,10 +98,10 @@ jobs:
       if: matrix.os != 'windows-latest'
       working-directory: ${{github.workspace}}/tests
       run: |
-        python3 -m pytest ./*.py
+        python3 -m pytest .
 
     - name: Run tests of the Python library
       if: matrix.os == 'windows-latest'
       working-directory: ${{github.workspace}}/tests
       run: |
-        python -m pytest *.py
+        python -m pytest .
