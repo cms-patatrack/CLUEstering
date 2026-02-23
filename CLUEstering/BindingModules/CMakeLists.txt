@@ -10,16 +10,21 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-string(
-  APPEND
-  CMAKE_CXX_FLAGS_DEBUG
-  " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wpedantic -Werror"
-)
-string(
-  APPEND
-  CMAKE_CXX_FLAGS
-  "-O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
-)
+if(MSVC)
+  string(APPEND CMAKE_CXX_FLAGS_DEBUG " /DCLUE_DEBUG /W4 /WX")
+  string(APPEND CMAKE_CXX_FLAGS " /O2")
+else()
+  string(
+    APPEND
+    CMAKE_CXX_FLAGS_DEBUG
+    " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wpedantic -Werror"
+  )
+  string(
+    APPEND
+    CMAKE_CXX_FLAGS
+    " -O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
+  )
+endif()
 
 # include pybind11 extern subfolder
 set(PYBIND11_FINDPYTHON ON)
@@ -56,7 +61,7 @@ add_custom_command(
   POST_BUILD
   COMMAND
     ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_BINARY_DIR}/../../lib/CLUEstering/lib/CLUE_Convolutional_Kernels.*
+    $<TARGET_FILE:CLUE_Convolutional_Kernels>
     ${CMAKE_CURRENT_SOURCE_DIR}/../lib/)
 
 add_subdirectory(serial)

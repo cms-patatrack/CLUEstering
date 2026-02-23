@@ -24,5 +24,5 @@ add_custom_command(
   POST_BUILD
   COMMAND
     ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_BINARY_DIR}/../../../lib/CLUEstering/lib/CLUE_GPU_HIP.*
+    $<TARGET_FILE:CLUE_GPU_HIP>
     ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/)
