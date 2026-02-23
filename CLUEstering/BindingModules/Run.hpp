@@ -68,8 +68,8 @@ namespace ALPAKA_BACKEND {
                const Kernel<TInput>& kernel,
                int Ndim,
                int32_t n_points,
-               size_t block_size,
-               size_t device_id) {
+               std::size_t block_size,
+               std::size_t device_id) {
     auto rData = data.request();
     auto* pData = static_cast<TInput*>(rData.ptr);
     auto rResults = results.request();
@@ -77,137 +77,49 @@ namespace ALPAKA_BACKEND {
 
     auto queue = clue::get_queue(device_id);
 
-    // Running the clustering algorithm //
+    auto dispatch = [&]<std::size_t N>() {
+      run<TInput, N, Kernel<TInput>>(dc,
+                                     rhoc,
+                                     dm,
+                                     seed_dc,
+                                     pPBin,
+                                     std::move(wrapped),
+                                     std::make_tuple(pData, pResults),
+                                     n_points,
+                                     kernel,
+                                     queue,
+                                     block_size);
+    };
     switch (Ndim) {
       [[unlikely]] case (1):
-        run<TInput, 1, Kernel<TInput>>(dc,
-                                       rhoc,
-                                       dm,
-                                       seed_dc,
-                                       pPBin,
-                                       std::move(wrapped),
-                                       std::make_tuple(pData, pResults),
-                                       n_points,
-                                       kernel,
-                                       queue,
-                                       block_size);
+        dispatch.template operator()<1>();
         return;
       [[likely]] case (2):
-        run<TInput, 2, Kernel<TInput>>(dc,
-                                       rhoc,
-                                       dm,
-                                       seed_dc,
-                                       pPBin,
-                                       std::move(wrapped),
-                                       std::make_tuple(pData, pResults),
-                                       n_points,
-                                       kernel,
-                                       queue,
-                                       block_size);
+        dispatch.template operator()<2>();
         return;
       [[likely]] case (3):
-        run<TInput, 3, Kernel<TInput>>(dc,
-                                       rhoc,
-                                       dm,
-                                       seed_dc,
-                                       pPBin,
-                                       std::move(wrapped),
-                                       std::make_tuple(pData, pResults),
-                                       n_points,
-                                       kernel,
-                                       queue,
-                                       block_size);
+        dispatch.template operator()<3>();
         return;
       [[unlikely]] case (4):
-        run<TInput, 4, Kernel<TInput>>(dc,
-                                       rhoc,
-                                       dm,
-                                       seed_dc,
-                                       pPBin,
-                                       std::move(wrapped),
-                                       std::make_tuple(pData, pResults),
-                                       n_points,
-                                       kernel,
-                                       queue,
-                                       block_size);
+        dispatch.template operator()<4>();
         return;
       [[unlikely]] case (5):
-        run<TInput, 5, Kernel<TInput>>(dc,
-                                       rhoc,
-                                       dm,
-                                       seed_dc,
-                                       pPBin,
-                                       std::move(wrapped),
-                                       std::make_tuple(pData, pResults),
-                                       n_points,
-                                       kernel,
-                                       queue,
-                                       block_size);
+        dispatch.template operator()<5>();
         return;
       [[unlikely]] case (6):
-        run<TInput, 6, Kernel<TInput>>(dc,
-                                       rhoc,
-                                       dm,
-                                       seed_dc,
-                                       pPBin,
-                                       std::move(wrapped),
-                                       std::make_tuple(pData, pResults),
-                                       n_points,
-                                       kernel,
-                                       queue,
-                                       block_size);
+        dispatch.template operator()<6>();
         return;
       [[unlikely]] case (7):
-        run<TInput, 7, Kernel<TInput>>(dc,
-                                       rhoc,
-                                       dm,
-                                       seed_dc,
-                                       pPBin,
-                                       std::move(wrapped),
-                                       std::make_tuple(pData, pResults),
-                                       n_points,
-                                       kernel,
-                                       queue,
-                                       block_size);
+        dispatch.template operator()<7>();
         return;
       [[unlikely]] case (8):
-        run<TInput, 8, Kernel<TInput>>(dc,
-                                       rhoc,
-                                       dm,
-                                       seed_dc,
-                                       pPBin,
-                                       std::move(wrapped),
-                                       std::make_tuple(pData, pResults),
-                                       n_points,
-                                       kernel,
-                                       queue,
-                                       block_size);
+        dispatch.template operator()<8>();
         return;
       [[unlikely]] case (9):
-        run<TInput, 9, Kernel<TInput>>(dc,
-                                       rhoc,
-                                       dm,
-                                       seed_dc,
-                                       pPBin,
-                                       std::move(wrapped),
-                                       std::make_tuple(pData, pResults),
-                                       n_points,
-                                       kernel,
-                                       queue,
-                                       block_size);
+        dispatch.template operator()<9>();
         return;
       [[unlikely]] case (10):
-        run<TInput, 10, Kernel<TInput>>(dc,
-                                        rhoc,
-                                        dm,
-                                        seed_dc,
-                                        pPBin,
-                                        std::move(wrapped),
-                                        std::make_tuple(pData, pResults),
-                                        n_points,
-                                        kernel,
-                                        queue,
-                                        block_size);
+        dispatch.template operator()<10>();
         return;
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";
