@@ -1,12 +1,10 @@
-cmake_minimum_required(VERSION 3.16.0)
 
 # Set CMake policies for compatibility
 if(POLICY CMP0057)
-  cmake_policy(SET CMP0057 NEW) # Support new IN_LIST if() operator
+  cmake_policy(SET CMP0057 NEW)
 endif()
 if(POLICY CMP0167)
-  cmake_policy(SET CMP0167 NEW) # Use BoostConfig.cmake instead of
-                                # FindBoost.cmake
+  cmake_policy(SET CMP0167 NEW)
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -18,14 +16,21 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-string(
-  APPEND
-  CMAKE_CXX_FLAGS_DEBUG
-  " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -O0 -Wall -Wextra -Wpedantic -Wshadow -Wimplicit-fallthrough -Wextra-semi -Wold-style-cast -g -pg -fsanitize=address"
-)
-set(CMAKE_CXX_FLAGS_RELEASE
+if(MSVC)
+  string(APPEND CMAKE_CXX_FLAGS_DEBUG " /DCLUE_DEBUG /W4 /WX")
+  string(APPEND CMAKE_CXX_FLAGS " /O2")
+else()
+  string(
+    APPEND
+    CMAKE_CXX_FLAGS_DEBUG
+    " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -O0 -Wall -Wextra -Wpedantic -Wshadow -Wimplicit-fallthrough -Wextra-semi -Wold-style-cast -g -pg -fsanitize=address"
+  )
+  string(
+    APPEND
+    CMAKE_CXX_FLAGS
     " -O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
-)
+  )
+endif()
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -36,7 +41,6 @@ include(FetchContent)
 
 find_package(alpaka 2.1.0)
 if(NOT alpaka_FOUND)
-  # alpaka
   FetchContent_Declare(
     alpaka
     URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.1.0.tar.gz)
@@ -57,7 +61,7 @@ if(NOT fmt_FOUND)
   FetchContent_Declare(
     fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-    GIT_TAG 10.2.1 # or another stable version
+    GIT_TAG 10.2.1
   )
   FetchContent_MakeAvailable(fmt)
 endif()
