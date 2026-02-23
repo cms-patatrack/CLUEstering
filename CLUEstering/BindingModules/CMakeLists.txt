@@ -59,10 +59,8 @@ set_target_properties(
 add_custom_command(
   TARGET CLUE_Convolutional_Kernels
   POST_BUILD
-  COMMAND
-    ${CMAKE_COMMAND} -E copy
-    $<TARGET_FILE:CLUE_Convolutional_Kernels>
-    ${CMAKE_CURRENT_SOURCE_DIR}/../lib/)
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:CLUE_Convolutional_Kernels>
+          ${CMAKE_CURRENT_SOURCE_DIR}/../lib/)
 
 add_subdirectory(serial)
 

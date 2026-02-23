@@ -24,7 +24,5 @@ set_target_properties(
 add_custom_command(
   TARGET CLUE_GPU_CUDA
   POST_BUILD
-  COMMAND
-    ${CMAKE_COMMAND} -E copy
-    $<TARGET_FILE:CLUE_GPU_CUDA>
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/)
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:CLUE_GPU_CUDA>
+          ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/)

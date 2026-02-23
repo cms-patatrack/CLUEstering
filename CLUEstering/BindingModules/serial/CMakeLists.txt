@@ -13,7 +13,5 @@ set_target_properties(
 add_custom_command(
   TARGET CLUE_CPU_Serial
   POST_BUILD
-  COMMAND
-    ${CMAKE_COMMAND} -E copy
-    $<TARGET_FILE:CLUE_CPU_Serial>
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/)
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:CLUE_CPU_Serial>
+          ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/)
