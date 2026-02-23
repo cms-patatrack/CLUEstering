@@ -2,6 +2,7 @@
 	path = extern/pybind11
 	url = https://github.com/sbaldu/pybind11.git
 	branch = master
+  ignore = dirty
 [submodule "extern/doxygen-awesome-css"]
 	path = extern/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
