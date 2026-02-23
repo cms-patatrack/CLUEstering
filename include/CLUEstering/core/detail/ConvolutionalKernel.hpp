@@ -40,7 +40,7 @@ namespace clue {
 
   template <std::floating_point TData>
   template <typename TAcc>
-  inline ALPAKA_FN_ACC auto GaussianKernel<TData>::operator()(const TAcc& acc,
+  inline ALPAKA_FN_ACC auto GaussianKernel<TData>::operator()(const TAcc&,
                                                               value_type dist_ij,
                                                               int point_id,
                                                               int j) const {
@@ -62,7 +62,7 @@ namespace clue {
 
   template <std::floating_point TData>
   template <typename TAcc>
-  inline ALPAKA_FN_ACC auto ExponentialKernel<TData>::operator()(const TAcc& acc,
+  inline ALPAKA_FN_ACC auto ExponentialKernel<TData>::operator()(const TAcc&,
                                                                  value_type dist_ij,
                                                                  int point_id,
                                                                  int j) const {

@@ -597,16 +597,10 @@ class clusterer:
             data.n_dim = len(dimensions)
             data.n_points = self.clust_data.n_points
 
-        if batch_sample_sizes is not None:
-            arguments = [self._dc, self._rhoc, self._dm, self._seed_dc,
-                         self._ppbin, self.wrapped, data.coords, data.results,
-                         self._kernel, data.n_dim, batch_sample_sizes, data.n_points,
-                         block_size, device_id]
-        else:
-            arguments = [self._dc, self._rhoc, self._dm, self._seed_dc,
-                        self._ppbin, self.wrapped, data.coords, data.results,
-                        self._kernel, data.n_dim, data.n_points,
-                        block_size, device_id]
+        arguments = [self._dc, self._rhoc, self._dm, self._seed_dc,
+                     self._ppbin, self.wrapped, data.coords, data.results,
+                     self._kernel, data.n_dim, batch_sample_sizes, data.n_points,
+                     block_size, device_id]
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(*arguments)
