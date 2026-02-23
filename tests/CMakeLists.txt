@@ -1,4 +1,3 @@
-
 # Set CMake policies for compatibility
 if(POLICY CMP0057)
   cmake_policy(SET CMP0057 NEW)
@@ -61,8 +60,7 @@ if(NOT fmt_FOUND)
   FetchContent_Declare(
     fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-    GIT_TAG 10.2.1
-  )
+    GIT_TAG 10.2.1)
   FetchContent_MakeAvailable(fmt)
 endif()
 
