@@ -15,5 +15,5 @@ add_custom_command(
   POST_BUILD
   COMMAND
     ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_BINARY_DIR}/../../../lib/CLUEstering/lib/CLUE_CPU_Serial.*
+    $<TARGET_FILE:CLUE_CPU_Serial>
     ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/)
