@@ -52,7 +52,6 @@ namespace clue {
     std::optional<internal::DeviceVector<>> m_event_associations;
 
     template <std::floating_point InputType>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void setup(Queue& queue,
                const clue::PointsHost<Ndim, InputType>& h_points,
                clue::PointsDevice<Ndim, value_type>& dev_points) {
@@ -62,7 +61,6 @@ namespace clue {
     }
 
     template <std::floating_point InputType>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void setup_batch(Queue& queue,
                      const clue::PointsHost<Ndim, InputType>& h_points,
                      clue::PointsDevice<Ndim, value_type>& dev_points,
@@ -74,7 +72,6 @@ namespace clue {
     }
 
     template <std::floating_point InputType>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void setup_batch(Queue& queue,
                      clue::PointsDevice<Ndim, InputType>& dev_points,
                      std::size_t batch_size) {
@@ -87,7 +84,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void make_clusters_impl(clue::PointsHost<Ndim, InputType>& h_points,
                             clue::PointsDevice<Ndim, value_type>& dev_points,
                             const DistanceMetric& metric,
@@ -98,7 +94,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void make_clusters_impl(clue::PointsDevice<Ndim, InputType>& dev_points,
                             const DistanceMetric& metric,
                             const Kernel& kernel,
@@ -108,7 +103,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void make_clusters_batched(clue::PointsDevice<Ndim, InputType>& dev_points,
                                std::span<const uint32_t> batch_item_sizes,
                                const DistanceMetric& metric,
@@ -170,7 +164,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void make_clusters(Queue& queue,
                        clue::PointsHost<Ndim, InputType>& h_points,
                        const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
@@ -189,7 +182,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void make_clusters(clue::PointsHost<Ndim, InputType>& h_points,
                        const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
                        const Kernel& kernel = FlatKernel<>{.5f},
@@ -208,7 +200,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void make_clusters(Queue& queue,
                        clue::PointsHost<Ndim, InputType>& h_points,
                        clue::PointsDevice<Ndim, value_type>& dev_points,
@@ -228,7 +219,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void make_clusters(Queue& queue,
                        clue::PointsDevice<Ndim, InputType>& dev_points,
                        const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
@@ -251,7 +241,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void make_clusters(Queue& queue,
                        clue::PointsHost<Ndim, InputType>& h_points,
                        clue::PointsDevice<Ndim, value_type>& dev_points,
@@ -275,7 +264,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     void make_clusters(Queue& queue,
                        clue::PointsDevice<Ndim, InputType>& dev_points,
                        std::span<const uint32_t> batch_item_sizes,
@@ -301,7 +289,6 @@ namespace clue {
     /// @param h_points Host points
     /// @return An associator mapping clusters and points
     template <std::floating_point InputType>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     host_associator getClusters(const clue::PointsHost<Ndim, InputType>& h_points);
     /// @brief Get the clusters from the device points
     /// This function returns an associator object mapping the clusters to the points they contain.
@@ -309,7 +296,6 @@ namespace clue {
     /// @param d_points Device points
     /// @return An associator mapping clusters and points
     template <std::floating_point InputType>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     AssociationMap<Device> getClusters(Queue& queue,
                                        const clue::PointsDevice<Ndim, InputType>& d_points);
 
@@ -318,7 +304,6 @@ namespace clue {
     /// @param queue The queue to use for the device operations
     /// @return A device buffer containing the event associations
     template <std::floating_point InputType>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     host_associator getSampleAssociations(Queue& queue,
                                           clue::PointsHost<Ndim, InputType>& h_points);
     /// @brief Get the sample-to-cluster associations for batched clustering
@@ -326,7 +311,6 @@ namespace clue {
     /// @param queue The queue to use for the device operations
     /// @return A device buffer containing the event associations
     template <std::floating_point InputType>
-      // requires std::same_as<std::remove_cv_t<InputType>, value_type>
     AssociationMap<Device> getSampleAssociations(Queue& queue,
                                                  clue::PointsDevice<Ndim, InputType>& d_points);
   };

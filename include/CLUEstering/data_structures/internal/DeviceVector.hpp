@@ -68,12 +68,10 @@ namespace clue::internal {
 
     template <clue::concepts::queue TQueue>
     ALPAKA_FN_HOST auto size(TQueue& queue) {
-      if (!m_size.has_value()) {
-        m_size = std::make_optional<std::size_t>();
-        alpaka::memcpy(queue, clue::make_host_view(*m_size), m_dsize);
-        alpaka::wait(queue);
-      }
-      return *m_size;
+      std::size_t size;
+      alpaka::memcpy(queue, clue::make_host_view(size), m_dsize);
+      alpaka::wait(queue);
+      return size;
     }
 
     template <clue::concepts::queue TQueue>
