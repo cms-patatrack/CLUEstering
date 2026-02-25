@@ -12,6 +12,8 @@ namespace clue {
   /// @brief Compute the silhouette score for a specific point in the dataset.
   ///
   /// @tparam Ndim The number of dimensions of the points
+  /// @tparam TData The data type for the point coordinates and weights, which must be a floating-point type.
+  /// By default, it is set to `float`.
   /// @param points The dataset containing the points
   /// @param point The index of the point for which to compute the silhouette score
   /// @return The silhouette score of the specified point
@@ -22,6 +24,8 @@ namespace clue {
   /// @brief Compute the average silhouette score for the entire dataset.
   ///
   /// @tparam Ndim The number of dimensions of the points
+  /// @tparam TData The data type for the point coordinates and weights, which must be a floating-point type.
+  /// By default, it is set to `float`.
   /// @param points The dataset containing the points
   /// @return The average silhouette score of the dataset
   /// @note This function currently only works for points with non-periodic coordinates.

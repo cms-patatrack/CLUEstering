@@ -33,6 +33,8 @@ namespace clue {
   /// and runs the clustering algorithm on host or device points.
   ///
   /// @tparam Ndim The number of dimensions of the points to cluster
+  /// @tparam DataType The data type for the point coordinates and weights, which must be a
+  /// floating-point type. By default, it is set to `float`.
   template <std::size_t Ndim, std::floating_point DataType = float>
   class Clusterer {
   public:
@@ -153,12 +155,15 @@ namespace clue {
 
     /// @brief Construct the clusters from host points
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @tparam Kernel The type of convolutional kernel to use
     /// @tparam DistanceMetric The type of distance metric to use
     /// @param queue The queue to use for the device operations
     /// @param h_points Host points to cluster
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
+    /// @param kernel The convolutional kernel to use for computing the local densities,
+    /// default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     template <
         std::floating_point InputType,
@@ -171,11 +176,14 @@ namespace clue {
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host points
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @tparam Kernel The type of convolutional kernel to use
     /// @tparam DistanceMetric The type of distance metric to use
     /// @param h_points Host points to cluster
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
+    /// @param kernel The convolutional kernel to use for computing the local densities,
+    /// default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     /// @note This method creates a temporary queue for the operations on the device
     template <
@@ -188,13 +196,16 @@ namespace clue {
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from host and device points
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @tparam Kernel The type of convolutional kernel to use
     /// @tparam DistanceMetric The type of distance metric to use
     /// @param queue The queue to use for the device operations
     /// @param h_points Host points to cluster
     /// @param dev_points Device points to cluster
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
+    /// @param kernel The convolutional kernel to use for computing the local densities,
+    /// default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     template <
         std::floating_point InputType,
@@ -208,12 +219,15 @@ namespace clue {
                        std::size_t block_size = 256);
     /// @brief Construct the clusters from device points
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @tparam Kernel The type of convolutional kernel to use
     /// @tparam DistanceMetric The type of distance metric to use
     /// @param queue The queue to use for the device operations
     /// @param dev_points Device points to cluster
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
+    /// @param kernel The convolutional kernel to use for computing the local densities,
+    /// default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     template <
         std::floating_point InputType,
@@ -227,6 +241,8 @@ namespace clue {
 
     /// @brief Construct the clusters from batched host and device points
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @tparam Kernel The type of convolutional kernel to use
     /// @tparam DistanceMetric The type of distance metric to use
     /// @param queue The queue to use for the device operations
@@ -234,7 +250,8 @@ namespace clue {
     /// @param dev_points Device points to cluster
     /// @param batch_item_sizes Sizes of each batch item
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
+    /// @param kernel The convolutional kernel to use for computing the local densities,
+    /// default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     /// @note The total size of h_points and dev_points must be equal to the sum of batch_item_sizes
     template <
@@ -251,13 +268,16 @@ namespace clue {
 
     /// @brief Construct the clusters from batched device points
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @tparam Kernel The type of convolutional kernel to use
     /// @tparam DistanceMetric The type of distance metric to use
     /// @param queue The queue to use for the device operations
     /// @param dev_points Device points to cluster
     /// @param batch_item_sizes Sizes of each batch item
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities, default is FlatKernel with height 0.5
+    /// @param kernel The convolutional kernel to use for computing the local densities,
+    /// default is FlatKernel with height 0.5
     /// @param block_size The size of the blocks to use for clustering, default is 256
     /// @note The total size of h_points and dev_points must be equal to the sum of batch_item_sizes
     template <
@@ -286,6 +306,8 @@ namespace clue {
 
     /// @brief Get the clusters from the host points
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @param h_points Host points
     /// @return An associator mapping clusters and points
     template <std::floating_point InputType>
@@ -293,6 +315,8 @@ namespace clue {
     /// @brief Get the clusters from the device points
     /// This function returns an associator object mapping the clusters to the points they contain.
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @param d_points Device points
     /// @return An associator mapping clusters and points
     template <std::floating_point InputType>
@@ -301,6 +325,8 @@ namespace clue {
 
     /// @brief Get the sample-to-cluster associations for batched clustering
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @param queue The queue to use for the device operations
     /// @return A device buffer containing the event associations
     template <std::floating_point InputType>
@@ -308,6 +334,8 @@ namespace clue {
                                           clue::PointsHost<Ndim, InputType>& h_points);
     /// @brief Get the sample-to-cluster associations for batched clustering
     ///
+    /// @tparam InputType The data type of the input points, which must be a floating-point type.
+    /// By default, it is set to `float`.
     /// @param queue The queue to use for the device operations
     /// @return A device buffer containing the event associations
     template <std::floating_point InputType>
