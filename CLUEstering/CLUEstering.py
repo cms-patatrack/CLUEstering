@@ -228,7 +228,7 @@ class clusterer:
     :type elapsed_time: float
     """
 
-    def __init__(self, dc: float, rhoc: float, dm: [float, None] = None, seed_dc: [float, None] = None, ppbin: int = 128):
+    def __init__(self, dc: float, rhoc: float, dm: Union[float, None] = None, seed_dc: Union[float, None] = None, ppbin: int = 128):
         self._dc = dc
         self._rhoc = rhoc
         self._dm = dm
@@ -254,7 +254,7 @@ class clusterer:
         self._elapsed_time = 0.
 
     def set_params(self, dc: float, rhoc: float,
-                   dm: [float, None] = None, seed_dc: [float, None] = None, ppbin: int = 128) -> None:
+                   dm: Union[float, None] = None, seed_dc: Union[float, None] = None, ppbin: int = 128) -> None:
         """
         Set parameters for the clustering algorithm.
 
