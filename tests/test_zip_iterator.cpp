@@ -6,7 +6,7 @@
 #include <vector>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "doctest.h"
+#include <doctest/doctest.h>
 
 TEST_CASE("Test zip iterator with two containers of the same type") {
   const std::size_t size = 100;

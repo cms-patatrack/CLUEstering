@@ -18,11 +18,11 @@ namespace clue::detail {
 
   template <concepts::queue TQueue,
             std::size_t Ndim,
-            std::floating_point TData,
+            std::floating_point TInput,
             concepts::device TDev = decltype(alpaka::getDev(std::declval<TQueue>()))>
   void setup_tiles(TQueue& queue,
-                   std::optional<internal::Tiles<Ndim, TData, TDev>>& tiles,
-                   const PointsHost<Ndim, TData>& points,
+                   const PointsHost<Ndim, TInput>& points,
+                   std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
                    int points_per_tile,
                    const std::array<uint8_t, Ndim>& wrapped_coordinates,
                    std::size_t batch_size = 1) {
@@ -32,7 +32,7 @@ namespace clue::detail {
     ntiles = static_cast<int32_t>(std::pow(n_per_dim, Ndim));
 
     if (!tiles.has_value()) {
-      tiles = std::make_optional<internal::Tiles<Ndim, TData, TDev>>(
+      tiles = std::make_optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>(
           queue, points.size(), ntiles, batch_size);
     }
     // check if tiles are large enough for current data
@@ -43,8 +43,9 @@ namespace clue::detail {
       tiles->reset(points.size(), ntiles, n_per_dim, batch_size);
     }
 
-    auto min_max = clue::make_host_buffer<internal::CoordinateExtremes<Ndim, TData>>(queue);
-    auto tile_sizes = clue::make_host_buffer<TData[Ndim]>(queue);
+    auto min_max =
+        clue::make_host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(queue);
+    auto tile_sizes = clue::make_host_buffer<std::remove_cv_t<TInput>[Ndim]>(queue);
     detail::compute_tile_size(min_max.data(), tile_sizes.data(), points, n_per_dim);
 
     alpaka::memcpy(queue, tiles->minMax(), min_max);
@@ -54,11 +55,11 @@ namespace clue::detail {
 
   template <concepts::queue TQueue,
             std::size_t Ndim,
-            std::floating_point TData,
+            std::floating_point TInput,
             concepts::device TDev = decltype(alpaka::getDev(std::declval<TQueue>()))>
   void setup_tiles(TQueue& queue,
-                   std::optional<internal::Tiles<Ndim, TData, TDev>>& tiles,
-                   const PointsDevice<Ndim, TData, TDev>& points,
+                   const PointsDevice<Ndim, TInput, TDev>& points,
+                   std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
                    int points_per_tile,
                    const std::array<uint8_t, Ndim>& wrapped_coordinates,
                    std::size_t batch_size = 1) {
@@ -67,7 +68,7 @@ namespace clue::detail {
     ntiles = static_cast<int32_t>(std::pow(n_per_dim, Ndim));
 
     if (!tiles.has_value()) {
-      tiles = std::make_optional<internal::Tiles<Ndim, TData, TDev>>(
+      tiles = std::make_optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>(
           queue, points.size(), ntiles, batch_size);
     }
     // check if tiles are large enough for current data
@@ -78,8 +79,9 @@ namespace clue::detail {
       tiles->reset(points.size(), ntiles, n_per_dim, batch_size);
     }
 
-    auto min_max = clue::make_host_buffer<internal::CoordinateExtremes<Ndim, TData>>(queue);
-    auto tile_sizes = clue::make_host_buffer<TData[Ndim]>(queue);
+    auto min_max =
+        clue::make_host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(queue);
+    auto tile_sizes = clue::make_host_buffer<std::remove_cv_t<TInput>[Ndim]>(queue);
     detail::compute_tile_size(min_max.data(), tile_sizes.data(), points, n_per_dim);
 
     alpaka::memcpy(queue, tiles->minMax(), min_max);

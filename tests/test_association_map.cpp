@@ -11,7 +11,7 @@
 #include <vector>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "doctest.h"
+#include <doctest/doctest.h>
 
 TEST_CASE("Test binary association map") {
   const auto host = alpaka::getDevByIdx(alpaka::PlatformCpu{}, 0u);

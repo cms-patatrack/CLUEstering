@@ -2,7 +2,7 @@
 #include "CLUEstering/CLUEstering.hpp"
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "doctest.h"
+#include <doctest/doctest.h>
 
 TEST_CASE("Test validation scores on toy detector dataset") {
   auto queue = clue::get_queue(0u);

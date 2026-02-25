@@ -2,7 +2,7 @@
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "doctest.h"
+#include <doctest/doctest.h>
 
 TEST_CASE("Test FlatKernel throwing conditions") {
   CHECK_THROWS(clue::FlatKernel(0.f));

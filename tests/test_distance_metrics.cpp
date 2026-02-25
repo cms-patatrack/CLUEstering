@@ -3,7 +3,7 @@
 #include <cmath>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "doctest.h"
+#include <doctest/doctest.h>
 
 TEST_CASE("Test euclidian metric") {
   auto metric = clue::metrics::Euclidean<2>();
