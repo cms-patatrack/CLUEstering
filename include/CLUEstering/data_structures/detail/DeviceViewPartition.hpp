@@ -141,10 +141,8 @@ namespace clue::soa::device {
     using value_type = std::remove_cv_t<TElement>;
     auto buffers_tuple = std::make_tuple(buffers...);
 
-    meta::apply<Ndim>([&]<std::size_t Dim>() {
-      view.coords[Dim] = (std::get<Dim>(buffers_tuple) + Dim * n_points);
-    });
-    view.weight = std::get<Ndim>(buffers_tuple) + Ndim * n_points;
+    meta::apply<Ndim>([&]<std::size_t Dim>() { view.coords[Dim] = std::get<Dim>(buffers_tuple); });
+    view.weight = std::get<Ndim>(buffers_tuple);
     view.cluster_index = std::get<Ndim + 1>(buffers_tuple);
     view.is_seed = reinterpret_cast<int*>(alloc_buffer);
     view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
