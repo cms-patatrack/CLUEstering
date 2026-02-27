@@ -311,28 +311,28 @@ TEST_CASE("Test clustering from constant host points") {
 
       CHECK(true);
     }
-    // SUBCASE("Four external buffers") {
-    //   auto x0 = clue::make_host_buffer<float[]>(queue, size);
-    //   auto x1 = clue::make_host_buffer<float[]>(queue, size);
-    //   auto weights = clue::make_host_buffer<float[]>(queue, size);
-    //   auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
-    //   std::generate(x0.data(), x0.data() + size, [&] { return dis(gen); });
-    //   std::generate(x1.data(), x1.data() + size, [&] { return dis(gen); });
-    //   std::fill(weights.data(), weights.data() + size, 1.f);
+    SUBCASE("Four external buffers") {
+      auto x0 = clue::make_host_buffer<float[]>(queue, size);
+      auto x1 = clue::make_host_buffer<float[]>(queue, size);
+      auto weights = clue::make_host_buffer<float[]>(queue, size);
+      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      std::generate(x0.data(), x0.data() + size, [&] { return dis(gen); });
+      std::generate(x1.data(), x1.data() + size, [&] { return dis(gen); });
+      std::fill(weights.data(), weights.data() + size, 1.f);
 
-    //   clue::ConstPointsHost<2> points_1(
-    //       queue, size, x0.data(), x1.data(), weights.data(), cluster_ids.data());
-    //   clue::ConstPointsHost<2> points_2(queue,
-    //                                     size,
-    //                                     std::span{x0.data(), size},
-    //                                     std::span{x1.data(), size},
-    //                                     std::span{weights.data(), size},
-    //                                     std::span{cluster_ids.data(), size});
-    //   algo.make_clusters(queue, points_1);
-    //   algo.make_clusters(queue, points_2);
+      clue::ConstPointsHost<2> points_1(
+          queue, size, x0.data(), x1.data(), weights.data(), cluster_ids.data());
+      clue::ConstPointsHost<2> points_2(queue,
+                                        size,
+                                        std::span{x0.data(), size},
+                                        std::span{x1.data(), size},
+                                        std::span{weights.data(), size},
+                                        std::span{cluster_ids.data(), size});
+      algo.make_clusters(queue, points_1);
+      algo.make_clusters(queue, points_2);
 
-    //   CHECK(true);
-    // }
+      CHECK(true);
+    }
   }
   SUBCASE("double-precision floating point data") {
     std::mt19937 gen;
@@ -373,27 +373,27 @@ TEST_CASE("Test clustering from constant host points") {
 
       CHECK(true);
     }
-    // SUBCASE("Four external buffers") {
-    //   auto x0 = clue::make_host_buffer<double[]>(queue, size);
-    //   auto x1 = clue::make_host_buffer<double[]>(queue, size);
-    //   auto weights = clue::make_host_buffer<double[]>(queue, size);
-    //   auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
-    //   std::generate(x0.data(), x0.data() + size, [&] { return dis(gen); });
-    //   std::generate(x1.data(), x1.data() + size, [&] { return dis(gen); });
-    //   std::fill(weights.data(), weights.data() + size, 1.f);
+    SUBCASE("Four external buffers") {
+      auto x0 = clue::make_host_buffer<double[]>(queue, size);
+      auto x1 = clue::make_host_buffer<double[]>(queue, size);
+      auto weights = clue::make_host_buffer<double[]>(queue, size);
+      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      std::generate(x0.data(), x0.data() + size, [&] { return dis(gen); });
+      std::generate(x1.data(), x1.data() + size, [&] { return dis(gen); });
+      std::fill(weights.data(), weights.data() + size, 1.f);
 
-    //   clue::ConstPointsHost<2, double> points_1(
-    //       queue, size, x0.data(), x1.data(), weights.data(), cluster_ids.data());
-    //   clue::ConstPointsHost<2, double> points_2(queue,
-    //                                             size,
-    //                                             std::span{x0.data(), size},
-    //                                             std::span{x1.data(), size},
-    //                                             std::span{weights.data(), size},
-    //                                             std::span{cluster_ids.data(), size});
-    //   algo.make_clusters(queue, points_1);
-    //   algo.make_clusters(queue, points_2);
+      clue::ConstPointsHost<2, double> points_1(
+          queue, size, x0.data(), x1.data(), weights.data(), cluster_ids.data());
+      clue::ConstPointsHost<2, double> points_2(queue,
+                                                size,
+                                                std::span{x0.data(), size},
+                                                std::span{x1.data(), size},
+                                                std::span{weights.data(), size},
+                                                std::span{cluster_ids.data(), size});
+      algo.make_clusters(queue, points_1);
+      algo.make_clusters(queue, points_2);
 
-    //   CHECK(true);
-    // }
+      CHECK(true);
+    }
   }
 }
