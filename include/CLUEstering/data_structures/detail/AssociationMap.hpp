@@ -11,6 +11,7 @@
 #include <alpaka/alpaka.hpp>
 #include <cassert>
 #include <span>
+#include <stdexcept>
 
 namespace clue {
 
@@ -69,10 +70,10 @@ namespace clue {
                                     std::size_t size) const {
         for (auto i : alpaka::uniformElements(acc, size)) {
           const auto binId = bin_buffer[i];
-          assert(static_cast<std::size_t>(binId) < nkeys);
           if (binId >= 0) {
+            assert(static_cast<std::size_t>(binId) < nkeys);
             auto prev = alpaka::atomicAdd(acc, &temp_offsets[binId], 1);
-            assert(prev < size);
+            assert(static_cast<std::size_t>(prev) < size);
             indexes[prev] = i;
           }
         }
