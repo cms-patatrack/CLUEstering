@@ -8,8 +8,9 @@
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/algorithm/scan/scan.hpp"
 
-#include <span>
 #include <alpaka/alpaka.hpp>
+#include <cassert>
+#include <span>
 
 namespace clue {
 
@@ -64,11 +65,14 @@ namespace clue {
                                     int32_t* indexes,
                                     const int32_t* bin_buffer,
                                     int32_t* temp_offsets,
-                                    size_t size) const {
+                                    std::size_t nkeys,
+                                    std::size_t size) const {
         for (auto i : alpaka::uniformElements(acc, size)) {
           const auto binId = bin_buffer[i];
+          assert(binId >= -1 && static_cast<std::size_t>(binId) < nkeys);
           if (binId >= 0) {
             auto prev = alpaka::atomicAdd(acc, &temp_offsets[binId], 1);
+            assert(prev < size);
             indexes[prev] = i;
           }
         }
@@ -324,6 +328,7 @@ namespace clue {
                        m_indexes.data(),
                        bin_buffer.data(),
                        temp_offsets.data(),
+                       m_extents.keys,
                        size);
   }
 
@@ -391,6 +396,7 @@ namespace clue {
                        m_indexes.data(),
                        associations.data(),
                        temp_offsets.data(),
+                       m_extents.keys,
                        associations.size());
   }
 
@@ -449,6 +455,7 @@ namespace clue {
                        m_indexes.data(),
                        bin_buffer.data(),
                        temp_offsets.data(),
+                       m_extents.keys,
                        size);
   }
 
