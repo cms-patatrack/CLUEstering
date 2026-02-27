@@ -18,9 +18,11 @@
 #include "CLUEstering/internal/nostd/ceil_div.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 
+#include <alpaka/alpaka.hpp>
 #include <array>
+#include <cassert>
+#include <concepts>
 #include <cstddef>
-#include <alpaka/core/Common.hpp>
 #include <cstdint>
 
 namespace clue::detail {
@@ -71,6 +73,7 @@ namespace clue::detail {
                                             global_idx,
                                             event);
 
+            assert(rho_i >= TData{0});
             dev_points.rho[global_idx] = rho_i;
           }
         }
@@ -126,6 +129,7 @@ namespace clue::detail {
                                                            global_idx,
                                                            event);
 
+            assert(nh_i == -1 || delta_i <= dm);
             dev_points.nearest_higher[global_idx] = nh_i;
             if (nh_i == -1) {
               alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
@@ -161,6 +165,7 @@ namespace clue::detail {
             auto coords_i = dev_points[global_idx];
             auto coords_nh = dev_points[nh];
             auto distance = metric(coords_i, coords_nh);
+            assert(distance >= TData{0});
 
             auto rho_i = dev_points.rho[global_idx];
             bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);

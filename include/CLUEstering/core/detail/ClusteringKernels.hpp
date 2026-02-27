@@ -17,9 +17,11 @@
 #include "CLUEstering/internal/nostd/ceil_div.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 
+#include <alpaka/alpaka.hpp>
 #include <array>
+#include <cassert>
+#include <concepts>
 #include <cstddef>
-#include <alpaka/core/Common.hpp>
 #include <cstdint>
 
 namespace clue::detail {
@@ -48,11 +50,14 @@ namespace clue::detail {
 
       for (auto binIter = 0u; binIter < binSize; ++binIter) {
         int32_t j = tiles[binId][binIter];
+        assert(j >= 0 && j < dev_points.n);
 
         auto coords_j = dev_points[j];
         auto distance = metric(coords_i, coords_j);
+        assert(distance >= TData{0});
 
         auto k = kernel(acc, distance, point_id, j);
+        assert(k >= TData{0});
         rho_i += static_cast<int>(distance <= dc) * k * dev_points.weight[j];
       }
       return;
@@ -116,6 +121,7 @@ namespace clue::detail {
                                         metric,
                                         i);
 
+        assert(rho_i >= TData{0});
         dev_points.rho[i] = rho_i;
       }
     }
@@ -145,12 +151,14 @@ namespace clue::detail {
 
       for (auto binIter = 0; binIter < binSize; ++binIter) {
         const auto j = tiles[binId][binIter];
+        assert(j >= 0 && j < dev_points.n);
         auto rho_j = dev_points.rho[j];
         bool found_higher = (rho_j > rho_i);
         found_higher = found_higher || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
 
         auto coords_j = dev_points[j];
         auto distance = metric(coords_i, coords_j);
+        assert(distance >= TData{0});
 
         if (found_higher && distance <= dm) {
           if (distance < delta_i) {
@@ -224,6 +232,7 @@ namespace clue::detail {
                                                        metric,
                                                        i);
 
+        assert(nh_i == -1 || delta_i <= dm);
         dev_points.nearest_higher[i] = nh_i;
         if (nh_i == -1) {
           alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
@@ -252,6 +261,7 @@ namespace clue::detail {
         auto coords_i = dev_points[i];
         auto coords_nh = dev_points[nh];
         auto distance = metric(coords_i, coords_nh);
+        assert(distance >= TData{0});
 
         auto rho_i = dev_points.rho[i];
         bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
@@ -283,6 +293,7 @@ namespace clue::detail {
         local_stack[local_stack_size] = idx_this_seed;
         ++local_stack_size;
         while (local_stack_size > 0) {
+          assert(local_stack_size <= 256);
           int idx_end_of_local_stack = local_stack[local_stack_size - 1];
           int temp_cluster_index = dev_points.cluster_index[idx_end_of_local_stack];
           local_stack[local_stack_size - 1] = -1;
@@ -291,7 +302,9 @@ namespace clue::detail {
           const auto followers_size = followers_ies.size();
           for (auto j = 0u; j != followers_size; ++j) {
             int follower = followers_ies[j];
+            assert(follower >= 0);
             dev_points.cluster_index[follower] = temp_cluster_index;
+            assert(local_stack_size < 256);
             local_stack[local_stack_size] = follower;
             ++local_stack_size;
           }
