@@ -69,7 +69,7 @@ namespace clue {
                                     std::size_t size) const {
         for (auto i : alpaka::uniformElements(acc, size)) {
           const auto binId = bin_buffer[i];
-          assert(binId >= -1 && static_cast<std::size_t>(binId) < nkeys);
+          assert(static_cast<std::size_t>(binId) < nkeys);
           if (binId >= 0) {
             auto prev = alpaka::atomicAdd(acc, &temp_offsets[binId], 1);
             assert(prev < size);
