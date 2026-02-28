@@ -22,9 +22,9 @@ struct KernelCompareDevicePoints {
     for (auto i : alpaka::uniformElements(acc, size)) {
       int comparison = 1;
       for (auto dim = 0u; dim < Ndim; ++dim) {
-        comparison = (view.coords[dim][i] == d_input[i + dim * size]);
+        comparison = (view.coords()[dim][i] == d_input[i + dim * size]);
       }
-      comparison = (view.weight[i] == d_input[i + Ndim * size]);
+      comparison = (view.weights()[i] == d_input[i + Ndim * size]);
 
       alpaka::atomicAnd(acc, result, comparison);
     }

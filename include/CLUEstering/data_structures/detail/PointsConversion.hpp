@@ -22,8 +22,8 @@ namespace clue {
                          const PointsDevice<Ndim, TDeviceInput, TDev>& d_points) {
     alpaka::memcpy(
         queue,
-        make_host_view(h_points.m_view.cluster_index, h_points.size()),
-        make_device_view(alpaka::getDev(queue), d_points.m_view.cluster_index, h_points.size()));
+        make_host_view(h_points.m_view.m_cluster_index, h_points.size()),
+        make_device_view(alpaka::getDev(queue), d_points.m_view.m_cluster_index, h_points.size()));
     h_points.mark_clustered();
   }
 
@@ -33,8 +33,8 @@ namespace clue {
 
     alpaka::memcpy(
         queue,
-        make_host_view(h_points.m_view.cluster_index, h_points.size()),
-        make_device_view(alpaka::getDev(queue), d_points.m_view.cluster_index, h_points.size()));
+        make_host_view(h_points.m_view.m_cluster_index, h_points.size()),
+        make_device_view(alpaka::getDev(queue), d_points.m_view.m_cluster_index, h_points.size()));
     h_points.mark_clustered();
 
     return h_points;
@@ -51,12 +51,13 @@ namespace clue {
     meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
       alpaka::memcpy(
           queue,
-          make_device_view(alpaka::getDev(queue), d_points.m_view.coords[Dim], h_points.size()),
-          make_host_view(h_points.m_view.coords[Dim], h_points.size()));
+          make_device_view(alpaka::getDev(queue), d_points.m_view.m_coords[Dim], h_points.size()),
+          make_host_view(h_points.m_view.m_coords[Dim], h_points.size()));
     });
-    alpaka::memcpy(queue,
-                   make_device_view(alpaka::getDev(queue), d_points.m_view.weight, h_points.size()),
-                   make_host_view(h_points.m_view.weight, h_points.size()));
+    alpaka::memcpy(
+        queue,
+        make_device_view(alpaka::getDev(queue), d_points.m_view.m_weight, h_points.size()),
+        make_host_view(h_points.m_view.m_weight, h_points.size()));
   }
 
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>

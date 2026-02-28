@@ -74,7 +74,7 @@ namespace clue::detail {
                                             event);
 
             assert(rho_i >= TData{0});
-            dev_points.rho[global_idx] = rho_i;
+            dev_points.rho()[global_idx] = rho_i;
           }
         }
       }
@@ -103,7 +103,7 @@ namespace clue::detail {
             auto delta_i = std::numeric_limits<TData>::max();
             int nh_i = -1;
             auto coords_i = dev_points[global_idx];
-            auto rho_i = dev_points.rho[global_idx];
+            auto rho_i = dev_points.rho()[global_idx];
 
             clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
             for (auto dim = 0u; dim != Ndim; ++dim) {
@@ -130,7 +130,7 @@ namespace clue::detail {
                                                            event);
 
             assert(nh_i == -1 || delta_i <= dm);
-            dev_points.nearest_higher[global_idx] = nh_i;
+            dev_points.nearest_higher()[global_idx] = nh_i;
             if (nh_i == -1) {
               alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
             }
@@ -159,24 +159,24 @@ namespace clue::detail {
         for (const auto local_idx : alpaka::uniformElementsAlong<1u>(acc, max_event_size)) {
           const auto global_idx = event_offsets[event] + local_idx;
           if (global_idx < event_offsets[event + 1]) {
-            dev_points.cluster_index[global_idx] = -1;
-            auto nh = dev_points.nearest_higher[global_idx];
+            dev_points.cluster_index()[global_idx] = -1;
+            auto nh = dev_points.nearest_higher()[global_idx];
 
             auto coords_i = dev_points[global_idx];
             auto coords_nh = dev_points[nh];
             auto distance = metric(coords_i, coords_nh);
             assert(distance >= TData{0});
 
-            auto rho_i = dev_points.rho[global_idx];
+            auto rho_i = dev_points.rho()[global_idx];
             bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
 
             if (is_seed) {
-              dev_points.is_seed[global_idx] = 1;
-              dev_points.nearest_higher[global_idx] = -1;
+              dev_points.is_seed()[global_idx] = 1;
+              dev_points.nearest_higher()[global_idx] = -1;
               const auto prev = seeds.push_back(acc, global_idx);
               event_associations[prev] = event;
             } else {
-              dev_points.is_seed[global_idx] = 0;
+              dev_points.is_seed()[global_idx] = 0;
             }
           }
         }
