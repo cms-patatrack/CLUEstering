@@ -92,7 +92,7 @@ namespace clue::internal {
       ALPAKA_FN_ACC int32_t operator()(int32_t index, std::size_t event = 0) const {
         value_type coords[Ndim];
         for (auto dim = 0u; dim < Ndim; ++dim) {
-          coords[dim] = pointsView.coords[dim][index];
+          coords[dim] = pointsView.coords()[dim][index];
         }
 
         auto bin = tilesView.getGlobalBin(coords, event);

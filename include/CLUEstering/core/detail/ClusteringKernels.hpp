@@ -50,7 +50,7 @@ namespace clue::detail {
 
       for (auto binIter = 0u; binIter < binSize; ++binIter) {
         int32_t j = tiles[binId][binIter];
-        assert(j >= 0 && j < dev_points.n);
+        assert(j >= 0 && j < dev_points.size());
 
         auto coords_j = dev_points[j];
         auto distance = metric(coords_i, coords_j);
@@ -58,7 +58,7 @@ namespace clue::detail {
 
         auto k = kernel(acc, distance, point_id, j);
         assert(k >= TData{0});
-        rho_i += static_cast<int>(distance <= dc) * k * dev_points.weight[j];
+        rho_i += static_cast<int>(distance <= dc) * k * dev_points.weights()[j];
       }
       return;
     } else {
@@ -122,7 +122,7 @@ namespace clue::detail {
                                         i);
 
         assert(rho_i >= TData{0});
-        dev_points.rho[i] = rho_i;
+        dev_points.rho()[i] = rho_i;
       }
     }
   };
@@ -151,8 +151,8 @@ namespace clue::detail {
 
       for (auto binIter = 0; binIter < binSize; ++binIter) {
         const auto j = tiles[binId][binIter];
-        assert(j >= 0 && j < dev_points.n);
-        auto rho_j = dev_points.rho[j];
+        assert(j >= 0 && j < dev_points.size());
+        auto rho_j = dev_points.rho()[j];
         bool found_higher = (rho_j > rho_i);
         found_higher = found_higher || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
 
@@ -208,7 +208,7 @@ namespace clue::detail {
         auto delta_i = std::numeric_limits<TData>::max();
         int nh_i = -1;
         auto coords_i = dev_points[i];
-        auto rho_i = dev_points.rho[i];
+        auto rho_i = dev_points.rho()[i];
 
         clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
@@ -233,7 +233,7 @@ namespace clue::detail {
                                                        i);
 
         assert(nh_i == -1 || delta_i <= dm);
-        dev_points.nearest_higher[i] = nh_i;
+        dev_points.nearest_higher()[i] = nh_i;
         if (nh_i == -1) {
           alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
         }
@@ -255,23 +255,23 @@ namespace clue::detail {
                                   TData rhoc,
                                   int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
-        dev_points.cluster_index[i] = -1;
-        auto nh = dev_points.nearest_higher[i];
+        dev_points.cluster_index()[i] = -1;
+        auto nh = dev_points.nearest_higher()[i];
 
         auto coords_i = dev_points[i];
         auto coords_nh = dev_points[nh];
         auto distance = metric(coords_i, coords_nh);
         assert(distance >= TData{0});
 
-        auto rho_i = dev_points.rho[i];
+        auto rho_i = dev_points.rho()[i];
         bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
 
         if (is_seed) {
-          dev_points.is_seed[i] = 1;
-          dev_points.nearest_higher[i] = -1;
+          dev_points.is_seed()[i] = 1;
+          dev_points.nearest_higher()[i] = -1;
           seeds.push_back(acc, i);
         } else {
-          dev_points.is_seed[i] = 0;
+          dev_points.is_seed()[i] = 0;
         }
       }
     }
@@ -289,13 +289,13 @@ namespace clue::detail {
         int local_stack_size = 0;
 
         int idx_this_seed = seeds[idx_cls];
-        dev_points.cluster_index[idx_this_seed] = idx_cls;
+        dev_points.cluster_index()[idx_this_seed] = idx_cls;
         local_stack[local_stack_size] = idx_this_seed;
         ++local_stack_size;
         while (local_stack_size > 0) {
           assert(local_stack_size <= 256);
           int idx_end_of_local_stack = local_stack[local_stack_size - 1];
-          int temp_cluster_index = dev_points.cluster_index[idx_end_of_local_stack];
+          int temp_cluster_index = dev_points.cluster_index()[idx_end_of_local_stack];
           local_stack[local_stack_size - 1] = -1;
           --local_stack_size;
           const auto& followers_ies = followers[idx_end_of_local_stack];
@@ -303,7 +303,7 @@ namespace clue::detail {
           for (auto j = 0u; j != followers_size; ++j) {
             int follower = followers_ies[j];
             assert(follower >= 0);
-            dev_points.cluster_index[follower] = temp_cluster_index;
+            dev_points.cluster_index()[follower] = temp_cluster_index;
             assert(local_stack_size < 256);
             local_stack[local_stack_size] = follower;
             ++local_stack_size;

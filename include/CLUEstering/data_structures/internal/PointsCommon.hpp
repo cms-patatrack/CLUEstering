@@ -28,7 +28,7 @@ namespace clue {
           throw std::out_of_range("Dimension out of range in call to coords.");
         }
         auto& view = static_cast<const TPoints*>(this)->m_view;
-        return std::span<const typename TPoints::value_type>(view.coords[dim], view.n);
+        return view.coords()[dim];
       }
       ALPAKA_FN_HOST auto coords(std::size_t dim)
         requires std::same_as<typename TPoints::element_type,
@@ -38,26 +38,26 @@ namespace clue {
           throw std::out_of_range("Dimension out of range in call to coords.");
         }
         auto& view = static_cast<TPoints*>(this)->m_view;
-        return std::span<typename TPoints::value_type>(view.coords[dim], view.n);
+        return view.coords()[dim];
       }
 
       ALPAKA_FN_HOST auto weights() const {
         auto& view = static_cast<const TPoints*>(this)->m_view;
-        return std::span<const typename TPoints::value_type>(view.weight, view.n);
+        return view.weights();
       }
       ALPAKA_FN_HOST auto weights()
         requires std::same_as<typename TPoints::element_type,
                               std::remove_cv_t<typename TPoints::element_type>>
       {
         auto& view = static_cast<TPoints*>(this)->m_view;
-        return std::span<typename TPoints::value_type>(view.weight, view.n);
+        return view.weights();
       }
 
       ALPAKA_FN_HOST auto clusterIndexes() const {
         assert(static_cast<const TPoints&>(*this).m_clustered &&
                "The points have not been clustered yet, so the cluster indexes cannot be accessed");
         auto& view = static_cast<const TPoints*>(this)->m_view;
-        return std::span<const int>(view.cluster_index, view.n);
+        return view.cluster_index();
       }
 
       ALPAKA_FN_HOST auto clustered() const {
@@ -75,13 +75,74 @@ namespace clue {
     using element_type = TElement;
     using value_type = std::remove_cv_t<TElement>;
 
-    std::array<element_type*, Ndim> coords;
-    element_type* weight;
-    std::int32_t* cluster_index;
-    std::int32_t* is_seed;
-    value_type* rho;
-    std::int32_t* nearest_higher;
-    std::int32_t n;
+    std::array<element_type*, Ndim> m_coords;
+    element_type* m_weight;
+    std::int32_t* m_cluster_index;
+    std::int32_t* m_is_seed;
+    value_type* m_rho;
+    std::int32_t* m_nearest_higher;
+    std::int32_t m_n;
+
+    ALPAKA_FN_HOST_ACC auto coords() const {
+      std::array<std::span<const value_type>, Ndim> coord_spans;
+      for (std::size_t dim = 0; dim < Ndim; ++dim) {
+        coord_spans[dim] = std::span<const value_type>(m_coords[dim], m_n);
+      }
+      return coord_spans;
+    }
+    ALPAKA_FN_HOST_ACC auto coords() {
+      std::array<std::span<value_type>, Ndim> coord_spans;
+      for (std::size_t dim = 0; dim < Ndim; ++dim) {
+        coord_spans[dim] = std::span<value_type>(m_coords[dim], m_n);
+      }
+      return coord_spans;
+    }
+    ALPAKA_FN_HOST_ACC auto weights() const { return std::span<const value_type>(m_weight, m_n); }
+    ALPAKA_FN_HOST_ACC auto weights() {
+      auto& view = *this;
+      return std::span<value_type>(m_weight, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto cluster_index() const {
+      assert(m_cluster_index != nullptr &&
+             "The cluster indexes have not been allocated yet, so they cannot be accessed");
+      return std::span<const int>(m_cluster_index, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto cluster_index() {
+      assert(m_cluster_index != nullptr &&
+             "The cluster indexes have not been allocated yet, so they cannot be accessed");
+      return std::span<int>(m_cluster_index, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto is_seed() const {
+      assert(m_is_seed != nullptr &&
+             "The is_seed array has not been allocated yet, so it cannot be accessed");
+      return std::span<const std::int32_t>(m_is_seed, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto is_seed() {
+      assert(m_is_seed != nullptr &&
+             "The is_seed array has not been allocated yet, so it cannot be accessed");
+      return std::span<std::int32_t>(m_is_seed, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto rho() const {
+      assert(m_rho != nullptr &&
+             "The rho array has not been allocated yet, so it cannot be accessed");
+      return std::span<const value_type>(m_rho, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto rho() {
+      assert(m_rho != nullptr &&
+             "The rho array has not been allocated yet, so it cannot be accessed");
+      return std::span<value_type>(m_rho, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto nearest_higher() const {
+      assert(m_nearest_higher != nullptr &&
+             "The nearest_higher array has not been allocated yet, so it cannot be accessed");
+      return std::span<const std::int32_t>(m_nearest_higher, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto nearest_higher() {
+      assert(m_nearest_higher != nullptr &&
+             "The nearest_higher array has not been allocated yet, so it cannot be accessed");
+      return std::span<std::int32_t>(m_nearest_higher, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto size() const { return m_n; }
 
     ALPAKA_FN_HOST_ACC auto operator[](int index) const {
       if (index == -1)
@@ -89,8 +150,8 @@ namespace clue {
             std::numeric_limits<value_type>::max());
 
       std::array<value_type, Ndim + 1> point;
-      meta::apply<Ndim>([&]<std::size_t Dim>() -> void { point[Dim] = coords[Dim][index]; });
-      point[Ndim] = weight[index];
+      meta::apply<Ndim>([&]<std::size_t Dim>() -> void { point[Dim] = m_coords[Dim][index]; });
+      point[Ndim] = m_weight[index];
       return point;
     }
   };

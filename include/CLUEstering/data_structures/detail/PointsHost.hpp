@@ -9,6 +9,7 @@
 #include "CLUEstering/internal/meta/apply.hpp"
 
 #include <alpaka/alpaka.hpp>
+#include <array>
 #include <cassert>
 #include <concepts>
 #include <optional>
@@ -96,10 +97,10 @@ namespace clue {
       throw std::out_of_range("Index out of range in PointsHost::operator[]");
 
     std::array<TData, Ndim> coords;
-    for (size_t dim = 0; dim < Ndim; ++dim) {
-      coords[dim] = m_view.coords[0][dim * m_size + idx];
+    for (auto dim = 0u; dim < Ndim; ++dim) {
+      coords[dim] = m_view.coords()[0][dim * m_size + idx];
     }
-    return Point(coords, m_view.weight[idx], m_view.cluster_index[idx]);
+    return Point(coords, m_view.weights()[idx], m_view.cluster_index()[idx]);
   }
 
   template <std::size_t Ndim, std::floating_point TData>

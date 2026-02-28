@@ -26,19 +26,19 @@ namespace clue::soa::device {
     using value_type = std::remove_cv_t<TElement>;
 
     meta::apply<Ndim>([&]<std::size_t Dim>() {
-      view.coords[Dim] =
+      view.m_coords[Dim] =
           reinterpret_cast<value_type*>(buffer + Dim * n_points * sizeof(value_type));
     });
-    view.weight = reinterpret_cast<value_type*>(buffer + Ndim * n_points * sizeof(value_type));
-    view.cluster_index =
+    view.m_weight = reinterpret_cast<value_type*>(buffer + Ndim * n_points * sizeof(value_type));
+    view.m_cluster_index =
         reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(value_type));
-    view.is_seed =
+    view.m_is_seed =
         reinterpret_cast<int*>(buffer + n_points * ((Ndim + 1) * sizeof(value_type) + sizeof(int)));
-    view.rho = reinterpret_cast<value_type*>(
+    view.m_rho = reinterpret_cast<value_type*>(
         buffer + n_points * ((Ndim + 1) * sizeof(value_type) + 2 * sizeof(int)));
-    view.nearest_higher = reinterpret_cast<int*>(
+    view.m_nearest_higher = reinterpret_cast<int*>(
         buffer + n_points * ((Ndim + 2) * sizeof(value_type) + 2 * sizeof(int)));
-    view.n = n_points;
+    view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
   inline void partitionSoAView(PointsView<Ndim, TElement>& view,
@@ -48,17 +48,17 @@ namespace clue::soa::device {
     using value_type = std::remove_cv_t<TElement>;
 
     meta::apply<Ndim>([&]<std::size_t Dim>() {
-      view.coords[Dim] =
+      view.m_coords[Dim] =
           reinterpret_cast<value_type*>(buffer + Dim * n_points * sizeof(value_type));
     });
-    view.weight = reinterpret_cast<value_type*>(buffer + Ndim * n_points * sizeof(value_type));
-    view.cluster_index =
+    view.m_weight = reinterpret_cast<value_type*>(buffer + Ndim * n_points * sizeof(value_type));
+    view.m_cluster_index =
         reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(value_type));
-    view.is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(int));
-    view.nearest_higher =
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(int));
+    view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
-    view.n = n_points;
+    view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
   inline void partitionSoAView(PointsView<Ndim, TElement>& view,
@@ -70,14 +70,14 @@ namespace clue::soa::device {
     using value_type = std::remove_cv_t<TElement>;
 
     meta::apply<Ndim>(
-        [&]<std::size_t Dim>() { view.coords[Dim] = coordinates.data() + Dim * n_points; });
-    view.weight = weights.data();
-    view.cluster_index = output.data();
-    view.is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher =
+        [&]<std::size_t Dim>() { view.m_coords[Dim] = coordinates.data() + Dim * n_points; });
+    view.m_weight = weights.data();
+    view.m_cluster_index = output.data();
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
-    view.n = n_points;
+    view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
   inline void partitionSoAView(PointsView<Ndim, TElement>& view,
@@ -87,14 +87,15 @@ namespace clue::soa::device {
                                std::span<int> output) {
     using value_type = std::remove_cv_t<TElement>;
 
-    meta::apply<Ndim>([&]<std::size_t Dim>() { view.coords[Dim] = input.data() + Dim * n_points; });
-    view.weight = input.data() + Ndim * n_points;
-    view.cluster_index = output.data();
-    view.is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher =
+    meta::apply<Ndim>(
+        [&]<std::size_t Dim>() { view.m_coords[Dim] = input.data() + Dim * n_points; });
+    view.m_weight = input.data() + Ndim * n_points;
+    view.m_cluster_index = output.data();
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
-    view.n = n_points;
+    view.m_n = n_points;
   }
 
   template <std::size_t Ndim, std::floating_point TElement>
@@ -106,14 +107,15 @@ namespace clue::soa::device {
                                int* output) {
     using value_type = std::remove_cv_t<TElement>;
 
-    meta::apply<Ndim>([&]<std::size_t Dim>() { view.coords[Dim] = coordinates + Dim * n_points; });
-    view.weight = weights;
-    view.cluster_index = output;
-    view.is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher =
+    meta::apply<Ndim>(
+        [&]<std::size_t Dim>() { view.m_coords[Dim] = coordinates + Dim * n_points; });
+    view.m_weight = weights;
+    view.m_cluster_index = output;
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
-    view.n = n_points;
+    view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
   inline void partitionSoAView(PointsView<Ndim, TElement>& view,
@@ -123,14 +125,14 @@ namespace clue::soa::device {
                                int* output) {
     using value_type = std::remove_cv_t<TElement>;
 
-    meta::apply<Ndim>([&]<std::size_t Dim>() { view.coords[Dim] = input + Dim * n_points; });
-    view.weight = input + Ndim * n_points;
-    view.cluster_index = output;
-    view.is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher =
+    meta::apply<Ndim>([&]<std::size_t Dim>() { view.m_coords[Dim] = input + Dim * n_points; });
+    view.m_weight = input + Ndim * n_points;
+    view.m_cluster_index = output;
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
-    view.n = n_points;
+    view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement, concepts::pointer... TBuffers>
     requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
@@ -141,14 +143,15 @@ namespace clue::soa::device {
     using value_type = std::remove_cv_t<TElement>;
     auto buffers_tuple = std::make_tuple(buffers...);
 
-    meta::apply<Ndim>([&]<std::size_t Dim>() { view.coords[Dim] = std::get<Dim>(buffers_tuple); });
-    view.weight = std::get<Ndim>(buffers_tuple);
-    view.cluster_index = std::get<Ndim + 1>(buffers_tuple);
-    view.is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
-    view.nearest_higher =
+    meta::apply<Ndim>(
+        [&]<std::size_t Dim>() { view.m_coords[Dim] = std::get<Dim>(buffers_tuple); });
+    view.m_weight = std::get<Ndim>(buffers_tuple);
+    view.m_cluster_index = std::get<Ndim + 1>(buffers_tuple);
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
-    view.n = n_points;
+    view.m_n = n_points;
   }
 
 }  // namespace clue::soa::device

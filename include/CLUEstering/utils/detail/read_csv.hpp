@@ -73,12 +73,12 @@ namespace clue {
 
       for (auto dim = 0u; dim < NDim; ++dim) {
         getline(buffer_stream, value, ',');
-        view.coords[dim][point_id] = std::stof(value);
+        view.m_coords[dim][point_id] = std::stof(value);
       }
       getline(buffer_stream, value, ',');
-      view.weight[point_id] = std::stof(value);
+      view.m_weight[point_id] = std::stof(value);
       getline(buffer_stream, value, ',');
-      view.cluster_index[point_id] = std::stoi(value);
+      view.m_cluster_index[point_id] = std::stoi(value);
 
       ++point_id;
     }
