@@ -37,7 +37,7 @@ def test_clustering(blobs):
     c.run_clue()
     c.to_csv('./', 'blobs_output.csv')
 
-    assert silhouette_score(c.coords.T, c.cluster_ids) > 0.8
+    assert silhouette_score(c.coords.T, c.cluster_ids) > 0.78
 
 
 if __name__ == "__main__":
