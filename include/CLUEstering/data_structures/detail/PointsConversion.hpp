@@ -25,6 +25,7 @@ namespace clue {
         make_host_view(h_points.m_view.m_cluster_index, h_points.size()),
         make_device_view(alpaka::getDev(queue), d_points.m_view.m_cluster_index, h_points.size()));
     h_points.mark_clustered();
+    alpaka::wait(queue);
   }
 
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
@@ -36,6 +37,7 @@ namespace clue {
         make_host_view(h_points.m_view.m_cluster_index, h_points.size()),
         make_device_view(alpaka::getDev(queue), d_points.m_view.m_cluster_index, h_points.size()));
     h_points.mark_clustered();
+    alpaka::wait(queue);
 
     return h_points;
   }
@@ -58,6 +60,7 @@ namespace clue {
         queue,
         make_device_view(alpaka::getDev(queue), d_points.m_view.m_weight, h_points.size()),
         make_host_view(h_points.m_view.m_weight, h_points.size()));
+    alpaka::wait(queue);
   }
 
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
@@ -73,6 +76,7 @@ namespace clue {
     alpaka::memcpy(queue,
                    make_device_view(alpaka::getDev(queue), d_points.m_view.weight, h_points.size()),
                    make_host_view(h_points.m_view.weight, h_points.size()));
+    alpaka::wait(queue);
 
     return d_points;
   }
