@@ -232,6 +232,7 @@ namespace clue::detail {
                                                        delta_i,
                                                        nh_i,
                                                        dm,
+                                                       seed_dc,
                                                        metric,
                                                        i);
 
