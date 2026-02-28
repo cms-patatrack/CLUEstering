@@ -50,7 +50,7 @@ namespace clue::detail {
 
       for (auto binIter = 0u; binIter < binSize; ++binIter) {
         int32_t j = tiles[binId][binIter];
-        assert(j >= 0 && j < dev_points.n);
+        assert(j >= 0 && j < dev_points.size());
 
         auto coords_j = dev_points[j];
         auto distance = metric(coords_i, coords_j);
@@ -151,7 +151,7 @@ namespace clue::detail {
 
       for (auto binIter = 0; binIter < binSize; ++binIter) {
         const auto j = tiles[binId][binIter];
-        assert(j >= 0 && j < dev_points.n);
+        assert(j >= 0 && j < dev_points.size());
         auto rho_j = dev_points.rho()[j];
         bool found_higher = (rho_j > rho_i);
         found_higher = found_higher || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
