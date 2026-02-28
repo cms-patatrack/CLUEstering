@@ -264,6 +264,7 @@ namespace clue {
                                                  m_tiles->view(),
                                                  dev_points.view(),
                                                  m_dm,
+                                                 m_seed_dc,
                                                  metric,
                                                  seed_candidates,
                                                  n_points);
@@ -310,6 +311,7 @@ namespace clue {
                                                  m_tiles->view(),
                                                  dev_points.view(),
                                                  m_dm,
+                                                 m_seed_dc,
                                                  metric,
                                                  seed_candidates,
                                                  n_points);
@@ -374,6 +376,7 @@ namespace clue {
                                                           m_tiles->view(),
                                                           dev_points.view(),
                                                           m_dm,
+                                                          m_seed_dc,
                                                           metric,
                                                           seed_candidates,
                                                           d_event_offsets,

@@ -142,6 +142,7 @@ namespace clue::detail {
                                                   TData& delta_i,
                                                   int& nh_i,
                                                   TData dm,
+                                                  TData seed_dc,
                                                   const DistanceMetric& metric,
                                                   int32_t point_id,
                                                   std::size_t event = 0) {
@@ -163,7 +164,7 @@ namespace clue::detail {
         if (found_higher && distance <= dm) {
           if (distance < delta_i) {
             delta_i = distance;
-            nh_i = j;
+            nh_i = (distance > seed_dc) ? -1 : j;
           }
         }
       }
@@ -184,6 +185,7 @@ namespace clue::detail {
                                                          delta_i,
                                                          nh_i,
                                                          dm,
+                                                         seed_dc,
                                                          metric,
                                                          point_id,
                                                          event);
@@ -201,6 +203,7 @@ namespace clue::detail {
                                   internal::TilesView<Ndim, TData> dev_tiles,
                                   PointsView<Ndim, TData> dev_points,
                                   TData dm,
+                                  TData seed_dc,
                                   DistanceMetric metric,
                                   std::size_t* seed_candidates,
                                   int32_t n_points) const {
@@ -351,6 +354,7 @@ namespace clue::detail {
                                     internal::TilesView<Ndim, TData>& tiles,
                                     PointsView<Ndim, TData>& dev_points,
                                     TData dm,
+                                    TData seed_dc,
                                     const DistanceMetric& metric,
                                     std::size_t& seed_candidates,
                                     int32_t size) {
@@ -362,6 +366,7 @@ namespace clue::detail {
                        tiles,
                        dev_points,
                        dm,
+                       seed_dc,
                        metric,
                        d_seed_candidates.data(),
                        size);
