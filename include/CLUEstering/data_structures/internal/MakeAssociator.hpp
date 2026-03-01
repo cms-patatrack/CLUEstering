@@ -15,11 +15,14 @@ namespace clue::internal {
   inline auto make_associator(TQueue& queue,
                               std::span<const int32_t> associations,
                               int32_t elements) {
-    const auto bins = clue::internal::algorithm::reduce(associations.begin(),
+    const auto bins = clue::internal::algorithm::reduce(queue,
+                                                        associations.begin(),
                                                         associations.end(),
                                                         std::numeric_limits<int32_t>::lowest(),
                                                         clue::nostd::maximum<int32_t>{}) +
                       1;
+    alpaka::wait(queue);
+
     clue::AssociationMap<decltype(alpaka::getDev(queue))> map(elements, bins, queue);
     map.template fill<clue::internal::Acc>(elements, associations, queue);
     alpaka::wait(queue);

@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "CLUEstering/detail/concepts.hpp"
+
 #include <alpaka/alpaka.hpp>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -105,6 +107,50 @@ namespace clue::internal::algorithm {
     return oneapi::dpl::reduce(std::forward<ExecutionPolicy>(policy), first, last, init, op);
 #else
     return std::reduce(std::forward<ExecutionPolicy>(policy), first, last, init, op);
+#endif
+  }
+
+  template <concepts::queue TQueue, typename InputIterator>
+  ALPAKA_FN_HOST inline constexpr typename std::iterator_traits<InputIterator>::value_type reduce(
+      TQueue& queue, InputIterator first, InputIterator last) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::device.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::device.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last);
+#else
+    return std::reduce(first, last);
+#endif
+  }
+
+  template <concepts::queue TQueue, typename InputIterator, typename T>
+  ALPAKA_FN_HOST inline constexpr T reduce(TQueue& queue,
+                                           InputIterator first,
+                                           InputIterator last,
+                                           T init) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::device.on(queue.getNativeHandle()), first, last, init);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::device.on(queue.getNativeHandle()), first, last, init);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last, init);
+#else
+    return std::reduce(first, last, init);
+#endif
+  }
+
+  template <concepts::queue TQueue, typename InputIterator, typename T, typename BinaryOperation>
+  ALPAKA_FN_HOST inline constexpr T reduce(
+      TQueue& queue, InputIterator first, InputIterator last, T init, BinaryOperation op) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::device.on(queue.getNativeHandle()), first, last, init, op);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::device.on(queue.getNativeHandle()), first, last, init, op);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last, init, op);
+#else
+    return std::reduce(first, last, init, op);
 #endif
   }
 
