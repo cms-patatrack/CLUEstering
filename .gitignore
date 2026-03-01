@@ -25,6 +25,7 @@ vgcore.*
 *file1.csv
 *file2.csv
 *_output.csv
+tests/*.png
 *_passed.py
 *test_sissa_import.csv
 
