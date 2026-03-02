@@ -7,9 +7,11 @@
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/reduce.h>
+#include <thrust/async/reduce.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/reduce.h>
+#include <thrust/async/reduce.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
 #include <oneapi/dpl/algorithm>
