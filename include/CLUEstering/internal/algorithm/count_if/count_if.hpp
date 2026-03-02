@@ -64,6 +64,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::count_if(oneapi::dpl::execution::dpcpp_default, first, last, pred);
 #else
+    alpaka::wait(queue);
     return std::count_if(first, last, pred);
 #endif
   }

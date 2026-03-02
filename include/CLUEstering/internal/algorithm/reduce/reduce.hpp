@@ -123,6 +123,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
+    alpaka::wait(queue);
     return std::reduce(first, last);
 #endif
   }
@@ -139,6 +140,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last, init);
 #else
+    alpaka::wait(queue);
     return std::reduce(first, last, init);
 #endif
   }
@@ -153,6 +155,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last, init, op);
 #else
+    alpaka::wait(queue);
     return std::reduce(first, last, init, op);
 #endif
   }

@@ -213,6 +213,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
+    alpaka::wait(queue);
     return std::min_element(first, last);
 #endif
   }
@@ -229,6 +230,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
+    alpaka::wait(queue);
     return std::min_element(first, last, comp);
 #endif
   }
@@ -244,6 +246,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
+    alpaka::wait(queue);
     return std::max_element(first, last);
 #endif
   }
@@ -260,6 +263,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
+    alpaka::wait(queue);
     return std::max_element(first, last, comp);
 #endif
   }
@@ -274,6 +278,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::minmax_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
+    alpaka::wait(queue);
     return std::minmax_element(first, last);
 #endif
   }
@@ -288,6 +293,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::minmax_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
+    alpaka::wait(queue);
     return std::minmax_element(first, last, comp);
 #endif
   }

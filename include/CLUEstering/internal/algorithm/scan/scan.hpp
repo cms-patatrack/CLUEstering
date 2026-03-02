@@ -199,6 +199,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     oneapi::dpl::inclusive_scan(oneapi::dpl::execution::dpcpp_default, first, last, output);
 #else
+    alpaka::wait(queue);
     std::inclusive_scan(first, last, output);
 #endif
   }
@@ -219,6 +220,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     oneapi::dpl::inclusive_scan(oneapi::dpl::execution::dpcpp_default, first, last, output, op);
 #else
+    alpaka::wait(queue);
     std::inclusive_scan(first, last, output, op);
 #endif
   }
@@ -244,6 +246,7 @@ namespace clue::internal::algorithm {
     oneapi::dpl::inclusive_scan(
         oneapi::dpl::execution::dpcpp_default, first, last, output, op, init);
 #else
+    alpaka::wait(queue);
     std::inclusive_scan(first, last, output, op, init);
 #endif
   }
@@ -258,6 +261,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     oneapi::dpl::exclusive_scan(oneapi::dpl::execution::dpcpp_default, first, last, output, init);
 #else
+    alpaka::wait(queue);
     std::exclusive_scan(first, last, output, init);
 #endif
   }
@@ -283,6 +287,7 @@ namespace clue::internal::algorithm {
     oneapi::dpl::exclusive_scan(
         oneapi::dpl::execution::dpcpp_default, first, last, output, init, op);
 #else
+    alpaka::wait(queue);
     std::exclusive_scan(first, last, output, init, op);
 #endif
   }

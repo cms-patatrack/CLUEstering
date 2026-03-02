@@ -93,6 +93,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     oneapi::dpl::sort(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
+    alpaka::wait(queue);
     std::sort(first, last);
 #endif
   }
@@ -109,6 +110,7 @@ namespace clue::internal::algorithm {
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     oneapi::dpl::sort(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
+    alpaka::wait(queue);
     std::sort(first, last, comp);
 #endif
   }
