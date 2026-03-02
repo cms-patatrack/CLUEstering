@@ -110,7 +110,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue, typename InputIterator>
+  template <clue::concepts::queue TQueue, typename InputIterator>
   ALPAKA_FN_HOST inline constexpr typename std::iterator_traits<InputIterator>::value_type reduce(
       TQueue& queue, InputIterator first, InputIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -124,7 +124,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue, typename InputIterator, typename T>
+  template <clue::concepts::queue TQueue, typename InputIterator, typename T>
   ALPAKA_FN_HOST inline constexpr T reduce(TQueue& queue,
                                            InputIterator first,
                                            InputIterator last,
@@ -140,7 +140,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue, typename InputIterator, typename T, typename BinaryOperation>
+  template <clue::concepts::queue TQueue, typename InputIterator, typename T, typename BinaryOperation>
   ALPAKA_FN_HOST inline constexpr T reduce(
       TQueue& queue, InputIterator first, InputIterator last, T init, BinaryOperation op) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)

@@ -80,7 +80,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue, typename RandomAccessIterator>
+  template <clue::concepts::queue TQueue, typename RandomAccessIterator>
   ALPAKA_FN_HOST inline constexpr void sort(TQueue& queue,
                                             RandomAccessIterator first,
                                             RandomAccessIterator last) {
@@ -95,7 +95,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue, typename RandomAccessIterator, typename Compare>
+  template <clue::concepts::queue TQueue, typename RandomAccessIterator, typename Compare>
   ALPAKA_FN_HOST inline constexpr void sort(TQueue& queue,
                                             RandomAccessIterator first,
                                             RandomAccessIterator last,

@@ -51,7 +51,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue, typename InputIterator, typename Predicate>
+  template <clue::concepts::queue TQueue, typename InputIterator, typename Predicate>
   ALPAKA_FN_HOST inline constexpr auto count_if(TQueue& queue,
                                                 InputIterator first,
                                                 InputIterator last,

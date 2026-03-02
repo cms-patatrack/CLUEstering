@@ -182,7 +182,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue, typename InputIterator, typename OutputIterator>
+  template <clue::concepts::queue TQueue, typename InputIterator, typename OutputIterator>
   ALPAKA_FN_HOST inline constexpr void inclusive_scan(TQueue& queue,
                                                       InputIterator first,
                                                       InputIterator last,
@@ -198,7 +198,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue,
+  template <clue::concepts::queue TQueue,
             typename InputIterator,
             typename OutputIterator,
             typename BinaryOperator>
@@ -218,7 +218,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue,
+  template <clue::concepts::queue TQueue,
             typename InputIterator,
             typename OutputIterator,
             typename BinaryOperator,
@@ -243,7 +243,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue, typename InputIterator, typename OutputIterator, typename T>
+  template <clue::concepts::queue TQueue, typename InputIterator, typename OutputIterator, typename T>
   ALPAKA_FN_HOST inline constexpr void exclusive_scan(
       TQueue& queue, InputIterator first, InputIterator last, OutputIterator output, T init) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
@@ -257,7 +257,7 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-  template <concepts::queue TQueue,
+  template <clue::concepts::queue TQueue,
             typename InputIterator,
             typename OutputIterator,
             typename T,
