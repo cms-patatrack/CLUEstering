@@ -207,10 +207,9 @@ namespace clue::internal::algorithm {
                                                               ForwardIterator first,
                                                               ForwardIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::async::min_element(
-        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
+    return thrust::min_element(thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::async::min_element(thrust::hip::par.on(queue.getNativeHandle()), first, last);
+    return thrust::min_element(thrust::hip::par.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
