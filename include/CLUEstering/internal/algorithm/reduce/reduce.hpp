@@ -35,6 +35,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr typename std::iterator_traits<ForwardIterator>::value_type reduce(
       ExecutionPolicy&& policy, ForwardIterator first, ForwardIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -62,6 +63,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr T reduce(ExecutionPolicy&& policy,
                                            ForwardIterator first,
                                            ForwardIterator last,
@@ -94,6 +96,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T, typename BinaryOperation>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr T reduce(ExecutionPolicy&& policy,
                                            ForwardIterator first,
                                            ForwardIterator last,

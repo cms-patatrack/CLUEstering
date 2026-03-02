@@ -36,6 +36,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename InputIterator, typename Predicate>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr auto count_if(ExecutionPolicy&& policy,
                                                 InputIterator first,
                                                 InputIterator last,

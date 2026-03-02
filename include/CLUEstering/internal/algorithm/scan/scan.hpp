@@ -33,6 +33,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void inclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,
@@ -65,6 +66,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryOperator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void inclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,
@@ -97,6 +99,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryOperator, typename T>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void inclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,
@@ -132,6 +135,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void exclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,
@@ -164,6 +168,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T, typename BinaryOperator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void exclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,

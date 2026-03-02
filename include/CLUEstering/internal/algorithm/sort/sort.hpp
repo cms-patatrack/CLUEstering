@@ -35,6 +35,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename RandomAccessIterator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void sort(ExecutionPolicy&& policy,
                                             RandomAccessIterator first,
                                             RandomAccessIterator last) {
@@ -65,6 +66,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename RandomAccessIterator, typename Compare>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void sort(ExecutionPolicy&& policy,
                                             RandomAccessIterator first,
                                             RandomAccessIterator last,
