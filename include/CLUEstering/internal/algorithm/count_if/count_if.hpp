@@ -7,11 +7,9 @@
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/count.h>
-#include <thrust/async/count.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/count.h>
-#include <thrust/async/count.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
 #include <oneapi/dpl/algorithm>
@@ -60,9 +58,10 @@ namespace clue::internal::algorithm {
                                                 InputIterator last,
                                                 Predicate pred) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::count_if(thrust::device.on(queue.getNativeHandle()), first, last, pred);
+    return thrust::count_if(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, pred);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::count_if(thrust::device.on(queue.getNativeHandle()), first, last, pred);
+    return thrust::count_if(thrust::hip::par.on(queue.getNativeHandle()), first, last, pred);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::count_if(oneapi::dpl::execution::dpcpp_default, first, last, pred);
 #else

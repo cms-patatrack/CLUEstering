@@ -7,11 +7,9 @@
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/extrema.h>
-#include <thrust/async/extrema.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/extrema.h>
-#include <thrust/async/extrema.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
 #include <oneapi/dpl/algorithm>
@@ -209,9 +207,10 @@ namespace clue::internal::algorithm {
                                                               ForwardIterator first,
                                                               ForwardIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::async::min_element(thrust::device.on(queue.getNativeHandle()), first, last);
+    return thrust::async::min_element(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::async::min_element(thrust::device.on(queue.getNativeHandle()), first, last);
+    return thrust::async::min_element(thrust::hip::par.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
@@ -226,9 +225,10 @@ namespace clue::internal::algorithm {
                                                               ForwardIterator last,
                                                               BinaryPredicate comp) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::min_element(thrust::device.on(queue.getNativeHandle()), first, last, comp);
+    return thrust::min_element(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, comp);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::min_element(thrust::device.on(queue.getNativeHandle()), first, last, comp);
+    return thrust::min_element(thrust::hip::par.on(queue.getNativeHandle()), first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
@@ -242,9 +242,9 @@ namespace clue::internal::algorithm {
                                                               ForwardIterator first,
                                                               ForwardIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::max_element(thrust::device.on(queue.getNativeHandle()), first, last);
+    return thrust::max_element(thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::max_element(thrust::device.on(queue.getNativeHandle()), first, last);
+    return thrust::max_element(thrust::hip::par.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
@@ -259,9 +259,10 @@ namespace clue::internal::algorithm {
                                                               ForwardIterator last,
                                                               BinaryPredicate comp) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::max_element(thrust::device.on(queue.getNativeHandle()), first, last, comp);
+    return thrust::max_element(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, comp);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::max_element(thrust::device.on(queue.getNativeHandle()), first, last, comp);
+    return thrust::max_element(thrust::hip::par.on(queue.getNativeHandle()), first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
@@ -274,9 +275,10 @@ namespace clue::internal::algorithm {
   ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
       TQueue& queue, ForwardIterator first, ForwardIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::minmax_element(thrust::device.on(queue.getNativeHandle()), first, last);
+    return thrust::minmax_element(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::minmax_element(thrust::device.on(queue.getNativeHandle()), first, last);
+    return thrust::minmax_element(thrust::hip::par.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::minmax_element(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
@@ -289,9 +291,10 @@ namespace clue::internal::algorithm {
   ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
       TQueue& queue, ForwardIterator first, ForwardIterator last, BinaryPredicate comp) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::minmax_element(thrust::device.on(queue.getNativeHandle()), first, last, comp);
+    return thrust::minmax_element(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, comp);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    return thrust::minmax_element(thrust::device.on(queue.getNativeHandle()), first, last, comp);
+    return thrust::minmax_element(thrust::hip::par.on(queue.getNativeHandle()), first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     return oneapi::dpl::minmax_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else

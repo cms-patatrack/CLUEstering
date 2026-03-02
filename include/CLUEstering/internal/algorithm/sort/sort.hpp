@@ -89,9 +89,9 @@ namespace clue::internal::algorithm {
                                             RandomAccessIterator first,
                                             RandomAccessIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    thrust::sort(thrust::device.on(queue.getNativeHandle()), first, last);
+    thrust::sort(thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    thrust::sort(thrust::device.on(queue.getNativeHandle()), first, last);
+    thrust::sort(thrust::hip::par.on(queue.getNativeHandle()), first, last);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     oneapi::dpl::sort(oneapi::dpl::execution::dpcpp_default, first, last);
 #else
@@ -106,9 +106,9 @@ namespace clue::internal::algorithm {
                                             RandomAccessIterator last,
                                             Compare comp) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    thrust::sort(thrust::device.on(queue.getNativeHandle()), first, last, comp);
+    thrust::sort(thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, comp);
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
-    thrust::sort(thrust::device.on(queue.getNativeHandle()), first, last, comp);
+    thrust::sort(thrust::hip::par.on(queue.getNativeHandle()), first, last, comp);
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
     oneapi::dpl::sort(oneapi::dpl::execution::dpcpp_default, first, last, comp);
 #else
