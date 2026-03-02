@@ -1,10 +1,13 @@
 
 #pragma once
 
+#include "CLUEstering/detail/concepts.hpp"
+
 #include <alpaka/alpaka.hpp>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) || defined(ALPAKA_ACC_GPU_HIP_ENABLED)
 #include <thrust/scan.h>
+#include <thrust/async/scan.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
 #include <oneapi/dpl/algorithm>
@@ -31,6 +34,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void inclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,
@@ -63,6 +67,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryOperator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void inclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,
@@ -95,6 +100,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryOperator, typename T>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void inclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,
@@ -130,6 +136,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void exclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,
@@ -162,6 +169,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T, typename BinaryOperator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void exclusive_scan(ExecutionPolicy&& policy,
                                                       ForwardIterator first,
                                                       ForwardIterator last,
@@ -177,6 +185,114 @@ namespace clue::internal::algorithm {
         std::forward<ExecutionPolicy>(policy), first, last, output, init, op);
 #else
     std::exclusive_scan(std::forward<ExecutionPolicy>(policy), first, last, output, init, op);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename InputIterator, typename OutputIterator>
+  ALPAKA_FN_HOST inline constexpr void inclusive_scan(TQueue& queue,
+                                                      InputIterator first,
+                                                      InputIterator last,
+                                                      OutputIterator output) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+    thrust::inclusive_scan(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, output);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+    thrust::inclusive_scan(thrust::hip::par.on(queue.getNativeHandle()), first, last, output);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    oneapi::dpl::inclusive_scan(oneapi::dpl::execution::dpcpp_default, first, last, output);
+#else
+    alpaka::wait(queue);
+    std::inclusive_scan(first, last, output);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue,
+            typename InputIterator,
+            typename OutputIterator,
+            typename BinaryOperator>
+  ALPAKA_FN_HOST inline constexpr void inclusive_scan(TQueue& queue,
+                                                      InputIterator first,
+                                                      InputIterator last,
+                                                      OutputIterator output,
+                                                      BinaryOperator op) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+    thrust::inclusive_scan(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, output, op);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+    thrust::inclusive_scan(thrust::hip::par.on(queue.getNativeHandle()), first, last, output, op);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    oneapi::dpl::inclusive_scan(oneapi::dpl::execution::dpcpp_default, first, last, output, op);
+#else
+    alpaka::wait(queue);
+    std::inclusive_scan(first, last, output, op);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue,
+            typename InputIterator,
+            typename OutputIterator,
+            typename BinaryOperator,
+            typename T>
+  ALPAKA_FN_HOST inline constexpr void inclusive_scan(TQueue& queue,
+                                                      InputIterator first,
+                                                      InputIterator last,
+                                                      OutputIterator output,
+                                                      BinaryOperator op,
+                                                      T init) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+    thrust::inclusive_scan(
+        thrust::cuda::par.on(queue.getNativeHandle()), first, last, output, op, init);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+    thrust::inclusive_scan(
+        thrust::hip::par_nosync.on(queue.getNativeHandle()), first, last, output, op, init);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    oneapi::dpl::inclusive_scan(
+        oneapi::dpl::execution::dpcpp_default, first, last, output, op, init);
+#else
+    alpaka::wait(queue);
+    std::inclusive_scan(first, last, output, op, init);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename InputIterator, typename OutputIterator, typename T>
+  ALPAKA_FN_HOST inline constexpr void exclusive_scan(
+      TQueue& queue, InputIterator first, InputIterator last, OutputIterator output, T init) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+    thrust::exclusive_scan(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, output, init);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+    thrust::exclusive_scan(thrust::hip::par.on(queue.getNativeHandle()), first, last, output, init);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    oneapi::dpl::exclusive_scan(oneapi::dpl::execution::dpcpp_default, first, last, output, init);
+#else
+    alpaka::wait(queue);
+    std::exclusive_scan(first, last, output, init);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue,
+            typename InputIterator,
+            typename OutputIterator,
+            typename T,
+            typename BinaryOperator>
+  ALPAKA_FN_HOST inline constexpr void exclusive_scan(TQueue& queue,
+                                                      InputIterator first,
+                                                      InputIterator last,
+                                                      OutputIterator output,
+                                                      T init,
+                                                      BinaryOperator op) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+    thrust::exclusive_scan(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, output, init, op);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+    thrust::exclusive_scan(
+        thrust::hip::par.on(queue.getNativeHandle()), first, last, output, init, op);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    oneapi::dpl::exclusive_scan(
+        oneapi::dpl::execution::dpcpp_default, first, last, output, init, op);
+#else
+    alpaka::wait(queue);
+    std::exclusive_scan(first, last, output, init, op);
 #endif
   }
 

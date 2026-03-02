@@ -1,13 +1,17 @@
 
 #pragma once
 
+#include "CLUEstering/detail/concepts.hpp"
+
 #include <alpaka/alpaka.hpp>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/reduce.h>
+#include <thrust/async/reduce.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/reduce.h>
+#include <thrust/async/reduce.h>
 #include <thrust/execution_policy.h>
 #elif defined(ALPAKA_ACC_SYCL_ENABLED)
 #include <oneapi/dpl/algorithm>
@@ -33,6 +37,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr typename std::iterator_traits<ForwardIterator>::value_type reduce(
       ExecutionPolicy&& policy, ForwardIterator first, ForwardIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -60,6 +65,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr T reduce(ExecutionPolicy&& policy,
                                            ForwardIterator first,
                                            ForwardIterator last,
@@ -92,6 +98,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T, typename BinaryOperation>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr T reduce(ExecutionPolicy&& policy,
                                            ForwardIterator first,
                                            ForwardIterator last,
@@ -105,6 +112,54 @@ namespace clue::internal::algorithm {
     return oneapi::dpl::reduce(std::forward<ExecutionPolicy>(policy), first, last, init, op);
 #else
     return std::reduce(std::forward<ExecutionPolicy>(policy), first, last, init, op);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename InputIterator>
+  ALPAKA_FN_HOST inline constexpr typename std::iterator_traits<InputIterator>::value_type reduce(
+      TQueue& queue, InputIterator first, InputIterator last) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::hip::par.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last);
+#else
+    alpaka::wait(queue);
+    return std::reduce(first, last);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename InputIterator, typename T>
+  ALPAKA_FN_HOST inline constexpr T reduce(TQueue& queue,
+                                           InputIterator first,
+                                           InputIterator last,
+                                           T init) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, init);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::hip::par.on(queue.getNativeHandle()), first, last, init);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last, init);
+#else
+    alpaka::wait(queue);
+    return std::reduce(first, last, init);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename InputIterator, typename T, typename BinaryOperation>
+  ALPAKA_FN_HOST inline constexpr T reduce(
+      TQueue& queue, InputIterator first, InputIterator last, T init, BinaryOperation op) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, init, op);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::reduce(thrust::hip::par.on(queue.getNativeHandle()), first, last, init, op);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::reduce(oneapi::dpl::execution::dpcpp_default, first, last, init, op);
+#else
+    alpaka::wait(queue);
+    return std::reduce(first, last, init, op);
 #endif
   }
 

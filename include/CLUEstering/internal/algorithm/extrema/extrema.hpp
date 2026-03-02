@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "CLUEstering/detail/concepts.hpp"
+
 #include <alpaka/alpaka.hpp>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -33,6 +35,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr ForwardIterator min_element(ExecutionPolicy&& policy,
                                                               ForwardIterator first,
                                                               ForwardIterator last) {
@@ -63,6 +66,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryPredicate>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr ForwardIterator min_element(ExecutionPolicy&& policy,
                                                               ForwardIterator first,
                                                               ForwardIterator last,
@@ -93,6 +97,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr ForwardIterator max_element(ExecutionPolicy&& policy,
                                                               ForwardIterator first,
                                                               ForwardIterator last) {
@@ -123,6 +128,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryPredicate>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr ForwardIterator max_element(ExecutionPolicy&& policy,
                                                               ForwardIterator first,
                                                               ForwardIterator last,
@@ -153,6 +159,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
       ExecutionPolicy&& policy, ForwardIterator first, ForwardIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -181,6 +188,7 @@ namespace clue::internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryPredicate>
+    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
       ExecutionPolicy&& policy, ForwardIterator first, ForwardIterator last, BinaryPredicate comp) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -191,6 +199,106 @@ namespace clue::internal::algorithm {
     return oneapi::dpl::minmax_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
 #else
     return std::minmax_element(std::forward<ExecutionPolicy>(policy), first, last, comp);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename ForwardIterator>
+  ALPAKA_FN_HOST inline constexpr ForwardIterator min_element(TQueue& queue,
+                                                              ForwardIterator first,
+                                                              ForwardIterator last) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::min_element(thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::min_element(thrust::hip::par.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last);
+#else
+    alpaka::wait(queue);
+    return std::min_element(first, last);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename ForwardIterator, typename BinaryPredicate>
+  ALPAKA_FN_HOST inline constexpr ForwardIterator min_element(TQueue& queue,
+                                                              ForwardIterator first,
+                                                              ForwardIterator last,
+                                                              BinaryPredicate comp) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::min_element(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, comp);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::min_element(thrust::hip::par.on(queue.getNativeHandle()), first, last, comp);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::min_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
+#else
+    alpaka::wait(queue);
+    return std::min_element(first, last, comp);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename ForwardIterator>
+  ALPAKA_FN_HOST inline constexpr ForwardIterator max_element(TQueue& queue,
+                                                              ForwardIterator first,
+                                                              ForwardIterator last) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::max_element(thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::max_element(thrust::hip::par.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last);
+#else
+    alpaka::wait(queue);
+    return std::max_element(first, last);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename ForwardIterator, typename BinaryPredicate>
+  ALPAKA_FN_HOST inline constexpr ForwardIterator max_element(TQueue& queue,
+                                                              ForwardIterator first,
+                                                              ForwardIterator last,
+                                                              BinaryPredicate comp) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::max_element(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, comp);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::max_element(thrust::hip::par.on(queue.getNativeHandle()), first, last, comp);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::max_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
+#else
+    alpaka::wait(queue);
+    return std::max_element(first, last, comp);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename ForwardIterator>
+  ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
+      TQueue& queue, ForwardIterator first, ForwardIterator last) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::minmax_element(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::minmax_element(thrust::hip::par.on(queue.getNativeHandle()), first, last);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::minmax_element(oneapi::dpl::execution::dpcpp_default, first, last);
+#else
+    alpaka::wait(queue);
+    return std::minmax_element(first, last);
+#endif
+  }
+
+  template <clue::concepts::queue TQueue, typename ForwardIterator, typename BinaryPredicate>
+  ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
+      TQueue& queue, ForwardIterator first, ForwardIterator last, BinaryPredicate comp) {
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::minmax_element(
+        thrust::cuda::par_nosync.on(queue.getNativeHandle()), first, last, comp);
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED) and not defined(ALPAKA_HOST_ONLY)
+    return thrust::minmax_element(thrust::hip::par.on(queue.getNativeHandle()), first, last, comp);
+#elif defined(ALPAKA_ACC_SYCL_ENABLED)
+    return oneapi::dpl::minmax_element(oneapi::dpl::execution::dpcpp_default, first, last, comp);
+#else
+    alpaka::wait(queue);
+    return std::minmax_element(first, last, comp);
 #endif
   }
 

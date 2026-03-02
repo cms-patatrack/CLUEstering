@@ -29,7 +29,8 @@ namespace clue {
     template <concepts::queue TQueue>
     inline auto get_clusters(TQueue& queue, std::span<const int> cluster_ids) {
       auto clustered_points = internal::algorithm::count_if(
-          cluster_ids.begin(), cluster_ids.end(), non_negative<int>{});
+          queue, cluster_ids.begin(), cluster_ids.end(), non_negative<int>{});
+      alpaka::wait(queue);
       return internal::make_associator(queue, cluster_ids, clustered_points);
     }
 
