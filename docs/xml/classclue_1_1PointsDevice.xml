@@ -1,0 +1,1054 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1PointsDevice" kind="class" language="C++" prot="public">
+    <compoundname>clue::PointsDevice</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">internal::points_interface&lt; PointsDevice&lt; Ndim, float, clue::Device &gt; &gt;</basecompoundref>
+    <includes refid="PointsDevice_8hpp" local="no">PointsDevice.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+      <param>
+        <type>std::floating_point</type>
+        <declname>TData</declname>
+        <defname>TData</defname>
+        <defval>float</defval>
+      </param>
+      <param>
+        <type>concepts::device</type>
+        <declname>TDev</declname>
+        <defname>TDev</defname>
+        <defval>clue::Device</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classclue_1_1PointsDevice_1a5eec3b5696cf6f2429d5a31f04b77fa5" prot="public" static="no">
+        <type>TData</type>
+        <definition>using clue::PointsDevice&lt; Ndim, TData, TDev &gt;::element_type = TData</definition>
+        <argsstring></argsstring>
+        <name>element_type</name>
+        <qualifiedname>clue::PointsDevice::element_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="58" column="5" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classclue_1_1PointsDevice_1a2b91eb7bcec833ae782a14c7af7ee67a" prot="public" static="no">
+        <type>std::remove_cv_t&lt; TData &gt;</type>
+        <definition>using clue::PointsDevice&lt; Ndim, TData, TDev &gt;::value_type = std::remove_cv_t&lt;TData&gt;</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>clue::PointsDevice::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="59" column="5" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1PointsDevice_1afbfb9335a40ddfb8f1a9e58927ff2a4d" prot="private" static="no" mutable="no">
+        <type>device_buffer&lt; TDev, std::byte[]&gt;</type>
+        <definition>device_buffer&lt;TDev, std::byte[]&gt; clue::PointsDevice&lt; Ndim, TData, TDev &gt;::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>clue::PointsDevice::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="62" column="19" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsDevice_1a77f7c38f9400e059553134a47433d33d" prot="private" static="no" mutable="no">
+        <type>PointsView&lt; Ndim, element_type &gt;</type>
+        <definition>PointsView&lt;Ndim, element_type&gt; clue::PointsDevice&lt; Ndim, TData, TDev &gt;::m_view</definition>
+        <argsstring></argsstring>
+        <name>m_view</name>
+        <qualifiedname>clue::PointsDevice::m_view</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="63" column="16" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsDevice_1a7e99787978a52068fcd2cc89c01600bc" prot="private" static="no" mutable="no">
+        <type>std::optional&lt; std::size_t &gt;</type>
+        <definition>std::optional&lt;std::size_t&gt; clue::PointsDevice&lt; Ndim, TData, TDev &gt;::m_nclusters</definition>
+        <argsstring></argsstring>
+        <name>m_nclusters</name>
+        <qualifiedname>clue::PointsDevice::m_nclusters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="64" column="19" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsDevice_1a83877281919774b19ee3af57e211bad3" prot="private" static="no" mutable="no">
+        <type>std::int32_t</type>
+        <definition>std::int32_t clue::PointsDevice&lt; Ndim, TData, TDev &gt;::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>clue::PointsDevice::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="65" column="18" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsDevice_1aaeb18b41d0ffd26f3e58224b577844c2" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool clue::PointsDevice&lt; Ndim, TData, TDev &gt;::m_clustered</definition>
+        <argsstring></argsstring>
+        <name>m_clustered</name>
+        <qualifiedname>clue::PointsDevice::m_clustered</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="66" column="10" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classclue_1_1PointsDevice_1af1b1622b393e284d6a4fe70b1019b27a" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t clue::PointsDevice&lt; Ndim, TData, TDev &gt;::Ndim_</definition>
+        <argsstring></argsstring>
+        <name>Ndim_</name>
+        <qualifiedname>clue::PointsDevice::Ndim_</qualifiedname>
+        <initializer>= Ndim</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="194" column="41" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="194" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::PointsDevice</definition>
+        <argsstring>(TQueue &amp;queue, std::int32_t n_points)</argsstring>
+        <name>PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::PointsDevice</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <briefdescription>
+<para>Construct a <ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points to allocate </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="74" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a3a5da1a2de532106ea59ab2d8bae1acc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::PointsDevice</definition>
+        <argsstring>(TQueue &amp;queue, std::int32_t n_points, std::span&lt; std::byte &gt; buffer)</argsstring>
+        <name>PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::PointsDevice</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>std::span&lt; std::byte &gt;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Construct a <ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref> object with a pre-allocated buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points to allocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer to use for the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="82" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1aa4dab77d757cdb9ac5842ab415d9e376" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::PointsDevice</definition>
+        <argsstring>(TQueue &amp;queue, std::int32_t n_points, std::span&lt; element_type &gt; input, std::span&lt; int &gt; output)</argsstring>
+        <name>PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::PointsDevice</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>std::span&lt; element_type &gt;</type>
+          <declname>input</declname>
+        </param>
+        <param>
+          <type>std::span&lt; int &gt;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the device using interleaved data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>input_buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing interleaved coordinates and weights </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>output_buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer to store the cluster indexes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The input buffer must contain the coordinates and weights in an SoA format </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="92" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1aa1574163f9a6a61ac2df3acf5e556c83" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::PointsDevice</definition>
+        <argsstring>(TQueue &amp;queue, std::int32_t n_points, std::span&lt; element_type &gt; coordinates, std::span&lt; element_type &gt; weights, std::span&lt; int &gt; output)</argsstring>
+        <name>PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::PointsDevice</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>std::span&lt; element_type &gt;</type>
+          <declname>coordinates</declname>
+        </param>
+        <param>
+          <type>std::span&lt; element_type &gt;</type>
+          <declname>weights</declname>
+        </param>
+        <param>
+          <type>std::span&lt; int &gt;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the device using separate coordinate and weight buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coordinates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing the coordinates </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername><ref refid="classclue_1_1PointsDevice_1ad9fbfbf03191af649b751c71d64ae30e" kindref="member">weights</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing the weights </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>output</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer to store the cluster indexes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The coordinates buffer must have a size of n_points * Ndim </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="106" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a9d1211372b0aee0d0c9be105f0d34a6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::PointsDevice</definition>
+        <argsstring>(TQueue &amp;queue, std::int32_t n_points, element_type *input, int *output)</argsstring>
+        <name>PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::PointsDevice</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>element_type *</type>
+          <declname>input</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the device using interleaved data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>input_buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing interleaved coordinates and weights </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>output_buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer to store the cluster indexes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The input buffer must contain the coordinates and weights in an SoA format </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="120" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1ae555cd0beb020025eceb2da72b537b05" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::PointsDevice</definition>
+        <argsstring>(TQueue &amp;queue, std::int32_t n_points, element_type *coordinates, element_type *weights, int *output)</argsstring>
+        <name>PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::PointsDevice</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>element_type *</type>
+          <declname>coordinates</declname>
+        </param>
+        <param>
+          <type>element_type *</type>
+          <declname>weights</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+<para>Constructs a container for the points allocated on the device using separate coordinate and weight buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for memory allocation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>coordinates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing the coordinates </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername><ref refid="classclue_1_1PointsDevice_1ad9fbfbf03191af649b751c71d64ae30e" kindref="member">weights</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer containing the weights </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>output</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pre-allocated buffer to store the cluster indexes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The coordinates buffer must have a size of n_points * Ndim </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="131" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a1702345b9baa6a0cd728af6ac3fd33cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>concepts::pointer...</type>
+            <declname>TBuffers</declname>
+            <defname>TBuffers</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::PointsDevice</definition>
+        <argsstring>(TQueue &amp;queue, std::int32_t n_points, TBuffers... buffers)</argsstring>
+        <name>PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::PointsDevice</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::int32_t</type>
+          <declname>n_points</declname>
+        </param>
+        <param>
+          <type>TBuffers...</type>
+          <declname>buffers</declname>
+        </param>
+        <briefdescription>
+<para>Construct a <ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref> object with a pre-allocated buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>n_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of points to allocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>buffers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffers to use for the points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="144" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a8150025232cba39dc29c91621df94665" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::PointsDevice</definition>
+        <argsstring>(const PointsDevice &amp;)=delete</argsstring>
+        <name>PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::PointsDevice</qualifiedname>
+        <param>
+          <type>const PointsDevice &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="146" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1ae713abeadff7921f2f281845d2dae24a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref> &amp;</type>
+        <definition>PointsDevice &amp; clue::PointsDevice&lt; Ndim, TData, TDev &gt;::operator=</definition>
+        <argsstring>(const PointsDevice &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>clue::PointsDevice::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="147" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a19e0f93c0817ee4f126ef9f7be2e53df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::PointsDevice</definition>
+        <argsstring>(PointsDevice &amp;&amp;)=default</argsstring>
+        <name>PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::PointsDevice</qualifiedname>
+        <param>
+          <type>PointsDevice &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="148" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a8b4c78bfcbd907556fb5eb5c314cb542" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref> &amp;</type>
+        <definition>PointsDevice &amp; clue::PointsDevice&lt; Ndim, TData, TDev &gt;::operator=</definition>
+        <argsstring>(PointsDevice &amp;&amp;)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>clue::PointsDevice::operator=</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="149" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1ac97cbd0e999dcb06838825298578e812" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::PointsDevice&lt; Ndim, TData, TDev &gt;::~PointsDevice</definition>
+        <argsstring>()=default</argsstring>
+        <name>~PointsDevice</name>
+        <qualifiedname>clue::PointsDevice::~PointsDevice</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="150" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a9906318d58a619f7f32e2851428a08d4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsDevice&lt; Ndim, TData, TDev &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>clue::PointsDevice::size</qualifiedname>
+        <briefdescription>
+<para>Returns the number of points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="155" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a499ee6836f0c06372b6863bcb55afac7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsDevice&lt; Ndim, TData, TDev &gt;::coords</definition>
+        <argsstring>(size_t dim) const</argsstring>
+        <name>coords</name>
+        <qualifiedname>clue::PointsDevice::coords</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+<para>Returns the coordinates of the points for a specific dimension as a const span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dimension for which to get the coordinates </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A const span of the coordinates for the specified dimension </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="159" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a2bb67928f7d28118f838f0891e6fc0a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsDevice&lt; Ndim, TData, TDev &gt;::coords</definition>
+        <argsstring>(size_t dim)</argsstring>
+        <name>coords</name>
+        <qualifiedname>clue::PointsDevice::coords</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+<para>Returns the coordinates of the points for a specific dimension as a span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dimension for which to get the coordinates </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A span of the coordinates for the specified dimension </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="163" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1ad9fbfbf03191af649b751c71d64ae30e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsDevice&lt; Ndim, TData, TDev &gt;::weights</definition>
+        <argsstring>() const</argsstring>
+        <name>weights</name>
+        <qualifiedname>clue::PointsDevice::weights</qualifiedname>
+        <briefdescription>
+<para>Returns the weights of the points as a const span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const span of the weights of the points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="166" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a5513a7bcc18c08e1a5c455c464111478" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsDevice&lt; Ndim, TData, TDev &gt;::weights</definition>
+        <argsstring>()</argsstring>
+        <name>weights</name>
+        <qualifiedname>clue::PointsDevice::weights</qualifiedname>
+        <briefdescription>
+<para>Returns the weights of the points as a span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A span of the weights of the points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="169" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a54314bd97f709e1e0a443f8e435a692f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsDevice&lt; Ndim, TData, TDev &gt;::clusterIndexes</definition>
+        <argsstring>() const</argsstring>
+        <name>clusterIndexes</name>
+        <qualifiedname>clue::PointsDevice::clusterIndexes</qualifiedname>
+        <briefdescription>
+<para>Returns the cluster indexes of the points as a const span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const span of the cluster indexes of the points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="172" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a6db6082e3e3abff32f940d3266af4b64" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsDevice&lt; Ndim, TData, TDev &gt;::clusterIndexes</definition>
+        <argsstring>()</argsstring>
+        <name>clusterIndexes</name>
+        <qualifiedname>clue::PointsDevice::clusterIndexes</qualifiedname>
+        <briefdescription>
+<para>Returns the cluster indexes of the points as a span. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A span of the cluster indexes of the points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="175" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1aeb73ee6a2b71317836d60375c16ccf8b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto</type>
+        <definition>ALPAKA_FN_HOST auto clue::PointsDevice&lt; Ndim, TData, TDev &gt;::clustered</definition>
+        <argsstring>() const</argsstring>
+        <name>clustered</name>
+        <qualifiedname>clue::PointsDevice::clustered</qualifiedname>
+        <briefdescription>
+<para>Indicates whether the points have been clustered. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>True if the points have been clustered, false otherwise </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="178" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a5b337783d80be5be78437fd79766e0f2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST const auto &amp;</type>
+        <definition>ALPAKA_FN_HOST const auto &amp; clue::PointsDevice&lt; Ndim, TData, TDev &gt;::view</definition>
+        <argsstring>() const</argsstring>
+        <name>view</name>
+        <qualifiedname>clue::PointsDevice::view</qualifiedname>
+        <briefdescription>
+<para>Returns the view of the points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const reference to the PointsView structure containing the points data </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="181" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a4c7fb3df945321890165fdbda8479b27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto &amp;</type>
+        <definition>ALPAKA_FN_HOST auto &amp; clue::PointsDevice&lt; Ndim, TData, TDev &gt;::view</definition>
+        <argsstring>()</argsstring>
+        <name>view</name>
+        <qualifiedname>clue::PointsDevice::view</qualifiedname>
+        <briefdescription>
+<para>Returns the view of the points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A reference to the PointsView structure containing the points data </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="184" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a61d44891e6fe9180339cc98dd6cc65cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST const auto &amp;</type>
+        <definition>ALPAKA_FN_HOST const auto &amp; clue::PointsDevice&lt; Ndim, TData, TDev &gt;::n_clusters</definition>
+        <argsstring>()</argsstring>
+        <name>n_clusters</name>
+        <qualifiedname>clue::PointsDevice::n_clusters</qualifiedname>
+        <briefdescription>
+<para>Teturns the cluster properties of the points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of clusters reconstructed </para>
+</simplesect>
+<simplesect kind="note"><para>This value is lazily evaluated and cached upon the first call </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="191" column="31"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classclue_1_1PointsDevice_1a0608f3dbc54b72b176670f0cdfe2a4fd" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void clue::PointsDevice&lt; Ndim, TData, TDev &gt;::mark_clustered</definition>
+        <argsstring>()</argsstring>
+        <name>mark_clustered</name>
+        <qualifiedname>clue::PointsDevice::mark_clustered</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="196" column="10" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="196" bodyend="196"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>The <ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref> class is a data structure that manages points on a device. It provides methods to allocate, access, and manipulate points in device memory. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points to manage </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type for the point coordinates and weights </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TDev</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The device type to use for the allocation. Defaults to clue::Device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>clue::PointsDevice&lt; Ndim, TData, TDev &gt;</label>
+        <link refid="classclue_1_1PointsDevice"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>internal::points_interface&lt; PointsDevice&lt; Ndim, float, clue::Device &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>clue::PointsDevice&lt; Ndim, TData, TDev &gt;</label>
+        <link refid="classclue_1_1PointsDevice"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>internal::points_interface&lt; PointsDevice&lt; Ndim, float, clue::Device &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="53" column="3" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="53" bodyend="221"/>
+    <listofallmembers>
+      <member refid="classclue_1_1PointsDevice_1aeb73ee6a2b71317836d60375c16ccf8b" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>clustered</name></member>
+      <member refid="classclue_1_1PointsDevice_1a54314bd97f709e1e0a443f8e435a692f" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>clusterIndexes</name></member>
+      <member refid="classclue_1_1PointsDevice_1a6db6082e3e3abff32f940d3266af4b64" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>clusterIndexes</name></member>
+      <member refid="classclue_1_1PointsDevice_1a499ee6836f0c06372b6863bcb55afac7" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>coords</name></member>
+      <member refid="classclue_1_1PointsDevice_1a2bb67928f7d28118f838f0891e6fc0a0" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>coords</name></member>
+      <member refid="classclue_1_1PointsDevice_1a5eec3b5696cf6f2429d5a31f04b77fa5" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>element_type</name></member>
+      <member refid="classclue_1_1PointsDevice_1afbfb9335a40ddfb8f1a9e58927ff2a4d" prot="private" virt="non-virtual"><scope>clue::PointsDevice</scope><name>m_buffer</name></member>
+      <member refid="classclue_1_1PointsDevice_1aaeb18b41d0ffd26f3e58224b577844c2" prot="private" virt="non-virtual"><scope>clue::PointsDevice</scope><name>m_clustered</name></member>
+      <member refid="classclue_1_1PointsDevice_1a7e99787978a52068fcd2cc89c01600bc" prot="private" virt="non-virtual"><scope>clue::PointsDevice</scope><name>m_nclusters</name></member>
+      <member refid="classclue_1_1PointsDevice_1a83877281919774b19ee3af57e211bad3" prot="private" virt="non-virtual"><scope>clue::PointsDevice</scope><name>m_size</name></member>
+      <member refid="classclue_1_1PointsDevice_1a77f7c38f9400e059553134a47433d33d" prot="private" virt="non-virtual"><scope>clue::PointsDevice</scope><name>m_view</name></member>
+      <member refid="classclue_1_1PointsDevice_1a0608f3dbc54b72b176670f0cdfe2a4fd" prot="private" virt="non-virtual"><scope>clue::PointsDevice</scope><name>mark_clustered</name></member>
+      <member refid="classclue_1_1PointsDevice_1a61d44891e6fe9180339cc98dd6cc65cf" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>n_clusters</name></member>
+      <member refid="classclue_1_1PointsDevice_1af1b1622b393e284d6a4fe70b1019b27a" prot="private" virt="non-virtual"><scope>clue::PointsDevice</scope><name>Ndim_</name></member>
+      <member refid="classclue_1_1PointsDevice_1ae713abeadff7921f2f281845d2dae24a" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>operator=</name></member>
+      <member refid="classclue_1_1PointsDevice_1a8b4c78bfcbd907556fb5eb5c314cb542" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>operator=</name></member>
+      <member refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>PointsDevice</name></member>
+      <member refid="classclue_1_1PointsDevice_1a3a5da1a2de532106ea59ab2d8bae1acc" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>PointsDevice</name></member>
+      <member refid="classclue_1_1PointsDevice_1aa4dab77d757cdb9ac5842ab415d9e376" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>PointsDevice</name></member>
+      <member refid="classclue_1_1PointsDevice_1aa1574163f9a6a61ac2df3acf5e556c83" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>PointsDevice</name></member>
+      <member refid="classclue_1_1PointsDevice_1a9d1211372b0aee0d0c9be105f0d34a6e" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>PointsDevice</name></member>
+      <member refid="classclue_1_1PointsDevice_1ae555cd0beb020025eceb2da72b537b05" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>PointsDevice</name></member>
+      <member refid="classclue_1_1PointsDevice_1a1702345b9baa6a0cd728af6ac3fd33cc" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>PointsDevice</name></member>
+      <member refid="classclue_1_1PointsDevice_1a8150025232cba39dc29c91621df94665" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>PointsDevice</name></member>
+      <member refid="classclue_1_1PointsDevice_1a19e0f93c0817ee4f126ef9f7be2e53df" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>PointsDevice</name></member>
+      <member refid="classclue_1_1PointsDevice_1a9906318d58a619f7f32e2851428a08d4" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>size</name></member>
+      <member refid="classclue_1_1PointsDevice_1a2b91eb7bcec833ae782a14c7af7ee67a" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>value_type</name></member>
+      <member refid="classclue_1_1PointsDevice_1a5b337783d80be5be78437fd79766e0f2" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>view</name></member>
+      <member refid="classclue_1_1PointsDevice_1a4c7fb3df945321890165fdbda8479b27" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>view</name></member>
+      <member refid="classclue_1_1PointsDevice_1ad9fbfbf03191af649b751c71d64ae30e" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>weights</name></member>
+      <member refid="classclue_1_1PointsDevice_1a5513a7bcc18c08e1a5c455c464111478" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>weights</name></member>
+      <member refid="classclue_1_1PointsDevice_1ac97cbd0e999dcb06838825298578e812" prot="public" virt="non-virtual"><scope>clue::PointsDevice</scope><name>~PointsDevice</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

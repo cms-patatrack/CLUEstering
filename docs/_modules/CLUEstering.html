@@ -1,0 +1,2080 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>CLUEstering - CLUEstering 2.9.0 documentation</title>
+      
+    
+    
+      
+        
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+        <link rel="stylesheet" type="text/css" href="../_static/sphinx_immaterial_theme.cf2c65c97ee1b6f01.min.css?v=0a68cab4" />
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="CLUEstering 2.9.0 documentation" class="md-header__button md-logo" aria-label="CLUEstering 2.9.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CLUEstering 2.9.0 documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CLUEstering
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="CLUEstering 2.9.0 documentation" class="md-nav__button md-logo" aria-label="CLUEstering 2.9.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    CLUEstering 2.9.0 documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Introduction to CLUEstering</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dependencies.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Supported Backends and Dependencies</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>How to Install</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Getting Started</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../cpp/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>C++ API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            <span>C++ API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/points_host.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Host</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/points_device.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Device</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/points_conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Conversions</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/distance_metrics.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Distance metrics</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/convolutional_kernel.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Convolutional Kernels</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/association_map.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association map</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/association_map_view.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association<wbr>Map<wbr>View</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/cluster_properties.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster properties</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/get_clusters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusters associations</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/cluster_centroid.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster centroids</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/read_csv.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>File reading</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/alpaka_utils.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Alpaka utilities</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp/scores.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Validation scores</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../python/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>Python API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Python API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python/clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1>Source code for CLUEstering</h1><div class="highlight"><pre>
+<span></span><code><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Density based clustering algorithm developed at CERN.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">import</span> <span class="nn">random</span> <span class="k">as</span> <span class="nn">rnd</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">types</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_blobs</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">exists</span><span class="p">,</span> <span class="n">join</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;lib&#39;</span><span class="p">))</span>
+<span class="kn">import</span> <span class="nn">CLUE_Convolutional_Kernels</span> <span class="k">as</span> <span class="nn">clue_kernels</span>
+<span class="kn">import</span> <span class="nn">CLUE_CPU_Serial</span> <span class="k">as</span> <span class="nn">cpu_serial</span>
+
+<span class="n">backends</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cpu serial&quot;</span><span class="p">]</span>
+<span class="n">tbb_found</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">((</span><span class="n">glob</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;lib/CLUE_CPU_TBB*.so&#39;</span><span class="p">))))</span>
+<span class="k">if</span> <span class="n">tbb_found</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">CLUE_CPU_TBB</span> <span class="k">as</span> <span class="nn">cpu_tbb</span>
+    <span class="n">backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;cpu tbb&quot;</span><span class="p">)</span>
+<span class="n">omp_found</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">((</span><span class="n">glob</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;lib/CLUE_CPU_OMP*.so&#39;</span><span class="p">))))</span>
+<span class="k">if</span> <span class="n">omp_found</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">CLUE_CPU_OMP</span> <span class="k">as</span> <span class="nn">cpu_omp</span>
+    <span class="n">backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;cpu openmp&quot;</span><span class="p">)</span>
+<span class="n">cuda_found</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">((</span><span class="n">glob</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;lib/CLUE_GPU_CUDA*.so&#39;</span><span class="p">))))</span>
+<span class="k">if</span> <span class="n">cuda_found</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="kn">import</span> <span class="nn">CLUE_GPU_CUDA</span> <span class="k">as</span> <span class="nn">gpu_cuda</span>
+    <span class="n">backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;gpu cuda&quot;</span><span class="p">)</span>
+<span class="n">hip_found</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">((</span><span class="n">glob</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;lib/CLUE_GPU_HIP*.so&#39;</span><span class="p">))))</span>
+<span class="k">if</span> <span class="n">hip_found</span><span class="p">:</span>   <span class="c1"># pragma: no cover</span>
+    <span class="kn">import</span> <span class="nn">CLUE_GPU_HIP</span> <span class="k">as</span> <span class="nn">gpu_hip</span>
+    <span class="n">backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;gpu hip&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">is_tbb_available</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the library is compiled with TBB support.</span>
+
+<span class="sd">    :returns: True if TBB is available, False otherwise.</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tbb_found</span>
+
+
+<span class="k">def</span> <span class="nf">is_openmp_available</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the library is compiled with OpenMP support.</span>
+
+<span class="sd">    :returns: True if OpenMP is available, False otherwise.</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">omp_found</span>
+
+
+<span class="k">def</span> <span class="nf">is_cuda_available</span><span class="p">():</span>    <span class="c1"># pragma: no cover</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the library is compiled with CUDA support.</span>
+
+<span class="sd">    :returns: True if CUDA is available, False otherwise.</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cuda_found</span>
+
+
+<span class="k">def</span> <span class="nf">is_hip_available</span><span class="p">():</span>     <span class="c1"># pragma: no cover</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the library is compiled with HIP support.</span>
+
+<span class="sd">    :returns: True if HIP is available, False otherwise.</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">hip_found</span>
+
+
+<span class="k">def</span> <span class="nf">test_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_blobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+               <span class="n">sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">x_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">y_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate random 2D or 3D gaussian blobs for testing purposes.</span>
+
+<span class="sd">    This function is useful for creating a random dataset to test the library.</span>
+
+<span class="sd">    :param n_samples: Number of points in the dataset.</span>
+<span class="sd">    :type n_samples: int</span>
+<span class="sd">    :param n_dim: Number of dimensions (2 or 3).</span>
+<span class="sd">    :type n_dim: int</span>
+<span class="sd">    :param n_blobs: Number of blobs to generate. Defaults to 4.</span>
+<span class="sd">    :type n_blobs: int, optional</span>
+<span class="sd">    :param mean: Mean of the gaussian distribution for z-values. Defaults to 0.</span>
+<span class="sd">    :type mean: float, optional</span>
+<span class="sd">    :param sigma: Standard deviation of the gaussian distribution for z-values. Defaults to 0.5.</span>
+<span class="sd">    :type sigma: float, optional</span>
+<span class="sd">    :param x_max: Maximum x-coordinate for blobs. Defaults to 30.</span>
+<span class="sd">    :type x_max: float, optional</span>
+<span class="sd">    :param y_max: Maximum y-coordinate for blobs. Defaults to 30.</span>
+<span class="sd">    :type y_max: float, optional</span>
+
+<span class="sd">    :raises ValueError: If n_blobs &lt; 0, sigma &lt; 0, or n_dim &gt; 3.</span>
+
+<span class="sd">    :returns: DataFrame containing the generated blobs and their weights.</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n_blobs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Wrong parameter value. The number of blobs must be positive.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sigma</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong parameter value. The mean and sigma of the blobs&quot;</span>
+                         <span class="o">+</span> <span class="s2">&quot; cannot be negative.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_dim</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong number of dimensions. Blobs can only be generated&quot;</span>
+                         <span class="o">+</span> <span class="s2">&quot; in 2 or 3 dimensions.&quot;</span><span class="p">)</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">n_dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x0&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="s1">&#39;x1&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])}</span>
+        <span class="n">centers</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x_max</span> <span class="o">*</span> <span class="n">rnd</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span>
+                    <span class="n">y_max</span> <span class="o">*</span> <span class="n">rnd</span><span class="o">.</span><span class="n">random</span><span class="p">()]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_blobs</span><span class="p">)]</span>
+        <span class="n">blob_data</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span>
+                               <span class="n">centers</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">centers</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blob_data</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blob_data</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">blob_data</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_dim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x0&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;x1&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;x2&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="n">sqrt_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_samples</span><span class="p">))</span>
+        <span class="n">z_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sqrt_samples</span><span class="p">)</span>
+        <span class="n">centers</span> <span class="o">=</span> <span class="p">[[</span><span class="n">x_max</span> <span class="o">*</span> <span class="n">rnd</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span>
+                    <span class="n">y_max</span> <span class="o">*</span> <span class="n">rnd</span><span class="o">.</span><span class="n">random</span><span class="p">()]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_blobs</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">z_values</span><span class="p">:</span>  <span class="c1"># for every z value, a layer is generated.</span>
+            <span class="n">blob_data</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="n">sqrt_samples</span><span class="p">,</span>
+                                   <span class="n">centers</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">centers</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">],</span> <span class="n">blob_data</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">],</span> <span class="n">blob_data</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x2&#39;</span><span class="p">],</span>
+                                         <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">sqrt_samples</span><span class="p">,</span>
+                                                 <span class="n">fill_value</span><span class="o">=</span><span class="n">value</span><span class="p">)])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">],</span>
+                                             <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">sqrt_samples</span><span class="p">,</span>
+                                                     <span class="n">fill_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)])</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="nd">@dataclass</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">ClusteringDataSoA</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Container for input coordinates and clustering results using Structure of Arrays (SoA).</span>
+
+<span class="sd">    :param coords: Input coordinates including weights.</span>
+<span class="sd">    :type coords: np.ndarray</span>
+<span class="sd">    :param results: Clustering results including cluster IDs.</span>
+<span class="sd">    :type results: np.ndarray</span>
+<span class="sd">    :param n_dim: Number of dimensions.</span>
+<span class="sd">    :type n_dim: int</span>
+<span class="sd">    :param n_points: Number of points.</span>
+<span class="sd">    :type n_points: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">coords</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">results</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">n_dim</span> <span class="p">:</span> <span class="nb">int</span>
+    <span class="n">n_points</span> <span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_dim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_points</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="o">=</span> <span class="n">coords</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">=</span> <span class="n">n_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span> <span class="o">=</span> <span class="n">n_points</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">eq</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">cluster_properties</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Container for results produced by the clustering algorithm.</span>
+
+<span class="sd">    :param n_clusters: Number of clusters constructed.</span>
+<span class="sd">    :type n_clusters: int</span>
+<span class="sd">    :param cluster_ids: Cluster ID for each point.</span>
+<span class="sd">    :type cluster_ids: np.ndarray</span>
+<span class="sd">    :param cluster_points: Lists of point IDs belonging to each cluster.</span>
+<span class="sd">    :type cluster_points: np.ndarray</span>
+<span class="sd">    :param points_per_cluster: Number of points per cluster.</span>
+<span class="sd">    :type points_per_cluster: np.ndarray</span>
+<span class="sd">    :param output_df: DataFrame containing the cluster_ids.</span>
+<span class="sd">    :type output_df: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">n_clusters</span> <span class="p">:</span> <span class="nb">int</span>
+    <span class="n">cluster_ids</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">cluster_points</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">points_per_cluster</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">output_df</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_clusters</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">n_clusters</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="clusterer">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer">[docs]</a>
+<span class="k">class</span> <span class="nc">clusterer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper class for performing clustering using the CLUE algorithm.</span>
+
+<span class="sd">    :param dc: Spatial parameter controlling the region for local density calculation.</span>
+<span class="sd">    :type dc: float</span>
+<span class="sd">    :param rhoc: Density threshold separating seeds from outliers.</span>
+<span class="sd">    :type rhoc: float</span>
+<span class="sd">    :param dm: Spatial parameter controlling the region for follower search.</span>
+<span class="sd">    :type dm: float</span>
+<span class="sd">    :param ppbin: Average number of points per tile.</span>
+<span class="sd">    :type ppbin: int</span>
+<span class="sd">    :param kernel: Kernel used to calculate local density.</span>
+<span class="sd">    :type kernel: clue_kernels.Algo.kernel</span>
+<span class="sd">    :param clust_data: Container for input data.</span>
+<span class="sd">    :type clust_data: ClusteringDataSoA</span>
+<span class="sd">    :param clust_prop: Container for clustering results.</span>
+<span class="sd">    :type clust_prop: cluster_properties</span>
+<span class="sd">    :param elapsed_time: Execution time of the algorithm in nanoseconds.</span>
+<span class="sd">    :type elapsed_time: float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rhoc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dm</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">seed_dc</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ppbin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dc</span> <span class="o">=</span> <span class="n">dc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rhoc</span> <span class="o">=</span> <span class="n">rhoc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dm</span> <span class="o">=</span> <span class="n">dm</span>
+        <span class="k">if</span> <span class="n">dm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dm</span> <span class="o">=</span> <span class="n">dc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_seed_dc</span> <span class="o">=</span> <span class="n">seed_dc</span>
+        <span class="k">if</span> <span class="n">seed_dc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_seed_dc</span> <span class="o">=</span> <span class="n">dc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ppbin</span> <span class="o">=</span> <span class="n">ppbin</span>
+
+        <span class="c1"># Initialize attributes</span>
+        <span class="c1">## Data containers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1">## Kernel for calculation of local density</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kernel</span> <span class="o">=</span> <span class="n">clue_kernels</span><span class="o">.</span><span class="n">FlatKernel</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="c1">## Array specifyng which coordinates are periodic (wrapped)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1">## Output attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed_time</span> <span class="o">=</span> <span class="mf">0.</span>
+
+<div class="viewcode-block" id="clusterer.set_params">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.set_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rhoc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                   <span class="n">dm</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">seed_dc</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ppbin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set parameters for the clustering algorithm.</span>
+
+<span class="sd">        :param dc: Spatial parameter for density calculation.</span>
+<span class="sd">        :type dc: float</span>
+<span class="sd">        :param rhoc: Density threshold.</span>
+<span class="sd">        :type rhoc: float</span>
+<span class="sd">        :param dm: Follower search region. Defaults to dc if None.</span>
+<span class="sd">        :type dm: float or None</span>
+<span class="sd">        :param seed_dc: Seed search region. Defaults to dc if None.</span>
+<span class="sd">        :type seed_dc: float or None</span>
+<span class="sd">        :param ppbin: Average points per tile.</span>
+<span class="sd">        :type ppbin: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dc</span> <span class="o">=</span> <span class="n">dc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rhoc</span> <span class="o">=</span> <span class="n">rhoc</span>
+        <span class="k">if</span> <span class="n">dm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dm</span> <span class="o">=</span> <span class="n">dm</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dm</span> <span class="o">=</span> <span class="n">dc</span>
+        <span class="k">if</span> <span class="n">seed_dc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_seed_dc</span> <span class="o">=</span> <span class="n">seed_dc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_seed_dc</span> <span class="o">=</span> <span class="n">dc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ppbin</span> <span class="o">=</span> <span class="n">ppbin</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_read_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read data from lists or np.ndarrays and initialize clustering data.</span>
+
+<span class="sd">        :param input_data: Coordinates and weights of data points.</span>
+<span class="sd">        :type input_data: list or np.ndarray</span>
+
+<span class="sd">        :raises ValueError: If input data format is invalid.</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># [[x0, x1, x2, ...], [y0, y1, y2, ...], ... , [weights]]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">11</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inadequate data. The supported dimensions are between&quot;</span> <span class="o">+</span>
+                             <span class="s2">&quot;1 and 10.&quot;</span><span class="p">)</span>
+        <span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">ndim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">input_data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>      <span class="c1"># coordinates SoA</span>
+                            <span class="n">input_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>      <span class="c1"># weights</span>
+                            <span class="n">dtype</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="n">input_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="n">input_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">npoints</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>    <span class="c1"># cluster ids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span> <span class="o">=</span> <span class="n">ClusteringDataSoA</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span>
+                                            <span class="n">results</span><span class="p">,</span>
+                                            <span class="n">ndim</span><span class="p">,</span>
+                                            <span class="n">npoints</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_read_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read input data from a CSV file.</span>
+
+<span class="sd">        :param input_data: Path to the CSV file containing the input data.</span>
+<span class="sd">        :type input_data: str</span>
+
+<span class="sd">        :raises ValueError: If the file is not a CSV.</span>
+
+<span class="sd">        :returns: DataFrame containing the input data.</span>
+<span class="sd">        :rtype: pd.DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">input_data</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Wrong type of file. The file is not a csv file.&#39;</span><span class="p">)</span>
+        <span class="n">df_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_</span>
+
+
+    <span class="k">def</span> <span class="nf">_read_dict_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read input data from a dictionary or pandas DataFrame.</span>
+
+<span class="sd">        :param input_data: Dictionary or DataFrame containing coordinates and weights.</span>
+<span class="sd">        :type input_data: dict or pd.DataFrame</span>
+
+<span class="sd">        :returns: DataFrame containing the input data.</span>
+<span class="sd">        :rtype: pd.DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_</span>
+
+
+    <span class="k">def</span> <span class="nf">_handle_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the `clust_data` attribute from a DataFrame.</span>
+
+<span class="sd">        :param df_: DataFrame produced by `_read_string` or `_read_dict_df`.</span>
+<span class="sd">        :type df_: pd.DataFrame</span>
+
+<span class="sd">        :raises ValueError: If the number of columns is less than 2 or greater than 11.</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inadequate data. The data must contain at least one coordinate and the weight.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">11</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inadequate data. The maximum number of dimensions supported is 10.&quot;</span><span class="p">)</span>
+
+        <span class="n">ndim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">coords</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">df_</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">df_</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">df_</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">npoints</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span> <span class="o">=</span> <span class="n">ClusteringDataSoA</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">ndim</span><span class="p">,</span> <span class="n">npoints</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="clusterer.read_data">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.read_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                  <span class="n">wrapped_coords</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read input data and initialize clustering-related attributes.</span>
+
+<span class="sd">        :param input_data: Data to read. Can be one of:</span>
+<span class="sd">            - pandas DataFrame: must contain one column per coordinate plus one column for weight.</span>
+<span class="sd">            - string: path to a CSV file containing the data.</span>
+<span class="sd">            - dict: dictionary with coordinates and weights.</span>
+<span class="sd">            - list or ndarray: list of coordinate lists plus a weight list.</span>
+<span class="sd">        :type input_data: Union[pd.DataFrame, str, dict, list, np.ndarray]</span>
+<span class="sd">        :param wrapped_coordinates: List or array indicating which dimensions are periodic.</span>
+<span class="sd">        :type wrapped_coordinates: list or np.ndarray</span>
+
+<span class="sd">        :raises ValueError: If the data format is not supported.</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_read_array</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_string</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_dict_df</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">wrapped_coords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">wrapped_coords</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_dim</span></div>
+
+
+
+<div class="viewcode-block" id="clusterer.set_wrapped">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.set_wrapped">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_wrapped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapped_coords</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set which coordinates are periodic (wrapped).</span>
+
+<span class="sd">        :param wrapped_coordinates: List or array indicating which dimensions are periodic.</span>
+<span class="sd">        :type wrapped_coordinates: list or np.ndarray</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">wrapped_coords</span></div>
+
+
+<div class="viewcode-block" id="clusterer.choose_kernel">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.choose_kernel">[docs]</a>
+    <span class="k">def</span> <span class="nf">choose_kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">choice</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                      <span class="n">parameters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">function</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the kernel for local density calculation.</span>
+
+<span class="sd">        The default kernel is a flat kernel with parameter 0.5.</span>
+
+<span class="sd">        :param choice: Kernel type to use. Options are: &#39;flat&#39;, &#39;exp&#39;, &#39;gaus&#39;, or &#39;custom&#39;.</span>
+<span class="sd">        :type choice: str</span>
+<span class="sd">        :param parameters: Parameters for the kernel. Required for &#39;flat&#39;, &#39;exp&#39;, &#39;gaus&#39;.</span>
+<span class="sd">            Not required for &#39;custom&#39;.</span>
+<span class="sd">        :type parameters: list or None</span>
+<span class="sd">        :param function: Function to use for a custom kernel.</span>
+<span class="sd">        :type function: function, optional</span>
+
+<span class="sd">        :raises ValueError: If the number of parameters is invalid or the kernel choice is invalid.</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;flat&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong number of parameters. The flat kernel requires 1 parameter.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_kernel</span> <span class="o">=</span> <span class="n">clue_kernels</span><span class="o">.</span><span class="n">FlatKernel</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;exp&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong number of parameters. The exponential kernel requires 2 parameters.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_kernel</span> <span class="o">=</span> <span class="n">clue_kernels</span><span class="o">.</span><span class="n">ExponentialKernel</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;gaus&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong number of parameters. The gaussian kernel requires 3 parameters.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_kernel</span> <span class="o">=</span> <span class="n">clue_kernels</span><span class="o">.</span><span class="n">GaussianKernel</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;custom&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong number of parameters. Custom kernels requires 0 parameters.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid kernel. Allowed choices are: flat, exp, gaus, custom.&quot;</span><span class="p">)</span></div>
+
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">coords</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the coordinates of the points used for clustering.</span>
+
+<span class="sd">        :returns: Coordinates array.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">coords</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">weight</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the weights of the points.</span>
+
+<span class="sd">        :returns: Weights array.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the number of dimensions.</span>
+
+<span class="sd">        :returns: Number of dimensions.</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_dim</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the number of points in the dataset.</span>
+
+<span class="sd">        :returns: Number of points.</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_points</span>
+
+
+<div class="viewcode-block" id="clusterer.list_devices">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.list_devices">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_devices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List available devices for a given backend.</span>
+
+<span class="sd">        :param backend: Backend to list devices for. Options: &#39;all&#39;, &#39;cpu serial&#39;, &#39;cpu tbb&#39;,</span>
+<span class="sd">                        &#39;cpu openmp&#39;, &#39;gpu cuda&#39;, &#39;gpu hip&#39;. Defaults to &#39;all&#39;.</span>
+<span class="sd">        :type backend: str, optional</span>
+
+<span class="sd">        :raises ValueError: If the backend is not valid.</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            <span class="n">cpu_serial</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="s1">&#39;cpu serial&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tbb_found</span><span class="p">:</span>
+                <span class="n">cpu_tbb</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="s1">&#39;cpu tbb&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">omp_found</span><span class="p">:</span>
+                <span class="n">cpu_omp</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="s1">&#39;cpu openmp&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cuda_found</span><span class="p">:</span>
+                <span class="n">gpu_cuda</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="s1">&#39;gpu cuda&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">hip_found</span><span class="p">:</span>
+                <span class="n">gpu_hip</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="s1">&#39;gpu hip&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;cpu serial&quot;</span><span class="p">:</span>
+            <span class="n">cpu_serial</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;cpu tbb&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tbb_found</span><span class="p">:</span>
+                <span class="n">cpu_tbb</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TBB module not found. Please re-compile the library and try again.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;cpu openmp&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">omp_found</span><span class="p">:</span>
+                <span class="n">cpu_omp</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OpenMP module not found. Please re-compile the library and try again.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;gpu cuda&quot;</span><span class="p">:</span>     <span class="c1"># pragma: no cover</span>
+            <span class="k">if</span> <span class="n">cuda_found</span><span class="p">:</span>
+                <span class="n">gpu_cuda</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CUDA module not found. Please re-compile the library and try again.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;gpu hip&quot;</span><span class="p">:</span>      <span class="c1"># pragma: no cover</span>
+            <span class="k">if</span> <span class="n">hip_found</span><span class="p">:</span>
+                <span class="n">gpu_hip</span><span class="o">.</span><span class="n">listDevices</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HIP module not found. Please re-compile the library and try again.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid backend. Allowed choices are: all, cpu serial, cpu tbb, cpu openmp, gpu cuda, gpu hip.&quot;</span><span class="p">)</span></div>
+
+
+
+    <span class="k">def</span> <span class="nf">_partial_dimension_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a dataset containing only the selected dimensions.</span>
+
+<span class="sd">        This method selects a subset of dimensions from the original dataset, useful</span>
+<span class="sd">        for running CLUE in lower-dimensional spaces.</span>
+
+<span class="sd">        :param dimensions: List of dimension indices to keep.</span>
+<span class="sd">        :type dimensions: list[int]</span>
+
+<span class="sd">        :returns: Array containing coordinates of the selected dimensions, with weights appended.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">dim</span><span class="p">])</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">dimensions</span><span class="p">]</span>
+        <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+
+
+<div class="viewcode-block" id="clusterer.run_clue">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.run_clue">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_clue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cpu serial&quot;</span><span class="p">,</span>
+                 <span class="n">block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span>
+                 <span class="n">batch_sample_sizes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">device_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">dimensions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute the CLUE clustering algorithm.</span>
+
+<span class="sd">        :param backend: Backend to use for execution. Defaults to &#39;cpu serial&#39;.</span>
+<span class="sd">        :type backend: str, optional</span>
+<span class="sd">        :param block_size: Size of blocks for parallel execution. Defaults to 1024.</span>
+<span class="sd">        :type block_size: int, optional</span>
+<span class="sd">        :param batch_sample_sizes: Optional array specifying batch sizes for sampling. Defaults to None.</span>
+<span class="sd">        ;type batch_sample_sizes: np.ndarray or None, optional</span>
+<span class="sd">        :param device_id: Device ID to run the algorithm on. Defaults to 0.</span>
+<span class="sd">        :type device_id: int, optional</span>
+<span class="sd">        :param verbose: If True, prints execution time and number of clusters found.</span>
+<span class="sd">        :type verbose: bool, optional</span>
+<span class="sd">        :param dimensions: Optional list of dimensions to consider. Defaults to None.</span>
+<span class="sd">        :type dimensions: list[int] or None, optional</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">dimensions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">ClusteringDataSoA</span><span class="p">()</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_partial_dimension_dataset</span><span class="p">(</span><span class="n">dimensions</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">results</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dimensions</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">n_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_points</span>
+
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rhoc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_seed_dc</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">_ppbin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">results</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">_kernel</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">n_dim</span><span class="p">,</span> <span class="n">batch_sample_sizes</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">n_points</span><span class="p">,</span>
+                     <span class="n">block_size</span><span class="p">,</span> <span class="n">device_id</span><span class="p">]</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time_ns</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;cpu serial&quot;</span><span class="p">:</span>
+            <span class="n">cluster_id_is_seed</span> <span class="o">=</span> <span class="n">cpu_serial</span><span class="o">.</span><span class="n">mainRun</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;cpu tbb&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="k">if</span> <span class="n">tbb_found</span><span class="p">:</span>   
+                <span class="n">cluster_id_is_seed</span> <span class="o">=</span> <span class="n">cpu_tbb</span><span class="o">.</span><span class="n">mainRun</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TBB module not found. Please re-compile the library and try again.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;cpu openmp&quot;</span><span class="p">:</span>   <span class="c1"># pragma: no cover</span>
+            <span class="k">if</span> <span class="n">omp_found</span><span class="p">:</span>   
+                <span class="n">cluster_id_is_seed</span> <span class="o">=</span> <span class="n">cpu_omp</span><span class="o">.</span><span class="n">mainRun</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OpenMP module not found. Please re-compile the library and try again.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;gpu cuda&quot;</span><span class="p">:</span>     <span class="c1"># pragma: no cover</span>
+            <span class="k">if</span> <span class="n">cuda_found</span><span class="p">:</span>  
+                <span class="n">cluster_id_is_seed</span> <span class="o">=</span> <span class="n">gpu_cuda</span><span class="o">.</span><span class="n">mainRun</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CUDA module not found. Please re-compile the library and try again.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;gpu hip&quot;</span><span class="p">:</span>      <span class="c1"># pragma: no cover</span>
+            <span class="k">if</span> <span class="n">hip_found</span><span class="p">:</span>
+                <span class="n">cluster_id_is_seed</span> <span class="o">=</span> <span class="n">gpu_hip</span><span class="o">.</span><span class="n">mainRun</span><span class="p">(</span><span class="o">*</span><span class="n">arguments</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HIP module not found. Please re-compile the library and try again.&quot;</span><span class="p">)</span>
+
+        <span class="n">finish</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time_ns</span><span class="p">()</span>
+        <span class="n">cluster_ids</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">results</span>
+        <span class="n">n_clusters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">cluster_ids</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">cluster_points</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_points</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">cluster_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">cluster_points</span><span class="p">[</span><span class="n">cluster_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="n">points_per_cluster</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">clust</span><span class="p">)</span> <span class="k">for</span> <span class="n">clust</span> <span class="ow">in</span> <span class="n">cluster_points</span><span class="p">])</span>
+        <span class="n">output_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;cluster_ids&#39;</span><span class="p">:</span> <span class="n">cluster_ids</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span> <span class="o">=</span> <span class="n">cluster_properties</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">,</span>
+                                             <span class="n">cluster_ids</span><span class="p">,</span>
+                                             <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cluster_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">),</span>
+                                             <span class="n">points_per_cluster</span><span class="p">,</span>
+                                             <span class="n">output_df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">finish</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;CLUE executed in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_elapsed_time</span><span class="si">}</span><span class="s1"> ms&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Number of clusters found: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">n_clusters</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="clusterer.fit">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.fit">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span><span class="nb">str</span><span class="p">,</span><span class="nb">dict</span><span class="p">,</span><span class="nb">list</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+            <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cpu serial&quot;</span><span class="p">,</span>
+            <span class="n">block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span>
+            <span class="n">batch_sample_sizes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">device_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Clusterer&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the CLUE clustering algorithm on the input data.</span>
+
+<span class="sd">        :param data: Input data. Can be a pandas DataFrame, a CSV file path (string),</span>
+<span class="sd">                     a dictionary with coordinate keys and weight, or a list/array</span>
+<span class="sd">                     containing coordinates and weights.</span>
+<span class="sd">        :type data: Union[pd.DataFrame, str, dict, list, np.ndarray]</span>
+<span class="sd">        :param backend: Backend to use for the algorithm execution.</span>
+<span class="sd">        :type backend: str, optional</span>
+<span class="sd">        :param block_size: Block size for parallel execution.</span>
+<span class="sd">        :type block_size: int, optional</span>
+<span class="sd">        :param batch_sample_sizes: Optional array specifying batch sizes for sampling. Defaults to None.</span>
+<span class="sd">        :type batch_sample_sizes: np.ndarray or None, optional</span>
+<span class="sd">        :param device_id: ID of the device to run the algorithm on.</span>
+<span class="sd">        :type device_id: int, optional</span>
+<span class="sd">        :param verbose: If True, prints execution information.</span>
+<span class="sd">        :type verbose: bool, optional</span>
+<span class="sd">        :param dimensions: List of dimensions to consider. If None, all are used.</span>
+<span class="sd">        :type dimensions: list or None, optional</span>
+
+<span class="sd">        :return: Returns the clusterer object itself.</span>
+<span class="sd">        :rtype: Clusterer</span>
+
+<span class="sd">        :raises: Various exceptions if input data is invalid or clustering fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_clue</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">block_size</span><span class="p">,</span> <span class="n">batch_sample_sizes</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="clusterer.fit_predict">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.fit_predict">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">data</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cpu serial&quot;</span><span class="p">,</span>
+                    <span class="n">block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span>
+                    <span class="n">batch_sample_sizes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">device_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="n">dimensions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the CLUE clustering algorithm and return the cluster labels.</span>
+
+<span class="sd">        :param data: Input data. Can be a pandas DataFrame, a CSV file path (string),</span>
+<span class="sd">                     a dictionary with coordinate keys and weight, or a list/array</span>
+<span class="sd">                     containing coordinates and weights.</span>
+<span class="sd">        :type data: Union[pd.DataFrame, str, dict, list, np.ndarray]</span>
+<span class="sd">        :param backend: Backend to use for the algorithm execution.</span>
+<span class="sd">        :type backend: str, optional</span>
+<span class="sd">        :param block_size: Block size for parallel execution.</span>
+<span class="sd">        :type block_size: int, optional</span>
+<span class="sd">        :param batch_sample_sizes: Optional array specifying batch sizes for sampling. Defaults to None.</span>
+<span class="sd">        :type batch_sample_sizes: np.ndarray or None, optional</span>
+<span class="sd">        :param device_id: ID of the device to run the algorithm on.</span>
+<span class="sd">        :type device_id: int, optional</span>
+<span class="sd">        :param verbose: If True, prints execution information.</span>
+<span class="sd">        :type verbose: bool, optional</span>
+<span class="sd">        :param dimensions: List of dimensions to consider. If None, all are used.</span>
+<span class="sd">        :type dimensions: list or None, optional</span>
+
+<span class="sd">        :return: Array containing the cluster index for every point.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+
+<span class="sd">        :raises: Various exceptions if input data is invalid or clustering fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_clue</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">block_size</span><span class="p">,</span> <span class="n">batch_sample_sizes</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_ids</span></div>
+
+
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the number of clusters found.</span>
+
+<span class="sd">        :returns: Number of clusters reconstructed by CLUE.</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">n_clusters</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cluster_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Index of the cluster to which each point belongs.</span>
+
+<span class="sd">        :return: Array mapping each point to its cluster.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">cluster_ids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Alias for `cluster_ids`.</span>
+
+<span class="sd">        :return: Array mapping each point to its cluster.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">cluster_ids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cluster_points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List of points for each cluster.</span>
+
+<span class="sd">        :return: Array of arrays containing point indices per cluster.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">cluster_points</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">points_per_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of points in each cluster.</span>
+
+<span class="sd">        :return: Array containing the number of points in each cluster.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">points_per_cluster</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">output_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        DataFrame containing cluster_ids.</span>
+
+<span class="sd">        :return: Pandas DataFrame with cluster assignments.</span>
+<span class="sd">        :rtype: pd.DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">output_df</span>
+
+<div class="viewcode-block" id="clusterer.cluster_centroid">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.cluster_centroid">[docs]</a>
+    <span class="k">def</span> <span class="nf">cluster_centroid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the centroid coordinates of a specified cluster.</span>
+
+<span class="sd">        :param cluster_id: ID of the cluster.</span>
+<span class="sd">        :type cluster_index: int</span>
+<span class="sd">        :return: Coordinates of the cluster centroid.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        :raises ValueError: If the cluster_id is invalid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">centroid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_dim</span><span class="p">)</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_points</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">cluster_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">cluster_index</span><span class="p">:</span>
+                <span class="n">centroid</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">centroid</span> <span class="o">/=</span> <span class="n">counter</span>
+
+        <span class="k">return</span> <span class="n">centroid</span></div>
+
+
+<div class="viewcode-block" id="clusterer.cluster_centroids">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.cluster_centroids">[docs]</a>
+    <span class="k">def</span> <span class="nf">cluster_centroids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the centroids of all clusters.</span>
+
+<span class="sd">        :return: Array of shape (n_clusters-1, n_dim) containing cluster centroids.</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">centroids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">n_clusters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_dim</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_points</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">cluster_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">centroids</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">cluster_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">coords</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">centroids</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">points_per_cluster</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">centroids</span></div>
+
+
+<div class="viewcode-block" id="clusterer.input_plotter">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.input_plotter">[docs]</a>
+    <span class="k">def</span> <span class="nf">input_plotter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">plot_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                      <span class="n">title_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">x_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">y_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span>
+                      <span class="n">z_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">label_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">pt_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                      <span class="n">pt_colour</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">grid_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span>
+                      <span class="n">grid_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">x_ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots the input points in 1D, 2D, or 3D space.</span>
+
+<span class="sd">        :param filepath: Path to save the plot. If None, the plot is shown interactively.</span>
+<span class="sd">        :type filepath: str or None</span>
+<span class="sd">        :param plot_title: Title of the plot.</span>
+<span class="sd">        :type plot_title: str</span>
+<span class="sd">        :param title_size: Font size of the plot title.</span>
+<span class="sd">        :type title_size: float</span>
+<span class="sd">        :param x_label: Label for the x-axis.</span>
+<span class="sd">        :type x_label: str</span>
+<span class="sd">        :param y_label: Label for the y-axis.</span>
+<span class="sd">        :type y_label: str</span>
+<span class="sd">        :param z_label: Label for the z-axis.</span>
+<span class="sd">        :type z_label: str</span>
+<span class="sd">        :param label_size: Font size for axis labels.</span>
+<span class="sd">        :type label_size: float</span>
+<span class="sd">        :param pt_size: Size of the points.</span>
+<span class="sd">        :type pt_size: float</span>
+<span class="sd">        :param pt_colour: Colour of the points.</span>
+<span class="sd">        :type pt_colour: str</span>
+<span class="sd">        :param grid: Whether to display a grid.</span>
+<span class="sd">        :type grid: bool</span>
+<span class="sd">        :param grid_style: Line style of the grid.</span>
+<span class="sd">        :type grid_style: str</span>
+<span class="sd">        :param grid_size: Line width of the grid.</span>
+<span class="sd">        :type grid_size: float</span>
+<span class="sd">        :param x_ticks: Custom tick locations for x-axis.</span>
+<span class="sd">        :type x_ticks: list or None</span>
+<span class="sd">        :param y_ticks: Custom tick locations for y-axis.</span>
+<span class="sd">        :type y_ticks: list or None</span>
+<span class="sd">        :param z_ticks: Custom tick locations for z-axis (only for 3D plots).</span>
+<span class="sd">        :type z_ticks: list or None</span>
+<span class="sd">        :param kwargs: Optional functions for converting coordinates.</span>
+<span class="sd">        :type kwargs: dict</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_points</span><span class="p">),</span>
+                        <span class="n">s</span><span class="o">=</span><span class="n">pt_size</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">pt_colour</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the plot title</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">plot_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">title_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis labels</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the grid</span>
+            <span class="k">if</span> <span class="n">grid</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="n">grid_style</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">grid_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis ticks</span>
+            <span class="k">if</span> <span class="n">x_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">s</span><span class="o">=</span><span class="n">pt_size</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">pt_colour</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the plot title</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">plot_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">title_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis labels</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the grid</span>
+            <span class="k">if</span> <span class="n">grid</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="n">grid_style</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">grid_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis ticks</span>
+            <span class="k">if</span> <span class="n">x_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">y_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">y_ticks</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">ax_</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="n">s</span><span class="o">=</span><span class="n">pt_size</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="n">pt_colour</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the plot title</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">plot_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">title_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis labels</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="n">z_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the grid</span>
+            <span class="k">if</span> <span class="n">grid</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="n">grid_style</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">grid_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis ticks</span>
+            <span class="k">if</span> <span class="n">x_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ax_</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">y_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ax_</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y_ticks</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">z_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ax_</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">(</span><span class="n">z_ticks</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="clusterer.cluster_plotter">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.cluster_plotter">[docs]</a>
+    <span class="k">def</span> <span class="nf">cluster_plotter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">plot_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                        <span class="n">title_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">x_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">y_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span>
+                        <span class="n">z_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">label_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">outl_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                        <span class="n">pt_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">grid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="n">grid_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">x_ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">y_ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots clusters with different colors and outliers as gray crosses.</span>
+
+<span class="sd">        :param filepath: Path to save the plot. If None, the plot is shown interactively.</span>
+<span class="sd">        :type filepath: str or None</span>
+<span class="sd">        :param plot_title: Title of the plot.</span>
+<span class="sd">        :type plot_title: str</span>
+<span class="sd">        :param title_size: Font size of the plot title.</span>
+<span class="sd">        :type title_size: float</span>
+<span class="sd">        :param x_label: Label for the x-axis.</span>
+<span class="sd">        :type x_label: str</span>
+<span class="sd">        :param y_label: Label for the y-axis.</span>
+<span class="sd">        :type y_label: str</span>
+<span class="sd">        :param z_label: Label for the z-axis.</span>
+<span class="sd">        :type z_label: str</span>
+<span class="sd">        :param label_size: Font size for axis labels.</span>
+<span class="sd">        :type label_size: float</span>
+<span class="sd">        :param outl_size: Marker size for outliers.</span>
+<span class="sd">        :type outl_size: float</span>
+<span class="sd">        :param pt_size: Marker size for cluster points.</span>
+<span class="sd">        :type pt_size: float</span>
+<span class="sd">        :param grid: Whether to display a grid.</span>
+<span class="sd">        :type grid: bool</span>
+<span class="sd">        :param grid_style: Line style of the grid.</span>
+<span class="sd">        :type grid_style: str</span>
+<span class="sd">        :param grid_size: Line width of the grid.</span>
+<span class="sd">        :type grid_size: float</span>
+<span class="sd">        :param x_ticks: Custom tick locations for x-axis.</span>
+<span class="sd">        :type x_ticks: list or None</span>
+<span class="sd">        :param y_ticks: Custom tick locations for y-axis.</span>
+<span class="sd">        :type y_ticks: list or None</span>
+<span class="sd">        :param z_ticks: Custom tick locations for z-axis (only for 3D plots).</span>
+<span class="sd">        :type z_ticks: list or None</span>
+<span class="sd">        :param kwargs: Optional functions for converting coordinates.</span>
+<span class="sd">        :type kwargs: dict</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x0&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="s1">&#39;x1&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_points</span><span class="p">),</span>
+                    <span class="s1">&#39;cluster_ids&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">cluster_ids</span><span class="p">}</span>
+            <span class="n">df_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="n">max_clusterid</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="s2">&quot;cluster_ids&quot;</span><span class="p">])</span>
+
+            <span class="n">df_out</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">df_</span><span class="o">.</span><span class="n">cluster_ids</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Outliers</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df_out</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="n">df_out</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">outl_size</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;0.4&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_clusterid</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">dfi</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">df_</span><span class="o">.</span><span class="n">cluster_ids</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span> <span class="c1"># ith cluster</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">dfi</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="n">dfi</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">pt_size</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the plot title</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">plot_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">title_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis labels</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the grid</span>
+            <span class="k">if</span> <span class="n">grid</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="n">grid_style</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">grid_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis ticks</span>
+            <span class="k">if</span> <span class="n">x_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x0&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="s1">&#39;x1&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;cluster_ids&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_ids</span><span class="p">}</span>
+            <span class="n">df_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="n">max_clusterid</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="s2">&quot;cluster_ids&quot;</span><span class="p">])</span>
+
+            <span class="n">df_out</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">df_</span><span class="o">.</span><span class="n">cluster_ids</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Outliers</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df_out</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="n">df_out</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">outl_size</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;0.4&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_clusterid</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">dfi</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">df_</span><span class="o">.</span><span class="n">cluster_ids</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span> <span class="c1"># ith cluster</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">dfi</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="n">dfi</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">pt_size</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the plot title</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">plot_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">title_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis labels</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the grid</span>
+            <span class="k">if</span> <span class="n">grid</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="n">grid_style</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">grid_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis ticks</span>
+            <span class="k">if</span> <span class="n">x_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">y_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">y_ticks</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x0&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="s1">&#39;x1&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;x2&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="s1">&#39;cluster_ids&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">cluster_ids</span><span class="p">}</span>
+            <span class="n">df_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="n">max_clusterid</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="s2">&quot;cluster_ids&quot;</span><span class="p">])</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">ax_</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+            <span class="n">df_out</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">df_</span><span class="o">.</span><span class="n">cluster_ids</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df_out</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="n">df_out</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="n">df_out</span><span class="o">.</span><span class="n">x2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">outl_size</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_clusterid</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">dfi</span> <span class="o">=</span> <span class="n">df_</span><span class="p">[</span><span class="n">df_</span><span class="o">.</span><span class="n">cluster_ids</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
+                <span class="n">ax_</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">dfi</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="n">dfi</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="n">dfi</span><span class="o">.</span><span class="n">x2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">pt_size</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the plot title</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">plot_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">title_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis labels</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="n">z_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">label_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of the grid</span>
+            <span class="k">if</span> <span class="n">grid</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="n">grid_style</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">grid_size</span><span class="p">)</span>
+
+            <span class="c1"># Customization of axis ticks</span>
+            <span class="k">if</span> <span class="n">x_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ax_</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">y_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ax_</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y_ticks</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">z_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ax_</span><span class="o">.</span><span class="n">set_zticks</span><span class="p">(</span><span class="n">z_ticks</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="clusterer.to_csv">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.to_csv">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a file containing the coordinates of all the points and their cluster_ids.</span>
+
+<span class="sd">        :param output_folder: Full path to the desired output folder.</span>
+<span class="sd">        :type output_folder: str</span>
+<span class="sd">        :param file_name: Name of the file, with the &#39;.csv&#39; suffix.</span>
+<span class="sd">        :type file_name: str</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">output_folder</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span>
+            <span class="n">output_folder</span> <span class="o">+=</span> <span class="s1">&#39;/&#39;</span>
+        <span class="k">if</span> <span class="n">file_name</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span> <span class="o">!=</span> <span class="s1">&#39;.csv&#39;</span><span class="p">:</span>
+            <span class="n">file_name</span> <span class="o">+=</span> <span class="s1">&#39;.csv&#39;</span> 
+        <span class="n">out_path</span> <span class="o">=</span> <span class="n">output_folder</span> <span class="o">+</span> <span class="n">file_name</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_dim</span><span class="p">):</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;cluster_ids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span><span class="o">.</span><span class="n">cluster_ids</span>
+
+        <span class="n">df_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">df_</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="clusterer.import_clusterer">
+<a class="viewcode-back" href="../python/clusterer.html#CLUEstering.clusterer.import_clusterer">[docs]</a>
+    <span class="k">def</span> <span class="nf">import_clusterer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Imports the results of a previous clustering.</span>
+
+<span class="sd">        :param input_folder: Full path to the folder containing the CSV file.</span>
+<span class="sd">        :type input_folder: str</span>
+<span class="sd">        :param file_name: Name of the file, with the &#39;.csv&#39; suffix.</span>
+<span class="sd">        :type file_name: str</span>
+
+<span class="sd">        :raises ValueError: If the file does not exist or cannot be read correctly.</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">in_path</span> <span class="o">=</span> <span class="n">input_folder</span> <span class="o">+</span> <span class="n">file_name</span>
+        <span class="n">df_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">in_path</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">cluster_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">df_</span><span class="p">[</span><span class="s2">&quot;cluster_ids&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle_dataframe</span><span class="p">(</span><span class="n">df_</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">n_clusters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">cluster_ids</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">cluster_points</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clust_data</span><span class="o">.</span><span class="n">n_points</span><span class="p">):</span>
+            <span class="n">cluster_points</span><span class="p">[</span><span class="n">cluster_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="n">points_per_cluster</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">clust</span><span class="p">)</span> <span class="k">for</span> <span class="n">clust</span> <span class="ow">in</span> <span class="n">cluster_points</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clust_prop</span> <span class="o">=</span> <span class="n">cluster_properties</span><span class="p">(</span>
+            <span class="n">n_clusters</span><span class="p">,</span>
+            <span class="n">cluster_ids</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cluster_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">),</span>
+            <span class="n">points_per_cluster</span><span class="p">,</span>
+            <span class="n">df_</span>
+        <span class="p">)</span></div>
+</div>
+
+</code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2025, Simone Balducci, Felice Pantaleo, Wahid Redjeb, Marco Rovere, Aurora Perego, Francesco Giacomini.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    8.2.3.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "toc.follow", "search.share", "header.autohide"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="../_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+    
+  </body>
+</html>

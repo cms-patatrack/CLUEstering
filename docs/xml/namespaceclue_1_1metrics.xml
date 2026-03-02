@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespaceclue_1_1metrics" kind="namespace" language="C++">
+    <compoundname>clue::metrics</compoundname>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1aea0148eb0315ba1666b1334050faec75" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>std::floating_point</type>
+            <declname>TData</declname>
+            <defname>TData</defname>
+            <defval>float</defval>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt; Ndim, TData &gt;</type>
+        <definition>using clue::metrics::Euclidean = clue::EuclideanMetric&lt;Ndim, TData&gt;</definition>
+        <argsstring></argsstring>
+        <name>Euclidean</name>
+        <qualifiedname>clue::metrics::Euclidean</qualifiedname>
+        <briefdescription>
+<para>Alias for <ref refid="DistanceMetrics_8hpp_1aea0148eb0315ba1666b1334050faec75" kindref="member">Euclidean</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>@tparam Ndim Number of dimensions
+@tparam TData Point coordinates and weights data type 
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="261" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="261" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1afd3a710949c9b0d5843143d7b3024097" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>std::floating_point</type>
+            <declname>TData</declname>
+            <defname>TData</defname>
+            <defval>float</defval>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1WeightedEuclideanMetric" kindref="compound">clue::WeightedEuclideanMetric</ref>&lt; Ndim, TData &gt;</type>
+        <definition>using clue::metrics::WeightedEuclidean = clue::WeightedEuclideanMetric&lt;Ndim, TData&gt;</definition>
+        <argsstring></argsstring>
+        <name>WeightedEuclidean</name>
+        <qualifiedname>clue::metrics::WeightedEuclidean</qualifiedname>
+        <briefdescription>
+<para>Alias for Weighted <ref refid="DistanceMetrics_8hpp_1aea0148eb0315ba1666b1334050faec75" kindref="member">Euclidean</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>@tparam Ndim Number of dimensions
+@tparam TData Point coordinates and weights data type 
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="268" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1a549d106bb329ac020d56976c77791b45" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>std::floating_point</type>
+            <declname>TData</declname>
+            <defname>TData</defname>
+            <defval>float</defval>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1PeriodicEuclideanMetric" kindref="compound">clue::PeriodicEuclideanMetric</ref>&lt; Ndim, TData &gt;</type>
+        <definition>using clue::metrics::PeriodicEuclidean = clue::PeriodicEuclideanMetric&lt;Ndim, TData&gt;</definition>
+        <argsstring></argsstring>
+        <name>PeriodicEuclidean</name>
+        <qualifiedname>clue::metrics::PeriodicEuclidean</qualifiedname>
+        <briefdescription>
+<para>Alias for Periodic <ref refid="DistanceMetrics_8hpp_1aea0148eb0315ba1666b1334050faec75" kindref="member">Euclidean</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>@tparam Ndim Number of dimensions
+@tparam TData Point coordinates and weights data type 
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="275" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="275" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1ac3b0439ab384b3aa149f74f298ca8833" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>std::floating_point</type>
+            <declname>TData</declname>
+            <defname>TData</defname>
+            <defval>float</defval>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1ManhattanMetric" kindref="compound">clue::ManhattanMetric</ref>&lt; Ndim, TData &gt;</type>
+        <definition>using clue::metrics::Manhattan = clue::ManhattanMetric&lt;Ndim, TData&gt;</definition>
+        <argsstring></argsstring>
+        <name>Manhattan</name>
+        <qualifiedname>clue::metrics::Manhattan</qualifiedname>
+        <briefdescription>
+<para>Alias for <ref refid="DistanceMetrics_8hpp_1ac3b0439ab384b3aa149f74f298ca8833" kindref="member">Manhattan</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>@tparam Ndim Number of dimensions
+@tparam TData Point coordinates and weights data type 
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="282" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="282" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1a6995bf55bdeda1d303a7ca9cb9b355b0" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>std::floating_point</type>
+            <declname>TData</declname>
+            <defname>TData</defname>
+            <defval>float</defval>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1ChebyshevMetric" kindref="compound">clue::ChebyshevMetric</ref>&lt; Ndim, TData &gt;</type>
+        <definition>using clue::metrics::Chebyshev = clue::ChebyshevMetric&lt;Ndim, TData&gt;</definition>
+        <argsstring></argsstring>
+        <name>Chebyshev</name>
+        <qualifiedname>clue::metrics::Chebyshev</qualifiedname>
+        <briefdescription>
+<para>Alias for <ref refid="DistanceMetrics_8hpp_1a6995bf55bdeda1d303a7ca9cb9b355b0" kindref="member">Chebyshev</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>@tparam Ndim Number of dimensions
+@tparam TData Point coordinates and weights data type 
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="289" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="289" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="DistanceMetrics_8hpp_1aded3f1fd03c18afb8dc2391aa9373a17" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>Ndim</declname>
+            <defname>Ndim</defname>
+          </param>
+          <param>
+            <type>std::floating_point</type>
+            <declname>TData</declname>
+            <defname>TData</defname>
+            <defval>float</defval>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1WeightedChebyshevMetric" kindref="compound">clue::WeightedChebyshevMetric</ref>&lt; Ndim, TData &gt;</type>
+        <definition>using clue::metrics::WeightedChebyshev = clue::WeightedChebyshevMetric&lt;Ndim, TData&gt;</definition>
+        <argsstring></argsstring>
+        <name>WeightedChebyshev</name>
+        <qualifiedname>clue::metrics::WeightedChebyshev</qualifiedname>
+        <briefdescription>
+<para>Alias for Weighted <ref refid="DistanceMetrics_8hpp_1a6995bf55bdeda1d303a7ca9cb9b355b0" kindref="member">Chebyshev</ref> distance metric. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><verbatim>@tparam Ndim Number of dimensions
+@tparam TData Point coordinates and weights data type 
+</verbatim> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="296" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="296" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="254" column="3"/>
+  </compounddef>
+</doxygen>

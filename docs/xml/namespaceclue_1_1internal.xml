@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespaceclue_1_1internal" kind="namespace" language="C++">
+    <compoundname>clue::internal</compoundname>
+    <innerclass refid="classclue_1_1internal_1_1Tiles" prot="public">clue::internal::Tiles</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="AssociationMap_8hpp_1ace098326cd1af84878f916ed6399a2bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>clue::concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto clue::internal::make_associator</definition>
+        <argsstring>(TQueue &amp;queue, std::span&lt; const int32_t &gt; associations, int32_t elements)</argsstring>
+        <name>make_associator</name>
+        <qualifiedname>clue::internal::make_associator</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const int32_t &gt;</type>
+          <declname>associations</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>elements</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="29" column="10" declfile="include/CLUEstering/data_structures/AssociationMap.hpp" declline="29" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="AssociationMap_8hpp_1a69ab433e3e105cf699f4446624822631" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref>&lt; alpaka::DevCpu &gt;</type>
+        <definition>AssociationMap&lt; alpaka::DevCpu &gt; clue::internal::make_associator</definition>
+        <argsstring>(std::span&lt; const int32_t &gt; associations, int32_t elements)</argsstring>
+        <name>make_associator</name>
+        <qualifiedname>clue::internal::make_associator</qualifiedname>
+        <param>
+          <type>std::span&lt; const int32_t &gt;</type>
+          <declname>associations</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>elements</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="30" column="10" declfile="include/CLUEstering/data_structures/AssociationMap.hpp" declline="30" declcolumn="10"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="23" column="3"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1FlatKernel" kind="class" language="C++" prot="public">
+    <compoundname>clue::FlatKernel</compoundname>
+    <includes refid="ConvolutionalKernel_8hpp" local="no">ConvolutionalKernel.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::floating_point</type>
+        <declname>TData</declname>
+        <defname>TData</defname>
+        <defval>float</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classclue_1_1FlatKernel_1abff1f845c29664cbb40b82a3e0a88b88" prot="public" static="no">
+        <type>std::remove_cv_t&lt; std::remove_reference_t&lt; TData &gt; &gt;</type>
+        <definition>using clue::FlatKernel&lt; TData &gt;::value_type = std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>clue::FlatKernel::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="21" column="5" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1FlatKernel_1aa46469ec13d7c16d5e9ac86c8c0fe13a" prot="private" static="no" mutable="no">
+        <type>value_type</type>
+        <definition>value_type clue::FlatKernel&lt; TData &gt;::m_flat</definition>
+        <argsstring></argsstring>
+        <name>m_flat</name>
+        <qualifiedname>clue::FlatKernel::m_flat</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="24" column="16" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1FlatKernel_1aad675ebe4796ac4525af1102cc7425d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::FlatKernel&lt; TData &gt;::FlatKernel</definition>
+        <argsstring>(value_type flat)</argsstring>
+        <name>FlatKernel</name>
+        <qualifiedname>clue::FlatKernel::FlatKernel</qualifiedname>
+        <param>
+          <type>value_type</type>
+          <declname>flat</declname>
+        </param>
+        <briefdescription>
+<para>Construct a <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>flat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The flat value for the kernel </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="30" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1FlatKernel_1acd17cb86148f4b948a09c52a3787948c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TAcc</type>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_ACC auto</type>
+        <definition>ALPAKA_FN_ACC auto clue::FlatKernel&lt; TData &gt;::operator()</definition>
+        <argsstring>(const TAcc &amp;acc, value_type dist_ij, int point_id, int j) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>clue::FlatKernel::operator()</qualifiedname>
+        <param>
+          <type>const TAcc &amp;</type>
+          <declname>acc</declname>
+        </param>
+        <param>
+          <type>value_type</type>
+          <declname>dist_ij</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>point_id</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+<para>Computes the kernel value between two points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>acc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The accelerator to use for the computation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dist_ij</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance between the two points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>point_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the first point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the second point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The computed kernel value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="40" column="24"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>The <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> class implements a flat kernel for convolution. It returns a constant value for the kernel, regardless of the distance between points. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type for the kernel values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="19" column="3" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="19" bodyend="41"/>
+    <listofallmembers>
+      <member refid="classclue_1_1FlatKernel_1aad675ebe4796ac4525af1102cc7425d6" prot="public" virt="non-virtual"><scope>clue::FlatKernel</scope><name>FlatKernel</name></member>
+      <member refid="classclue_1_1FlatKernel_1aa46469ec13d7c16d5e9ac86c8c0fe13a" prot="private" virt="non-virtual"><scope>clue::FlatKernel</scope><name>m_flat</name></member>
+      <member refid="classclue_1_1FlatKernel_1acd17cb86148f4b948a09c52a3787948c" prot="public" virt="non-virtual"><scope>clue::FlatKernel</scope><name>operator()</name></member>
+      <member refid="classclue_1_1FlatKernel_1abff1f845c29664cbb40b82a3e0a88b88" prot="public" virt="non-virtual"><scope>clue::FlatKernel</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

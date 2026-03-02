@@ -1,0 +1,1829 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1Clusterer" kind="class" language="C++" prot="public">
+    <compoundname>clue::Clusterer</compoundname>
+    <includes refid="Clusterer_8hpp" local="no">Clusterer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+      <param>
+        <type>std::floating_point</type>
+        <declname>DataType</declname>
+        <defname>DataType</defname>
+        <defval>float</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classclue_1_1Clusterer_1a725e0a9f2949c037f2ca8c2631f976b5" prot="public" static="no">
+        <type>std::remove_cv_t&lt; std::remove_reference_t&lt; DataType &gt; &gt;</type>
+        <definition>using clue::Clusterer&lt; Ndim, DataType &gt;::value_type = std::remove_cv_t&lt;std::remove_reference_t&lt;DataType&gt;&gt;</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>clue::Clusterer::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="41" column="5" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1ab0b4f917f60acdf3cc452f525ea49897" prot="private" static="no" mutable="no">
+        <type>value_type</type>
+        <definition>value_type clue::Clusterer&lt; Ndim, DataType &gt;::m_dc</definition>
+        <argsstring></argsstring>
+        <name>m_dc</name>
+        <qualifiedname>clue::Clusterer::m_dc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="44" column="16" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1acfd04f56506e70346b3d2af3a9dfcbf6" prot="private" static="no" mutable="no">
+        <type>value_type</type>
+        <definition>value_type clue::Clusterer&lt; Ndim, DataType &gt;::m_seed_dc</definition>
+        <argsstring></argsstring>
+        <name>m_seed_dc</name>
+        <qualifiedname>clue::Clusterer::m_seed_dc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="45" column="16" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1a88ad8c3096326a59ace27a28f0ddbccd" prot="private" static="no" mutable="no">
+        <type>value_type</type>
+        <definition>value_type clue::Clusterer&lt; Ndim, DataType &gt;::m_rhoc</definition>
+        <argsstring></argsstring>
+        <name>m_rhoc</name>
+        <qualifiedname>clue::Clusterer::m_rhoc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="46" column="16" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1a881a003073178407074895c22d335e67" prot="private" static="no" mutable="no">
+        <type>value_type</type>
+        <definition>value_type clue::Clusterer&lt; Ndim, DataType &gt;::m_dm</definition>
+        <argsstring></argsstring>
+        <name>m_dm</name>
+        <qualifiedname>clue::Clusterer::m_dm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="47" column="16" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1a659032a4586547d7cbaa376f32720cba" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int clue::Clusterer&lt; Ndim, DataType &gt;::m_pointsPerTile</definition>
+        <argsstring></argsstring>
+        <name>m_pointsPerTile</name>
+        <qualifiedname>clue::Clusterer::m_pointsPerTile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="48" column="9" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1a8875eaf90447b21b610f8c132cf23751" prot="private" static="no" mutable="no">
+        <type>std::array&lt; uint8_t, Ndim &gt;</type>
+        <definition>std::array&lt;uint8_t, Ndim&gt; clue::Clusterer&lt; Ndim, DataType &gt;::m_wrappedCoordinates</definition>
+        <argsstring></argsstring>
+        <name>m_wrappedCoordinates</name>
+        <qualifiedname>clue::Clusterer::m_wrappedCoordinates</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="49" column="16" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1a0321d0640037a2e6ef3500192505261c" prot="private" static="no" mutable="no">
+        <type>std::optional&lt; <ref refid="classclue_1_1internal_1_1Tiles" kindref="compound">internal::Tiles</ref>&lt; Ndim, value_type, clue::Device &gt; &gt;</type>
+        <definition>std::optional&lt;internal::Tiles&lt;Ndim, value_type, clue::Device&gt; &gt; clue::Clusterer&lt; Ndim, DataType &gt;::m_tiles</definition>
+        <argsstring></argsstring>
+        <name>m_tiles</name>
+        <qualifiedname>clue::Clusterer::m_tiles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="51" column="19" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1a9464f3236f6e4fee9f195fce7c928e33" prot="private" static="no" mutable="no">
+        <type>std::optional&lt; internal::SeedArray&lt;&gt; &gt;</type>
+        <definition>std::optional&lt;internal::SeedArray&lt;&gt; &gt; clue::Clusterer&lt; Ndim, DataType &gt;::m_seeds</definition>
+        <argsstring></argsstring>
+        <name>m_seeds</name>
+        <qualifiedname>clue::Clusterer::m_seeds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="52" column="19" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1a33a22a728e17914509a0452b852db2eb" prot="private" static="no" mutable="no">
+        <type>std::optional&lt; <ref refid="classclue_1_1Followers" kindref="compound">Followers</ref>&lt; clue::Device &gt; &gt;</type>
+        <definition>std::optional&lt;Followers&lt;clue::Device&gt; &gt; clue::Clusterer&lt; Ndim, DataType &gt;::m_followers</definition>
+        <argsstring></argsstring>
+        <name>m_followers</name>
+        <qualifiedname>clue::Clusterer::m_followers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="53" column="19" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1Clusterer_1a13b7bbe9c98360555dea8a44202725a0" prot="private" static="no" mutable="no">
+        <type>std::optional&lt; internal::DeviceVector&lt;&gt; &gt;</type>
+        <definition>std::optional&lt;internal::DeviceVector&lt;&gt; &gt; clue::Clusterer&lt; Ndim, DataType &gt;::m_event_associations</definition>
+        <argsstring></argsstring>
+        <name>m_event_associations</name>
+        <qualifiedname>clue::Clusterer::m_event_associations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="54" column="19" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a811f56be5696d62512c08bb1f367b747" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::setup</definition>
+        <argsstring>(Queue &amp;queue, const clue::PointsHost&lt; Ndim, InputType &gt; &amp;h_points, clue::PointsDevice&lt; Ndim, value_type &gt; &amp;dev_points)</argsstring>
+        <name>setup</name>
+        <qualifiedname>clue::Clusterer::setup</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, value_type &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="57" column="10" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="57" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1aef6b60d5b78c6c95ecee09743cb32c87" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::setup_batch</definition>
+        <argsstring>(Queue &amp;queue, const clue::PointsHost&lt; Ndim, InputType &gt; &amp;h_points, clue::PointsDevice&lt; Ndim, value_type &gt; &amp;dev_points, std::size_t batch_size)</argsstring>
+        <name>setup_batch</name>
+        <qualifiedname>clue::Clusterer::setup_batch</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, value_type &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>batch_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="66" column="10" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="66" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a63a845b25d7a30f6879e8df37d29af8f" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::setup_batch</definition>
+        <argsstring>(Queue &amp;queue, clue::PointsDevice&lt; Ndim, InputType &gt; &amp;dev_points, std::size_t batch_size)</argsstring>
+        <name>setup_batch</name>
+        <qualifiedname>clue::Clusterer::setup_batch</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>batch_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="77" column="10" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="77" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a77078034803389ee696abb93461d481f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+          <param>
+            <type>concepts::convolutional_kernel</type>
+            <declname>Kernel</declname>
+            <defname>Kernel</defname>
+            <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;</defval>
+          </param>
+          <param>
+            <type>concepts::distance_metric&lt; Ndim &gt;</type>
+            <declname>DistanceMetric</declname>
+            <defname>DistanceMetric</defname>
+            <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt;Ndim, value_type&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::make_clusters_impl</definition>
+        <argsstring>(clue::PointsHost&lt; Ndim, InputType &gt; &amp;h_points, clue::PointsDevice&lt; Ndim, value_type &gt; &amp;dev_points, const DistanceMetric &amp;metric, const Kernel &amp;kernel, Queue &amp;queue, std::size_t block_size)</argsstring>
+        <name>make_clusters_impl</name>
+        <qualifiedname>clue::Clusterer::make_clusters_impl</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, value_type &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <param>
+          <type>const DistanceMetric &amp;</type>
+          <declname>metric</declname>
+        </param>
+        <param>
+          <type>const Kernel &amp;</type>
+          <declname>kernel</declname>
+        </param>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>block_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="89" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a046888139b9a4d0a5cd2de8c188c1d0a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+          <param>
+            <type>concepts::convolutional_kernel</type>
+            <declname>Kernel</declname>
+            <defname>Kernel</defname>
+            <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;</defval>
+          </param>
+          <param>
+            <type>concepts::distance_metric&lt; Ndim &gt;</type>
+            <declname>DistanceMetric</declname>
+            <defname>DistanceMetric</defname>
+            <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt;Ndim, value_type&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::make_clusters_impl</definition>
+        <argsstring>(clue::PointsDevice&lt; Ndim, InputType &gt; &amp;dev_points, const DistanceMetric &amp;metric, const Kernel &amp;kernel, Queue &amp;queue, std::size_t block_size)</argsstring>
+        <name>make_clusters_impl</name>
+        <qualifiedname>clue::Clusterer::make_clusters_impl</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <param>
+          <type>const DistanceMetric &amp;</type>
+          <declname>metric</declname>
+        </param>
+        <param>
+          <type>const Kernel &amp;</type>
+          <declname>kernel</declname>
+        </param>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>block_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="99" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a8f4aa420025bfcbbe08de13c6afa3aa9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+          <param>
+            <type>concepts::convolutional_kernel</type>
+            <declname>Kernel</declname>
+            <defname>Kernel</defname>
+            <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;</defval>
+          </param>
+          <param>
+            <type>concepts::distance_metric&lt; Ndim &gt;</type>
+            <declname>DistanceMetric</declname>
+            <defname>DistanceMetric</defname>
+            <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt;Ndim, value_type&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::make_clusters_batched</definition>
+        <argsstring>(clue::PointsDevice&lt; Ndim, InputType &gt; &amp;dev_points, std::span&lt; const uint32_t &gt; batch_item_sizes, const DistanceMetric &amp;metric, const Kernel &amp;kernel, Queue &amp;queue, std::size_t block_size)</argsstring>
+        <name>make_clusters_batched</name>
+        <qualifiedname>clue::Clusterer::make_clusters_batched</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const uint32_t &gt;</type>
+          <declname>batch_item_sizes</declname>
+        </param>
+        <param>
+          <type>const DistanceMetric &amp;</type>
+          <declname>metric</declname>
+        </param>
+        <param>
+          <type>const Kernel &amp;</type>
+          <declname>kernel</declname>
+        </param>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>block_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="108" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1Clusterer_1aade1499dc9680f8d34c005f8578aece9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::Clusterer&lt; Ndim, DataType &gt;::Clusterer</definition>
+        <argsstring>(value_type dc, value_type rhoc, std::optional&lt; value_type &gt; dm=std::nullopt, std::optional&lt; value_type &gt; seed_dc=std::nullopt, int pPBin=128)</argsstring>
+        <name>Clusterer</name>
+        <qualifiedname>clue::Clusterer::Clusterer</qualifiedname>
+        <param>
+          <type>value_type</type>
+          <declname>dc</declname>
+        </param>
+        <param>
+          <type>value_type</type>
+          <declname>rhoc</declname>
+        </param>
+        <param>
+          <type>std::optional&lt; value_type &gt;</type>
+          <declname>dm</declname>
+          <defval>std::nullopt</defval>
+        </param>
+        <param>
+          <type>std::optional&lt; value_type &gt;</type>
+          <declname>seed_dc</declname>
+          <defval>std::nullopt</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>pPBin</declname>
+          <defval>128</defval>
+        </param>
+        <briefdescription>
+<para>Constuct a <ref refid="classclue_1_1Clusterer" kindref="compound">Clusterer</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Distance threshold for clustering. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rhoc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Density threshold for clustering </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Minimum distance between clusters. This parameter is optional and by default dc is used. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>seed_dc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Distance threshold for seed points. This parameter is optional and by default dc is used. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pPBin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of points per bin, used to determine the tile size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="123" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a03abb1d871c148c548b824e8d3b4ac28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::Clusterer&lt; Ndim, DataType &gt;::Clusterer</definition>
+        <argsstring>(Queue &amp;queue, value_type dc, value_type rhoc, std::optional&lt; value_type &gt; dm=std::nullopt, std::optional&lt; value_type &gt; seed_dc=std::nullopt, int pPBin=128)</argsstring>
+        <name>Clusterer</name>
+        <qualifiedname>clue::Clusterer::Clusterer</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>value_type</type>
+          <declname>dc</declname>
+        </param>
+        <param>
+          <type>value_type</type>
+          <declname>rhoc</declname>
+        </param>
+        <param>
+          <type>std::optional&lt; value_type &gt;</type>
+          <declname>dm</declname>
+          <defval>std::nullopt</defval>
+        </param>
+        <param>
+          <type>std::optional&lt; value_type &gt;</type>
+          <declname>seed_dc</declname>
+          <defval>std::nullopt</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>pPBin</declname>
+          <defval>128</defval>
+        </param>
+        <briefdescription>
+<para>Constuct a <ref refid="classclue_1_1Clusterer" kindref="compound">Clusterer</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Distance threshold for clustering. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rhoc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Density threshold for clustering </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Minimum distance between clusters. This parameter is optional and by default dc is used. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>seed_dc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Distance threshold for seed points. This parameter is optional and by default dc is used. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pPBin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of points per bin, used to determine the tile size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="136" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a2872cae067420d6cc25a416f3cdd4fe2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::setParameters</definition>
+        <argsstring>(value_type dc, value_type rhoc, std::optional&lt; value_type &gt; dm=std::nullopt, std::optional&lt; value_type &gt; seed_dc=std::nullopt, int pPBin=128)</argsstring>
+        <name>setParameters</name>
+        <qualifiedname>clue::Clusterer::setParameters</qualifiedname>
+        <param>
+          <type>value_type</type>
+          <declname>dc</declname>
+        </param>
+        <param>
+          <type>value_type</type>
+          <declname>rhoc</declname>
+        </param>
+        <param>
+          <type>std::optional&lt; value_type &gt;</type>
+          <declname>dm</declname>
+          <defval>std::nullopt</defval>
+        </param>
+        <param>
+          <type>std::optional&lt; value_type &gt;</type>
+          <declname>seed_dc</declname>
+          <defval>std::nullopt</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>pPBin</declname>
+          <defval>128</defval>
+        </param>
+        <briefdescription>
+<para>Set the parameters for the clustering algorithm. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Distance threshold for clustering </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rhoc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Density threshold for clustering </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Minimum distance between clusters. This parameter is optional and by default dc is used. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>seed_dc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Distance threshold for seed points. This parameter is optional and by default dc is used. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>pPBin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of points per bin, used to determine the tile size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="150" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a0ba7ef4fb92992ed3378ba9254980853" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+          <param>
+            <type>concepts::convolutional_kernel</type>
+            <declname>Kernel</declname>
+            <defname>Kernel</defname>
+            <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;</defval>
+          </param>
+          <param>
+            <type>concepts::distance_metric&lt; Ndim &gt;</type>
+            <declname>DistanceMetric</declname>
+            <defname>DistanceMetric</defname>
+            <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt;Ndim, value_type&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::make_clusters</definition>
+        <argsstring>(Queue &amp;queue, clue::PointsHost&lt; Ndim, InputType &gt; &amp;h_points, const DistanceMetric &amp;metric=clue::EuclideanMetric&lt; Ndim, value_type &gt;{}, const Kernel &amp;kernel=FlatKernel&lt;&gt;{.5f}, std::size_t block_size=256)</argsstring>
+        <name>make_clusters</name>
+        <qualifiedname>clue::Clusterer::make_clusters</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <param>
+          <type>const DistanceMetric &amp;</type>
+          <declname>metric</declname>
+          <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt; Ndim, value_type &gt;{}</defval>
+        </param>
+        <param>
+          <type>const Kernel &amp;</type>
+          <declname>kernel</declname>
+          <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;{.5f}</defval>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>block_size</declname>
+          <defval>256</defval>
+        </param>
+        <briefdescription>
+<para>Construct the clusters from host points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of convolutional kernel to use </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DistanceMetric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of distance metric to use </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>h_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Host points to cluster </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>metric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance metric to use for clustering, default is <ref refid="classclue_1_1EuclideanMetric" kindref="compound">EuclideanMetric</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The convolutional kernel to use for computing the local densities, default is <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> with height 0.5 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>block_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size of the blocks to use for clustering, default is 256 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="172" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1aa44240a7c96cefcc646939807a1a826c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+          <param>
+            <type>concepts::convolutional_kernel</type>
+            <declname>Kernel</declname>
+            <defname>Kernel</defname>
+            <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;</defval>
+          </param>
+          <param>
+            <type>concepts::distance_metric&lt; Ndim &gt;</type>
+            <declname>DistanceMetric</declname>
+            <defname>DistanceMetric</defname>
+            <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt;Ndim, value_type&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::make_clusters</definition>
+        <argsstring>(clue::PointsHost&lt; Ndim, InputType &gt; &amp;h_points, const DistanceMetric &amp;metric=clue::EuclideanMetric&lt; Ndim, value_type &gt;{}, const Kernel &amp;kernel=FlatKernel&lt;&gt;{.5f}, std::size_t block_size=256)</argsstring>
+        <name>make_clusters</name>
+        <qualifiedname>clue::Clusterer::make_clusters</qualifiedname>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <param>
+          <type>const DistanceMetric &amp;</type>
+          <declname>metric</declname>
+          <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt; Ndim, value_type &gt;{}</defval>
+        </param>
+        <param>
+          <type>const Kernel &amp;</type>
+          <declname>kernel</declname>
+          <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;{.5f}</defval>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>block_size</declname>
+          <defval>256</defval>
+        </param>
+        <briefdescription>
+<para>Construct the clusters from host points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of convolutional kernel to use </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DistanceMetric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of distance metric to use </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>h_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Host points to cluster </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>metric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance metric to use for clustering, default is <ref refid="classclue_1_1EuclideanMetric" kindref="compound">EuclideanMetric</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The convolutional kernel to use for computing the local densities, default is <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> with height 0.5 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>block_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size of the blocks to use for clustering, default is 256 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>This method creates a temporary queue for the operations on the device </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="193" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a23fa751189b374f1dc93f28bac16488d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+          <param>
+            <type>concepts::convolutional_kernel</type>
+            <declname>Kernel</declname>
+            <defname>Kernel</defname>
+            <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;</defval>
+          </param>
+          <param>
+            <type>concepts::distance_metric&lt; Ndim &gt;</type>
+            <declname>DistanceMetric</declname>
+            <defname>DistanceMetric</defname>
+            <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt;Ndim, value_type&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::make_clusters</definition>
+        <argsstring>(Queue &amp;queue, clue::PointsHost&lt; Ndim, InputType &gt; &amp;h_points, clue::PointsDevice&lt; Ndim, value_type &gt; &amp;dev_points, const DistanceMetric &amp;metric=clue::EuclideanMetric&lt; Ndim, value_type &gt;{}, const Kernel &amp;kernel=FlatKernel&lt;&gt;{.5f}, std::size_t block_size=256)</argsstring>
+        <name>make_clusters</name>
+        <qualifiedname>clue::Clusterer::make_clusters</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, value_type &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <param>
+          <type>const DistanceMetric &amp;</type>
+          <declname>metric</declname>
+          <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt; Ndim, value_type &gt;{}</defval>
+        </param>
+        <param>
+          <type>const Kernel &amp;</type>
+          <declname>kernel</declname>
+          <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;{.5f}</defval>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>block_size</declname>
+          <defval>256</defval>
+        </param>
+        <briefdescription>
+<para>Construct the clusters from host and device points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of convolutional kernel to use </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DistanceMetric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of distance metric to use </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>h_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Host points to cluster </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dev_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Device points to cluster </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>metric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance metric to use for clustering, default is <ref refid="classclue_1_1EuclideanMetric" kindref="compound">EuclideanMetric</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The convolutional kernel to use for computing the local densities, default is <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> with height 0.5 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>block_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size of the blocks to use for clustering, default is 256 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="214" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a84ee29449ed56ac3b3ea42c4bd429bb5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+          <param>
+            <type>concepts::convolutional_kernel</type>
+            <declname>Kernel</declname>
+            <defname>Kernel</defname>
+            <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;</defval>
+          </param>
+          <param>
+            <type>concepts::distance_metric&lt; Ndim &gt;</type>
+            <declname>DistanceMetric</declname>
+            <defname>DistanceMetric</defname>
+            <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt;Ndim, value_type&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::make_clusters</definition>
+        <argsstring>(Queue &amp;queue, clue::PointsDevice&lt; Ndim, InputType &gt; &amp;dev_points, const DistanceMetric &amp;metric=clue::EuclideanMetric&lt; Ndim, value_type &gt;{}, const Kernel &amp;kernel=FlatKernel&lt;&gt;{.5f}, std::size_t block_size=256)</argsstring>
+        <name>make_clusters</name>
+        <qualifiedname>clue::Clusterer::make_clusters</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <param>
+          <type>const DistanceMetric &amp;</type>
+          <declname>metric</declname>
+          <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt; Ndim, value_type &gt;{}</defval>
+        </param>
+        <param>
+          <type>const Kernel &amp;</type>
+          <declname>kernel</declname>
+          <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;{.5f}</defval>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>block_size</declname>
+          <defval>256</defval>
+        </param>
+        <briefdescription>
+<para>Construct the clusters from device points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of convolutional kernel to use </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DistanceMetric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of distance metric to use </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dev_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Device points to cluster </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>metric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance metric to use for clustering, default is <ref refid="classclue_1_1EuclideanMetric" kindref="compound">EuclideanMetric</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The convolutional kernel to use for computing the local densities, default is <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> with height 0.5 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>block_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size of the blocks to use for clustering, default is 256 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="236" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1ad794865757aab47a739fd74f8191c799" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+          <param>
+            <type>concepts::convolutional_kernel</type>
+            <declname>Kernel</declname>
+            <defname>Kernel</defname>
+            <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;</defval>
+          </param>
+          <param>
+            <type>concepts::distance_metric&lt; Ndim &gt;</type>
+            <declname>DistanceMetric</declname>
+            <defname>DistanceMetric</defname>
+            <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt;Ndim, value_type&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::make_clusters</definition>
+        <argsstring>(Queue &amp;queue, clue::PointsHost&lt; Ndim, InputType &gt; &amp;h_points, clue::PointsDevice&lt; Ndim, value_type &gt; &amp;dev_points, std::span&lt; const uint32_t &gt; batch_item_sizes, const DistanceMetric &amp;metric=clue::EuclideanMetric&lt; Ndim, value_type &gt;{}, const Kernel &amp;kernel=FlatKernel&lt;&gt;{.5f}, std::size_t block_size=256)</argsstring>
+        <name>make_clusters</name>
+        <qualifiedname>clue::Clusterer::make_clusters</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, value_type &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const uint32_t &gt;</type>
+          <declname>batch_item_sizes</declname>
+        </param>
+        <param>
+          <type>const DistanceMetric &amp;</type>
+          <declname>metric</declname>
+          <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt; Ndim, value_type &gt;{}</defval>
+        </param>
+        <param>
+          <type>const Kernel &amp;</type>
+          <declname>kernel</declname>
+          <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;{.5f}</defval>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>block_size</declname>
+          <defval>256</defval>
+        </param>
+        <briefdescription>
+<para>Construct the clusters from batched host and device points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of convolutional kernel to use </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DistanceMetric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of distance metric to use </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>h_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Host points to cluster </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dev_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Device points to cluster </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>batch_item_sizes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sizes of each batch item </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>metric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance metric to use for clustering, default is <ref refid="classclue_1_1EuclideanMetric" kindref="compound">EuclideanMetric</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The convolutional kernel to use for computing the local densities, default is <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> with height 0.5 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>block_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size of the blocks to use for clustering, default is 256 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The total size of h_points and dev_points must be equal to the sum of batch_item_sizes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="261" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1abcc3d0a5e8ca2d7473a7e33eb69b824c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+          <param>
+            <type>concepts::convolutional_kernel</type>
+            <declname>Kernel</declname>
+            <defname>Kernel</defname>
+            <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;</defval>
+          </param>
+          <param>
+            <type>concepts::distance_metric&lt; Ndim &gt;</type>
+            <declname>DistanceMetric</declname>
+            <defname>DistanceMetric</defname>
+            <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt;Ndim, value_type&gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::make_clusters</definition>
+        <argsstring>(Queue &amp;queue, clue::PointsDevice&lt; Ndim, InputType &gt; &amp;dev_points, std::span&lt; const uint32_t &gt; batch_item_sizes, const DistanceMetric &amp;metric=clue::EuclideanMetric&lt; Ndim, value_type &gt;{}, const Kernel &amp;kernel=FlatKernel&lt;&gt;{.5f}, std::size_t block_size=256)</argsstring>
+        <name>make_clusters</name>
+        <qualifiedname>clue::Clusterer::make_clusters</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>dev_points</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const uint32_t &gt;</type>
+          <declname>batch_item_sizes</declname>
+        </param>
+        <param>
+          <type>const DistanceMetric &amp;</type>
+          <declname>metric</declname>
+          <defval><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric</ref>&lt; Ndim, value_type &gt;{}</defval>
+        </param>
+        <param>
+          <type>const Kernel &amp;</type>
+          <declname>kernel</declname>
+          <defval><ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref>&lt;&gt;{.5f}</defval>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>block_size</declname>
+          <defval>256</defval>
+        </param>
+        <briefdescription>
+<para>Construct the clusters from batched device points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of convolutional kernel to use </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DistanceMetric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of distance metric to use </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dev_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Device points to cluster </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>batch_item_sizes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sizes of each batch item </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>metric</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance metric to use for clustering, default is <ref refid="classclue_1_1EuclideanMetric" kindref="compound">EuclideanMetric</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>kernel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The convolutional kernel to use for computing the local densities, default is <ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel</ref> with height 0.5 </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>block_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size of the blocks to use for clustering, default is 256 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The total size of h_points and dev_points must be equal to the sum of batch_item_sizes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="287" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a6ffffc2afb52eec6d43636ad9431b5cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::ranges::contiguous_range</type>
+            <declname>TRange</declname>
+            <defname>TRange</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::setWrappedCoordinates</definition>
+        <argsstring>(const TRange &amp;wrapped_coordinates)</argsstring>
+        <name>setWrappedCoordinates</name>
+        <qualifiedname>clue::Clusterer::setWrappedCoordinates</qualifiedname>
+        <param>
+          <type>const TRange &amp;</type>
+          <declname>wrapped_coordinates</declname>
+        </param>
+        <briefdescription>
+<para>Specify which coordinates are periodic. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>wrappedCoordinates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of wrapped coordinates, where 1 means periodic and 0 means non-periodic </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="299" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a86b30f5edbaf5e488a45a902d76a4d6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::integral...</type>
+            <declname>TArgs</declname>
+            <defname>TArgs</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void clue::Clusterer&lt; Ndim, DataType &gt;::setWrappedCoordinates</definition>
+        <argsstring>(TArgs... wrapped_coordinates)</argsstring>
+        <name>setWrappedCoordinates</name>
+        <qualifiedname>clue::Clusterer::setWrappedCoordinates</qualifiedname>
+        <param>
+          <type>TArgs...</type>
+          <declname>wrapped_coordinates</declname>
+        </param>
+        <briefdescription>
+<para>Specify which coordinates are periodic. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TArgs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Types of the wrapped coordinates, should be convertible to uint8_t </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>wrappedCoordinates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wrapped coordinates, where 1 means periodic and 0 means non-periodic </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="305" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a4bbabf23129be0267473b5bef6240b40" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+        </templateparamlist>
+        <type>host_associator</type>
+        <definition>host_associator clue::Clusterer&lt; Ndim, DataType &gt;::getClusters</definition>
+        <argsstring>(const clue::PointsHost&lt; Ndim, InputType &gt; &amp;h_points)</argsstring>
+        <name>getClusters</name>
+        <qualifiedname>clue::Clusterer::getClusters</qualifiedname>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <briefdescription>
+<para>Get the clusters from the host points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>h_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Host points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An associator mapping clusters and points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="314" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a4f5855e12942bc752cb410d84b0f4ad7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref>&lt; Device &gt;</type>
+        <definition>AssociationMap&lt; Device &gt; clue::Clusterer&lt; Ndim, DataType &gt;::getClusters</definition>
+        <argsstring>(Queue &amp;queue, const clue::PointsDevice&lt; Ndim, InputType &gt; &amp;d_points)</argsstring>
+        <name>getClusters</name>
+        <qualifiedname>clue::Clusterer::getClusters</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>d_points</declname>
+        </param>
+        <briefdescription>
+<para>Get the clusters from the device points This function returns an associator object mapping the clusters to the points they contain. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>d_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Device points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An associator mapping clusters and points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="323" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a35de12c9ab180af6456525f37a925dfb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+        </templateparamlist>
+        <type>host_associator</type>
+        <definition>host_associator clue::Clusterer&lt; Ndim, DataType &gt;::getSampleAssociations</definition>
+        <argsstring>(Queue &amp;queue, clue::PointsHost&lt; Ndim, InputType &gt; &amp;h_points)</argsstring>
+        <name>getSampleAssociations</name>
+        <qualifiedname>clue::Clusterer::getSampleAssociations</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>h_points</declname>
+        </param>
+        <briefdescription>
+<para>Get the sample-to-cluster associations for batched clustering. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A device buffer containing the event associations </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="333" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1Clusterer_1a68aad94472d6dc210de746fd00b3414b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::floating_point</type>
+            <declname>InputType</declname>
+            <defname>InputType</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref>&lt; Device &gt;</type>
+        <definition>AssociationMap&lt; Device &gt; clue::Clusterer&lt; Ndim, DataType &gt;::getSampleAssociations</definition>
+        <argsstring>(Queue &amp;queue, clue::PointsDevice&lt; Ndim, InputType &gt; &amp;d_points)</argsstring>
+        <name>getSampleAssociations</name>
+        <qualifiedname>clue::Clusterer::getSampleAssociations</qualifiedname>
+        <param>
+          <type>Queue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type><ref refid="classclue_1_1PointsDevice" kindref="compound">clue::PointsDevice</ref>&lt; Ndim, InputType &gt; &amp;</type>
+          <declname>d_points</declname>
+        </param>
+        <briefdescription>
+<para>Get the sample-to-cluster associations for batched clustering. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>InputType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type of the input points, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the device operations </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A device buffer containing the event associations </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/Clusterer.hpp" line="342" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>The <ref refid="classclue_1_1Clusterer" kindref="compound">Clusterer</ref> class is the interface for running the clustering algorithm. It provides methods to set up the clustering parameters, initializes the internal buffers and runs the clustering algorithm on host or device points. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions of the points to cluster </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DataType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type for the point coordinates and weights, which must be a floating-point type. By default, it is set to <computeroutput>float</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/Clusterer.hpp" line="39" column="3" bodyfile="include/CLUEstering/core/Clusterer.hpp" bodystart="39" bodyend="344"/>
+    <listofallmembers>
+      <member refid="classclue_1_1Clusterer_1aade1499dc9680f8d34c005f8578aece9" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>Clusterer</name></member>
+      <member refid="classclue_1_1Clusterer_1a03abb1d871c148c548b824e8d3b4ac28" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>Clusterer</name></member>
+      <member refid="classclue_1_1Clusterer_1a4bbabf23129be0267473b5bef6240b40" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>getClusters</name></member>
+      <member refid="classclue_1_1Clusterer_1a4f5855e12942bc752cb410d84b0f4ad7" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>getClusters</name></member>
+      <member refid="classclue_1_1Clusterer_1a35de12c9ab180af6456525f37a925dfb" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>getSampleAssociations</name></member>
+      <member refid="classclue_1_1Clusterer_1a68aad94472d6dc210de746fd00b3414b" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>getSampleAssociations</name></member>
+      <member refid="classclue_1_1Clusterer_1ab0b4f917f60acdf3cc452f525ea49897" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_dc</name></member>
+      <member refid="classclue_1_1Clusterer_1a881a003073178407074895c22d335e67" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_dm</name></member>
+      <member refid="classclue_1_1Clusterer_1a13b7bbe9c98360555dea8a44202725a0" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_event_associations</name></member>
+      <member refid="classclue_1_1Clusterer_1a33a22a728e17914509a0452b852db2eb" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_followers</name></member>
+      <member refid="classclue_1_1Clusterer_1a659032a4586547d7cbaa376f32720cba" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_pointsPerTile</name></member>
+      <member refid="classclue_1_1Clusterer_1a88ad8c3096326a59ace27a28f0ddbccd" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_rhoc</name></member>
+      <member refid="classclue_1_1Clusterer_1acfd04f56506e70346b3d2af3a9dfcbf6" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_seed_dc</name></member>
+      <member refid="classclue_1_1Clusterer_1a9464f3236f6e4fee9f195fce7c928e33" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_seeds</name></member>
+      <member refid="classclue_1_1Clusterer_1a0321d0640037a2e6ef3500192505261c" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_tiles</name></member>
+      <member refid="classclue_1_1Clusterer_1a8875eaf90447b21b610f8c132cf23751" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>m_wrappedCoordinates</name></member>
+      <member refid="classclue_1_1Clusterer_1a0ba7ef4fb92992ed3378ba9254980853" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>make_clusters</name></member>
+      <member refid="classclue_1_1Clusterer_1aa44240a7c96cefcc646939807a1a826c" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>make_clusters</name></member>
+      <member refid="classclue_1_1Clusterer_1a23fa751189b374f1dc93f28bac16488d" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>make_clusters</name></member>
+      <member refid="classclue_1_1Clusterer_1a84ee29449ed56ac3b3ea42c4bd429bb5" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>make_clusters</name></member>
+      <member refid="classclue_1_1Clusterer_1ad794865757aab47a739fd74f8191c799" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>make_clusters</name></member>
+      <member refid="classclue_1_1Clusterer_1abcc3d0a5e8ca2d7473a7e33eb69b824c" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>make_clusters</name></member>
+      <member refid="classclue_1_1Clusterer_1a8f4aa420025bfcbbe08de13c6afa3aa9" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>make_clusters_batched</name></member>
+      <member refid="classclue_1_1Clusterer_1a77078034803389ee696abb93461d481f" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>make_clusters_impl</name></member>
+      <member refid="classclue_1_1Clusterer_1a046888139b9a4d0a5cd2de8c188c1d0a" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>make_clusters_impl</name></member>
+      <member refid="classclue_1_1Clusterer_1a2872cae067420d6cc25a416f3cdd4fe2" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>setParameters</name></member>
+      <member refid="classclue_1_1Clusterer_1a811f56be5696d62512c08bb1f367b747" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>setup</name></member>
+      <member refid="classclue_1_1Clusterer_1aef6b60d5b78c6c95ecee09743cb32c87" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>setup_batch</name></member>
+      <member refid="classclue_1_1Clusterer_1a63a845b25d7a30f6879e8df37d29af8f" prot="private" virt="non-virtual"><scope>clue::Clusterer</scope><name>setup_batch</name></member>
+      <member refid="classclue_1_1Clusterer_1a6ffffc2afb52eec6d43636ad9431b5cd" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>setWrappedCoordinates</name></member>
+      <member refid="classclue_1_1Clusterer_1a86b30f5edbaf5e488a45a902d76a4d6e" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>setWrappedCoordinates</name></member>
+      <member refid="classclue_1_1Clusterer_1a725e0a9f2949c037f2ca8c2631f976b5" prot="public" virt="non-virtual"><scope>clue::Clusterer</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

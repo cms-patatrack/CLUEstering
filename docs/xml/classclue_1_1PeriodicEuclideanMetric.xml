@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1PeriodicEuclideanMetric" kind="class" language="C++" prot="public">
+    <compoundname>clue::PeriodicEuclideanMetric</compoundname>
+    <includes refid="DistanceMetrics_8hpp" local="no">DistanceMetrics.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+      <param>
+        <type>std::floating_point</type>
+        <declname>TData</declname>
+        <defname>TData</defname>
+        <defval>float</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classclue_1_1PeriodicEuclideanMetric_1ada5df85a61229a17cd3d2ec664e6a24c" prot="public" static="no">
+        <type>std::remove_cv_t&lt; std::remove_reference_t&lt; TData &gt; &gt;</type>
+        <definition>using clue::PeriodicEuclideanMetric&lt; Ndim, TData &gt;::value_type = std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>clue::PeriodicEuclideanMetric::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="120" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1PeriodicEuclideanMetric_1aba00b999556844110ce01066c57ebd00" prot="private" static="no" mutable="no">
+        <type>std::array&lt; value_type, Ndim &gt;</type>
+        <definition>std::array&lt;value_type, Ndim&gt; clue::PeriodicEuclideanMetric&lt; Ndim, TData &gt;::m_periods</definition>
+        <argsstring></argsstring>
+        <name>m_periods</name>
+        <qualifiedname>clue::PeriodicEuclideanMetric::m_periods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="123" column="16" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1PeriodicEuclideanMetric_1a6006f273a33da892b18d02f565e56c21" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::PeriodicEuclideanMetric&lt; Ndim, TData &gt;::PeriodicEuclideanMetric</definition>
+        <argsstring>(const std::array&lt; value_type, Ndim &gt; &amp;periods)</argsstring>
+        <name>PeriodicEuclideanMetric</name>
+        <qualifiedname>clue::PeriodicEuclideanMetric::PeriodicEuclideanMetric</qualifiedname>
+        <param>
+          <type>const std::array&lt; value_type, Ndim &gt; &amp;</type>
+          <declname>periods</declname>
+        </param>
+        <briefdescription>
+<para>Constructor periodic euclidian metric with periods. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>periods</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Periods for each dimension If a coordinate is not periodic, the corresponding period should be set to 0.f </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classclue_1_1PeriodicEuclideanMetric" kindref="compound">PeriodicEuclideanMetric</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="131" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="131" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PeriodicEuclideanMetric_1a3cef7a7b1c366b093b2696925180e003" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::PeriodicEuclideanMetric&lt; Ndim, TData &gt;::PeriodicEuclideanMetric</definition>
+        <argsstring>(std::array&lt; value_type, Ndim &gt; &amp;&amp;periods)</argsstring>
+        <name>PeriodicEuclideanMetric</name>
+        <qualifiedname>clue::PeriodicEuclideanMetric::PeriodicEuclideanMetric</qualifiedname>
+        <param>
+          <type>std::array&lt; value_type, Ndim &gt; &amp;&amp;</type>
+          <declname>periods</declname>
+        </param>
+        <briefdescription>
+<para>Move constructor periodic euclidian metric with periods. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>periods</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Periods for each dimension If a coordinate is not periodic, the corresponding period should be set to 0.f </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classclue_1_1PeriodicEuclideanMetric" kindref="compound">PeriodicEuclideanMetric</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="138" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="138" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PeriodicEuclideanMetric_1a2ae5e025928e66940826acd6dcb9655a" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr auto</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr auto clue::PeriodicEuclideanMetric&lt; Ndim, TData &gt;::operator()</definition>
+        <argsstring>(const Point&lt; Ndim, value_type &gt; &amp;lhs, const Point&lt; Ndim, value_type &gt; &amp;rhs) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>clue::PeriodicEuclideanMetric::operator()</qualifiedname>
+        <param>
+          <type>const Point&lt; Ndim, value_type &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const Point&lt; Ndim, value_type &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Compute the Periodic Euclidean distance between two points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>lhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>First point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Second point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Periodic Euclidean distance between the two points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="146" column="46" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="146" bodyend="154"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Periodic Euclidean distance metric This class implements the Euclidean distance metric in Ndim dimensions for coordinate systems where one or more coordinates are defined in a periodic domain. The distance is then computed by treating the coordinates as euclidean.. This metric expects a period for each dimension, where a period equal to 0 means that the coordinate is not periodic. The periodic coordinates are expected to be defined in the range [0, period). </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of dimensions </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Data type for the coordinates </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="118" column="3" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="118" bodyend="155"/>
+    <listofallmembers>
+      <member refid="classclue_1_1PeriodicEuclideanMetric_1aba00b999556844110ce01066c57ebd00" prot="private" virt="non-virtual"><scope>clue::PeriodicEuclideanMetric</scope><name>m_periods</name></member>
+      <member refid="classclue_1_1PeriodicEuclideanMetric_1a2ae5e025928e66940826acd6dcb9655a" prot="public" virt="non-virtual"><scope>clue::PeriodicEuclideanMetric</scope><name>operator()</name></member>
+      <member refid="classclue_1_1PeriodicEuclideanMetric_1a6006f273a33da892b18d02f565e56c21" prot="public" virt="non-virtual"><scope>clue::PeriodicEuclideanMetric</scope><name>PeriodicEuclideanMetric</name></member>
+      <member refid="classclue_1_1PeriodicEuclideanMetric_1a3cef7a7b1c366b093b2696925180e003" prot="public" virt="non-virtual"><scope>clue::PeriodicEuclideanMetric</scope><name>PeriodicEuclideanMetric</name></member>
+      <member refid="classclue_1_1PeriodicEuclideanMetric_1ada5df85a61229a17cd3d2ec664e6a24c" prot="public" virt="non-virtual"><scope>clue::PeriodicEuclideanMetric</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_fa28860a501df7f6b51401a4b34c9f09" kind="dir">
+    <compoundname>include/CLUEstering/data_structures</compoundname>
+    <innerfile refid="AssociationMap_8hpp">AssociationMap.hpp</innerfile>
+    <innerfile refid="AssociationMapView_8hpp">AssociationMapView.hpp</innerfile>
+    <innerfile refid="ClusterProperties_8hpp">ClusterProperties.hpp</innerfile>
+    <innerfile refid="PointsConversion_8hpp">PointsConversion.hpp</innerfile>
+    <innerfile refid="PointsDevice_8hpp">PointsDevice.hpp</innerfile>
+    <innerfile refid="PointsHost_8hpp">PointsHost.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/data_structures/"/>
+  </compounddef>
+</doxygen>

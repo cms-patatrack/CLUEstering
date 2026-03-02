@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="DistanceMetrics_8hpp" kind="file" language="C++">
+    <compoundname>DistanceMetrics.hpp</compoundname>
+    <includes local="yes">CLUEstering/internal/meta/accumulate.hpp</includes>
+    <includes local="yes">CLUEstering/internal/meta/maximum.hpp</includes>
+    <includes local="yes">CLUEstering/internal/math/math.hpp</includes>
+    <includes local="no">alpaka/alpaka.hpp</includes>
+    <includes local="no">array</includes>
+    <includes local="no">concepts</includes>
+    <includes local="no">cstddef</includes>
+    <includedby refid="Clusterer_8hpp" local="yes">include/CLUEstering/core/Clusterer.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/CLUEstering/core/DistanceMetrics.hpp</label>
+        <link refid="DistanceMetrics_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>CLUEstering/internal/math/math.hpp</label>
+      </node>
+      <node id="2">
+        <label>CLUEstering/internal/meta/accumulate.hpp</label>
+      </node>
+      <node id="3">
+        <label>CLUEstering/internal/meta/maximum.hpp</label>
+      </node>
+      <node id="5">
+        <label>alpaka/alpaka.hpp</label>
+      </node>
+      <node id="6">
+        <label>array</label>
+      </node>
+      <node id="7">
+        <label>concepts</label>
+      </node>
+      <node id="8">
+        <label>cstddef</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>include/CLUEstering/CLUEstering.hpp</label>
+        <link refid="CLUEstering_8hpp"/>
+      </node>
+      <node id="2">
+        <label>include/CLUEstering/core/Clusterer.hpp</label>
+        <link refid="Clusterer_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/CLUEstering/core/DistanceMetrics.hpp</label>
+        <link refid="DistanceMetrics_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classclue_1_1EuclideanMetric" prot="public">clue::EuclideanMetric</innerclass>
+    <innerclass refid="classclue_1_1WeightedEuclideanMetric" prot="public">clue::WeightedEuclideanMetric</innerclass>
+    <innerclass refid="classclue_1_1PeriodicEuclideanMetric" prot="public">clue::PeriodicEuclideanMetric</innerclass>
+    <innerclass refid="classclue_1_1ManhattanMetric" prot="public">clue::ManhattanMetric</innerclass>
+    <innerclass refid="classclue_1_1ChebyshevMetric" prot="public">clue::ChebyshevMetric</innerclass>
+    <innerclass refid="classclue_1_1WeightedChebyshevMetric" prot="public">clue::WeightedChebyshevMetric</innerclass>
+    <innerconcept refid="conceptclue_1_1concepts_1_1distance__metric">clue::concepts::distance_metric</innerconcept>
+    <innernamespace refid="namespaceclue">clue</innernamespace>
+    <innernamespace refid="namespaceclue_1_1concepts">clue::concepts</innernamespace>
+    <innernamespace refid="namespaceclue_1_1metrics">clue::metrics</innernamespace>
+    <briefdescription>
+<para>Implementations of common distance metrics. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Simone Balducci </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/internal/meta/accumulate.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/internal/meta/maximum.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/internal/math/math.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;alpaka/alpaka.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;array&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;concepts&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstddef&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">clue<sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">concepts<sp/>{</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>TMetric,<sp/>std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim&gt;</highlight></codeline>
+<codeline lineno="20" refid="conceptclue_1_1concepts_1_1distance__metric" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">concept<sp/></highlight><highlight class="normal"><ref refid="conceptclue_1_1concepts_1_1distance__metric" kindref="compound">distance_metric</ref><sp/>=<sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(TMetric&amp;&amp;<sp/>metric)<sp/>{</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>metric(std::array&lt;typename<sp/>TMetric::value_type,<sp/>Ndim<sp/>+<sp/>1&gt;{},</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::array&lt;typename<sp/>TMetric::value_type,<sp/>Ndim<sp/>+<sp/>1&gt;{})</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/>-&gt;<sp/>std::same_as&lt;typename<sp/>TMetric::value_type&gt;;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/>}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>concepts</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData&gt;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Point<sp/>=<sp/>std::array&lt;TData,<sp/>Ndim<sp/>+<sp/>1&gt;;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="38" refid="classclue_1_1EuclideanMetric" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1EuclideanMetric_1a3ff344da8df8fa97d8b0f44055ad6c61" kindref="member">EuclideanMetric</ref><sp/>{</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="44" refid="classclue_1_1EuclideanMetric_1a3ff344da8df8fa97d8b0f44055ad6c61" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1EuclideanMetric_1a3ff344da8df8fa97d8b0f44055ad6c61" kindref="member">EuclideanMetric</ref>()<sp/>{}</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51" refid="classclue_1_1EuclideanMetric_1a29189a8742a0a4e89275e669c36a7b66" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1EuclideanMetric_1a29189a8742a0a4e89275e669c36a7b66" kindref="member">operator()</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>lhs,</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>rhs)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>distance2<sp/>=<sp/>meta::accumulate&lt;Ndim&gt;(</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;]&lt;std::size_t<sp/>Dim&gt;()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(lhs[Dim]<sp/>-<sp/>rhs[Dim])<sp/>*<sp/>(lhs[Dim]<sp/>-<sp/>rhs[Dim]);<sp/>});</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>math::sqrt(distance2);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="65" refid="classclue_1_1WeightedEuclideanMetric" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1WeightedEuclideanMetric_1a468f3d0b2503b723d5df80dc09fb5597" kindref="member">WeightedEuclideanMetric</ref><sp/>{</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>std::array&lt;value_type,<sp/>Ndim&gt;<sp/>m_weights;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::floating_point...<sp/>TValues&gt;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">...(TValues)<sp/>==<sp/>Ndim)</highlight></codeline>
+<codeline lineno="79" refid="classclue_1_1WeightedEuclideanMetric_1a468f3d0b2503b723d5df80dc09fb5597" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1WeightedEuclideanMetric_1a468f3d0b2503b723d5df80dc09fb5597" kindref="member">WeightedEuclideanMetric</ref>(TValues...<sp/>weights)</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>m_weights{weights...}<sp/>{}</highlight></codeline>
+<codeline lineno="85" refid="classclue_1_1WeightedEuclideanMetric_1a80b2ba5c5ab34317bcd88f3480658ba1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1WeightedEuclideanMetric_1a80b2ba5c5ab34317bcd88f3480658ba1" kindref="member">WeightedEuclideanMetric</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::array&lt;value_type,<sp/>Ndim&gt;&amp;<sp/>weights)</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>m_weights{weights}<sp/>{}</highlight></codeline>
+<codeline lineno="91" refid="classclue_1_1WeightedEuclideanMetric_1a48543e6770c4d9cb19b159506e4822d7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1WeightedEuclideanMetric_1a48543e6770c4d9cb19b159506e4822d7" kindref="member">WeightedEuclideanMetric</ref>(std::array&lt;value_type,<sp/>Ndim&gt;&amp;&amp;<sp/>weights)</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>m_weights{std::move(weights)}<sp/>{}</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99" refid="classclue_1_1WeightedEuclideanMetric_1ae070c37e521a9c54e1b9512d8b91bad3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1WeightedEuclideanMetric_1ae070c37e521a9c54e1b9512d8b91bad3" kindref="member">operator()</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>lhs,</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>rhs)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>distance2<sp/>=<sp/>meta::accumulate&lt;Ndim&gt;([&amp;]&lt;std::size_t<sp/>Dim&gt;()<sp/>{</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>m_weights[Dim]<sp/>*<sp/>(lhs[Dim]<sp/>-<sp/>rhs[Dim])<sp/>*<sp/>(lhs[Dim]<sp/>-<sp/>rhs[Dim]);</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>});</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>math::sqrt(distance2);</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="118" refid="classclue_1_1PeriodicEuclideanMetric" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1PeriodicEuclideanMetric_1a6006f273a33da892b18d02f565e56c21" kindref="member">PeriodicEuclideanMetric</ref><sp/>{</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/>std::array&lt;value_type,<sp/>Ndim&gt;<sp/>m_periods;</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="131" refid="classclue_1_1PeriodicEuclideanMetric_1a6006f273a33da892b18d02f565e56c21" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PeriodicEuclideanMetric_1a6006f273a33da892b18d02f565e56c21" kindref="member">PeriodicEuclideanMetric</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::array&lt;value_type,<sp/>Ndim&gt;&amp;<sp/>periods)</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>m_periods{periods}<sp/>{}</highlight></codeline>
+<codeline lineno="138" refid="classclue_1_1PeriodicEuclideanMetric_1a3cef7a7b1c366b093b2696925180e003" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PeriodicEuclideanMetric_1a3cef7a7b1c366b093b2696925180e003" kindref="member">PeriodicEuclideanMetric</ref>(std::array&lt;value_type,<sp/>Ndim&gt;&amp;&amp;<sp/>periods)</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>m_periods{std::move(periods)}<sp/>{}</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146" refid="classclue_1_1PeriodicEuclideanMetric_1a2ae5e025928e66940826acd6dcb9655a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PeriodicEuclideanMetric_1a2ae5e025928e66940826acd6dcb9655a" kindref="member">operator()</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>lhs,</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>rhs)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>distance2<sp/>=<sp/>meta::accumulate&lt;Ndim&gt;([&amp;]&lt;std::size_t<sp/>Dim&gt;()<sp/>{</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>diff<sp/>=<sp/>math::fabs(lhs[Dim]<sp/>-<sp/>rhs[Dim]);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>periodic_diff<sp/>=<sp/>math::min(diff,<sp/>m_periods[Dim]<sp/>-<sp/>diff);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>periodic_diff<sp/>*<sp/>periodic_diff;</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>});</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>math::sqrt(distance2);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="163" refid="classclue_1_1ManhattanMetric" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1ManhattanMetric_1acd79e167d0d1f798bfb21bbd32d06db3" kindref="member">ManhattanMetric</ref><sp/>{</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight></codeline>
+<codeline lineno="168" refid="classclue_1_1ManhattanMetric_1acd79e167d0d1f798bfb21bbd32d06db3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1ManhattanMetric_1acd79e167d0d1f798bfb21bbd32d06db3" kindref="member">ManhattanMetric</ref>()<sp/>{}</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"></highlight></codeline>
+<codeline lineno="175" refid="classclue_1_1ManhattanMetric_1a09a1cf4150e6c4cf5c04d296dcce6967" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1ManhattanMetric_1a09a1cf4150e6c4cf5c04d296dcce6967" kindref="member">operator()</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>lhs,</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>rhs)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>meta::accumulate&lt;Ndim&gt;(</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;]&lt;std::size_t<sp/>Dim&gt;()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>math::fabs(lhs[Dim]<sp/>-<sp/>rhs[Dim]);<sp/>});</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="188" refid="classclue_1_1ChebyshevMetric" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1ChebyshevMetric_1adc9b62c51366176c2cc0641352a412a7" kindref="member">ChebyshevMetric</ref><sp/>{</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"></highlight></codeline>
+<codeline lineno="193" refid="classclue_1_1ChebyshevMetric_1adc9b62c51366176c2cc0641352a412a7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1ChebyshevMetric_1adc9b62c51366176c2cc0641352a412a7" kindref="member">ChebyshevMetric</ref>()<sp/>{}</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"></highlight></codeline>
+<codeline lineno="200" refid="classclue_1_1ChebyshevMetric_1ac4ed577525b38edd29f1e416b4ac0930" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1ChebyshevMetric_1ac4ed577525b38edd29f1e416b4ac0930" kindref="member">operator()</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>lhs,</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>rhs)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>meta::maximum&lt;Ndim&gt;(</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;]&lt;std::size_t<sp/>Dim&gt;()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>math::fabs(lhs[Dim]<sp/>-<sp/>rhs[Dim]);<sp/>});</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="213" refid="classclue_1_1WeightedChebyshevMetric" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1WeightedChebyshevMetric_1afff39368ebf51bb623bc508403999c8f" kindref="member">WeightedChebyshevMetric</ref><sp/>{</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"></highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/>std::array&lt;value_type,<sp/>Ndim&gt;<sp/>m_weights;</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"></highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::floating_point...<sp/>TValues&gt;</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">...(TValues)<sp/>==<sp/>Ndim)</highlight></codeline>
+<codeline lineno="227" refid="classclue_1_1WeightedChebyshevMetric_1afff39368ebf51bb623bc508403999c8f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1WeightedChebyshevMetric_1afff39368ebf51bb623bc508403999c8f" kindref="member">WeightedChebyshevMetric</ref>(TValues...<sp/>weights)</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>m_weights{weights...}<sp/>{}</highlight></codeline>
+<codeline lineno="233" refid="classclue_1_1WeightedChebyshevMetric_1ae486b32f3c877f2ca22d527607f25251" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1WeightedChebyshevMetric_1ae486b32f3c877f2ca22d527607f25251" kindref="member">WeightedChebyshevMetric</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::array&lt;value_type,<sp/>Ndim&gt;&amp;<sp/>weights)</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>m_weights{weights}<sp/>{}</highlight></codeline>
+<codeline lineno="239" refid="classclue_1_1WeightedChebyshevMetric_1afd2b2efdf0aeda55c49a28b5770e5037" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1WeightedChebyshevMetric_1afd2b2efdf0aeda55c49a28b5770e5037" kindref="member">WeightedChebyshevMetric</ref>(std::array&lt;value_type,<sp/>Ndim&gt;&amp;&amp;<sp/>weights)</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>m_weights{std::move(weights)}<sp/>{}</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"></highlight></codeline>
+<codeline lineno="247" refid="classclue_1_1WeightedChebyshevMetric_1ab531897a4a5a5aa7b98db2498c1928dd" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST_ACC<sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1WeightedChebyshevMetric_1ab531897a4a5a5aa7b98db2498c1928dd" kindref="member">operator()</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>lhs,</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Point&lt;Ndim,<sp/>value_type&gt;&amp;<sp/>rhs)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>meta::maximum&lt;Ndim&gt;(</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;]&lt;std::size_t<sp/>Dim&gt;()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>m_weights[Dim]<sp/>*<sp/>math::fabs(lhs[Dim]<sp/>-<sp/>rhs[Dim]);<sp/>});</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"></highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">metrics<sp/>{</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"></highlight></codeline>
+<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="261" refid="DistanceMetrics_8hpp_1aea0148eb0315ba1666b1334050faec75" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="DistanceMetrics_8hpp_1aea0148eb0315ba1666b1334050faec75" kindref="member">Euclidean</ref><sp/>=<sp/><ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric&lt;Ndim, TData&gt;</ref>;</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"></highlight></codeline>
+<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="268" refid="DistanceMetrics_8hpp_1afd3a710949c9b0d5843143d7b3024097" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="DistanceMetrics_8hpp_1afd3a710949c9b0d5843143d7b3024097" kindref="member">WeightedEuclidean</ref><sp/>=<sp/><ref refid="classclue_1_1WeightedEuclideanMetric" kindref="compound">clue::WeightedEuclideanMetric&lt;Ndim, TData&gt;</ref>;</highlight></codeline>
+<codeline lineno="269"><highlight class="normal"></highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="275" refid="DistanceMetrics_8hpp_1a549d106bb329ac020d56976c77791b45" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="DistanceMetrics_8hpp_1a549d106bb329ac020d56976c77791b45" kindref="member">PeriodicEuclidean</ref><sp/>=<sp/><ref refid="classclue_1_1PeriodicEuclideanMetric" kindref="compound">clue::PeriodicEuclideanMetric&lt;Ndim, TData&gt;</ref>;</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"></highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="282" refid="DistanceMetrics_8hpp_1ac3b0439ab384b3aa149f74f298ca8833" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="DistanceMetrics_8hpp_1ac3b0439ab384b3aa149f74f298ca8833" kindref="member">Manhattan</ref><sp/>=<sp/><ref refid="classclue_1_1ManhattanMetric" kindref="compound">clue::ManhattanMetric&lt;Ndim, TData&gt;</ref>;</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"></highlight></codeline>
+<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="289" refid="DistanceMetrics_8hpp_1a6995bf55bdeda1d303a7ca9cb9b355b0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="DistanceMetrics_8hpp_1a6995bf55bdeda1d303a7ca9cb9b355b0" kindref="member">Chebyshev</ref><sp/>=<sp/><ref refid="classclue_1_1ChebyshevMetric" kindref="compound">clue::ChebyshevMetric&lt;Ndim, TData&gt;</ref>;</highlight></codeline>
+<codeline lineno="290"><highlight class="normal"></highlight></codeline>
+<codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="296" refid="DistanceMetrics_8hpp_1aded3f1fd03c18afb8dc2391aa9373a17" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal"><ref refid="DistanceMetrics_8hpp_1aded3f1fd03c18afb8dc2391aa9373a17" kindref="member">WeightedChebyshev</ref><sp/>=<sp/><ref refid="classclue_1_1WeightedChebyshevMetric" kindref="compound">clue::WeightedChebyshevMetric&lt;Ndim, TData&gt;</ref>;</highlight></codeline>
+<codeline lineno="297"><highlight class="normal"></highlight></codeline>
+<codeline lineno="298"><highlight class="normal"><sp/><sp/>}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>metrics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="299"><highlight class="normal"></highlight></codeline>
+<codeline lineno="300"><highlight class="normal">}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>clue</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp"/>
+  </compounddef>
+</doxygen>

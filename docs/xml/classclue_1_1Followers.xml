@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1Followers" kind="class" language="C++" prot="public">
+    <compoundname>clue::Followers</compoundname>
+    <templateparamlist>
+      <param>
+        <type>concepts::device</type>
+        <declname>TDev</declname>
+        <defname>TDev</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="21" column="3" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="21" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

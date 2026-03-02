@@ -1,0 +1,1139 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1AssociationMap" kind="class" language="C++" prot="public">
+    <compoundname>clue::AssociationMap</compoundname>
+    <includes refid="AssociationMap_8hpp" local="no">AssociationMap.hpp</includes>
+    <innerclass refid="structclue_1_1AssociationMap_1_1Extents" prot="public">clue::AssociationMap::Extents</innerclass>
+    <innerclass refid="structclue_1_1AssociationMap_1_1Containers" prot="public">clue::AssociationMap::Containers</innerclass>
+    <templateparamlist>
+      <param>
+        <type>concepts::device</type>
+        <declname>TDev</declname>
+        <defname>TDev</defname>
+        <defval>clue::Device</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classclue_1_1AssociationMap_1ab7640a3b2e0c7c968b4d96f3c9203eef" prot="public" static="no">
+        <type>int32_t</type>
+        <definition>using clue::AssociationMap&lt; TDev &gt;::key_type = int32_t</definition>
+        <argsstring></argsstring>
+        <name>key_type</name>
+        <qualifiedname>clue::AssociationMap::key_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="41" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classclue_1_1AssociationMap_1aeda3d00e89348a20597393103e8fab43" prot="public" static="no">
+        <type>int32_t</type>
+        <definition>using clue::AssociationMap&lt; TDev &gt;::mapped_type = int32_t</definition>
+        <argsstring></argsstring>
+        <name>mapped_type</name>
+        <qualifiedname>clue::AssociationMap::mapped_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="42" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classclue_1_1AssociationMap_1af5dad821ac129041c18b62acd305b03a" prot="public" static="no">
+        <type>std::pair&lt; key_type, mapped_type &gt;</type>
+        <definition>using clue::AssociationMap&lt; TDev &gt;::value_type = std::pair&lt;key_type, mapped_type&gt;</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>clue::AssociationMap::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="43" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classclue_1_1AssociationMap_1a274be1f44715ada258492974b84cbeb8" prot="public" static="no">
+        <type>std::size_t</type>
+        <definition>using clue::AssociationMap&lt; TDev &gt;::size_type = std::size_t</definition>
+        <argsstring></argsstring>
+        <name>size_type</name>
+        <qualifiedname>clue::AssociationMap::size_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="44" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classclue_1_1AssociationMap_1abf09e578b4ae2f5504856a47b71b4efd" prot="public" static="no">
+        <type>mapped_type *</type>
+        <definition>using clue::AssociationMap&lt; TDev &gt;::iterator = mapped_type*</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>clue::AssociationMap::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="45" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classclue_1_1AssociationMap_1aff156b743cfa5f17e130378603481da1" prot="public" static="no">
+        <type>const mapped_type *</type>
+        <definition>using clue::AssociationMap&lt; TDev &gt;::const_iterator = const mapped_type*</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>clue::AssociationMap::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="46" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classclue_1_1AssociationMap_1a6868e4cac62702a4b124b197a6d8f8f0" prot="public" static="no">
+        <type>device_buffer&lt; TDev, key_type[]&gt;</type>
+        <definition>using clue::AssociationMap&lt; TDev &gt;::keys_container_type = device_buffer&lt;TDev, key_type[]&gt;</definition>
+        <argsstring></argsstring>
+        <name>keys_container_type</name>
+        <qualifiedname>clue::AssociationMap::keys_container_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="47" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="classclue_1_1AssociationMap_1a2259bd09b88cfa6010f69b8561d2d027" prot="public" static="no">
+        <type>device_buffer&lt; TDev, mapped_type[]&gt;</type>
+        <definition>using clue::AssociationMap&lt; TDev &gt;::mapped_container_type = device_buffer&lt;TDev, mapped_type[]&gt;</definition>
+        <argsstring></argsstring>
+        <name>mapped_container_type</name>
+        <qualifiedname>clue::AssociationMap::mapped_container_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="48" column="5" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1AssociationMap_1a08340c9ec72b744086973f04f4fa8568" prot="private" static="no" mutable="no">
+        <type>device_buffer&lt; TDev, mapped_type[]&gt;</type>
+        <definition>device_buffer&lt;TDev, mapped_type[]&gt; clue::AssociationMap&lt; TDev &gt;::m_indexes</definition>
+        <argsstring></argsstring>
+        <name>m_indexes</name>
+        <qualifiedname>clue::AssociationMap::m_indexes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="169" column="19" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1AssociationMap_1a9e0159751b5c56dbd793ee5ffca18bfb" prot="private" static="no" mutable="no">
+        <type>device_buffer&lt; TDev, key_type[]&gt;</type>
+        <definition>device_buffer&lt;TDev, key_type[]&gt; clue::AssociationMap&lt; TDev &gt;::m_offsets</definition>
+        <argsstring></argsstring>
+        <name>m_offsets</name>
+        <qualifiedname>clue::AssociationMap::m_offsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="170" column="19" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1AssociationMap_1a667249d57ed8b6329bb085a3c7971a80" prot="private" static="no" mutable="no">
+        <type><ref refid="classclue_1_1AssociationMapView" kindref="compound">AssociationMapView</ref></type>
+        <definition>AssociationMapView clue::AssociationMap&lt; TDev &gt;::m_view</definition>
+        <argsstring></argsstring>
+        <name>m_view</name>
+        <qualifiedname>clue::AssociationMap::m_view</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="171" column="24" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1AssociationMap_1a330bab3eea82e864cd7502b071884d5d" prot="private" static="no" mutable="no">
+        <type><ref refid="structclue_1_1AssociationMap_1_1Extents" kindref="compound">Extents</ref></type>
+        <definition>Extents clue::AssociationMap&lt; TDev &gt;::m_extents</definition>
+        <argsstring></argsstring>
+        <name>m_extents</name>
+        <qualifiedname>clue::AssociationMap::m_extents</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="172" column="13" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a210ee89c60e4669813bdda9f0ae36517" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::AssociationMap&lt; TDev &gt;::AssociationMap</definition>
+        <argsstring>()=default</argsstring>
+        <name>AssociationMap</name>
+        <qualifiedname>clue::AssociationMap::AssociationMap</qualifiedname>
+        <briefdescription>
+<para>Construct an empty <ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="61" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a9d63d31754a9c934ab97b66b683facf3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::AssociationMap&lt; TDev &gt;::AssociationMap</definition>
+        <argsstring>(size_type nelements, size_type nbins)</argsstring>
+        <name>AssociationMap</name>
+        <qualifiedname>clue::AssociationMap::AssociationMap</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>nelements</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>nbins</declname>
+        </param>
+    <requiresclause>std::same_as&lt;TDev, alpaka::DevCpu&gt;    </requiresclause>
+        <briefdescription>
+<para>Construct an <ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref> with a specific number of elements and bins. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nelements</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of elements to allocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nbins</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of bins to allocate </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>This constructor is only available for the CPU device </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="66" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a03a2b802bb2f948a05814ee2b638f49b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>clue::AssociationMap&lt; TDev &gt;::AssociationMap</definition>
+        <argsstring>(size_type nelements, size_type nbins, TQueue &amp;queue)</argsstring>
+        <name>AssociationMap</name>
+        <qualifiedname>clue::AssociationMap::AssociationMap</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>nelements</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>nbins</declname>
+        </param>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+<para>Construct an <ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref> with a specific number of elements and bins. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nelements</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of elements to allocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nbins</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of bins to allocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue to use for the allocation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="74" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a5cc1c5519c84188e267a29a2b4be50b1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto clue::AssociationMap&lt; TDev &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>clue::AssociationMap::size</qualifiedname>
+        <briefdescription>
+<para>Return the number of bins in the map. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of bins in the map </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="79" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1aa1b1c333ac2590236db9f3fc539b5780" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto clue::AssociationMap&lt; TDev &gt;::extents</definition>
+        <argsstring>() const</argsstring>
+        <name>extents</name>
+        <qualifiedname>clue::AssociationMap::extents</qualifiedname>
+        <briefdescription>
+<para>Return the extents of the internal buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A struct containing the number of keys and values in the map </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="83" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1ae1aca74e7f7052a25e9fbd52dc19dc8b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator clue::AssociationMap&lt; TDev &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>clue::AssociationMap::begin</qualifiedname>
+        <briefdescription>
+<para>Return iterator to the beginning of the content buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An iterator to the beginning of the content buffer </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="87" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1ac80051f92121b9f57b60969c5f8cfd06" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator clue::AssociationMap&lt; TDev &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>clue::AssociationMap::begin</qualifiedname>
+        <briefdescription>
+<para>Return const iterator to the beginning of the content buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const iterator to the beginning of the content buffer </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="90" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1af590d7a186ba7b7768099cbf0765413b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator clue::AssociationMap&lt; TDev &gt;::cbegin</definition>
+        <argsstring>() const</argsstring>
+        <name>cbegin</name>
+        <qualifiedname>clue::AssociationMap::cbegin</qualifiedname>
+        <briefdescription>
+<para>Return const iterator to the beginning of the content buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const iterator to the beginning of the content buffer </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="93" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a9223f5b3a1b20eaed9480f20a3dac039" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator clue::AssociationMap&lt; TDev &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>clue::AssociationMap::end</qualifiedname>
+        <briefdescription>
+<para>Return iterator to the end of the content buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An iterator to the end of the content buffer </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="97" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a21cf216ee48cb9f0d8a2eda98f7fb0f0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator clue::AssociationMap&lt; TDev &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>clue::AssociationMap::end</qualifiedname>
+        <briefdescription>
+<para>Return const iterator to the end of the content buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const iterator to the end of the content buffer </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="100" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1aa299c6c9bbf293d0a018be2756f1a67b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator clue::AssociationMap&lt; TDev &gt;::cend</definition>
+        <argsstring>() const</argsstring>
+        <name>cend</name>
+        <qualifiedname>clue::AssociationMap::cend</qualifiedname>
+        <briefdescription>
+<para>Return const iterator to the end of the content buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const iterator to the end of the content buffer </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="103" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1ac58d89f41fa4b09035328c16860b36da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator clue::AssociationMap&lt; TDev &gt;::find</definition>
+        <argsstring>(key_type key)</argsstring>
+        <name>find</name>
+        <qualifiedname>clue::AssociationMap::find</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="108" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1ab0e38574ba06a3c68eeefa13b2ef8d4a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator clue::AssociationMap&lt; TDev &gt;::find</definition>
+        <argsstring>(key_type key) const</argsstring>
+        <name>find</name>
+        <qualifiedname>clue::AssociationMap::find</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="109" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a392897b0e8b8f2b86a0c26b7099da4f6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_type</type>
+        <definition>size_type clue::AssociationMap&lt; TDev &gt;::count</definition>
+        <argsstring>(key_type key) const</argsstring>
+        <name>count</name>
+        <qualifiedname>clue::AssociationMap::count</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Count the number of elements with the given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key to count </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The number of elements associated to a given key </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="115" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1afd8e4452830c44c34e4c2893955054c9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool clue::AssociationMap&lt; TDev &gt;::contains</definition>
+        <argsstring>(key_type key) const</argsstring>
+        <name>contains</name>
+        <qualifiedname>clue::AssociationMap::contains</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Check if the map contains elements with a given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key to check </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>True if the map contains elements with the given key, false otherwise </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="121" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1ad31e53571666e30eef68510e903d3363" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator clue::AssociationMap&lt; TDev &gt;::lower_bound</definition>
+        <argsstring>(key_type key)</argsstring>
+        <name>lower_bound</name>
+        <qualifiedname>clue::AssociationMap::lower_bound</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Get the iterator to the first element with a given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key to search for </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An iterator to the first element with the given key </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="127" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a54f37798de3521f0c92244cd9f900785" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator clue::AssociationMap&lt; TDev &gt;::lower_bound</definition>
+        <argsstring>(key_type key) const</argsstring>
+        <name>lower_bound</name>
+        <qualifiedname>clue::AssociationMap::lower_bound</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Get the const iterator to the first element with a given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key to search for </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A const iterator to the first element with the given key </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="132" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1ad641bc369531f62767066885e39e62fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>iterator</type>
+        <definition>iterator clue::AssociationMap&lt; TDev &gt;::upper_bound</definition>
+        <argsstring>(key_type key)</argsstring>
+        <name>upper_bound</name>
+        <qualifiedname>clue::AssociationMap::upper_bound</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Get the iterator to the first element with a key greater than the given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key to search for </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>An iterator to the first element with a key greater than the given key </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="138" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1ac947d4704dd03f397a682a6c587df758" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const_iterator</type>
+        <definition>const_iterator clue::AssociationMap&lt; TDev &gt;::upper_bound</definition>
+        <argsstring>(key_type key) const</argsstring>
+        <name>upper_bound</name>
+        <qualifiedname>clue::AssociationMap::upper_bound</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Get the const iterator to the first element with a key greater than the given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key to search for </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A const iterator to the first element with a key greater than the given key </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="143" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a2214fead94f7cef09fdfddb4cc4d1467" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; iterator, iterator &gt;</type>
+        <definition>std::pair&lt; iterator, iterator &gt; clue::AssociationMap&lt; TDev &gt;::equal_range</definition>
+        <argsstring>(key_type key)</argsstring>
+        <name>equal_range</name>
+        <qualifiedname>clue::AssociationMap::equal_range</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Get the range of elements with a given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key to search for </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A pair of iterators representing the range of elements with the given key </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="149" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a0e68e83e21a54ec60e6ddbcb0d2ebc04" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; const_iterator, const_iterator &gt;</type>
+        <definition>std::pair&lt; const_iterator, const_iterator &gt; clue::AssociationMap&lt; TDev &gt;::equal_range</definition>
+        <argsstring>(key_type key) const</argsstring>
+        <name>equal_range</name>
+        <qualifiedname>clue::AssociationMap::equal_range</qualifiedname>
+        <param>
+          <type>key_type</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Get the const range of elements with a given key. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The key to search for </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A pair of const iterators representing the range of elements with the given key </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="154" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a45f92263d3374178b84b626e44aa24fa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structclue_1_1AssociationMap_1_1Containers" kindref="compound">Containers</ref></type>
+        <definition>Containers clue::AssociationMap&lt; TDev &gt;::extract</definition>
+        <argsstring>() const</argsstring>
+        <name>extract</name>
+        <qualifiedname>clue::AssociationMap::extract</qualifiedname>
+        <briefdescription>
+<para>Get a const-reference to the underlying containers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A <ref refid="structclue_1_1AssociationMap_1_1Containers" kindref="compound">Containers</ref> object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="159" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1aeb715d905c892d88023a567e178f342b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>const <ref refid="classclue_1_1AssociationMapView" kindref="compound">AssociationMapView</ref> &amp;</type>
+        <definition>const AssociationMapView &amp; clue::AssociationMap&lt; TDev &gt;::view</definition>
+        <argsstring>() const</argsstring>
+        <name>view</name>
+        <qualifiedname>clue::AssociationMap::view</qualifiedname>
+        <briefdescription>
+<para>Get the constant view of the association map. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A const reference to the <ref refid="classclue_1_1AssociationMapView" kindref="compound">AssociationMapView</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="163" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1adf9012b51041bbf607a6780a54074954" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classclue_1_1AssociationMapView" kindref="compound">AssociationMapView</ref> &amp;</type>
+        <definition>AssociationMapView &amp; clue::AssociationMap&lt; TDev &gt;::view</definition>
+        <argsstring>()</argsstring>
+        <name>view</name>
+        <qualifiedname>clue::AssociationMap::view</qualifiedname>
+        <briefdescription>
+<para>Get the view of the association map. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A reference to the <ref refid="classclue_1_1AssociationMapView" kindref="compound">AssociationMapView</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="166" column="24"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a7d1c2b76f6d8c55275199d43d6374032" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST void</type>
+        <definition>ALPAKA_FN_HOST void clue::AssociationMap&lt; TDev &gt;::initialize</definition>
+        <argsstring>(size_type nelements, size_type nbins)</argsstring>
+        <name>initialize</name>
+        <qualifiedname>clue::AssociationMap::initialize</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>nelements</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>nbins</declname>
+        </param>
+    <requiresclause>std::same_as&lt;TDev, alpaka::DevCpu&gt;    </requiresclause>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="174" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a6b41c241092381df6744c41bb5c567af" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_HOST void</type>
+        <definition>ALPAKA_FN_HOST void clue::AssociationMap&lt; TDev &gt;::initialize</definition>
+        <argsstring>(size_type nelements, size_type nbins, TQueue &amp;queue)</argsstring>
+        <name>initialize</name>
+        <qualifiedname>clue::AssociationMap::initialize</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>nelements</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>nbins</declname>
+        </param>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="177" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1ae8bdd29191e460f14da5bc5e883848b8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST void</type>
+        <definition>ALPAKA_FN_HOST void clue::AssociationMap&lt; TDev &gt;::reset</definition>
+        <argsstring>(size_type nelements, size_type nbins)</argsstring>
+        <name>reset</name>
+        <qualifiedname>clue::AssociationMap::reset</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>nelements</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>nbins</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="179" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a2372a7435326ffdc8ebcc9b9c609835c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::accelerator</type>
+            <declname>TAcc</declname>
+            <defname>TAcc</defname>
+          </param>
+          <param>
+            <type>typename TFunc</type>
+          </param>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_HOST void</type>
+        <definition>ALPAKA_FN_HOST void clue::AssociationMap&lt; TDev &gt;::fill</definition>
+        <argsstring>(size_type size, TFunc func, TQueue &amp;queue)</argsstring>
+        <name>fill</name>
+        <qualifiedname>clue::AssociationMap::fill</qualifiedname>
+        <param>
+          <type>size_type</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>TFunc</type>
+          <declname>func</declname>
+        </param>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="182" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a4ed4e85ae193f45531a2219d0b3e4f84" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST void</type>
+        <definition>ALPAKA_FN_HOST void clue::AssociationMap&lt; TDev &gt;::fill</definition>
+        <argsstring>(std::span&lt; const key_type &gt; associations)</argsstring>
+        <name>fill</name>
+        <qualifiedname>clue::AssociationMap::fill</qualifiedname>
+        <param>
+          <type>std::span&lt; const key_type &gt;</type>
+          <declname>associations</declname>
+        </param>
+    <requiresclause>std::same_as&lt;TDev, alpaka::DevCpu&gt;    </requiresclause>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="183" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1aa65517595b3debee558c1698bca046ed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::accelerator</type>
+            <declname>TAcc</declname>
+            <defname>TAcc</defname>
+          </param>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_HOST void</type>
+        <definition>ALPAKA_FN_HOST void clue::AssociationMap&lt; TDev &gt;::fill</definition>
+        <argsstring>(size_type, std::span&lt; const key_type &gt; associations, TQueue &amp;queue)</argsstring>
+        <name>fill</name>
+        <qualifiedname>clue::AssociationMap::fill</qualifiedname>
+        <param>
+          <type>size_type</type>
+        </param>
+        <param>
+          <type>std::span&lt; const key_type &gt;</type>
+          <declname>associations</declname>
+        </param>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="186" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1ab2a7f9bade598959612fc3c9acb4e5a4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>concepts::accelerator</type>
+            <declname>TAcc</declname>
+            <defname>TAcc</defname>
+          </param>
+          <param>
+            <type>concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>typename TFunc</type>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_HOST void</type>
+        <definition>ALPAKA_FN_HOST void clue::AssociationMap&lt; TDev &gt;::fill_batch</definition>
+        <argsstring>(TQueue &amp;queue, size_type size, TFunc func, const auto &amp;event_offsets, std::size_t max_event_size)</argsstring>
+        <name>fill_batch</name>
+        <qualifiedname>clue::AssociationMap::fill_batch</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>size_type</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>TFunc</type>
+          <declname>func</declname>
+        </param>
+        <param>
+          <type>const auto &amp;</type>
+          <declname>event_offsets</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>max_event_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="188" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a21749e604b0bad9f81cf354c58b796bc" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST const auto &amp;</type>
+        <definition>ALPAKA_FN_HOST const auto &amp; clue::AssociationMap&lt; TDev &gt;::indexes</definition>
+        <argsstring>() const</argsstring>
+        <name>indexes</name>
+        <qualifiedname>clue::AssociationMap::indexes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="194" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a609c8abb7e698a8bb9b7a92460f96575" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST auto &amp;</type>
+        <definition>ALPAKA_FN_HOST auto &amp; clue::AssociationMap&lt; TDev &gt;::indexes</definition>
+        <argsstring>()</argsstring>
+        <name>indexes</name>
+        <qualifiedname>clue::AssociationMap::indexes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="195" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a888af7761de4f63c6ba84dd9f8a06102" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST const device_buffer&lt; TDev, int32_t[]&gt; &amp;</type>
+        <definition>ALPAKA_FN_HOST const device_buffer&lt; TDev, int32_t[]&gt; &amp; clue::AssociationMap&lt; TDev &gt;::offsets</definition>
+        <argsstring>() const</argsstring>
+        <name>offsets</name>
+        <qualifiedname>clue::AssociationMap::offsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="197" column="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AssociationMap_1a97dedc4455a78389ba5c6eaccecfbd2d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST device_buffer&lt; TDev, int32_t[]&gt; &amp;</type>
+        <definition>ALPAKA_FN_HOST device_buffer&lt; TDev, int32_t[]&gt; &amp; clue::AssociationMap&lt; TDev &gt;::offsets</definition>
+        <argsstring>()</argsstring>
+        <name>offsets</name>
+        <qualifiedname>clue::AssociationMap::offsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="198" column="34"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>The <ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref> class is a data structure that maps keys to values. It associates integer keys with integer values in ono-to-many or many-to-many associations. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TDev</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The device type to use for the allocation. Defaults to clue::Device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="39" column="3" bodyfile="include/CLUEstering/data_structures/AssociationMap.hpp" bodystart="39" bodyend="211"/>
+    <listofallmembers>
+      <member refid="classclue_1_1AssociationMap_1a210ee89c60e4669813bdda9f0ae36517" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>AssociationMap</name></member>
+      <member refid="classclue_1_1AssociationMap_1a9d63d31754a9c934ab97b66b683facf3" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>AssociationMap</name></member>
+      <member refid="classclue_1_1AssociationMap_1a03a2b802bb2f948a05814ee2b638f49b" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>AssociationMap</name></member>
+      <member refid="classclue_1_1AssociationMap_1ae1aca74e7f7052a25e9fbd52dc19dc8b" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>begin</name></member>
+      <member refid="classclue_1_1AssociationMap_1ac80051f92121b9f57b60969c5f8cfd06" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>begin</name></member>
+      <member refid="classclue_1_1AssociationMap_1af590d7a186ba7b7768099cbf0765413b" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>cbegin</name></member>
+      <member refid="classclue_1_1AssociationMap_1aa299c6c9bbf293d0a018be2756f1a67b" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>cend</name></member>
+      <member refid="classclue_1_1AssociationMap_1aff156b743cfa5f17e130378603481da1" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>const_iterator</name></member>
+      <member refid="classclue_1_1AssociationMap_1afd8e4452830c44c34e4c2893955054c9" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>contains</name></member>
+      <member refid="classclue_1_1AssociationMap_1a392897b0e8b8f2b86a0c26b7099da4f6" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>count</name></member>
+      <member refid="classclue_1_1AssociationMap_1a9223f5b3a1b20eaed9480f20a3dac039" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>end</name></member>
+      <member refid="classclue_1_1AssociationMap_1a21cf216ee48cb9f0d8a2eda98f7fb0f0" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>end</name></member>
+      <member refid="classclue_1_1AssociationMap_1a2214fead94f7cef09fdfddb4cc4d1467" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>equal_range</name></member>
+      <member refid="classclue_1_1AssociationMap_1a0e68e83e21a54ec60e6ddbcb0d2ebc04" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>equal_range</name></member>
+      <member refid="classclue_1_1AssociationMap_1aa1b1c333ac2590236db9f3fc539b5780" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>extents</name></member>
+      <member refid="classclue_1_1AssociationMap_1a45f92263d3374178b84b626e44aa24fa" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>extract</name></member>
+      <member refid="classclue_1_1AssociationMap_1a2372a7435326ffdc8ebcc9b9c609835c" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>fill</name></member>
+      <member refid="classclue_1_1AssociationMap_1a4ed4e85ae193f45531a2219d0b3e4f84" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>fill</name></member>
+      <member refid="classclue_1_1AssociationMap_1aa65517595b3debee558c1698bca046ed" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>fill</name></member>
+      <member refid="classclue_1_1AssociationMap_1ab2a7f9bade598959612fc3c9acb4e5a4" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>fill_batch</name></member>
+      <member refid="classclue_1_1AssociationMap_1ac58d89f41fa4b09035328c16860b36da" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>find</name></member>
+      <member refid="classclue_1_1AssociationMap_1ab0e38574ba06a3c68eeefa13b2ef8d4a" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>find</name></member>
+      <member refid="classclue_1_1AssociationMap_1a21749e604b0bad9f81cf354c58b796bc" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>indexes</name></member>
+      <member refid="classclue_1_1AssociationMap_1a609c8abb7e698a8bb9b7a92460f96575" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>indexes</name></member>
+      <member refid="classclue_1_1AssociationMap_1a7d1c2b76f6d8c55275199d43d6374032" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>initialize</name></member>
+      <member refid="classclue_1_1AssociationMap_1a6b41c241092381df6744c41bb5c567af" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>initialize</name></member>
+      <member refid="classclue_1_1AssociationMap_1abf09e578b4ae2f5504856a47b71b4efd" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>iterator</name></member>
+      <member refid="classclue_1_1AssociationMap_1ab7640a3b2e0c7c968b4d96f3c9203eef" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>key_type</name></member>
+      <member refid="classclue_1_1AssociationMap_1a6868e4cac62702a4b124b197a6d8f8f0" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>keys_container_type</name></member>
+      <member refid="classclue_1_1AssociationMap_1ad31e53571666e30eef68510e903d3363" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>lower_bound</name></member>
+      <member refid="classclue_1_1AssociationMap_1a54f37798de3521f0c92244cd9f900785" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>lower_bound</name></member>
+      <member refid="classclue_1_1AssociationMap_1a330bab3eea82e864cd7502b071884d5d" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>m_extents</name></member>
+      <member refid="classclue_1_1AssociationMap_1a08340c9ec72b744086973f04f4fa8568" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>m_indexes</name></member>
+      <member refid="classclue_1_1AssociationMap_1a9e0159751b5c56dbd793ee5ffca18bfb" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>m_offsets</name></member>
+      <member refid="classclue_1_1AssociationMap_1a667249d57ed8b6329bb085a3c7971a80" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>m_view</name></member>
+      <member refid="classclue_1_1AssociationMap_1a2259bd09b88cfa6010f69b8561d2d027" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>mapped_container_type</name></member>
+      <member refid="classclue_1_1AssociationMap_1aeda3d00e89348a20597393103e8fab43" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>mapped_type</name></member>
+      <member refid="classclue_1_1AssociationMap_1a888af7761de4f63c6ba84dd9f8a06102" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>offsets</name></member>
+      <member refid="classclue_1_1AssociationMap_1a97dedc4455a78389ba5c6eaccecfbd2d" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>offsets</name></member>
+      <member refid="classclue_1_1AssociationMap_1ae8bdd29191e460f14da5bc5e883848b8" prot="private" virt="non-virtual"><scope>clue::AssociationMap</scope><name>reset</name></member>
+      <member refid="classclue_1_1AssociationMap_1a5cc1c5519c84188e267a29a2b4be50b1" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>size</name></member>
+      <member refid="classclue_1_1AssociationMap_1a274be1f44715ada258492974b84cbeb8" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>size_type</name></member>
+      <member refid="classclue_1_1AssociationMap_1ad641bc369531f62767066885e39e62fe" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>upper_bound</name></member>
+      <member refid="classclue_1_1AssociationMap_1ac947d4704dd03f397a682a6c587df758" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>upper_bound</name></member>
+      <member refid="classclue_1_1AssociationMap_1af5dad821ac129041c18b62acd305b03a" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>value_type</name></member>
+      <member refid="classclue_1_1AssociationMap_1aeb715d905c892d88023a567e178f342b" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>view</name></member>
+      <member refid="classclue_1_1AssociationMap_1adf9012b51041bbf607a6780a54074954" prot="public" virt="non-virtual"><scope>clue::AssociationMap</scope><name>view</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

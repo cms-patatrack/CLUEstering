@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1ManhattanMetric" kind="class" language="C++" prot="public">
+    <compoundname>clue::ManhattanMetric</compoundname>
+    <includes refid="DistanceMetrics_8hpp" local="no">DistanceMetrics.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+      <param>
+        <type>std::floating_point</type>
+        <declname>TData</declname>
+        <defname>TData</defname>
+        <defval>float</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classclue_1_1ManhattanMetric_1a7b584eb16586942c9c9628856405e53d" prot="public" static="no">
+        <type>std::remove_cv_t&lt; std::remove_reference_t&lt; TData &gt; &gt;</type>
+        <definition>using clue::ManhattanMetric&lt; Ndim, TData &gt;::value_type = std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>clue::ManhattanMetric::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="165" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1ManhattanMetric_1acd79e167d0d1f798bfb21bbd32d06db3" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::ManhattanMetric&lt; Ndim, TData &gt;::ManhattanMetric</definition>
+        <argsstring>()</argsstring>
+        <name>ManhattanMetric</name>
+        <qualifiedname>clue::ManhattanMetric::ManhattanMetric</qualifiedname>
+        <briefdescription>
+<para>Default constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="168" column="34" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="168" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1ManhattanMetric_1a09a1cf4150e6c4cf5c04d296dcce6967" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr auto</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr auto clue::ManhattanMetric&lt; Ndim, TData &gt;::operator()</definition>
+        <argsstring>(const Point&lt; Ndim, value_type &gt; &amp;lhs, const Point&lt; Ndim, value_type &gt; &amp;rhs) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>clue::ManhattanMetric::operator()</qualifiedname>
+        <param>
+          <type>const Point&lt; Ndim, value_type &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>const Point&lt; Ndim, value_type &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Compute the Manhattan distance between two points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>lhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>First point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Second point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Manhattan distance between the two points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="175" column="46" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="175" bodyend="179"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Manhattan distance metric This class implements the Manhattan distance metric in Ndim dimensions. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of dimensions </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Data type for the coordinates </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="163" column="3" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="163" bodyend="180"/>
+    <listofallmembers>
+      <member refid="classclue_1_1ManhattanMetric_1acd79e167d0d1f798bfb21bbd32d06db3" prot="public" virt="non-virtual"><scope>clue::ManhattanMetric</scope><name>ManhattanMetric</name></member>
+      <member refid="classclue_1_1ManhattanMetric_1a09a1cf4150e6c4cf5c04d296dcce6967" prot="public" virt="non-virtual"><scope>clue::ManhattanMetric</scope><name>operator()</name></member>
+      <member refid="classclue_1_1ManhattanMetric_1a7b584eb16586942c9c9628856405e53d" prot="public" virt="non-virtual"><scope>clue::ManhattanMetric</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

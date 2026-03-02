@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1ClusterProperties" kind="class" language="C++" prot="public">
+    <compoundname>clue::ClusterProperties</compoundname>
+    <includes refid="ClusterProperties_8hpp" local="no">ClusterProperties.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1ClusterProperties_1af69aaba43521008ef661a94af7dea8ae" prot="private" static="no" mutable="no">
+        <type>host_associator</type>
+        <definition>host_associator clue::ClusterProperties::m_clusters_to_points</definition>
+        <argsstring></argsstring>
+        <name>m_clusters_to_points</name>
+        <qualifiedname>clue::ClusterProperties::m_clusters_to_points</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/ClusterProperties.hpp" line="24" column="21" bodyfile="include/CLUEstering/data_structures/ClusterProperties.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1ClusterProperties_1a409a725979925df47dd37aa9d783bdf2" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::size_t &gt;</type>
+        <definition>std::vector&lt;std::size_t&gt; clue::ClusterProperties::m_cluster_sizes</definition>
+        <argsstring></argsstring>
+        <name>m_cluster_sizes</name>
+        <qualifiedname>clue::ClusterProperties::m_cluster_sizes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/ClusterProperties.hpp" line="25" column="17" bodyfile="include/CLUEstering/data_structures/ClusterProperties.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1ClusterProperties_1a365610ebb2692dea8b27861a26af37fe" prot="private" static="no" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t clue::ClusterProperties::m_nclusters</definition>
+        <argsstring></argsstring>
+        <name>m_nclusters</name>
+        <qualifiedname>clue::ClusterProperties::m_nclusters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/ClusterProperties.hpp" line="26" column="17" bodyfile="include/CLUEstering/data_structures/ClusterProperties.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classclue_1_1ClusterProperties_1ae71458b5280efe95bd41975c8f3d992c" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>clue::ClusterProperties::ClusterProperties</definition>
+        <argsstring>(std::span&lt; const int &gt; cluster_indexes)</argsstring>
+        <name>ClusterProperties</name>
+        <qualifiedname>clue::ClusterProperties::ClusterProperties</qualifiedname>
+        <param>
+          <type>std::span&lt; const int &gt;</type>
+          <declname>cluster_indexes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/ClusterProperties.hpp" line="28" column="5" bodyfile="include/CLUEstering/data_structures/ClusterProperties.hpp" bodystart="28" bodyend="35"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1ClusterProperties_1a96fa8095683f30afe94c8a4adcf6e285" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; clue::ClusterProperties::cluster_sizes</definition>
+        <argsstring>() const</argsstring>
+        <name>cluster_sizes</name>
+        <qualifiedname>clue::ClusterProperties::cluster_sizes</qualifiedname>
+        <briefdescription>
+<para>Returns a vector containing the sizes of each cluster. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>A vector of containing the sizes of each cluster </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/ClusterProperties.hpp" line="41" column="16" bodyfile="include/CLUEstering/data_structures/ClusterProperties.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1ClusterProperties_1ad74e511195db4b296cdfd25555984238" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; clue::ClusterProperties::clusters</definition>
+        <argsstring>() const</argsstring>
+        <name>clusters</name>
+        <qualifiedname>clue::ClusterProperties::clusters</qualifiedname>
+        <briefdescription>
+<para>Returns an associator mapping clusters to their associated points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An host_associator mapping clusters to points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/ClusterProperties.hpp" line="45" column="16" bodyfile="include/CLUEstering/data_structures/ClusterProperties.hpp" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1ClusterProperties_1a0221d05133958263121670b9fc976eca" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const auto &amp;</type>
+        <definition>const auto &amp; clue::ClusterProperties::n_clusters</definition>
+        <argsstring>() const</argsstring>
+        <name>n_clusters</name>
+        <qualifiedname>clue::ClusterProperties::n_clusters</qualifiedname>
+        <briefdescription>
+<para>Returns the number of clusters. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of clusters </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/ClusterProperties.hpp" line="49" column="16" bodyfile="include/CLUEstering/data_structures/ClusterProperties.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>The <ref refid="classclue_1_1ClusterProperties" kindref="compound">ClusterProperties</ref> class provides access to the properties of clusters such as the number of clusters, the size of each cluster and point associations. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/data_structures/ClusterProperties.hpp" line="22" column="3" bodyfile="include/CLUEstering/data_structures/ClusterProperties.hpp" bodystart="22" bodyend="56"/>
+    <listofallmembers>
+      <member refid="classclue_1_1ClusterProperties_1a96fa8095683f30afe94c8a4adcf6e285" prot="public" virt="non-virtual"><scope>clue::ClusterProperties</scope><name>cluster_sizes</name></member>
+      <member refid="classclue_1_1ClusterProperties_1ae71458b5280efe95bd41975c8f3d992c" prot="private" virt="non-virtual"><scope>clue::ClusterProperties</scope><name>ClusterProperties</name></member>
+      <member refid="classclue_1_1ClusterProperties_1ad74e511195db4b296cdfd25555984238" prot="public" virt="non-virtual"><scope>clue::ClusterProperties</scope><name>clusters</name></member>
+      <member refid="classclue_1_1ClusterProperties_1a409a725979925df47dd37aa9d783bdf2" prot="private" virt="non-virtual"><scope>clue::ClusterProperties</scope><name>m_cluster_sizes</name></member>
+      <member refid="classclue_1_1ClusterProperties_1af69aaba43521008ef661a94af7dea8ae" prot="private" virt="non-virtual"><scope>clue::ClusterProperties</scope><name>m_clusters_to_points</name></member>
+      <member refid="classclue_1_1ClusterProperties_1a365610ebb2692dea8b27861a26af37fe" prot="private" virt="non-virtual"><scope>clue::ClusterProperties</scope><name>m_nclusters</name></member>
+      <member refid="classclue_1_1ClusterProperties_1a0221d05133958263121670b9fc976eca" prot="public" virt="non-virtual"><scope>clue::ClusterProperties</scope><name>n_clusters</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

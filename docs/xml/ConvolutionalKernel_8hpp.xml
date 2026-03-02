@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="ConvolutionalKernel_8hpp" kind="file" language="C++">
+    <compoundname>ConvolutionalKernel.hpp</compoundname>
+    <includes local="yes">CLUEstering/core/detail/defines.hpp</includes>
+    <includes local="no">alpaka/alpaka.hpp</includes>
+    <includes local="no">concepts</includes>
+    <includes local="no">type_traits</includes>
+    <includes local="yes">CLUEstering/core/detail/ConvolutionalKernel.hpp</includes>
+    <includedby refid="CLUEstering_8hpp" local="yes">include/CLUEstering/CLUEstering.hpp</includedby>
+    <includedby refid="Clusterer_8hpp" local="yes">include/CLUEstering/core/Clusterer.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/CLUEstering/core/ConvolutionalKernel.hpp</label>
+        <link refid="ConvolutionalKernel_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>CLUEstering/core/detail/ConvolutionalKernel.hpp</label>
+      </node>
+      <node id="2">
+        <label>CLUEstering/core/detail/defines.hpp</label>
+      </node>
+      <node id="3">
+        <label>alpaka/alpaka.hpp</label>
+      </node>
+      <node id="4">
+        <label>concepts</label>
+      </node>
+      <node id="5">
+        <label>type_traits</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>include/CLUEstering/CLUEstering.hpp</label>
+        <link refid="CLUEstering_8hpp"/>
+      </node>
+      <node id="3">
+        <label>include/CLUEstering/core/Clusterer.hpp</label>
+        <link refid="Clusterer_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/CLUEstering/core/ConvolutionalKernel.hpp</label>
+        <link refid="ConvolutionalKernel_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classclue_1_1FlatKernel" prot="public">clue::FlatKernel</innerclass>
+    <innerclass refid="classclue_1_1GaussianKernel" prot="public">clue::GaussianKernel</innerclass>
+    <innerclass refid="classclue_1_1ExponentialKernel" prot="public">clue::ExponentialKernel</innerclass>
+    <innerconcept refid="conceptclue_1_1concepts_1_1convolutional__kernel">clue::concepts::convolutional_kernel</innerconcept>
+    <innernamespace refid="namespaceclue">clue</innernamespace>
+    <innernamespace refid="namespaceclue_1_1concepts">clue::concepts</innernamespace>
+    <briefdescription>
+<para>Provides the kernel classes for the convolution done when computing the weighted density of the points. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="authors"><para>Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/core/detail/defines.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;alpaka/alpaka.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;concepts&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;type_traits&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">clue<sp/>{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="19" refid="classclue_1_1FlatKernel" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1FlatKernel_1aad675ebe4796ac4525af1102cc7425d6" kindref="member">FlatKernel</ref><sp/>{</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>value_type<sp/>m_flat;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="30" refid="classclue_1_1FlatKernel_1aad675ebe4796ac4525af1102cc7425d6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1FlatKernel_1aad675ebe4796ac4525af1102cc7425d6" kindref="member">FlatKernel</ref>(value_type<sp/>flat);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>TAcc&gt;</highlight></codeline>
+<codeline lineno="40" refid="classclue_1_1FlatKernel_1acd17cb86148f4b948a09c52a3787948c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_ACC<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1FlatKernel_1acd17cb86148f4b948a09c52a3787948c" kindref="member">operator()</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TAcc&amp;<sp/>acc,<sp/>value_type<sp/>dist_ij,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>point_id,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="48" refid="classclue_1_1GaussianKernel" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1GaussianKernel_1a41ec947ef34f699be131662948998040" kindref="member">GaussianKernel</ref><sp/>{</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>value_type<sp/>m_gaus_avg;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>value_type<sp/>m_gaus_std;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>value_type<sp/>m_gaus_amplitude;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="63" refid="classclue_1_1GaussianKernel_1a41ec947ef34f699be131662948998040" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1GaussianKernel_1a41ec947ef34f699be131662948998040" kindref="member">GaussianKernel</ref>(value_type<sp/>gaus_avg,<sp/>value_type<sp/>gaus_std,<sp/>value_type<sp/>gaus_amplitude);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>TAcc&gt;</highlight></codeline>
+<codeline lineno="73" refid="classclue_1_1GaussianKernel_1a1ce68adbf808f00fee8f38f2f84fd5b5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_ACC<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1GaussianKernel_1a1ce68adbf808f00fee8f38f2f84fd5b5" kindref="member">operator()</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TAcc&amp;<sp/>acc,<sp/>value_type<sp/>dist_ij,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>point_id,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline lineno="81" refid="classclue_1_1ExponentialKernel" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1ExponentialKernel_1a8be995a46df8263ea09dedf9bc0b03b7" kindref="member">ExponentialKernel</ref><sp/>{</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>value_type<sp/>m_exp_avg;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>value_type<sp/>m_exp_amplitude;</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="94" refid="classclue_1_1ExponentialKernel_1a8be995a46df8263ea09dedf9bc0b03b7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1ExponentialKernel_1a8be995a46df8263ea09dedf9bc0b03b7" kindref="member">ExponentialKernel</ref>(value_type<sp/>exp_avg,<sp/>value_type<sp/>exp_amplitude);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>TAcc&gt;</highlight></codeline>
+<codeline lineno="104" refid="classclue_1_1ExponentialKernel_1ae21e79f1fdb240caed86b36d7135b97f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_ACC<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1ExponentialKernel_1ae21e79f1fdb240caed86b36d7135b97f" kindref="member">operator()</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>TAcc&amp;<sp/>acc,<sp/>value_type<sp/>dist_ij,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>point_id,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">concepts<sp/>{</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>TKernel&gt;</highlight></codeline>
+<codeline lineno="111" refid="conceptclue_1_1concepts_1_1convolutional__kernel" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">concept<sp/></highlight><highlight class="normal"><ref refid="conceptclue_1_1concepts_1_1convolutional__kernel" kindref="compound">convolutional_kernel</ref><sp/>=</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(TKernel&amp;&amp;<sp/>kernel,</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>internal::Acc&amp;<sp/>acc,</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>std::remove_cvref_t&lt;TKernel&gt;::value_type<sp/>distance,</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>point_i,</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>point_j)<sp/>{</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{<sp/>kernel(acc,<sp/>distance,<sp/>point_i,<sp/>point_j)<sp/>};</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/>}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>concepts</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal">}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>clue</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/core/detail/ConvolutionalKernel.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="include/CLUEstering/core/ConvolutionalKernel.hpp"/>
+  </compounddef>
+</doxygen>
