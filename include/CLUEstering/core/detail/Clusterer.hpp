@@ -104,7 +104,9 @@ namespace clue {
     auto d_points = clue::PointsDevice<Ndim, value_type>(queue, h_points.size());
 
     setup(queue, h_points, d_points);
-    make_clusters_impl(h_points, d_points, metric, kernel, queue, block_size);
+    make_clusters_impl(d_points, metric, kernel, queue, block_size);
+    clue::copyToHost(queue, h_points, d_points);
+    h_points.mark_clustered();
     alpaka::wait(queue);
   }
   template <std::size_t Ndim, std::floating_point DataType>
@@ -120,7 +122,9 @@ namespace clue {
     auto d_points = clue::PointsDevice<Ndim, value_type>(queue, h_points.size());
 
     setup(queue, h_points, d_points);
-    make_clusters_impl(h_points, d_points, metric, kernel, queue, block_size);
+    make_clusters_impl(d_points, metric, kernel, queue, block_size);
+    clue::copyToHost(queue, h_points, d_points);
+    h_points.mark_clustered();
     alpaka::wait(queue);
   }
   template <std::size_t Ndim, std::floating_point DataType>
@@ -135,7 +139,9 @@ namespace clue {
       const Kernel& kernel,
       std::size_t block_size) {
     setup(queue, h_points, dev_points);
-    make_clusters_impl(h_points, dev_points, metric, kernel, queue, block_size);
+    make_clusters_impl(dev_points, metric, kernel, queue, block_size);
+    clue::copyToHost(queue, h_points, dev_points);
+    h_points.mark_clustered();
     alpaka::wait(queue);
   }
   template <std::size_t Ndim, std::floating_point DataType>
@@ -237,54 +243,6 @@ namespace clue {
         queue,
         std::span<const std::int32_t>{m_event_associations->data(), d_points.n_clusters()},
         d_points.n_clusters());
-  }
-
-  template <std::size_t Ndim, std::floating_point DataType>
-  template <std::floating_point InputType,
-            concepts::convolutional_kernel Kernel,
-            concepts::distance_metric<Ndim> DistanceMetric>
-  void Clusterer<Ndim, DataType>::make_clusters_impl(
-      clue::PointsHost<Ndim, InputType>& h_points,
-      clue::PointsDevice<Ndim, value_type>& dev_points,
-      const DistanceMetric& metric,
-      const Kernel& kernel,
-      Queue& queue,
-      std::size_t block_size) {
-    const auto n_points = h_points.size();
-    m_tiles->template fill<internal::Acc>(queue, dev_points, n_points);
-
-    const Idx grid_size = nostd::ceil_div(n_points, block_size);
-    auto work_division = clue::make_workdiv<internal::Acc>(grid_size, block_size);
-
-    detail::computeLocalDensity<internal::Acc>(
-        queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, metric, n_points);
-    auto seed_candidates = std::size_t{0};
-    detail::computeNearestHighers<internal::Acc>(queue,
-                                                 work_division,
-                                                 m_tiles->view(),
-                                                 dev_points.view(),
-                                                 m_dm,
-                                                 metric,
-                                                 seed_candidates,
-                                                 n_points);
-    detail::setup_seeds(queue, m_seeds, seed_candidates);
-    detail::findClusterSeeds<internal::Acc>(queue,
-                                            work_division,
-                                            m_seeds.value(),
-                                            dev_points.view(),
-                                            m_seed_dc,
-                                            metric,
-                                            m_rhoc,
-                                            n_points);
-
-    m_followers->template fill<internal::Acc>(queue, dev_points);
-
-    detail::assignPointsToClusters<internal::Acc>(
-        queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
-
-    clue::copyToHost(queue, h_points, dev_points);
-    h_points.mark_clustered();
-    dev_points.mark_clustered();
   }
 
   template <std::size_t Ndim, std::floating_point DataType>

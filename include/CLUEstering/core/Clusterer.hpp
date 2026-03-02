@@ -86,16 +86,6 @@ namespace clue {
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<>,
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-    void make_clusters_impl(clue::PointsHost<Ndim, InputType>& h_points,
-                            clue::PointsDevice<Ndim, value_type>& dev_points,
-                            const DistanceMetric& metric,
-                            const Kernel& kernel,
-                            Queue& queue,
-                            std::size_t block_size);
-    template <
-        std::floating_point InputType,
-        concepts::convolutional_kernel Kernel = FlatKernel<>,
-        concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
     void make_clusters_impl(clue::PointsDevice<Ndim, InputType>& dev_points,
                             const DistanceMetric& metric,
                             const Kernel& kernel,
