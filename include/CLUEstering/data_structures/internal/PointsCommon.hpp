@@ -98,10 +98,7 @@ namespace clue {
       return coord_spans;
     }
     ALPAKA_FN_HOST_ACC auto weights() const { return std::span<const value_type>(m_weight, m_n); }
-    ALPAKA_FN_HOST_ACC auto weights() {
-      auto& view = *this;
-      return std::span<value_type>(m_weight, m_n);
-    }
+    ALPAKA_FN_HOST_ACC auto weights() { return std::span<value_type>(m_weight, m_n); }
     ALPAKA_FN_HOST_ACC auto cluster_index() const {
       assert(m_cluster_index != nullptr &&
              "The cluster indexes have not been allocated yet, so they cannot be accessed");
