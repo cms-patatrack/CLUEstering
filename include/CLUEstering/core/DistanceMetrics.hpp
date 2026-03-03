@@ -74,14 +74,6 @@ namespace clue {
     ///
     /// @param weights Weights for each dimension
     /// @return WeightedEuclideanMetric object
-    template <std::floating_point... TValues>
-      requires(sizeof...(TValues) == Ndim)
-    ALPAKA_FN_HOST_ACC constexpr WeightedEuclideanMetric(TValues... weights)
-        : m_weights{weights...} {}
-    /// @brief Constructor euclidian metric with weights
-    ///
-    /// @param weights Weights for each dimension
-    /// @return WeightedEuclideanMetric object
     ALPAKA_FN_HOST_ACC constexpr WeightedEuclideanMetric(const std::array<value_type, Ndim>& weights)
         : m_weights{weights} {}
     /// @brief Move constructor euclidian metric with weights
@@ -90,6 +82,14 @@ namespace clue {
     /// @return WeightedEuclideanMetric object
     ALPAKA_FN_HOST_ACC constexpr WeightedEuclideanMetric(std::array<value_type, Ndim>&& weights)
         : m_weights{std::move(weights)} {}
+    /// @brief Constructor euclidian metric with weights
+    ///
+    /// @param weights Weights for each dimension
+    /// @return WeightedEuclideanMetric object
+    template <std::floating_point... TValues>
+      requires(sizeof...(TValues) == Ndim)
+    ALPAKA_FN_HOST_ACC constexpr WeightedEuclideanMetric(TValues... weights)
+        : m_weights{weights...} {}
 
     /// @brief Compute the Weighted Euclidean distance between two points
     ///
@@ -137,6 +137,15 @@ namespace clue {
     /// @return PeriodicEuclideanMetric object
     ALPAKA_FN_HOST_ACC constexpr PeriodicEuclideanMetric(std::array<value_type, Ndim>&& periods)
         : m_periods{std::move(periods)} {}
+    /// @brief Constructor periodic euclidian metric with periods
+    ///
+    /// @param periods Periods for each dimension
+    /// If a coordinate is not periodic, the corresponding period should be set to 0.f
+    /// @return PeriodicEuclideanMetric object
+    template <std::floating_point... TValues>
+      requires(sizeof...(TValues) == Ndim)
+    ALPAKA_FN_HOST_ACC constexpr PeriodicEuclideanMetric(TValues... periods)
+        : m_periods{periods...} {}
 
     /// @brief Compute the Periodic Euclidean distance between two points
     ///
@@ -222,14 +231,6 @@ namespace clue {
     ///
     /// @param weights Weights for each dimension
     /// @return WeightedChebyshevMetric object
-    template <std::floating_point... TValues>
-      requires(sizeof...(TValues) == Ndim)
-    ALPAKA_FN_HOST_ACC constexpr WeightedChebyshevMetric(TValues... weights)
-        : m_weights{weights...} {}
-    /// @brief Constructor weighted chebyshev metric with weights
-    ///
-    /// @param weights Weights for each dimension
-    /// @return WeightedChebyshevMetric object
     ALPAKA_FN_HOST_ACC constexpr WeightedChebyshevMetric(const std::array<value_type, Ndim>& weights)
         : m_weights{weights} {}
     /// @brief Move constructor weighted chebyshev metric with weights
@@ -238,6 +239,14 @@ namespace clue {
     /// @return WeightedChebyshevMetric object
     ALPAKA_FN_HOST_ACC constexpr WeightedChebyshevMetric(std::array<value_type, Ndim>&& weights)
         : m_weights{std::move(weights)} {}
+    /// @brief Constructor weighted chebyshev metric with weights
+    ///
+    /// @param weights Weights for each dimension
+    /// @return WeightedChebyshevMetric object
+    template <std::floating_point... TValues>
+      requires(sizeof...(TValues) == Ndim)
+    ALPAKA_FN_HOST_ACC constexpr WeightedChebyshevMetric(TValues... weights)
+        : m_weights{weights...} {}
 
     /// @brief Compute the Weighted Chebyshev distance between two points
     ///
