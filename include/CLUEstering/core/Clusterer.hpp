@@ -41,10 +41,10 @@ namespace clue {
     using value_type = std::remove_cv_t<std::remove_reference_t<DataType>>;
 
   private:
-    value_type m_dc;
-    value_type m_seed_dc;
-    value_type m_rhoc;
-    value_type m_dm;
+    value_type m_density_radius;
+    value_type m_seeding_distance;
+    value_type m_min_density;
+    value_type m_outlier_distance;
     int m_pointsPerTile;  // average number of points found in a tile
     std::array<uint8_t, Ndim> m_wrappedCoordinates;
 
@@ -105,42 +105,42 @@ namespace clue {
   public:
     /// @brief Constuct a Clusterer object
     ///
-    /// @param dc Distance threshold for clustering.
-    /// @param rhoc Density threshold for clustering
-    /// @param dm Minimum distance between clusters. This parameter is optional and by default dc is used.
-    /// @param seed_dc Distance threshold for seed points. This parameter is optional and by default dc is used.
+    /// @param density_radius Distance threshold for clustering.
+    /// @param min_density Density threshold for clustering
+    /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
+    /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
     /// @param pPBin Number of points per bin, used to determine the tile size
-    Clusterer(value_type dc,
-              value_type rhoc,
-              std::optional<value_type> dm = std::nullopt,
-              std::optional<value_type> seed_dc = std::nullopt,
+    Clusterer(value_type density_radius,
+              value_type min_density,
+              std::optional<value_type> outlier_distance = std::nullopt,
+              std::optional<value_type> seeding_distance = std::nullopt,
               int pPBin = 128);
     /// @brief Constuct a Clusterer object
     ///
     /// @param queue The queue to use for the device operations
-    /// @param dc Distance threshold for clustering.
-    /// @param rhoc Density threshold for clustering
-    /// @param dm Minimum distance between clusters. This parameter is optional and by default dc is used.
-    /// @param seed_dc Distance threshold for seed points. This parameter is optional and by default dc is used.
+    /// @param density_radius Distance threshold for clustering.
+    /// @param min_density Density threshold for clustering
+    /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
+    /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
     /// @param pPBin Number of points per bin, used to determine the tile size
     Clusterer(Queue& queue,
-              value_type dc,
-              value_type rhoc,
-              std::optional<value_type> dm = std::nullopt,
-              std::optional<value_type> seed_dc = std::nullopt,
+              value_type density_radius,
+              value_type min_density,
+              std::optional<value_type> outlier_distance = std::nullopt,
+              std::optional<value_type> seeding_distance = std::nullopt,
               int pPBin = 128);
 
     /// @brief Set the parameters for the clustering algorithm
     ///
-    /// @param dc Distance threshold for clustering
-    /// @param rhoc Density threshold for clustering
-    /// @param dm Minimum distance between clusters. This parameter is optional and by default dc is used.
-    /// @param seed_dc Distance threshold for seed points. This parameter is optional and by default dc is used.
+    /// @param density_radius Distance threshold for clustering
+    /// @param min_density Density threshold for clustering
+    /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
+    /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
     /// @param pPBin Number of points per bin, used to determine the tile size
-    void setParameters(value_type dc,
-                       value_type rhoc,
-                       std::optional<value_type> dm = std::nullopt,
-                       std::optional<value_type> seed_dc = std::nullopt,
+    void setParameters(value_type density_radius,
+                       value_type min_density,
+                       std::optional<value_type> outlier_distance = std::nullopt,
+                       std::optional<value_type> seeding_distance = std::nullopt,
                        int pPBin = 128);
 
     /// @brief Construct the clusters from host points

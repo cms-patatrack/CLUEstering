@@ -32,20 +32,21 @@
 namespace clue {
 
   template <std::size_t Ndim, std::floating_point DataType>
-  Clusterer<Ndim, DataType>::Clusterer(value_type dc,
-                                       value_type rhoc,
-                                       std::optional<value_type> dm,
-                                       std::optional<value_type> seed_dc,
+  Clusterer<Ndim, DataType>::Clusterer(value_type density_radius,
+                                       value_type min_density,
+                                       std::optional<value_type> outlier_distance,
+                                       std::optional<value_type> seeding_distance,
                                        int pPBin)
-      : m_dc{dc},
-        m_seed_dc{seed_dc.value_or(dc)},
-        m_rhoc{rhoc},
-        m_dm{dm.value_or(dc)},
+      : m_density_radius{density_radius},
+        m_seeding_distance{seeding_distance.value_or(density_radius)},
+        m_min_density{min_density},
+        m_outlier_distance{outlier_distance.value_or(density_radius)},
         m_pointsPerTile{pPBin},
         m_wrappedCoordinates{} {
-    if (m_dc <= static_cast<value_type>(0.) || m_rhoc < static_cast<value_type>(0.) ||
-        m_dm <= static_cast<value_type>(0.) || m_seed_dc <= static_cast<value_type>(0.) ||
-        m_pointsPerTile <= 0) {
+    if (m_density_radius <= static_cast<value_type>(0.) ||
+        m_min_density < static_cast<value_type>(0.) ||
+        m_outlier_distance <= static_cast<value_type>(0.) ||
+        m_seeding_distance <= static_cast<value_type>(0.) || m_pointsPerTile <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
@@ -53,40 +54,42 @@ namespace clue {
 
   template <std::size_t Ndim, std::floating_point DataType>
   inline Clusterer<Ndim, DataType>::Clusterer(Queue&,
-                                              value_type dc,
-                                              value_type rhoc,
-                                              std::optional<value_type> dm,
-                                              std::optional<value_type> seed_dc,
+                                              value_type density_radius,
+                                              value_type min_density,
+                                              std::optional<value_type> outlier_distance,
+                                              std::optional<value_type> seeding_distance,
                                               int pPBin)
-      : m_dc{dc},
-        m_seed_dc{seed_dc.value_or(dc)},
-        m_rhoc{rhoc},
-        m_dm{dm.value_or(dc)},
+      : m_density_radius{density_radius},
+        m_seeding_distance{seeding_distance.value_or(density_radius)},
+        m_min_density{min_density},
+        m_outlier_distance{outlier_distance.value_or(density_radius)},
         m_pointsPerTile{pPBin},
         m_wrappedCoordinates{} {
-    if (m_dc <= static_cast<value_type>(0.) || m_rhoc < static_cast<value_type>(0.) ||
-        m_dm <= static_cast<value_type>(0.) || m_seed_dc <= static_cast<value_type>(0.) ||
-        m_pointsPerTile <= 0) {
+    if (m_density_radius <= static_cast<value_type>(0.) ||
+        m_min_density < static_cast<value_type>(0.) ||
+        m_outlier_distance <= static_cast<value_type>(0.) ||
+        m_seeding_distance <= static_cast<value_type>(0.) || m_pointsPerTile <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
   }
 
   template <std::size_t Ndim, std::floating_point DataType>
-  void Clusterer<Ndim, DataType>::setParameters(value_type dc,
-                                                value_type rhoc,
-                                                std::optional<value_type> dm,
-                                                std::optional<value_type> seed_dc,
+  void Clusterer<Ndim, DataType>::setParameters(value_type density_radius,
+                                                value_type min_density,
+                                                std::optional<value_type> outlier_distance,
+                                                std::optional<value_type> seeding_distance,
                                                 int pPBin) {
-    m_dc = dc;
-    m_dm = dm.value_or(dc);
-    m_seed_dc = seed_dc.value_or(dc);
-    m_rhoc = rhoc;
+    m_density_radius = density_radius;
+    m_outlier_distance = outlier_distance.value_or(density_radius);
+    m_seeding_distance = seeding_distance.value_or(density_radius);
+    m_min_density = min_density;
     m_pointsPerTile = pPBin;
 
-    if (m_dc <= static_cast<value_type>(0.) || m_rhoc < static_cast<value_type>(0.) ||
-        m_dm <= static_cast<value_type>(0.) || m_seed_dc <= static_cast<value_type>(0.) ||
-        m_pointsPerTile <= 0) {
+    if (m_density_radius <= static_cast<value_type>(0.) ||
+        m_min_density < static_cast<value_type>(0.) ||
+        m_outlier_distance <= static_cast<value_type>(0.) ||
+        m_seeding_distance <= static_cast<value_type>(0.) || m_pointsPerTile <= 0) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
@@ -260,14 +263,20 @@ namespace clue {
     const Idx grid_size = nostd::ceil_div(n_points, block_size);
     auto work_division = clue::make_workdiv<internal::Acc>(grid_size, block_size);
 
-    detail::computeLocalDensity<internal::Acc>(
-        queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_dc, metric, n_points);
+    detail::computeLocalDensity<internal::Acc>(queue,
+                                               work_division,
+                                               m_tiles->view(),
+                                               dev_points.view(),
+                                               kernel,
+                                               m_density_radius,
+                                               metric,
+                                               n_points);
     auto seed_candidates = std::size_t{0};
     detail::computeNearestHighers<internal::Acc>(queue,
                                                  work_division,
                                                  m_tiles->view(),
                                                  dev_points.view(),
-                                                 m_dm,
+                                                 m_outlier_distance,
                                                  metric,
                                                  seed_candidates,
                                                  n_points);
@@ -276,9 +285,9 @@ namespace clue {
                                             work_division,
                                             m_seeds.value(),
                                             dev_points.view(),
-                                            m_seed_dc,
+                                            m_seeding_distance,
                                             metric,
-                                            m_rhoc,
+                                            m_min_density,
                                             n_points);
 
     m_followers->template fill<internal::Acc>(queue, dev_points);
@@ -322,7 +331,7 @@ namespace clue {
                                                         m_tiles->view(),
                                                         dev_points.view(),
                                                         kernel,
-                                                        m_dc,
+                                                        m_density_radius,
                                                         metric,
                                                         d_event_offsets,
                                                         max_event_size,
@@ -331,7 +340,7 @@ namespace clue {
     detail::computeNearestHighersBatched<internal::Acc2D>(queue,
                                                           m_tiles->view(),
                                                           dev_points.view(),
-                                                          m_dm,
+                                                          m_outlier_distance,
                                                           metric,
                                                           seed_candidates,
                                                           d_event_offsets,
@@ -343,9 +352,9 @@ namespace clue {
     detail::findClusterSeedsBatched<internal::Acc2D>(queue,
                                                      m_seeds.value(),
                                                      dev_points.view(),
-                                                     m_seed_dc,
+                                                     m_seeding_distance,
                                                      metric,
-                                                     m_rhoc,
+                                                     m_min_density,
                                                      d_event_offsets,
                                                      max_event_size,
                                                      m_event_associations->view(),

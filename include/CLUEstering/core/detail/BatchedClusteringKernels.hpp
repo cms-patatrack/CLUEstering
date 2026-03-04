@@ -38,7 +38,7 @@ namespace clue::detail {
                                   internal::TilesView<Ndim, TData> dev_tiles,
                                   PointsView<Ndim, TData> dev_points,
                                   const KernelType& kernel,
-                                  TData dc,
+                                  TData density_radius,
                                   DistanceMetric metric,
                                   const auto* event_offsets,
                                   std::size_t max_event_size,
@@ -53,7 +53,7 @@ namespace clue::detail {
             clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
             for (auto dim = 0u; dim != Ndim; ++dim) {
               searchbox_extremes[dim] =
-                  clue::nostd::make_array(coords_i[dim] - dc, coords_i[dim] + dc);
+                  clue::nostd::make_array(coords_i[dim] - density_radius, coords_i[dim] + density_radius);
             }
 
             clue::SearchBoxBins<Ndim> searchbox_bins;
@@ -68,7 +68,7 @@ namespace clue::detail {
                                             kernel,
                                             coords_i,
                                             rho_i,
-                                            dc,
+                                            density_radius,
                                             metric,
                                             global_idx,
                                             event);
@@ -90,7 +90,7 @@ namespace clue::detail {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim, TData> dev_tiles,
                                   PointsView<Ndim, TData> dev_points,
-                                  TData dm,
+                                  TData outlier_distance,
                                   DistanceMetric metric,
                                   std::size_t* seed_candidates,
                                   const auto* event_offsets,
@@ -108,7 +108,7 @@ namespace clue::detail {
             clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
             for (auto dim = 0u; dim != Ndim; ++dim) {
               searchbox_extremes[dim] =
-                  clue::nostd::make_array(coords_i[dim] - dm, coords_i[dim] + dm);
+                  clue::nostd::make_array(coords_i[dim] - outlier_distance, coords_i[dim] + outlier_distance);
             }
 
             clue::SearchBoxBins<Ndim> searchbox_bins;
@@ -124,12 +124,12 @@ namespace clue::detail {
                                                            rho_i,
                                                            delta_i,
                                                            nh_i,
-                                                           dm,
+                                                           outlier_distance,
                                                            metric,
                                                            global_idx,
                                                            event);
 
-            assert(nh_i == -1 || delta_i <= dm);
+            assert(nh_i == -1 || delta_i <= outlier_distance);
             dev_points.nearest_higher()[global_idx] = nh_i;
             if (nh_i == -1) {
               alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
@@ -149,9 +149,9 @@ namespace clue::detail {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
                                   PointsView<Ndim, TData> dev_points,
-                                  TData seed_dc,
+                                  TData seeding_distance,
                                   DistanceMetric metric,
-                                  TData rhoc,
+                                  TData min_density,
                                   clue::internal::DeviceVectorView event_associations,
                                   const auto* event_offsets,
                                   std::size_t max_event_size) const {
@@ -168,7 +168,7 @@ namespace clue::detail {
             assert(distance >= TData{0});
 
             auto rho_i = dev_points.rho()[global_idx];
-            bool is_seed = (distance > seed_dc) && (rho_i >= rhoc);
+            bool is_seed = (distance > seeding_distance) && (rho_i >= min_density);
 
             if (is_seed) {
               dev_points.is_seed()[global_idx] = 1;
@@ -195,7 +195,7 @@ namespace clue::detail {
                                          internal::TilesView<Ndim, TData>& tiles,
                                          PointsView<Ndim, TData>& dev_points,
                                          KernelType&& kernel,
-                                         TData dc,
+                                         TData density_radius,
                                          const DistanceMetric& metric,
                                          const auto& event_offsets,
                                          std::size_t max_event_size,
@@ -210,7 +210,7 @@ namespace clue::detail {
                        tiles,
                        dev_points,
                        std::forward<KernelType>(kernel),
-                       dc,
+                       density_radius,
                        metric,
                        event_offsets.data(),
                        max_event_size,
@@ -226,7 +226,7 @@ namespace clue::detail {
   inline void computeNearestHighersBatched(TQueue& queue,
                                            internal::TilesView<Ndim, TData>& tiles,
                                            PointsView<Ndim, TData>& dev_points,
-                                           TData dm,
+                                           TData outlier_distance,
                                            const DistanceMetric& metric,
                                            std::size_t& seed_candidates,
                                            const auto& event_offsets,
@@ -244,7 +244,7 @@ namespace clue::detail {
                        KernelCalculateNearestHigherBatched{},
                        tiles,
                        dev_points,
-                       dm,
+                       outlier_distance,
                        metric,
                        d_seed_candidates.data(),
                        event_offsets.data(),
@@ -263,9 +263,9 @@ namespace clue::detail {
   inline void findClusterSeedsBatched(TQueue& queue,
                                       clue::internal::SeedArray<>& seeds,
                                       PointsView<Ndim, TData>& dev_points,
-                                      TData seed_dc,
+                                      TData seeding_distance,
                                       const DistanceMetric& metric,
-                                      TData rhoc,
+                                      TData min_density,
                                       const auto& event_offsets,
                                       std::size_t max_event_size,
                                       const clue::internal::DeviceVectorView& event_associations,
@@ -279,9 +279,9 @@ namespace clue::detail {
                        KernelFindClustersBatched{},
                        seeds.view(),
                        dev_points,
-                       seed_dc,
+                       seeding_distance,
                        metric,
-                       rhoc,
+                       min_density,
                        event_associations,
                        event_offsets.data(),
                        max_event_size);
