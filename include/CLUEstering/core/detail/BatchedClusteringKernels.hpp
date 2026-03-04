@@ -52,8 +52,8 @@ namespace clue::detail {
 
             clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
             for (auto dim = 0u; dim != Ndim; ++dim) {
-              searchbox_extremes[dim] =
-                  clue::nostd::make_array(coords_i[dim] - density_radius, coords_i[dim] + density_radius);
+              searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - density_radius,
+                                                                coords_i[dim] + density_radius);
             }
 
             clue::SearchBoxBins<Ndim> searchbox_bins;
@@ -107,8 +107,8 @@ namespace clue::detail {
 
             clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
             for (auto dim = 0u; dim != Ndim; ++dim) {
-              searchbox_extremes[dim] =
-                  clue::nostd::make_array(coords_i[dim] - outlier_distance, coords_i[dim] + outlier_distance);
+              searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - outlier_distance,
+                                                                coords_i[dim] + outlier_distance);
             }
 
             clue::SearchBoxBins<Ndim> searchbox_bins;
