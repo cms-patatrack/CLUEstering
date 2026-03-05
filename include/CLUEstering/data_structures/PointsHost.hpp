@@ -226,7 +226,7 @@ namespace clue {
     const auto& n_clusters();
     /// @brief Returns the associator mapping clusters to their associated points
     ///
-    /// @return An host_associator mapping clusters to points
+    /// @return An AssociationMapHost mapping clusters to points
     /// @note This object is lazily evaluated and cached upon the first call
     const auto& clusters();
     /// @brief Returns a vector containing the sizes of each cluster

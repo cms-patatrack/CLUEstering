@@ -21,7 +21,7 @@ namespace clue {
   /// such as the number of clusters, the size of each cluster and point associations.
   class ClusterProperties {
   private:
-    host_associator m_clusters_to_points;
+    AssociationMapHost m_clusters_to_points;
     std::vector<std::size_t> m_cluster_sizes;
     std::size_t m_nclusters;
 
@@ -41,7 +41,7 @@ namespace clue {
     const auto& cluster_sizes() const { return m_clusters_to_points; }
     /// @brief Returns an associator mapping clusters to their associated points
     ///
-    /// @return An host_associator mapping clusters to points
+    /// @return An AssociationMapHost mapping clusters to points
     const auto& clusters() const { return m_cluster_sizes; }
     /// @brief Returns the number of clusters
     ///

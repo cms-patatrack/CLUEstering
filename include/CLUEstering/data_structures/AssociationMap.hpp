@@ -114,6 +114,17 @@ namespace clue {
     /// @return The number of elements associated to a given key
     size_type count(key_type key) const;
 
+    /// @brief Check if the map is empty
+    ///
+    /// @return True if the map is empty, false otherwise
+    bool empty() const;
+
+    /// @brief Check if the map has no elements associated to a given key
+    ///
+    /// @param key The key to check
+    /// @return True if the map has no elements associated to the given key, false otherwise
+    bool empty(key_type key) const;
+
     /// @brief Check if the map contains elements with a given key
     ///
     /// @param key The key to check
@@ -210,7 +221,7 @@ namespace clue {
 #endif
   };
 
-  using host_associator = AssociationMap<alpaka::DevCpu>;
+  using AssociationMapHost = AssociationMap<alpaka::DevCpu>;
 
 }  // namespace clue
 

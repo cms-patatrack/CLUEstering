@@ -37,7 +37,7 @@ namespace clue::internal {
                                   clue::nostd::maximum<int32_t>{}) +
 
                       1;
-    clue::host_associator map(elements, bins);
+    clue::AssociationMapHost map(elements, bins);
     map.fill(associations);
     return map;
   }

@@ -164,6 +164,19 @@ namespace clue {
   }
 
   template <concepts::device TDev>
+  bool AssociationMap<TDev>::empty() const {
+    return m_extents.keys == 0;
+  } 
+
+  template <concepts::device TDev>
+  bool AssociationMap<TDev>::empty(key_type key) const {
+    if (key < 0 || key >= static_cast<key_type>(m_extents.keys)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::empty.");
+    }
+    return m_offsets[key + 1] == m_offsets[key];
+  } 
+
+  template <concepts::device TDev>
   bool AssociationMap<TDev>::contains(key_type key) const {
     if (key < 0 || key >= static_cast<key_type>(m_extents.keys)) {
       throw std::out_of_range("Key out of range in call to AssociationMap::contains.");

@@ -151,7 +151,7 @@ namespace clue::detail {
       auto tile_idx = tiles.getGlobalBinByBin(base_vec, event);
       auto tile_size = tiles[tile_idx].size();
 
-      for (auto tile_it = 0; tile_it < tile_size; ++tile_it) {
+      for (auto tile_it = 0u; tile_it < tile_size; ++tile_it) {
         const auto j = tiles[tile_idx][tile_it];
         assert(j >= 0 && j < dev_points.size());
         auto rho_j = dev_points.rho()[j];

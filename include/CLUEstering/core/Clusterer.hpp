@@ -301,7 +301,7 @@ namespace clue {
     /// @param h_points Host points
     /// @return An associator mapping clusters and points
     template <std::floating_point InputType>
-    host_associator getClusters(const clue::PointsHost<Ndim, InputType>& h_points);
+    AssociationMapHost getClusters(const clue::PointsHost<Ndim, InputType>& h_points);
     /// @brief Get the clusters from the device points
     /// This function returns an associator object mapping the clusters to the points they contain.
     ///
@@ -320,8 +320,8 @@ namespace clue {
     /// @param queue The queue to use for the device operations
     /// @return A device buffer containing the event associations
     template <std::floating_point InputType>
-    host_associator getSampleAssociations(Queue& queue,
-                                          clue::PointsHost<Ndim, InputType>& h_points);
+    AssociationMapHost getSampleAssociations(Queue& queue,
+                                             clue::PointsHost<Ndim, InputType>& h_points);
     /// @brief Get the sample-to-cluster associations for batched clustering
     ///
     /// @tparam InputType The data type of the input points, which must be a floating-point type.
