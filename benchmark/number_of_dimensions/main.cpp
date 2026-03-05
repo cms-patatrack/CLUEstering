@@ -23,5 +23,14 @@ static void BM_clustering(benchmark::State& state) {
   }
 }
 
+BENCHMARK(BM_clustering<1>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
 BENCHMARK(BM_clustering<2>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
+BENCHMARK(BM_clustering<3>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
+BENCHMARK(BM_clustering<4>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
+BENCHMARK(BM_clustering<5>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
+BENCHMARK(BM_clustering<6>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
+BENCHMARK(BM_clustering<7>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
+BENCHMARK(BM_clustering<8>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
+BENCHMARK(BM_clustering<9>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
+BENCHMARK(BM_clustering<10>)->RangeMultiplier(2)->Range(1 << 10, 1 << 19);
 BENCHMARK_MAIN();
