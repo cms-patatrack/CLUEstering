@@ -210,12 +210,12 @@ class clusterer:
     """
     Wrapper class for performing clustering using the CLUE algorithm.
 
-    :param dc: Spatial parameter controlling the region for local density calculation.
-    :type dc: float
-    :param rhoc: Density threshold separating seeds from outliers.
-    :type rhoc: float
-    :param dm: Spatial parameter controlling the region for follower search.
-    :type dm: float
+    :param density_radius: Spatial parameter controlling the region for local density calculation.
+    :type density_radius: float
+    :param min_density: Density threshold separating seeds from outliers.
+    :type min_density: float
+    :param outlier_distance: Spatial parameter controlling the region for follower search.
+    :type outlier_distance: float
     :param ppbin: Average number of points per tile.
     :type ppbin: int
     :param kernel: Kernel used to calculate local density.
@@ -228,15 +228,15 @@ class clusterer:
     :type elapsed_time: float
     """
 
-    def __init__(self, dc: float, rhoc: float, dm: Union[float, None] = None, seed_dc: Union[float, None] = None, ppbin: int = 128):
-        self._dc = dc
-        self._rhoc = rhoc
-        self._dm = dm
-        if dm is None:
-            self._dm = dc
-        self._seed_dc = seed_dc
-        if seed_dc is None:
-            self._seed_dc = dc
+    def __init__(self, density_radius: float, min_density: float, outlier_distance: Union[float, None] = None, seeding_distance: Union[float, None] = None, ppbin: int = 128):
+        self._density_radius = density_radius
+        self._min_density = min_density
+        self._outlier_distance = outlier_distance
+        if outlier_distance is None:
+            self._outlier_distance = density_radius
+        self._seeding_distance = seeding_distance
+        if seeding_distance is None:
+            self._seeding_distance = density_radius
         self._ppbin = ppbin
 
         # Initialize attributes
@@ -253,32 +253,32 @@ class clusterer:
         self.clust_prop = None
         self._elapsed_time = 0.
 
-    def set_params(self, dc: float, rhoc: float,
-                   dm: Union[float, None] = None, seed_dc: Union[float, None] = None, ppbin: int = 128) -> None:
+    def set_params(self, density_radius: float, min_density: float,
+                   outlier_distance: Union[float, None] = None, seeding_distance: Union[float, None] = None, ppbin: int = 128) -> None:
         """
         Set parameters for the clustering algorithm.
 
-        :param dc: Spatial parameter for density calculation.
-        :type dc: float
-        :param rhoc: Density threshold.
-        :type rhoc: float
-        :param dm: Follower search region. Defaults to dc if None.
-        :type dm: float or None
-        :param seed_dc: Seed search region. Defaults to dc if None.
-        :type seed_dc: float or None
+        :param density_radius: Spatial parameter for density calculation.
+        :type density_radius: float
+        :param min_density: Density threshold.
+        :type min_density: float
+        :param outlier_distance: Follower search region. Defaults to density_radius if None.
+        :type outlier_distance: float or None
+        :param seeding_distance: Seed search region. Defaults to density_radius if None.
+        :type seeding_distance: float or None
         :param ppbin: Average points per tile.
         :type ppbin: int
         """
-        self._dc = dc
-        self._rhoc = rhoc
-        if dm is not None:
-            self._dm = dm
+        self._density_radius = density_radius
+        self._min_density = min_density
+        if outlier_distance is not None:
+            self._outlier_distance = outlier_distance
         else:
-            self._dm = dc
-        if seed_dc is not None:
-            self._seed_dc = seed_dc
+            self._outlier_distance = density_radius
+        if seeding_distance is not None:
+            self._seeding_distance = seeding_distance
         else:
-            self._seed_dc = dc
+            self._seeding_distance = density_radius
         self._ppbin = ppbin
 
     def _read_array(self, input_data: Union[list, np.ndarray]) -> None:
@@ -597,7 +597,7 @@ class clusterer:
             data.n_dim = len(dimensions)
             data.n_points = self.clust_data.n_points
 
-        arguments = [self._dc, self._rhoc, self._dm, self._seed_dc,
+        arguments = [self._density_radius, self._min_density, self._outlier_distance, self._seeding_distance,
                      self._ppbin, self.wrapped, data.coords, data.results,
                      self._kernel, data.n_dim, batch_sample_sizes, data.n_points,
                      block_size, device_id]

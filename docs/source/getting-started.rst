@@ -21,8 +21,8 @@ Below is a simple C++ code snippet, which can also be found, along with the CMak
         clue::PointsDevice<2> d_points(queue, h_points.size());
     
         // Define the parameters for the clustering and construct the clusterer.
-        const float dc = 20.f, rhoc = 10.f, outlier = 20.f;
-        clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+        const auto density_radius = 20.f, min_density = 10.f;
+        clue::Clusterer<2> algo(queue, density_radius, min_density);
     
         // Launch the clustering
         // The results will be stored in the `clue::PointsHost` object
@@ -113,7 +113,7 @@ Minimal example:
 
     import CLUEstering as clue
 
-    clust = clue.clusterer(1., 5., 1.5)
+    clust = clue.clusterer(1., 5.)
     clust.read_data(data)
     clust.run_clue()
     clust.to_csv('./output/', 'data_results.csv')
