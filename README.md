@@ -90,7 +90,7 @@ int main() {
   clue::PointsHost<2> points = clue::read_csv<2>(queue, "data.csv");
 
   // Define the parameters for the clustering and construct the clusterer.
-  const float density_radius = 20.f, min_density = 10.f;
+  const auto density_radius = 20.f, min_density = 10.f;
   clue::Clusterer<2> algo(queue, density_radius, min_density);
 
   // Launch the clustering

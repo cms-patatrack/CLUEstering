@@ -21,7 +21,7 @@ Below is a simple C++ code snippet, which can also be found, along with the CMak
         clue::PointsDevice<2> d_points(queue, h_points.size());
     
         // Define the parameters for the clustering and construct the clusterer.
-        const float density_radius = 20.f, min_density = 10.f;
+        const auto density_radius = 20.f, min_density = 10.f;
         clue::Clusterer<2> algo(queue, density_radius, min_density);
     
         // Launch the clustering
