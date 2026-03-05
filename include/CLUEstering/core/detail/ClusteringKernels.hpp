@@ -143,6 +143,7 @@ namespace clue::detail {
                                                   TData& delta_i,
                                                   int& nh_i,
                                                   TData outlier_distance,
+                                                  TData seeding_distance,
                                                   const DistanceMetric& metric,
                                                   int32_t point_id,
                                                   std::size_t event = 0) {
@@ -164,7 +165,7 @@ namespace clue::detail {
         if (found_higher && distance <= outlier_distance) {
           if (distance < delta_i) {
             delta_i = distance;
-            nh_i = j;
+            nh_i = (distance > seeding_distance) ? -1 : j;
           }
         }
       }
@@ -185,6 +186,7 @@ namespace clue::detail {
                                                          delta_i,
                                                          nh_i,
                                                          outlier_distance,
+                                                         seeding_distance,
                                                          metric,
                                                          point_id,
                                                          event);
@@ -202,6 +204,7 @@ namespace clue::detail {
                                   internal::TilesView<Ndim, TData> dev_tiles,
                                   PointsView<Ndim, TData> dev_points,
                                   TData outlier_distance,
+                                  TData seeding_distance,
                                   DistanceMetric metric,
                                   std::size_t* seed_candidates,
                                   int32_t n_points) const {
@@ -231,6 +234,7 @@ namespace clue::detail {
                                                        delta_i,
                                                        nh_i,
                                                        outlier_distance,
+                                                       seeding_distance,
                                                        metric,
                                                        i);
 
@@ -353,6 +357,7 @@ namespace clue::detail {
                                     internal::TilesView<Ndim, TData>& tiles,
                                     PointsView<Ndim, TData>& dev_points,
                                     TData outlier_distance,
+                                    TData seeding_distance,
                                     const DistanceMetric& metric,
                                     std::size_t& seed_candidates,
                                     int32_t size) {
@@ -364,6 +369,7 @@ namespace clue::detail {
                        tiles,
                        dev_points,
                        outlier_distance,
+                       seeding_distance,
                        metric,
                        d_seed_candidates.data(),
                        size);
