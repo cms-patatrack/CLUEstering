@@ -45,11 +45,11 @@ namespace clue::detail {
                                    int32_t point_id,
                                    std::size_t event = 0) {
     if constexpr (N_ == 0) {
-      auto binId = tiles.getGlobalBinByBin(base_vec, event);
-      auto binSize = tiles[binId].size();
+      auto tile_idx = tiles.getGlobalBinByBin(base_vec, event);
+      auto tile_size = tiles[tile_idx].size();
 
-      for (auto binIter = 0u; binIter < binSize; ++binIter) {
-        int32_t j = tiles[binId][binIter];
+      for (auto tile_it = 0u; tile_it < tile_size; ++tile_it) {
+        auto j = tiles[tile_idx][tile_it];
         assert(j >= 0 && j < dev_points.size());
 
         auto coords_j = dev_points[j];
@@ -148,22 +148,23 @@ namespace clue::detail {
                                                   int32_t point_id,
                                                   std::size_t event = 0) {
     if constexpr (N_ == 0) {
-      int binId = tiles.getGlobalBinByBin(base_vec, event);
-      int binSize = tiles[binId].size();
+      auto tile_idx = tiles.getGlobalBinByBin(base_vec, event);
+      auto tile_size = tiles[tile_idx].size();
 
-      for (auto binIter = 0; binIter < binSize; ++binIter) {
-        const auto j = tiles[binId][binIter];
+      for (auto tile_it = 0; tile_it < tile_size; ++tile_it) {
+        const auto j = tiles[tile_idx][tile_it];
         assert(j >= 0 && j < dev_points.size());
         auto rho_j = dev_points.rho()[j];
-        bool found_higher = (rho_j > rho_i);
-        found_higher = found_higher || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
+        bool found_higher_in_tile = (rho_j > rho_i);
+        found_higher_in_tile =
+            found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
 
-        auto coords_j = dev_points[j];
-        auto distance = metric(coords_i, coords_j);
-        assert(distance >= TData{0});
+        if (found_higher_in_tile) {
+          auto coords_j = dev_points[j];
+          auto distance = metric(coords_i, coords_j);
+          assert(distance >= TData{0});
 
-        if (found_higher && distance <= outlier_distance) {
-          if (distance < delta_i) {
+          if (distance <= outlier_distance && distance < delta_i) {
             delta_i = distance;
             nh_i = (distance > seeding_distance) ? -1 : j;
           }
