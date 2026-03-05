@@ -24,31 +24,31 @@ def test_clusterer_constructor():
     '''
     c = clue.clusterer(21., 10., 21.)
     d = clue.clusterer(21., 10.)
-    assert c._dc == d._dc
-    assert c._rhoc == d._rhoc
-    assert c._dm == d._dm
+    assert c._density_radius == d._density_radius
+    assert c._min_density == d._min_density
+    assert c._outlier_distance == d._outlier_distance
 
 
 def test_set_params():
     c = clue.clusterer(0., 0., 0.)
 
-    c.set_params(dc=1., rhoc=5.)
-    assert c._dc == 1.
-    assert c._rhoc == 5.
-    assert c._dm == 1.
-    assert c._seed_dc == 1.
+    c.set_params(density_radius=1., min_density=5.)
+    assert c._density_radius == 1.
+    assert c._min_density == 5.
+    assert c._outlier_distance == 1.
+    assert c._seeding_distance == 1.
 
-    c.set_params(dc=1., rhoc=5., dm=2.)
-    assert c._dc == 1.
-    assert c._rhoc == 5.
-    assert c._dm == 2.
-    assert c._seed_dc == 1.
+    c.set_params(density_radius=1., min_density=5., outlier_distance=2.)
+    assert c._density_radius == 1.
+    assert c._min_density == 5.
+    assert c._outlier_distance == 2.
+    assert c._seeding_distance == 1.
 
-    c.set_params(dc=1., rhoc=5., dm=2., seed_dc=3)
-    assert c._dc == 1.
-    assert c._rhoc == 5.
-    assert c._dm == 2.
-    assert c._seed_dc == 3
+    c.set_params(density_radius=1., min_density=5., outlier_distance=2., seeding_distance=3)
+    assert c._density_radius == 1.
+    assert c._min_density == 5.
+    assert c._outlier_distance == 2.
+    assert c._seeding_distance == 3
 
 def test_clustering_methods(dataset):
     '''
