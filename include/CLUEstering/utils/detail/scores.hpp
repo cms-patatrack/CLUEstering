@@ -31,7 +31,7 @@ namespace clue {
     }
 
     template <std::size_t Ndim, std::floating_point TData>
-    inline auto silhouette(const clue::host_associator& clusters,
+    inline auto silhouette(const clue::AssociationMapHost& clusters,
                            const clue::PointsHost<Ndim, TData>& points,
                            int point) {
       auto a = TData{0};

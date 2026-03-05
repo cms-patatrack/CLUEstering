@@ -126,7 +126,7 @@ TEST_CASE("Test throwing conditions") {
   }
 }
 
-TEST_CASE("Test binary host_associator") {
+TEST_CASE("Test binary AssociationMapHost") {
   const int32_t size = 1000;
 
   auto associations = clue::make_host_buffer<int32_t[]>(size);

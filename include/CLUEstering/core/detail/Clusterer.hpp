@@ -211,7 +211,7 @@ namespace clue {
 
   template <std::size_t Ndim, std::floating_point DataType>
   template <std::floating_point InputType>
-  inline host_associator Clusterer<Ndim, DataType>::getClusters(
+  inline AssociationMapHost Clusterer<Ndim, DataType>::getClusters(
       const clue::PointsHost<Ndim, InputType>& h_points) {
     return clue::get_clusters(h_points);
   }
@@ -225,7 +225,7 @@ namespace clue {
 
   template <std::size_t Ndim, std::floating_point DataType>
   template <std::floating_point InputType>
-  inline host_associator Clusterer<Ndim, DataType>::getSampleAssociations(
+  inline AssociationMapHost Clusterer<Ndim, DataType>::getSampleAssociations(
       Queue& queue, clue::PointsHost<Ndim, InputType>& h_points) {
     auto event_associations = make_host_buffer<std::int32_t[]>(h_points.n_clusters());
     alpaka::memcpy(queue,
