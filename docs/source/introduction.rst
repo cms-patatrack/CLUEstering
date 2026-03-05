@@ -28,18 +28,18 @@ Description of the Algorithm
 The algorithm proceeds in four main steps:
 
 1. **Computation of the local density**  
-   The local energy density for each hit is computed by searching for nearby hits and weighting them according to their distance and energy. Controlled by the parameter ``dc``.
+   The local energy density for each hit is computed by searching for nearby hits and weighting them according to their distance and energy. Controlled by the parameter ``density_radius``.
 
 2. **Computation of the nearest highers**  
-   Each point is linked to the closest point with a greater local density, called its *nearest higher*, within a maximum distance ``dm``.
+   Each point is linked to the closest point with a greater local density, called its *nearest higher*, within a maximum distance ``outlier_distance``.
 
 3. **Finding cluster centers**  
-   Points without any nearest-higher are classified: those with density above a threshold ``rhoc`` become seeds (cluster centers), while others are marked as outliers.
+   Points without any nearest-higher, or with a nearest-higher whose distance is greater than ``seeding_distance``,  are classified: those with density above a threshold ``min_density`` become seeds (cluster centers), while others are marked as outliers.
 
 4. **Assigning points to clusters**  
    Clusters are built by linking each point to its nearest-higher, leaving outliers unattached.
 
-The CLUE algorithm takes three main parameters: ``dc``, ``rhoc``, and ``dm``.
+The CLUE algorithm takes four parameters: ``density_radius``, ``min_density``, ``outlier_distance`` and ``seeding_disntace``.
 
 .. image:: images/docs/algorithm-steps.gif
    :alt: Algorithm steps
