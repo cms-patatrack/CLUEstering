@@ -108,6 +108,17 @@ namespace clue {
     iterator find(key_type key);
     const_iterator find(key_type key) const;
 
+    /// @brief Return a span of values associated to a given key
+    ///
+    /// @param key The key to search for
+    /// @return A span of values associated to the given key
+    std::span<mapped_type> operator[](key_type key);
+    /// @brief Return a const span of values associated to a given key
+    ///
+    /// @param key The key to search for
+    /// @return A const span of values associated to the given key
+    std::span<const mapped_type> operator[](key_type key) const;
+
     /// @brief Count the number of elements with the given key
     ///
     /// @param key The key to count

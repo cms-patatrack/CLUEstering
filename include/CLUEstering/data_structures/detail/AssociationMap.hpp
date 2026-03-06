@@ -156,6 +156,27 @@ namespace clue {
   }
 
   template <concepts::device TDev>
+  std::span<typename AssociationMap<TDev>::mapped_type> AssociationMap<TDev>::operator[](
+      key_type key) {
+    if (key < 0 || key >= static_cast<key_type>(m_extents.keys)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::operator[].");
+    }
+    return std::span<typename AssociationMap<TDev>::mapped_type>{
+        m_indexes.data() + m_offsets[key],
+        static_cast<std::size_t>(m_offsets[key + 1] - m_offsets[key])};
+  }
+  template <concepts::device TDev>
+  std::span<const typename AssociationMap<TDev>::mapped_type> AssociationMap<TDev>::operator[](
+      key_type key) const {
+    if (key < 0 || key >= static_cast<key_type>(m_extents.keys)) {
+      throw std::out_of_range("Key out of range in call to AssociationMap::operator[].");
+    }
+    return std::span<const typename AssociationMap<TDev>::mapped_type>{
+        m_indexes.data() + m_offsets[key],
+        static_cast<std::size_t>(m_offsets[key + 1] - m_offsets[key])};
+  }
+
+  template <concepts::device TDev>
   AssociationMap<TDev>::size_type AssociationMap<TDev>::count(key_type key) const {
     if (key < 0 || key >= static_cast<key_type>(m_extents.keys)) {
       throw std::out_of_range("Key out of range in call to AssociationMap::count.");
@@ -166,7 +187,7 @@ namespace clue {
   template <concepts::device TDev>
   bool AssociationMap<TDev>::empty() const {
     return m_extents.keys == 0;
-  } 
+  }
 
   template <concepts::device TDev>
   bool AssociationMap<TDev>::empty(key_type key) const {
@@ -174,7 +195,7 @@ namespace clue {
       throw std::out_of_range("Key out of range in call to AssociationMap::empty.");
     }
     return m_offsets[key + 1] == m_offsets[key];
-  } 
+  }
 
   template <concepts::device TDev>
   bool AssociationMap<TDev>::contains(key_type key) const {
