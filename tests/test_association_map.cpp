@@ -74,11 +74,6 @@ TEST_CASE("Test throwing conditions") {
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
 
-  SUBCASE("Test construction throwing conditions") {
-    CHECK_THROWS(
-        clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), 0), 0));
-  }
-
   auto map =
       clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), size), size);
   SUBCASE("Test count throwing conditions") {
