@@ -89,10 +89,6 @@ namespace clue {
         m_offsets{make_host_buffer<key_type[]>(nbins + 1)},
         m_view{},
         m_extents{nbins, nelements} {
-    if (nelements == 0) {
-      throw std::invalid_argument(
-          "Number of bins and elements must be positive in AssociationMap constructor");
-    }
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
     m_view.m_extents = {nbins, nelements};
@@ -107,10 +103,6 @@ namespace clue {
         m_offsets{make_device_buffer<key_type[]>(queue, nbins + 1)},
         m_view{},
         m_extents{nbins, nelements} {
-    if (nelements == 0) {
-      throw std::invalid_argument(
-          "Number of bins and elements must be positive in AssociationMap constructor");
-    }
     m_view.m_indexes = m_indexes.data();
     m_view.m_offsets = m_offsets.data();
     m_view.m_extents = {nbins, nelements};
@@ -369,6 +361,9 @@ namespace clue {
   ALPAKA_FN_HOST void AssociationMap<TDev>::fill(std::span<const key_type> associations)
     requires std::same_as<TDev, alpaka::DevCpu>
   {
+    if (m_extents.keys == 0 || m_extents.values == 0)
+      return;
+
     std::vector<key_type> sizes(m_extents.keys, 0);
     std::for_each(associations.begin(), associations.end(), [&](key_type key) {
       if (key >= 0) {
@@ -394,7 +389,7 @@ namespace clue {
   ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type,
                                                         std::span<const key_type> associations,
                                                         TQueue& queue) {
-    if (m_extents.keys == 0)
+    if (m_extents.keys == 0 || m_extents.values == 0)
       return;
     const auto blocksize = 512;
     const auto gridsize = divide_up_by(associations.size(), blocksize);
@@ -438,7 +433,7 @@ namespace clue {
                                                               TFunc func,
                                                               const auto& event_offsets,
                                                               std::size_t max_event_size) {
-    if (m_extents.keys == 0)
+    if (m_extents.keys == 0 || m_extents.values == 0)
       return;
 
     auto bin_buffer = make_device_buffer<int32_t[]>(queue, size);
