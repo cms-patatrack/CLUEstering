@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1PointsHost_1_1Point" kind="class" language="C++" prot="public">
+    <compoundname>clue::PointsHost::Point</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1_1Point_1a879644aebd7121e624ab6331124b6e13" prot="private" static="no" mutable="no">
+        <type>std::array&lt; value_type, Ndim &gt;</type>
+        <definition>std::array&lt;value_type, Ndim&gt; clue::PointsHost&lt; Ndim, TData &gt;::Point::m_coordinates</definition>
+        <argsstring></argsstring>
+        <name>m_coordinates</name>
+        <qualifiedname>clue::PointsHost::Point::m_coordinates</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="77" column="18" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1_1Point_1a12c75a623973a079f76d2039578343ec" prot="private" static="no" mutable="no">
+        <type>value_type</type>
+        <definition>value_type clue::PointsHost&lt; Ndim, TData &gt;::Point::m_weight</definition>
+        <argsstring></argsstring>
+        <name>m_weight</name>
+        <qualifiedname>clue::PointsHost::Point::m_weight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="78" column="18" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1PointsHost_1_1Point_1aae3f06022ceb4bacb3092dbbf71bf2c6" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int clue::PointsHost&lt; Ndim, TData &gt;::Point::m_clusterIndex</definition>
+        <argsstring></argsstring>
+        <name>m_clusterIndex</name>
+        <qualifiedname>clue::PointsHost::Point::m_clusterIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="79" column="11" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1PointsHost_1_1Point_1ab68fc65297961d215c6af18c29f4dff3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::PointsHost&lt; Ndim, TData &gt;::Point::Point</definition>
+        <argsstring>(const std::array&lt; value_type, Ndim &gt; &amp;coordinates, value_type weight, int cluster_index)</argsstring>
+        <name>Point</name>
+        <qualifiedname>clue::PointsHost::Point::Point</qualifiedname>
+        <param>
+          <type>const std::array&lt; value_type, Ndim &gt; &amp;</type>
+          <declname>coordinates</declname>
+        </param>
+        <param>
+          <type>value_type</type>
+          <declname>weight</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>cluster_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="82" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1_1Point_1ae1a0f5d769d359edaff2f982e8812874" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto clue::PointsHost&lt; Ndim, TData &gt;::Point::operator[]</definition>
+        <argsstring>(size_t dim) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>clue::PointsHost::Point::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>dim</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="83" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1_1Point_1aa329a3a11e0728230d9c535e3591c47a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto clue::PointsHost&lt; Ndim, TData &gt;::Point::weight</definition>
+        <argsstring>() const</argsstring>
+        <name>weight</name>
+        <qualifiedname>clue::PointsHost::Point::weight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="85" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1PointsHost_1_1Point_1a347ffcbd5357e2033d9fcfed4fa99217" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto clue::PointsHost&lt; Ndim, TData &gt;::Point::cluster_index</definition>
+        <argsstring>() const</argsstring>
+        <name>cluster_index</name>
+        <qualifiedname>clue::PointsHost::Point::cluster_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="86" column="12"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/data_structures/PointsHost.hpp" line="76" column="5" bodyfile="include/CLUEstering/data_structures/PointsHost.hpp" bodystart="76" bodyend="87"/>
+    <listofallmembers>
+      <member refid="classclue_1_1PointsHost_1_1Point_1a347ffcbd5357e2033d9fcfed4fa99217" prot="public" virt="non-virtual"><scope>clue::PointsHost::Point</scope><name>cluster_index</name></member>
+      <member refid="classclue_1_1PointsHost_1_1Point_1aae3f06022ceb4bacb3092dbbf71bf2c6" prot="private" virt="non-virtual"><scope>clue::PointsHost::Point</scope><name>m_clusterIndex</name></member>
+      <member refid="classclue_1_1PointsHost_1_1Point_1a879644aebd7121e624ab6331124b6e13" prot="private" virt="non-virtual"><scope>clue::PointsHost::Point</scope><name>m_coordinates</name></member>
+      <member refid="classclue_1_1PointsHost_1_1Point_1a12c75a623973a079f76d2039578343ec" prot="private" virt="non-virtual"><scope>clue::PointsHost::Point</scope><name>m_weight</name></member>
+      <member refid="classclue_1_1PointsHost_1_1Point_1ae1a0f5d769d359edaff2f982e8812874" prot="public" virt="non-virtual"><scope>clue::PointsHost::Point</scope><name>operator[]</name></member>
+      <member refid="classclue_1_1PointsHost_1_1Point_1ab68fc65297961d215c6af18c29f4dff3" prot="public" virt="non-virtual"><scope>clue::PointsHost::Point</scope><name>Point</name></member>
+      <member refid="classclue_1_1PointsHost_1_1Point_1aa329a3a11e0728230d9c535e3591c47a" prot="public" virt="non-virtual"><scope>clue::PointsHost::Point</scope><name>weight</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

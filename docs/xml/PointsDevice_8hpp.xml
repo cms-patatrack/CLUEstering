@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="PointsDevice_8hpp" kind="file" language="C++">
+    <compoundname>PointsDevice.hpp</compoundname>
+    <includes local="yes">CLUEstering/core/detail/defines.hpp</includes>
+    <includes local="yes">CLUEstering/data_structures/internal/PointsCommon.hpp</includes>
+    <includes local="yes">CLUEstering/detail/concepts.hpp</includes>
+    <includes local="yes">CLUEstering/internal/alpaka/memory.hpp</includes>
+    <includes local="no">concepts</includes>
+    <includes local="no">cstddef</includes>
+    <includes local="no">cstdint</includes>
+    <includes local="no">optional</includes>
+    <includes local="no">span</includes>
+    <includes local="no">alpaka/alpaka.hpp</includes>
+    <includes local="yes">CLUEstering/data_structures/detail/PointsDevice.hpp</includes>
+    <includedby refid="CLUEstering_8hpp" local="yes">include/CLUEstering/CLUEstering.hpp</includedby>
+    <includedby refid="Clusterer_8hpp" local="yes">include/CLUEstering/core/Clusterer.hpp</includedby>
+    <includedby refid="PointsConversion_8hpp" local="yes">include/CLUEstering/data_structures/PointsConversion.hpp</includedby>
+    <includedby refid="get__clusters_8hpp" local="yes">include/CLUEstering/utils/get_clusters.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/CLUEstering/data_structures/PointsDevice.hpp</label>
+        <link refid="PointsDevice_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>CLUEstering/core/detail/defines.hpp</label>
+      </node>
+      <node id="12">
+        <label>CLUEstering/data_structures/detail/PointsDevice.hpp</label>
+      </node>
+      <node id="3">
+        <label>CLUEstering/data_structures/internal/PointsCommon.hpp</label>
+      </node>
+      <node id="4">
+        <label>CLUEstering/detail/concepts.hpp</label>
+      </node>
+      <node id="5">
+        <label>CLUEstering/internal/alpaka/memory.hpp</label>
+      </node>
+      <node id="11">
+        <label>alpaka/alpaka.hpp</label>
+      </node>
+      <node id="6">
+        <label>concepts</label>
+      </node>
+      <node id="7">
+        <label>cstddef</label>
+      </node>
+      <node id="8">
+        <label>cstdint</label>
+      </node>
+      <node id="9">
+        <label>optional</label>
+      </node>
+      <node id="10">
+        <label>span</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>include/CLUEstering/CLUEstering.hpp</label>
+        <link refid="CLUEstering_8hpp"/>
+      </node>
+      <node id="3">
+        <label>include/CLUEstering/core/Clusterer.hpp</label>
+        <link refid="Clusterer_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>include/CLUEstering/data_structures/PointsConversion.hpp</label>
+        <link refid="PointsConversion_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/CLUEstering/data_structures/PointsDevice.hpp</label>
+        <link refid="PointsDevice_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>include/CLUEstering/utils/get_clusters.hpp</label>
+        <link refid="get__clusters_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classclue_1_1PointsDevice" prot="public">clue::PointsDevice</innerclass>
+    <innernamespace refid="namespaceclue">clue</innernamespace>
+    <briefdescription>
+<para>Provides the PointsDevice class for managing points on a device. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="authors"><para>Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/core/detail/defines.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/data_structures/internal/PointsCommon.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/detail/concepts.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/internal/alpaka/memory.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;concepts&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstddef&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdint&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;optional&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;span&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;alpaka/alpaka.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">clue<sp/>{</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData&gt;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1Clusterer" kindref="compound">Clusterer</ref>;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData&gt;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost</ref>;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData,<sp/>concepts::device<sp/>TDev&gt;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref>;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::queue<sp/>TQueue,</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t<sp/>Ndim,</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::floating_point<sp/>THostInput,</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::floating_point<sp/>TDeviceInput,</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>concepts::device<sp/>TDev&gt;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="PointsConversion_8hpp_1a1132011f82306a10d9c7e6cb3cdf9903" kindref="member">copyToHost</ref>(TQueue&amp;<sp/>queue,</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost&lt;Ndim, THostInput&gt;</ref>&amp;<sp/>h_points,</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice&lt;Ndim, TDeviceInput, TDev&gt;</ref>&amp;<sp/>d_points);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::queue<sp/>TQueue,</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t<sp/>Ndim,</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::floating_point<sp/>TDeviceInput,</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>concepts::device<sp/>TDev,</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::floating_point<sp/>THostInput&gt;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="PointsConversion_8hpp_1a515a5b740886c72fef39297c19e4868b" kindref="member">copyToDevice</ref>(TQueue&amp;<sp/>queue,</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice&lt;Ndim, TDeviceInput, TDev&gt;</ref>&amp;<sp/>d_points,</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsHost" kindref="compound">PointsHost&lt;Ndim, THostInput&gt;</ref>&amp;<sp/>h_points);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>TData<sp/>=<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal">,<sp/>concepts::device<sp/>TDev<sp/>=<sp/>clue::Device&gt;</highlight></codeline>
+<codeline lineno="53" refid="classclue_1_1PointsDevice" refkind="compound"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>internal::points_interface&lt;PointsDevice&lt;Ndim,<sp/>TData,<sp/>TDev&gt;&gt;<sp/>{</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static_assert</highlight><highlight class="normal">(std::is_same_v&lt;TData,<sp/>std::remove_reference_t&lt;TData&gt;&gt;,</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;Points&apos;<sp/>data<sp/>must<sp/>be<sp/>a<sp/>non-reference<sp/>type&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">element_type<sp/>=<sp/>TData;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">value_type<sp/>=<sp/>std::remove_cv_t&lt;TData&gt;;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>device_buffer&lt;TDev,<sp/>std::byte[]&gt;<sp/>m_buffer;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>PointsView&lt;Ndim,<sp/>element_type&gt;<sp/>m_view;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>std::optional&lt;std::size_t&gt;<sp/>m_nclusters;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>std::int32_t<sp/>m_size;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>m_clustered<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::queue<sp/>TQueue&gt;</highlight></codeline>
+<codeline lineno="74" refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref>(TQueue&amp;<sp/>queue,<sp/>std::int32_t<sp/>n_points);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::queue<sp/>TQueue&gt;</highlight></codeline>
+<codeline lineno="82" refid="classclue_1_1PointsDevice_1a3a5da1a2de532106ea59ab2d8bae1acc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1a3a5da1a2de532106ea59ab2d8bae1acc" kindref="member">PointsDevice</ref>(TQueue&amp;<sp/>queue,<sp/>std::int32_t<sp/>n_points,<sp/>std::span&lt;std::byte&gt;<sp/>buffer);</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::queue<sp/>TQueue&gt;</highlight></codeline>
+<codeline lineno="92" refid="classclue_1_1PointsDevice_1aa4dab77d757cdb9ac5842ab415d9e376" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1aa4dab77d757cdb9ac5842ab415d9e376" kindref="member">PointsDevice</ref>(TQueue&amp;<sp/>queue,</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::int32_t<sp/>n_points,</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;element_type&gt;<sp/>input,</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;int&gt;<sp/>output);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::queue<sp/>TQueue&gt;</highlight></codeline>
+<codeline lineno="106" refid="classclue_1_1PointsDevice_1aa1574163f9a6a61ac2df3acf5e556c83" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1aa1574163f9a6a61ac2df3acf5e556c83" kindref="member">PointsDevice</ref>(TQueue&amp;<sp/>queue,</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::int32_t<sp/>n_points,</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;element_type&gt;<sp/>coordinates,</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;element_type&gt;<sp/><ref refid="classclue_1_1PointsDevice_1ad9fbfbf03191af649b751c71d64ae30e" kindref="member">weights</ref>,</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;int&gt;<sp/>output);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::queue<sp/>TQueue&gt;</highlight></codeline>
+<codeline lineno="120" refid="classclue_1_1PointsDevice_1a9d1211372b0aee0d0c9be105f0d34a6e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1a9d1211372b0aee0d0c9be105f0d34a6e" kindref="member">PointsDevice</ref>(TQueue&amp;<sp/>queue,<sp/>std::int32_t<sp/>n_points,<sp/>element_type*<sp/>input,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">*<sp/>output);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::queue<sp/>TQueue&gt;</highlight></codeline>
+<codeline lineno="131" refid="classclue_1_1PointsDevice_1ae555cd0beb020025eceb2da72b537b05" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1ae555cd0beb020025eceb2da72b537b05" kindref="member">PointsDevice</ref>(TQueue&amp;<sp/>queue,</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::int32_t<sp/>n_points,</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>element_type*<sp/>coordinates,</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>element_type*<sp/><ref refid="classclue_1_1PointsDevice_1ad9fbfbf03191af649b751c71d64ae30e" kindref="member">weights</ref>,</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">*<sp/>output);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;concepts::queue<sp/>TQueue,<sp/>concepts::pointer...<sp/>TBuffers&gt;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">...(TBuffers)<sp/>==<sp/>Ndim<sp/>+<sp/>2<sp/>and<sp/>Ndim<sp/>&gt;<sp/>1)</highlight></codeline>
+<codeline lineno="144" refid="classclue_1_1PointsDevice_1a1702345b9baa6a0cd728af6ac3fd33cc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1a1702345b9baa6a0cd728af6ac3fd33cc" kindref="member">PointsDevice</ref>(TQueue&amp;<sp/>queue,<sp/>std::int32_t<sp/>n_points,<sp/>TBuffers...<sp/>buffers);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref>&amp;)<sp/>=<sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref>&amp;<sp/>operator=(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref>&amp;)<sp/>=<sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref>(<ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref>&amp;&amp;)<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref>&amp;<sp/>operator=(<ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">PointsDevice</ref>&amp;&amp;)<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classclue_1_1PointsDevice_1af17360942f7ed062121f93c6496e67bc" kindref="member">~PointsDevice</ref>()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>CLUE_BUILD_DOXYGEN</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="155" refid="classclue_1_1PointsDevice_1a9906318d58a619f7f32e2851428a08d4" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1a9906318d58a619f7f32e2851428a08d4" kindref="member">size</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="159" refid="classclue_1_1PointsDevice_1a499ee6836f0c06372b6863bcb55afac7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1a499ee6836f0c06372b6863bcb55afac7" kindref="member">coords</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>dim)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="163" refid="classclue_1_1PointsDevice_1a2bb67928f7d28118f838f0891e6fc0a0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1a2bb67928f7d28118f838f0891e6fc0a0" kindref="member">coords</ref>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>dim);</highlight></codeline>
+<codeline lineno="166" refid="classclue_1_1PointsDevice_1ad9fbfbf03191af649b751c71d64ae30e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1ad9fbfbf03191af649b751c71d64ae30e" kindref="member">weights</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="169" refid="classclue_1_1PointsDevice_1a5513a7bcc18c08e1a5c455c464111478" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1a5513a7bcc18c08e1a5c455c464111478" kindref="member">weights</ref>();</highlight></codeline>
+<codeline lineno="172" refid="classclue_1_1PointsDevice_1a54314bd97f709e1e0a443f8e435a692f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1a54314bd97f709e1e0a443f8e435a692f" kindref="member">clusterIndexes</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="175" refid="classclue_1_1PointsDevice_1a6db6082e3e3abff32f940d3266af4b64" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1a6db6082e3e3abff32f940d3266af4b64" kindref="member">clusterIndexes</ref>();</highlight></codeline>
+<codeline lineno="178" refid="classclue_1_1PointsDevice_1aeb73ee6a2b71317836d60375c16ccf8b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="classclue_1_1PointsDevice_1aeb73ee6a2b71317836d60375c16ccf8b" kindref="member">clustered</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="181" refid="classclue_1_1PointsDevice_1a5b337783d80be5be78437fd79766e0f2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classclue_1_1PointsDevice_1a5b337783d80be5be78437fd79766e0f2" kindref="member">view</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="184" refid="classclue_1_1PointsDevice_1a4c7fb3df945321890165fdbda8479b27" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classclue_1_1PointsDevice_1a4c7fb3df945321890165fdbda8479b27" kindref="member">view</ref>();</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"></highlight></codeline>
+<codeline lineno="191" refid="classclue_1_1PointsDevice_1a61d44891e6fe9180339cc98dd6cc65cf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>ALPAKA_FN_HOST<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/><ref refid="classclue_1_1PointsDevice_1a61d44891e6fe9180339cc98dd6cc65cf" kindref="member">n_clusters</ref>();</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">constexpr</highlight><highlight class="normal"><sp/>std::size_t<sp/>Ndim_<sp/>=<sp/>Ndim;</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"></highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>mark_clustered()<sp/>{<sp/>m_clustered<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"></highlight></codeline>
+<codeline lineno="198"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>CLUE_BUILD_DOXYGEN</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classclue_1_1Clusterer" kindref="compound">Clusterer</ref>&lt;Ndim,<sp/>std::remove_cv_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"></highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/>template<sp/>&lt;concepts::queue<sp/>TQueue,</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t<sp/>N,</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::floating_point<sp/>THostInput,</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::floating_point<sp/>TDeviceInput,</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>concepts::device<sp/>Dev&gt;</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/>friend<sp/>void<sp/><ref refid="PointsConversion_8hpp_1a1132011f82306a10d9c7e6cb3cdf9903" kindref="member">copyToHost</ref>(TQueue&amp;<sp/>queue,</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PointsHost&lt;N,<sp/>THostInput&gt;&amp;<sp/>h_points,</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>const<sp/>PointsDevice&lt;N,<sp/>TDeviceInput,<sp/>Dev&gt;&amp;<sp/>d_points);</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"></highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/>template<sp/>&lt;concepts::queue<sp/>TQueue,</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t<sp/>N,</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::floating_point<sp/>TDeviceInput,</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>concepts::device<sp/>Dev,</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::floating_point<sp/>THostInput&gt;</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/>friend<sp/>void<sp/><ref refid="PointsConversion_8hpp_1a515a5b740886c72fef39297c19e4868b" kindref="member">copyToDevice</ref>(TQueue&amp;<sp/>queue,</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PointsDevice&lt;N,<sp/>TDeviceInput,<sp/>Dev&gt;&amp;<sp/>d_points,</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>const<sp/>PointsHost&lt;N,<sp/>THostInput&gt;&amp;<sp/>h_points);</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"></highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/>friend<sp/>struct<sp/>internal::points_interface&lt;PointsDevice&lt;Ndim,<sp/>TData,<sp/>TDev&gt;&gt;;</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/>template<sp/>&lt;std::size_t<sp/>Ndim,<sp/>std::floating_point<sp/>TData<sp/>=<sp/>float&gt;</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/>using<sp/>ConstPointsDevice<sp/>=<sp/><ref refid="classclue_1_1PointsDevice" kindref="compound">PointsDevice</ref>&lt;Ndim,<sp/>std::add_const_t&lt;TData&gt;&gt;;</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"></highlight></codeline>
+<codeline lineno="226"><highlight class="normal">}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>clue</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/data_structures/detail/PointsDevice.hpp&quot;</highlight></codeline>
+    </programlisting>
+    <location file="include/CLUEstering/data_structures/PointsDevice.hpp"/>
+  </compounddef>
+</doxygen>

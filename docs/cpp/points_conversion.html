@@ -1,0 +1,2156 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="points_device.html">
+      
+      
+        <link rel="next" href="distance_metrics.html">
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>Points Conversions - CLUEstering 2.9.0 documentation</title>
+      
+    
+    
+      
+        
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+        <link rel="stylesheet" type="text/css" href="../_static/sphinx_immaterial_theme.cf2c65c97ee1b6f01.min.css?v=0a68cab4" />
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_CPPv44clue" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="CLUEstering 2.9.0 documentation" class="md-header__button md-logo" aria-label="CLUEstering 2.9.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CLUEstering 2.9.0 documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Points Conversions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="CLUEstering 2.9.0 documentation" class="md-nav__button md-logo" aria-label="CLUEstering 2.9.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    CLUEstering 2.9.0 documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Introduction to CLUEstering</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dependencies.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Supported Backends and Dependencies</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>How to Install</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Getting Started</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>C++ API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            <span>C++ API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="points_host.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Host</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="points_device.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Device</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Conversions</span>
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Conversions</span>
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_CPPv44clue" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>clue</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Functions</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>copy<wbr>To<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="copyToHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TQueue" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span>TQueue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-THostInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span>THost<wbr>Input</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDeviceInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span>TDevice<wbr>Input</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDev" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span>TDev</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::queue (C++ function parameter) — The queue used for the device operations"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-h_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::h_points (C++ function parameter) — The points allocated on the host, where the clustering results will be saved"><span>h_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-d_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::d_points (C++ function parameter) — The points allocated on the device, where the clustering has been run"><span>d_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>copy<wbr>To<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="copyToHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TQueue" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span>TQueue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span>TInput</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TDev" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span>TDev</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::queue (C++ function parameter) — The queue used for the device operations"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-d_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::d_points (C++ function parameter) — The points allocated on the device, where the clustering has been run"><span>d_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>copy<wbr>To<wbr>Device</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="copyToDevice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TQueue" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span>TQueue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDeviceInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span>TDevice<wbr>Input</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDev" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span>TDev</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-THostInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span>THost<wbr>Input</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::queue (C++ function parameter) — The queue used for the device operations"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-d_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::d_points (C++ function parameter) — The empty points allocated on the device"><span>d_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-h_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::h_points (C++ function parameter) — The points allocated on the host, containing the points&#39; coordinates and weights"><span>h_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>copy<wbr>To<wbr>Device</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="copyToDevice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TQueue" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span>TQueue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span>TInput</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TDev" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span>TDev</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::queue (C++ function parameter) — The queue used for the device operations"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-h_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::h_points (C++ function parameter) — The points allocated on the host, containing the points&#39; coordinates and weights"><span>h_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="distance_metrics.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Distance metrics</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="convolutional_kernel.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Convolutional Kernels</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="association_map.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association map</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="association_map_view.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association<wbr>Map<wbr>View</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cluster_properties.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster properties</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="get_clusters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusters associations</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cluster_centroid.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster centroids</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="read_csv.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>File reading</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="alpaka_utils.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Alpaka utilities</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="scores.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Validation scores</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../python/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>Python API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Python API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python/clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_CPPv44clue" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>clue</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breathe-section-title-functions" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Functions</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>copy<wbr>To<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="copyToHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TQueue" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span>TQueue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-THostInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span>THost<wbr>Input</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDeviceInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span>TDevice<wbr>Input</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDev" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span>TDev</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::queue (C++ function parameter) — The queue used for the device operations"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-h_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::h_points (C++ function parameter) — The points allocated on the host, where the clustering results will be saved"><span>h_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-d_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::d_points (C++ function parameter) — The points allocated on the device, where the clustering has been run"><span>d_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>copy<wbr>To<wbr>Host</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="copyToHost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TQueue" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span>TQueue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span>TInput</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TDev" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span>TDev</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::queue (C++ function parameter) — The queue used for the device operations"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-d_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToHost::d_points (C++ function parameter) — The points allocated on the device, where the clustering has been run"><span>d_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>copy<wbr>To<wbr>Device</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="copyToDevice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TQueue" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span>TQueue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDeviceInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span>TDevice<wbr>Input</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDev" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span>TDev</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-THostInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span>THost<wbr>Input</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::queue (C++ function parameter) — The queue used for the device operations"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-d_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::d_points (C++ function parameter) — The empty points allocated on the device"><span>d_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-h_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::h_points (C++ function parameter) — The points allocated on the host, containing the points&#39; coordinates and weights"><span>h_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>copy<wbr>To<wbr>Device</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="copyToDevice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-template-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Template Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Template Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TQueue" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span>TQueue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-Ndim" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span>Ndim</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TInput" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span>TInput</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TDev" class="md-nav__link">
+    
+      <span aria-label="C++ non-type template parameter" class="objinfo-icon objinfo-icon__data" title="C++ non-type template parameter">N</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span>TDev</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-parameters" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Parameters</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-queue" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::queue (C++ function parameter) — The queue used for the device operations"><span>queue</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-h_points" class="md-nav__link">
+    
+      <span aria-label="C++ function parameter" class="objinfo-icon objinfo-icon__sub-data" title="C++ function parameter">p</span>
+    
+    <span class="md-ellipsis">
+      <span title="clue::copyToDevice::h_points (C++ function parameter) — The points allocated on the host, containing the points&#39; coordinates and weights"><span>h_<wbr>points</span></span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1 id="points-conversions">Points Conversions<a class="headerlink" href="#points-conversions" title="Link to this heading">¶</a></h1>
+<p>Provides utilities for copying data between host and device points. </p>
+<p><dl class="simple">
+<dt><strong>Authors</strong></dt><dd><p>Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini </p>
+</dd>
+</dl>
+</p>
+<dl class="cpp type objdesc">
+<dt class="sig sig-object highlight cpp" id="_CPPv44clue">
+<span id="_CPPv34clue"></span><span id="_CPPv24clue"></span><span id="clue"></span><span class="target" id="namespaceclue"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clue</span></span></span><a class="headerlink" href="#_CPPv44clue" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions<a class="headerlink" href="#breathe-section-title-functions" title="Permalink to this headline">¶</a></p>
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE">
+<span id="_CPPv3I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostER6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE"></span><span id="_CPPv2I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostER6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TQueue" title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-Ndim" title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">floating_point</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-THostInput" title="clue::copyToHost::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span class="n"><span class="pre">THostInput</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">floating_point</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDeviceInput" title="clue::copyToHost::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span class="n"><span class="pre">TDeviceInput</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">device</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDev" title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n"><span class="pre">TDev</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="PointsConversion_8hpp_1a1132011f82306a10d9c7e6cb3cdf9903"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copyToHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TQueue" title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-queue" title="clue::copyToHost::queue (C++ function parameter) — The queue used for the device operations"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="points_host.html#_CPPv4I_NSt6size_tE_NSt14floating_pointEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n"><span class="pre">PointsHost</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-Ndim" title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-THostInput" title="clue::copyToHost::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span class="n"><span class="pre">THostInput</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-h_points" title="clue::copyToHost::h_points (C++ function parameter) — The points allocated on the host, where the clustering results will be saved"><span class="n sig-param"><span class="pre">h_points</span></span></a>, </span><span class="sig-param-decl"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="desctype reference internal" href="points_device.html#_CPPv4I_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12PointsDeviceE" title="clue::PointsDevice (C++ class) — The PointsDevice class is a data structure that manages points on a device. It provides methods to allocate, access, and manipulate points in device memory."><span class="n"><span class="pre">PointsDevice</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-Ndim" title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDeviceInput" title="clue::copyToHost::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span class="n"><span class="pre">TDeviceInput</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDev" title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n"><span class="pre">TDev</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-d_points" title="clue::copyToHost::d_points (C++ function parameter) — The points allocated on the device, where the clustering has been run"><span class="n sig-param"><span class="pre">d_points</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Copies the results of the clustering from the device points to the host points. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-template-parameters">Template Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-template-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TQueue"><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n">concepts</span></a><span class="p">::</span><span class="n">queue</span><span class="w"> </span><span class="sig-name descname"><span class="n">TQueue</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TQueue" title="Permalink to this definition">¶</a></dt><dd><p>The type of the queue for the device operations </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-Ndim"><span class="n">std</span><span class="p">::</span><span class="n">size_t</span><span class="w"> </span><span class="sig-name descname"><span class="n">Ndim</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-Ndim" title="Permalink to this definition">¶</a></dt><dd><p>The number of dimensions of the points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-THostInput"><span class="n">std</span><span class="p">::</span><span class="n">floating_point</span><span class="w"> </span><span class="sig-name descname"><span class="n">THostInput</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-THostInput" title="Permalink to this definition">¶</a></dt><dd><p>The type of the input coordinates and weights for the host points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDeviceInput"><span class="n">std</span><span class="p">::</span><span class="n">floating_point</span><span class="w"> </span><span class="sig-name descname"><span class="n">TDeviceInput</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDeviceInput" title="Permalink to this definition">¶</a></dt><dd><p>The type of the input coordinates and weights for the device points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDev"><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n">concepts</span></a><span class="p">::</span><span class="n">device</span><span class="w"> </span><span class="sig-name descname"><span class="n">TDev</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDev" title="Permalink to this definition">¶</a></dt><dd><p>The type of device that the points are allocated on </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TQueue" title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue used for the device operations </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-h_points"><a class="desctype reference internal" href="points_host.html#_CPPv4I_NSt6size_tE_NSt14floating_pointEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n">PointsHost</span></a><span class="p">&lt;</span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-Ndim" title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n">Ndim</span></a><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-THostInput" title="clue::copyToHost::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span class="n">THostInput</span></a><span class="p">&gt;</span><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">h_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-h_points" title="Permalink to this definition">¶</a></dt><dd><p>The points allocated on the host, where the clustering results will be saved </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-d_points"><span class="k">const</span><span class="w"> </span><a class="desctype reference internal" href="points_device.html#_CPPv4I_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12PointsDeviceE" title="clue::PointsDevice (C++ class) — The PointsDevice class is a data structure that manages points on a device. It provides methods to allocate, access, and manipulate points in device memory."><span class="n">PointsDevice</span></a><span class="p">&lt;</span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-Ndim" title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n">Ndim</span></a><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDeviceInput" title="clue::copyToHost::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span class="n">TDeviceInput</span></a><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-TDev" title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n">TDev</span></a><span class="p">&gt;</span><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">d_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEvR6TQueueR10PointsHostI4Ndim10THostInputERK12PointsDeviceI4Ndim12TDeviceInput4TDevE-p-d_points" title="Permalink to this definition">¶</a></dt><dd><p>The points allocated on the device, where the clustering has been run </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE">
+<span id="_CPPv3I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostER6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE"></span><span id="_CPPv2I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostER6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TQueue" title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-Ndim" title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">floating_point</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TInput" title="clue::copyToHost::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span class="n"><span class="pre">TInput</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">device</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TDev" title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n"><span class="pre">TDev</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="PointsConversion_8hpp_1a6628cb9c55898a5bc87b96ace264cfb1"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copyToHost</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TQueue" title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-queue" title="clue::copyToHost::queue (C++ function parameter) — The queue used for the device operations"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="desctype reference internal" href="points_device.html#_CPPv4I_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12PointsDeviceE" title="clue::PointsDevice (C++ class) — The PointsDevice class is a data structure that manages points on a device. It provides methods to allocate, access, and manipulate points in device memory."><span class="n"><span class="pre">PointsDevice</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-Ndim" title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TInput" title="clue::copyToHost::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span class="n"><span class="pre">TInput</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TDev" title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n"><span class="pre">TDev</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-d_points" title="clue::copyToHost::d_points (C++ function parameter) — The points allocated on the device, where the clustering has been run"><span class="n sig-param"><span class="pre">d_points</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Copies the results of the clustering from the device points to the host points. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-template-parameters">Template Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-template-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TQueue"><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n">concepts</span></a><span class="p">::</span><span class="n">queue</span><span class="w"> </span><span class="sig-name descname"><span class="n">TQueue</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TQueue" title="Permalink to this definition">¶</a></dt><dd><p>The type of the queue for the device operations </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-Ndim"><span class="n">std</span><span class="p">::</span><span class="n">size_t</span><span class="w"> </span><span class="sig-name descname"><span class="n">Ndim</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-Ndim" title="Permalink to this definition">¶</a></dt><dd><p>The number of dimensions of the points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TInput"><span class="n">std</span><span class="p">::</span><span class="n">floating_point</span><span class="w"> </span><span class="sig-name descname"><span class="n">TInput</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TInput" title="Permalink to this definition">¶</a></dt><dd><p>The type of the input coordinates and weights for the device points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TDev"><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n">concepts</span></a><span class="p">::</span><span class="n">device</span><span class="w"> </span><span class="sig-name descname"><span class="n">TDev</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TDev" title="Permalink to this definition">¶</a></dt><dd><p>The type of device that the points are allocated on </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TQueue" title="clue::copyToHost::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue used for the device operations </p>
+</dd>
+<dt><span class="sig-name descname">h_points</span></dt><dd><p>The points allocated on the host, where the clustering results will be saved </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-d_points"><span class="k">const</span><span class="w"> </span><a class="desctype reference internal" href="points_device.html#_CPPv4I_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12PointsDeviceE" title="clue::PointsDevice (C++ class) — The PointsDevice class is a data structure that manages points on a device. It provides methods to allocate, access, and manipulate points in device memory."><span class="n">PointsDevice</span></a><span class="p">&lt;</span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-Ndim" title="clue::copyToHost::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n">Ndim</span></a><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TInput" title="clue::copyToHost::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span class="n">TInput</span></a><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-TDev" title="clue::copyToHost::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n">TDev</span></a><span class="p">&gt;</span><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">d_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue10copyToHostEDaR6TQueueRK12PointsDeviceI4Ndim6TInput4TDevE-p-d_points" title="Permalink to this definition">¶</a></dt><dd><p>The points allocated on the device, where the clustering has been run </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE">
+<span id="_CPPv3I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceER6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE"></span><span id="_CPPv2I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceER6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TQueue" title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-Ndim" title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">floating_point</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDeviceInput" title="clue::copyToDevice::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span class="n"><span class="pre">TDeviceInput</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">device</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDev" title="clue::copyToDevice::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n"><span class="pre">TDev</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">floating_point</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-THostInput" title="clue::copyToDevice::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span class="n"><span class="pre">THostInput</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="PointsConversion_8hpp_1a515a5b740886c72fef39297c19e4868b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copyToDevice</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TQueue" title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-queue" title="clue::copyToDevice::queue (C++ function parameter) — The queue used for the device operations"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><a class="desctype reference internal" href="points_device.html#_CPPv4I_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12PointsDeviceE" title="clue::PointsDevice (C++ class) — The PointsDevice class is a data structure that manages points on a device. It provides methods to allocate, access, and manipulate points in device memory."><span class="n"><span class="pre">PointsDevice</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-Ndim" title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDeviceInput" title="clue::copyToDevice::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span class="n"><span class="pre">TDeviceInput</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDev" title="clue::copyToDevice::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n"><span class="pre">TDev</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-d_points" title="clue::copyToDevice::d_points (C++ function parameter) — The empty points allocated on the device"><span class="n sig-param"><span class="pre">d_points</span></span></a>, </span><span class="sig-param-decl"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="desctype reference internal" href="points_host.html#_CPPv4I_NSt6size_tE_NSt14floating_pointEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n"><span class="pre">PointsHost</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-Ndim" title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-THostInput" title="clue::copyToDevice::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span class="n"><span class="pre">THostInput</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-h_points" title="clue::copyToDevice::h_points (C++ function parameter) — The points allocated on the host, containing the points' coordinates and weights"><span class="n sig-param"><span class="pre">h_points</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Copies the coordinates and weights of the points from the host to the device. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-template-parameters">Template Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-template-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TQueue"><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n">concepts</span></a><span class="p">::</span><span class="n">queue</span><span class="w"> </span><span class="sig-name descname"><span class="n">TQueue</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TQueue" title="Permalink to this definition">¶</a></dt><dd><p>The type of the queue for the device operations </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-Ndim"><span class="n">std</span><span class="p">::</span><span class="n">size_t</span><span class="w"> </span><span class="sig-name descname"><span class="n">Ndim</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-Ndim" title="Permalink to this definition">¶</a></dt><dd><p>The number of dimensions of the points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDeviceInput"><span class="n">std</span><span class="p">::</span><span class="n">floating_point</span><span class="w"> </span><span class="sig-name descname"><span class="n">TDeviceInput</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDeviceInput" title="Permalink to this definition">¶</a></dt><dd><p>The type of the input coordinates and weights for the device points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDev"><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n">concepts</span></a><span class="p">::</span><span class="n">device</span><span class="w"> </span><span class="sig-name descname"><span class="n">TDev</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDev" title="Permalink to this definition">¶</a></dt><dd><p>The type of device that the points are allocated on </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-THostInput"><span class="n">std</span><span class="p">::</span><span class="n">floating_point</span><span class="w"> </span><span class="sig-name descname"><span class="n">THostInput</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-THostInput" title="Permalink to this definition">¶</a></dt><dd><p>The type of the input coordinates and weights for the host points </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TQueue" title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue used for the device operations </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-d_points"><a class="desctype reference internal" href="points_device.html#_CPPv4I_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12PointsDeviceE" title="clue::PointsDevice (C++ class) — The PointsDevice class is a data structure that manages points on a device. It provides methods to allocate, access, and manipulate points in device memory."><span class="n">PointsDevice</span></a><span class="p">&lt;</span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-Ndim" title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n">Ndim</span></a><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDeviceInput" title="clue::copyToDevice::TDeviceInput (C++ non-type template parameter) — The type of the input coordinates and weights for the device points"><span class="n">TDeviceInput</span></a><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-TDev" title="clue::copyToDevice::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n">TDev</span></a><span class="p">&gt;</span><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">d_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-d_points" title="Permalink to this definition">¶</a></dt><dd><p>The empty points allocated on the device </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-h_points"><span class="k">const</span><span class="w"> </span><a class="desctype reference internal" href="points_host.html#_CPPv4I_NSt6size_tE_NSt14floating_pointEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n">PointsHost</span></a><span class="p">&lt;</span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-Ndim" title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n">Ndim</span></a><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-THostInput" title="clue::copyToDevice::THostInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span class="n">THostInput</span></a><span class="p">&gt;</span><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">h_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceE_NSt14floating_pointEEN4clue12copyToDeviceEvR6TQueueR12PointsDeviceI4Ndim12TDeviceInput4TDevERK10PointsHostI4Ndim10THostInputE-p-h_points" title="Permalink to this definition">¶</a></dt><dd><p>The points allocated on the host, containing the points’ coordinates and weights </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function objdesc">
+<dt class="sig sig-object highlight sig-wrap cpp" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE">
+<span id="_CPPv3I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceER6TQueueRK10PointsHostI4Ndim6TInputE"></span><span id="_CPPv2I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceER6TQueueRK10PointsHostI4Ndim6TInputE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">queue</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TQueue" title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n"><span class="pre">TQueue</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-Ndim" title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">floating_point</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TInput" title="clue::copyToDevice::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span class="n"><span class="pre">TInput</span></span></a></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n"><span class="pre">concepts</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">device</span></span><span class="w"> </span><span class="sig-name descname sig-name-nonprimary"><a class="n reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TDev" title="clue::copyToDevice::TDev (C++ non-type template parameter) — The type of device that the points are allocated on"><span class="n"><span class="pre">TDev</span></span></a></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="PointsConversion_8hpp_1a7dfee5dddca1b8738229e58755a726a0"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copyToDevice</span></span></span><span class="sig-paren">(</span><span class="sig-param-decl"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TQueue" title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n"><span class="pre">TQueue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-queue" title="clue::copyToDevice::queue (C++ function parameter) — The queue used for the device operations"><span class="n sig-param"><span class="pre">queue</span></span></a>, </span><span class="sig-param-decl"><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="desctype reference internal" href="points_host.html#_CPPv4I_NSt6size_tE_NSt14floating_pointEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n"><span class="pre">PointsHost</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-Ndim" title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n"><span class="pre">Ndim</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TInput" title="clue::copyToDevice::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span class="n"><span class="pre">TInput</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><a class="n sig-param reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-h_points" title="clue::copyToDevice::h_points (C++ function parameter) — The points allocated on the host, containing the points' coordinates and weights"><span class="n sig-param"><span class="pre">h_points</span></span></a></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Copies the coordinates and weights of the points from the host to the device. </p>
+<dl class="field-list simple">
+<dt class="field-odd" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-template-parameters">Template Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-template-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-odd"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TQueue"><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n">concepts</span></a><span class="p">::</span><span class="n">queue</span><span class="w"> </span><span class="sig-name descname"><span class="n">TQueue</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TQueue" title="Permalink to this definition">¶</a></dt><dd><p>The type of the queue for the device operations </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-Ndim"><span class="n">std</span><span class="p">::</span><span class="n">size_t</span><span class="w"> </span><span class="sig-name descname"><span class="n">Ndim</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-Ndim" title="Permalink to this definition">¶</a></dt><dd><p>The number of dimensions of the points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TInput"><span class="n">std</span><span class="p">::</span><span class="n">floating_point</span><span class="w"> </span><span class="sig-name descname"><span class="n">TInput</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TInput" title="Permalink to this definition">¶</a></dt><dd><p>The type of the input coordinates and weights for the host points </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TDev"><a class="desctype reference internal" href="convolutional_kernel.html#_CPPv4N4clue8conceptsE" title="clue::concepts (C++ type)"><span class="n">concepts</span></a><span class="p">::</span><span class="n">device</span><span class="w"> </span><span class="sig-name descname"><span class="n">TDev</span></span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TDev" title="Permalink to this definition">¶</a></dt><dd><p>The type of device that the points are allocated on </p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even" id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-parameters">Parameters<span class="colon">:</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-parameters" title="Permalink to this headline">¶</a></dt>
+<dd class="field-even"><dl class="simple api-field highlight">
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-queue"><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TQueue" title="clue::copyToDevice::TQueue (C++ non-type template parameter) — The type of the queue for the device operations"><span class="n">TQueue</span></a><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">queue</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-queue" title="Permalink to this definition">¶</a></dt><dd><p>The queue used for the device operations </p>
+</dd>
+<dt><span class="sig-name descname">d_points</span></dt><dd><p>The empty points allocated on the device </p>
+</dd>
+<dt id="_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-h_points"><span class="k">const</span><span class="w"> </span><a class="desctype reference internal" href="points_host.html#_CPPv4I_NSt6size_tE_NSt14floating_pointEEN4clue10PointsHostE" title="clue::PointsHost (C++ class) — The PointsHost class is a data structure that manages points in host memory. It provides methods to allocate, access, and manipulate points in host memory."><span class="n">PointsHost</span></a><span class="p">&lt;</span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-Ndim" title="clue::copyToDevice::Ndim (C++ non-type template parameter) — The number of dimensions of the points"><span class="n">Ndim</span></a><span class="p">,</span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-TInput" title="clue::copyToDevice::TInput (C++ non-type template parameter) — The type of the input coordinates and weights for the host points"><span class="n">TInput</span></a><span class="p">&gt;</span><span class="w"> </span><span class="p">&amp;</span><span class="n sig-param sig-name">h_points</span><a class="headerlink" href="#_CPPv4I_N8concepts5queueE_NSt6size_tE_NSt14floating_pointE_N8concepts6deviceEEN4clue12copyToDeviceEDaR6TQueueRK10PointsHostI4Ndim6TInputE-p-h_points" title="Permalink to this definition">¶</a></dt><dd><p>The points allocated on the host, containing the points’ coordinates and weights </p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2025, Simone Balducci, Felice Pantaleo, Wahid Redjeb, Marco Rovere, Aurora Perego, Francesco Giacomini.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    8.2.3.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "toc.follow", "search.share", "header.autohide"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="../_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+    
+  </body>
+</html>

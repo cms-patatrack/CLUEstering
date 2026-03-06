@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="dir_8dff6c10bf0afdabd1dec894b4deddc1" kind="dir">
+    <compoundname>include/CLUEstering</compoundname>
+    <innerdir refid="dir_43d3417ceeb7eaaa370c8b0ba7d75225">include/CLUEstering/core</innerdir>
+    <innerdir refid="dir_fa28860a501df7f6b51401a4b34c9f09">include/CLUEstering/data_structures</innerdir>
+    <innerdir refid="dir_4d002444c984ff1eb7009e06d7cb4d26">include/CLUEstering/utils</innerdir>
+    <innerfile refid="CLUEstering_8hpp">CLUEstering.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classclue_1_1GaussianKernel" kind="class" language="C++" prot="public">
+    <compoundname>clue::GaussianKernel</compoundname>
+    <includes refid="ConvolutionalKernel_8hpp" local="no">ConvolutionalKernel.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::floating_point</type>
+        <declname>TData</declname>
+        <defname>TData</defname>
+        <defval>float</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classclue_1_1GaussianKernel_1a7d6d190a04ca95460710cae9ea3e2c6c" prot="public" static="no">
+        <type>std::remove_cv_t&lt; std::remove_reference_t&lt; TData &gt; &gt;</type>
+        <definition>using clue::GaussianKernel&lt; TData &gt;::value_type = std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>clue::GaussianKernel::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="50" column="5" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classclue_1_1GaussianKernel_1a2d578f72df31f832e17b74b169cdb184" prot="private" static="no" mutable="no">
+        <type>value_type</type>
+        <definition>value_type clue::GaussianKernel&lt; TData &gt;::m_gaus_avg</definition>
+        <argsstring></argsstring>
+        <name>m_gaus_avg</name>
+        <qualifiedname>clue::GaussianKernel::m_gaus_avg</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="53" column="16" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1GaussianKernel_1a5b75ab73b9cd864bcbe916508d9630d6" prot="private" static="no" mutable="no">
+        <type>value_type</type>
+        <definition>value_type clue::GaussianKernel&lt; TData &gt;::m_gaus_std</definition>
+        <argsstring></argsstring>
+        <name>m_gaus_std</name>
+        <qualifiedname>clue::GaussianKernel::m_gaus_std</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="54" column="16" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classclue_1_1GaussianKernel_1aa6e97f0c347e268c3bd927b6a72d1870" prot="private" static="no" mutable="no">
+        <type>value_type</type>
+        <definition>value_type clue::GaussianKernel&lt; TData &gt;::m_gaus_amplitude</definition>
+        <argsstring></argsstring>
+        <name>m_gaus_amplitude</name>
+        <qualifiedname>clue::GaussianKernel::m_gaus_amplitude</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="55" column="16" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1GaussianKernel_1a41ec947ef34f699be131662948998040" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>clue::GaussianKernel&lt; TData &gt;::GaussianKernel</definition>
+        <argsstring>(value_type gaus_avg, value_type gaus_std, value_type gaus_amplitude)</argsstring>
+        <name>GaussianKernel</name>
+        <qualifiedname>clue::GaussianKernel::GaussianKernel</qualifiedname>
+        <param>
+          <type>value_type</type>
+          <declname>gaus_avg</declname>
+        </param>
+        <param>
+          <type>value_type</type>
+          <declname>gaus_std</declname>
+        </param>
+        <param>
+          <type>value_type</type>
+          <declname>gaus_amplitude</declname>
+        </param>
+        <briefdescription>
+<para>Construct a <ref refid="classclue_1_1GaussianKernel" kindref="compound">GaussianKernel</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>gaus_avg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The average value for the Gaussian kernel </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>gaus_std</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The standard deviation for the Gaussian kernel </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>gaus_amplitude</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The amplitude for the Gaussian kernel </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="63" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1GaussianKernel_1a1ce68adbf808f00fee8f38f2f84fd5b5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TAcc</type>
+          </param>
+        </templateparamlist>
+        <type>ALPAKA_FN_ACC auto</type>
+        <definition>ALPAKA_FN_ACC auto clue::GaussianKernel&lt; TData &gt;::operator()</definition>
+        <argsstring>(const TAcc &amp;acc, value_type dist_ij, int point_id, int j) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>clue::GaussianKernel::operator()</qualifiedname>
+        <param>
+          <type>const TAcc &amp;</type>
+          <declname>acc</declname>
+        </param>
+        <param>
+          <type>value_type</type>
+          <declname>dist_ij</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>point_id</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+<para>Computes the kernel value between two points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>acc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The accelerator to use for the computation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dist_ij</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The distance between the two points </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>point_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the first point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the second point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The computed kernel value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="73" column="24"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>The <ref refid="classclue_1_1GaussianKernel" kindref="compound">GaussianKernel</ref> class implements a Gaussian kernel for convolution. It computes the kernel value based on the Gaussian function, which is defined by its average, standard deviation, and amplitude. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>TData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data type for the kernel values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="48" column="3" bodyfile="include/CLUEstering/core/ConvolutionalKernel.hpp" bodystart="48" bodyend="74"/>
+    <listofallmembers>
+      <member refid="classclue_1_1GaussianKernel_1a41ec947ef34f699be131662948998040" prot="public" virt="non-virtual"><scope>clue::GaussianKernel</scope><name>GaussianKernel</name></member>
+      <member refid="classclue_1_1GaussianKernel_1aa6e97f0c347e268c3bd927b6a72d1870" prot="private" virt="non-virtual"><scope>clue::GaussianKernel</scope><name>m_gaus_amplitude</name></member>
+      <member refid="classclue_1_1GaussianKernel_1a2d578f72df31f832e17b74b169cdb184" prot="private" virt="non-virtual"><scope>clue::GaussianKernel</scope><name>m_gaus_avg</name></member>
+      <member refid="classclue_1_1GaussianKernel_1a5b75ab73b9cd864bcbe916508d9630d6" prot="private" virt="non-virtual"><scope>clue::GaussianKernel</scope><name>m_gaus_std</name></member>
+      <member refid="classclue_1_1GaussianKernel_1a1ce68adbf808f00fee8f38f2f84fd5b5" prot="public" virt="non-virtual"><scope>clue::GaussianKernel</scope><name>operator()</name></member>
+      <member refid="classclue_1_1GaussianKernel_1a7d6d190a04ca95460710cae9ea3e2c6c" prot="public" virt="non-virtual"><scope>clue::GaussianKernel</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
