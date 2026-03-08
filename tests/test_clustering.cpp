@@ -13,16 +13,12 @@
 #include <doctest/doctest.h>
 
 TEST_CASE("Test clustering on benchmarking datasets") {
-#ifdef COVERAGE
   auto range = std::make_pair(10, 14);
-#else
-  auto range = std::make_pair(10, 18);
-#endif
   SUBCASE("Test clustering from combined buffers") {
     SUBCASE("Clustering with single-precision float data") {
       auto queue = clue::get_queue(0u);
 
-      const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
+      const float dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       for (auto i = range.first; i < range.second; ++i) {
@@ -33,14 +29,13 @@ TEST_CASE("Test clustering on benchmarking datasets") {
         auto h_points = clue::PointsHost<2>(queue, n_points, input_data.data, input_data.labels);
 
         algo.make_clusters(queue, h_points);
-
-        // CHECK(clue::silhouette(h_points) >= 0.9f);
+        CHECK(clue::silhouette(h_points) >= 0.9f);
       }
     }
     SUBCASE("Clustering with double-precision float data") {
       auto queue = clue::get_queue(0u);
 
-      const auto dc{1.5}, rhoc{10.}, outlier{1.5};
+      const auto dc = 1.5, rhoc = 10., outlier = 1.5;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       for (auto i = range.first; i < range.second; ++i) {
@@ -52,8 +47,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
             clue::PointsHost<2, double>(queue, n_points, input_data.data, input_data.labels);
 
         algo.make_clusters(queue, h_points);
-
-        // CHECK(clue::silhouette(h_points) >= 0.9f);
+        CHECK(clue::silhouette(h_points) >= 0.9f);
       }
     }
   }
@@ -61,7 +55,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     SUBCASE("Clustering with single-precision float data") {
       auto queue = clue::get_queue(0u);
 
-      const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
+      const float dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       for (auto i = range.first; i < range.second; ++i) {
@@ -73,14 +67,13 @@ TEST_CASE("Test clustering on benchmarking datasets") {
             queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
         algo.make_clusters(queue, h_points);
-
-        // CHECK(clue::silhouette(h_points) >= 0.9f);
+        CHECK(clue::silhouette(h_points) >= 0.9f);
       }
     }
     SUBCASE("Clustering with double-precision float data") {
       auto queue = clue::get_queue(0u);
 
-      const auto dc{1.5}, rhoc{10.}, outlier{1.5};
+      const auto dc = 1.5, rhoc = 10., outlier = 1.5;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       for (auto i = range.first; i < range.second; ++i) {
@@ -92,8 +85,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
             queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
         algo.make_clusters(queue, h_points);
-
-        // CHECK(clue::silhouette(h_points) >= 0.9f);
+        CHECK(clue::silhouette(h_points) >= 0.9f);
       }
     }
   }
@@ -101,7 +93,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     SUBCASE("Clustering with single-precision float data") {
       auto queue = clue::get_queue(0u);
 
-      const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
+      const float dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       for (auto i = range.first; i < range.second; ++i) {
@@ -117,14 +109,13 @@ TEST_CASE("Test clustering on benchmarking datasets") {
                                             input_data.labels);
 
         algo.make_clusters(queue, h_points);
-
-        // CHECK(clue::silhouette(h_points) >= 0.9f);
+        CHECK(clue::silhouette(h_points) >= 0.9f);
       }
     }
     SUBCASE("Clustering with double-precision float data") {
       auto queue = clue::get_queue(0u);
 
-      const auto dc{1.5}, rhoc{10.}, outlier{1.5};
+      const auto dc = 1.5, rhoc = 10., outlier = 1.5;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       for (auto i = range.first; i < range.second; ++i) {
@@ -140,9 +131,120 @@ TEST_CASE("Test clustering on benchmarking datasets") {
                                                     input_data.labels);
 
         algo.make_clusters(queue, h_points);
-
-        // CHECK(clue::silhouette(h_points) >= 0.9f);
+        CHECK(clue::silhouette(h_points) >= 0.9f);
       }
+    }
+  }
+}
+
+TEST_CASE("Test clustering on a large dataset") {
+  SUBCASE("Test clustering from combined buffers") {
+    SUBCASE("Clustering with single-precision float data") {
+      auto queue = clue::get_queue(0u);
+
+      const float dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
+      clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+
+      const auto test_file_path =
+          std::string(TEST_DATA_DIR) + fmt::format("/data_{}.csv", std::pow(2, 18));
+      auto input_data = test::read_csv_combined<float>(test_file_path);
+      const auto n_points = input_data.n_points;
+      auto h_points = clue::PointsHost<2>(queue, n_points, input_data.data, input_data.labels);
+
+      algo.make_clusters(queue, h_points);
+      CHECK(clue::silhouette(h_points) >= 0.9f);
+    }
+    SUBCASE("Clustering with double-precision float data") {
+      auto queue = clue::get_queue(0u);
+
+      const auto dc = 1.5, rhoc = 10., outlier = 1.5;
+      clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+
+      const auto test_file_path =
+          std::string(TEST_DATA_DIR) + fmt::format("/data_{}.csv", std::pow(2, 18));
+      auto input_data = test::read_csv_combined<double>(test_file_path);
+      const auto n_points = input_data.n_points;
+      auto h_points =
+          clue::PointsHost<2, double>(queue, n_points, input_data.data, input_data.labels);
+
+      algo.make_clusters(queue, h_points);
+      CHECK(clue::silhouette(h_points) >= 0.9f);
+    }
+  }
+  SUBCASE("Test clustering from separate input buffers") {
+    SUBCASE("Clustering with single-precision float data") {
+      auto queue = clue::get_queue(0u);
+
+      const float dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
+      clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+
+      const auto test_file_path =
+          std::string(TEST_DATA_DIR) + fmt::format("/data_{}.csv", std::pow(2, 18));
+      auto input_data = test::read_csv_separate<float>(test_file_path);
+      const auto n_points = input_data.n_points;
+      auto h_points = clue::PointsHost<2>(
+          queue, n_points, input_data.coords, input_data.weights, input_data.labels);
+
+      algo.make_clusters(queue, h_points);
+      CHECK(clue::silhouette(h_points) >= 0.9f);
+    }
+    SUBCASE("Clustering with double-precision float data") {
+      auto queue = clue::get_queue(0u);
+
+      const auto dc = 1.5, rhoc = 10., outlier = 1.5;
+      clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+
+      const auto test_file_path =
+          std::string(TEST_DATA_DIR) + fmt::format("/data_{}.csv", std::pow(2, 18));
+      auto input_data = test::read_csv_separate<double>(test_file_path);
+      const auto n_points = input_data.n_points;
+      auto h_points = clue::PointsHost<2, double>(
+          queue, n_points, input_data.coords, input_data.weights, input_data.labels);
+
+      algo.make_clusters(queue, h_points);
+      CHECK(clue::silhouette(h_points) >= 0.9f);
+    }
+  }
+  SUBCASE("Test clustering from separate coordinates buffers") {
+    SUBCASE("Clustering with single-precision float data") {
+      auto queue = clue::get_queue(0u);
+
+      const float dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
+      clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+
+      const auto test_file_path =
+          std::string(TEST_DATA_DIR) + fmt::format("/data_{}.csv", std::pow(2, 18));
+      auto input_data = test::read_csv_per_dim<float>(test_file_path);
+      const auto n_points = input_data.n_points;
+      auto h_points = clue::PointsHost<2>(queue,
+                                          n_points,
+                                          input_data.dims[0],
+                                          input_data.dims[1],
+                                          input_data.weights,
+                                          input_data.labels);
+
+      algo.make_clusters(queue, h_points);
+      CHECK(clue::silhouette(h_points) >= 0.9f);
+    }
+    SUBCASE("Clustering with double-precision float data") {
+      auto queue = clue::get_queue(0u);
+
+      const auto dc = 1.5, rhoc = 10., outlier = 1.5;
+      clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+
+      const auto test_file_path =
+          std::string(TEST_DATA_DIR) + fmt::format("/data_{}.csv", std::pow(2, 18));
+      auto input_data = test::read_csv_per_dim<double>(test_file_path);
+      const auto n_points = input_data.n_points;
+      auto h_points = clue::PointsHost<2, double>(queue,
+                                                  n_points,
+                                                  input_data.dims[0],
+                                                  input_data.dims[1],
+                                                  input_data.weights,
+                                                  input_data.labels);
+
+      algo.make_clusters(queue, h_points);
+      CHECK(clue::silhouette(h_points) >= 0.9f);
     }
   }
 }
@@ -157,7 +259,7 @@ TEST_CASE("Test clustering on aniso dataset") {
       const auto n_points = input_data.n_points;
       auto h_points = clue::PointsHost<2>(queue, n_points, input_data.data, input_data.labels);
 
-      const float dc{25.f}, rhoc{5.f}, outlier{23.f};
+      const float dc = 25.f, rhoc = 5.f, outlier = 23.f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
@@ -174,7 +276,7 @@ TEST_CASE("Test clustering on aniso dataset") {
       auto h_points =
           clue::PointsHost<2, double>(queue, n_points, input_data.data, input_data.labels);
 
-      const auto dc{25.}, rhoc{5.}, outlier{23.};
+      const auto dc = 25., rhoc = 5., outlier = 23.;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
@@ -193,7 +295,7 @@ TEST_CASE("Test clustering on aniso dataset") {
       auto h_points = clue::PointsHost<2>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const float dc{25.f}, rhoc{5.f}, outlier{23.f};
+      const float dc = 25.f, rhoc = 5.f, outlier = 23.f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
@@ -210,7 +312,7 @@ TEST_CASE("Test clustering on aniso dataset") {
       auto h_points = clue::PointsHost<2, double>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const auto dc{25.}, rhoc{5.}, outlier{23.};
+      const auto dc = 25., rhoc = 5., outlier = 23.;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
@@ -233,7 +335,7 @@ TEST_CASE("Test clustering on aniso dataset") {
                                           input_data.weights,
                                           input_data.labels);
 
-      const float dc{25.f}, rhoc{5.f}, outlier{23.f};
+      const float dc = 25.f, rhoc = 5.f, outlier = 23.f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
@@ -254,7 +356,7 @@ TEST_CASE("Test clustering on aniso dataset") {
                                                   input_data.weights,
                                                   input_data.labels);
 
-      const auto dc{25.}, rhoc{5.}, outlier{23.};
+      const auto dc = 25., rhoc = 5., outlier = 23.;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
@@ -280,7 +382,6 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.5f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -297,7 +398,6 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.5f);
     }
   }
@@ -316,7 +416,6 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.5f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -333,7 +432,6 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.5f);
     }
   }
@@ -356,7 +454,6 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.5f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -377,7 +474,6 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.5f);
     }
   }
@@ -393,11 +489,10 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
       const auto n_points = input_data.n_points;
       auto h_points = clue::PointsHost<2>(queue, n_points, input_data.data, input_data.labels);
 
-      const float dc{20.f}, rhoc{10.f}, outlier{20.f};
+      const float dc = 20.f, rhoc = 10.f, outlier = 20.f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.45f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -409,11 +504,10 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
       auto h_points =
           clue::PointsHost<2, double>(queue, n_points, input_data.data, input_data.labels);
 
-      const auto dc{20.}, rhoc{10.}, outlier{20.};
+      const auto dc = 20., rhoc = 10., outlier = 20.;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.45f);
     }
   }
@@ -427,11 +521,10 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
       auto h_points = clue::PointsHost<2>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const float dc{20.f}, rhoc{10.f}, outlier{20.f};
+      const float dc = 20.f, rhoc = 10.f, outlier = 20.f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.45f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -443,11 +536,10 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
       auto h_points = clue::PointsHost<2, double>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const auto dc{20.}, rhoc{10.}, outlier{20.};
+      const auto dc = 20., rhoc = 10., outlier = 20.;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.45f);
     }
   }
@@ -465,11 +557,10 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
                                           input_data.weights,
                                           input_data.labels);
 
-      const float dc{20.f}, rhoc{10.f}, outlier{20.f};
+      const float dc = 20.f, rhoc = 10.f, outlier = 20.f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.45f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -485,11 +576,10 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
                                                   input_data.weights,
                                                   input_data.labels);
 
-      const auto dc{20.}, rhoc{10.}, outlier{20.};
+      const auto dc = 20., rhoc = 10., outlier = 20.;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.45f);
     }
   }
@@ -505,7 +595,7 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
       const auto n_points = input_data.n_points;
       auto h_points = clue::PointsHost<2>(queue, n_points, input_data.data, input_data.labels);
 
-      const float dc{4.f}, rhoc{2.5f}, outlier{4.f};
+      const float dc = 4.f, rhoc = 2.5f, outlier = 4.f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
@@ -521,11 +611,10 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
       auto h_points =
           clue::PointsHost<2, double>(queue, n_points, input_data.data, input_data.labels);
 
-      const auto dc{4.}, rhoc{2.5}, outlier{4.};
+      const auto dc = 4., rhoc = 2.5, outlier = 4.;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
   }
@@ -539,11 +628,10 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
       auto h_points = clue::PointsHost<2>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const float dc{4.f}, rhoc{2.5f}, outlier{4.f};
+      const float dc = 4.f, rhoc = 2.5f, outlier = 4.f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -555,11 +643,10 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
       auto h_points = clue::PointsHost<2, double>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const auto dc{4.}, rhoc{2.5}, outlier{4.};
+      const auto dc = 4., rhoc = 2.5, outlier = 4.;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
   }
@@ -577,11 +664,10 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
                                           input_data.weights,
                                           input_data.labels);
 
-      const float dc{4.f}, rhoc{2.5f}, outlier{4.f};
+      const float dc = 4.f, rhoc = 2.5f, outlier = 4.f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -597,11 +683,10 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
                                                   input_data.weights,
                                                   input_data.labels);
 
-      const auto dc{4.}, rhoc{2.5}, outlier{4.};
+      const auto dc = 4., rhoc = 2.5, outlier = 4.;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
   }
@@ -617,11 +702,10 @@ TEST_CASE("Test clustering on blob dataset") {
       const auto n_points = input_data.n_points;
       auto h_points = clue::PointsHost<3>(queue, n_points, input_data.data, input_data.labels);
 
-      const float dc{1.f}, rhoc{5.f}, outlier{2.f};
+      const float dc = 1.f, rhoc = 5.f, outlier = 2.f;
       clue::Clusterer<3> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -633,11 +717,10 @@ TEST_CASE("Test clustering on blob dataset") {
       auto h_points =
           clue::PointsHost<3, double>(queue, n_points, input_data.data, input_data.labels);
 
-      const auto dc{1.}, rhoc{5.}, outlier{2.};
+      const auto dc = 1., rhoc = 5., outlier = 2.;
       clue::Clusterer<3, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
   }
@@ -651,11 +734,10 @@ TEST_CASE("Test clustering on blob dataset") {
       auto h_points = clue::PointsHost<3>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const float dc{1.f}, rhoc{5.f}, outlier{2.f};
+      const float dc = 1.f, rhoc = 5.f, outlier = 2.f;
       clue::Clusterer<3> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -667,11 +749,10 @@ TEST_CASE("Test clustering on blob dataset") {
       auto h_points = clue::PointsHost<3, double>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const auto dc{1.}, rhoc{5.}, outlier{2.};
+      const auto dc = 1., rhoc = 5., outlier = 2.;
       clue::Clusterer<3, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
   }
@@ -690,11 +771,10 @@ TEST_CASE("Test clustering on blob dataset") {
                                           input_data.weights,
                                           input_data.labels);
 
-      const float dc{1.f}, rhoc{5.f}, outlier{2.f};
+      const float dc = 1.f, rhoc = 5.f, outlier = 2.f;
       clue::Clusterer<3> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
     SUBCASE("Clustering with double-precision float data") {
@@ -711,11 +791,10 @@ TEST_CASE("Test clustering on blob dataset") {
                                                   input_data.weights,
                                                   input_data.labels);
 
-      const auto dc{1.}, rhoc{5.}, outlier{2.};
+      const auto dc = 1., rhoc = 5., outlier = 2.;
       clue::Clusterer<3, double> algo(queue, dc, rhoc, outlier);
 
       algo.make_clusters(queue, h_points);
-
       CHECK(clue::silhouette(h_points) >= 0.8f);
     }
   }
@@ -731,7 +810,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
       const auto n_points = input_data.n_points;
       auto h_points = clue::PointsHost<2>(queue, n_points, input_data.data, input_data.labels);
 
-      const float dc{.2f}, rhoc{5.f}, outlier{.2f};
+      const float dc = .2f, rhoc = 5.f, outlier = .2f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.setWrappedCoordinates(0, 1);
@@ -750,7 +829,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
       auto h_points =
           clue::PointsHost<2, double>(queue, n_points, input_data.data, input_data.labels);
 
-      const auto dc{.2}, rhoc{5.}, outlier{.2};
+      const auto dc = .2, rhoc = 5., outlier = .2;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.setWrappedCoordinates(0, 1);
@@ -771,7 +850,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
       auto h_points = clue::PointsHost<2>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const float dc{.2f}, rhoc{5.f}, outlier{.2f};
+      const float dc = .2f, rhoc = 5.f, outlier = .2f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.setWrappedCoordinates(0, 1);
@@ -790,7 +869,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
       auto h_points = clue::PointsHost<2, double>(
           queue, n_points, input_data.coords, input_data.weights, input_data.labels);
 
-      const auto dc{.2}, rhoc{5.}, outlier{.2};
+      const auto dc = .2, rhoc = 5., outlier = .2;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.setWrappedCoordinates(0, 1);
@@ -815,7 +894,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
                                           input_data.weights,
                                           input_data.labels);
 
-      const float dc{.2f}, rhoc{5.f}, outlier{.2f};
+      const float dc = .2f, rhoc = 5.f, outlier = .2f;
       clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
       algo.setWrappedCoordinates(0, 1);
@@ -838,7 +917,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
                                                   input_data.weights,
                                                   input_data.labels);
 
-      const auto dc{.2}, rhoc{5.}, outlier{.2};
+      const auto dc = .2, rhoc = 5., outlier = .2;
       clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
 
       algo.setWrappedCoordinates(0, 1);
@@ -859,7 +938,7 @@ TEST_CASE("Test clustering from constant host points") {
     std::normal_distribution<float> dis(0.f, .3f);
 
     const auto size = 1000u;
-    const float dc{.2f}, rhoc{1.f}, outlier{.2f};
+    const float dc = .2f, rhoc = 1.f, outlier = .2f;
     clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
     SUBCASE("Two external buffers") {
       auto input = clue::make_host_buffer<float[]>(queue, 3 * size);
@@ -921,7 +1000,7 @@ TEST_CASE("Test clustering from constant host points") {
     std::normal_distribution<double> dis(0., .3);
 
     const auto size = 1000u;
-    const auto dc{.2}, rhoc{1.}, outlier{.2};
+    const auto dc = .2, rhoc = 1., outlier = .2;
     clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
     SUBCASE("Two external buffers") {
       auto input = clue::make_host_buffer<double[]>(queue, 3 * size);
