@@ -98,7 +98,7 @@ namespace clue {
 
     std::array<TData, Ndim> coords;
     for (auto dim = 0u; dim < Ndim; ++dim) {
-      coords[dim] = m_view.coords()[0][dim * m_size + idx];
+      coords[dim] = m_view.coords()[dim][idx];
     }
     return Point(coords, m_view.weights()[idx], m_view.cluster_index()[idx]);
   }
