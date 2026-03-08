@@ -1,6 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <concepts>
+#include <cstddef>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
@@ -11,8 +13,8 @@ namespace test {
 
   namespace detail {
 
-    template <std::floating_point T>
-    inline std::size_t parse_csv(const std::string& path, std::vector<std::vector<T>>& points) {
+    inline std::size_t parse_csv(const std::string& path,
+                                 std::vector<std::vector<double>>& points) {
       std::ifstream file(path);
       if (!file.is_open()) {
         throw std::runtime_error("test: cannot open file: " + path);
@@ -25,26 +27,28 @@ namespace test {
 
       while (std::getline(file, line)) {
         ++line_no;
+
         if (line.empty() || line[0] == '#' ||
             (line.size() >= 2 && line[0] == '/' && line[1] == '/')) {
           continue;
         }
 
-        auto first = line.find_first_not_of(" \t\r\n");
-        if (first != std::string::npos && std::isalpha(static_cast<unsigned char>(line[first]))) {
-          continue;
+        {
+          auto first = line.find_first_not_of(" \t\r\n");
+          if (first != std::string::npos && std::isalpha(static_cast<unsigned char>(line[first]))) {
+            continue;
+          }
         }
 
-        std::vector<T> row;
+        std::vector<double> row;
         std::istringstream ss(line);
         std::string token;
         while (std::getline(ss, token, ',')) {
-          // Trim whitespace
           auto start = token.find_first_not_of(" \t\r\n");
           auto end = token.find_last_not_of(" \t\r\n");
           if (start == std::string::npos)
             continue;
-          row.push_back(std::stof(token.substr(start, end - start + 1)));
+          row.push_back(std::stod(token.substr(start, end - start + 1)));
         }
 
         if (row.size() < 2) {
@@ -107,8 +111,8 @@ namespace test {
   };
 
   template <std::floating_point T>
-  inline CombinedBuffers<T> read_csv_combined(const std::string& path) {
-    std::vector<std::vector<T>> points;
+  CombinedBuffers<T> read_csv_combined(const std::string& path) {
+    std::vector<std::vector<double>> points;
     const std::size_t n_dims = detail::parse_csv(path, points);
     const std::size_t n_points = points.size();
     const std::size_t stride = n_dims + 1;
@@ -119,9 +123,9 @@ namespace test {
     out.data.resize(n_points * stride);
     out.labels.assign(n_points, 0);
 
-    for (auto i = 0u; i < n_points; ++i) {
-      for (auto col = 0u; col < stride; ++col) {
-        out.data[i * stride + col] = points[i][col];
+    for (std::size_t col = 0; col < stride; ++col) {
+      for (std::size_t i = 0; i < n_points; ++i) {
+        out.data[col * n_points + i] = static_cast<T>(points[i][col]);
       }
     }
 
@@ -129,8 +133,8 @@ namespace test {
   }
 
   template <std::floating_point T>
-  inline SeparateBuffers<T> read_csv_separate(const std::string& path) {
-    std::vector<std::vector<T>> points;
+  SeparateBuffers<T> read_csv_separate(const std::string& path) {
+    std::vector<std::vector<double>> points;
     const std::size_t n_dims = detail::parse_csv(path, points);
     const std::size_t n_points = points.size();
 
@@ -141,19 +145,21 @@ namespace test {
     out.weights.resize(n_points);
     out.labels.assign(n_points, 0);
 
-    for (auto i = 0u; i < n_points; ++i) {
-      for (auto d = 0u; d < n_dims; ++d) {
-        out.coords[i * n_dims + d] = points[i][d];
+    for (std::size_t d = 0; d < n_dims; ++d) {
+      for (std::size_t i = 0; i < n_points; ++i) {
+        out.coords[d * n_points + i] = static_cast<T>(points[i][d]);
       }
-      out.weights[i] = points[i][n_dims];
+    }
+    for (std::size_t i = 0; i < n_points; ++i) {
+      out.weights[i] = static_cast<T>(points[i][n_dims]);
     }
 
     return out;
   }
 
   template <std::floating_point T>
-  inline PerDimBuffers<T> read_csv_per_dim(const std::string& path) {
-    std::vector<std::vector<T>> points;
+  PerDimBuffers<T> read_csv_per_dim(const std::string& path) {
+    std::vector<std::vector<double>> points;
     const std::size_t n_dims = detail::parse_csv(path, points);
     const std::size_t n_points = points.size();
 
@@ -164,11 +170,11 @@ namespace test {
     out.weights.resize(n_points);
     out.labels.assign(n_points, 0);
 
-    for (auto i = 0u; i < n_points; ++i) {
-      for (auto d = 0u; d < n_dims; ++d) {
-        out.dims[d][i] = points[i][d];
+    for (std::size_t i = 0; i < n_points; ++i) {
+      for (std::size_t d = 0; d < n_dims; ++d) {
+        out.dims[d][i] = static_cast<T>(points[i][d]);
       }
-      out.weights[i] = points[i][n_dims];
+      out.weights[i] = static_cast<T>(points[i][n_dims]);
     }
 
     return out;
