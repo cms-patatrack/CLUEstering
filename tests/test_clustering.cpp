@@ -141,6 +141,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
   }
 }
 
+#ifndef COVERAGE
 TEST_CASE("Test clustering on a large dataset") {
   SUBCASE("Test clustering from combined buffers") {
     SUBCASE("Clustering with single-precision float data") {
@@ -252,6 +253,7 @@ TEST_CASE("Test clustering on a large dataset") {
     }
   }
 }
+#endif
 
 TEST_CASE("Test clustering on aniso dataset") {
   SUBCASE("Test clustering from combined buffers") {
