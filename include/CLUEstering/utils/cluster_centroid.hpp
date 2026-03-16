@@ -37,6 +37,10 @@ namespace clue {
   inline Centroid<Ndim, TData> cluster_centroid(const clue::PointsHost<Ndim, TData>& points,
                                                 std::size_t cluster_id);
 
+  template <std::size_t Ndim, std::floating_point TData = float>
+  inline Centroid<Ndim, TData> weighted_cluster_centroid(
+      const clue::PointsHost<Ndim, TData>& points, std::size_t cluster_id);
+
   /// @brief Compute the centroids of all clusters from the given Points
   ///
   /// @tparam Ndim The number of dimensions of the points
@@ -45,6 +49,10 @@ namespace clue {
   /// @return A vector of centroids, one for each cluster
   template <std::size_t Ndim, std::floating_point TData = float>
   inline Centroids<Ndim, TData> cluster_centroids(const clue::PointsHost<Ndim, TData>& points);
+
+  template <std::size_t Ndim, std::floating_point TData = float>
+  inline Centroids<Ndim, TData> weighted_cluster_centroids(
+      const clue::PointsHost<Ndim, TData>& points);
 
 }  // namespace clue
 
