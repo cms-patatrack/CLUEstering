@@ -81,6 +81,7 @@ namespace clue {
     std::int32_t* m_is_seed;
     value_type* m_rho;
     std::int32_t* m_nearest_higher;
+    element_type* m_density_uncertainty;
     std::int32_t m_n;
 
     ALPAKA_FN_HOST_ACC auto coords() const {
@@ -139,6 +140,20 @@ namespace clue {
              "The nearest_higher array has not been allocated yet, so it cannot be accessed");
       return std::span<std::int32_t>(m_nearest_higher, m_n);
     }
+
+    ALPAKA_FN_HOST_ACC auto has_uncertainty() const { return m_density_uncertainty != nullptr; }
+
+    ALPAKA_FN_HOST_ACC auto density_uncertainty() const {
+      assert(m_density_uncertainty != nullptr &&
+             "The density_uncertainty array has not been allocated yet, so it cannot be accessed");
+      return std::span<const element_type>(m_density_uncertainty, m_n);
+    }
+    ALPAKA_FN_HOST_ACC auto density_uncertainty() {
+      assert(m_density_uncertainty != nullptr &&
+             "The density_uncertainty array has not been allocated yet, so it cannot be accessed");
+      return std::span<element_type>(m_density_uncertainty, m_n);
+    }
+
     ALPAKA_FN_HOST_ACC auto size() const { return m_n; }
 
     ALPAKA_FN_HOST_ACC auto operator[](int index) const {
