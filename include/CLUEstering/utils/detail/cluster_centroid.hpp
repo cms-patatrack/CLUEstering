@@ -20,7 +20,7 @@ namespace clue {
     auto cluster_ids = points.clusterIndexes();
     auto clusters = get_clusters(points);
     // TODO: add error handling
-    Centroid<Ndim> centroid;
+    Centroid<Ndim, TData> centroid{};
     auto size = clusters.count(cluster_id);
     for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
@@ -46,7 +46,7 @@ namespace clue {
     auto cluster_ids = points.clusterIndexes();
     auto clusters = get_clusters(points);
     // TODO: add error handling
-    Centroid<Ndim> centroid;
+    Centroid<Ndim, TData> centroid{};
     auto size = clusters.count(cluster_id);
     for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
