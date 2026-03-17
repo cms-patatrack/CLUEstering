@@ -399,7 +399,6 @@ TEST_CASE("Test clustering from constant host points") {
 }
 
 TEST_CASE("Test non-default local density uncertainty") {
-  auto host = alpaka::getDevByIdx(alpaka::PlatformCpu{}, 0u);
   std::mt19937 gen;
   std::normal_distribution<double> dis(0., .3);
 
