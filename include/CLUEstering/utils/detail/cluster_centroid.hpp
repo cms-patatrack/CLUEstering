@@ -13,14 +13,14 @@
 
 namespace clue {
 
-  template <std::size_t Ndim, std::floating_point TData>
-  inline Centroid<Ndim, TData> cluster_centroid(const clue::PointsHost<Ndim, TData>& points,
-                                                std::size_t cluster_id) {
+  template <std::size_t Ndim, std::floating_point ValueType>
+  inline Centroid<Ndim, ValueType> cluster_centroid(const clue::PointsHost<Ndim, ValueType>& points,
+                                                    std::size_t cluster_id) {
     assert(points.clustered());
     auto cluster_ids = points.clusterIndexes();
     auto clusters = get_clusters(points);
     // TODO: add error handling
-    Centroid<Ndim, TData> centroid{};
+    Centroid<Ndim, ValueType> centroid{};
     auto size = clusters.count(cluster_id);
     for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
@@ -33,20 +33,20 @@ namespace clue {
                           centroid[dim] += coord;
                         }
                       });
-      centroid[dim] /= static_cast<TData>(size);
+      centroid[dim] /= static_cast<ValueType>(size);
     }
 
     return centroid;
   }
 
-  template <std::size_t Ndim, std::floating_point TData>
-  inline Centroid<Ndim, TData> weighted_cluster_centroid(
-      const clue::PointsHost<Ndim, TData>& points, std::size_t cluster_id) {
+  template <std::size_t Ndim, std::floating_point ValueType>
+  inline Centroid<Ndim, ValueType> weighted_cluster_centroid(
+      const clue::PointsHost<Ndim, ValueType>& points, std::size_t cluster_id) {
     assert(points.clustered());
     auto cluster_ids = points.clusterIndexes();
     auto clusters = get_clusters(points);
     // TODO: add error handling
-    Centroid<Ndim, TData> centroid{};
+    Centroid<Ndim, ValueType> centroid{};
     auto size = clusters.count(cluster_id);
     for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
@@ -62,8 +62,8 @@ namespace clue {
                         }
                       });
       auto cluster = clusters[cluster_id];
-      auto total_weight =
-          std::reduce(cluster.begin(), cluster.end(), TData{0}, [&](TData acc, std::size_t idx) {
+      auto total_weight = std::reduce(
+          cluster.begin(), cluster.end(), ValueType{0}, [&](ValueType acc, std::size_t idx) {
             return acc + points.weights()[idx];
           });
       centroid[dim] /= total_weight;
@@ -72,14 +72,15 @@ namespace clue {
     return centroid;
   }
 
-  template <std::size_t Ndim, std::floating_point TData>
-  inline Centroids<Ndim, TData> cluster_centroids(const clue::PointsHost<Ndim, TData>& points) {
+  template <std::size_t Ndim, std::floating_point ValueType>
+  inline Centroids<Ndim, ValueType> cluster_centroids(
+      const clue::PointsHost<Ndim, ValueType>& points) {
     assert(points.clustered());
     auto cluster_ids = points.clusterIndexes();
     auto clusters = get_clusters(points);
     const auto n_clusters = clusters.size();
 
-    Centroids<Ndim> centroids(n_clusters);
+    Centroids<Ndim, ValueType> centroids(n_clusters);
     for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
       std::for_each_n(nostd::zip(coords.begin(), cluster_ids.begin()),
@@ -92,7 +93,7 @@ namespace clue {
                       });
       std::ranges::for_each(centroids, [&, dim, cl = 0](auto& centroid) mutable {
         const auto size = clusters.count(cl);
-        centroid[dim] /= static_cast<TData>(size);
+        centroid[dim] /= static_cast<ValueType>(size);
         ++cl;
       });
     }
@@ -100,15 +101,15 @@ namespace clue {
     return centroids;
   }
 
-  template <std::size_t Ndim, std::floating_point TData>
-  inline Centroids<Ndim, TData> weighted_cluster_centroids(
-      const clue::PointsHost<Ndim, TData>& points) {
+  template <std::size_t Ndim, std::floating_point ValueType>
+  inline Centroids<Ndim, ValueType> weighted_cluster_centroids(
+      const clue::PointsHost<Ndim, ValueType>& points) {
     assert(points.clustered());
     auto cluster_ids = points.clusterIndexes();
     auto clusters = get_clusters(points);
     const auto n_clusters = clusters.size();
 
-    Centroids<Ndim> centroids(n_clusters);
+    Centroids<Ndim, ValueType> centroids(n_clusters);
     for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
       auto weights = points.weights();
@@ -123,8 +124,8 @@ namespace clue {
                       });
       std::ranges::for_each(centroids, [&, dim, cl = 0](auto& centroid) mutable {
         auto cluster = clusters[cl];
-        const auto total_weight =
-            std::reduce(cluster.begin(), cluster.end(), TData{0}, [&](TData acc, std::size_t idx) {
+        const auto total_weight = std::reduce(
+            cluster.begin(), cluster.end(), ValueType{0}, [&](ValueType acc, std::size_t idx) {
               return acc + points.weights()[idx];
             });
         centroid[dim] /= total_weight;
