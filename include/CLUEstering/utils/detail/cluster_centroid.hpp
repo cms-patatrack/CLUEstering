@@ -22,6 +22,9 @@ namespace clue {
     // TODO: add error handling
     Centroid<Ndim, ValueType> centroid{};
     auto size = clusters.count(cluster_id);
+    if (size == 0) {
+      return centroid;
+    }
     for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
       std::for_each_n(nostd::zip(coords.begin(), cluster_ids.begin()),
@@ -48,6 +51,9 @@ namespace clue {
     // TODO: add error handling
     Centroid<Ndim, ValueType> centroid{};
     auto size = clusters.count(cluster_id);
+    if (size == 0) {
+      return centroid;
+    }
     for (auto dim = 0u; dim < Ndim; ++dim) {
       auto coords = points.coords(dim);
       auto weights = points.weights();
@@ -62,7 +68,7 @@ namespace clue {
                         }
                       });
       auto cluster = clusters[cluster_id];
-      auto total_weight = std::reduce(
+      auto total_weight = std::accumulate(
           cluster.begin(), cluster.end(), ValueType{0}, [&](ValueType acc, std::size_t idx) {
             return acc + points.weights()[idx];
           });
@@ -124,7 +130,7 @@ namespace clue {
                       });
       std::ranges::for_each(centroids, [&, dim, cl = 0](auto& centroid) mutable {
         auto cluster = clusters[cl];
-        const auto total_weight = std::reduce(
+        const auto total_weight = std::accumulate(
             cluster.begin(), cluster.end(), ValueType{0}, [&](ValueType acc, std::size_t idx) {
               return acc + points.weights()[idx];
             });
