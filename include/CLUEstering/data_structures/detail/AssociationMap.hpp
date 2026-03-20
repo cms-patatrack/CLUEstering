@@ -66,7 +66,7 @@ namespace clue {
                                     int32_t* indexes,
                                     const int32_t* bin_buffer,
                                     int32_t* temp_offsets,
-                                    std::size_t nkeys,
+                                    [[maybe_unused]] std::size_t nkeys,
                                     std::size_t size) const {
         for (auto i : alpaka::uniformElements(acc, size)) {
           const auto binId = bin_buffer[i];
