@@ -4,9 +4,11 @@
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/utils/get_queue.hpp"
 #include <alpaka/alpaka.hpp>
 #include <cstddef>
 #include <cstdint>
+#include <span>
 
 namespace clue::internal {
 
@@ -85,6 +87,11 @@ namespace clue::internal {
 
     ALPAKA_FN_HOST const auto& view() const { return m_view; }
     ALPAKA_FN_HOST auto& view() { return m_view; }
+
+    operator std::span<const int32_t>() const {
+      auto queue = clue::get_queue(0u);
+      return std::span<const int32_t>{data(), size(queue)};
+    }
   };
 
 }  // namespace clue::internal
