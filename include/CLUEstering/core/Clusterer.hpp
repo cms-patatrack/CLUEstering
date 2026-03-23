@@ -294,6 +294,12 @@ namespace clue {
     template <std::integral... TArgs>
     void setWrappedCoordinates(TArgs... wrapped_coordinates);
 
+    /// @brief Get the list of seeds found in the last clustering run
+    ///
+    /// @return A span the the device array containing the seed indices
+    /// @note The values of this array are overwritten at each clustering run
+    std::span<const int32_t> getSeeds() const;
+
     /// @brief Get the clusters from the host points
     ///
     /// @tparam InputType The data type of the input points, which must be a floating-point type.

@@ -210,6 +210,14 @@ namespace clue {
   }
 
   template <std::size_t Ndim, std::floating_point DataType>
+  inline std::span<const int32_t> Clusterer<Ndim, DataType>::getSeeds() const {
+    if (!m_seeds.has_value()) {
+      throw std::runtime_error("Seeds are not available. Please run make_clusters first.");
+    }
+    return static_cast<std::span<const int32_t>>(*m_seeds);
+  }
+
+  template <std::size_t Ndim, std::floating_point DataType>
   template <std::floating_point InputType>
   inline AssociationMapHost Clusterer<Ndim, DataType>::getClusters(
       const clue::PointsHost<Ndim, InputType>& h_points) {
