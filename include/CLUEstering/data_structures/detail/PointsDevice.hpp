@@ -121,4 +121,12 @@ namespace clue {
     return m_nclusters.value();
   }
 
+  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  inline void PointsDevice<Ndim, TData, TDev>::set_density_uncertainty(
+      std::span<element_type> density_uncertainty) {
+    assert(density_uncertainty.size() == static_cast<size_t>(m_size) &&
+           "The size of the density uncertainty array must match the number of points");
+    m_view.m_density_uncertainty = density_uncertainty.data();
+  }
+
 }  // namespace clue

@@ -397,3 +397,83 @@ TEST_CASE("Test clustering from constant host points") {
     }
   }
 }
+
+TEST_CASE("Test non-default local density uncertainty") {
+  std::mt19937 gen;
+  std::normal_distribution<double> dis(0., .3);
+
+  const auto size = 1000u;
+  const auto dc = .2f, rhoc = 1.f, outlier = .2f;
+  auto queue = clue::get_queue(0u);
+  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  auto input = clue::make_host_buffer<float[]>(queue, 3 * size);
+  auto output = clue::make_host_buffer<int[]>(queue, size);
+  std::generate(input.data(), input.data() + 3 * size, [&] { return dis(gen); });
+  clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
+
+  SUBCASE("Test interface for host points") {
+    SUBCASE("Clustering with default density uncertainty") {
+      std::vector<float> density_uncertainty(size, 1.f);
+      h_points.set_density_uncertainty(density_uncertainty);
+      algo.make_clusters(queue, h_points);
+      CHECK(true);
+    }
+    SUBCASE("Clustering with non-default density uncertainty") {
+      std::vector<float> density_uncertainty(size, 5.f);
+      h_points.set_density_uncertainty(density_uncertainty);
+      algo.make_clusters(queue, h_points);
+      CHECK(true);
+    }
+    SUBCASE("Clustering with variable density uncertainty") {
+      std::vector<float> density_uncertainty(size);
+      std::generate(
+          density_uncertainty.begin(), density_uncertainty.end(), [&] { return dis(gen) + 1.f; });
+      h_points.set_density_uncertainty(density_uncertainty);
+      algo.make_clusters(queue, h_points);
+      CHECK(true);
+    }
+  }
+  SUBCASE("Test interface for device points") {
+    auto d_points = clue::PointsDevice<2>(queue, size);
+    clue::copyToDevice(queue, d_points, h_points);
+
+    SUBCASE("Clustering with default density uncertainty") {
+      std::vector<float> density_uncertainty(size, 1.f);
+
+      auto d_density_uncertainty = clue::make_device_buffer<float[]>(queue, size);
+      alpaka::memcpy(
+          queue, d_density_uncertainty, clue::make_host_view(density_uncertainty.data(), size));
+      alpaka::wait(queue);
+
+      d_points.set_density_uncertainty(std::span<float>{d_density_uncertainty.data(), size});
+      algo.make_clusters(queue, d_points);
+      CHECK(true);
+    }
+    SUBCASE("Clustering with non-default density uncertainty") {
+      std::vector<float> density_uncertainty(size, 5.f);
+
+      auto d_density_uncertainty = clue::make_device_buffer<float[]>(queue, size);
+      alpaka::memcpy(
+          queue, d_density_uncertainty, clue::make_host_view(density_uncertainty.data(), size));
+      alpaka::wait(queue);
+
+      d_points.set_density_uncertainty(std::span<float>{d_density_uncertainty.data(), size});
+      algo.make_clusters(queue, d_points);
+      CHECK(true);
+    }
+    SUBCASE("Clustering with variable density uncertainty") {
+      std::vector<float> density_uncertainty(size);
+      std::generate(
+          density_uncertainty.begin(), density_uncertainty.end(), [&] { return dis(gen) + 1.f; });
+
+      auto d_density_uncertainty = clue::make_device_buffer<float[]>(queue, size);
+      alpaka::memcpy(
+          queue, d_density_uncertainty, clue::make_host_view(density_uncertainty.data(), size));
+      alpaka::wait(queue);
+
+      d_points.set_density_uncertainty(std::span<float>{d_density_uncertainty.data(), size});
+      algo.make_clusters(queue, d_points);
+      CHECK(true);
+    }
+  }
+}

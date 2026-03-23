@@ -145,4 +145,14 @@ namespace clue {
     return m_clusterProperties.value();
   }
 
+  template <std::size_t Ndim, std::floating_point TData>
+  inline void PointsHost<Ndim, TData>::set_density_uncertainty(
+      std::span<element_type> density_uncertainty) {
+    if (density_uncertainty.size() != static_cast<size_t>(m_size)) {
+      throw std::invalid_argument(
+          "Size of density_uncertainty does not match the number of points");
+    }
+    m_view.m_density_uncertainty = density_uncertainty.data();
+  }
+
 }  // namespace clue

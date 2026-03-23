@@ -240,6 +240,12 @@ namespace clue {
     /// @note This object is lazily evaluated and cached upon the first call
     const auto& cluster_properties();
 
+    /// @brief Sets the uncertainty on the local density estimation for each point
+    ///
+    /// @param density_uncertainty A span containing the uncertainty values for each point
+    /// @note The uncertainty gets multiplied to the `min_density` parameter
+    void set_density_uncertainty(std::span<element_type> density_uncertainty);
+
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;
 

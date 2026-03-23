@@ -170,7 +170,11 @@ namespace clue::detail {
             assert(distance >= TData{0});
 
             auto rho_i = dev_points.rho()[global_idx];
-            bool is_seed = (distance > seeding_distance) && (rho_i >= min_density);
+            const auto density_uncertainty = (dev_points.has_uncertainty())
+                                                 ? dev_points.density_uncertainty()[global_idx]
+                                                 : TData{1.};
+            bool is_seed =
+                (distance > seeding_distance) && (rho_i >= min_density * density_uncertainty);
 
             if (is_seed) {
               dev_points.is_seed()[global_idx] = 1;
