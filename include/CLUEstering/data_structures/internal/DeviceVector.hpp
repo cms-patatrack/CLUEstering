@@ -69,7 +69,7 @@ namespace clue::internal {
     ALPAKA_FN_HOST constexpr auto capacity() const { return m_capacity; }
 
     template <clue::concepts::queue TQueue>
-    ALPAKA_FN_HOST auto size(TQueue& queue) {
+    ALPAKA_FN_HOST auto size(TQueue& queue) const {
       std::size_t size;
       alpaka::memcpy(queue, clue::make_host_view(size), m_dsize);
       alpaka::wait(queue);
