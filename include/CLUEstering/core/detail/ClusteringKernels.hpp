@@ -10,7 +10,6 @@
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/TilesView.hpp"
-#include "CLUEstering/data_structures/internal/VecArray.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
@@ -33,7 +32,7 @@ namespace clue::detail {
             concepts::convolutional_kernel KernelType,
             concepts::distance_metric<Ndim> DistanceMetric>
   ALPAKA_FN_ACC void for_recursion(const TAcc& acc,
-                                   VecArray<int32_t, Ndim>& base_vec,
+                                   std::array<int32_t, Ndim>& base_vec,
                                    const clue::SearchBoxBins<Ndim>& search_box,
                                    internal::TilesView<Ndim, TData>& tiles,
                                    PointsView<Ndim, TData>& dev_points,
@@ -65,7 +64,7 @@ namespace clue::detail {
       for (auto i = search_box[search_box.size() - N_][0];
            i <= search_box[search_box.size() - N_][1];
            ++i) {
-        base_vec[base_vec.capacity() - N_] = i;
+        base_vec[Ndim - N_] = i;
         for_recursion<TAcc, Ndim, N_ - 1>(acc,
                                           base_vec,
                                           search_box,
@@ -109,7 +108,7 @@ namespace clue::detail {
         clue::SearchBoxBins<Ndim> searchbox_bins;
         dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
 
-        VecArray<int32_t, Ndim> base_vec;
+        std::array<int32_t, Ndim> base_vec;
         for_recursion<TAcc, Ndim, Ndim>(acc,
                                         base_vec,
                                         searchbox_bins,
@@ -134,7 +133,7 @@ namespace clue::detail {
             std::floating_point TData,
             concepts::distance_metric<Ndim> DistanceMetric>
   ALPAKA_FN_ACC void for_recursion_nearest_higher(const TAcc& acc,
-                                                  VecArray<int32_t, Ndim>& base_vec,
+                                                  std::array<int32_t, Ndim>& base_vec,
                                                   const clue::SearchBoxBins<Ndim>& search_box,
                                                   internal::TilesView<Ndim, TData>& tiles,
                                                   PointsView<Ndim, TData>& dev_points,
@@ -176,7 +175,7 @@ namespace clue::detail {
       for (auto i = search_box[search_box.size() - N_][0];
            i <= search_box[search_box.size() - N_][1];
            ++i) {
-        base_vec[base_vec.capacity() - N_] = i;
+        base_vec[Ndim - N_] = i;
         for_recursion_nearest_higher<TAcc, Ndim, N_ - 1>(acc,
                                                          base_vec,
                                                          search_box,
@@ -224,7 +223,7 @@ namespace clue::detail {
         clue::SearchBoxBins<Ndim> searchbox_bins;
         dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
 
-        VecArray<int32_t, Ndim> base_vec{};
+        std::array<int32_t, Ndim> base_vec{};
         for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
                                                        base_vec,
                                                        searchbox_bins,
