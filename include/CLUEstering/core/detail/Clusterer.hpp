@@ -320,7 +320,6 @@ namespace clue {
       Queue& queue,
       std::size_t block_size) {
     const auto batch_size = batch_item_sizes.size();
-    setup_batch(queue, dev_points, batch_size);
 
     const auto max_event_size = std::reduce(
         batch_item_sizes.begin(), batch_item_sizes.end(), 0u, nostd::maximum<uint32_t>{});
