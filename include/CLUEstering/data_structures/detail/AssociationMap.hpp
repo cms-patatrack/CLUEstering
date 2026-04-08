@@ -337,9 +337,6 @@ namespace clue {
                        sizes_buffer.data(),
                        size);
 
-    auto block_counter = make_device_buffer<int32_t>(queue);
-    alpaka::memset(queue, block_counter, 0);
-
     auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_extents.keys + 1);
     alpaka::memset(queue, temp_offsets, 0u, 1u);
     internal::algorithm::inclusive_scan(
@@ -404,9 +401,6 @@ namespace clue {
                        sizes_buffer.data(),
                        associations.size());
 
-    auto block_counter = make_device_buffer<int32_t>(queue);
-    alpaka::memset(queue, block_counter, 0);
-
     auto temp_offsets = make_device_buffer<key_type[]>(queue, m_extents.keys + 1);
     alpaka::memset(queue, temp_offsets, 0u, 1u);
 
@@ -461,9 +455,6 @@ namespace clue {
                        bin_buffer.data(),
                        sizes_buffer.data(),
                        size);
-
-    auto block_counter = make_device_buffer<int32_t>(queue);
-    alpaka::memset(queue, block_counter, 0);
 
     auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_extents.keys + 1);
     alpaka::memset(queue, temp_offsets, 0u, 1u);
