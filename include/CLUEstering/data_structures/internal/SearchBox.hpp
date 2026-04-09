@@ -2,6 +2,7 @@
 #pragma once
 
 #include <array>
+#include <cassert>
 #include <cstdint>
 
 namespace clue {
@@ -9,8 +10,14 @@ namespace clue {
   template <std::size_t Ndim, typename T>
   class SearchBox {
   public:
-    constexpr auto& operator[](int dim) { return m_extremes[dim]; }
-    constexpr const auto& operator[](int dim) const { return m_extremes[dim]; }
+    constexpr auto& operator[](int dim) {
+      assert(dim >= 0 && static_cast<std::size_t>(dim) < Ndim);
+      return m_extremes[dim];
+    }
+    constexpr const auto& operator[](int dim) const {
+      assert(dim >= 0 && static_cast<std::size_t>(dim) < Ndim);
+      return m_extremes[dim];
+    }
 
     constexpr auto size() const { return Ndim; }
 
