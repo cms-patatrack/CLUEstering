@@ -29,7 +29,7 @@ namespace clue::internal {
           m_tilesizes{make_device_buffer<value_type[Ndim]>(queue)},
           m_wrapped{make_device_buffer<uint8_t[Ndim]>(queue)},
           m_ntiles{n_tiles},
-          m_nperdim{static_cast<int32_t>(std::pow(n_tiles, 1.f / Ndim))},
+          m_nperdim{static_cast<int32_t>(std::pow(n_tiles, 1. / Ndim))},
           m_batch_size{batch_size},
           m_view{} {
       m_view.indexes = m_assoc.indexes().data();
