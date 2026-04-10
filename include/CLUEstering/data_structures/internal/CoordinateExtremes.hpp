@@ -2,6 +2,7 @@
 #pragma once
 
 #include <array>
+#include <cassert>
 #include <alpaka/alpaka.hpp>
 
 namespace clue::internal {
@@ -19,10 +20,22 @@ namespace clue::internal {
     ALPAKA_FN_HOST_ACC const auto* data() const { return m_data; }
     ALPAKA_FN_HOST_ACC auto* data() { return m_data; }
 
-    ALPAKA_FN_HOST_ACC auto min(int i) const { return m_data[2 * i]; }
-    ALPAKA_FN_HOST_ACC auto& min(int i) { return m_data[2 * i]; }
-    ALPAKA_FN_HOST_ACC auto max(int i) const { return m_data[2 * i + 1]; }
-    ALPAKA_FN_HOST_ACC auto& max(int i) { return m_data[2 * i + 1]; }
+    ALPAKA_FN_HOST_ACC auto min(int i) const {
+      assert(i >= 0 && static_cast<std::size_t>(i) < Ndim);
+      return m_data[2 * i];
+    }
+    ALPAKA_FN_HOST_ACC auto& min(int i) {
+      assert(i >= 0 && static_cast<std::size_t>(i) < Ndim);
+      return m_data[2 * i];
+    }
+    ALPAKA_FN_HOST_ACC auto max(int i) const {
+      assert(i >= 0 && static_cast<std::size_t>(i) < Ndim);
+      return m_data[2 * i + 1];
+    }
+    ALPAKA_FN_HOST_ACC auto& max(int i) {
+      assert(i >= 0 && static_cast<std::size_t>(i) < Ndim);
+      return m_data[2 * i + 1];
+    }
     ALPAKA_FN_HOST_ACC auto range(int i) const { return max(i) - min(i); }
   };
 
