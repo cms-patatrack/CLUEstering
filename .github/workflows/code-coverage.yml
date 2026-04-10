@@ -15,19 +15,30 @@ jobs:
     runs-on: ubuntu-latest
     name: codecov-coverage-reporter
     steps:
-      - name: Install coverage analysis tools
-        run: sudo apt-get install lcov gcovr
-
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           submodules: true
 
-      - name: Install dependencies
-        working-directory: ${{github.workspace}}/tests
+      - name: Cache apt packages
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives
+          key: apt-${{ runner.os }}-lcov-boost-tbb
+
+      - name: Install apt packages
         run: |
           sudo apt-get update -y
-          sudo apt install -y libboost-atomic-dev libtbb-dev
+          sudo apt install -y lcov libboost-atomic-dev libtbb-dev
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-coverage-pytest-sklearn-pandas-matplotlib
+
+      - name: Install Python dependencies
+        run: |
           python -m pip install --upgrade pip
           python -m pip install pytest scikit-learn pandas matplotlib coverage
 
