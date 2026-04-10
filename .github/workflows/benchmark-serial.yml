@@ -19,6 +19,12 @@ jobs:
       with:
         submodules: true
 
+    - name: Cache apt packages
+      uses: actions/cache@v4
+      with:
+        path: /var/cache/apt/archives
+        key: apt-${{ runner.os }}-boost-tbb-omp-benchmark
+
     - name: Install dependencies
       run: |
         sudo apt-get update -y
