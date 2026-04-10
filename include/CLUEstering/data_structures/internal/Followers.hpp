@@ -5,6 +5,7 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
+#include <cassert>
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
@@ -19,9 +20,13 @@ namespace clue {
   template <concepts::device TDev>
   class Followers {
   public:
-    Followers(int32_t npoints, const TDev& dev) : m_assoc(npoints, npoints, dev) {}
+    Followers(int32_t npoints, const TDev& dev) : m_assoc(npoints, npoints, dev) {
+      assert(npoints > 0);
+    }
     template <concepts::queue TQueue>
-    Followers(int32_t npoints, TQueue& queue) : m_assoc(npoints, npoints, queue) {}
+    Followers(int32_t npoints, TQueue& queue) : m_assoc(npoints, npoints, queue) {
+      assert(npoints > 0);
+    }
 
     template <concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(int32_t npoints, TQueue& queue) {
