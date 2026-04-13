@@ -246,6 +246,9 @@ class clusterer:
         ## Kernel for calculation of local density
         self._kernel = clue_kernels.FlatKernel(0.5)
 
+        ## Distance metric (defaults to Euclidean)
+        self._metric = clue_kernels.EuclideanMetric()
+
         ## Array specifyng which coordinates are periodic (wrapped)
         self.wrapped = None
 
@@ -453,6 +456,54 @@ class clusterer:
             raise ValueError("Invalid kernel. Allowed choices are: flat, exp, gaus, custom.")
 
 
+    def choose_metric(self,
+                      choice: str,
+                      parameters: Union[list, None] = None) -> None:
+        """
+        Set the distance metric used for local-density and nearest-higher computations.
+
+        The default metric is Euclidean.
+
+        :param choice: Metric type. Options are: 'euclidean', 'manhattan', 'chebyshev',
+            'weighted_euclidean', 'weighted_chebyshev', 'periodic_euclidean'.
+        :type choice: str
+        :param parameters: Per-dimension weights or periods for the parameterised metrics.
+            Must have exactly one entry per coordinate dimension and must be provided
+            before calling :meth:`run_clue`, when the dimensionality of the data is known.
+            Ignored for the parameter-free metrics.
+        :type parameters: list or None
+
+        :raises ValueError: If the metric name is invalid or required parameters are missing.
+
+        :returns: None
+        """
+        if choice == "euclidean":
+            self._metric = clue_kernels.EuclideanMetric()
+        elif choice == "manhattan":
+            self._metric = clue_kernels.ManhattanMetric()
+        elif choice == "chebyshev":
+            self._metric = clue_kernels.ChebyshevMetric()
+        elif choice == "weighted_euclidean":
+            if not parameters:
+                raise ValueError(
+                    "weighted_euclidean requires a 'parameters' list of per-dimension weights.")
+            self._metric = clue_kernels.WeightedEuclideanMetric(list(parameters))
+        elif choice == "weighted_chebyshev":
+            if not parameters:
+                raise ValueError(
+                    "weighted_chebyshev requires a 'parameters' list of per-dimension weights.")
+            self._metric = clue_kernels.WeightedChebyshevMetric(list(parameters))
+        elif choice == "periodic_euclidean":
+            if not parameters:
+                raise ValueError(
+                    "periodic_euclidean requires a 'parameters' list of per-dimension periods.")
+            self._metric = clue_kernels.PeriodicEuclideanMetric(list(parameters))
+        else:
+            raise ValueError(
+                "Invalid metric. Allowed choices are: euclidean, manhattan, chebyshev, "
+                "weighted_euclidean, weighted_chebyshev, periodic_euclidean.")
+
+
     @property
     def coords(self) -> np.ndarray:
         """
@@ -600,7 +651,7 @@ class clusterer:
         arguments = [self._density_radius, self._min_density, self._outlier_distance, self._seeding_distance,
                      self._ppbin, self.wrapped, data.coords, data.results,
                      self._kernel, data.n_dim, batch_sample_sizes, data.n_points,
-                     block_size, device_id]
+                     block_size, device_id, self._metric]
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(*arguments)

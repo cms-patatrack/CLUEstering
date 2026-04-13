@@ -23,6 +23,7 @@ namespace alpaka_omp2_async {
     m.def("listDevices",
           &alpaka_omp2_async::listDevices,
           "List the available devices for the OpenMP backend");
+
     m.def("mainRun", &alpaka_omp2_async::mainRun<float, clue::FlatKernel>);
     m.def("mainRun", &alpaka_omp2_async::mainRun<float, clue::ExponentialKernel>);
     m.def("mainRun", &alpaka_omp2_async::mainRun<float, clue::GaussianKernel>);
