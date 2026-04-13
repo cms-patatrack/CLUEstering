@@ -374,6 +374,7 @@ namespace clue {
     detail::assignPointsToClusters<internal::Acc>(
         queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
 
+    alpaka::wait(queue);
     dev_points.mark_clustered();
   }
 
