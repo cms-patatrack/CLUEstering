@@ -5,7 +5,9 @@ target_link_libraries(CLUE_CPU_Serial PRIVATE alpaka::alpaka Boost::atomic)
 target_compile_definitions(
   CLUE_CPU_Serial PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
                           CLUE_ENABLE_CACHING_ALLOCATOR)
-target_precompile_headers(CLUE_CPU_Serial PRIVATE
+target_precompile_headers(
+  CLUE_CPU_Serial
+  PRIVATE
   <alpaka/alpaka.hpp>
   <pybind11/pybind11.h>
   <pybind11/numpy.h>

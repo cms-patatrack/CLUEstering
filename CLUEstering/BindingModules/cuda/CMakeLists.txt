@@ -15,7 +15,9 @@ target_link_libraries(CLUE_GPU_CUDA PRIVATE alpaka::alpaka Boost::atomic)
 target_compile_definitions(CLUE_GPU_CUDA PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED
                                                  CLUE_ENABLE_CACHING_ALLOCATOR)
 target_compile_options(CLUE_GPU_CUDA PRIVATE --expt-relaxed-constexpr)
-target_precompile_headers(CLUE_GPU_CUDA PRIVATE
+target_precompile_headers(
+  CLUE_GPU_CUDA
+  PRIVATE
   <alpaka/alpaka.hpp>
   <pybind11/pybind11.h>
   <pybind11/numpy.h>
