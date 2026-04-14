@@ -21,6 +21,14 @@ sys.path.insert(1, join(path, 'lib'))
 import CLUE_Convolutional_Kernels as clue_kernels
 import CLUE_CPU_Serial as cpu_serial
 
+# Re-export distance metrics so users can write CLUEstering.EuclideanMetric() etc.
+EuclideanMetric = clue_kernels.EuclideanMetric
+ManhattanMetric = clue_kernels.ManhattanMetric
+ChebyshevMetric = clue_kernels.ChebyshevMetric
+WeightedEuclideanMetric = clue_kernels.WeightedEuclideanMetric
+WeightedChebyshevMetric = clue_kernels.WeightedChebyshevMetric
+PeriodicEuclideanMetric = clue_kernels.PeriodicEuclideanMetric
+
 backends = ["cpu serial"]
 tbb_found = bool((glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
 if tbb_found:
