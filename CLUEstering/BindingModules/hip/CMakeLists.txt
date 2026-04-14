@@ -14,6 +14,9 @@ target_compile_definitions(CLUE_GPU_HIP PRIVATE ALPAKA_ACC_GPU_HIP_ENABLED
 target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_INCLUDE_DIRS})
 target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_BASE}/hiprand/include)
 target_include_directories(CLUE_GPU_HIP PRIVATE ${hip_BASE}/rocrand/include)
+# NOTE: PCH is intentionally omitted for the HIP backend. This target overrides
+# CMAKE_CXX_COMPILER with hipcc, which does not support the PCH flags that CMake
+# generates for standard Clang/GCC.
 set_target_properties(
   CLUE_GPU_HIP
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY
