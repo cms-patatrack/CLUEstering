@@ -27,8 +27,7 @@ def test_euclidean(sissa_1000):
     c = clue.clusterer(20., 10., 20.)
     c.read_data(sissa_1000)
     assert c.n_dim == 2
-    metric = clue.EuclideanMetric()
-    c.choose_metric(metric)
+    c.choose_metric('euclidean')
     c.run_clue()
 
     mask = c.cluster_ids != -1
@@ -43,8 +42,7 @@ def test_weighted_euclidean(sissa_1000):
     c = clue.clusterer(20., 10., 20.)
     c.read_data(sissa_1000)
     assert c.n_dim == 2
-    metric = clue.EuclideanMetric([0.5, 0.5])
-    c.choose_metric(metric)
+    c.choose_metric('weighted_euclidean', [0.5, 0.5])
     c.run_clue()
 
     mask = c.cluster_ids != -1
@@ -59,8 +57,7 @@ def test_manhattan(sissa_1000):
     c = clue.clusterer(20., 10., 20.)
     c.read_data(sissa_1000)
     assert c.n_dim == 2
-    metric = clue.ManhattanMetric()
-    c.choose_metric(metric)
+    c.choose_metric('manhattan')
     c.run_clue()
 
     mask = c.cluster_ids != -1
@@ -75,8 +72,7 @@ def test_chebyshev(sissa_1000):
     c = clue.clusterer(20., 10., 20.)
     c.read_data(sissa_1000)
     assert c.n_dim == 2
-    metric = clue.ChebyshevMetric()
-    c.choose_metric(metric)
+    c.choose_metric('chebyshev')
     c.run_clue()
 
     mask = c.cluster_ids != -1
@@ -90,8 +86,7 @@ def test_weighted_chebyshev(sissa_1000):
     c = clue.clusterer(20., 10., 20.)
     c.read_data(sissa_1000)
     assert c.n_dim == 2
-    metric = clue.WeightedChebyshevMetric([0.5, 0.5])
-    c.choose_metric(metric)
+    c.choose_metric('weighted_chebyshev', [0.5, 0.5])
     c.run_clue()
 
     mask = c.cluster_ids != -1
