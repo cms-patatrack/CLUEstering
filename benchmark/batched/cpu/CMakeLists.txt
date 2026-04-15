@@ -24,8 +24,8 @@ if(TBB_FOUND)
                     ${CMAKE_SOURCE_DIR}/../../benchmark)
   target_link_libraries(tbb.out PRIVATE alpaka::alpaka Boost::boost TBB::tbb
                                         benchmark::benchmark)
-  target_compile_definitions(
-    tbb.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
+  target_compile_definitions(tbb.out PRIVATE ALPAKA_HOST_ONLY
+                                             ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 endif()
 
 find_package(OpenMP)

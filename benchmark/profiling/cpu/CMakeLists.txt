@@ -19,8 +19,8 @@ if(TBB_FOUND)
   add_executable(tbb.out ${CMAKE_SOURCE_DIR}/main.cpp)
   target_include_directories(tbb.out PRIVATE ${CMAKE_SOURCE_DIR}/../../include)
   target_link_libraries(tbb.out PRIVATE alpaka::alpaka Boost::atomic TBB::tbb)
-  target_compile_definitions(
-    tbb.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
+  target_compile_definitions(tbb.out PRIVATE ALPAKA_HOST_ONLY
+                                             ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 endif()
 
 find_package(OpenMP)

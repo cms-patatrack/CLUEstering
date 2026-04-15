@@ -11,9 +11,8 @@ foreach(source ${sources})
                                                ${doctest_SOURCE_DIR})
   target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt)
   target_compile_definitions(
-    ${target}
-    PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
-            TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
+    ${target} PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
+                      TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
   set_target_properties(
     ${target}
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/serial
@@ -39,9 +38,8 @@ if(TBB_FOUND AND NOT COVERAGE)
     target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic
                                             TBB::tbb fmt::fmt)
     target_compile_definitions(
-      ${target}
-      PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
-              TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
+      ${target} PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
+                        TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
     set_target_properties(
       ${target}
       PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tbb
@@ -62,9 +60,8 @@ if(OpenMP_CXX_FOUND AND NOT COVERAGE)
     target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic
                                             OpenMP::OpenMP_CXX fmt::fmt)
     target_compile_definitions(
-      ${target}
-      PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
-              TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
+      ${target} PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
+                        TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
     set_target_properties(
       ${target}
       PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/openmp
