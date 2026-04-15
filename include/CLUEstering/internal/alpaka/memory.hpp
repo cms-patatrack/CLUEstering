@@ -5,8 +5,7 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "CLUEstering/internal/alpaka/caching_allocator/allocator_policy.hpp"
-#include "CLUEstering/internal/alpaka/caching_allocator/cached_buf_alloc.hpp"
+#include "CLUEstering/internal/alpaka/allocator_policy.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/detail/concepts.hpp"
