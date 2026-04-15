@@ -4,8 +4,7 @@ target_include_directories(serial.out
 target_link_libraries(serial.out PRIVATE alpaka::alpaka Boost::atomic
                                          benchmark::benchmark)
 target_compile_definitions(
-  serial.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
-                     CLUE_ENABLE_CACHING_ALLOCATOR)
+  serial.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 
 find_package(TBB)
 if(TBB_FOUND)
@@ -15,8 +14,7 @@ if(TBB_FOUND)
   target_link_libraries(tbb.out PRIVATE alpaka::alpaka Boost::atomic
                                         benchmark::benchmark TBB::tbb)
   target_compile_definitions(
-    tbb.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
-                    CLUE_ENABLE_CACHING_ALLOCATOR)
+    tbb.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 endif()
 
 find_package(OpenMP)
@@ -28,6 +26,5 @@ if(OpenMP_CXX_FOUND)
     openmp.out PRIVATE alpaka::alpaka Boost::atomic benchmark::benchmark
                        OpenMP::OpenMP_CXX)
   target_compile_definitions(
-    openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
-                       CLUE_ENABLE_CACHING_ALLOCATOR)
+    openmp.out PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
 endif()

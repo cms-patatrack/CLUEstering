@@ -13,7 +13,6 @@ foreach(source ${sources})
   target_compile_definitions(
     ${target}
     PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
-            CLUE_ENABLE_CACHING_ALLOCATOR
             TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
   set_target_properties(
     ${target}
@@ -42,7 +41,6 @@ if(TBB_FOUND AND NOT COVERAGE)
     target_compile_definitions(
       ${target}
       PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
-              CLUE_ENABLE_CACHING_ALLOCATOR
               TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
     set_target_properties(
       ${target}
@@ -66,7 +64,6 @@ if(OpenMP_CXX_FOUND AND NOT COVERAGE)
     target_compile_definitions(
       ${target}
       PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
-              CLUE_ENABLE_CACHING_ALLOCATOR
               TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
     set_target_properties(
       ${target}
