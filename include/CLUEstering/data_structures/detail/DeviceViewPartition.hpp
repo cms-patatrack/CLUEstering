@@ -16,7 +16,7 @@ namespace clue::soa::device {
       throw std::invalid_argument(
           "Number of points passed to PointsDevice constructor must be positive.");
     }
-    return ((Ndim + 2) * sizeof(TValue) + 3 * sizeof(int)) * n_points;
+    return ((Ndim + 3) * sizeof(TValue) + 3 * sizeof(int)) * n_points;
   }
 
   template <std::size_t Ndim, std::floating_point TElement>
@@ -38,6 +38,8 @@ namespace clue::soa::device {
         buffer + n_points * ((Ndim + 1) * sizeof(value_type) + 2 * sizeof(int)));
     view.m_nearest_higher = reinterpret_cast<int*>(
         buffer + n_points * ((Ndim + 2) * sizeof(value_type) + 2 * sizeof(int)));
+    view.m_density_uncertainty = reinterpret_cast<value_type*>(
+        buffer + n_points * ((Ndim + 2) * sizeof(value_type) + 3 * sizeof(int)));
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -58,6 +60,8 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(int));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_density_uncertainty = reinterpret_cast<value_type*>(
+        alloc_buffer + n_points * (sizeof(value_type) + 2 * sizeof(int)));
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -77,6 +81,8 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_density_uncertainty = reinterpret_cast<value_type*>(
+        alloc_buffer + n_points * (sizeof(value_type) + 2 * sizeof(int)));
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -95,6 +101,8 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_density_uncertainty = reinterpret_cast<value_type*>(
+        alloc_buffer + n_points * (sizeof(value_type) + 2 * sizeof(int)));
     view.m_n = n_points;
   }
 
@@ -115,6 +123,8 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_density_uncertainty = reinterpret_cast<value_type*>(
+        alloc_buffer + n_points * (sizeof(value_type) + 2 * sizeof(int)));
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -132,6 +142,8 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_density_uncertainty = reinterpret_cast<value_type*>(
+        alloc_buffer + n_points * (sizeof(value_type) + 2 * sizeof(int)));
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement, concepts::pointer... TBuffers>
@@ -151,6 +163,8 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_density_uncertainty = reinterpret_cast<value_type*>(
+        alloc_buffer + n_points * (sizeof(value_type) + 2 * sizeof(int)));
     view.m_n = n_points;
   }
 
