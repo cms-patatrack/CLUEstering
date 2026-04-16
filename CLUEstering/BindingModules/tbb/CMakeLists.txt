@@ -1,4 +1,4 @@
-pybind11_add_module(CLUE_CPU_TBB SHARED binding_cpu_tbb.cpp)
+pybind11_add_module(CLUE_CPU_TBB NO_EXTRAS SHARED binding_cpu_tbb.cpp)
 target_include_directories(CLUE_CPU_TBB
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_compile_definitions(

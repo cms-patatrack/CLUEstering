@@ -8,7 +8,7 @@ if(NOT DEFINED CMAKE_CUDA_STANDARD)
 endif()
 
 set_source_files_properties(binding_gpu_cuda.cpp PROPERTIES LANGUAGE CUDA)
-pybind11_add_module(CLUE_GPU_CUDA SHARED binding_gpu_cuda.cpp)
+pybind11_add_module(CLUE_GPU_CUDA NO_EXTRAS SHARED binding_gpu_cuda.cpp)
 target_include_directories(CLUE_GPU_CUDA
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_link_libraries(CLUE_GPU_CUDA PRIVATE alpaka::alpaka Boost::atomic)
