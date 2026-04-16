@@ -1,6 +1,29 @@
 [build-system]
-requires = ["setuptools>=42","wheel","pathlib"]
-build-backend = "setuptools.build_meta"
+requires = ["scikit-build-core>=0.9"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "CLUEstering"
+version = "2.10.0"
+description = "A library that generalizes the original 2-dimensional CLUE algorithm made at CERN."
+readme = {file = "README.md", content-type = "text/markdown"}
+authors = [
+  {name = "Simone Balducci", email = "simone.balducci00@gmail.com"},
+]
+requires-python = ">=3.7"
+dependencies = ["scikit-learn", "numpy", "matplotlib", "pandas"]
+keywords = ["Python", "Clustering", "Binding"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Operating System :: Unix",
+  "Operating System :: MacOS :: MacOS X",
+]
+
+[tool.scikit-build]
+cmake.args = ["-DBUILD_PYTHON=ON"]
+cmake.build-type = "Release"
+wheel.packages = ["CLUEstering"]
 
 [tool.autopep8]
 max_line_length = 108
