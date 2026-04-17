@@ -5,16 +5,17 @@ build-backend = "scikit_build_core.build"
 [project]
 name = "CLUEstering"
 version = "2.10.0"
-description = "A library that generalizes the original 2-dimensional CLUE algorithm made at CERN."
+description = "High-Performance Density-Based Weighted Clustering for Heterogeneous Computing"
 readme = {file = "README.md", content-type = "text/markdown"}
 authors = [
-  {name = "Simone Balducci", email = "simone.balducci00@gmail.com"},
+  {name = "Simone Balducci, Felice Pantaleo, Marco Rovere, Wahid Redjeb, Aurora Perego, Francesco Giacomini", email = "simone.balducci00@gmail.com"},
 ]
 requires-python = ">=3.7"
 dependencies = ["scikit-learn", "numpy", "matplotlib", "pandas"]
-keywords = ["Python", "Clustering", "Binding"]
+keywords = ["Density-based Weighted Clustering", "HPC", "Parallel Computing", "GPU Computing", "Performance Portability"]
 classifiers = [
   "Intended Audience :: Developers",
+  "Intended Audience :: Researchers",
   "Programming Language :: Python :: 3",
   "Operating System :: Unix",
   "Operating System :: MacOS :: MacOS X",
