@@ -21,6 +21,7 @@ set_target_properties(
   CLUE_GPU_HIP
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY
              ${CMAKE_CURRENT_BINARY_DIR}/../../../lib/CLUEstering/lib/)
+install(TARGETS CLUE_GPU_HIP LIBRARY DESTINATION CLUEstering/lib)
 # create link of shared object to lib folder inside CLUEstering directory
 add_custom_command(
   TARGET CLUE_GPU_HIP
