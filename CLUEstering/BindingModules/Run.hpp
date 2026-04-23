@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CLUEstering/CLUEstering.hpp"
+#include "MetricDescriptor.hpp"
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
@@ -30,6 +31,7 @@ void run(TInput dc,
          const std::optional<std::span<uint32_t>>& batch_sample_sizes,
          int32_t n_points,
          const Kernel& kernel,
+         const clue::internal::MetricDescriptor<TInput>& metric_desc,
          clue::Queue queue,
          size_t block_size) {
   clue::Clusterer<Ndim, TInput> algo(queue, dc, rhoc, dm, seed_dc, pPBin);
@@ -38,18 +40,14 @@ void run(TInput dc,
   clue::PointsHost<Ndim, TInput> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
   clue::PointsDevice<Ndim, TInput> d_points(queue, n_points);
 
-  if (batch_sample_sizes.has_value()) [[unlikely]] {
-    algo.make_clusters(queue,
-                       h_points,
-                       d_points,
-                       batch_sample_sizes.value(),
-                       clue::EuclideanMetric<Ndim, TInput>{},
-                       kernel,
-                       block_size);
-  } else [[likely]] {
-    algo.make_clusters(
-        queue, h_points, d_points, clue::EuclideanMetric<Ndim, TInput>{}, kernel, block_size);
-  }
+  clue::internal::apply_metric<Ndim>(metric_desc, [&](auto&& metric) {
+    if (batch_sample_sizes.has_value()) [[unlikely]] {
+      algo.make_clusters(
+          queue, h_points, d_points, batch_sample_sizes.value(), metric, kernel, block_size);
+    } else [[likely]] {
+      algo.make_clusters(queue, h_points, d_points, metric, kernel, block_size);
+    }
+  });
 }
 
 namespace ALPAKA_BACKEND {
@@ -83,7 +81,8 @@ namespace ALPAKA_BACKEND {
                std::optional<py::array_t<uint32_t>> batch_sample_sizes,
                int32_t n_points,
                std::size_t block_size,
-               std::size_t device_id) {
+               std::size_t device_id,
+               const clue::internal::MetricDescriptor<TInput>& metric_desc) {
     auto rData = data.request();
     auto* pData = static_cast<TInput*>(rData.ptr);
     auto rResults = results.request();
@@ -111,6 +110,7 @@ namespace ALPAKA_BACKEND {
                                      batch_sample_sizes_span,
                                      n_points,
                                      kernel,
+                                     metric_desc,
                                      queue,
                                      block_size);
     };

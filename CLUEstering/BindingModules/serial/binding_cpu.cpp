@@ -23,6 +23,7 @@ namespace alpaka_serial_sync {
     m.def("listDevices",
           &alpaka_serial_sync::listDevices,
           "List the available devices for the CPU serial backend");
+
     m.def("mainRun", &alpaka_serial_sync::mainRun<float, clue::FlatKernel>);
     m.def("mainRun", &alpaka_serial_sync::mainRun<float, clue::ExponentialKernel>);
     m.def("mainRun", &alpaka_serial_sync::mainRun<float, clue::GaussianKernel>);
