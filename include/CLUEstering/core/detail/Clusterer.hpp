@@ -370,6 +370,33 @@ namespace clue {
                                                      m_event_associations->view(),
                                                      block_size);
 
+    // reorder m_seeds and m_event_associations so that seeds are contiguous bx-wise
+    detail::reorderSeedsBatchWise<internal::Acc>(queue, 
+                                                  m_seeds.value(), 
+                                                  m_event_associations.value());
+    
+    // auto num_seeds = m_seeds.value().size(queue);
+    // std::cout << "Number of seeds after reorderSeedsBatchWise = " << num_seeds << std::endl;
+    // auto h_seeds_reordered = clue::make_host_buffer<int32_t[]>(num_seeds);
+    // alpaka::memcpy(
+    //     queue,
+    //     h_seeds_reordered,
+    //     clue::make_device_view(alpaka::getDev(queue), m_seeds.value().data(), num_seeds)
+    // );
+
+    // auto h_batch_association_reordered = clue::make_host_buffer<int32_t[]>(num_seeds);
+    // alpaka::memcpy(
+    //     queue,
+    //     h_batch_association_reordered,
+    //     clue::make_device_view(alpaka::getDev(queue), m_event_associations.value().data(), num_seeds)
+    // );
+    // alpaka::wait(queue);
+
+    // std::cout << "idx, seed reordered, batch_association reordered" << std::endl;
+    // for (auto ii = 0; ii < num_seeds; ++ii) {
+    //   std::cout << ii << ", " << h_seeds_reordered[ii] << ", " << h_batch_association_reordered[ii] << std::endl;
+    // }
+
     m_followers->template fill<internal::Acc>(queue, dev_points);
 
     detail::assignPointsToClusters<internal::Acc>(
