@@ -13,6 +13,7 @@
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
+#include "CLUEstering/data_structures/PointsConversion.hpp"
 #include "CLUEstering/data_structures/internal/DeviceVector.hpp"
 #include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
