@@ -42,7 +42,7 @@ FetchContent_MakeAvailable(alpaka)
 file(MAKE_DIRECTORY ../lib)
 
 # Convolutional Kernels
-pybind11_add_module(CLUE_Convolutional_Kernels SHARED
+pybind11_add_module(CLUE_Convolutional_Kernels NO_EXTRAS SHARED
                     ${CMAKE_CURRENT_SOURCE_DIR}/binding_kernels.cpp)
 target_include_directories(CLUE_Convolutional_Kernels
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
