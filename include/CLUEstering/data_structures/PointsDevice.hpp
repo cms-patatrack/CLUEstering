@@ -39,6 +39,7 @@ namespace clue {
 
   private:
     device_buffer<TDev, std::byte[]> m_buffer;
+    std::optional<device_buffer<TDev, value_type[]>> m_uncertainty_buffer;
     PointsView<Ndim, element_type> m_view;
     std::optional<std::size_t> m_nclusters;
     std::int32_t m_size;

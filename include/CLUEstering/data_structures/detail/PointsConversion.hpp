@@ -4,6 +4,7 @@
 
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
+#include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/internal/meta/apply.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include <alpaka/alpaka.hpp>
@@ -60,6 +61,16 @@ namespace clue {
         queue,
         make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
         make_host_view(h_points.view().m_weight, h_points.size()));
+    if (h_points.view().has_uncertainty()) {
+      using dev_value_t = std::remove_cv_t<TDeviceInput>;
+      using PType = std::remove_cvref_t<decltype(d_points)>;
+      auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
+      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+      alpaka::memcpy(queue,
+                     make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
+                     make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
+      d_points.view().m_density_uncertainty = ubuf->data();
+    }
     alpaka::wait(queue);
   }
 
@@ -77,6 +88,16 @@ namespace clue {
         queue,
         make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
         make_host_view(h_points.view().m_weight, h_points.size()));
+    if (h_points.view().has_uncertainty()) {
+      using dev_value_t = std::remove_cv_t<TInput>;
+      using PType = std::remove_cvref_t<decltype(d_points)>;
+      auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
+      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+      alpaka::memcpy(queue,
+                     make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
+                     make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
+      d_points.view().m_density_uncertainty = ubuf->data();
+    }
     alpaka::wait(queue);
 
     return d_points;
