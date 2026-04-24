@@ -73,9 +73,10 @@ namespace clue {
           make_device_view(alpaka::getDev(queue), d_points.view().m_coords[Dim], h_points.size()),
           make_host_view(h_points.view().m_coords[Dim], h_points.size()));
     });
-    alpaka::memcpy(queue,
-                   make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
-                   make_host_view(h_points.view().m_weight, h_points.size()));
+    alpaka::memcpy(
+        queue,
+        make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
+        make_host_view(h_points.view().m_weight, h_points.size()));
     alpaka::wait(queue);
 
     return d_points;

@@ -305,7 +305,8 @@ namespace clue {
         queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
 
     alpaka::wait(queue);
-    internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(dev_points);
+    internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(
+        dev_points);
   }
 
   template <std::size_t Ndim, std::floating_point DataType>
@@ -375,7 +376,8 @@ namespace clue {
         queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
 
     alpaka::wait(queue);
-    internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(dev_points);
+    internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(
+        dev_points);
   }
 
 }  // namespace clue
