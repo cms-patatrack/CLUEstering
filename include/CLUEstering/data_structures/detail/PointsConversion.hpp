@@ -66,10 +66,9 @@ namespace clue {
       using PType = std::remove_cvref_t<decltype(d_points)>;
       auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
       ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
-      alpaka::memcpy(
-          queue,
-          make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
-          make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
+      alpaka::memcpy(queue,
+                     make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
+                     make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
       d_points.view().m_density_uncertainty = ubuf->data();
     }
     alpaka::wait(queue);
@@ -94,10 +93,9 @@ namespace clue {
       using PType = std::remove_cvref_t<decltype(d_points)>;
       auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
       ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
-      alpaka::memcpy(
-          queue,
-          make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
-          make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
+      alpaka::memcpy(queue,
+                     make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
+                     make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
       d_points.view().m_density_uncertainty = ubuf->data();
     }
     alpaka::wait(queue);
