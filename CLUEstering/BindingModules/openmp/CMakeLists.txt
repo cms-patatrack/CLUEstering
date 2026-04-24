@@ -6,6 +6,7 @@ target_compile_definitions(
   CLUE_CPU_OMP PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
                        CLUE_ENABLE_CACHING_ALLOCATOR)
 target_link_libraries(CLUE_CPU_OMP PRIVATE OpenMP::OpenMP_CXX)
+target_compile_options(CLUE_CPU_OMP PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/bigobj>)
 target_precompile_headers(
   CLUE_CPU_OMP
   PRIVATE
