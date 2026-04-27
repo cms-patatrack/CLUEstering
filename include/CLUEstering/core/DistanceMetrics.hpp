@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/internal/meta/accumulate.hpp"
 #include "CLUEstering/internal/meta/maximum.hpp"
 #include "CLUEstering/internal/math/math.hpp"
@@ -16,18 +17,74 @@ namespace clue {
 
   namespace concepts {
 
+    namespace detail {
+
+      /// Metric callable as metric(Point, Point) -> value_type
+      template <typename TMetric, std::size_t Ndim>
+      concept point_distance_metric =
+          requires(TMetric&& metric, std::array<typename TMetric::value_type, Ndim + 1> arr) {
+            { metric(arr, arr) } -> std::same_as<typename TMetric::value_type>;
+          };
+
+      /// Metric callable as metric(PointsView, i, j) -> value_type (used for per-point sigma)
+      template <typename TMetric, std::size_t Ndim>
+      concept view_distance_metric = requires(
+          TMetric&& metric, PointsView<Ndim, typename TMetric::value_type> view, std::size_t i) {
+        { metric(view, i, i) } -> std::same_as<typename TMetric::value_type>;
+      };
+
+    }  // namespace detail
+
+    /// @brief Concept for distance metrics accepted by the clusterer
+    ///
+    /// Satisfied by either a point-wise metric (taking two coordinate arrays) or a
+    /// view-wise metric (taking a PointsView and two point indices).
     template <typename TMetric, std::size_t Ndim>
-    concept distance_metric = requires(TMetric&& metric) {
-      {
-        metric(std::array<typename TMetric::value_type, Ndim + 1>{},
-               std::array<typename TMetric::value_type, Ndim + 1>{})
-      } -> std::same_as<typename TMetric::value_type>;
-    };
+    concept distance_metric =
+        detail::point_distance_metric<TMetric, Ndim> || detail::view_distance_metric<TMetric, Ndim>;
 
   }  // namespace concepts
 
   template <std::size_t Ndim, std::floating_point TData>
   using Point = std::array<TData, Ndim + 1>;
+
+  /// @brief Mahalanobis distance metric with per-point coordinate uncertainties
+  ///
+  /// Computes a normalised distance between two points using the per-point sigma
+  /// values stored in the PointsView. For each dimension the contribution is
+  /// `(x_i - x_j)^2 / (sigma_i^2 + sigma_j^2)`, which is the correct combination
+  /// for two independent Gaussian uncertainties.
+  ///
+  /// @note Requires that sigma values have been set for every dimension via
+  ///       `set_sigma` or `set_sigmas` before clustering.
+  ///
+  /// @tparam Ndim Number of dimensions
+  /// @tparam TData Floating-point type for coordinates and sigma values
+  template <std::size_t Ndim, std::floating_point TData = float>
+  class MahalanobisMetric {
+  public:
+    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+
+    ALPAKA_FN_HOST_ACC constexpr MahalanobisMetric() = default;
+
+    /// @brief Compute the Mahalanobis distance between points i and j
+    ///
+    /// @param points The PointsView holding coordinates and sigma arrays
+    /// @param i Index of the first point
+    /// @param j Index of the second point
+    /// @return Mahalanobis distance between the two points
+    ALPAKA_FN_HOST_ACC constexpr inline auto operator()(PointsView<Ndim, TData> points,
+                                                        std::size_t i,
+                                                        std::size_t j) const {
+      const auto d_squared = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
+        const auto diff = points[i][Dim] - points[j][Dim];
+        const auto sigma_i = points.sigma(Dim)[i];
+        const auto sigma_j = points.sigma(Dim)[j];
+        return diff * diff / (sigma_i * sigma_i + sigma_j * sigma_j);
+      });
+      return math::sqrt(d_squared);
+    }
+  };
 
   /// @brief Euclidean distance metric
   //// This class implements the Euclidean distance metric in Ndim dimensions.
@@ -41,7 +98,7 @@ namespace clue {
     /// @brief Default constructor
     ///
     /// @return EuclideanMetric object
-    ALPAKA_FN_HOST_ACC constexpr EuclideanMetric() {}
+    ALPAKA_FN_HOST_ACC constexpr EuclideanMetric() = default;
 
     /// @brief Compute the Euclidean distance between two points
     ///
@@ -174,7 +231,7 @@ namespace clue {
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
 
     /// @brief Default constructor
-    ALPAKA_FN_HOST_ACC constexpr ManhattanMetric() {}
+    ALPAKA_FN_HOST_ACC constexpr ManhattanMetric() = default;
 
     /// @brief Compute the Manhattan distance between two points
     ///
@@ -199,7 +256,7 @@ namespace clue {
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
 
     /// @brief Default constructor
-    ALPAKA_FN_HOST_ACC constexpr ChebyshevMetric() {}
+    ALPAKA_FN_HOST_ACC constexpr ChebyshevMetric() = default;
 
     /// @brief Compute the Chebyshev distance between two points
     ///
@@ -303,6 +360,13 @@ namespace clue {
     /// 	@tparam TData Point coordinates and weights data type
     template <std::size_t Ndim, std::floating_point TData = float>
     using WeightedChebyshev = clue::WeightedChebyshevMetric<Ndim, TData>;
+
+    /// @brief Alias for Mahalanobis distance metric
+    ///
+    /// 	@tparam Ndim Number of dimensions
+    /// 	@tparam TData Point coordinates and weights data type
+    template <std::size_t Ndim, std::floating_point TData = float>
+    using Mahalanobis = clue::MahalanobisMetric<Ndim, TData>;
 
   }  // namespace metrics
 

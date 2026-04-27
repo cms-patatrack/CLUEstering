@@ -17,6 +17,7 @@
 #include <cstdint>
 #include <limits>
 #include <optional>
+#include <ranges>
 #include <span>
 #include <tuple>
 
@@ -127,6 +128,26 @@ namespace clue {
     assert(density_uncertainty.size() == static_cast<size_t>(m_size) &&
            "The size of the density uncertainty array must match the number of points");
     m_view.m_density_uncertainty = density_uncertainty.data();
+  }
+
+  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  inline void PointsDevice<Ndim, TData, TDev>::set_sigma(std::size_t dim,
+                                                         std::span<element_type> uncertainty) {
+    assert(dim < Ndim && "Dimension out of range in set_sigma");
+    assert(uncertainty.size() == static_cast<size_t>(m_size) &&
+           "The size of the coordinate uncertainty array must match the number of points");
+    m_view.m_sigmas[dim] = uncertainty.data();
+  }
+
+  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+  template <std::ranges::contiguous_range... Containers>
+    requires(sizeof...(Containers) == Ndim)
+  inline void PointsDevice<Ndim, TData, TDev>::set_sigmas(Containers&&... uncertainties) {
+    auto containers_tuple = std::forward_as_tuple(std::forward<Containers>(uncertainties)...);
+    meta::apply<Ndim>([&]<std::size_t Dim>() {
+      auto& c = std::get<Dim>(containers_tuple);
+      set_sigma(Dim, std::span<element_type>(c.data(), c.size()));
+    });
   }
 
 }  // namespace clue

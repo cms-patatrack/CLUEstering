@@ -50,8 +50,12 @@ namespace clue::detail {
 
             clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
             for (auto dim = 0u; dim != Ndim; ++dim) {
-              searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - density_radius,
-                                                                coords_i[dim] + density_radius);
+              const auto sigma_i =
+                  dev_points.has_sigma(dim) ? dev_points.sigma(dim)[global_idx] : TData{0};
+              const auto box_radius =
+                  math::max(density_radius, density_radius * sigma_i * math::sqrt(TData{2}));
+              searchbox_extremes[dim] =
+                  clue::nostd::make_array(coords_i[dim] - box_radius, coords_i[dim] + box_radius);
             }
 
             clue::SearchBoxBins<Ndim> searchbox_bins;
@@ -111,8 +115,12 @@ namespace clue::detail {
 
             clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
             for (auto dim = 0u; dim != Ndim; ++dim) {
-              searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - outlier_distance,
-                                                                coords_i[dim] + outlier_distance);
+              const auto sigma_i =
+                  dev_points.has_sigma(dim) ? dev_points.sigma(dim)[global_idx] : TData{0};
+              const auto box_radius =
+                  math::max(outlier_distance, outlier_distance * sigma_i * math::sqrt(TData{2}));
+              searchbox_extremes[dim] =
+                  clue::nostd::make_array(coords_i[dim] - box_radius, coords_i[dim] + box_radius);
             }
 
             clue::SearchBoxBins<Ndim> searchbox_bins;
