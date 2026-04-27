@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="PointsFactory_8hpp" kind="file" language="C++">
+    <compoundname>PointsFactory.hpp</compoundname>
+    <includes local="yes">CLUEstering/detail/concepts.hpp</includes>
+    <includes local="no">concepts</includes>
+    <includes local="no">cstddef</includes>
+    <includes local="no">ranges</includes>
+    <includes local="no">span</includes>
+    <includes local="yes">CLUEstering/data_structures/detail/PointsFactory.hpp</includes>
+    <includedby refid="CLUEstering_8hpp" local="yes">include/CLUEstering/CLUEstering.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>include/CLUEstering/data_structures/PointsFactory.hpp</label>
+        <link refid="PointsFactory_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>CLUEstering/data_structures/detail/PointsFactory.hpp</label>
+      </node>
+      <node id="2">
+        <label>CLUEstering/detail/concepts.hpp</label>
+      </node>
+      <node id="3">
+        <label>concepts</label>
+      </node>
+      <node id="4">
+        <label>cstddef</label>
+      </node>
+      <node id="5">
+        <label>ranges</label>
+      </node>
+      <node id="6">
+        <label>span</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>include/CLUEstering/CLUEstering.hpp</label>
+        <link refid="CLUEstering_8hpp"/>
+      </node>
+      <node id="1">
+        <label>include/CLUEstering/data_structures/PointsFactory.hpp</label>
+        <link refid="PointsFactory_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="namespaceclue">clue</innernamespace>
+    <briefdescription>
+<para>Provides factory functions for creating clustered points data structures. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="authors"><para>Simone Balducci </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/detail/concepts.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;concepts&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstddef&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;ranges&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;span&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">clue<sp/>{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>InputType,<sp/>concepts::queue<sp/>QueueType&gt;</highlight></codeline>
+<codeline lineno="23" refid="PointsFactory_8hpp_1ad206834f091ee26feb2d31f6ac2eaf2d" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="PointsFactory_8hpp_1ad206834f091ee26feb2d31f6ac2eaf2d" kindref="member">make_clustered_points</ref>(QueueType&amp;<sp/>queue,</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t<sp/>n_points,</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>InputType*<sp/>coordinates,</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>InputType*<sp/>weights,</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">*<sp/>cluster_indexes);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>InputType,<sp/>concepts::queue<sp/>QueueType&gt;</highlight></codeline>
+<codeline lineno="35" refid="PointsFactory_8hpp_1a9ecf35c519cd329fa7d696dba42933e7" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="PointsFactory_8hpp_1ad206834f091ee26feb2d31f6ac2eaf2d" kindref="member">make_clustered_points</ref>(QueueType&amp;<sp/>queue,</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>InputType&gt;<sp/>coordinates,</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>InputType&gt;<sp/>weights,</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>int&gt;<sp/>cluster_indexes);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>InputType,<sp/>concepts::device<sp/>DeviceType&gt;</highlight></codeline>
+<codeline lineno="47" refid="PointsFactory_8hpp_1a6662b4b164a9e4b277b51677cbd5cc84" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="PointsFactory_8hpp_1ad206834f091ee26feb2d31f6ac2eaf2d" kindref="member">make_clustered_points</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>DeviceType&amp;<sp/>device,</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::size_t<sp/>n_points,</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>InputType*<sp/>coordinates,</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>InputType*<sp/>weights,</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">*<sp/>cluster_indexes);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim,<sp/>std::</highlight><highlight class="keywordtype">float</highlight><highlight class="normal">ing_po</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>InputType,<sp/>concepts::device<sp/>DeviceType&gt;</highlight></codeline>
+<codeline lineno="59" refid="PointsFactory_8hpp_1ae9073e462650cad5978af9b58daea281" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="PointsFactory_8hpp_1ad206834f091ee26feb2d31f6ac2eaf2d" kindref="member">make_clustered_points</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>DeviceType&amp;<sp/>device,</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>InputType&gt;<sp/>coordinates,</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>InputType&gt;<sp/>weights,</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::span&lt;const<sp/>int&gt;<sp/>cluster_indexes);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::size_t<sp/>Ndim,<sp/>concepts::queue<sp/>QueueType,<sp/>concepts::pointer...<sp/>TBuffers&gt;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">...(TBuffers)<sp/>==<sp/>Ndim<sp/>+<sp/>2<sp/>and<sp/>Ndim<sp/>&gt;<sp/>1)</highlight></codeline>
+<codeline lineno="70" refid="PointsFactory_8hpp_1a389453ab2ac5888b5427ebf6aae1644e" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="PointsFactory_8hpp_1ad206834f091ee26feb2d31f6ac2eaf2d" kindref="member">make_clustered_points</ref>(QueueType&amp;<sp/>queue,<sp/>std::size_t<sp/>n_points,<sp/>TBuffers...<sp/>buffers);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::size_t<sp/>Ndim,<sp/>concepts::queue<sp/>QueueType,<sp/>std::ranges::contiguous_range...<sp/>TBuffers&gt;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">...(TBuffers)<sp/>==<sp/>Ndim<sp/>+<sp/>2<sp/>and<sp/>Ndim<sp/>&gt;<sp/>1)</highlight></codeline>
+<codeline lineno="77" refid="PointsFactory_8hpp_1ada00d15335743d1f63744e8d7420798e" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="PointsFactory_8hpp_1ad206834f091ee26feb2d31f6ac2eaf2d" kindref="member">make_clustered_points</ref>(QueueType&amp;<sp/>queue,<sp/>TBuffers&amp;&amp;...<sp/>buffers);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::size_t<sp/>Ndim,<sp/>concepts::device<sp/>DeviceType,<sp/>concepts::pointer...<sp/>TBuffers&gt;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">...(TBuffers)<sp/>==<sp/>Ndim<sp/>+<sp/>2<sp/>and<sp/>Ndim<sp/>&gt;<sp/>1)</highlight></codeline>
+<codeline lineno="85" refid="PointsFactory_8hpp_1a1efc113bbb5a56bf60e3c74a817e79b9" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="PointsFactory_8hpp_1ad206834f091ee26feb2d31f6ac2eaf2d" kindref="member">make_clustered_points</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>DeviceType&amp;<sp/>device,<sp/>std::size_t<sp/>n_points,<sp/>TBuffers...<sp/>buffers);</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;std::size_t<sp/>Ndim,<sp/>concepts::device<sp/>DeviceType,<sp/>std::ranges::contiguous_range...<sp/>TBuffers&gt;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(</highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">...(TBuffers)<sp/>==<sp/>Ndim<sp/>+<sp/>2<sp/>and<sp/>Ndim<sp/>&gt;<sp/>1)</highlight></codeline>
+<codeline lineno="92" refid="PointsFactory_8hpp_1a3a6f7b7c01f5f6ee1080fc8ac4ba81e1" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/><ref refid="PointsFactory_8hpp_1ad206834f091ee26feb2d31f6ac2eaf2d" kindref="member">make_clustered_points</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>DeviceType&amp;<sp/>device,<sp/>TBuffers&amp;&amp;...<sp/>buffers);</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal">}<sp/><sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>clue</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;CLUEstering/data_structures/detail/PointsFactory.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="include/CLUEstering/data_structures/PointsFactory.hpp"/>
+  </compounddef>
+</doxygen>
