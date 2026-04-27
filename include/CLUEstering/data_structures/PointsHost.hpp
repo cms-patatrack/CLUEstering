@@ -216,6 +216,19 @@ namespace clue {
     /// @note The uncertainty gets multiplied to the `min_density` parameter
     void set_density_uncertainty(std::span<element_type> density_uncertainty);
 
+    /// @brief Sets the per-point coordinate sigma for the given dimension
+    ///
+    /// @param dim The dimension index (must be less than Ndim)
+    /// @param uncertainty A span of sigma values, one per point
+    void set_sigma(std::size_t dim, std::span<element_type> uncertainty);
+
+    /// @brief Sets the per-point coordinate sigma for all dimensions at once
+    ///
+    /// @param uncertainties One contiguous range per dimension, in dimension order
+    template <std::ranges::contiguous_range... Containers>
+      requires(sizeof...(Containers) == Ndim)
+    void set_sigmas(Containers&&... uncertainties);
+
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;
 

@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <limits>
 #include <stdexcept>
+#include <ranges>
 #include <span>
 #include <type_traits>
 
@@ -64,9 +65,34 @@ namespace clue {
         return static_cast<const TPoints&>(*this).m_clustered;
       }
 
+      /// @brief Sets the per-point coordinate sigma for all dimensions at once
+      ///
+      /// @param uncertainties One contiguous range per dimension, in dimension order
+      template <std::ranges::contiguous_range... Containers>
+        requires(sizeof...(Containers) == TPoints::Ndim_)
+      ALPAKA_FN_HOST void set_sigmas(Containers&&... uncertainties) {
+        auto containers_tuple = std::forward_as_tuple(std::forward<Containers>(uncertainties)...);
+        meta::apply<TPoints::Ndim_>([&]<std::size_t Dim>() {
+          auto& c = std::get<Dim>(containers_tuple);
+          static_cast<TPoints*>(this)->set_sigma(
+              Dim, std::span<typename TPoints::element_type>(c.data(), c.size()));
+        });
+      }
+
       static void mark_clustered(TPoints& points) { points.m_clustered = true; }
 
-      static auto& uncertainty_buffer(TPoints& points) { return points.m_uncertainty_buffer; }
+      static auto& uncertainty_buffer(TPoints& points)
+        requires requires { points.m_uncertainty_buffer; }
+      {
+        return points.m_uncertainty_buffer;
+      }
+
+      /// @brief Returns the device buffers owning the sigma arrays
+      static auto& sigma_buffers(TPoints& points)
+        requires requires { points.m_sigma_buffers; }
+      {
+        return points.m_sigma_buffers;
+      }
 
       ALPAKA_FN_HOST const auto& view() const { return static_cast<const TPoints*>(this)->m_view; }
       ALPAKA_FN_HOST auto& view() { return static_cast<TPoints*>(this)->m_view; }
@@ -85,6 +111,7 @@ namespace clue {
     std::int32_t* m_is_seed;
     value_type* m_rho;
     std::int32_t* m_nearest_higher;
+    std::array<element_type*, Ndim> m_sigmas;
     element_type* m_density_uncertainty;
     std::int32_t m_n;
 
@@ -156,6 +183,22 @@ namespace clue {
       assert(m_density_uncertainty != nullptr &&
              "The density_uncertainty array has not been allocated yet, so it cannot be accessed");
       return std::span<element_type>(m_density_uncertainty, m_n);
+    }
+
+    /// @brief Returns whether per-point sigma values are set for the given dimension
+    ALPAKA_FN_HOST_ACC auto has_sigma(std::size_t dim) const { return m_sigmas[dim] != nullptr; }
+
+    /// @brief Returns a read-only span of the per-point sigma values for the given dimension
+    ALPAKA_FN_HOST_ACC auto sigma(std::size_t dim) const {
+      assert(m_sigmas[dim] != nullptr &&
+             "The sigma array for this dimension has not been allocated yet");
+      return std::span<const element_type>(m_sigmas[dim], m_n);
+    }
+    /// @brief Returns a span of the per-point sigma values for the given dimension
+    ALPAKA_FN_HOST_ACC auto sigma(std::size_t dim) {
+      assert(m_sigmas[dim] != nullptr &&
+             "The sigma array for this dimension has not been allocated yet");
+      return std::span<element_type>(m_sigmas[dim], m_n);
     }
 
     ALPAKA_FN_HOST_ACC auto size() const { return m_n; }
