@@ -2,8 +2,7 @@ pybind11_add_module(CLUE_CPU_TBB SHARED binding_cpu_tbb.cpp)
 target_include_directories(CLUE_CPU_TBB
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_compile_definitions(
-  CLUE_CPU_TBB PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
-                       CLUE_ENABLE_CACHING_ALLOCATOR)
+  CLUE_CPU_TBB PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 target_link_libraries(CLUE_CPU_TBB PRIVATE alpaka::alpaka Boost::atomic
                                            TBB::tbb)
 target_precompile_headers(

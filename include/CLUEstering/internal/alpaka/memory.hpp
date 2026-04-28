@@ -5,8 +5,7 @@
 
 #include <alpaka/alpaka.hpp>
 
-#include "CLUEstering/internal/alpaka/caching_allocator/allocator_policy.hpp"
-#include "CLUEstering/internal/alpaka/caching_allocator/cached_buf_alloc.hpp"
+#include "CLUEstering/internal/alpaka/allocator_policy.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/detail/concepts.hpp"
@@ -95,34 +94,22 @@ namespace clue {
 
   template <internal::concepts::scalar T, concepts::queue TQueue>
   host_buffer<T> make_host_buffer(TQueue const& queue) {
-    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
-      return allocCachedBuf<T, Idx>(host, queue, Scalar{});
-    } else {
-      using TPlatform = alpaka::Platform<alpaka::Dev<TQueue>>;
-      return alpaka::allocMappedBuf<T, Idx>(host, platform<TPlatform>(), Scalar{});
-    }
+    using TPlatform = alpaka::Platform<alpaka::Dev<TQueue>>;
+    return alpaka::allocMappedBuf<T, Idx>(host, platform<TPlatform>(), Scalar{});
   }
 
   template <internal::concepts::unbounded_array T, concepts::queue TQueue>
   host_buffer<T> make_host_buffer(TQueue const& queue, Extent extent) {
-    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
-      return allocCachedBuf<std::remove_extent_t<T>, Idx>(host, queue, Vec1D{extent});
-    } else {
-      using TPlatform = alpaka::Platform<alpaka::Dev<TQueue>>;
-      return alpaka::allocMappedBuf<std::remove_extent_t<T>, Idx>(
-          host, platform<TPlatform>(), Vec1D{extent});
-    }
+    using TPlatform = alpaka::Platform<alpaka::Dev<TQueue>>;
+    return alpaka::allocMappedBuf<std::remove_extent_t<T>, Idx>(
+        host, platform<TPlatform>(), Vec1D{extent});
   }
 
   template <internal::concepts::bounded_array T, concepts::queue TQueue>
   host_buffer<T> make_host_buffer(TQueue const& queue) {
-    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
-      return allocCachedBuf<std::remove_extent_t<T>, Idx>(host, queue, Vec1D{std::extent_v<T>});
-    } else {
-      using TPlatform = alpaka::Platform<alpaka::Dev<TQueue>>;
-      return alpaka::allocMappedBuf<std::remove_extent_t<T>, Idx>(
-          host, platform<TPlatform>(), Vec1D{std::extent_v<T>});
-    }
+    using TPlatform = alpaka::Platform<alpaka::Dev<TQueue>>;
+    return alpaka::allocMappedBuf<std::remove_extent_t<T>, Idx>(
+        host, platform<TPlatform>(), Vec1D{std::extent_v<T>});
   }
 
   // scalar and 1-dimensional host views
@@ -159,41 +146,27 @@ namespace clue {
 
   template <internal::concepts::scalar T, concepts::queue TQueue>
   device_buffer<alpaka::Dev<TQueue>, T> make_device_buffer(TQueue const& queue) {
-    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
-      return allocCachedBuf<T, Idx>(alpaka::getDev(queue), queue, Scalar{});
-    }
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Asynchronous) {
       return alpaka::allocAsyncBuf<T, Idx>(queue, Scalar{});
-    }
-    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
+    } else if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
       return alpaka::allocBuf<T, Idx>(alpaka::getDev(queue), Scalar{});
     }
   }
 
   template <internal::concepts::unbounded_array T, concepts::queue TQueue>
   device_buffer<alpaka::Dev<TQueue>, T> make_device_buffer(TQueue const& queue, Extent extent) {
-    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
-      return allocCachedBuf<std::remove_extent_t<T>, Idx>(
-          alpaka::getDev(queue), queue, Vec1D{extent});
-    }
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Asynchronous) {
       return alpaka::allocAsyncBuf<std::remove_extent_t<T>, Idx>(queue, Vec1D{extent});
-    }
-    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
+    } else if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
       return alpaka::allocBuf<std::remove_extent_t<T>, Idx>(alpaka::getDev(queue), Vec1D{extent});
     }
   }
 
   template <internal::concepts::bounded_array T, concepts::queue TQueue>
   device_buffer<alpaka::Dev<TQueue>, T> make_device_buffer(TQueue const& queue) {
-    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Caching) {
-      return allocCachedBuf<std::remove_extent_t<T>, Idx>(
-          alpaka::getDev(queue), queue, Vec1D{std::extent_v<T>});
-    }
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Asynchronous) {
       return alpaka::allocAsyncBuf<std::remove_extent_t<T>, Idx>(queue, Vec1D{std::extent_v<T>});
-    }
-    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
+    } else if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
       return alpaka::allocBuf<std::remove_extent_t<T>, Idx>(alpaka::getDev(queue),
                                                             Vec1D{std::extent_v<T>});
     }
