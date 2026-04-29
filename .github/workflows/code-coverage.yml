@@ -42,10 +42,14 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pytest scikit-learn pandas matplotlib coverage
 
-      - name: Compile Python modules
+      - name: Compile C++ tests
         working-directory: ${{github.workspace}}
         run: |
-          cmake -B build -DBUILD_PYTHON=ON -DBUILD_TESTING=ON -DCOVERAGE=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel
+          cmake -B build -DBUILD_TESTING=ON -DCOVERAGE=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel
+
+      - name: Install Python package
+        working-directory: ${{github.workspace}}
+        run: pip install .
 
       - name: Measure coverage of Python tests
         working-directory: ${{github.workspace}}/tests
@@ -69,8 +73,8 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: |
-            ${{github.workspace}}/tests/build/cpp-coverage.info
-            python-coverage.xml
+            ${{github.workspace}}/build/cpp-coverage.info
+            ${{github.workspace}}/tests/python-coverage.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true
