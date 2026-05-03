@@ -1,4 +1,4 @@
-pybind11_add_module(CLUE_CPU_Serial SHARED binding_cpu.cpp)
+pybind11_add_module(CLUE_CPU_Serial NO_EXTRAS SHARED binding_cpu.cpp)
 target_include_directories(CLUE_CPU_Serial
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_link_libraries(CLUE_CPU_Serial PRIVATE alpaka::alpaka Boost::atomic)
