@@ -283,18 +283,13 @@ namespace clue {
                                                  dev_points.view(),
                                                  m_outlier_distance,
                                                  m_seeding_distance,
+                                                 m_min_density,
                                                  metric,
                                                  seed_candidates,
                                                  n_points);
     detail::setup_seeds(queue, m_seeds, seed_candidates);
-    detail::findClusterSeeds<internal::Acc>(queue,
-                                            work_division,
-                                            m_seeds.value(),
-                                            dev_points.view(),
-                                            m_seeding_distance,
-                                            metric,
-                                            m_min_density,
-                                            n_points);
+    detail::findClusterSeeds<internal::Acc>(
+        queue, work_division, m_seeds.value(), dev_points.view(), m_min_density, n_points);
 
     detail::assignPointsToClusters<internal::Acc>(
         queue, block_size, m_seeds.value(), dev_points.view(), n_points);
@@ -346,6 +341,7 @@ namespace clue {
                                                           dev_points.view(),
                                                           m_outlier_distance,
                                                           m_seeding_distance,
+                                                          m_min_density,
                                                           metric,
                                                           seed_candidates,
                                                           d_event_offsets,
@@ -357,8 +353,6 @@ namespace clue {
     detail::findClusterSeedsBatched<internal::Acc2D>(queue,
                                                      m_seeds.value(),
                                                      dev_points.view(),
-                                                     m_seeding_distance,
-                                                     metric,
                                                      m_min_density,
                                                      d_event_offsets,
                                                      max_event_size,
