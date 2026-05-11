@@ -258,8 +258,7 @@ namespace clue::detail {
   template <concepts::accelerator TAcc,
             concepts::queue TQueue,
             std::size_t Ndim,
-            std::floating_point TData,
-            concepts::distance_metric<Ndim> DistanceMetric>
+            std::floating_point TData>
     requires(alpaka::Dim<TAcc>::value == 2)
   inline void findClusterSeedsBatched(TQueue& queue,
                                       clue::internal::SeedArray<>& seeds,
