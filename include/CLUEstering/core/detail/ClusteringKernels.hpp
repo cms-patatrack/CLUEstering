@@ -6,7 +6,6 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/data_structures/internal/DeviceVector.hpp"
-#include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/TilesView.hpp"
@@ -286,41 +285,59 @@ namespace clue::detail {
     }
   };
 
-  struct KernelAssignClusters {
+  struct KernelAssignSeedIndices {
     template <typename TAcc, std::size_t Ndim, std::floating_point TData>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
-                                  clue::FollowersView followers,
                                   PointsView<Ndim, TData> dev_points) const {
-      const auto n_seeds = seeds.size();
-      for (auto idx_cls : alpaka::uniformElements(acc, n_seeds)) {
-        int local_stack[256] = {-1};
-        int local_stack_size = 0;
-
-        int idx_this_seed = seeds[idx_cls];
-        dev_points.cluster_index()[idx_this_seed] = idx_cls;
-        local_stack[local_stack_size] = idx_this_seed;
-        ++local_stack_size;
-        while (local_stack_size > 0) {
-          assert(local_stack_size <= 256);
-          int idx_end_of_local_stack = local_stack[local_stack_size - 1];
-          int temp_cluster_index = dev_points.cluster_index()[idx_end_of_local_stack];
-          local_stack[local_stack_size - 1] = -1;
-          --local_stack_size;
-          const auto& followers_ies = followers[idx_end_of_local_stack];
-          const auto followers_size = followers_ies.size();
-          for (auto j = 0u; j != followers_size; ++j) {
-            int follower = followers_ies[j];
-            assert(follower >= 0);
-            dev_points.cluster_index()[follower] = temp_cluster_index;
-            assert(local_stack_size < 256);
-            local_stack[local_stack_size] = follower;
-            ++local_stack_size;
-          }
-        }
+      for (auto cls_idx : alpaka::uniformElements(acc, seeds.size())) {
+        dev_points.cluster_index()[seeds[cls_idx]] = static_cast<int>(cls_idx);
       }
     }
   };
+
+  struct KernelAssignClusters {
+    template <typename TAcc, std::size_t Ndim, std::floating_point TData>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  PointsView<Ndim, TData> dev_points,
+                                  int32_t n_points) const {
+      for (auto idx : alpaka::uniformElements(acc, n_points)) {
+        if (dev_points.is_seed()[idx] || dev_points.nearest_higher()[idx] == -1)
+          continue;
+
+        auto current = idx;
+        while (!dev_points.is_seed()[current] && dev_points.nearest_higher()[current] != -1)
+          current = dev_points.nearest_higher()[current];
+
+        dev_points.cluster_index()[idx] = dev_points.cluster_index()[current];
+      }
+    }
+  };
+
+  // struct OldKernelAssignClusters {
+  //   template <typename TAcc, std::size_t Ndim, std::floating_point TData>
+  //   ALPAKA_FN_ACC void operator()(const TAcc& acc,
+  //                                 clue::internal::SeedArrayView seeds,
+  //                                 clue::FollowersView followers,
+  //                                 PointsView<Ndim, TData> dev_points) const {
+  //     const auto n_seeds = seeds.size();
+  //     for (auto seed_idx : alpaka::uniformElements(acc, n_seeds)) {
+  //       internal::DeviceQueue<int, 256> local_queue;
+  //       auto idx_this_seed = seeds[seed_idx];
+  //       local_queue.push(idx_this_seed);
+  //
+  //       while (!local_queue.empty()) {
+  //         const auto follower_idx = local_queue.pop();
+  //         dev_points.cluster_index()[follower_idx] = seed_idx;
+  //
+  //         auto local_followers = followers[follower_idx];
+  //         for (auto follower : local_followers) {
+  //           local_queue.push(follower);
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
 
   using WorkDiv = clue::WorkDiv<clue::Dim1D>;
 
@@ -412,12 +429,21 @@ namespace clue::detail {
   inline void assignPointsToClusters(TQueue& queue,
                                      std::size_t block_size,
                                      clue::internal::SeedArray<>& seeds,
-                                     clue::FollowersView followers,
-                                     PointsView<Ndim, TData> dev_points) {
-    const Idx grid_size = nostd::ceil_div(seeds.size(queue), block_size);
-    const auto work_division = clue::make_workdiv<TAcc>(grid_size, block_size);
-    alpaka::exec<TAcc>(
-        queue, work_division, KernelAssignClusters{}, seeds.view(), followers, dev_points);
+                                     PointsView<Ndim, TData> dev_points,
+                                     int32_t n_points) {
+    const Idx seed_grid = nostd::ceil_div(seeds.size(queue), block_size);
+    alpaka::exec<TAcc>(queue,
+                       clue::make_workdiv<TAcc>(seed_grid, block_size),
+                       KernelAssignSeedIndices{},
+                       seeds.view(),
+                       dev_points);
+
+    const Idx point_grid = nostd::ceil_div(n_points, block_size);
+    alpaka::exec<TAcc>(queue,
+                       clue::make_workdiv<TAcc>(point_grid, block_size),
+                       KernelAssignClusters{},
+                       dev_points,
+                       n_points);
   }
 
 }  // namespace clue::detail

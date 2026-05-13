@@ -7,7 +7,6 @@
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
-#include "CLUEstering/core/detail/SetupFollowers.hpp"
 #include "CLUEstering/core/detail/SetupTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
@@ -15,7 +14,6 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/PointsConversion.hpp"
 #include "CLUEstering/data_structures/internal/DeviceVector.hpp"
-#include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
 
@@ -51,7 +49,6 @@ namespace clue {
 
     std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
     std::optional<internal::SeedArray<>> m_seeds;
-    std::optional<Followers<clue::Device>> m_followers;
     std::optional<internal::DeviceVector<>> m_event_associations;
 
     template <std::floating_point InputType>
@@ -59,7 +56,6 @@ namespace clue {
                const clue::PointsHost<Ndim, InputType>& h_points,
                clue::PointsDevice<Ndim, value_type>& dev_points) {
       detail::setup_tiles(queue, h_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates);
-      detail::setup_followers(queue, m_followers, h_points.size());
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
@@ -70,7 +66,6 @@ namespace clue {
                      std::size_t batch_size) {
       detail::setup_tiles(
           queue, h_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates, batch_size);
-      detail::setup_followers(queue, m_followers, h_points.size());
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
@@ -80,7 +75,6 @@ namespace clue {
                      std::size_t batch_size) {
       detail::setup_tiles(
           queue, dev_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates, batch_size);
-      detail::setup_followers(queue, m_followers, dev_points.size());
     }
 
     template <
