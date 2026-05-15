@@ -365,6 +365,9 @@ namespace clue {
                                                      m_event_associations->view(),
                                                      block_size);
 
+    detail::reorderSeedsBatchWise<internal::Acc>(
+        queue, m_seeds.value(), m_event_associations.value());
+
     detail::assignPointsToClusters<internal::Acc>(
         queue, block_size, m_seeds.value(), dev_points.view(), n_points);
 
