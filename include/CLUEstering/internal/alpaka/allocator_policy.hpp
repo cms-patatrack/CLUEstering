@@ -13,10 +13,12 @@ namespace clue {
   template <typename TDev>
   constexpr inline AllocatorPolicy allocator_policy = AllocatorPolicy::Synchronous;
 
-#if defined ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED || defined ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
+#if defined ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED || defined ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED || \
+    defined ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
   template <>
   constexpr inline AllocatorPolicy allocator_policy<alpaka::DevCpu> = AllocatorPolicy::Synchronous;
 #endif  // defined ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED || defined ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
+        // || defined ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
 
 #if defined ALPAKA_ACC_GPU_CUDA_ENABLED
   template <>
