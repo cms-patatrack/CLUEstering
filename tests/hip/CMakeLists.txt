@@ -17,7 +17,7 @@ foreach(source ${sources})
                       ${HIP_INCLUDE_DIR})
   target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt)
   target_compile_definitions(
-    ${target} PRIVATE ALPAKA_ACC_GPU_HIP_ENABLED CLUE_ENABLE_CACHING_ALLOCATOR
+    ${target} PRIVATE ALPAKA_ACC_GPU_HIP_ENABLED
                       TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
   set_target_properties(
     ${target}

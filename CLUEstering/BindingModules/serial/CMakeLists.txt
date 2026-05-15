@@ -3,8 +3,7 @@ target_include_directories(CLUE_CPU_Serial
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_link_libraries(CLUE_CPU_Serial PRIVATE alpaka::alpaka Boost::atomic)
 target_compile_definitions(
-  CLUE_CPU_Serial PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
-                          CLUE_ENABLE_CACHING_ALLOCATOR)
+  CLUE_CPU_Serial PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 target_precompile_headers(
   CLUE_CPU_Serial
   PRIVATE

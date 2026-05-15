@@ -352,6 +352,7 @@ namespace clue {
                        temp_offsets.data(),
                        m_extents.keys,
                        size);
+    alpaka::wait(queue);
   }
 
   template <concepts::device TDev>
@@ -418,6 +419,7 @@ namespace clue {
                        temp_offsets.data(),
                        m_extents.keys,
                        associations.size());
+    alpaka::wait(queue);
   }
 
   template <concepts::device TDev>
@@ -474,6 +476,7 @@ namespace clue {
                        temp_offsets.data(),
                        m_extents.keys,
                        size);
+    alpaka::wait(queue);
   }
 
 }  // namespace clue

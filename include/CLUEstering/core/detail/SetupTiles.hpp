@@ -51,6 +51,7 @@ namespace clue::detail {
     alpaka::memcpy(queue, tiles->minMax(), min_max);
     alpaka::memcpy(queue, tiles->tileSize(), tile_sizes);
     alpaka::memcpy(queue, tiles->wrapped(), clue::make_host_view(wrapped_coordinates.data(), Ndim));
+    alpaka::wait(queue);
   }
 
   template <concepts::queue TQueue,
@@ -87,6 +88,7 @@ namespace clue::detail {
     alpaka::memcpy(queue, tiles->minMax(), min_max);
     alpaka::memcpy(queue, tiles->tileSize(), tile_sizes);
     alpaka::memcpy(queue, tiles->wrapped(), clue::make_host_view(wrapped_coordinates.data(), Ndim));
+    alpaka::wait(queue);
   }
 
 }  // namespace clue::detail

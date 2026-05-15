@@ -22,7 +22,7 @@ foreach(source ${sources})
                                                ${doctest_SOURCE_DIR})
   target_link_libraries(${target} PRIVATE alpaka::alpaka Boost::atomic fmt::fmt)
   target_compile_definitions(
-    ${target} PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED CLUE_ENABLE_CACHING_ALLOCATOR
+    ${target} PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED
                       TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
   target_compile_options(${target} PRIVATE --expt-relaxed-constexpr)
   set_target_properties(${target} PROPERTIES CUDA_SEPARABLE_COMPILATION ON
