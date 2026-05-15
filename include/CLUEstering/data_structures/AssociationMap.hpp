@@ -17,9 +17,6 @@ namespace clue {
 
   template <concepts::device TDev>
   class AssociationMap;
-  template <concepts::device TDev>
-  class Followers;
-
   namespace internal {
 
     template <std::size_t Ndim, std::floating_point TData, clue::concepts::device TDev>
@@ -220,8 +217,6 @@ namespace clue {
     ALPAKA_FN_HOST device_buffer<TDev, int32_t[]>& offsets();
 
 #ifndef CLUE_BUILD_DOXYGEN
-    friend class Followers<TDev>;
-
     template <std::size_t Ndim, std::floating_point TData, concepts::device _TDev>
     friend class internal::Tiles;
 
