@@ -314,31 +314,6 @@ namespace clue::detail {
     }
   };
 
-  // struct OldKernelAssignClusters {
-  //   template <typename TAcc, std::size_t Ndim, std::floating_point TData>
-  //   ALPAKA_FN_ACC void operator()(const TAcc& acc,
-  //                                 clue::internal::SeedArrayView seeds,
-  //                                 clue::FollowersView followers,
-  //                                 PointsView<Ndim, TData> dev_points) const {
-  //     const auto n_seeds = seeds.size();
-  //     for (auto seed_idx : alpaka::uniformElements(acc, n_seeds)) {
-  //       internal::DeviceQueue<int, 256> local_queue;
-  //       auto idx_this_seed = seeds[seed_idx];
-  //       local_queue.push(idx_this_seed);
-  //
-  //       while (!local_queue.empty()) {
-  //         const auto follower_idx = local_queue.pop();
-  //         dev_points.cluster_index()[follower_idx] = seed_idx;
-  //
-  //         auto local_followers = followers[follower_idx];
-  //         for (auto follower : local_followers) {
-  //           local_queue.push(follower);
-  //         }
-  //       }
-  //     }
-  //   }
-  // };
-
   using WorkDiv = clue::WorkDiv<clue::Dim1D>;
 
   template <concepts::accelerator TAcc,
