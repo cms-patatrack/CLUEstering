@@ -38,11 +38,11 @@ namespace clue {
     /// @brief Returns a vector containing the sizes of each cluster
     ///
     /// @return A vector of containing the sizes of each cluster
-    const auto& cluster_sizes() const { return m_clusters_to_points; }
+    const auto& cluster_sizes() const { return m_cluster_sizes; }
     /// @brief Returns an associator mapping clusters to their associated points
     ///
     /// @return An AssociationMapHost mapping clusters to points
-    const auto& clusters() const { return m_cluster_sizes; }
+    const auto& clusters() const { return m_clusters_to_points; }
     /// @brief Returns the number of clusters
     ///
     /// @return The number of clusters

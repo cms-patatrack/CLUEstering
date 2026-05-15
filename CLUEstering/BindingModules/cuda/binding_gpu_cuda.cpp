@@ -23,6 +23,7 @@ namespace alpaka_cuda_async {
     m.def("listDevices",
           &alpaka_cuda_async::listDevices,
           "List the available devices for the CUDA backend");
+
     m.def("mainRun", &alpaka_cuda_async::mainRun<float, clue::FlatKernel>);
     m.def("mainRun", &alpaka_cuda_async::mainRun<float, clue::ExponentialKernel>);
     m.def("mainRun", &alpaka_cuda_async::mainRun<float, clue::GaussianKernel>);

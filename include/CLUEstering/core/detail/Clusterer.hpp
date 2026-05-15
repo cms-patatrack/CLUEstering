@@ -8,12 +8,10 @@
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
-#include "CLUEstering/core/detail/SetupFollowers.hpp"
 #include "CLUEstering/core/detail/SetupSeeds.hpp"
 #include "CLUEstering/core/detail/SetupTiles.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/internal/nostd/ceil_div.hpp"
@@ -109,7 +107,7 @@ namespace clue {
     setup(queue, h_points, d_points);
     make_clusters_impl(d_points, metric, kernel, queue, block_size);
     clue::copyToHost(queue, h_points, d_points);
-    h_points.mark_clustered();
+    internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
     alpaka::wait(queue);
   }
   template <std::size_t Ndim, std::floating_point DataType>
@@ -127,7 +125,7 @@ namespace clue {
     setup(queue, h_points, d_points);
     make_clusters_impl(d_points, metric, kernel, queue, block_size);
     clue::copyToHost(queue, h_points, d_points);
-    h_points.mark_clustered();
+    internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
     alpaka::wait(queue);
   }
   template <std::size_t Ndim, std::floating_point DataType>
@@ -144,7 +142,7 @@ namespace clue {
     setup(queue, h_points, dev_points);
     make_clusters_impl(dev_points, metric, kernel, queue, block_size);
     clue::copyToHost(queue, h_points, dev_points);
-    h_points.mark_clustered();
+    internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
     alpaka::wait(queue);
   }
   template <std::size_t Ndim, std::floating_point DataType>
@@ -158,7 +156,6 @@ namespace clue {
       const Kernel& kernel,
       std::size_t block_size) {
     detail::setup_tiles(queue, dev_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates);
-    detail::setup_followers(queue, m_followers, dev_points.size());
     make_clusters_impl(dev_points, metric, kernel, queue, block_size);
     alpaka::wait(queue);
   }
@@ -299,13 +296,12 @@ namespace clue {
                                             m_min_density,
                                             n_points);
 
-    m_followers->template fill<internal::Acc>(queue, dev_points);
-
     detail::assignPointsToClusters<internal::Acc>(
-        queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
+        queue, block_size, m_seeds.value(), dev_points.view(), n_points);
 
     alpaka::wait(queue);
-    dev_points.mark_clustered();
+    internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(
+        dev_points);
   }
 
   template <std::size_t Ndim, std::floating_point DataType>
@@ -320,7 +316,6 @@ namespace clue {
       Queue& queue,
       std::size_t block_size) {
     const auto batch_size = batch_item_sizes.size();
-    setup_batch(queue, dev_points, batch_size);
 
     const auto max_event_size = std::reduce(
         batch_item_sizes.begin(), batch_item_sizes.end(), 0u, nostd::maximum<uint32_t>{});
@@ -376,9 +371,11 @@ namespace clue {
     m_followers->template fill<internal::Acc>(queue, dev_points);
 
     detail::assignPointsToClusters<internal::Acc>(
-        queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
+        queue, block_size, m_seeds.value(), dev_points.view(), n_points);
 
-    dev_points.mark_clustered();
+    alpaka::wait(queue);
+    internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(
+        dev_points);
   }
 
 }  // namespace clue

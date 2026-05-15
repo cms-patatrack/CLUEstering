@@ -4,7 +4,6 @@
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
-#include "CLUEstering/data_structures/internal/VecArray.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 #include <array>
@@ -64,7 +63,7 @@ namespace clue::internal {
       return global_bin;
     }
 
-    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const VecArray<int32_t, Ndim>& Bins,
+    ALPAKA_FN_ACC inline constexpr int getGlobalBinByBin(const std::array<int32_t, Ndim>& Bins,
                                                          std::size_t event = 0) const {
       int32_t globalBin = 0;
       for (auto dim = 0u; dim != Ndim; ++dim) {

@@ -59,7 +59,7 @@ namespace clue {
         std::count(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') -
         1;
     clue::PointsHost<NDim> points(queue, n_points);
-    points.mark_clustered();
+    internal::points_interface<std::remove_cvref_t<decltype(points)>>::mark_clustered(points);
     auto& view = points.view();
 
     file = std::fstream(file_path);

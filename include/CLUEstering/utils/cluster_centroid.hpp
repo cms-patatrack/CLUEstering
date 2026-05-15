@@ -8,6 +8,7 @@
 #include <array>
 #include <cstddef>
 #include <concepts>
+#include <type_traits>
 #include <vector>
 
 namespace clue {
@@ -17,7 +18,7 @@ namespace clue {
   /// @tparam Ndim The number of dimensions of the centroids
   /// @tparam ValueType The data type for the centroid coordinates
   template <std::size_t Ndim, std::floating_point ValueType = float>
-  using Centroid = std::array<ValueType, Ndim>;
+  using Centroid = std::array<std::remove_cv_t<ValueType>, Ndim>;
 
   /// @brief Type alias for a collection of centroids in Ndim dimensions
   ///

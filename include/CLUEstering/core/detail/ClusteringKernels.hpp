@@ -6,11 +6,9 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/data_structures/internal/DeviceVector.hpp"
-#include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/TilesView.hpp"
-#include "CLUEstering/data_structures/internal/VecArray.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
@@ -33,7 +31,7 @@ namespace clue::detail {
             concepts::convolutional_kernel KernelType,
             concepts::distance_metric<Ndim> DistanceMetric>
   ALPAKA_FN_ACC void for_recursion(const TAcc& acc,
-                                   VecArray<int32_t, Ndim>& base_vec,
+                                   std::array<int32_t, Ndim>& base_vec,
                                    const clue::SearchBoxBins<Ndim>& search_box,
                                    internal::TilesView<Ndim, TData>& tiles,
                                    PointsView<Ndim, TData>& dev_points,
@@ -65,7 +63,7 @@ namespace clue::detail {
       for (auto i = search_box[search_box.size() - N_][0];
            i <= search_box[search_box.size() - N_][1];
            ++i) {
-        base_vec[base_vec.capacity() - N_] = i;
+        base_vec[Ndim - N_] = i;
         for_recursion<TAcc, Ndim, N_ - 1>(acc,
                                           base_vec,
                                           search_box,
@@ -109,7 +107,7 @@ namespace clue::detail {
         clue::SearchBoxBins<Ndim> searchbox_bins;
         dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
 
-        VecArray<int32_t, Ndim> base_vec;
+        std::array<int32_t, Ndim> base_vec;
         for_recursion<TAcc, Ndim, Ndim>(acc,
                                         base_vec,
                                         searchbox_bins,
@@ -134,7 +132,7 @@ namespace clue::detail {
             std::floating_point TData,
             concepts::distance_metric<Ndim> DistanceMetric>
   ALPAKA_FN_ACC void for_recursion_nearest_higher(const TAcc& acc,
-                                                  VecArray<int32_t, Ndim>& base_vec,
+                                                  std::array<int32_t, Ndim>& base_vec,
                                                   const clue::SearchBoxBins<Ndim>& search_box,
                                                   internal::TilesView<Ndim, TData>& tiles,
                                                   PointsView<Ndim, TData>& dev_points,
@@ -176,7 +174,7 @@ namespace clue::detail {
       for (auto i = search_box[search_box.size() - N_][0];
            i <= search_box[search_box.size() - N_][1];
            ++i) {
-        base_vec[base_vec.capacity() - N_] = i;
+        base_vec[Ndim - N_] = i;
         for_recursion_nearest_higher<TAcc, Ndim, N_ - 1>(acc,
                                                          base_vec,
                                                          search_box,
@@ -224,7 +222,7 @@ namespace clue::detail {
         clue::SearchBoxBins<Ndim> searchbox_bins;
         dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
 
-        VecArray<int32_t, Ndim> base_vec{};
+        std::array<int32_t, Ndim> base_vec{};
         for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
                                                        base_vec,
                                                        searchbox_bins,
@@ -287,38 +285,31 @@ namespace clue::detail {
     }
   };
 
-  struct KernelAssignClusters {
+  struct KernelAssignSeedIndices {
     template <typename TAcc, std::size_t Ndim, std::floating_point TData>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
-                                  clue::FollowersView followers,
                                   PointsView<Ndim, TData> dev_points) const {
-      const auto n_seeds = seeds.size();
-      for (auto idx_cls : alpaka::uniformElements(acc, n_seeds)) {
-        int local_stack[256] = {-1};
-        int local_stack_size = 0;
+      for (auto cls_idx : alpaka::uniformElements(acc, seeds.size())) {
+        dev_points.cluster_index()[seeds[cls_idx]] = static_cast<int>(cls_idx);
+      }
+    }
+  };
 
-        int idx_this_seed = seeds[idx_cls];
-        dev_points.cluster_index()[idx_this_seed] = idx_cls;
-        local_stack[local_stack_size] = idx_this_seed;
-        ++local_stack_size;
-        while (local_stack_size > 0) {
-          assert(local_stack_size <= 256);
-          int idx_end_of_local_stack = local_stack[local_stack_size - 1];
-          int temp_cluster_index = dev_points.cluster_index()[idx_end_of_local_stack];
-          local_stack[local_stack_size - 1] = -1;
-          --local_stack_size;
-          const auto& followers_ies = followers[idx_end_of_local_stack];
-          const auto followers_size = followers_ies.size();
-          for (auto j = 0u; j != followers_size; ++j) {
-            int follower = followers_ies[j];
-            assert(follower >= 0);
-            dev_points.cluster_index()[follower] = temp_cluster_index;
-            assert(local_stack_size < 256);
-            local_stack[local_stack_size] = follower;
-            ++local_stack_size;
-          }
-        }
+  struct KernelAssignClusters {
+    template <typename TAcc, std::size_t Ndim, std::floating_point TData>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  PointsView<Ndim, TData> dev_points,
+                                  int32_t n_points) const {
+      for (auto idx : alpaka::uniformElements(acc, n_points)) {
+        if (dev_points.is_seed()[idx] || dev_points.nearest_higher()[idx] == -1)
+          continue;
+
+        auto current = idx;
+        while (!dev_points.is_seed()[current] && dev_points.nearest_higher()[current] != -1)
+          current = dev_points.nearest_higher()[current];
+
+        dev_points.cluster_index()[idx] = dev_points.cluster_index()[current];
       }
     }
   };
@@ -413,12 +404,21 @@ namespace clue::detail {
   inline void assignPointsToClusters(TQueue& queue,
                                      std::size_t block_size,
                                      clue::internal::SeedArray<>& seeds,
-                                     clue::FollowersView followers,
-                                     PointsView<Ndim, TData> dev_points) {
-    const Idx grid_size = nostd::ceil_div(seeds.size(queue), block_size);
-    const auto work_division = clue::make_workdiv<TAcc>(grid_size, block_size);
-    alpaka::exec<TAcc>(
-        queue, work_division, KernelAssignClusters{}, seeds.view(), followers, dev_points);
+                                     PointsView<Ndim, TData> dev_points,
+                                     int32_t n_points) {
+    const Idx seed_grid = nostd::ceil_div(seeds.size(queue), block_size);
+    alpaka::exec<TAcc>(queue,
+                       clue::make_workdiv<TAcc>(seed_grid, block_size),
+                       KernelAssignSeedIndices{},
+                       seeds.view(),
+                       dev_points);
+
+    const Idx point_grid = nostd::ceil_div(n_points, block_size);
+    alpaka::exec<TAcc>(queue,
+                       clue::make_workdiv<TAcc>(point_grid, block_size),
+                       KernelAssignClusters{},
+                       dev_points,
+                       n_points);
   }
 
 }  // namespace clue::detail

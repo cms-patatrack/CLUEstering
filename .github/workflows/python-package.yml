@@ -38,11 +38,25 @@ jobs:
     container: ${{ matrix.container }}
 
     steps:
+    - name: Cache dnf packages
+      if: matrix.container != ''
+      uses: actions/cache@v4
+      with:
+        path: /var/cache/dnf
+        key: dnf-${{ matrix.name }}
+
     - name: Install dependencies
       if: matrix.container == 'fedora:42'
       run: |
         dnf install -y ${{ matrix.compiler }}
         dnf install -y git cmake boost-devel tbb libomp.x86_64 python3-devel python3-pip
+
+    - name: Cache Homebrew downloads
+      if: matrix.os == 'macos-latest'
+      uses: actions/cache@v4
+      with:
+        path: ~/Library/Caches/Homebrew/downloads
+        key: brew-${{ runner.os }}-boost-tbb-libomp
 
     - name: Install dependencies
       if: matrix.os == 'macos-latest'
@@ -55,8 +69,18 @@ jobs:
       with:
         submodules: true
 
+    - name: Export GitHub Actions cache environment variables
+      if: matrix.os == 'windows-latest'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
     - name: Set up vcpkg
       if: matrix.os == 'windows-latest'
+      env:
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
       run: |
         echo "VCPKG_ROOT=C:/vcpkg" >> $env:GITHUB_ENV
         echo "CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
@@ -68,6 +92,20 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip packages
+      if: matrix.os != 'windows-latest'
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: pip-${{ matrix.name }}-pytest-sklearn-pandas-matplotlib
+
+    - name: Cache pip packages (Windows)
+      if: matrix.os == 'windows-latest'
+      uses: actions/cache@v4
+      with:
+        path: ~\AppData\Local\pip\Cache
+        key: pip-${{ matrix.name }}-pytest-sklearn-pandas-matplotlib
 
     - name: Install Python dependencies
       if: matrix.os != 'windows-latest'

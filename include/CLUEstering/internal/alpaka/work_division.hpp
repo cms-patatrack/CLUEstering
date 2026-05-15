@@ -2,6 +2,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 #include <utility>
 
 #include <alpaka/alpaka.hpp>
@@ -42,6 +43,7 @@ namespace clue {
    * If the first argument is not a multiple of the second argument, round it up to the next multiple.
    */
   inline constexpr Idx round_up_by(Idx value, Idx divisor) {
+    assert(divisor != 0);
     return (value + divisor - 1) / divisor * divisor;
   }
 
@@ -49,6 +51,7 @@ namespace clue {
    * Return the integer division of the first argument by the second argument, rounded up to the next integer.
    */
   inline constexpr Idx divide_up_by(Idx value, Idx divisor) {
+    assert(divisor != 0);
     return (value + divisor - 1) / divisor;
   }
 

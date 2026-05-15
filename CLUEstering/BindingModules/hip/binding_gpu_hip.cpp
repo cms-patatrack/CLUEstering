@@ -23,6 +23,7 @@ namespace alpaka_rocm_async {
     m.def("listDevices",
           &alpaka_rocm_async::listDevices,
           "List the available devices for the HIP/ROCm backend");
+
     m.def("mainRun", &alpaka_rocm_async::mainRun<float, clue::FlatKernel>);
     m.def("mainRun", &alpaka_rocm_async::mainRun<float, clue::ExponentialKernel>);
     m.def("mainRun", &alpaka_rocm_async::mainRun<float, clue::GaussianKernel>);

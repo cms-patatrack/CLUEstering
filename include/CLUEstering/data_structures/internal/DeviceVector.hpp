@@ -6,6 +6,7 @@
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/utils/get_queue.hpp"
 #include <alpaka/alpaka.hpp>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <span>
@@ -37,6 +38,7 @@ namespace clue::internal {
     template <clue::concepts::accelerator TAcc>
     ALPAKA_FN_ACC constexpr auto push_back(const TAcc& acc, int32_t value) {
       auto prev = alpaka::atomicAdd(acc, m_size, std::size_t{1});
+      assert(prev < m_capacity);
       if (prev < m_capacity) {
         m_data[prev] = value;
       } else {
@@ -69,7 +71,7 @@ namespace clue::internal {
     ALPAKA_FN_HOST constexpr auto capacity() const { return m_capacity; }
 
     template <clue::concepts::queue TQueue>
-    ALPAKA_FN_HOST auto size(TQueue& queue) {
+    ALPAKA_FN_HOST auto size(TQueue& queue) const {
       std::size_t size;
       alpaka::memcpy(queue, clue::make_host_view(size), m_dsize);
       alpaka::wait(queue);

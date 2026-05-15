@@ -6,10 +6,19 @@ target_compile_definitions(
   CLUE_CPU_OMP PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
                        CLUE_ENABLE_CACHING_ALLOCATOR)
 target_link_libraries(CLUE_CPU_OMP PRIVATE OpenMP::OpenMP_CXX)
+target_precompile_headers(
+  CLUE_CPU_OMP
+  PRIVATE
+  <alpaka/alpaka.hpp>
+  <pybind11/pybind11.h>
+  <pybind11/numpy.h>
+  <pybind11/stl.h>
+  <pybind11/functional.h>)
 set_target_properties(
   CLUE_CPU_OMP
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY
              ${CMAKE_CURRENT_BINARY_DIR}/../../../lib/CLUEstering/lib/)
+install(TARGETS CLUE_CPU_OMP LIBRARY DESTINATION CLUEstering/lib)
 # copy shared library for local testing
 add_custom_command(
   TARGET CLUE_CPU_OMP
