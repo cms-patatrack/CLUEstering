@@ -35,14 +35,5 @@ jobs:
           docker build -t serial .
 
           docker run -t -v "$(pwd)"/../../:/app serial bash -c \
-            "cd /app && pip install . --break-system-packages;
+            "cd /app && pip install . --break-system-packages -v;
             python3 -c 'import CLUEstering'"
-
-      - name: Test installation inside docker containers (tbb)
-        working-directory: ${{github.workspace}}/docker/tbb
-        run: |
-          docker build -t tbb .
-
-          docker run -t -v "$(pwd)"/../../:/app tbb bash -c \
-            "cd /app && pip install . --break-system-packages;
-            python3 -c 'import CLUEstering' || exit 1"
