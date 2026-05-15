@@ -148,7 +148,8 @@ namespace clue {
   device_buffer<alpaka::Dev<TQueue>, T> make_device_buffer(TQueue const& queue) {
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Asynchronous) {
       return alpaka::allocAsyncBuf<T, Idx>(queue, Scalar{});
-    } else if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
+    }
+    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
       return alpaka::allocBuf<T, Idx>(alpaka::getDev(queue), Scalar{});
     }
   }
@@ -157,7 +158,8 @@ namespace clue {
   device_buffer<alpaka::Dev<TQueue>, T> make_device_buffer(TQueue const& queue, Extent extent) {
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Asynchronous) {
       return alpaka::allocAsyncBuf<std::remove_extent_t<T>, Idx>(queue, Vec1D{extent});
-    } else if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
+    }
+    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
       return alpaka::allocBuf<std::remove_extent_t<T>, Idx>(alpaka::getDev(queue), Vec1D{extent});
     }
   }
@@ -166,7 +168,8 @@ namespace clue {
   device_buffer<alpaka::Dev<TQueue>, T> make_device_buffer(TQueue const& queue) {
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Asynchronous) {
       return alpaka::allocAsyncBuf<std::remove_extent_t<T>, Idx>(queue, Vec1D{std::extent_v<T>});
-    } else if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
+    }
+    if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
       return alpaka::allocBuf<std::remove_extent_t<T>, Idx>(alpaka::getDev(queue),
                                                             Vec1D{std::extent_v<T>});
     }
