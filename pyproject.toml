@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "CLUEstering"
-version = "2.10.0"
+version = "2.11.0"
 description = "High-Performance Density-Based Weighted Clustering for Heterogeneous Computing"
 readme = {file = "README.md", content-type = "text/markdown"}
 authors = [
