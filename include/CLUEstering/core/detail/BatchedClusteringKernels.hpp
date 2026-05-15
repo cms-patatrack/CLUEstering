@@ -192,12 +192,12 @@ namespace clue::detail {
 
   struct KernelReorderSeeds {
     template <typename TAcc>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc, 
-                                  clue::internal::SeedArrayView old_seeds, 
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  clue::internal::SeedArrayView old_seeds,
                                   clue::internal::SeedArrayView old_batches,
                                   const int32_t* batches_to_seeds_indexes,
                                   clue::internal::SeedArrayView new_seeds,
-                                  clue::internal::SeedArrayView new_batches, 
+                                  clue::internal::SeedArrayView new_batches,
                                   std::size_t num_seeds) const {
       for (auto ii : alpaka::uniformElements(acc, num_seeds)) {
         auto old_seed_idx = batches_to_seeds_indexes[ii];
@@ -279,104 +279,50 @@ namespace clue::detail {
     alpaka::wait(queue);
   }
 
-  template <concepts::accelerator TAcc, 
-            concepts::queue TQueue>
+  template <concepts::accelerator TAcc, concepts::queue TQueue>
     requires(alpaka::Dim<TAcc>::value == 1)
-  inline void reorderSeedsBatchWise(TQueue& queue, 
-                                    clue::internal::SeedArray<>& seeds, 
+  inline void reorderSeedsBatchWise(TQueue& queue,
+                                    clue::internal::SeedArray<>& seeds,
                                     clue::internal::SeedArray<>& batch_association) {
-    auto num_seeds = seeds.size(queue);
-    // std::cout << "BEFORE" << std::endl;
-    // std::cout << "num_seeds = " << num_seeds << std::endl;
-    if (num_seeds == 0) return;
-
-    // auto h_seeds = clue::make_host_buffer<int32_t[]>(num_seeds);
-    // alpaka::memcpy(
-    //     queue,
-    //     h_seeds,
-    //     clue::make_device_view(alpaka::getDev(queue), seeds.data(), num_seeds)
-    // );
-
-    // auto h_batch_association = clue::make_host_buffer<int32_t[]>(num_seeds);
-    // alpaka::memcpy(
-    //     queue,
-    //     h_batch_association,
-    //     clue::make_device_view(alpaka::getDev(queue), batch_association.data(), num_seeds)
-    // );
-    // alpaka::wait(queue);
-
-    // std::cout << "idx, seed, batch_association" << std::endl;
-    // for (auto ii = 0; ii < num_seeds; ++ii) {
-    //   std::cout << ii << ", " << h_seeds[ii] << ", " << h_batch_association[ii] << std::endl;
-    // }
+    const auto num_seeds = seeds.size(queue);
+    if (num_seeds == 0)
+      return;
 
     auto batches_to_seeds = clue::internal::make_associator(
-      queue, 
-      std::span<const int32_t>{batch_association.data(), num_seeds}, 
-      static_cast<int32_t>(num_seeds));
-    
-    // std::cout << "batches_to_seeds.extents().keys = " << batches_to_seeds.extents().keys << std::endl;
-    // std::cout << "batches_to_seeds.extents().values = " << batches_to_seeds.extents().values << std::endl;
+        queue,
+        std::span<const int32_t>{batch_association.data(), num_seeds},
+        static_cast<int32_t>(num_seeds));
+
     auto extracted = batches_to_seeds.extract();
-    auto batches_to_seeds_indexes = extracted.values.data();
+    auto* batches_to_seeds_indexes = extracted.values.data();
 
     auto seeds_reordered = clue::internal::SeedArray<>(queue, num_seeds);
     auto batches_reordered = clue::internal::SeedArray<>(queue, num_seeds);
-    
-    const auto block_size = 256;
+
+    const auto block_size = 512;
     const auto grid_size = clue::divide_up_by(num_seeds, block_size);
     const auto work_division = clue::make_workdiv<internal::Acc>(grid_size, block_size);
 
-    alpaka::exec<TAcc>(queue, 
-                      work_division,
-                      KernelReorderSeeds{}, 
-                      seeds.view(), 
-                      batch_association.view(), 
-                      batches_to_seeds_indexes, 
-                      seeds_reordered.view(), 
-                      batches_reordered.view(),
-                      num_seeds);
-
-    alpaka::wait(queue);
-
-    // auto h_seeds_reordered = clue::make_host_buffer<int32_t[]>(num_seeds);
-    // alpaka::memcpy(
-    //     queue,
-    //     h_seeds_reordered,
-    //     clue::make_device_view(alpaka::getDev(queue), seeds_reordered.data(), num_seeds)
-    // );
-
-    // auto h_batch_association_reordered = clue::make_host_buffer<int32_t[]>(num_seeds);
-    // alpaka::memcpy(
-    //     queue,
-    //     h_batch_association_reordered,
-    //     clue::make_device_view(alpaka::getDev(queue), batches_reordered.data(), num_seeds)
-    // );
-    // alpaka::wait(queue);
-
-    // std::cout << "idx, seed reordered, batch_association reordered" << std::endl;
-    // for (auto ii = 0; ii < num_seeds; ++ii) {
-    //   std::cout << ii << ", " << h_seeds_reordered[ii] << ", " << h_batch_association_reordered[ii] << std::endl;
-    // }
+    alpaka::exec<TAcc>(queue,
+                       work_division,
+                       KernelReorderSeeds{},
+                       seeds.view(),
+                       batch_association.view(),
+                       batches_to_seeds_indexes,
+                       seeds_reordered.view(),
+                       batches_reordered.view(),
+                       num_seeds);
 
     alpaka::memcpy(
-      queue,
-      clue::make_device_view(alpaka::getDev(queue), seeds.data(), num_seeds),
-      clue::make_device_view(alpaka::getDev(queue), seeds_reordered.data(), num_seeds)
-    );
+        queue,
+        clue::make_device_view(alpaka::getDev(queue), seeds.data(), num_seeds),
+        clue::make_device_view(alpaka::getDev(queue), seeds_reordered.data(), num_seeds));
 
     alpaka::memcpy(
-      queue,
-      clue::make_device_view(alpaka::getDev(queue), batch_association.data(), num_seeds),
-      clue::make_device_view(alpaka::getDev(queue), batches_reordered.data(), num_seeds)
-    );
-
-    alpaka::wait(queue);
-
-    // std::cout << "AFTER COPY BACK" << std::endl;
-    // std::cout << "seeds.size(queue) = " << seeds.size(queue) << std::endl;
-    // std::cout << "batch_association.size(queue) = " << batch_association.size(queue) << std::endl;
-  }                      
+        queue,
+        clue::make_device_view(alpaka::getDev(queue), batch_association.data(), num_seeds),
+        clue::make_device_view(alpaka::getDev(queue), batches_reordered.data(), num_seeds));
+  }
 
   template <concepts::accelerator TAcc,
             concepts::queue TQueue,
