@@ -7,7 +7,6 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/data_structures/internal/DeviceVector.hpp"
-#include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/TilesView.hpp"

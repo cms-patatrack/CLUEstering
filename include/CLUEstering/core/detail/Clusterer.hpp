@@ -8,12 +8,10 @@
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
-#include "CLUEstering/core/detail/SetupFollowers.hpp"
 #include "CLUEstering/core/detail/SetupSeeds.hpp"
 #include "CLUEstering/core/detail/SetupTiles.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/data_structures/internal/Followers.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/internal/nostd/ceil_div.hpp"
@@ -158,7 +156,6 @@ namespace clue {
       const Kernel& kernel,
       std::size_t block_size) {
     detail::setup_tiles(queue, dev_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates);
-    detail::setup_followers(queue, m_followers, dev_points.size());
     make_clusters_impl(dev_points, metric, kernel, queue, block_size);
     alpaka::wait(queue);
   }
@@ -299,10 +296,8 @@ namespace clue {
                                             m_min_density,
                                             n_points);
 
-    m_followers->template fill<internal::Acc>(queue, dev_points);
-
     detail::assignPointsToClusters<internal::Acc>(
-        queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
+        queue, block_size, m_seeds.value(), dev_points.view(), n_points);
 
     alpaka::wait(queue);
     internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(
@@ -370,10 +365,8 @@ namespace clue {
                                                      m_event_associations->view(),
                                                      block_size);
 
-    m_followers->template fill<internal::Acc>(queue, dev_points);
-
     detail::assignPointsToClusters<internal::Acc>(
-        queue, block_size, m_seeds.value(), m_followers->view(), dev_points.view());
+        queue, block_size, m_seeds.value(), dev_points.view(), n_points);
 
     alpaka::wait(queue);
     internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(
