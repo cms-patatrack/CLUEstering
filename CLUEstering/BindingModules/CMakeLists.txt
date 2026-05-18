@@ -12,7 +12,7 @@ endif()
 
 if(MSVC)
   string(APPEND CMAKE_CXX_FLAGS_DEBUG " /DCLUE_DEBUG /W4 /WX")
-  string(APPEND CMAKE_CXX_FLAGS " /O2")
+  string(APPEND CMAKE_CXX_FLAGS " /O2 /bigobj")
 else()
   string(
     APPEND
@@ -42,7 +42,7 @@ FetchContent_MakeAvailable(alpaka)
 file(MAKE_DIRECTORY ../lib)
 
 # Convolutional Kernels
-pybind11_add_module(CLUE_Convolutional_Kernels SHARED
+pybind11_add_module(CLUE_Convolutional_Kernels NO_EXTRAS SHARED
                     ${CMAKE_CURRENT_SOURCE_DIR}/binding_kernels.cpp)
 target_include_directories(CLUE_Convolutional_Kernels
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
