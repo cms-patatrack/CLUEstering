@@ -12,7 +12,7 @@ endif()
 
 if(MSVC)
   string(APPEND CMAKE_CXX_FLAGS_DEBUG " /DCLUE_DEBUG /W4 /WX")
-  string(APPEND CMAKE_CXX_FLAGS " /O2")
+  string(APPEND CMAKE_CXX_FLAGS " /O2 /bigobj")
 else()
   string(
     APPEND
