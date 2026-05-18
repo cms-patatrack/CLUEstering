@@ -142,12 +142,17 @@ namespace clue::detail {
                                                   int& nh_i,
                                                   TData outlier_distance,
                                                   TData seeding_distance,
+                                                  TData min_density,
                                                   const DistanceMetric& metric,
                                                   int32_t point_id,
                                                   std::size_t event = 0) {
     if constexpr (N_ == 0) {
       auto tile_idx = tiles.getGlobalBinByBin(base_vec, event);
       auto tile_size = tiles[tile_idx].size();
+
+      // High-density points are seeds or followers: governed by seeding_distance.
+      // Low-density points are outliers or followers: governed by outlier_distance.
+      const auto effective_distance = (rho_i >= min_density) ? seeding_distance : outlier_distance;
 
       for (auto tile_it = 0u; tile_it < tile_size; ++tile_it) {
         const auto j = tiles[tile_idx][tile_it];
@@ -162,9 +167,9 @@ namespace clue::detail {
           auto distance = metric(coords_i, coords_j);
           assert(distance >= TData{0});
 
-          if (distance <= outlier_distance && distance < delta_i) {
+          if (distance <= effective_distance && distance < delta_i) {
             delta_i = distance;
-            nh_i = (distance > seeding_distance) ? -1 : j;
+            nh_i = j;
           }
         }
       }
@@ -186,6 +191,7 @@ namespace clue::detail {
                                                          nh_i,
                                                          outlier_distance,
                                                          seeding_distance,
+                                                         min_density,
                                                          metric,
                                                          point_id,
                                                          event);
@@ -204,6 +210,7 @@ namespace clue::detail {
                                   PointsView<Ndim, TData> dev_points,
                                   TData outlier_distance,
                                   TData seeding_distance,
+                                  TData min_density,
                                   DistanceMetric metric,
                                   std::size_t* seed_candidates,
                                   int32_t n_points) const {
@@ -212,6 +219,9 @@ namespace clue::detail {
         int nh_i = -1;
         auto coords_i = dev_points[i];
         auto rho_i = dev_points.rho()[i];
+        const auto density_uncertainty =
+            dev_points.has_uncertainty() ? dev_points.density_uncertainty()[i] : TData{1.};
+        const auto effective_min_density = min_density * density_uncertainty;
 
         clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
@@ -234,6 +244,7 @@ namespace clue::detail {
                                                        nh_i,
                                                        outlier_distance,
                                                        seeding_distance,
+                                                       effective_min_density,
                                                        metric,
                                                        i);
 
@@ -247,36 +258,23 @@ namespace clue::detail {
   };
 
   struct KernelFindClusters {
-    template <typename TAcc,
-              std::size_t Ndim,
-              std::floating_point TData,
-              concepts::distance_metric<Ndim> DistanceMetric>
+    template <typename TAcc, std::size_t Ndim, std::floating_point TData>
       requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
                                   PointsView<Ndim, TData> dev_points,
-                                  TData seeding_distance,
-                                  DistanceMetric metric,
                                   TData min_density,
                                   int32_t n_points) const {
       for (auto i : alpaka::uniformElements(acc, n_points)) {
         dev_points.cluster_index()[i] = -1;
-        auto nh = dev_points.nearest_higher()[i];
-
-        auto coords_i = dev_points[i];
-        auto coords_nh = dev_points[nh];
-        auto distance = metric(coords_i, coords_nh);
-        assert(distance >= TData{0});
-
-        auto rho_i = dev_points.rho()[i];
+        const auto nh = dev_points.nearest_higher()[i];
+        const auto rho_i = dev_points.rho()[i];
         const auto density_uncertainty =
-            (dev_points.has_uncertainty()) ? dev_points.density_uncertainty()[i] : TData{1.};
-        bool is_seed =
-            (distance > seeding_distance) && (rho_i >= min_density * density_uncertainty);
+            dev_points.has_uncertainty() ? dev_points.density_uncertainty()[i] : TData{1.};
+        const auto is_seed = (nh == -1) && (rho_i >= min_density * density_uncertainty);
 
         if (is_seed) {
           dev_points.is_seed()[i] = 1;
-          dev_points.nearest_higher()[i] = -1;
           seeds.push_back(acc, i);
         } else {
           dev_points.is_seed()[i] = 0;
@@ -353,6 +351,7 @@ namespace clue::detail {
                                     PointsView<Ndim, TData>& dev_points,
                                     TData outlier_distance,
                                     TData seeding_distance,
+                                    TData min_density,
                                     const DistanceMetric& metric,
                                     std::size_t& seed_candidates,
                                     int32_t size) {
@@ -365,6 +364,7 @@ namespace clue::detail {
                        dev_points,
                        outlier_distance,
                        seeding_distance,
+                       min_density,
                        metric,
                        d_seed_candidates.data(),
                        size);
@@ -375,26 +375,16 @@ namespace clue::detail {
   template <concepts::accelerator TAcc,
             concepts::queue TQueue,
             std::size_t Ndim,
-            std::floating_point TData,
-            concepts::distance_metric<Ndim> DistanceMetric>
+            std::floating_point TData>
     requires(alpaka::Dim<TAcc>::value == 1)
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
                                clue::internal::SeedArray<>& seeds,
                                PointsView<Ndim, TData>& dev_points,
-                               TData seeding_distance,
-                               const DistanceMetric& metric,
                                TData min_density,
                                int32_t size) {
-    alpaka::exec<TAcc>(queue,
-                       work_division,
-                       KernelFindClusters{},
-                       seeds.view(),
-                       dev_points,
-                       seeding_distance,
-                       metric,
-                       min_density,
-                       size);
+    alpaka::exec<TAcc>(
+        queue, work_division, KernelFindClusters{}, seeds.view(), dev_points, min_density, size);
   }
 
   template <concepts::accelerator TAcc,
