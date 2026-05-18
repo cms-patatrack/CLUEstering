@@ -8,6 +8,7 @@
 ![PyPI](https://img.shields.io/pypi/v/CLUEstering)
 [![Platforms](https://img.shields.io/badge/platform-linux%20%7C%20mac%20%7C%20windows-blue.svg)](https://github.com/cms-patatrack/CLUEstering)
 [![License](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20270689.svg)](https://doi.org/10.5281/zenodo.20270689)
 
 <p align="center">
   <img width="580" height="380" src="https://raw.githubusercontent.com/cms-patatrack/CLUEstering/main/docs/source/images/docs/CLUEstering-logo.png">
