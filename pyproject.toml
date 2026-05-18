@@ -25,6 +25,28 @@ classifiers = [
 cmake.args = ["-DBUILD_PYTHON=ON"]
 cmake.build-type = "Release"
 wheel.packages = ["CLUEstering"]
+sdist.exclude = [
+  "benchmark",
+  "data",
+  "docs",
+  "docker",
+  "examples",
+  "tests",
+  "scripts",
+  ".github",
+  "extern/doxygen-awesome-css",
+  "Doxyfile",
+  "CONTRIBUTING.md",
+  ".clang-format",
+  ".clang-tidy",
+  ".clangd",
+  ".cmake-format.yml",
+  ".pylintrc",
+  ".coveragerc",
+  ".codecov.yml",
+  ".zenodo.json",
+  ".env",
+]
 
 [tool.autopep8]
 max_line_length = 108
