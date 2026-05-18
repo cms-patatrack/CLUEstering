@@ -37,27 +37,32 @@
  	{
 	  "name": "Holzer, Markus",
 	  "affiliation": "CERN",
-	  "orcid": "0000-0001-5499-5857"
+	  "orcid": "0000-0001-5499-5857",
+    "type": "Other"
 	},
 	{
 	  "name": "Lanzi, Samuele",
 	  "affiliation": "University and INFN of Bologna",
-	  "orcid": "0009-0006-1820-5380"
+	  "orcid": "0009-0006-1820-5380",
+    "type": "Other"
 	},
 	{
 	  "name": "Pancaldi, Francesco Orso",
 	  "affiliation": "University of Bologna",
-	  "orcid": "0009-0008-5382-2653"
+	  "orcid": "0009-0008-5382-2653",
+    "type": "Other"
 	},
 	{
 	  "name": "Zago, Giovanni",
 	  "affiliation": "CERN, University and INFN of Padova",
-	  "orcid": "0009-0003-6842-6411"
+	  "orcid": "0009-0003-6842-6411",
+    "type": "Other"
 	},
 	{
 	  "name": "Helsens, Clement",
 	  "affiliation": "EPFL",
-	  "orcid": "0000-0002-9243-7554"
+	  "orcid": "0000-0002-9243-7554",
+    "type": "Other"
 	}
   ],
   "access_right": "open",
