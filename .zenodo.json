@@ -31,7 +31,7 @@
 	  "name": "Giacomini, Francesco",
 	  "affiliation": "INFN-CNAF",
 	  "orcid": "0000-0002-3129-2814"
-	},
+	}
   ],
   "contributors": [
  	{
@@ -58,7 +58,7 @@
 	  "name": "Helsens, Clement",
 	  "affiliation": "EPFL",
 	  "orcid": "0000-0002-9243-7554"
-	},
+	}
   ],
   "access_right": "open",
   "keywords": [
@@ -71,5 +71,5 @@
     "performance portability"
   ],
   "license": "MPL-2.0",
-  "upload_type": "software",
+  "upload_type": "software"
 }
