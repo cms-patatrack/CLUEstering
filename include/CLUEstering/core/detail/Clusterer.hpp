@@ -201,7 +201,7 @@ namespace clue {
   template <std::ranges::contiguous_range TRange>
     requires std::integral<std::ranges::range_value_t<TRange>>
   inline void Clusterer<Ndim, DataType>::setWrappedCoordinates(const TRange& wrapped_coordinates) {
-    std::ranges::copy(wrapped_coordinates, m_wrappedCoordinates.begin());
+    std::ranges::copy(wrapped_coordinates | std::views::take(Ndim), m_wrappedCoordinates.begin());
   }
   template <std::size_t Ndim, std::floating_point DataType>
   template <std::integral... TArgs>
