@@ -52,6 +52,12 @@ jobs:
         run: |
           ctest --test-dir build --output-on-failure --parallel $(nproc)
 
+      - name: Create coverage report
+        working-directory: ${{github.workspace}}/build
+        run: |
+          lcov --capture --directory .. --output-file coverage.info --ignore-errors mismatch
+          lcov --remove coverage.info '/usr/*' '*/extern/*' --output-file cpp-coverage.info --ignore-errors unused mismatch
+
       - name: Build Python bindings
         working-directory: ${{github.workspace}}
         run: |
@@ -63,13 +69,6 @@ jobs:
         run: |
           coverage run -m pytest
           coverage xml -o python-coverage.xml
-
-
-      - name: Create coverage report
-        working-directory: ${{github.workspace}}/build
-        run: |
-          lcov --capture --directory .. --output-file coverage.info --ignore-errors mismatch
-          lcov --remove coverage.info '/usr/*' '*/extern/*' --output-file cpp-coverage.info --ignore-errors unused mismatch
 
       - uses: codecov/codecov-action@v5.4.3
         if: github.event.repository.full_name == 'cms-patatrack/CLUEstering'
