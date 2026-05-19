@@ -121,3 +121,22 @@ The data can be provided in many different formats, including numpy arrays, pand
 - [S. Balducci, *CLUEstering: a high-performance density-based clustering library for scientific computing*, UNIBO Master Thesis (2024)](https://amslaurea.unibo.it/id/eprint/32544/)
 - [S. Balducci et al., *CLUE: A Scalable Clustering Algorithm for the Data Challenges of Tomorrow*, CERN EP newsletter (2025)](https://ep-news.web.cern.ch/content/clue-scalable-clustering-algorithm-data-challenges-tomorrow)
 - [S. Balducci et al., *CLUEstering: a novel high-performance clustering library for scientific computing*, 23rd International Workshop on Advanced Computing and Analysis Techniques in Physics Research (ACAT 2025)](https://indico.cern.ch/event/1488410/contributions/6562810/)
+
+To cite this software directly, please use the following BibTeX entry:
+```bibtex
+@software{balducci_2026_20270711,
+  author       = {Balducci, Simone and
+                  Pantaleo, Felice and
+                  Perego, Aurora and
+                  Redjeb, Wahid and
+                  Rovere, Marco and
+                  Giacomini, Francesco},
+  title        = {CLUEstering},
+  month        = may,
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {2.11.0},
+  doi          = {10.5281/zenodo.20270711},
+  url          = {https://doi.org/10.5281/zenodo.20270711},
+}
+```
