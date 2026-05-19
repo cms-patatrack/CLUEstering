@@ -15,7 +15,7 @@ dependencies = ["scikit-learn", "numpy", "matplotlib", "pandas"]
 keywords = ["Density-based Weighted Clustering", "HPC", "Parallel Computing", "GPU Computing", "Performance Portability"]
 classifiers = [
   "Intended Audience :: Developers",
-  "Intended Audience :: Researchers",
+  "Intended Audience :: Science/Research",
   "Programming Language :: Python :: 3",
   "Operating System :: Unix",
   "Operating System :: MacOS :: MacOS X",
