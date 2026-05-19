@@ -29,7 +29,7 @@ jobs:
       - name: Install apt packages
         run: |
           sudo apt-get update -y
-          sudo apt install -y lcov libboost-atomic-dev libtbb-dev
+          sudo apt install -y lcov libboost-atomic-dev
 
       - name: Cache pip packages
         uses: actions/cache@v4
@@ -42,21 +42,15 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pytest scikit-learn pandas matplotlib coverage
 
-      - name: Compile Python modules
+      - name: Compile C++ tests
         working-directory: ${{github.workspace}}
         run: |
-          cmake -B build -DBUILD_PYTHON=ON -DBUILD_TESTING=ON -DCOVERAGE=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel
-
-      - name: Measure coverage of Python tests
-        working-directory: ${{github.workspace}}/tests
-        run: |
-          coverage run -m pytest
-          coverage xml -o python-coverage.xml
+          cmake -B build -DBUILD_TESTING=ON -DCOVERAGE=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel
 
       - name: Measure coverage of C++ tests
         working-directory: ${{github.workspace}}
         run: |
-          ctest --test-dir build --output-on-failure
+          ctest --test-dir build --output-on-failure --parallel $(nproc)
 
       - name: Create coverage report
         working-directory: ${{github.workspace}}/build
@@ -64,13 +58,25 @@ jobs:
           lcov --capture --directory .. --output-file coverage.info --ignore-errors mismatch
           lcov --remove coverage.info '/usr/*' '*/extern/*' --output-file cpp-coverage.info --ignore-errors unused mismatch
 
+      - name: Build Python bindings
+        working-directory: ${{github.workspace}}
+        run: |
+          rm -rf build
+          cmake -B build -DBUILD_PYTHON=ON && cmake --build build --parallel
+
+      - name: Measure coverage of Python tests
+        working-directory: ${{github.workspace}}/tests
+        run: |
+          coverage run -m pytest
+          coverage xml -o python-coverage.xml
+
       - uses: codecov/codecov-action@v5.4.3
         if: github.event.repository.full_name == 'cms-patatrack/CLUEstering'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: |
-            ${{github.workspace}}/tests/build/cpp-coverage.info
-            python-coverage.xml
+            ${{github.workspace}}/build/cpp-coverage.info
+            ${{github.workspace}}/tests/python-coverage.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true

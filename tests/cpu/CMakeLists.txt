@@ -18,7 +18,7 @@ foreach(source ${sources})
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/serial
                OUTPUT_NAME ${test_name})
   if(COVERAGE)
-    target_compile_options(${target} PRIVATE -O0 -g --coverage)
+    target_compile_options(${target} PRIVATE -O1 -g --coverage)
     target_link_options(${target} PRIVATE --coverage)
     target_compile_definitions(${target} PRIVATE COVERAGE)
   endif()
