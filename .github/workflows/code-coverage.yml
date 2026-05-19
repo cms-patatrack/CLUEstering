@@ -47,9 +47,16 @@ jobs:
         run: |
           cmake -B build -DBUILD_TESTING=ON -DCOVERAGE=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel
 
-      - name: Install Python package
+      - name: Measure coverage of C++ tests
         working-directory: ${{github.workspace}}
-        run: pip install .
+        run: |
+          ctest --test-dir build --output-on-failure
+
+      - name: Build Python bindings
+        working-directory: ${{github.workspace}}
+        run: |
+          rm -rf build
+          cmake -B build -DBUILD_PYTHON=ON && cmake --build build --parallel
 
       - name: Measure coverage of Python tests
         working-directory: ${{github.workspace}}/tests
@@ -57,10 +64,6 @@ jobs:
           coverage run -m pytest
           coverage xml -o python-coverage.xml
 
-      - name: Measure coverage of C++ tests
-        working-directory: ${{github.workspace}}
-        run: |
-          ctest --test-dir build --output-on-failure
 
       - name: Create coverage report
         working-directory: ${{github.workspace}}/build
