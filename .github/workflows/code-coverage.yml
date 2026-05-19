@@ -29,7 +29,7 @@ jobs:
       - name: Install apt packages
         run: |
           sudo apt-get update -y
-          sudo apt install -y lcov libboost-atomic-dev libtbb-dev
+          sudo apt install -y lcov libboost-atomic-dev
 
       - name: Cache pip packages
         uses: actions/cache@v4
