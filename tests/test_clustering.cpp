@@ -13,7 +13,7 @@
 
 TEST_CASE("Test clustering on benchmarking datasets") {
 #ifdef COVERAGE
-  auto range = std::make_pair(10, 14);
+  auto range = std::make_pair(10, 12);
 #else
   auto range = std::make_pair(10, 18);
 #endif

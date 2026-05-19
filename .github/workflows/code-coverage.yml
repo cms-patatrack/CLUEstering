@@ -50,7 +50,7 @@ jobs:
       - name: Measure coverage of C++ tests
         working-directory: ${{github.workspace}}
         run: |
-          ctest --test-dir build --output-on-failure
+          ctest --test-dir build --output-on-failure --parallel $(nproc)
 
       - name: Build Python bindings
         working-directory: ${{github.workspace}}
