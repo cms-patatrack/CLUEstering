@@ -113,7 +113,7 @@ jobs:
       run: |
         cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release
         cmake --build build --parallel
-        ctest --test-dir build --output-on-failure
+        ctest --test-dir build --output-on-failure --parallel $(nproc)
 
     - name: Compile and run tests
       if: matrix.container == 'almalinux:9'
@@ -122,7 +122,7 @@ jobs:
         source /opt/rh/${{ matrix.compiler }}/enable
         cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release
         cmake --build build --parallel
-        ctest --test-dir build --output-on-failure
+        ctest --test-dir build --output-on-failure --parallel $(nproc)
 
     - name: Compile and run tests
       if: matrix.os == 'windows-latest'
@@ -130,4 +130,4 @@ jobs:
       run: |
         cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:CMAKE_TOOLCHAIN_FILE" -DVCPKG_TARGET_TRIPLET=x64-windows -DVCPKG_MANIFEST_DIR="${{ github.workspace }}"
         cmake --build build --parallel --config Release
-        ctest --test-dir build --output-on-failure --build-config Release
+        ctest --test-dir build --output-on-failure --parallel $env:NUMBER_OF_PROCESSORS --build-config Release
