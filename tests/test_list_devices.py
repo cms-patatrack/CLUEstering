@@ -21,3 +21,12 @@ def test_list_devices():
     c.list_devices('gpu cuda')
     c.list_devices('gpu hip')
     assert True
+
+
+def test_list_devices_invalid_backend():
+    '''
+    Test that list_devices raises ValueError for an unrecognised backend name
+    '''
+    c = clue.clusterer(0.4, 5, 0.4)
+    with pytest.raises(ValueError):
+        c.list_devices('not_a_backend')

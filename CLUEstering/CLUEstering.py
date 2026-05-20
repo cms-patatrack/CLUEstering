@@ -30,14 +30,14 @@ WeightedChebyshevMetric = clue_kernels.WeightedChebyshevMetric
 PeriodicEuclideanMetric = clue_kernels.PeriodicEuclideanMetric
 
 backends = ["cpu serial"]
-tbb_found = bool((glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
-if tbb_found:
-    import CLUE_CPU_TBB as cpu_tbb
-    backends.append("cpu tbb")
 omp_found = bool((glob(join(path, 'lib/CLUE_CPU_OMP*.so'))))
 if omp_found:
     import CLUE_CPU_OMP as cpu_omp
     backends.append("cpu openmp")
+tbb_found = bool((glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
+if tbb_found:  # pragma: no cover
+    import CLUE_CPU_TBB as cpu_tbb
+    backends.append("cpu tbb")
 cuda_found = bool((glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))))
 if cuda_found:  # pragma: no cover
     import CLUE_GPU_CUDA as gpu_cuda
@@ -570,17 +570,17 @@ class clusterer:
         """
         if backend == "all":
             cpu_serial.listDevices('cpu serial')
-            if tbb_found:
+            if tbb_found:   # pragma: no cover
                 cpu_tbb.listDevices('cpu tbb')
             if omp_found:
                 cpu_omp.listDevices('cpu openmp')
-            if cuda_found:
+            if cuda_found:  # pragma: no cover
                 gpu_cuda.listDevices('gpu cuda')
-            if hip_found:
+            if hip_found:   # pragma: no cover
                 gpu_hip.listDevices('gpu hip')
         elif backend == "cpu serial":
             cpu_serial.listDevices(backend)
-        elif backend == "cpu tbb":
+        elif backend == "cpu tbb":  #pragma: no cover
             if tbb_found:
                 cpu_tbb.listDevices(backend)
             else:
