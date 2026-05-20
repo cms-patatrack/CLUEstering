@@ -91,3 +91,18 @@ def test_weighted_chebyshev(sissa_1000):
 
     mask = c.cluster_ids != -1
     assert silhouette_score(c.coords.T[mask], c.cluster_ids[mask]) > 0.5
+
+
+@pytest.mark.parametrize("choice,params", [
+    ("weighted_euclidean", None),
+    ("weighted_chebyshev", None),
+    ("periodic_euclidean", None),
+    ("not_a_metric", None),
+])
+def test_choose_metric_raises(choice, params):
+    '''
+    Tests that choose_metric raises ValueError for invalid or incomplete arguments
+    '''
+    c = clue.clusterer(20., 10., 20.)
+    with pytest.raises(ValueError):
+        c.choose_metric(choice, params)
