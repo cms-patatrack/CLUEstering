@@ -320,6 +320,7 @@ namespace clue::detail {
         queue,
         clue::make_device_view(alpaka::getDev(queue), batch_association.data(), num_seeds),
         clue::make_device_view(alpaka::getDev(queue), batches_reordered.data(), num_seeds));
+    alpaka::wait(queue);
   }
 
   template <concepts::accelerator TAcc,
