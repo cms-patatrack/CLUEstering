@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="conceptclue_1_1concepts_1_1convolutional__kernel" kind="concept">
+    <compoundname>clue::concepts::convolutional_kernel</compoundname>
+    <includes refid="ConvolutionalKernel_8hpp" local="no">ConvolutionalKernel.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename TKernel</type>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;typename TKernel&gt;
+concept <ref refid="conceptclue_1_1concepts_1_1convolutional__kernel" kindref="compound">clue::concepts::convolutional_kernel</ref> = 
+        requires(TKernel&amp;&amp; kernel,
+                 const internal::Acc&amp; acc,
+                 typename std::remove_cvref_t&lt;TKernel&gt;::value_type distance,
+                 int point_i,
+                 int point_j) {
+          { kernel(acc, distance, point_i, point_j) };
+        }</initializer>
+    <conceptparts>
+      <codepart line="111">    <programlisting>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>TKernel&gt;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">concept<sp/></highlight><highlight class="normal">convolutional_kernel<sp/>=</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(TKernel&amp;&amp;<sp/>kernel,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>internal::Acc&amp;<sp/>acc,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>std::remove_cvref_t&lt;TKernel&gt;::value_type<sp/>distance,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>point_i,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>point_j)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{<sp/>kernel(acc,<sp/>distance,<sp/>point_i,<sp/>point_j)<sp/>};</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+    </programlisting>
+</codepart>
+    </conceptparts>
+    <briefdescription>
+<para>Concept describing a convolutional kernel. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="111" column="5"/>
+  </compounddef>
+</doxygen>
