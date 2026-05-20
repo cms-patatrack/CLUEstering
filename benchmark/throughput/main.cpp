@@ -20,8 +20,7 @@ constexpr auto dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
 using Event = clue::PointsHost<NDIM>;
 
 auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int nClusters) {
-  const auto cpuDev =
-      alpaka::getDevByIdx(alpaka::Platform<alpaka_serial_sync::Acc1D>{}, 0u);
+  const auto cpuDev = alpaka::getDevByIdx(alpaka::Platform<alpaka_serial_sync::Acc1D>{}, 0u);
   alpaka_serial_sync::Queue genQueue(cpuDev);
 
   std::vector<Event> events;
@@ -32,11 +31,13 @@ auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int n
   }
 
   std::vector<serial::WorkerState*> cpuWorkers(nCpuThreads);
-  for (auto& w : cpuWorkers) w = serial::createWorker(dc, rhoc, outlier, nPoints);
+  for (auto& w : cpuWorkers)
+    w = serial::createWorker(dc, rhoc, outlier, nPoints);
 
 #ifdef CLUE_HAS_CUDA
   std::vector<cuda::WorkerState*> gpuWorkers(nGpuStreams);
-  for (auto& w : gpuWorkers) w = cuda::createWorker(dc, rhoc, outlier, nPoints);
+  for (auto& w : gpuWorkers)
+    w = cuda::createWorker(dc, rhoc, outlier, nPoints);
 #else
   if (nGpuStreams > 0) {
     std::cerr << "GPU support not available in this build\n";
@@ -49,13 +50,15 @@ auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int n
   auto start = std::chrono::high_resolution_clock::now();
 
   std::thread cpuThread([&] {
-    if (nCpuThreads == 0) return;
+    if (nCpuThreads == 0)
+      return;
     tbb::task_arena arena(nCpuThreads);
     arena.execute([&] {
       tbb::parallel_for(0, nCpuThreads, [&](int i) {
         while (true) {
           int id = eventCounter.fetch_add(1);
-          if (id >= nEvents) return;
+          if (id >= nEvents)
+            return;
           serial::processEvent(cpuWorkers[i], events[id]);
         }
       });
@@ -64,13 +67,15 @@ auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int n
 
 #ifdef CLUE_HAS_CUDA
   std::thread gpuThread([&] {
-    if (nGpuStreams == 0) return;
+    if (nGpuStreams == 0)
+      return;
     tbb::task_arena arena(nGpuStreams);
     arena.execute([&] {
       tbb::parallel_for(0, nGpuStreams, [&](int i) {
         while (true) {
           int id = eventCounter.fetch_add(1);
-          if (id >= nEvents) return;
+          if (id >= nEvents)
+            return;
           cuda::processEvent(gpuWorkers[i], events[id]);
         }
       });
@@ -85,13 +90,14 @@ auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int n
 
   auto end = std::chrono::high_resolution_clock::now();
 
-  for (auto& w : cpuWorkers) serial::destroyWorker(w);
+  for (auto& w : cpuWorkers)
+    serial::destroyWorker(w);
 #ifdef CLUE_HAS_CUDA
-  for (auto& w : gpuWorkers) cuda::destroyWorker(w);
+  for (auto& w : gpuWorkers)
+    cuda::destroyWorker(w);
 #endif
 
-  const auto duration =
-      std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+  const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
   return (1000. * nEvents) / duration;
 }
 

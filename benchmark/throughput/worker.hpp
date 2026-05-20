@@ -11,11 +11,11 @@ namespace serial {
   WorkerState* createWorker(float dc, float rhoc, float outlier, int n_points);
   void destroyWorker(WorkerState*);
   void processEvent(WorkerState*, clue::PointsHost<NDIM>&);
-}
+}  // namespace serial
 
 namespace cuda {
   struct WorkerState;
   WorkerState* createWorker(float dc, float rhoc, float outlier, int n_points);
   void destroyWorker(WorkerState*);
   void processEvent(WorkerState*, clue::PointsHost<NDIM>&);
-}
+}  // namespace cuda

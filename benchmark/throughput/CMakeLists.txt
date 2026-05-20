@@ -39,8 +39,8 @@ find_package(alpaka)
 if(NOT alpaka_FOUND)
   include(FetchContent)
   FetchContent_Declare(
-	alpaka
-	URL https://github.com/alpaka-group/alpaka/archive/refs/tags/1.2.0.tar.gz)
+    alpaka
+    URL https://github.com/alpaka-group/alpaka/archive/refs/tags/1.2.0.tar.gz)
   FetchContent_MakeAvailable(alpaka)
 endif()
 
@@ -52,9 +52,8 @@ if(CMAKE_CUDA_COMPILER)
   add_subdirectory(cuda)
 endif()
 
-set(benchmark_include_dirs
-    ${CMAKE_SOURCE_DIR}/../../include
-    ${CMAKE_SOURCE_DIR}/..)
+set(benchmark_include_dirs ${CMAKE_SOURCE_DIR}/../../include
+                           ${CMAKE_SOURCE_DIR}/..)
 
 set(benchmark_defs ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED ALPAKA_HOST_ONLY)
 set(benchmark_libs serial alpaka::alpaka Boost::boost TBB::tbb)
