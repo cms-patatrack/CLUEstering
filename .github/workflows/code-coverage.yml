@@ -57,6 +57,7 @@ jobs:
         run: |
           lcov --capture --directory .. --output-file coverage.info --ignore-errors mismatch
           lcov --remove coverage.info '/usr/*' '*/extern/*' --output-file cpp-coverage.info --ignore-errors unused mismatch
+          cp cpp-coverage.info ${{github.workspace}}/cpp-coverage.info
 
       - name: Build Python bindings
         working-directory: ${{github.workspace}}
@@ -75,7 +76,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: |
-            ${{github.workspace}}/build/cpp-coverage.info
+            ${{github.workspace}}/cpp-coverage.info
             ${{github.workspace}}/tests/python-coverage.xml
           flags: unittests
           name: codecov-umbrella
