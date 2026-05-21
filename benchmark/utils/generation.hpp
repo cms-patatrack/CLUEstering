@@ -1,5 +1,6 @@
 
 #include <algorithm>
+#include <array>
 #include <execution>
 #include <random>
 #include <vector>
@@ -9,12 +10,16 @@
 namespace clue {
   namespace utils {
 
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     using ClusterCenters = std::vector<std::array<float, Ndim>>;
+    template <std::size_t Ndim>
+    using SpaceBoundaries = std::array<std::pair<float, float>, Ndim>;
+    template <std::size_t Ndim>
+    using UniformDistributions = std::array<std::uniform_real_distribution<float>, Ndim>;
 
     namespace detail {
 
-      template <uint8_t Ndim>
+      template <std::size_t Ndim>
       ClusterCenters<Ndim> computeClusterCenters(size_t n_clusters,
                                                  std::uniform_real_distribution<float> uniform_dist,
                                                  std::mt19937& gen) {
@@ -31,7 +36,23 @@ namespace clue {
         return cluster_centers;
       }
 
-      template <uint8_t Ndim>
+      template <std::size_t Ndim>
+      ClusterCenters<Ndim> computeClusterCenters(size_t n_clusters,
+                                                 const UniformDistributions<Ndim>& uniform_dists,
+                                                 std::mt19937& gen) {
+        ClusterCenters<Ndim> cluster_centers(n_clusters);
+
+        std::generate(cluster_centers.begin(), cluster_centers.end(), [&]() {
+          std::array<float, Ndim> center;
+          std::ranges::transform(
+              uniform_dists, center.begin(), [&](auto dist) { return dist(gen); });
+          return center;
+        });
+
+        return cluster_centers;
+      }
+
+      template <std::size_t Ndim>
       void generateClusterData(clue::PointsHost<Ndim>& points,
                                const ClusterCenters<Ndim>& cluster_centers,
                                size_t n_clusters,
@@ -49,7 +70,7 @@ namespace clue {
         }
       }
 
-      template <uint8_t Ndim>
+      template <std::size_t Ndim>
       void generateNoiseData(clue::PointsHost<Ndim>& points,
                              size_t data_size,
                              size_t noise_size,
@@ -63,9 +84,30 @@ namespace clue {
         }
       }
 
+      template <std::size_t Ndim>
+      void generateEnergies(clue::PointsHost<Ndim>& points,
+                            int cluster_size,
+                            int cumulative_cluster_size,
+                            const std::array<float, Ndim>& cluster_center,
+                            std::uniform_real_distribution<float> energy_dist,
+                            std::mt19937& gen) {
+        const auto amplitude = energy_dist(gen);
+        const auto sigma = 1.5f * amplitude;
+        const auto n_points = points.size();
+        for (auto i = cumulative_cluster_size; i < cumulative_cluster_size + cluster_size; ++i) {
+          auto distance = 0.f;
+          for (auto dim = 0u; dim < Ndim; ++dim) {
+            distance += (points.coords(dim)[i] - cluster_center[dim]) *
+                        (points.coords(dim)[i] - cluster_center[dim]);
+          }
+          // std::cout << "Distance: " << distance << std::endl;
+          points.weights()[i] = amplitude * std::exp(-distance / (2 * sigma * sigma));
+        }
+      }
+
     }  // namespace detail
 
-    template <uint8_t Ndim>
+    template <std::size_t Ndim>
     void generateRandomData(clue::PointsHost<Ndim>& points,
                             size_t n_clusters,
                             std::pair<float, float> space_boundaries,
@@ -86,6 +128,88 @@ namespace clue {
           points, cluster_centers, n_clusters, cluster_size, stddev, gen);
       detail::generateNoiseData<Ndim>(points, data_size, noise_size, uniform_dist, gen);
       std::fill(points.weights().begin(), points.weights().end(), 1.0f);
+    }
+
+    template <std::size_t Ndim, typename TQueue>
+    clue::PointsHost<Ndim> generateRandomData(TQueue& queue,
+                                              size_t n_points,
+                                              size_t n_clusters,
+                                              std::pair<float, float> space_boundaries,
+                                              float stddev,
+                                              float noisiness = .1f,
+                                              int seed = 0) {
+      clue::PointsHost<Ndim> points(queue, n_points);
+      std::mt19937 gen(seed);
+      std::uniform_real_distribution<float> uniform_dist(space_boundaries.first,
+                                                         space_boundaries.second);
+
+      auto cluster_centers = detail::computeClusterCenters<Ndim>(n_clusters, uniform_dist, gen);
+
+      const auto cluster_size =
+          static_cast<size_t>(std::floor(points.size() * (1 - noisiness) / n_clusters));
+      const auto data_size = n_clusters * cluster_size;
+      const auto noise_size = points.size() - data_size;
+      detail::generateClusterData<Ndim>(
+          points, cluster_centers, n_clusters, cluster_size, stddev, gen);
+      detail::generateNoiseData<Ndim>(points, data_size, noise_size, uniform_dist, gen);
+      std::fill(points.weights().begin(), points.weights().end(), 1.0f);
+
+      return points;
+    }
+
+    template <std::size_t Ndim, typename TQueue>
+    clue::PointsHost<Ndim> generateClustersWithEnergy(TQueue& queue,
+                                                      size_t mean_cluster_size,
+                                                      size_t n_clusters,
+                                                      const SpaceBoundaries<Ndim>& space_boundaries,
+                                                      const std::pair<float, float>& energy_range,
+                                                      const std::array<float, Ndim>& stddevs,
+                                                      float noisiness = .1f,
+                                                      int seed = 0) {
+      std::mt19937 gen(seed);
+      std::array<std::uniform_real_distribution<float>, Ndim> uniform_dists;
+      std::transform(space_boundaries.begin(),
+                     space_boundaries.end(),
+                     uniform_dists.begin(),
+                     [&](const auto& boundary) {
+                       return std::uniform_real_distribution<float>(boundary.first,
+                                                                    boundary.second);
+                     });
+
+      auto cluster_centers = detail::computeClusterCenters<Ndim>(n_clusters, uniform_dists, gen);
+
+      std::uniform_real_distribution<float> energy_dist(energy_range.first, energy_range.second);
+      std::poisson_distribution<int> cluster_size_distribution(mean_cluster_size);
+
+      std::vector<int> cluster_sizes(n_clusters);
+      std::generate(cluster_sizes.begin(), cluster_sizes.end(), [&]() {
+        return cluster_size_distribution(gen);
+      });
+      auto n_points = std::reduce(cluster_sizes.begin(), cluster_sizes.end(), 0u);
+      clue::PointsHost<Ndim> points(queue, n_points);
+
+      auto cumulative_cluster_size = 0u;
+      for (auto cluster_id = 0u; cluster_id < n_clusters; ++cluster_id) {
+        const auto cluster_size = cluster_sizes[cluster_id];
+        for (auto dim = 0u; dim < Ndim; ++dim) {
+          std::normal_distribution<float> gaussian_dist(cluster_centers[cluster_id][dim],
+                                                        stddevs[dim]);
+          std::generate_n(std::execution::unseq,
+                          points.coords(dim).begin() + cumulative_cluster_size,
+                          cluster_size,
+                          [&] { return gaussian_dist(gen); });
+        }
+        detail::generateEnergies<Ndim>(points,
+                                       cluster_size,
+                                       cumulative_cluster_size,
+                                       cluster_centers[cluster_id],
+                                       energy_dist,
+                                       gen);
+
+        cumulative_cluster_size += cluster_size;
+      }
+
+      return points;
     }
 
   }  // namespace utils
