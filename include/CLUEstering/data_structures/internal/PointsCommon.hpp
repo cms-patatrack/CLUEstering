@@ -172,8 +172,13 @@ namespace clue {
     }
   };
 
-  // TODO: implement for better cache use
+  // Round n_points up to the next multiple of 32 so that each sub-array in a
+  // SoA layout starts at a 128-byte–aligned address for 4-byte types (float,
+  // int32), matching the GPU L2 cache line size.
   template <std::size_t Ndim>
-  int32_t computeAlignSoASize(int32_t n_points);
+  inline int32_t computeAlignSoASize(int32_t n_points) {
+    constexpr int32_t alignment = 32;
+    return ((n_points + alignment - 1) / alignment) * alignment;
+  }
 
 }  // namespace clue
