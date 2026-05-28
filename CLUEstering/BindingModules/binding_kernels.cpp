@@ -2,19 +2,18 @@
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "MetricDescriptor.hpp"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/functional.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/stl/vector.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 
-PYBIND11_MODULE(CLUE_Convolutional_Kernels, m) {
+NB_MODULE(CLUE_Convolutional_Kernels, m) {
   m.doc() = "Binding of the convolutional kernels and distance metrics used in the CLUE algorithm.";
 
   // ----- Convolutional kernels -----
-  py::class_<clue::FlatKernel<float>>(m, "FlatKernel").def(py::init<float>());
-  py::class_<clue::ExponentialKernel<float>>(m, "ExponentialKernel").def(py::init<float, float>());
-  py::class_<clue::GaussianKernel<float>>(m, "GaussianKernel").def(py::init<float, float>());
+  nb::class_<clue::FlatKernel<float>>(m, "FlatKernel").def(nb::init<float>());
+  nb::class_<clue::ExponentialKernel<float>>(m, "ExponentialKernel").def(nb::init<float, float>());
+  nb::class_<clue::GaussianKernel<float>>(m, "GaussianKernel").def(nb::init<float, float>());
 
   // ----- Distance metrics -----
   // MetricDescriptor<float> is an opaque handle; users obtain instances via the
@@ -22,14 +21,14 @@ PYBIND11_MODULE(CLUE_Convolutional_Kernels, m) {
   using Descriptor = clue::internal::MetricDescriptor<float>;
   using Tag = Descriptor::Tag;
 
-  py::class_<Descriptor>(m, "MetricDescriptor");
+  nb::class_<Descriptor>(m, "MetricDescriptor");
 
   m.def(
       "EuclideanMetric",
       [](std::vector<float> weights) {
         return Descriptor{Tag::WeightedEuclidean, std::move(weights)};
       },
-      py::arg("weights") = std::vector<float>{},
+      nb::arg("weights") = std::vector<float>{},
       "Euclidean (L2) distance metric. Optionally pass one weight per coordinate dimension; "
       "omit or pass an empty list for the unweighted variant.");
 
@@ -43,7 +42,7 @@ PYBIND11_MODULE(CLUE_Convolutional_Kernels, m) {
       [](std::vector<float> weights) {
         return Descriptor{Tag::WeightedChebyshev, std::move(weights)};
       },
-      py::arg("weights") = std::vector<float>{},
+      nb::arg("weights") = std::vector<float>{},
       "Chebyshev (L-infinity) distance metric. Optionally pass one weight per coordinate "
       "dimension; omit or pass an empty list for the unweighted variant.");
 
@@ -52,7 +51,7 @@ PYBIND11_MODULE(CLUE_Convolutional_Kernels, m) {
       [](std::vector<float> periods) {
         return Descriptor{Tag::PeriodicEuclidean, std::move(periods)};
       },
-      py::arg("periods"),
+      nb::arg("periods"),
       "Periodic Euclidean metric. Pass one period per coordinate dimension; "
       "a period of 0 means the dimension is not periodic.");
 }

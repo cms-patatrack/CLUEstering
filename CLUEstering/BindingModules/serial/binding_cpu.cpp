@@ -8,16 +8,11 @@
 
 #include "../Run.hpp"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/functional.h>
-#include <pybind11/numpy.h>
-
-namespace py = pybind11;
+#include <nanobind/nanobind.h>
 
 namespace alpaka_serial_sync {
 
-  PYBIND11_MODULE(CLUE_CPU_Serial, m) {
+  NB_MODULE(CLUE_CPU_Serial, m) {
     m.doc() = "Binding of the CLUE algorithm running serially on CPU";
 
     m.def("listDevices",

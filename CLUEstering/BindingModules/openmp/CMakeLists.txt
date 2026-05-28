@@ -1,4 +1,4 @@
-pybind11_add_module(CLUE_CPU_OMP NO_EXTRAS SHARED binding_cpu_omp.cpp)
+nanobind_add_module(CLUE_CPU_OMP NB_STATIC binding_cpu_omp.cpp)
 target_include_directories(CLUE_CPU_OMP
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_link_libraries(CLUE_CPU_OMP PRIVATE alpaka::alpaka Boost::atomic)
@@ -6,14 +6,7 @@ target_compile_definitions(
   CLUE_CPU_OMP PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
 target_link_libraries(CLUE_CPU_OMP PRIVATE OpenMP::OpenMP_CXX)
 target_compile_options(CLUE_CPU_OMP PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/bigobj>)
-target_precompile_headers(
-  CLUE_CPU_OMP
-  PRIVATE
-  <alpaka/alpaka.hpp>
-  <pybind11/pybind11.h>
-  <pybind11/numpy.h>
-  <pybind11/stl.h>
-  <pybind11/functional.h>)
+target_precompile_headers(CLUE_CPU_OMP REUSE_FROM CLUE_Convolutional_Kernels)
 set_target_properties(
   CLUE_CPU_OMP
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY

@@ -8,16 +8,11 @@
 
 #include "../Run.hpp"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/functional.h>
-#include <pybind11/numpy.h>
-
-namespace py = pybind11;
+#include <nanobind/nanobind.h>
 
 namespace alpaka_tbb_async {
 
-  PYBIND11_MODULE(CLUE_CPU_TBB, m) {
+  NB_MODULE(CLUE_CPU_TBB, m) {
     m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
 
     m.def("listDevices",

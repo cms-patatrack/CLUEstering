@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 1
-          submodules: true
+          submodules: recursive
 
       - name: Cache apt packages
         uses: actions/cache@v6
