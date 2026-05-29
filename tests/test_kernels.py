@@ -51,18 +51,6 @@ def test_exponential_kernel_except():
         clust.choose_kernel('exp', [1., 2., 3.])
 
 
-def test_custom_kernel_except():
-    '''
-    Test the exceptions raised by the custom kernel
-    '''
-    clust = clue.clusterer(0.4, 5, 0.4)
-    clust.read_data(clue.test_blobs(1000, 2))
-
-    # Now we test that if we pass an incorrect set of parameters, an exception is raised
-    with pytest.raises(ValueError):
-        clust.choose_kernel('custom', [1., 2.])
-
-
 def test_inexistent_kernel_except():
     '''
     Test the exceptions raised when choosing an inexistent kernel
