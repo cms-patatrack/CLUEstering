@@ -4,6 +4,8 @@
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/internal/math/math.hpp"
 
+#include <concepts>
+#include <stdexcept>
 #include <alpaka/alpaka.hpp>
 
 namespace clue {
@@ -33,7 +35,7 @@ namespace clue {
                                                value_type gaus_std,
                                                value_type gaus_amplitude)
       : m_gaus_avg{gaus_avg}, m_gaus_std{gaus_std}, m_gaus_amplitude{gaus_amplitude} {
-    if (gaus_std <= value_type{0} || gaus_amplitude <= value_type{0} || gaus_avg <= value_type{0}) {
+    if (gaus_std <= value_type{0} || gaus_amplitude <= value_type{0}) {
       throw std::invalid_argument("Gaussian kernel parameters must be positive.");
     }
   }
