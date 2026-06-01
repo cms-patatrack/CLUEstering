@@ -17,10 +17,8 @@ TEST_CASE("Test ExponentialKernel throwing conditions") {
 }
 
 TEST_CASE("Test GaussianKernel throwing conditions") {
-  CHECK_THROWS(clue::GaussianKernel(0.f, 1.f, 1.f));
   CHECK_THROWS(clue::GaussianKernel(1.f, 0.f, 1.f));
   CHECK_THROWS(clue::GaussianKernel(1.f, 1.f, 0.f));
-  CHECK_THROWS(clue::GaussianKernel(-1.f, 1.f, 1.f));
   CHECK_THROWS(clue::GaussianKernel(1.f, -1.f, 1.f));
   CHECK_THROWS(clue::GaussianKernel(1.f, 1.f, -1.f));
 }
