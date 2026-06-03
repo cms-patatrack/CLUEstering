@@ -29,12 +29,14 @@ namespace clue::detail {
             std::size_t N_,
             std::floating_point TData,
             concepts::convolutional_kernel KernelType,
-            concepts::distance_metric<Ndim> DistanceMetric>
+            concepts::distance_metric<Ndim> DistanceMetric,
+            std::floating_point TPointsData = TData>
+    requires std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>
   ALPAKA_FN_ACC void for_recursion(const TAcc& acc,
                                    std::array<int32_t, Ndim>& base_vec,
                                    const clue::SearchBoxBins<Ndim>& search_box,
                                    internal::TilesView<Ndim, TData>& tiles,
-                                   PointsView<Ndim, TData>& dev_points,
+                                   PointsView<Ndim, TPointsData>& dev_points,
                                    const KernelType& kernel,
                                    const std::array<TData, Ndim + 1>& coords_i,
                                    TData& rho_i,
@@ -85,11 +87,13 @@ namespace clue::detail {
               std::size_t Ndim,
               std::floating_point TData,
               concepts::convolutional_kernel KernelType,
-              concepts::distance_metric<Ndim> DistanceMetric>
-      requires(alpaka::Dim<TAcc>::value == 1)
+              concepts::distance_metric<Ndim> DistanceMetric,
+              std::floating_point TPointsData = TData>
+      requires(alpaka::Dim<TAcc>::value == 1 &&
+               std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim, TData> dev_tiles,
-                                  PointsView<Ndim, TData> dev_points,
+                                  PointsView<Ndim, TPointsData> dev_points,
                                   const KernelType& kernel,
                                   TData density_radius,
                                   DistanceMetric metric,
@@ -130,12 +134,14 @@ namespace clue::detail {
             std::size_t Ndim,
             std::size_t N_,
             std::floating_point TData,
-            concepts::distance_metric<Ndim> DistanceMetric>
+            concepts::distance_metric<Ndim> DistanceMetric,
+            std::floating_point TPointsData = TData>
+    requires std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>
   ALPAKA_FN_ACC void for_recursion_nearest_higher(const TAcc& acc,
                                                   std::array<int32_t, Ndim>& base_vec,
                                                   const clue::SearchBoxBins<Ndim>& search_box,
                                                   internal::TilesView<Ndim, TData>& tiles,
-                                                  PointsView<Ndim, TData>& dev_points,
+                                                  PointsView<Ndim, TPointsData>& dev_points,
                                                   const std::array<TData, Ndim + 1>& coords_i,
                                                   TData rho_i,
                                                   TData& delta_i,
@@ -201,11 +207,13 @@ namespace clue::detail {
     template <typename TAcc,
               std::size_t Ndim,
               std::floating_point TData,
-              concepts::distance_metric<Ndim> DistanceMetric>
-      requires(alpaka::Dim<TAcc>::value == 1)
+              concepts::distance_metric<Ndim> DistanceMetric,
+              std::floating_point TPointsData = TData>
+      requires(alpaka::Dim<TAcc>::value == 1 &&
+               std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim, TData> dev_tiles,
-                                  PointsView<Ndim, TData> dev_points,
+                                  PointsView<Ndim, TPointsData> dev_points,
                                   TData outlier_distance,
                                   TData seeding_distance,
                                   TData min_density,
@@ -317,11 +325,13 @@ namespace clue::detail {
             std::size_t Ndim,
             std::floating_point TData,
             concepts::convolutional_kernel KernelType,
-            concepts::distance_metric<Ndim> DistanceMetric>
+            concepts::distance_metric<Ndim> DistanceMetric,
+            std::floating_point TPointsData = TData>
+    requires std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>
   inline void computeLocalDensity(TQueue& queue,
                                   const WorkDiv& work_division,
                                   internal::TilesView<Ndim, TData>& tiles,
-                                  PointsView<Ndim, TData>& dev_points,
+                                  PointsView<Ndim, TPointsData>& dev_points,
                                   KernelType&& kernel,
                                   TData density_radius,
                                   const DistanceMetric& metric,
@@ -341,12 +351,14 @@ namespace clue::detail {
             concepts::queue TQueue,
             std::size_t Ndim,
             std::floating_point TData,
-            concepts::distance_metric<Ndim> DistanceMetric>
-    requires(alpaka::Dim<TAcc>::value == 1)
+            concepts::distance_metric<Ndim> DistanceMetric,
+            std::floating_point TPointsData = TData>
+    requires(alpaka::Dim<TAcc>::value == 1 &&
+             std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
   inline void computeNearestHighers(TQueue& queue,
                                     const WorkDiv& work_division,
                                     internal::TilesView<Ndim, TData>& tiles,
-                                    PointsView<Ndim, TData>& dev_points,
+                                    PointsView<Ndim, TPointsData>& dev_points,
                                     TData outlier_distance,
                                     TData seeding_distance,
                                     TData min_density,
