@@ -8,7 +8,6 @@ from glob import glob
 import random as rnd
 from math import sqrt
 import time
-import types
 from typing import Union
 import matplotlib.pyplot as plt
 import numpy as np
@@ -426,20 +425,16 @@ class clusterer:
 
     def choose_kernel(self,
                       choice: str,
-                      parameters: Union[list, None] = None,
-                      function: types.FunctionType = lambda: 0) -> None:
+                      parameters: Union[list, None] = None) -> None:
         """
         Set the kernel for local density calculation.
 
         The default kernel is a flat kernel with parameter 0.5.
 
-        :param choice: Kernel type to use. Options are: 'flat', 'exp', 'gaus', or 'custom'.
+        :param choice: Kernel type to use. Options are: 'flat', 'exp', or 'gaus'.
         :type choice: str
-        :param parameters: Parameters for the kernel. Required for 'flat', 'exp', 'gaus'.
-            Not required for 'custom'.
+        :param parameters: Parameters for the kernel.
         :type parameters: list or None
-        :param function: Function to use for a custom kernel.
-        :type function: function, optional
 
         :raises ValueError: If the number of parameters is invalid or the kernel choice is invalid.
 
@@ -457,11 +452,8 @@ class clusterer:
             if len(parameters) != 3:
                 raise ValueError("Wrong number of parameters. The gaussian kernel requires 3 parameters.")
             self._kernel = clue_kernels.GaussianKernel(parameters[0], parameters[1], parameters[2])
-        elif choice == "custom":
-            if len(parameters) != 0:
-                raise ValueError("Wrong number of parameters. Custom kernels requires 0 parameters.")
         else:
-            raise ValueError("Invalid kernel. Allowed choices are: flat, exp, gaus, custom.")
+            raise ValueError("Invalid kernel. Allowed choices are: flat, exp, gaus.")
 
 
     def choose_metric(self,
