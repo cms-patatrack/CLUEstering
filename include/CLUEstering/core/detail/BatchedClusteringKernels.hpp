@@ -156,7 +156,7 @@ namespace clue::detail {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
                                   PointsView<Ndim, TData> dev_points,
-                                  TData min_density,
+                                  std::remove_cv_t<TData> min_density,
                                   clue::internal::DeviceVectorView event_associations,
                                   const auto* event_offsets,
                                   std::size_t max_event_size) const {
@@ -335,7 +335,7 @@ namespace clue::detail {
   inline void findClusterSeedsBatched(TQueue& queue,
                                       clue::internal::SeedArray<>& seeds,
                                       PointsView<Ndim, TData>& dev_points,
-                                      TData min_density,
+                                      std::remove_cv_t<TData> min_density,
                                       const auto& event_offsets,
                                       std::size_t max_event_size,
                                       const clue::internal::DeviceVectorView& event_associations,
