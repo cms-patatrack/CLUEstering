@@ -85,8 +85,10 @@ namespace clue::internal {
       m_view.nperdim = nperdim;
     }
 
+    template <typename T>
+      requires std::same_as<std::remove_cv_t<T>, TData>
     struct GetGlobalBin {
-      PointsView<Ndim, TData> pointsView;
+      PointsView<Ndim, T> pointsView;
       TilesView<Ndim, TData> tilesView;
 
       ALPAKA_FN_ACC int32_t operator()(int32_t index, std::size_t event = 0) const {
@@ -100,19 +102,22 @@ namespace clue::internal {
       }
     };
 
-    template <clue::concepts::accelerator TAcc, clue::concepts::queue TQueue>
-
+    template <clue::concepts::accelerator TAcc,
+              clue::concepts::queue TQueue,
+              std::floating_point TInput>
     ALPAKA_FN_HOST void fill(TQueue& queue,
-                             PointsDevice<Ndim, TData, TDev>& d_points,
+                             PointsDevice<Ndim, TInput, TDev>& d_points,
                              size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
       m_assoc.template fill<TAcc>(size, GetGlobalBin{pointsView, m_view}, queue);
     }
 
-    template <clue::concepts::accelerator TAcc, clue::concepts::queue TQueue>
+    template <clue::concepts::accelerator TAcc,
+              clue::concepts::queue TQueue,
+              std::floating_point TInput>
     ALPAKA_FN_HOST void fill_batch(TQueue& queue,
-                                   PointsDevice<Ndim, TData, TDev>& d_points,
+                                   PointsDevice<Ndim, TInput, TDev>& d_points,
                                    size_t size,
                                    const auto& event_offsets,
                                    std::size_t max_event_size) {
