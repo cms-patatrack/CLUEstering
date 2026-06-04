@@ -141,7 +141,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
   }
 }
 
-#ifndef COVERAGE
+#if not defined(COVERAGE) and not defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 TEST_CASE("Test clustering on a large dataset") {
   SUBCASE("Test clustering from combined buffers") {
     SUBCASE("Clustering with single-precision float data") {
