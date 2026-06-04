@@ -2,8 +2,9 @@
 #pragma once
 
 #include "CLUEstering/data_structures/AssociationMap.hpp"
-#include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
+#include "CLUEstering/data_structures/internal/PointsCommon.hpp"
+#include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
@@ -90,6 +91,10 @@ namespace clue::internal {
     struct GetGlobalBin {
       PointsView<Ndim, T> pointsView;
       TilesView<Ndim, TData> tilesView;
+
+      ALPAKA_FN_HOST_ACC GetGlobalBin(PointsView<Ndim, T> pointsView,
+                                      TilesView<Ndim, TData> tilesView)
+          : pointsView(pointsView), tilesView(tilesView) {}
 
       ALPAKA_FN_ACC int32_t operator()(int32_t index, std::size_t event = 0) const {
         value_type coords[Ndim];
