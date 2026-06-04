@@ -95,7 +95,9 @@ namespace clue {
       }
       return coord_spans;
     }
-    ALPAKA_FN_HOST_ACC auto coords() {
+    ALPAKA_FN_HOST_ACC auto coords()
+      requires std::same_as<element_type, value_type>
+    {
       std::array<std::span<value_type>, Ndim> coord_spans;
       for (std::size_t dim = 0; dim < Ndim; ++dim) {
         coord_spans[dim] = std::span<value_type>(m_coords[dim], m_n);
@@ -103,7 +105,11 @@ namespace clue {
       return coord_spans;
     }
     ALPAKA_FN_HOST_ACC auto weights() const { return std::span<const value_type>(m_weight, m_n); }
-    ALPAKA_FN_HOST_ACC auto weights() { return std::span<value_type>(m_weight, m_n); }
+    ALPAKA_FN_HOST_ACC auto weights()
+      requires std::same_as<element_type, value_type>
+    {
+      return std::span<value_type>(m_weight, m_n);
+    }
     ALPAKA_FN_HOST_ACC auto cluster_index() const {
       assert(m_cluster_index != nullptr &&
              "The cluster indexes have not been allocated yet, so they cannot be accessed");
