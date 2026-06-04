@@ -77,10 +77,9 @@ namespace clue {
         using PType = std::remove_cvref_t<decltype(d_points)>;
         auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
         cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
-        alpaka::memcpy(
-            queue,
-            make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
-            make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
+        alpaka::memcpy(queue,
+                       make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
+                       make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
         d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
       }
     });
@@ -117,10 +116,9 @@ namespace clue {
         using PType = std::remove_cvref_t<decltype(d_points)>;
         auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
         cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
-        alpaka::memcpy(
-            queue,
-            make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
-            make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
+        alpaka::memcpy(queue,
+                       make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
+                       make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
         d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
       }
     });
