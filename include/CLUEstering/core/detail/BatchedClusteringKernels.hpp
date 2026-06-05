@@ -30,11 +30,13 @@ namespace clue::detail {
               std::size_t Ndim,
               std::floating_point TData,
               concepts::convolutional_kernel KernelType,
-              concepts::distance_metric<Ndim> DistanceMetric>
-      requires(alpaka::Dim<TAcc>::value == 2)
+              concepts::distance_metric<Ndim> DistanceMetric,
+              std::floating_point TPointsData = TData>
+      requires(alpaka::Dim<TAcc>::value == 2 &&
+               std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim, TData> dev_tiles,
-                                  PointsView<Ndim, TData> dev_points,
+                                  PointsView<Ndim, TPointsData> dev_points,
                                   const KernelType& kernel,
                                   TData density_radius,
                                   DistanceMetric metric,
@@ -83,11 +85,13 @@ namespace clue::detail {
     template <typename TAcc,
               std::size_t Ndim,
               std::floating_point TData,
-              concepts::distance_metric<Ndim> DistanceMetric>
-      requires(alpaka::Dim<TAcc>::value == 2)
+              concepts::distance_metric<Ndim> DistanceMetric,
+              std::floating_point TPointsData = TData>
+      requires(alpaka::Dim<TAcc>::value == 2 &&
+               std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   internal::TilesView<Ndim, TData> dev_tiles,
-                                  PointsView<Ndim, TData> dev_points,
+                                  PointsView<Ndim, TPointsData> dev_points,
                                   TData outlier_distance,
                                   TData seeding_distance,
                                   TData min_density,
@@ -152,7 +156,7 @@ namespace clue::detail {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
                                   PointsView<Ndim, TData> dev_points,
-                                  TData min_density,
+                                  std::remove_cv_t<TData> min_density,
                                   clue::internal::DeviceVectorView event_associations,
                                   const auto* event_offsets,
                                   std::size_t max_event_size) const {
@@ -203,11 +207,13 @@ namespace clue::detail {
             std::size_t Ndim,
             std::floating_point TData,
             concepts::convolutional_kernel KernelType,
-            concepts::distance_metric<Ndim> DistanceMetric>
-    requires(alpaka::Dim<TAcc>::value == 2)
+            concepts::distance_metric<Ndim> DistanceMetric,
+            std::floating_point TPointsData = TData>
+    requires(alpaka::Dim<TAcc>::value == 2 &&
+             std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
   inline void computeLocalDensityBatched(TQueue& queue,
                                          internal::TilesView<Ndim, TData>& tiles,
-                                         PointsView<Ndim, TData>& dev_points,
+                                         PointsView<Ndim, TPointsData>& dev_points,
                                          KernelType&& kernel,
                                          TData density_radius,
                                          const DistanceMetric& metric,
@@ -235,11 +241,13 @@ namespace clue::detail {
             concepts::queue TQueue,
             std::size_t Ndim,
             std::floating_point TData,
-            concepts::distance_metric<Ndim> DistanceMetric>
-    requires(alpaka::Dim<TAcc>::value == 2)
+            concepts::distance_metric<Ndim> DistanceMetric,
+            std::floating_point TPointsData = TData>
+    requires(alpaka::Dim<TAcc>::value == 2 &&
+             std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
   inline void computeNearestHighersBatched(TQueue& queue,
                                            internal::TilesView<Ndim, TData>& tiles,
-                                           PointsView<Ndim, TData>& dev_points,
+                                           PointsView<Ndim, TPointsData>& dev_points,
                                            TData outlier_distance,
                                            TData seeding_distance,
                                            TData min_density,
@@ -327,7 +335,7 @@ namespace clue::detail {
   inline void findClusterSeedsBatched(TQueue& queue,
                                       clue::internal::SeedArray<>& seeds,
                                       PointsView<Ndim, TData>& dev_points,
-                                      TData min_density,
+                                      std::remove_cv_t<TData> min_density,
                                       const auto& event_offsets,
                                       std::size_t max_event_size,
                                       const clue::internal::DeviceVectorView& event_associations,

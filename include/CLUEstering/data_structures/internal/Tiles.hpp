@@ -2,8 +2,9 @@
 #pragma once
 
 #include "CLUEstering/data_structures/AssociationMap.hpp"
-#include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
+#include "CLUEstering/data_structures/internal/PointsCommon.hpp"
+#include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
@@ -91,6 +92,10 @@ namespace clue::internal {
       PointsView<Ndim, T> pointsView;
       TilesView<Ndim, TData> tilesView;
 
+      ALPAKA_FN_HOST_ACC GetGlobalBin(PointsView<Ndim, T> pointsView,
+                                      TilesView<Ndim, TData> tilesView)
+          : pointsView(pointsView), tilesView(tilesView) {}
+
       ALPAKA_FN_ACC int32_t operator()(int32_t index, std::size_t event = 0) const {
         value_type coords[Ndim];
         for (auto dim = 0u; dim < Ndim; ++dim) {
@@ -110,7 +115,7 @@ namespace clue::internal {
                              size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
-      m_assoc.template fill<TAcc>(size, GetGlobalBin{pointsView, m_view}, queue);
+      m_assoc.template fill<TAcc>(size, GetGlobalBin(pointsView, m_view), queue);
     }
 
     template <clue::concepts::accelerator TAcc,
@@ -124,7 +129,7 @@ namespace clue::internal {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
       m_assoc.template fill_batch<TAcc>(
-          queue, size, GetGlobalBin{pointsView, m_view}, event_offsets, max_event_size);
+          queue, size, GetGlobalBin(pointsView, m_view), event_offsets, max_event_size);
     }
 
     ALPAKA_FN_HOST inline clue::device_buffer<TDev, CoordinateExtremes<Ndim, value_type>> minMax()
