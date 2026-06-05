@@ -32,8 +32,7 @@ void run(TInput dc,
          int32_t n_points,
          const Kernel& kernel,
          const clue::internal::MetricDescriptor<TInput>& metric_desc,
-         clue::Queue queue,
-         size_t block_size) {
+         clue::Queue queue) {
   clue::Clusterer<Ndim, TInput> algo(queue, dc, rhoc, dm, seed_dc, pPBin);
   algo.setWrappedCoordinates(std::move(wrapped));
 
@@ -42,10 +41,9 @@ void run(TInput dc,
 
   clue::internal::apply_metric<Ndim>(metric_desc, [&](auto&& metric) {
     if (batch_sample_sizes.has_value()) [[unlikely]] {
-      algo.make_clusters(
-          queue, h_points, d_points, batch_sample_sizes.value(), metric, kernel, block_size);
+      algo.make_clusters(queue, h_points, d_points, batch_sample_sizes.value(), metric, kernel);
     } else [[likely]] {
-      algo.make_clusters(queue, h_points, d_points, metric, kernel, block_size);
+      algo.make_clusters(queue, h_points, d_points, metric, kernel);
     }
   });
 }
@@ -80,7 +78,6 @@ namespace ALPAKA_BACKEND {
                int Ndim,
                std::optional<py::array_t<uint32_t>> batch_sample_sizes,
                int32_t n_points,
-               std::size_t block_size,
                std::size_t device_id,
                const clue::internal::MetricDescriptor<TInput>& metric_desc) {
     auto rData = data.request();
@@ -111,8 +108,7 @@ namespace ALPAKA_BACKEND {
                                      n_points,
                                      kernel,
                                      metric_desc,
-                                     queue,
-                                     block_size);
+                                     queue);
     };
     switch (Ndim) {
       [[unlikely]] case (1):

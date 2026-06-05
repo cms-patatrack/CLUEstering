@@ -100,12 +100,11 @@ namespace clue {
   inline void Clusterer<Ndim, DataType>::make_clusters(Queue& queue,
                                                        clue::PointsHost<Ndim, InputType>& h_points,
                                                        const DistanceMetric& metric,
-                                                       const Kernel& kernel,
-                                                       std::size_t block_size) {
+                                                       const Kernel& kernel) {
     auto d_points = clue::PointsDevice<Ndim, value_type>(queue, h_points.size());
 
     setup(queue, h_points, d_points);
-    make_clusters_impl(d_points, metric, kernel, queue, block_size);
+    make_clusters_impl(d_points, metric, kernel, queue);
     clue::copyToHost(queue, h_points, d_points);
     internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
     alpaka::wait(queue);
@@ -116,14 +115,13 @@ namespace clue {
             concepts::distance_metric<Ndim> DistanceMetric>
   inline void Clusterer<Ndim, DataType>::make_clusters(clue::PointsHost<Ndim, InputType>& h_points,
                                                        const DistanceMetric& metric,
-                                                       const Kernel& kernel,
-                                                       std::size_t block_size) {
+                                                       const Kernel& kernel) {
     auto device = alpaka::getDevByIdx(Platform{}, 0u);
     Queue queue(device);
     auto d_points = clue::PointsDevice<Ndim, value_type>(queue, h_points.size());
 
     setup(queue, h_points, d_points);
-    make_clusters_impl(d_points, metric, kernel, queue, block_size);
+    make_clusters_impl(d_points, metric, kernel, queue);
     clue::copyToHost(queue, h_points, d_points);
     internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
     alpaka::wait(queue);
@@ -137,10 +135,9 @@ namespace clue {
       clue::PointsHost<Ndim, InputType>& h_points,
       clue::PointsDevice<Ndim, value_type>& dev_points,
       const DistanceMetric& metric,
-      const Kernel& kernel,
-      std::size_t block_size) {
+      const Kernel& kernel) {
     setup(queue, h_points, dev_points);
-    make_clusters_impl(dev_points, metric, kernel, queue, block_size);
+    make_clusters_impl(dev_points, metric, kernel, queue);
     clue::copyToHost(queue, h_points, dev_points);
     internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
     alpaka::wait(queue);
@@ -153,10 +150,9 @@ namespace clue {
       Queue& queue,
       clue::PointsDevice<Ndim, InputType>& dev_points,
       const DistanceMetric& metric,
-      const Kernel& kernel,
-      std::size_t block_size) {
+      const Kernel& kernel) {
     detail::setup_tiles(queue, dev_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates);
-    make_clusters_impl(dev_points, metric, kernel, queue, block_size);
+    make_clusters_impl(dev_points, metric, kernel, queue);
     alpaka::wait(queue);
   }
 
@@ -170,11 +166,10 @@ namespace clue {
       clue::PointsDevice<Ndim, value_type>& dev_points,
       std::span<const uint32_t> batch_item_sizes,
       const DistanceMetric& metric,
-      const Kernel& kernel,
-      std::size_t block_size) {
+      const Kernel& kernel) {
     const auto batch_size = batch_item_sizes.size();
     setup_batch(queue, h_points, dev_points, batch_size);
-    make_clusters_batched(dev_points, batch_item_sizes, metric, kernel, queue, block_size);
+    make_clusters_batched(dev_points, batch_item_sizes, metric, kernel, queue);
     clue::copyToHost(queue, h_points, dev_points);
   }
 
@@ -187,11 +182,10 @@ namespace clue {
       clue::PointsDevice<Ndim, InputType>& dev_points,
       std::span<const uint32_t> batch_item_sizes,
       const DistanceMetric& metric,
-      const Kernel& kernel,
-      std::size_t block_size) {
+      const Kernel& kernel) {
     const auto batch_size = batch_item_sizes.size();
     setup_batch(queue, dev_points, batch_size);
-    make_clusters_batched(dev_points, batch_item_sizes, metric, kernel, queue, block_size);
+    make_clusters_batched(dev_points, batch_item_sizes, metric, kernel, queue);
   }
 
   template <std::size_t Ndim, std::floating_point DataType>
@@ -260,8 +254,8 @@ namespace clue {
   void Clusterer<Ndim, DataType>::make_clusters_impl(clue::PointsDevice<Ndim, InputType>& dev_points,
                                                      const DistanceMetric& metric,
                                                      const Kernel& kernel,
-                                                     Queue& queue,
-                                                     std::size_t block_size) {
+                                                     Queue& queue) {
+    constexpr std::size_t block_size = 256;
     const auto n_points = dev_points.size();
     m_tiles->template fill<internal::Acc>(queue, dev_points, n_points);
 
@@ -308,8 +302,8 @@ namespace clue {
       std::span<const uint32_t> batch_item_sizes,
       const DistanceMetric& metric,
       const Kernel& kernel,
-      Queue& queue,
-      std::size_t block_size) {
+      Queue& queue) {
+    constexpr std::size_t block_size = 256;
     const auto batch_size = batch_item_sizes.size();
 
     const auto max_event_size = std::reduce(
