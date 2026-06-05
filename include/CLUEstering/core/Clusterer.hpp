@@ -84,8 +84,7 @@ namespace clue {
     void make_clusters_impl(clue::PointsDevice<Ndim, InputType>& dev_points,
                             const DistanceMetric& metric,
                             const Kernel& kernel,
-                            Queue& queue,
-                            std::size_t block_size);
+                            Queue& queue);
     template <
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
@@ -94,8 +93,7 @@ namespace clue {
                                std::span<const uint32_t> batch_item_sizes,
                                const DistanceMetric& metric,
                                const Kernel& kernel,
-                               Queue& queue,
-                               std::size_t block_size);
+                               Queue& queue);
 
   public:
     /// @brief Constuct a Clusterer object
@@ -149,7 +147,6 @@ namespace clue {
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities,
     /// default is FlatKernel with height 0.5
-    /// @param block_size The size of the blocks to use for clustering, default is 256
     template <
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
@@ -157,8 +154,7 @@ namespace clue {
     void make_clusters(Queue& queue,
                        clue::PointsHost<Ndim, InputType>& h_points,
                        const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f},
-                       std::size_t block_size = 256);
+                       const Kernel& kernel = FlatKernel<value_type>{.5f});
     /// @brief Construct the clusters from host points
     ///
     /// @tparam InputType The data type of the input points, which must be a floating-point type.
@@ -169,7 +165,6 @@ namespace clue {
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities,
     /// default is FlatKernel with height 0.5
-    /// @param block_size The size of the blocks to use for clustering, default is 256
     /// @note This method creates a temporary queue for the operations on the device
     template <
         std::floating_point InputType,
@@ -177,8 +172,7 @@ namespace clue {
         concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
     void make_clusters(clue::PointsHost<Ndim, InputType>& h_points,
                        const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f},
-                       std::size_t block_size = 256);
+                       const Kernel& kernel = FlatKernel<value_type>{.5f});
     /// @brief Construct the clusters from host and device points
     ///
     /// @tparam InputType The data type of the input points, which must be a floating-point type.
@@ -191,7 +185,6 @@ namespace clue {
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities,
     /// default is FlatKernel with height 0.5
-    /// @param block_size The size of the blocks to use for clustering, default is 256
     template <
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
@@ -200,8 +193,7 @@ namespace clue {
                        clue::PointsHost<Ndim, InputType>& h_points,
                        clue::PointsDevice<Ndim, value_type>& dev_points,
                        const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f},
-                       std::size_t block_size = 256);
+                       const Kernel& kernel = FlatKernel<value_type>{.5f});
     /// @brief Construct the clusters from device points
     ///
     /// @tparam InputType The data type of the input points, which must be a floating-point type.
@@ -213,7 +205,6 @@ namespace clue {
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities,
     /// default is FlatKernel with height 0.5
-    /// @param block_size The size of the blocks to use for clustering, default is 256
     template <
         std::floating_point InputType,
         concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
@@ -221,8 +212,7 @@ namespace clue {
     void make_clusters(Queue& queue,
                        clue::PointsDevice<Ndim, InputType>& dev_points,
                        const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f},
-                       std::size_t block_size = 256);
+                       const Kernel& kernel = FlatKernel<value_type>{.5f});
 
     /// @brief Construct the clusters from batched host and device points
     ///
@@ -237,7 +227,6 @@ namespace clue {
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities,
     /// default is FlatKernel with height 0.5
-    /// @param block_size The size of the blocks to use for clustering, default is 256
     /// @note The total size of h_points and dev_points must be equal to the sum of batch_item_sizes
     template <
         std::floating_point InputType,
@@ -248,8 +237,7 @@ namespace clue {
                        clue::PointsDevice<Ndim, value_type>& dev_points,
                        std::span<const uint32_t> batch_item_sizes,
                        const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f},
-                       std::size_t block_size = 256);
+                       const Kernel& kernel = FlatKernel<value_type>{.5f});
 
     /// @brief Construct the clusters from batched device points
     ///
@@ -263,7 +251,6 @@ namespace clue {
     /// @param metric The distance metric to use for clustering, default is EuclideanMetric
     /// @param kernel The convolutional kernel to use for computing the local densities,
     /// default is FlatKernel with height 0.5
-    /// @param block_size The size of the blocks to use for clustering, default is 256
     /// @note The total size of h_points and dev_points must be equal to the sum of batch_item_sizes
     template <
         std::floating_point InputType,
@@ -273,8 +260,7 @@ namespace clue {
                        clue::PointsDevice<Ndim, InputType>& dev_points,
                        std::span<const uint32_t> batch_item_sizes,
                        const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f},
-                       std::size_t block_size = 256);
+                       const Kernel& kernel = FlatKernel<value_type>{.5f});
 
     /// @brief Specify which coordinates are periodic
     ///
