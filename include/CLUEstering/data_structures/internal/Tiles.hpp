@@ -115,7 +115,7 @@ namespace clue::internal {
                              size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
-      m_assoc.template fill<TAcc>(size, GetGlobalBin{pointsView, m_view}, queue);
+      m_assoc.template fill<TAcc>(size, GetGlobalBin(pointsView, m_view), queue);
     }
 
     template <clue::concepts::accelerator TAcc,
@@ -129,7 +129,7 @@ namespace clue::internal {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
       m_assoc.template fill_batch<TAcc>(
-          queue, size, GetGlobalBin{pointsView, m_view}, event_offsets, max_event_size);
+          queue, size, GetGlobalBin(pointsView, m_view), event_offsets, max_event_size);
     }
 
     ALPAKA_FN_HOST inline clue::device_buffer<TDev, CoordinateExtremes<Ndim, value_type>> minMax()
