@@ -52,8 +52,14 @@ namespace clue::detail {
         auto j = tiles[tile_idx][tile_it];
         assert(j >= 0 && j < dev_points.size());
 
-        auto coords_j = dev_points[j];
-        auto distance = metric(coords_i, coords_j);
+        const auto distance = [&]() -> TData {
+          if constexpr (concepts::detail::view_distance_metric<DistanceMetric, Ndim>) {
+            return metric(
+                dev_points, static_cast<std::size_t>(point_id), static_cast<std::size_t>(j));
+          } else {
+            return metric(coords_i, dev_points[j]);
+          }
+        }();
         assert(distance >= TData{0});
 
         auto k = kernel(acc, distance, point_id, j);
@@ -104,8 +110,11 @@ namespace clue::detail {
 
         clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - density_radius,
-                                                            coords_i[dim] + density_radius);
+          const auto sigma_i = dev_points.has_sigma(dim) ? dev_points.sigma(dim)[i] : TData{0};
+          const auto box_radius =
+              math::max(density_radius, density_radius * sigma_i * math::sqrt(TData{2}));
+          searchbox_extremes[dim] =
+              clue::nostd::make_array(coords_i[dim] - box_radius, coords_i[dim] + box_radius);
         }
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
@@ -167,8 +176,14 @@ namespace clue::detail {
             found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
 
         if (found_higher_in_tile) {
-          auto coords_j = dev_points[j];
-          auto distance = metric(coords_i, coords_j);
+          const auto distance = [&]() -> TData {
+            if constexpr (concepts::detail::view_distance_metric<DistanceMetric, Ndim>) {
+              return metric(
+                  dev_points, static_cast<std::size_t>(point_id), static_cast<std::size_t>(j));
+            } else {
+              return metric(coords_i, dev_points[j]);
+            }
+          }();
           assert(distance >= TData{0});
 
           if (distance <= effective_distance && distance < delta_i) {
@@ -231,8 +246,11 @@ namespace clue::detail {
 
         clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
-          searchbox_extremes[dim] = clue::nostd::make_array(coords_i[dim] - outlier_distance,
-                                                            coords_i[dim] + outlier_distance);
+          const auto sigma_i = dev_points.has_sigma(dim) ? dev_points.sigma(dim)[i] : TData{0};
+          const auto box_radius =
+              math::max(outlier_distance, outlier_distance * sigma_i * math::sqrt(TData{2}));
+          searchbox_extremes[dim] =
+              clue::nostd::make_array(coords_i[dim] - box_radius, coords_i[dim] + box_radius);
         }
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
