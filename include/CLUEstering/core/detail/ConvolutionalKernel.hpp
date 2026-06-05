@@ -19,10 +19,10 @@ namespace clue {
 
   template <std::floating_point TData>
   template <typename TAcc>
-  inline ALPAKA_FN_ACC auto FlatKernel<TData>::operator()(const TAcc&,
-                                                          value_type /*dist_ij*/,
-                                                          int point_id,
-                                                          int j) const {
+  inline ALPAKA_FN_HOST_ACC auto FlatKernel<TData>::operator()(const TAcc&,
+                                                               value_type /*dist_ij*/,
+                                                               int point_id,
+                                                               int j) const {
     if (point_id == j) {
       return value_type{1};
     } else {
@@ -42,10 +42,10 @@ namespace clue {
 
   template <std::floating_point TData>
   template <typename TAcc>
-  inline ALPAKA_FN_ACC auto GaussianKernel<TData>::operator()(const TAcc&,
-                                                              value_type dist_ij,
-                                                              int point_id,
-                                                              int j) const {
+  inline ALPAKA_FN_HOST_ACC auto GaussianKernel<TData>::operator()(const TAcc&,
+                                                                   value_type dist_ij,
+                                                                   int point_id,
+                                                                   int j) const {
     if (point_id == j) {
       return value_type{1};
     } else {
@@ -64,10 +64,10 @@ namespace clue {
 
   template <std::floating_point TData>
   template <typename TAcc>
-  inline ALPAKA_FN_ACC auto ExponentialKernel<TData>::operator()(const TAcc&,
-                                                                 value_type dist_ij,
-                                                                 int point_id,
-                                                                 int j) const {
+  inline ALPAKA_FN_HOST_ACC auto ExponentialKernel<TData>::operator()(const TAcc&,
+                                                                      value_type dist_ij,
+                                                                      int point_id,
+                                                                      int j) const {
     if (point_id == j) {
       return value_type{1};
     } else {
