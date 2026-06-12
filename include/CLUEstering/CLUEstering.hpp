@@ -17,3 +17,4 @@
 #include "CLUEstering/utils/get_device.hpp"
 #include "CLUEstering/utils/get_queue.hpp"
 #include "CLUEstering/utils/scores.hpp"
+#include "CLUEstering/utils/to_dot.hpp"
