@@ -15,13 +15,6 @@ namespace clue {
 
   /// @brief Export clustering results to a DOT format file
   ///
-  /// The graph encodes the full CLUE output:
-  /// - Each point becomes a node; seed points use a double-circle shape.
-  /// - Points are grouped into DOT subgraphs by cluster; outliers (cluster index -1)
-  ///   are placed in a dedicated subgraph with dashed node borders.
-  /// - Directed edges follow the nearest-higher-density (nearest_higher) relation,
-  ///   which is read directly from device memory.
-  ///
   /// @tparam TQueue The type of queue used for device memory copies
   /// @tparam Ndim The number of dimensions of the points
   /// @tparam TData The data type for the point coordinates and weights

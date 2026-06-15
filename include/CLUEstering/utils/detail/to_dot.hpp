@@ -18,10 +18,7 @@
 
 namespace clue {
 
-  template <concepts::queue TQueue,
-            std::size_t Ndim,
-            std::floating_point TData,
-            concepts::device TDev>
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   inline void to_dot(TQueue& queue,
                      const PointsDevice<Ndim, TData, TDev>& d_points,
                      const std::string& file_path) {

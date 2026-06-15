@@ -43,8 +43,8 @@ TEST_CASE("Test to_dot export") {
   std::istringstream line_stream(content);
   std::string line;
   while (std::getline(line_stream, line)) {
-    if (line.size() >= 5 && line[0] == ' ' && line[1] == ' ' && line[2] == ' ' &&
-        line[3] == ' ' && std::isdigit(static_cast<unsigned char>(line[4]))) {
+    if (line.size() >= 5 && line[0] == ' ' && line[1] == ' ' && line[2] == ' ' && line[3] == ' ' &&
+        std::isdigit(static_cast<unsigned char>(line[4]))) {
       ++node_count;
     }
   }
