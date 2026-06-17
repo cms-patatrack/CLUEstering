@@ -37,9 +37,8 @@ namespace clue::internal {
           weights.fill(TData{1});
         } else {
           if (desc.params.size() != Ndim) {
-            throw std::invalid_argument("EuclideanMetric requires exactly " +
-                                        std::to_string(Ndim) + " weight(s), got " +
-                                        std::to_string(desc.params.size()));
+            throw std::invalid_argument("EuclideanMetric requires exactly " + std::to_string(Ndim) +
+                                        " weight(s), got " + std::to_string(desc.params.size()));
           }
           std::copy_n(desc.params.begin(), Ndim, weights.begin());
         }
@@ -70,9 +69,8 @@ namespace clue::internal {
           weights.fill(TData{1});
         } else {
           if (desc.params.size() != Ndim) {
-            throw std::invalid_argument("ChebyshevMetric requires exactly " +
-                                        std::to_string(Ndim) + " weight(s), got " +
-                                        std::to_string(desc.params.size()));
+            throw std::invalid_argument("ChebyshevMetric requires exactly " + std::to_string(Ndim) +
+                                        " weight(s), got " + std::to_string(desc.params.size()));
           }
           std::copy_n(desc.params.begin(), Ndim, weights.begin());
         }
