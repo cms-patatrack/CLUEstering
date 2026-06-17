@@ -16,16 +16,14 @@ namespace clue::internal {
   template <std::floating_point TData>
   struct MetricDescriptor {
     enum class Tag : std::uint8_t {
-      Euclidean,
       WeightedEuclidean,
       PeriodicEuclidean,
       Manhattan,
-      Chebyshev,
       WeightedChebyshev
     };
 
-    Tag tag = Tag::Euclidean;
-    std::vector<TData> params;
+    Tag tag = Tag::WeightedEuclidean;
+    std::vector<TData> params;  // empty means unit weights for weighted metrics
   };
 
   template <std::size_t Ndim, std::floating_point TData, typename Callable>
@@ -33,30 +31,23 @@ namespace clue::internal {
     using Tag = typename MetricDescriptor<TData>::Tag;
 
     switch (desc.tag) {
-      case Tag::Euclidean: {
-        std::forward<Callable>(callable)(clue::EuclideanMetric<Ndim, TData>{});
+      case Tag::WeightedEuclidean: {
+        std::array<TData, Ndim> weights;
+        if (desc.params.empty()) {
+          weights.fill(TData{1});
+        } else {
+          if (desc.params.size() != Ndim) {
+            throw std::invalid_argument("EuclideanMetric requires exactly " + std::to_string(Ndim) +
+                                        " weight(s), got " + std::to_string(desc.params.size()));
+          }
+          std::copy_n(desc.params.begin(), Ndim, weights.begin());
+        }
+        std::forward<Callable>(callable)(clue::WeightedEuclideanMetric<Ndim, TData>{weights});
         return;
       }
 
       case Tag::Manhattan: {
         std::forward<Callable>(callable)(clue::ManhattanMetric<Ndim, TData>{});
-        return;
-      }
-
-      case Tag::Chebyshev: {
-        std::forward<Callable>(callable)(clue::ChebyshevMetric<Ndim, TData>{});
-        return;
-      }
-
-      case Tag::WeightedEuclidean: {
-        if (desc.params.size() != Ndim) {
-          throw std::invalid_argument("WeightedEuclideanMetric requires exactly " +
-                                      std::to_string(Ndim) + " weight(s), got " +
-                                      std::to_string(desc.params.size()));
-        }
-        std::array<TData, Ndim> weights;
-        std::copy_n(desc.params.begin(), Ndim, weights.begin());
-        std::forward<Callable>(callable)(clue::WeightedEuclideanMetric<Ndim, TData>{weights});
         return;
       }
 
@@ -73,13 +64,16 @@ namespace clue::internal {
       }
 
       case Tag::WeightedChebyshev: {
-        if (desc.params.size() != Ndim) {
-          throw std::invalid_argument("WeightedChebyshevMetric requires exactly " +
-                                      std::to_string(Ndim) + " weight(s), got " +
-                                      std::to_string(desc.params.size()));
-        }
         std::array<TData, Ndim> weights;
-        std::copy_n(desc.params.begin(), Ndim, weights.begin());
+        if (desc.params.empty()) {
+          weights.fill(TData{1});
+        } else {
+          if (desc.params.size() != Ndim) {
+            throw std::invalid_argument("ChebyshevMetric requires exactly " + std::to_string(Ndim) +
+                                        " weight(s), got " + std::to_string(desc.params.size()));
+          }
+          std::copy_n(desc.params.begin(), Ndim, weights.begin());
+        }
         std::forward<Callable>(callable)(clue::WeightedChebyshevMetric<Ndim, TData>{weights});
         return;
       }

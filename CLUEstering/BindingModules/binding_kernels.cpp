@@ -24,11 +24,14 @@ PYBIND11_MODULE(CLUE_Convolutional_Kernels, m) {
 
   py::class_<Descriptor>(m, "MetricDescriptor");
 
-  // Parameter-free metrics
   m.def(
       "EuclideanMetric",
-      []() { return Descriptor{Tag::Euclidean, {}}; },
-      "Euclidean (L2) distance metric.");
+      [](std::vector<float> weights) {
+        return Descriptor{Tag::WeightedEuclidean, std::move(weights)};
+      },
+      py::arg("weights") = std::vector<float>{},
+      "Euclidean (L2) distance metric. Optionally pass one weight per coordinate dimension; "
+      "omit or pass an empty list for the unweighted variant.");
 
   m.def(
       "ManhattanMetric",
@@ -37,25 +40,12 @@ PYBIND11_MODULE(CLUE_Convolutional_Kernels, m) {
 
   m.def(
       "ChebyshevMetric",
-      []() { return Descriptor{Tag::Chebyshev, {}}; },
-      "Chebyshev (L-infinity) distance metric.");
-
-  // Parameterised metrics
-  m.def(
-      "WeightedEuclideanMetric",
-      [](std::vector<float> weights) {
-        return Descriptor{Tag::WeightedEuclidean, std::move(weights)};
-      },
-      py::arg("weights"),
-      "Weighted Euclidean metric. Pass one weight per coordinate dimension.");
-
-  m.def(
-      "WeightedChebyshevMetric",
       [](std::vector<float> weights) {
         return Descriptor{Tag::WeightedChebyshev, std::move(weights)};
       },
-      py::arg("weights"),
-      "Weighted Chebyshev metric. Pass one weight per coordinate dimension.");
+      py::arg("weights") = std::vector<float>{},
+      "Chebyshev (L-infinity) distance metric. Optionally pass one weight per coordinate "
+      "dimension; omit or pass an empty list for the unweighted variant.");
 
   m.def(
       "PeriodicEuclideanMetric",
