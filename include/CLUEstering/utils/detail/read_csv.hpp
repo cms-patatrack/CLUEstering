@@ -12,8 +12,27 @@
 #include <sstream>
 #include <string>
 #include <stdexcept>
+#include <type_traits>
 
 namespace clue {
+
+  namespace detail {
+
+    /// @brief Parses a string into a floating-point value of the requested type.
+    /// @details Dispatches to the std::sto* overload matching T so that the full
+    /// precision of T is preserved (std::stof alone would truncate to float).
+    template <std::floating_point T>
+    inline T parse_floating(const std::string& value) {
+      if constexpr (std::is_same_v<T, float>) {
+        return std::stof(value);
+      } else if constexpr (std::is_same_v<T, double>) {
+        return std::stod(value);
+      } else {
+        return std::stold(value);
+      }
+    }
+
+  }  // namespace detail
 
   template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
   inline clue::PointsHost<NDim, TData> read_csv(TQueue& queue, const std::string& file_path) {
@@ -38,10 +57,10 @@ namespace clue {
 
       for (auto dim = 0u; dim < NDim; ++dim) {
         getline(buffer_stream, value, ',');
-        points.coords(dim)[point_id] = std::stof(value);
+        points.coords(dim)[point_id] = detail::parse_floating<TData>(value);
       }
       getline(buffer_stream, value);
-      points.weights()[point_id] = std::stof(value);
+      points.weights()[point_id] = detail::parse_floating<TData>(value);
       ++point_id;
     }
     file.close();
@@ -58,7 +77,7 @@ namespace clue {
     auto n_points =
         std::count(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') -
         1;
-    clue::PointsHost<NDim> points(queue, n_points);
+    clue::PointsHost<NDim, TData> points(queue, n_points);
     internal::points_interface<std::remove_cvref_t<decltype(points)>>::mark_clustered(points);
     auto& view = points.view();
 
@@ -73,10 +92,10 @@ namespace clue {
 
       for (auto dim = 0u; dim < NDim; ++dim) {
         getline(buffer_stream, value, ',');
-        view.m_coords[dim][point_id] = std::stof(value);
+        view.m_coords[dim][point_id] = detail::parse_floating<TData>(value);
       }
       getline(buffer_stream, value, ',');
-      view.m_weight[point_id] = std::stof(value);
+      view.m_weight[point_id] = detail::parse_floating<TData>(value);
       getline(buffer_stream, value, ',');
       view.m_cluster_index[point_id] = std::stoi(value);
 
