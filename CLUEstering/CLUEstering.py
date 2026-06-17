@@ -24,8 +24,6 @@ import CLUE_CPU_Serial as cpu_serial
 EuclideanMetric = clue_kernels.EuclideanMetric
 ManhattanMetric = clue_kernels.ManhattanMetric
 ChebyshevMetric = clue_kernels.ChebyshevMetric
-WeightedEuclideanMetric = clue_kernels.WeightedEuclideanMetric
-WeightedChebyshevMetric = clue_kernels.WeightedChebyshevMetric
 PeriodicEuclideanMetric = clue_kernels.PeriodicEuclideanMetric
 
 backends = ["cpu serial"]
@@ -487,12 +485,12 @@ class clusterer:
             if not parameters:
                 raise ValueError(
                     "weighted_euclidean requires a 'parameters' list of per-dimension weights.")
-            self._metric = clue_kernels.WeightedEuclideanMetric(list(parameters))
+            self._metric = clue_kernels.EuclideanMetric(list(parameters))
         elif choice == "weighted_chebyshev":
             if not parameters:
                 raise ValueError(
                     "weighted_chebyshev requires a 'parameters' list of per-dimension weights.")
-            self._metric = clue_kernels.WeightedChebyshevMetric(list(parameters))
+            self._metric = clue_kernels.ChebyshevMetric(list(parameters))
         elif choice == "periodic_euclidean":
             if not parameters:
                 raise ValueError(
