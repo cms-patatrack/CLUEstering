@@ -29,7 +29,8 @@ namespace clue::detail {
     // TODO: reconsider the way that we compute the number of tiles
     auto ntiles = nostd::ceil_div(points.size(), points_per_tile);
     int32_t n_per_dim = 1;
-    while (nostd::pow(n_per_dim, Ndim) < ntiles) ++n_per_dim;
+    while (nostd::pow(n_per_dim, Ndim) < ntiles)
+      ++n_per_dim;
     ntiles = nostd::pow(n_per_dim, Ndim);
 
     if (!tiles.has_value()) {
@@ -67,7 +68,8 @@ namespace clue::detail {
                    std::size_t batch_size = 1) {
     auto ntiles = nostd::ceil_div(points.size(), points_per_tile);
     int32_t n_per_dim = 1;
-    while (nostd::pow(n_per_dim, Ndim) < ntiles) ++n_per_dim;
+    while (nostd::pow(n_per_dim, Ndim) < ntiles)
+      ++n_per_dim;
     ntiles = nostd::pow(n_per_dim, Ndim);
 
     if (!tiles.has_value()) {
