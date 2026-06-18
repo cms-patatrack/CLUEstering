@@ -7,6 +7,7 @@
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/nostd/ceil_div.hpp"
+#include "CLUEstering/internal/nostd/pow.hpp"
 #include <array>
 #include <concepts>
 #include <cstddef>
@@ -14,15 +15,6 @@
 #include <optional>
 
 namespace clue::detail {
-
-  /// @brief Raises base to the given exponent using only integer arithmetic.
-  constexpr int32_t integer_pow(int32_t base, std::size_t exp) {
-    int32_t result = 1;
-    for (std::size_t i = 0; i < exp; ++i) {
-      result *= base;
-    }
-    return result;
-  }
 
   template <concepts::queue TQueue,
             std::size_t Ndim,
@@ -37,8 +29,8 @@ namespace clue::detail {
     // TODO: reconsider the way that we compute the number of tiles
     auto ntiles = nostd::ceil_div(points.size(), points_per_tile);
     int32_t n_per_dim = 1;
-    while (integer_pow(n_per_dim, Ndim) < ntiles) ++n_per_dim;
-    ntiles = integer_pow(n_per_dim, Ndim);
+    while (nostd::pow(n_per_dim, Ndim) < ntiles) ++n_per_dim;
+    ntiles = nostd::pow(n_per_dim, Ndim);
 
     if (!tiles.has_value()) {
       tiles = std::make_optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>(
@@ -75,8 +67,8 @@ namespace clue::detail {
                    std::size_t batch_size = 1) {
     auto ntiles = nostd::ceil_div(points.size(), points_per_tile);
     int32_t n_per_dim = 1;
-    while (integer_pow(n_per_dim, Ndim) < ntiles) ++n_per_dim;
-    ntiles = integer_pow(n_per_dim, Ndim);
+    while (nostd::pow(n_per_dim, Ndim) < ntiles) ++n_per_dim;
+    ntiles = nostd::pow(n_per_dim, Ndim);
 
     if (!tiles.has_value()) {
       tiles = std::make_optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>(
