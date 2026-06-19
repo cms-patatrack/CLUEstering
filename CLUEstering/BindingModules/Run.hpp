@@ -25,7 +25,6 @@ void run(TInput dc,
          TInput rhoc,
          TInput dm,
          TInput seed_dc,
-         int pPBin,
          std::vector<uint8_t>&& wrapped,
          std::tuple<TInput*, int*>&& pData,
          const std::optional<std::span<uint32_t>>& batch_sample_sizes,
@@ -34,7 +33,7 @@ void run(TInput dc,
          const clue::internal::MetricDescriptor<TInput>& metric_desc,
          clue::Queue queue,
          size_t block_size) {
-  clue::Clusterer<Ndim, TInput> algo(queue, dc, rhoc, dm, seed_dc, pPBin);
+  clue::Clusterer<Ndim, TInput> algo(queue, dc, rhoc, dm, seed_dc);
   algo.setWrappedCoordinates(std::move(wrapped));
 
   clue::PointsHost<Ndim, TInput> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
@@ -72,7 +71,6 @@ namespace ALPAKA_BACKEND {
                TInput rhoc,
                TInput dm,
                TInput seed_dc,
-               int pPBin,
                std::vector<uint8_t> wrapped,
                py::array_t<TInput> data,
                py::array_t<int> results,
@@ -104,7 +102,6 @@ namespace ALPAKA_BACKEND {
                                      rhoc,
                                      dm,
                                      seed_dc,
-                                     pPBin,
                                      std::move(wrapped),
                                      std::make_tuple(pData, pResults),
                                      batch_sample_sizes_span,
