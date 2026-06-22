@@ -17,5 +17,26 @@ respectively `clang-format` and `cmake-format`.
 If you encounter a bug or have a feature request, please open an issue on GitHub. When opening an issue, please provide as much detail as possible.
 If you are reporting a bug, please include steps to reproduce the issue, as well as any relevant error messages or logs.  
 
+# Compiling and running tests
+To test the C++ interface, compile the tests with:
+```shell
+cmake -B build -DBUILD_TESTING=ON
+cmake --build build --parallel <nproc>
+```
+where `<nproc>` is the desired number of cores. Finally, run the tests with:
+```shell
+ctest --test-dir build
+```
+
+To test the Python interface, compile the bindings with:
+```shell
+cmake -B build -DBUILD_PYTHON=ON
+cmake --build build --parallel <nproc>
+```
+and run the tests with
+```shell
+pytest
+```
+
 # Licensing
 By contributing to this project, you agree that your contributions will be licensed under the MPL-2.0 license.
