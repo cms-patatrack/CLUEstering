@@ -17,35 +17,26 @@ respectively `clang-format` and `cmake-format`.
 If you encounter a bug or have a feature request, please open an issue on GitHub. When opening an issue, please provide as much detail as possible.
 If you are reporting a bug, please include steps to reproduce the issue, as well as any relevant error messages or logs.  
 
+# Compiling and running tests
+To test the C++ interface, compile the tests with:
+```shell
+cmake -B build -DBUILD_TESTING=ON
+cmake --build build --parallel <nproc>
+```
+where `<nproc>` is the desired number of cores. Finally, run the tests with:
+```shell
+ctest --test-dir build
+```
+
+To test the Python interface, compile the bindings with:
+```shell
+cmake -B build -DBUILD_PYTHON=ON
+cmake --build build --parallel <nproc>
+```
+and run the tests with
+```shell
+pytest
+```
+
 # Licensing
 By contributing to this project, you agree that your contributions will be licensed under the MPL-2.0 license.
-
-# Compiling with CMake
-
-1. Configure using:
-```shell
-   cmake -B build
-```
-   This generates build files in a folder called `build/`.
-
-2. Enable compilation of test suite and python bindings:
-```shell
-   cmake -B build -DBUILD_TESTING=ON
-   cmake -B build -DBUILD_PYTHON=ON
-```
-
-3. Build and specify number of CPU cores by replacing `<nproc>` with the desired number:
-```shell
-   cmake --build build --parallel <nproc>
-```
-
-4. Run tests:
-```shell
-   ctest --test-dir build
-```
-
-   
-
-
-
-
