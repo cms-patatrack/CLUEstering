@@ -18,8 +18,6 @@ namespace clue {
 
   namespace detail {
 
-    /// @brief Parses a string into a floating-point value of the requested type.
-    /// @details Dispatches to the std::sto* overload matching T so that the full
     /// precision of T is preserved (std::stof alone would truncate to float).
     template <std::floating_point T>
     inline T parse_floating(const std::string& value) {
