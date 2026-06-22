@@ -19,3 +19,33 @@ If you are reporting a bug, please include steps to reproduce the issue, as well
 
 # Licensing
 By contributing to this project, you agree that your contributions will be licensed under the MPL-2.0 license.
+
+# Compiling with CMake
+
+1. Configure using:
+```shell
+   cmake -B build
+```
+   This generates build files in a folder called `build/`.
+
+2. Enable compilation of test suite and python bindings:
+```shell
+   cmake -B build -DBUILD_TESTING=ON
+   cmake -B build -DBUILD_PYTHON=ON
+```
+
+3. Build and specify number of CPU cores by replacing `<nproc>` with the desired number:
+```shell
+   cmake --build build --parallel <nproc>
+```
+
+4. Run tests:
+```shell
+   ctest --test-dir build
+```
+
+   
+
+
+
+
