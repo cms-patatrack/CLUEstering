@@ -85,14 +85,15 @@ namespace clue::internal {
       m_view.nperdim = nperdim;
     }
 
+    template <std::floating_point TInput>
     struct GetGlobalBin {
-      PointsView<Ndim, TData> pointsView;
-      TilesView<Ndim, TData> tilesView;
+      PointsView<Ndim, TInput> pointsView;
+      TilesView<Ndim, value_type> tilesView;
 
       ALPAKA_FN_ACC int32_t operator()(int32_t index, std::size_t event = 0) const {
         value_type coords[Ndim];
         for (auto dim = 0u; dim < Ndim; ++dim) {
-          coords[dim] = pointsView.coords()[dim][index];
+          coords[dim] = static_cast<value_type>(pointsView.coords()[dim][index]);
         }
 
         auto bin = tilesView.getGlobalBin(coords, event);
@@ -100,26 +101,29 @@ namespace clue::internal {
       }
     };
 
-    template <clue::concepts::accelerator TAcc, clue::concepts::queue TQueue>
-
+    template <clue::concepts::accelerator TAcc,
+              clue::concepts::queue TQueue,
+              std::floating_point TInput>
     ALPAKA_FN_HOST void fill(TQueue& queue,
-                             PointsDevice<Ndim, TData, TDev>& d_points,
+                             PointsDevice<Ndim, TInput, TDev>& d_points,
                              size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
-      m_assoc.template fill<TAcc>(size, GetGlobalBin{pointsView, m_view}, queue);
+      m_assoc.template fill<TAcc>(size, GetGlobalBin<TInput>{pointsView, m_view}, queue);
     }
 
-    template <clue::concepts::accelerator TAcc, clue::concepts::queue TQueue>
+    template <clue::concepts::accelerator TAcc,
+              clue::concepts::queue TQueue,
+              std::floating_point TInput>
     ALPAKA_FN_HOST void fill_batch(TQueue& queue,
-                                   PointsDevice<Ndim, TData, TDev>& d_points,
+                                   PointsDevice<Ndim, TInput, TDev>& d_points,
                                    size_t size,
                                    const auto& event_offsets,
                                    std::size_t max_event_size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
       m_assoc.template fill_batch<TAcc>(
-          queue, size, GetGlobalBin{pointsView, m_view}, event_offsets, max_event_size);
+          queue, size, GetGlobalBin<TInput>{pointsView, m_view}, event_offsets, max_event_size);
     }
 
     ALPAKA_FN_HOST inline clue::device_buffer<TDev, CoordinateExtremes<Ndim, value_type>> minMax()
