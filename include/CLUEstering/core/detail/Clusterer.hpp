@@ -33,18 +33,16 @@ namespace clue {
   Clusterer<Ndim, DataType>::Clusterer(value_type density_radius,
                                        value_type min_density,
                                        std::optional<value_type> outlier_distance,
-                                       std::optional<value_type> seeding_distance,
-                                       int pPBin)
+                                       std::optional<value_type> seeding_distance)
       : m_density_radius{density_radius},
         m_seeding_distance{seeding_distance.value_or(density_radius)},
         m_min_density{min_density},
         m_outlier_distance{outlier_distance.value_or(density_radius)},
-        m_pointsPerTile{pPBin},
         m_wrappedCoordinates{} {
     if (m_density_radius <= static_cast<value_type>(0.) ||
         m_min_density < static_cast<value_type>(0.) ||
         m_outlier_distance <= static_cast<value_type>(0.) ||
-        m_seeding_distance <= static_cast<value_type>(0.) || m_pointsPerTile <= 0) {
+        m_seeding_distance <= static_cast<value_type>(0.)) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
@@ -55,18 +53,16 @@ namespace clue {
                                               value_type density_radius,
                                               value_type min_density,
                                               std::optional<value_type> outlier_distance,
-                                              std::optional<value_type> seeding_distance,
-                                              int pPBin)
+                                              std::optional<value_type> seeding_distance)
       : m_density_radius{density_radius},
         m_seeding_distance{seeding_distance.value_or(density_radius)},
         m_min_density{min_density},
         m_outlier_distance{outlier_distance.value_or(density_radius)},
-        m_pointsPerTile{pPBin},
         m_wrappedCoordinates{} {
     if (m_density_radius <= static_cast<value_type>(0.) ||
         m_min_density < static_cast<value_type>(0.) ||
         m_outlier_distance <= static_cast<value_type>(0.) ||
-        m_seeding_distance <= static_cast<value_type>(0.) || m_pointsPerTile <= 0) {
+        m_seeding_distance <= static_cast<value_type>(0.)) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
@@ -76,18 +72,16 @@ namespace clue {
   void Clusterer<Ndim, DataType>::setParameters(value_type density_radius,
                                                 value_type min_density,
                                                 std::optional<value_type> outlier_distance,
-                                                std::optional<value_type> seeding_distance,
-                                                int pPBin) {
+                                                std::optional<value_type> seeding_distance) {
     m_density_radius = density_radius;
     m_outlier_distance = outlier_distance.value_or(density_radius);
     m_seeding_distance = seeding_distance.value_or(density_radius);
     m_min_density = min_density;
-    m_pointsPerTile = pPBin;
 
     if (m_density_radius <= static_cast<value_type>(0.) ||
         m_min_density < static_cast<value_type>(0.) ||
         m_outlier_distance <= static_cast<value_type>(0.) ||
-        m_seeding_distance <= static_cast<value_type>(0.) || m_pointsPerTile <= 0) {
+        m_seeding_distance <= static_cast<value_type>(0.)) {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
@@ -155,7 +149,7 @@ namespace clue {
       const DistanceMetric& metric,
       const Kernel& kernel,
       std::size_t block_size) {
-    detail::setup_tiles(queue, dev_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates);
+    detail::setup_tiles(queue, dev_points, m_tiles, 128, m_wrappedCoordinates);
     make_clusters_impl(dev_points, metric, kernel, queue, block_size);
     alpaka::wait(queue);
   }

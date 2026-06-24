@@ -44,7 +44,6 @@ namespace clue {
     value_type m_seeding_distance;
     value_type m_min_density;
     value_type m_outlier_distance;
-    int m_pointsPerTile;  // average number of points found in a tile
     std::array<uint8_t, Ndim> m_wrappedCoordinates;
 
     std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
@@ -55,7 +54,7 @@ namespace clue {
     void setup(Queue& queue,
                const clue::PointsHost<Ndim, InputType>& h_points,
                clue::PointsDevice<Ndim, value_type>& dev_points) {
-      detail::setup_tiles(queue, h_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates);
+      detail::setup_tiles(queue, h_points, m_tiles, 128, m_wrappedCoordinates);
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
@@ -64,8 +63,7 @@ namespace clue {
                      const clue::PointsHost<Ndim, InputType>& h_points,
                      clue::PointsDevice<Ndim, value_type>& dev_points,
                      std::size_t batch_size) {
-      detail::setup_tiles(
-          queue, h_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates, batch_size);
+      detail::setup_tiles(queue, h_points, m_tiles, 128, m_wrappedCoordinates, batch_size);
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
@@ -73,8 +71,7 @@ namespace clue {
     void setup_batch(Queue& queue,
                      clue::PointsDevice<Ndim, InputType>& dev_points,
                      std::size_t batch_size) {
-      detail::setup_tiles(
-          queue, dev_points, m_tiles, m_pointsPerTile, m_wrappedCoordinates, batch_size);
+      detail::setup_tiles(queue, dev_points, m_tiles, 128, m_wrappedCoordinates, batch_size);
     }
 
     template <
@@ -104,12 +101,10 @@ namespace clue {
     /// @param min_density Density threshold for clustering
     /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
     /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-    /// @param pPBin Number of points per bin, used to determine the tile size
     Clusterer(value_type density_radius,
               value_type min_density,
               std::optional<value_type> outlier_distance = std::nullopt,
-              std::optional<value_type> seeding_distance = std::nullopt,
-              int pPBin = 128);
+              std::optional<value_type> seeding_distance = std::nullopt);
     /// @brief Constuct a Clusterer object
     ///
     /// @param queue The queue to use for the device operations
@@ -117,13 +112,11 @@ namespace clue {
     /// @param min_density Density threshold for clustering
     /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
     /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-    /// @param pPBin Number of points per bin, used to determine the tile size
     Clusterer(Queue& queue,
               value_type density_radius,
               value_type min_density,
               std::optional<value_type> outlier_distance = std::nullopt,
-              std::optional<value_type> seeding_distance = std::nullopt,
-              int pPBin = 128);
+              std::optional<value_type> seeding_distance = std::nullopt);
 
     /// @brief Set the parameters for the clustering algorithm
     ///
@@ -131,12 +124,10 @@ namespace clue {
     /// @param min_density Density threshold for clustering
     /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
     /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-    /// @param pPBin Number of points per bin, used to determine the tile size
     void setParameters(value_type density_radius,
                        value_type min_density,
                        std::optional<value_type> outlier_distance = std::nullopt,
-                       std::optional<value_type> seeding_distance = std::nullopt,
-                       int pPBin = 128);
+                       std::optional<value_type> seeding_distance = std::nullopt);
 
     /// @brief Construct the clusters from host points
     ///
