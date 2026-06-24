@@ -614,7 +614,6 @@ class clusterer:
 
     def run_clue(self,
                  backend: str = "cpu serial",
-                 block_size: int = 1024,
                  batch_sample_sizes: Union[np.ndarray, None] = None,
                  device_id: int = 0,
                  verbose: bool = False,
@@ -624,8 +623,6 @@ class clusterer:
 
         :param backend: Backend to use for execution. Defaults to 'cpu serial'.
         :type backend: str, optional
-        :param block_size: Size of blocks for parallel execution. Defaults to 1024.
-        :type block_size: int, optional
         :param batch_sample_sizes: Optional array specifying batch sizes for sampling. Defaults to None.
         ;type batch_sample_sizes: np.ndarray or None, optional
         :param device_id: Device ID to run the algorithm on. Defaults to 0.
@@ -649,7 +646,7 @@ class clusterer:
         arguments = [self._density_radius, self._min_density, self._outlier_distance, self._seeding_distance,
                      self._ppbin, self.wrapped, data.coords, data.results,
                      self._kernel, data.n_dim, batch_sample_sizes, data.n_points,
-                     block_size, device_id, self._metric]
+                     device_id, self._metric]
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(*arguments)
@@ -699,7 +696,6 @@ class clusterer:
     def fit(self,
             data: Union[pd.DataFrame,str,dict,list,np.ndarray],
             backend: str = "cpu serial",
-            block_size: int = 1024,
             batch_sample_sizes: Union[np.ndarray, None] = None,
             device_id: int = 0,
             verbose: bool = False,
@@ -713,8 +709,6 @@ class clusterer:
         :type data: Union[pd.DataFrame, str, dict, list, np.ndarray]
         :param backend: Backend to use for the algorithm execution.
         :type backend: str, optional
-        :param block_size: Block size for parallel execution.
-        :type block_size: int, optional
         :param batch_sample_sizes: Optional array specifying batch sizes for sampling. Defaults to None.
         :type batch_sample_sizes: np.ndarray or None, optional
         :param device_id: ID of the device to run the algorithm on.
@@ -731,13 +725,12 @@ class clusterer:
         """
 
         self.read_data(data)
-        self.run_clue(backend, block_size, batch_sample_sizes, device_id, verbose, dimensions)
+        self.run_clue(backend, batch_sample_sizes, device_id, verbose, dimensions)
         return self
 
     def fit_predict(self,
                     data: [],
                     backend: str = "cpu serial",
-                    block_size: int = 1024,
                     batch_sample_sizes: Union[np.ndarray, None] = None,
                     device_id: int = 0,
                     verbose: bool = False,
@@ -751,8 +744,6 @@ class clusterer:
         :type data: Union[pd.DataFrame, str, dict, list, np.ndarray]
         :param backend: Backend to use for the algorithm execution.
         :type backend: str, optional
-        :param block_size: Block size for parallel execution.
-        :type block_size: int, optional
         :param batch_sample_sizes: Optional array specifying batch sizes for sampling. Defaults to None.
         :type batch_sample_sizes: np.ndarray or None, optional
         :param device_id: ID of the device to run the algorithm on.
@@ -769,7 +760,7 @@ class clusterer:
         """
 
         self.read_data(data)
-        self.run_clue(backend, block_size, batch_sample_sizes, device_id, verbose, dimensions)
+        self.run_clue(backend, batch_sample_sizes, device_id, verbose, dimensions)
         return self.cluster_ids
 
 
