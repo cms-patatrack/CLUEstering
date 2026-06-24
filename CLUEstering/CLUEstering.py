@@ -1218,7 +1218,8 @@ class clusterer:
 
         cluster_points = [[] for _ in range(n_clusters)]
         for i in range(self.clust_data.n_points):
-            cluster_points[cluster_ids[i]].append(i)
+            if cluster_ids[i] != -1:
+                cluster_points[cluster_ids[i]].append(i)
 
         points_per_cluster = np.array([len(clust) for clust in cluster_points])
         self.clust_prop = cluster_properties(
