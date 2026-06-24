@@ -18,7 +18,6 @@ namespace clue {
 
   namespace detail {
 
-    /// precision of T is preserved (std::stof alone would truncate to float).
     template <std::floating_point T>
     inline T parse_floating(const std::string& value) {
       if constexpr (std::is_same_v<T, float>) {
