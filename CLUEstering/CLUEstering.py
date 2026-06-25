@@ -673,6 +673,8 @@ class clusterer:
                 cluster_id_is_seed = gpu_hip.mainRun(*arguments)
             else:
                 print("HIP module not found. Please re-compile the library and try again.")
+        else:
+            raise ValueError(f"Invalid backend '{backend}'. Allowed choices are: cpu serial, cpu tbb, cpu openmp, gpu cuda, gpu hip.")
 
         finish = time.time_ns()
         cluster_ids = data.results
