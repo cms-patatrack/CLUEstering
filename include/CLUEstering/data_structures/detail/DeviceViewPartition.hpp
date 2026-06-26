@@ -38,6 +38,7 @@ namespace clue::soa::device {
         buffer + n_points * ((Ndim + 1) * sizeof(value_type) + 2 * sizeof(int)));
     view.m_nearest_higher = reinterpret_cast<int*>(
         buffer + n_points * ((Ndim + 2) * sizeof(value_type) + 2 * sizeof(int)));
+    view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
     view.m_n = n_points;
   }
@@ -59,6 +60,7 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(int));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
     view.m_n = n_points;
   }
@@ -79,6 +81,7 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
     view.m_n = n_points;
   }
@@ -98,6 +101,7 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
     view.m_n = n_points;
   }
@@ -119,6 +123,7 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
     view.m_n = n_points;
   }
@@ -137,6 +142,7 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
     view.m_n = n_points;
   }
@@ -157,6 +163,7 @@ namespace clue::soa::device {
     view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
+    view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
     view.m_n = n_points;
   }

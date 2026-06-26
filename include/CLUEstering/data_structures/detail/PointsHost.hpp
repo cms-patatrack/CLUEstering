@@ -155,4 +155,27 @@ namespace clue {
     m_view.m_density_uncertainty = density_uncertainty.data();
   }
 
+  template <std::size_t Ndim, std::floating_point TData>
+  inline void PointsHost<Ndim, TData>::set_sigma(std::size_t dim,
+                                                 std::span<element_type> uncertainty) {
+    if (dim >= Ndim) {
+      throw std::out_of_range("Dimension out of range in set_sigma");
+    }
+    if (uncertainty.size() != static_cast<size_t>(m_size)) {
+      throw std::invalid_argument("Size of sigma does not match the number of points");
+    }
+    m_view.m_sigmas[dim] = uncertainty.data();
+  }
+
+  template <std::size_t Ndim, std::floating_point TData>
+  template <std::ranges::contiguous_range... Containers>
+    requires(sizeof...(Containers) == Ndim)
+  inline void PointsHost<Ndim, TData>::set_sigmas(Containers&&... uncertainties) {
+    auto containers_tuple = std::forward_as_tuple(std::forward<Containers>(uncertainties)...);
+    meta::apply<Ndim>([&]<std::size_t Dim>() {
+      auto& c = std::get<Dim>(containers_tuple);
+      set_sigma(Dim, std::span<element_type>(c.data(), c.size()));
+    });
+  }
+
 }  // namespace clue
