@@ -39,4 +39,23 @@ namespace clue::math {
     return pow(base, exp);
   }
 
+
+#ifdef __STDCPP_FLOAT16_T__
+#include <stdfloat>
+
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float pow(std::float16_t base, std::float16_t exp) {
+    const auto b = static_cast<float>(base);
+    const auto e = static_cast<float>(exp);
+#if defined(CUDA_DEVICE_FN)
+    return static_cast<std::float16_t>(::pow(b, e));
+#elif defined(HIP_DEVICE_FN)
+    return static_cast<std::float16_t>(::pow(b, e));
+#elif defined(SYCL_DEVICE_FN)
+    return static_cast<std::float16_t>(sycl::pow(b, e));
+#else
+    return static_cast<std::float16_t>(std::pow(b, e));
+#endif
+  }
+#endif
+
 }  // namespace clue::math

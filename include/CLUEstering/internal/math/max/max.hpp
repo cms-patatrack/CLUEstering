@@ -38,4 +38,23 @@ namespace clue::math {
 #endif
   }
 
+
+#ifdef __STDCPP_FLOAT16_T__
+#include <stdfloat>
+
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float max(const std::float16_t& a, const std::float16_t& b) {
+    const auto x = static_cast<float>(a);
+    const auto y = static_cast<float>(b);
+#if defined(CUDA_DEVICE_FN)
+    return static_cast<std::float16_t>(::max(x, y));
+#elif defined(HIP_DEVICE_FN)
+    return static_cast<std::float16_t>(::max(x, y));
+#elif defined(SYCL_DEVICE_FN)
+    return static_cast<std::float16_t>(sycl::max(x, y));
+#else
+    return static_cast<std::float16_t>(std::max(x, y));
+#endif
+  }
+#endif
+
 }  // namespace clue::math

@@ -43,4 +43,21 @@ namespace clue::math {
     return exp(static_cast<double>(x));
   }
 
+#ifdef __STDCPP_FLOAT16_T__
+#include <stdfloat>
+
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float exp(std::float16_t x) {
+  const auto y = static_cast<float>(x);
+#if defined(CUDA_DEVICE_FN)
+    return static_cast<std::float16_t>(::exp(y));
+#elif defined(HIP_DEVICE_FN)
+    return static_cast<std::float16_t>(::exp(y));
+#elif defined(SYCL_DEVICE_FN)
+    return static_cast<std::float16_t>(sycl::exp(y));
+#else
+    return static_cast<std::float16_t>(std::exp(y));
+#endif
+  }
+#endif
+
 }  // namespace clue::math
