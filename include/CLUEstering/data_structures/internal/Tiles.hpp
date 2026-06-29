@@ -115,7 +115,7 @@ namespace clue::internal {
                              size_t size) {
       auto dev = alpaka::getDev(queue);
       auto pointsView = d_points.view();
-      m_assoc.template fill<TAcc>(size, GetGlobalBin(pointsView, m_view), queue);
+      m_assoc.template fill<TAcc>(size, GetGlobalBin<TInput>(pointsView, m_view), queue);
     }
 
     template <clue::concepts::accelerator TAcc,
