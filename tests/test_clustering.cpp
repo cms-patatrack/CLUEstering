@@ -400,7 +400,7 @@ TEST_CASE("Test clustering from constant host points") {
 
 TEST_CASE("Test non-default local density uncertainty") {
   std::mt19937 gen;
-  std::normal_distribution<double> dis(0., .3);
+  std::normal_distribution<float> dis(0., .3);
 
   const auto size = 1000u;
   const auto dc = .2f, rhoc = 1.f, outlier = .2f;

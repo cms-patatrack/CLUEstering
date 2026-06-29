@@ -13,7 +13,7 @@ TEST_CASE("Test zip iterator with two containers of the same type") {
   std::vector<int> v1(size);
   std::vector<int> v2(size);
   std::iota(v1.begin(), v1.end(), 0);
-  std::iota(v2.begin(), v2.end(), size);
+  std::iota(v2.begin(), v2.end(), stati_cast<int>(size));
 
   auto zip_begin = clue::nostd::zip(v1.begin(), v2.begin());
   auto zip_end = zip_begin + size;
