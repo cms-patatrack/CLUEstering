@@ -48,7 +48,7 @@ namespace clue::math {
   }
 
 #if __STDCPP_FLOAT16_T__ == 1
-  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float sqrt(std::float16_t x) {
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline std::float16_t sqrt(std::float16_t x) {
     const auto y = static_cast<float>(x);
 #if defined(CUDA_DEVICE_FN)
     return static_cast<std::float16_t>(::sqrt(y));

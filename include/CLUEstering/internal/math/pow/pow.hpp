@@ -43,9 +43,9 @@ namespace clue::math {
     return pow(base, exp);
   }
 
-
 #if __STDCPP_FLOAT16_T__ == 1
-  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float pow(std::float16_t base, std::float16_t exp) {
+  ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline std::float16_t pow(std::float16_t base,
+                                                            std::float16_t exp) {
     const auto b = static_cast<float>(base);
     const auto e = static_cast<float>(exp);
 #if defined(CUDA_DEVICE_FN)
