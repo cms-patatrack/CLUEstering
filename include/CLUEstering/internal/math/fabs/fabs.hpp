@@ -6,6 +6,10 @@
 
 #include "CLUEstering/internal/math/defines.hpp"
 
+#if __STDCPP_FLOAT16_T__ == 1
+#include <stdfloat>
+#endif
+
 namespace clue::math {
 
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float fabs(float arg) {
@@ -33,9 +37,7 @@ namespace clue::math {
   }
 
 
-#ifdef __STDCPP_FLOAT16_T__
-#include <stdfloat>
-
+#if __STDCPP_FLOAT16_T__ == 1
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float fabs(std::float16_t arg) {
     const auto y = static_cast<float>(arg);
 #if defined(CUDA_DEVICE_FN)

@@ -10,6 +10,10 @@
 #include <cmath>
 #endif
 
+#if __STDCPP_FLOAT16_T__ == 1
+#include <stdfloat>
+#endif
+
 namespace clue::math {
 
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float sqrt(float x) {
@@ -43,10 +47,7 @@ namespace clue::math {
     return sqrt(static_cast<double>(x));
   }
 
-
-#ifdef __STDCPP_FLOAT16_T__
-#include <stdfloat>
-
+#if __STDCPP_FLOAT16_T__ == 1
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float sqrt(std::float16_t x) {
     const auto y = static_cast<float>(x);
 #if defined(CUDA_DEVICE_FN)

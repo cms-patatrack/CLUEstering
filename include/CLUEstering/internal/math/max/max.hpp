@@ -10,6 +10,10 @@
 #include <cmath>
 #endif
 
+#if __STDCPP_FLOAT16_T__ == 1
+#include <stdfloat>
+#endif
+
 namespace clue::math {
 
   template <clue::concepts::Numeric T>
@@ -39,9 +43,7 @@ namespace clue::math {
   }
 
 
-#ifdef __STDCPP_FLOAT16_T__
-#include <stdfloat>
-
+#if __STDCPP_FLOAT16_T__ == 1
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float max(const std::float16_t& a, const std::float16_t& b) {
     const auto x = static_cast<float>(a);
     const auto y = static_cast<float>(b);

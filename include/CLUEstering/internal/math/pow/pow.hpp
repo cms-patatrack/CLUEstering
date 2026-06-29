@@ -9,6 +9,10 @@
 #include <cmath>
 #endif
 
+#if __STDCPP_FLOAT16_T__ == 1
+#include <stdfloat>
+#endif
+
 namespace clue::math {
 
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float pow(float base, float exp) {
@@ -40,9 +44,7 @@ namespace clue::math {
   }
 
 
-#ifdef __STDCPP_FLOAT16_T__
-#include <stdfloat>
-
+#if __STDCPP_FLOAT16_T__ == 1
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float pow(std::float16_t base, std::float16_t exp) {
     const auto b = static_cast<float>(base);
     const auto e = static_cast<float>(exp);
