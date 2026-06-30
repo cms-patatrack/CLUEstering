@@ -71,7 +71,7 @@ jobs:
           coverage run -m pytest
           coverage xml -o python-coverage.xml
 
-      - uses: codecov/codecov-action@v5.4.3
+      - uses: codecov/codecov-action@v5
         if: github.event.repository.full_name == 'cms-patatrack/CLUEstering'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
