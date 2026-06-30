@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="conceptclue_1_1concepts_1_1detail_1_1point__distance__metric" kind="concept">
+    <compoundname>clue::concepts::detail::point_distance_metric</compoundname>
+    <includes refid="DistanceMetrics_8hpp" local="no">DistanceMetrics.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename TMetric</type>
+      </param>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;typename TMetric, std::size_t Ndim&gt;
+concept <ref refid="conceptclue_1_1concepts_1_1detail_1_1point__distance__metric" kindref="compound">clue::concepts::detail::point_distance_metric</ref> = 
+          requires(TMetric&amp;&amp; metric, std::array&lt;typename TMetric::value_type, Ndim + 1&gt; arr) {
+            { metric(arr, arr) } -&gt; std::same_as&lt;typename TMetric::value_type&gt;;
+          }</initializer>
+    <conceptparts>
+      <codepart line="24">    <programlisting>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>TMetric,<sp/>std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim&gt;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">concept<sp/></highlight><highlight class="normal">point_distance_metric<sp/>=</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">requires</highlight><highlight class="normal">(TMetric&amp;&amp;<sp/>metric,<sp/>std::array&lt;typename<sp/>TMetric::value_type,<sp/>Ndim<sp/>+<sp/>1&gt;<sp/>arr)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{<sp/>metric(arr,<sp/>arr)<sp/>}<sp/>-&gt;<sp/>std::same_as&lt;typename<sp/>TMetric::value_type&gt;;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+    </programlisting>
+</codepart>
+    </conceptparts>
+    <briefdescription>
+<para>Metric callable as metric(Point, Point) -&gt; value_type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="24" column="7"/>
+  </compounddef>
+</doxygen>

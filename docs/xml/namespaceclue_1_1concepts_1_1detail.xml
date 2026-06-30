@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="namespaceclue_1_1concepts_1_1detail" kind="namespace" language="C++">
+    <compoundname>clue::concepts::detail</compoundname>
+    <innerconcept refid="conceptclue_1_1concepts_1_1detail_1_1point__distance__metric">clue::concepts::detail::point_distance_metric</innerconcept>
+    <innerconcept refid="conceptclue_1_1concepts_1_1detail_1_1view__distance__metric">clue::concepts::detail::view_distance_metric</innerconcept>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="20" column="5"/>
+  </compounddef>
+</doxygen>

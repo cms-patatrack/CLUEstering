@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="namespaceclue_1_1concepts" kind="namespace" language="C++">
+    <compoundname>clue::concepts</compoundname>
+    <innerconcept refid="conceptclue_1_1concepts_1_1convolutional__kernel">clue::concepts::convolutional_kernel</innerconcept>
+    <innerconcept refid="conceptclue_1_1concepts_1_1distance__metric">clue::concepts::distance_metric</innerconcept>
+    <innernamespace refid="namespaceclue_1_1concepts_1_1detail">clue::concepts::detail</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/ConvolutionalKernel.hpp" line="116" column="3"/>
+  </compounddef>
+</doxygen>
