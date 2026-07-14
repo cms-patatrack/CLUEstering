@@ -139,6 +139,120 @@ namespace clue::detail {
     }
   };
 
+  struct KernelCreateFreqGrid{
+    template <typename TAcc>
+    requires(alpaka::Dim<TAcc>::value == 1)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                              float* k_grid,// grid of frequencies
+                              float freq_max,
+                              float step, // step size between frequencies
+                              int n_grid) const {
+        for (auto i : alpaka::uniformElements(acc, n_grid)){
+            k_grid[i] = -freq_max + i * step;
+        }
+    }
+};
+
+struct KernelCreateMeshGrid{
+    template <typename TAcc, typename TData>
+    requires(alpaka::Dim<TAcc>::value == 1)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                              TData* meshgrid,
+                              const float* k_grid,
+                              int n_grid) const {
+        for (auto idx : alpaka::uniformElements(acc, n_grid * n_grid)){
+            int i = idx / n_grid; // row index
+            int j = idx % n_grid; //column index
+            meshgrid[idx] = k_grid[i];  // k0
+            meshgrid[idx + n_grid * n_grid]  = k_grid[j];  // k1
+        }
+    }
+};
+
+
+struct KernelFourrierTransform {
+    template <typename TAcc, typename TData>
+    requires(alpaka::Dim<TAcc>::value == 1)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+            const TData* X_flat,
+            const TData* meshgrid,
+            TData* w_flat,
+            TData* c_real,
+            TData* c_imag,
+            int n_samples,
+            int n_grid) const {
+        for (auto idx : alpaka::uniformElements(acc, n_grid * n_grid)) {
+            auto real = TData{};
+            auto imag = TData{};
+
+            for (int n = 0; n < n_samples; ++n) {
+                const auto x = X_flat[n];
+                const auto y = X_flat[n + n_samples];
+                const auto k0 = meshgrid[idx];
+                const auto k1 = meshgrid[idx + n_grid * n_grid];
+                const auto dot_product = k0 * x + k1 * y;
+                const auto weight = w_flat[n];
+
+                real += weight * cos(dot_product);
+                imag += weight * -1 * sin(dot_product);
+            }
+
+            c_real[idx] = real / n_samples;
+            c_imag[idx] = imag / n_samples;
+        }
+    }
+};
+
+struct KernelMultByGaussian {
+    template <typename TAcc, typename TData>
+    requires(alpaka::Dim<TAcc>::value == 1)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+            TData* g_hat_flat,
+            TData* rho_hat_flat_real,
+            TData* rho_hat_flat_imag,
+            TData* meshgrid,
+            TData* c_real,
+            TData* c_imag,
+            int n_grid,
+            double sigma_kernel) const {
+        for (auto idx : alpaka::uniformElements(acc, n_grid * n_grid)) {
+            g_hat_flat[idx] = std::exp(-0.5f * sigma_kernel * sigma_kernel *
+                                       (meshgrid[idx] * meshgrid[idx] +
+                                        meshgrid[idx + n_grid * n_grid] * meshgrid[idx + n_grid * n_grid]));
+            rho_hat_flat_real[idx] = c_real[idx] * g_hat_flat[idx];
+            rho_hat_flat_imag[idx] = c_imag[idx] * g_hat_flat[idx];
+        }
+    }
+};
+
+
+struct KernelInverseFourrierTransform {
+    template <typename TAcc, typename TData>
+    requires(alpaka::Dim<TAcc>::value == 1)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+            const TData* X_flat,
+            const TData* meshgrid,
+            TData* rho_hat_flat_real,
+            TData* rho_hat_flat_imag,
+            TData* rho_fourier,
+            TData prefactor,
+            int n_samples,
+            int n_grid) const {
+            for (auto idx : alpaka::uniformElements(acc, n_samples)) {
+            TData real_sum = TData{};
+            for (int i = 0; i < n_grid * n_grid; ++i) {
+                TData theta = meshgrid[i] * X_flat[idx]
+                            + meshgrid[i + n_grid * n_grid] * X_flat[idx + n_samples];
+                real_sum += rho_hat_flat_real[i] * std::cos(theta)
+                          - rho_hat_flat_imag[i] * std::sin(theta);
+            }
+            rho_fourier[idx] = prefactor * real_sum;
+        }
+    }
+        };
+
+
+
   template <typename TAcc,
             std::size_t Ndim,
             std::size_t N_,
