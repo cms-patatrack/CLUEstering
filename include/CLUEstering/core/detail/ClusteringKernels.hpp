@@ -88,6 +88,10 @@ namespace clue::detail {
     }
   }
 
+
+
+
+
   struct KernelCalculateLocalDensity {
     template <typename TAcc,
               std::size_t Ndim,
@@ -478,6 +482,100 @@ struct KernelInverseFourrierTransform {
                        metric,
                        size);
   }
+
+
+template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TData>
+    requires(alpaka::Dim<TAcc>::value == 1)
+    inline void computeLocalDensityFourier(TQueue& queue,
+                                         std::size_t block_size,
+                                         PointsView<Ndim, TData>& dev_points,
+                                         TData sigma_kernel,
+                                         TData freq_max,
+                                         int32_t n_grid,
+                                         int32_t n_points) {
+
+                                auto d_k_grid = clue::make_device_buffer<TData{}>(queue, n_grid);
+                                auto d_meshgrid = clue::make_device_buffer<TData{}>(queue, 2 * n_grid * n_grid);
+                                auto d_c_real = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
+                                auto d_c_imag = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
+                                auto d_rho_hat_flat_real = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
+                                auto d_rho_hat_flat_imag = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
+                                auto d_g_hat_flat = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
+                              
+
+                                const auto wd_grid = clue::make_workdiv<TAcc>(nostd::ceil_div(n_grid, block_size), block_size);
+                                const auto wd_mesh = clue::make_workdiv<TAcc>(nostd::ceil_div(n_grid * n_grid, block_size), block_size);
+                                const auto wd_pts  = clue::make_workdiv<TAcc>(nostd::ceil_div(n_points, block_size), block_size);
+
+                                const TData step      = 2.0f * freq_max / static_cast<float>(n_grid);
+                                const TData prefactor = step * step / (2.0f * M_PI * 2.0f * M_PI);      
+
+                               
+                                alpaka::exec<TAcc>(queue, wd_grid, KernelCreateFreqGrid{},
+                                                      d_k_grid.data(),
+                                                      freq_max,
+                                                      step,
+                                                      n_grid);
+
+
+                                 
+                                  alpaka::wait(queue);
+
+                                   alpaka::exec<TAcc>(queue,
+                                    wd_mesh,
+                                    KernelCreateMeshGrid{},
+                                    d_meshgrid.data(),
+                                    d_k_grid.data(),
+                                    n_grid);
+                                    alpaka::wait(queue);
+
+                                    alpaka::exec<TAcc>(queue,
+                                        wd_pts,
+                                        KernelFourrierTransform{},
+                                        dev_points.coords(),
+                                        d_meshgrid.data(),
+                                        dev_points.weights(),
+                                        d_c_real.data(),
+                                        d_c_imag.data(),
+                                        n_points,
+                                        n_grid);
+                                     alpaka::wait(queue);
+
+                                  alpaka::exec<TAcc>(queue,
+                                    wd_mesh,
+                                    KernelMultByGaussian{},
+                                    d_g_hat_flat.data(),
+                                    d_rho_hat_flat_real.data(),
+                                    d_rho_hat_flat_imag.data(),
+                                    d_meshgrid.data(),
+                                    d_c_real.data(),
+                                    d_c_imag.data(),
+                                    n_grid,
+                                    sigma_kernel);
+                  
+
+                alpaka::exec<TAcc>(queue,
+                                wd_pts,
+                                KernelInverseFourrierTransform{},
+                                dev_points.coords(),
+                                d_meshgrid.data(),
+                                d_rho_hat_flat_real.data(),
+                                d_rho_hat_flat_imag.data(),
+                                dev_points.rho(),
+                                prefactor,
+                                n_points,
+                                n_grid);
+                alpaka::wait(queue);
+
+
+
+                                         }
+                                
+
+
 
   template <concepts::accelerator TAcc,
             concepts::queue TQueue,
