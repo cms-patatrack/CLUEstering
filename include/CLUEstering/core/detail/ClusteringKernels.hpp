@@ -144,12 +144,12 @@ namespace clue::detail {
   };
 
   struct KernelCreateFreqGrid{
-    template <typename TAcc>
+    template <typename TAcc, typename TData>
     requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                              float* k_grid,// grid of frequencies
-                              float freq_max,
-                              float step, // step size between frequencies
+                              TData* k_grid,// grid of frequencies
+                              TData freq_max,
+                              TData step, // step size between frequencies
                               int n_grid) const {
         for (auto i : alpaka::uniformElements(acc, n_grid)){
             k_grid[i] = -freq_max + i * step;
@@ -162,11 +162,11 @@ struct KernelCreateMeshGrid{
     requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                               TData* meshgrid,
-                              const float* k_grid,
+                              const TData* k_grid,
                               int n_grid) const {
         for (auto idx : alpaka::uniformElements(acc, n_grid * n_grid)){
-            int i = idx / n_grid; // row index
-            int j = idx % n_grid; //column index
+            auto i = idx / n_grid; // row index
+            auto j = idx % n_grid; //column index
             meshgrid[idx] = k_grid[i];  // k0
             meshgrid[idx + n_grid * n_grid]  = k_grid[j];  // k1
         }
@@ -189,7 +189,7 @@ struct KernelFourrierTransform {
             auto real = TData{};
             auto imag = TData{};
 
-            for (int n = 0; n < n_samples; ++n) {
+            for (auto n = 0; n < n_samples; ++n) {
                 const auto x = X_flat[n];
                 const auto y = X_flat[n + n_samples];
                 const auto k0 = meshgrid[idx];
@@ -218,9 +218,9 @@ struct KernelMultByGaussian {
             TData* c_real,
             TData* c_imag,
             int n_grid,
-            double sigma_kernel) const {
+            TData sigma_kernel) const {
         for (auto idx : alpaka::uniformElements(acc, n_grid * n_grid)) {
-            g_hat_flat[idx] = std::exp(-0.5f * sigma_kernel * sigma_kernel *
+            g_hat_flat[idx] = math::exp(-0.5f * sigma_kernel * sigma_kernel *
                                        (meshgrid[idx] * meshgrid[idx] +
                                         meshgrid[idx + n_grid * n_grid] * meshgrid[idx + n_grid * n_grid]));
             rho_hat_flat_real[idx] = c_real[idx] * g_hat_flat[idx];
@@ -243,12 +243,12 @@ struct KernelInverseFourrierTransform {
             int n_samples,
             int n_grid) const {
             for (auto idx : alpaka::uniformElements(acc, n_samples)) {
-            TData real_sum = TData{};
-            for (int i = 0; i < n_grid * n_grid; ++i) {
-                TData theta = meshgrid[i] * X_flat[idx]
+            auto real_sum = TData{};
+            for (auto i = 0; i < n_grid * n_grid; ++i) {
+                auto theta = meshgrid[i] * X_flat[idx]
                             + meshgrid[i + n_grid * n_grid] * X_flat[idx + n_samples];
-                real_sum += rho_hat_flat_real[i] * std::cos(theta)
-                          - rho_hat_flat_imag[i] * std::sin(theta);
+                real_sum += rho_hat_flat_real[i] * math::cos(theta)
+                          - rho_hat_flat_imag[i] * math::sin(theta);
             }
             rho_fourier[idx] = prefactor * real_sum;
         }
