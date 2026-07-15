@@ -192,8 +192,8 @@ namespace clue::detail {
           const auto dot_product = k0 * x + k1 * y;
           const auto weight = w_flat[n];
 
-          real += weight * cos(dot_product);
-          imag += weight * -1 * sin(dot_product);
+          real += weight * alpaka::math::cos(acc, dot_product);
+          imag += weight * -1 * alpaka::math::sin(acc, dot_product);
         }
 
         c_real[idx] = real / n_samples;
@@ -243,7 +243,7 @@ namespace clue::detail {
           auto theta =
               meshgrid[i] * X_flat[idx] + meshgrid[i + n_grid * n_grid] * X_flat[idx + n_samples];
           real_sum +=
-              rho_hat_flat_real[i] * math::cos(theta) - rho_hat_flat_imag[i] * math::sin(theta);
+              rho_hat_flat_real[i] * alpaka::math::cos(acc, theta) - rho_hat_flat_imag[i] * alpaka::math::sin(acc, theta);
         }
         rho_fourier[idx] = prefactor * real_sum;
       }
