@@ -173,11 +173,10 @@ namespace clue::detail {
     template <typename TAcc, typename TData>
       requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  const TData* X_flat,
                                   const TData* meshgrid,
-                                  TData* w_flat,
                                   TData* c_real,
                                   TData* c_imag,
+                                  PointsView<Ndim, TPointsData> dev_points,
                                   int n_samples,
                                   int n_grid) const {
       for (auto idx : alpaka::uniformElements(acc, n_grid * n_grid)) {
@@ -185,12 +184,12 @@ namespace clue::detail {
         auto imag = TData{};
 
         for (auto n = 0; n < n_samples; ++n) {
-          const auto x = X_flat[n];
-          const auto y = X_flat[n + n_samples];
+          const auto x = dev_points[n][0];
+          const auto y = dev_points[n][1];
           const auto k0 = meshgrid[idx];
           const auto k1 = meshgrid[idx + n_grid * n_grid];
           const auto dot_product = k0 * x + k1 * y;
-          const auto weight = w_flat[n];
+          const auto weight = dev_points.weights()[n];
 
           real += weight * alpaka::math::cos(acc, dot_product);
           imag += weight * -1 * alpaka::math::sin(acc, dot_product);
@@ -229,11 +228,10 @@ namespace clue::detail {
     template <typename TAcc, typename TData>
       requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  const TData* X_flat,
+                                  PointsView<Ndim, TPointsData> dev_points,
                                   const TData* meshgrid,
                                   TData* rho_hat_flat_real,
                                   TData* rho_hat_flat_imag,
-                                  TData* rho_fourier,
                                   TData prefactor,
                                   int n_samples,
                                   int n_grid) const {
@@ -241,11 +239,11 @@ namespace clue::detail {
         auto real_sum = TData{};
         for (auto i = 0; i < n_grid * n_grid; ++i) {
           auto theta =
-              meshgrid[i] * X_flat[idx] + meshgrid[i + n_grid * n_grid] * X_flat[idx + n_samples];
-          real_sum +=
-              rho_hat_flat_real[i] * alpaka::math::cos(acc, theta) - rho_hat_flat_imag[i] * alpaka::math::sin(acc, theta);
+              meshgrid[i] * dev_points[idx][0] + meshgrid[i + n_grid * n_grid] * dev_points[idx][1];
+          real_sum += rho_hat_flat_real[i] * alpaka::math::cos(acc, theta) -
+                      rho_hat_flat_imag[i] * alpaka::math::sin(acc, theta);
         }
-        rho_fourier[idx] = prefactor * real_sum;
+        dev_points.rho()[idx] = prefactor * real_sum;
       }
     }
   };
@@ -509,11 +507,8 @@ namespace clue::detail {
     alpaka::exec<TAcc>(
         queue, wd_grid, KernelCreateFreqGrid{}, d_k_grid.data(), freq_max, step, n_grid);
 
-    alpaka::wait(queue);
-
     alpaka::exec<TAcc>(
         queue, wd_mesh, KernelCreateMeshGrid{}, d_meshgrid.data(), d_k_grid.data(), n_grid);
-    alpaka::wait(queue);
 
     alpaka::exec<TAcc>(queue,
                        wd_pts,
@@ -525,7 +520,6 @@ namespace clue::detail {
                        d_c_imag.data(),
                        n_points,
                        n_grid);
-    alpaka::wait(queue);
 
     alpaka::exec<TAcc>(queue,
                        wd_mesh,
