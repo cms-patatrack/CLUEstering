@@ -8,8 +8,6 @@
 #include <cmath>
 #endif
 
-
-
 namespace clue::math {
 
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline double cyl_bessel_j(int n, double x) {
