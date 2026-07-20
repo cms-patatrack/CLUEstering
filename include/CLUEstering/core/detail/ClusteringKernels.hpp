@@ -170,8 +170,10 @@ namespace clue::detail {
   };
 
   struct KernelFourrierTransform {
-    template <typename TAcc, typename TData>
-      requires(alpaka::Dim<TAcc>::value == 1)
+    template <typename TAcc, std::size_t Ndim,
+              std::floating_point TData,
+              std::floating_point TPointsData = TData>
+      requires(alpaka::Dim<TAcc>::value == 1 && Ndim == 2)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   const TData* meshgrid,
                                   TData* c_real,
@@ -225,8 +227,10 @@ namespace clue::detail {
   };
 
   struct KernelInverseFourrierTransform {
-    template <typename TAcc, typename TData>
-      requires(alpaka::Dim<TAcc>::value == 1)
+    template <typename TAcc, std::size_t Ndim,
+              std::floating_point TData,
+              std::floating_point TPointsData = TData>
+      requires(alpaka::Dim<TAcc>::value == 1 && Ndim == 2)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   PointsView<Ndim, TPointsData> dev_points,
                                   const TData* meshgrid,
@@ -488,13 +492,13 @@ namespace clue::detail {
                                   TData freq_max,
                                   int32_t n_grid,
                                   int32_t n_points) {
-    auto d_k_grid = clue::make_device_buffer<TData{}>(queue, n_grid);
-    auto d_meshgrid = clue::make_device_buffer<TData{}>(queue, 2 * n_grid * n_grid);
-    auto d_c_real = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
-    auto d_c_imag = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
-    auto d_rho_hat_flat_real = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
-    auto d_rho_hat_flat_imag = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
-    auto d_g_hat_flat = clue::make_device_buffer<TData{}>(queue, n_grid * n_grid);
+    auto d_k_grid = clue::make_device_buffer<TData[]>(queue, n_grid);
+    auto d_meshgrid = clue::make_device_buffer<TData[]>(queue, 2 * n_grid * n_grid);
+    auto d_c_real = clue::make_device_buffer<TData[]>(queue, n_grid * n_grid);
+    auto d_c_imag = clue::make_device_buffer<TData[]>(queue, n_grid * n_grid);
+    auto d_rho_hat_flat_real = clue::make_device_buffer<TData[]>(queue, n_grid * n_grid);
+    auto d_rho_hat_flat_imag = clue::make_device_buffer<TData[]>(queue, n_grid * n_grid);
+    auto d_g_hat_flat = clue::make_device_buffer<TData[]>(queue, n_grid * n_grid);
 
     const auto wd_grid = clue::make_workdiv<TAcc>(nostd::ceil_div(n_grid, block_size), block_size);
     const auto wd_mesh =
@@ -507,19 +511,24 @@ namespace clue::detail {
     alpaka::exec<TAcc>(
         queue, wd_grid, KernelCreateFreqGrid{}, d_k_grid.data(), freq_max, step, n_grid);
 
+    alpaka::wait(queue);
+
     alpaka::exec<TAcc>(
         queue, wd_mesh, KernelCreateMeshGrid{}, d_meshgrid.data(), d_k_grid.data(), n_grid);
 
+    alpaka::wait(queue);
+
     alpaka::exec<TAcc>(queue,
-                       wd_pts,
-                       KernelFourrierTransform{},
-                       dev_points.coords(),
-                       d_meshgrid.data(),
-                       dev_points.weights(),
-                       d_c_real.data(),
-                       d_c_imag.data(),
-                       n_points,
-                       n_grid);
+                    wd_pts,
+                    KernelFourrierTransform{},
+                    d_meshgrid.data(),   
+                    d_c_real.data(),
+                    d_c_imag.data(),
+                    dev_points,          
+                    n_points,
+                    n_grid);
+
+    alpaka::wait(queue);
 
     alpaka::exec<TAcc>(queue,
                        wd_mesh,
@@ -533,14 +542,15 @@ namespace clue::detail {
                        n_grid,
                        sigma_kernel);
 
+    alpaka::wait(queue);
+
     alpaka::exec<TAcc>(queue,
                        wd_pts,
                        KernelInverseFourrierTransform{},
-                       dev_points.coords(),
+                       dev_points,
                        d_meshgrid.data(),
                        d_rho_hat_flat_real.data(),
                        d_rho_hat_flat_imag.data(),
-                       dev_points.rho(),
                        prefactor,
                        n_points,
                        n_grid);
