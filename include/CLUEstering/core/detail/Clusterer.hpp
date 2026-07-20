@@ -268,14 +268,15 @@ namespace clue {
     const Idx grid_size = nostd::ceil_div(n_points, block_size);
     auto work_division = clue::make_workdiv<internal::Acc>(grid_size, block_size);
 
+    if constexpr (Ndim == 2) {
     detail::computeLocalDensity<internal::Acc>(queue,
-                                               work_division,
-                                               m_tiles->view(),
+                                               block_size,
                                                dev_points.view(),
-                                               kernel,
-                                               m_density_radius,
-                                               metric,
+                                               InputType{0.2},
+                                               InputType{0.2},
+                                               32,
                                                n_points);
+   }
     auto seed_candidates = std::size_t{0};
     detail::computeNearestHighers<internal::Acc>(queue,
                                                  work_division,
