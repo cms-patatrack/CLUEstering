@@ -227,7 +227,13 @@ namespace clue {
     /// @param uncertainties One contiguous range per dimension, in dimension order
     template <std::ranges::contiguous_range... Containers>
       requires(sizeof...(Containers) == Ndim)
-    void set_sigmas(Containers&&... uncertainties);
+    void set_sigmas(Containers&&... uncertainties) {
+      auto containers_tuple = std::forward_as_tuple(std::forward<Containers>(uncertainties)...);
+      meta::apply<Ndim>([&]<std::size_t Dim>() {
+        auto& c = std::get<Dim>(containers_tuple);
+        set_sigma(Dim, std::span<element_type>(c.data(), c.size()));
+      });
+    }
 
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;
