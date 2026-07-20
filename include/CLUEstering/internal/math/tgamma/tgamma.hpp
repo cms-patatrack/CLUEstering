@@ -9,10 +9,6 @@
 #include <cmath>
 #endif
 
-#if __STDCPP_FLOAT16_T__ == 1
-#include <stdfloat>
-#endif
-
 namespace clue::math {
 
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline double tgamma(double x) {
