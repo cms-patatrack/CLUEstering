@@ -139,15 +139,4 @@ namespace clue {
     m_view.m_sigmas[dim] = uncertainty.data();
   }
 
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  template <std::ranges::contiguous_range... Containers>
-    requires(sizeof...(Containers) == Ndim)
-  inline void PointsDevice<Ndim, TData, TDev>::set_sigmas(Containers&&... uncertainties) {
-    auto containers_tuple = std::forward_as_tuple(std::forward<Containers>(uncertainties)...);
-    meta::apply<Ndim>([&]<std::size_t Dim>() {
-      auto& c = std::get<Dim>(containers_tuple);
-      set_sigma(Dim, std::span<element_type>(c.data(), c.size()));
-    });
-  }
-
 }  // namespace clue
