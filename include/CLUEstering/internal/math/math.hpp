@@ -7,3 +7,5 @@
 #include "min/min.hpp"
 #include "pow/pow.hpp"
 #include "sqrt/sqrt.hpp"
+#include "tgamma/tgamma.hpp"
+#include "bessel/bessel.hpp"

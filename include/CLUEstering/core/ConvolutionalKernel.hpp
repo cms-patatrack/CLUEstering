@@ -15,19 +15,23 @@ namespace clue {
   /// It returns a constant value for the kernel, regardless of the distance between points.
   ///
   /// @tparam TData The data type for the kernel values
-  template <std::floating_point TData = float>
+  template <std::floating_point TData, std::size_t Ndim = 2>
   class FlatKernel {
   public:
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
 
   private:
     value_type m_flat;
+    value_type density_radius;
 
   public:
     /// @brief Construct a FlatKernel object
     ///
     /// @param flat The flat value for the kernel
     FlatKernel(value_type flat);
+
+    FlatKernel(value_type flat, value_type radius);
+    
 
     /// @brief Computes the kernel value between two points
     ///
@@ -41,13 +45,18 @@ namespace clue {
                                        value_type dist_ij,
                                        int point_id,
                                        int j) const;
+   template <typename TAcc>
+    ALPAKA_FN_HOST_ACC auto freq_eval(const TAcc& acc, 
+                                    const value_type* k) const;                                    
   };
+
+  
 
   /// @brief The GaussianKernel class implements a Gaussian kernel for convolution.
   /// It computes the kernel value based on the Gaussian function, which is defined by its average, standard deviation, and amplitude.
   ///
   /// @tparam TData The data type for the kernel values
-  template <std::floating_point TData = float>
+  template <std::floating_point TData, std::size_t Ndim>
   class GaussianKernel {
   public:
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
@@ -77,13 +86,17 @@ namespace clue {
                                        value_type dist_ij,
                                        int point_id,
                                        int j) const;
+    template <typename TAcc>
+    ALPAKA_FN_HOST_ACC auto freq_eval(const TAcc& acc, 
+      const value_type* k) const;
   };
 
   /// @brief The ExponentialKernel class implements an exponential kernel for convolution.
   /// It computes the kernel value based on the exponential function, which is defined by its average and amplitude.
   ///
   /// @tparam TData The data type for the kernel values
-  template <std::floating_point TData = float>
+  /// @tparam Ndim The number of dimensions
+  template <std::floating_point TData, std::size_t Ndim>
   class ExponentialKernel {
   public:
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
@@ -111,6 +124,9 @@ namespace clue {
                                        value_type dist_ij,
                                        int point_id,
                                        int j) const;
+    template <typename TAcc>
+    ALPAKA_FN_HOST_ACC auto freq_eval(const TAcc& acc, 
+                                      const value_type* k) const;
   };
 
   namespace concepts {

@@ -21,10 +21,16 @@ TEST_CASE("Test computation of cluster centroid") {
   const auto n_points = h_points.size();
   clue::PointsDevice<2> d_points(queue, n_points);
 
-  const float dc{21.f}, rhoc{10.f}, outlier{21.f};
+  const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
 
   algo.make_clusters(queue, h_points, d_points);
+
+  auto clusters = clue::get_clusters(h_points);
+  fmt::print("Number of clusters found: {}\n", clusters.size());
+  for (auto c : clusters) fmt::print("cluster index: {}\n", c);
+  for (auto i = 0u; i < std::min<std::size_t>(h_points.size(), 10); ++i)
+  fmt::print("rho[{}] = {}\n", i, d_points.view().rho()[i]);
 
   SUBCASE("Check centroid of cluster 0") {
     auto centroid = clue::cluster_centroid(h_points, 0);

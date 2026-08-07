@@ -269,13 +269,29 @@ namespace clue {
     auto work_division = clue::make_workdiv<internal::Acc>(grid_size, block_size);
 
     if constexpr (Ndim == 2) {
-    detail::computeLocalDensity<internal::Acc>(queue,
+
+      /// tile method
+
+   /* alpaka::exec<internal::Acc>(queue,
+                                work_division,
+                                detail::KernelCalculateLocalDensity{},
+                                m_tiles->view(),
+                                dev_points.view(),
+                                kernel,
+                                m_seeding_distance,
+                                metric,
+                                n_points); */
+
+
+      // spectral
+   detail::computeLocalDensity<internal::Acc>(queue,
                                                block_size,
                                                dev_points.view(),
-                                               InputType{0.2},
-                                               InputType{0.2},
-                                               32,
+                                               kernel,
+                                               InputType{3.0},
+                                               256,
                                                n_points);
+                                              
    }
     auto seed_candidates = std::size_t{0};
     detail::computeNearestHighers<internal::Acc>(queue,
