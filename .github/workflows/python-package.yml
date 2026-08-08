@@ -40,7 +40,7 @@ jobs:
     steps:
     - name: Cache dnf packages
       if: matrix.container != ''
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: /var/cache/dnf
         key: dnf-${{ matrix.name }}
@@ -53,7 +53,7 @@ jobs:
 
     - name: Cache Homebrew downloads
       if: matrix.os == 'macos-latest'
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/Library/Caches/Homebrew/downloads
         key: brew-${{ runner.os }}-boost-tbb-libomp
@@ -95,14 +95,14 @@ jobs:
 
     - name: Cache pip packages
       if: matrix.os != 'windows-latest'
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.cache/pip
         key: pip-${{ matrix.name }}-pytest-sklearn-pandas-matplotlib
 
     - name: Cache pip packages (Windows)
       if: matrix.os == 'windows-latest'
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~\AppData\Local\pip\Cache
         key: pip-${{ matrix.name }}-pytest-sklearn-pandas-matplotlib

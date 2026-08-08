@@ -21,7 +21,7 @@ jobs:
           submodules: true
 
       - name: Cache apt packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: /var/cache/apt/archives
           key: apt-${{ runner.os }}-lcov-boost-tbb
@@ -32,7 +32,7 @@ jobs:
           sudo apt install -y lcov libboost-atomic-dev
 
       - name: Cache pip packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/pip
           key: pip-${{ runner.os }}-coverage-pytest-sklearn-pandas-matplotlib
