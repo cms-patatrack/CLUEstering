@@ -45,6 +45,9 @@ jobs:
         submodules: true
         fetch-depth: 0
 
+    - name: Mark workspace as safe for git
+      run: git config --global --add safe.directory '*'
+
     - name: Install dependencies
       run: |
         dnf install epel-release -y
@@ -146,7 +149,7 @@ jobs:
       env:
         RUNNER_NAME: ${{ matrix.runner }}
       run: |
-        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        git config --global --add safe.directory '*'
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
