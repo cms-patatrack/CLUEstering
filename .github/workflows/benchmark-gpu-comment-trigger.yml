@@ -1,0 +1,95 @@
+name: Benchmark GPU comment trigger
+
+# Listens for a "/benchmark-gpu" comment on a PR and, if the commenter is a
+# maintainer, dispatches benchmark-nvidia-gpu.yml and benchmark-amd-gpu.yml
+# for that PR's head commit. Runs on ubuntu-latest (not self-hosted): it only
+# talks to the GitHub API, it never checks out or builds PR code itself.
+#
+# issue_comment runs with the base repo's token/secrets even for comments on
+# PRs opened from forks, so the maintainer check below MUST happen before any
+# self-hosted GPU job is dispatched.
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  actions: write
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  trigger:
+    if: >
+      github.event.issue.pull_request != null &&
+      contains(github.event.comment.body, '/benchmark-gpu')
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check that the commenter is a maintainer
+      id: check
+      run: |
+        case "${{ github.event.comment.author_association }}" in
+          OWNER|MEMBER|COLLABORATOR)
+            echo "authorized=true" >> "$GITHUB_OUTPUT" ;;
+          *)
+            echo "authorized=false" >> "$GITHUB_OUTPUT" ;;
+        esac
+
+    - name: Reject unauthorized request
+      if: steps.check.outputs.authorized == 'false'
+      uses: actions/github-script@v9
+      with:
+        script: |
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: "Only repository maintainers can trigger GPU benchmarks with `/benchmark-gpu`.",
+          });
+
+    - name: Acknowledge request
+      if: steps.check.outputs.authorized == 'true'
+      uses: actions/github-script@v9
+      with:
+        script: |
+          await github.rest.reactions.createForIssueComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            comment_id: context.payload.comment.id,
+            content: 'rocket',
+          });
+
+    - name: Resolve PR head commit
+      if: steps.check.outputs.authorized == 'true'
+      id: pr
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        SHA=$(gh pr view "${{ github.event.issue.number }}" \
+          --repo "${{ github.repository }}" \
+          --json headRefOid --jq .headRefOid)
+        echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+    - name: Dispatch NVIDIA GPU benchmark
+      if: steps.check.outputs.authorized == 'true'
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh workflow run benchmark-nvidia-gpu.yml \
+          --repo "${{ github.repository }}" \
+          --ref main \
+          -f pr_number="${{ github.event.issue.number }}" \
+          -f head_sha="${{ steps.pr.outputs.sha }}"
+
+    - name: Dispatch AMD GPU benchmark
+      if: steps.check.outputs.authorized == 'true'
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh workflow run benchmark-amd-gpu.yml \
+          --repo "${{ github.repository }}" \
+          --ref main \
+          -f pr_number="${{ github.event.issue.number }}" \
+          -f head_sha="${{ steps.pr.outputs.sha }}"
