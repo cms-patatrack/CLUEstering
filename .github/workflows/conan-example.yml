@@ -3,8 +3,14 @@ name: Run exaple with Conan
 on:
   push:
     branches: [ "main" ]
+    paths: &cpp-paths
+      - "include/**"
+      - "**/CMakeLists.txt"
+      - "**/*.cmake"
+      - "cmake/**"
   pull_request:
     branches: [ "main" ]
+    paths: *cpp-paths
 
 jobs:
   build-conan-example:

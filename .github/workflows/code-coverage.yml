@@ -4,8 +4,15 @@ name: Code Coverage
 on:
   push:
     branches: [ main ]
+    paths: &python-paths
+      - "include/**"
+      - "**/CMakeLists.txt"
+      - "**/*.cmake"
+      - "cmake/**"
+      - "CLUEstering/**"
   pull_request:
     branches: [ main ]
+    paths: *python-paths
 
 permissions:
   contents: read
