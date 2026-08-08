@@ -1,10 +1,36 @@
 name: Run benchmarks on NVIDIA GPU backend
 
-on: pull_request
+# Not triggered automatically on every PR: GPU benchmarks run on shared,
+# self-hosted lab hardware, so they only start on explicit maintainer request
+# via a "/benchmark-gpu" PR comment (see benchmark-gpu-comment-trigger.yml),
+# which dispatches this workflow. After a merge to main, this workflow also
+# re-runs automatically to append a data point to the historical log.
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to comment the comparison on"
+        required: true
+      head_sha:
+        description: "Commit SHA of the PR to benchmark"
+        required: true
+  push:
+    branches: [ "main" ]
+    paths:
+      - "include/**"
+      - "benchmark/**"
+      - "**/CMakeLists.txt"
+      - "cmake/**"
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-  benchmark-nvidia-gpu:
+  compare:
+    if: github.event_name == 'workflow_dispatch'
     strategy:
+      fail-fast: false
       matrix:
         runner:
           - cms-patatrack-h100
@@ -13,7 +39,90 @@ jobs:
     container: registry.cern.ch/ngt/lxplus-like:9
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.head_sha }}
+        submodules: true
+        fetch-depth: 0
+
+    - name: Install dependencies
+      run: |
+        dnf install epel-release -y
+        dnf makecache -y
+        dnf install -y google-benchmark google-benchmark-devel python3
+
+    - name: Compile and run benchmark (PR)
+      working-directory: ${{ github.workspace }}/benchmark/dataset_size
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --parallel
+        ./build/serial.out --benchmark_format=json --benchmark_out=serial-pr.json
+        ./build/openmp.out --benchmark_format=json --benchmark_out=openmp-pr.json
+        ./build/cuda.out --benchmark_format=json --benchmark_out=cuda-pr.json
+
+    - name: Resolve latest release tag
+      id: baseline
+      run: |
+        git fetch --tags --force origin
+        BASELINE_TAG=$(git tag --sort=-creatordate | head -n1)
+        if [ -z "$BASELINE_TAG" ]; then
+          echo "No release tag found, cannot build a baseline." >&2
+          exit 1
+        fi
+        echo "tag=$BASELINE_TAG" >> "$GITHUB_OUTPUT"
+
+    - name: Compile and run benchmark (baseline)
+      working-directory: ${{ github.workspace }}
+      run: |
+        git worktree remove --force ../baseline 2>/dev/null || true
+        git worktree prune
+        git worktree add ../baseline "${{ steps.baseline.outputs.tag }}"
+        cd ../baseline
+        git submodule update --init --recursive
+        cd benchmark/dataset_size
+        cmake -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --parallel
+        ./build/serial.out --benchmark_format=json --benchmark_out=serial-baseline.json
+        ./build/openmp.out --benchmark_format=json --benchmark_out=openmp-baseline.json
+        ./build/cuda.out --benchmark_format=json --benchmark_out=cuda-baseline.json
+
+    - name: Compare against baseline
+      working-directory: ${{ github.workspace }}/benchmark/dataset_size
+      run: |
+        python3 ${{ github.workspace }}/.github/scripts/compare_benchmarks.py \
+          --pair serial serial-pr.json ../../../baseline/benchmark/dataset_size/serial-baseline.json \
+          --pair openmp openmp-pr.json ../../../baseline/benchmark/dataset_size/openmp-baseline.json \
+          --pair cuda cuda-pr.json ../../../baseline/benchmark/dataset_size/cuda-baseline.json \
+          --baseline-label "${{ steps.baseline.outputs.tag }} (${{ matrix.runner }})" \
+          --output report.md
+        cat report.md >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Post comparison as PR comment
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const fs = require('fs');
+          const body = fs.readFileSync('${{ github.workspace }}/benchmark/dataset_size/report.md', 'utf8');
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: ${{ inputs.pr_number }},
+            body,
+          });
+
+  save-history:
+    if: github.event_name == 'push'
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - cms-patatrack-h100
+          - cms-patatrack-l40s
+    runs-on: ${{ matrix.runner }}
+    container: registry.cern.ch/ngt/lxplus-like:9
+
+    steps:
+    - uses: actions/checkout@v4
       with:
         submodules: true
 
@@ -21,16 +130,46 @@ jobs:
       run: |
         dnf install epel-release -y
         dnf makecache -y
-        dnf install -y google-benchmark google-benchmark-devel
+        dnf install -y google-benchmark google-benchmark-devel git
 
     - name: Compile and run benchmark
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build --parallel
-        echo "Running serial backend"
-        ./build/serial.out
-        echo "Running OpenMP backend"
-        ./build/openmp.out
-        echo "Running CUDA backend"
-        ./build/cuda.out
+        ./build/serial.out --benchmark_format=json --benchmark_out=serial.json
+        ./build/openmp.out --benchmark_format=json --benchmark_out=openmp.json
+        ./build/cuda.out --benchmark_format=json --benchmark_out=cuda.json
+
+    - name: Append results to benchmark-results history
+      working-directory: ${{ github.workspace }}
+      env:
+        RUNNER_NAME: ${{ matrix.runner }}
+      run: |
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        SHORT_SHA=$(git rev-parse --short HEAD)
+        DATE=$(date -u +%Y-%m-%d)
+        DEST="results/${RUNNER_NAME}/${DATE}_${SHORT_SHA}"
+
+        for attempt in 1 2 3 4 5; do
+          git worktree remove --force ../results-branch 2>/dev/null || true
+          git worktree prune
+          git fetch origin benchmark-results
+          git worktree add ../results-branch origin/benchmark-results
+          cd ../results-branch
+          git switch -C benchmark-results
+          mkdir -p "$DEST"
+          cp "$GITHUB_WORKSPACE"/benchmark/dataset_size/serial.json "$DEST"/serial.json
+          cp "$GITHUB_WORKSPACE"/benchmark/dataset_size/openmp.json "$DEST"/openmp.json
+          cp "$GITHUB_WORKSPACE"/benchmark/dataset_size/cuda.json "$DEST"/cuda.json
+          git add "$DEST"
+          git commit -m "Add NVIDIA benchmark results for ${SHORT_SHA} (${RUNNER_NAME})"
+          if git push origin HEAD:benchmark-results; then
+            break
+          fi
+          cd "$GITHUB_WORKSPACE"
+          sleep $((attempt * 5))
+        done
