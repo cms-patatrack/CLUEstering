@@ -28,13 +28,13 @@ jobs:
         # $CONDA is an environment variable pointing to the root of the miniconda directory
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Cache conda packages
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/conda_pkgs_dir
         key: conda-${{ runner.os }}-${{ hashFiles('.env/test_env.yml') }}
         restore-keys: conda-${{ runner.os }}-
     - name: Cache pip packages
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.cache/pip
         key: pip-${{ runner.os }}-anaconda-pytest-sklearn-pandas-matplotlib
