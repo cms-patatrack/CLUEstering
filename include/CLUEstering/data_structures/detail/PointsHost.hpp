@@ -23,10 +23,12 @@ namespace clue {
   template <concepts::queue TQueue>
   inline PointsHost<Ndim, TData>::PointsHost(TQueue& queue, int32_t n_points)
       : m_buffer{make_host_buffer<std::byte[]>(
-            queue, soa::host::computeSoASize<Ndim, value_type>(n_points))},
+            queue,
+            soa::host::computeSoASize<Ndim, value_type>(computeAlignSoASize<Ndim>(n_points)))},
         m_view{},
         m_size{n_points} {
-    soa::host::partitionSoAView(m_view, m_buffer->data(), n_points);
+    soa::host::partitionSoAView(m_view, m_buffer->data(), computeAlignSoASize<Ndim>(n_points));
+    m_view.m_n = n_points;
   }
 
   template <std::size_t Ndim, std::floating_point TData>
