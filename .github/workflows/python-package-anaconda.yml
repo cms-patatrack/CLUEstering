@@ -23,7 +23,7 @@ jobs:
       CONDA_PKGS_DIRS: ~/conda_pkgs_dir
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
       with:
         submodules: true
     - name: Set up Python 3.10
