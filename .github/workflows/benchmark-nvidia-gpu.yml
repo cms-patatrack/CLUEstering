@@ -39,7 +39,7 @@ jobs:
     container: registry.cern.ch/ngt/lxplus-like:9
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         ref: ${{ inputs.head_sha }}
         submodules: true
@@ -125,7 +125,7 @@ jobs:
     container: registry.cern.ch/ngt/lxplus-like:9
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         submodules: true
 
