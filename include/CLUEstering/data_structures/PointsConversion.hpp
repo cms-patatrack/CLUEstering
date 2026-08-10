@@ -44,6 +44,29 @@ namespace clue {
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
   auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TInput, TDev>& d_points);
 
+  /// @brief Copies the results of the clustering from the device points to
+  /// the host points
+  ///
+  /// @tparam TQueue The type of the queue for the device operations
+  /// @tparam Ndim The number of dimensions of the points
+  /// @tparam THostInput The type of the input coordinates and weights for the host points
+  /// @tparam TDeviceInput The type of the input coordinates and weights for the device points
+  /// @tparam TDev The type of device that the points are allocated on
+  /// @param queue The queue used for the device operations
+  /// @param h_points The points allocated on the host, where the clustering results will be saved
+  /// @param d_points The points allocated on the device, where the clustering has been run
+  ///
+  /// @note This function is asynchronous and does not block the host thread.
+  /// The user must ensure that the device points remain valid until the copy operation is complete.
+  template <concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point THostInput,
+            std::floating_point TDeviceInput,
+            concepts::device TDev>
+  void copyToHostAsync(TQueue& queue,
+                       PointsHost<Ndim, THostInput>& h_points,
+                       const PointsDevice<Ndim, TDeviceInput, TDev>& d_points);
+
   /// @brief Copies the coordinates and weights of the points from the host to the device
   ///
   /// @tparam TQueue The type of the queue for the device operations
@@ -76,6 +99,29 @@ namespace clue {
   /// and weights
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
   auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TInput>& h_points);
+
+  /// @brief Copies the coordinates and weights of the points from the host to the device
+  ///
+  /// @tparam TQueue The type of the queue for the device operations
+  /// @tparam Ndim The number of dimensions of the points
+  /// @tparam TDeviceInput The type of the input coordinates and weights for the device points
+  /// @tparam TDev The type of device that the points are allocated on
+  /// @tparam THostInput The type of the input coordinates and weights for the host points
+  /// @param queue The queue used for the device operations
+  /// @param d_points The empty points allocated on the device
+  /// @param h_points The points allocated on the host, containing the points' coordinates
+  /// and weights
+  ///
+  /// @note This function is asynchronous and does not block the host thread.
+  /// The user must ensure that the host points remain valid until the copy operation is complete.
+  template <concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TDeviceInput,
+            concepts::device TDev,
+            std::floating_point THostInput>
+  void copyToDeviceAsync(TQueue& queue,
+                         PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
+                         const PointsHost<Ndim, THostInput>& h_points);
 
 }  // namespace clue
 
