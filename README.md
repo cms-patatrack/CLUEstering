@@ -119,7 +119,7 @@ The data can be provided in many different formats, including numpy arrays, pand
 ## References and citing
 - [M. Rovere et al., *CLUE: A Fast Parallel Clustering Algorithm for High-Density Environments*, Front. Big Data (2020)](https://www.frontiersin.org/articles/10.3389/fdata.2020.591315/full)
 - [S. Balducci, *CLUEstering: a high-performance density-based clustering library for scientific computing*, UNIBO Master Thesis (2024)](https://amslaurea.unibo.it/id/eprint/32544/)
-- [S. Balducci et al., *CLUE: A Scalable Clustering Algorithm for the Data Challenges of Tomorrow*, CERN EP newsletter (2025)](https://ep-news.web.cern.ch/content/clue-scalable-clustering-algorithm-data-challenges-tomorrow)
+- [S. Balducci et al., *CLUE: A Scalable Clustering Algorithm for the Data Challenges of Tomorrow*, CERN EP newsletter (2025)](https://ep-news-wp.web.cern.ch/clue-scalable-clustering-algorithm-data-challenges-tomorrow/)
 - [S. Balducci et al., *CLUEstering: a novel high-performance clustering library for scientific computing*, 23rd International Workshop on Advanced Computing and Analysis Techniques in Physics Research (ACAT 2025)](https://indico.cern.ch/event/1488410/contributions/6562810/)
 
 To cite this software directly, please use the following BibTeX entry:
