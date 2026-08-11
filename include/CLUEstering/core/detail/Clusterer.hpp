@@ -250,20 +250,13 @@ namespace clue {
                                                      const Kernel& kernel,
                                                      Queue& queue) {
     constexpr std::size_t block_size = 256;
-    const auto n_points = dev_points.size();
-    m_tiles->template fill<internal::Acc>(queue, dev_points, n_points);
+    m_tiles->template fill<internal::Acc>(queue, dev_points);
 
-    const Idx grid_size = nostd::ceil_div(n_points, block_size);
+    const Idx grid_size = nostd::ceil_div(dev_points.size(), block_size);
     auto work_division = clue::make_workdiv<internal::Acc>(grid_size, block_size);
 
-    detail::computeLocalDensity<internal::Acc>(queue,
-                                               work_division,
-                                               m_tiles->view(),
-                                               dev_points.view(),
-                                               kernel,
-                                               m_density_radius,
-                                               metric,
-                                               n_points);
+    detail::computeLocalDensity<internal::Acc>(
+        queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_density_radius, metric);
     auto seed_candidates = std::size_t{0};
     detail::computeNearestHighers<internal::Acc>(queue,
                                                  work_division,
@@ -273,14 +266,13 @@ namespace clue {
                                                  m_seeding_distance,
                                                  m_min_density,
                                                  metric,
-                                                 seed_candidates,
-                                                 n_points);
+                                                 seed_candidates);
     detail::setup_seeds(queue, m_seeds, seed_candidates);
     detail::findClusterSeeds<internal::Acc>(
-        queue, work_division, m_seeds.value(), dev_points.view(), m_min_density, n_points);
+        queue, work_division, m_seeds.value(), dev_points.view(), m_min_density);
 
     detail::assignPointsToClusters<internal::Acc>(
-        queue, block_size, m_seeds.value(), dev_points.view(), n_points);
+        queue, block_size, m_seeds.value(), dev_points.view());
 
     alpaka::wait(queue);
     internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(
@@ -310,9 +302,7 @@ namespace clue {
     alpaka::memcpy(queue, d_event_offsets, event_offsets);
     alpaka::wait(queue);
 
-    const auto n_points = dev_points.size();
-    m_tiles->template fill_batch<internal::Acc>(
-        queue, dev_points, n_points, d_event_offsets, max_event_size);
+    m_tiles->template fill_batch<internal::Acc>(queue, dev_points, d_event_offsets, max_event_size);
 
     detail::computeLocalDensityBatched<internal::Acc2D>(queue,
                                                         m_tiles->view(),
@@ -351,7 +341,7 @@ namespace clue {
         queue, m_seeds.value(), m_event_associations.value());
 
     detail::assignPointsToClusters<internal::Acc>(
-        queue, block_size, m_seeds.value(), dev_points.view(), n_points);
+        queue, block_size, m_seeds.value(), dev_points.view());
 
     alpaka::wait(queue);
     internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(
