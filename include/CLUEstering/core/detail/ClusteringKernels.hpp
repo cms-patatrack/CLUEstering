@@ -424,7 +424,16 @@ namespace clue::detail {
                                      clue::internal::SeedArray<>& seeds,
                                      PointsView<Ndim, TData> dev_points,
                                      int32_t n_points) {
-    const Idx seed_grid = nostd::ceil_div(seeds.size(queue), block_size);
+    const auto nseeds = seeds.size(queue);
+    if (nseeds == 0) {
+      alpaka::fill(queue,
+                   clue::make_device_view(
+                       alpaka::getDev(queue), dev_points.cluster_index().data(), dev_points.size()),
+                   -1);
+      return;
+    }
+
+    const Idx seed_grid = nostd::ceil_div(nseeds, block_size);
     alpaka::exec<TAcc>(queue,
                        clue::make_workdiv<TAcc>(seed_grid, block_size),
                        KernelAssignSeedIndices{},
