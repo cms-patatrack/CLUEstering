@@ -9,6 +9,12 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
+#if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#include "cuda/cuda_check.hpp"
+#elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#include "hip/hip_check.hpp"
+#endif
+
 TEST_CASE("Test clue::get_device utility") {
   clue::Device device = clue::get_device(0u);
   static_assert(std::is_same_v<decltype(device), clue::Device>, "Expected type clue::Device");
@@ -62,7 +68,7 @@ TEST_CASE("Test clue::get_queue utility") {
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
   SUBCASE("Create queue using CUDA stream") {
     cudaStream_t stream;
-    cudaStreamCreate(&stream);
+    CUDA_CHECK(cudaStreamCreate(&stream));
 
     {
       auto queue = clue::get_queue(stream);
@@ -75,14 +81,14 @@ TEST_CASE("Test clue::get_queue utility") {
       CHECK(1);
     }
 
-    cudaStreamDestroy(stream);
+    CUDA_CHECK(cudaStreamDestroy(stream));
   }
 #endif
 
 #ifdef ALPAKA_ACC_GPU_HIP_ENABLED
   SUBCASE("Create queue using HIP stream") {
     hipStream_t stream;
-    hipStreamCreate(&stream);
+    HIP_CHECK(hipStreamCreate(&stream));
 
     {
       auto queue = clue::get_queue(stream);
@@ -95,7 +101,7 @@ TEST_CASE("Test clue::get_queue utility") {
       CHECK(1);
     }
 
-    hipStreamDestroy(stream);
+    HIP_CHECK(hipStreamDestroy(stream));
   }
 #endif
 }
