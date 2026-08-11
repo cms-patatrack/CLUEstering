@@ -441,9 +441,9 @@ class clusterer:
                 raise ValueError("Wrong number of parameters. The exponential kernel requires 2 parameters.")
             self._kernel = clue_kernels.ExponentialKernel(parameters[0], parameters[1])
         elif choice == "gaus":
-            if len(parameters) != 3:
+            if len(parameters) != 2:
                 raise ValueError("Wrong number of parameters. The gaussian kernel requires 3 parameters.")
-            self._kernel = clue_kernels.GaussianKernel(parameters[0], parameters[1], parameters[2])
+            self._kernel = clue_kernels.GaussianKernel(parameters[0], parameters[1])
         else:
             raise ValueError("Invalid kernel. Allowed choices are: flat, exp, gaus.")
 

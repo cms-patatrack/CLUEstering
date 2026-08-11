@@ -14,7 +14,7 @@ PYBIND11_MODULE(CLUE_Convolutional_Kernels, m) {
   // ----- Convolutional kernels -----
   py::class_<clue::FlatKernel<float>>(m, "FlatKernel").def(py::init<float>());
   py::class_<clue::ExponentialKernel<float>>(m, "ExponentialKernel").def(py::init<float, float>());
-  py::class_<clue::GaussianKernel<float>>(m, "GaussianKernel").def(py::init<float, float, float>());
+  py::class_<clue::GaussianKernel<float>>(m, "GaussianKernel").def(py::init<float, float>());
 
   // ----- Distance metrics -----
   // MetricDescriptor<float> is an opaque handle; users obtain instances via the

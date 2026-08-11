@@ -53,17 +53,15 @@ namespace clue {
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
 
   private:
-    value_type m_gaus_avg;
     value_type m_gaus_std;
     value_type m_gaus_amplitude;
 
   public:
     /// @brief Construct a GaussianKernel object
     ///
-    /// @param gaus_avg The average value for the Gaussian kernel
     /// @param gaus_std The standard deviation for the Gaussian kernel
     /// @param gaus_amplitude The amplitude for the Gaussian kernel
-    GaussianKernel(value_type gaus_avg, value_type gaus_std, value_type gaus_amplitude);
+    GaussianKernel(value_type gaus_std, value_type gaus_amplitude);
 
     /// @brief Computes the kernel value between two points
     ///

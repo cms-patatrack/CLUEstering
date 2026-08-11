@@ -82,7 +82,7 @@ def test_flat_kernel(dataset):
 
 def test_gaussian_kernel(dataset):
     c = clue.clusterer(21., 10., 21.)
-    c.choose_kernel('gaus', [1.0, 0.5, 0.1])
+    c.choose_kernel('gaus', [0.5, 0.1])
     c.fit(dataset)
 
     # clustering run without errors, test passes
