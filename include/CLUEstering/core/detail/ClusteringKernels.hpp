@@ -36,7 +36,7 @@ namespace clue::detail {
                                    std::array<int32_t, Ndim>& base_vec,
                                    const clue::SearchBoxBins<Ndim>& search_box,
                                    internal::TilesView<Ndim, TData>& tiles,
-                                   PointsView<Ndim, TPointsData>& dev_points,
+                                   PointsView<Ndim, TPointsData>& points,
                                    const KernelType& kernel,
                                    const std::array<TData, Ndim + 1>& coords_i,
                                    TData& rho_i,
@@ -50,21 +50,20 @@ namespace clue::detail {
 
       for (auto tile_it = 0u; tile_it < tile_size; ++tile_it) {
         auto j = tiles[tile_idx][tile_it];
-        assert(j >= 0 && j < dev_points.size());
+        assert(j >= 0 && j < points.size());
 
         const auto distance = [&]() -> TData {
           if constexpr (concepts::detail::view_distance_metric<DistanceMetric, Ndim>) {
-            return metric(
-                dev_points, static_cast<std::size_t>(point_id), static_cast<std::size_t>(j));
+            return metric(points, static_cast<std::size_t>(point_id), static_cast<std::size_t>(j));
           } else {
-            return metric(coords_i, dev_points[j]);
+            return metric(coords_i, points[j]);
           }
         }();
         assert(distance >= TData{0});
 
         auto k = kernel(acc, distance, point_id, j);
         assert(k >= TData{0});
-        rho_i += static_cast<int>(distance <= density_radius) * k * dev_points.weights()[j];
+        rho_i += static_cast<int>(distance <= density_radius) * k * points.weights()[j];
       }
       return;
     } else {
@@ -76,7 +75,7 @@ namespace clue::detail {
                                           base_vec,
                                           search_box,
                                           tiles,
-                                          dev_points,
+                                          points,
                                           kernel,
                                           coords_i,
                                           rho_i,
@@ -98,19 +97,18 @@ namespace clue::detail {
       requires(alpaka::Dim<TAcc>::value == 1 &&
                std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  internal::TilesView<Ndim, TData> dev_tiles,
-                                  PointsView<Ndim, TPointsData> dev_points,
+                                  internal::TilesView<Ndim, TData> tiles,
+                                  PointsView<Ndim, TPointsData> points,
                                   const KernelType& kernel,
                                   TData density_radius,
-                                  DistanceMetric metric,
-                                  int32_t n_points) const {
-      for (auto i : alpaka::uniformElements(acc, n_points)) {
+                                  DistanceMetric metric) const {
+      for (auto i : alpaka::uniformElements(acc, points.size())) {
         auto rho_i = static_cast<TData>(0.);
-        auto coords_i = dev_points[i];
+        auto coords_i = points[i];
 
         clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
-          const auto sigma_i = dev_points.has_sigma(dim) ? dev_points.sigma(dim)[i] : TData{0};
+          const auto sigma_i = points.has_sigma(dim) ? points.sigma(dim)[i] : TData{0};
           const auto box_radius =
               math::max(density_radius, density_radius * sigma_i * math::sqrt(TData{2}));
           searchbox_extremes[dim] =
@@ -118,14 +116,14 @@ namespace clue::detail {
         }
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
-        dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
+        tiles.searchBox(searchbox_extremes, searchbox_bins);
 
         std::array<int32_t, Ndim> base_vec;
         for_recursion<TAcc, Ndim, Ndim>(acc,
                                         base_vec,
                                         searchbox_bins,
-                                        dev_tiles,
-                                        dev_points,
+                                        tiles,
+                                        points,
                                         kernel,
                                         coords_i,
                                         rho_i,
@@ -134,7 +132,7 @@ namespace clue::detail {
                                         i);
 
         assert(rho_i >= TData{0});
-        dev_points.rho()[i] = rho_i;
+        points.rho()[i] = rho_i;
       }
     }
   };
@@ -150,7 +148,7 @@ namespace clue::detail {
                                                   std::array<int32_t, Ndim>& base_vec,
                                                   const clue::SearchBoxBins<Ndim>& search_box,
                                                   internal::TilesView<Ndim, TData>& tiles,
-                                                  PointsView<Ndim, TPointsData>& dev_points,
+                                                  PointsView<Ndim, TPointsData>& points,
                                                   const std::array<TData, Ndim + 1>& coords_i,
                                                   TData rho_i,
                                                   TData& delta_i,
@@ -169,8 +167,8 @@ namespace clue::detail {
 
       for (auto tile_it = 0u; tile_it < tile_size; ++tile_it) {
         const auto j = tiles[tile_idx][tile_it];
-        assert(j >= 0 && j < dev_points.size());
-        auto rho_j = dev_points.rho()[j];
+        assert(j >= 0 && j < points.size());
+        auto rho_j = points.rho()[j];
         bool found_higher_in_tile = (rho_j > rho_i);
         found_higher_in_tile =
             found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
@@ -179,9 +177,9 @@ namespace clue::detail {
           const auto distance = [&]() -> TData {
             if constexpr (concepts::detail::view_distance_metric<DistanceMetric, Ndim>) {
               return metric(
-                  dev_points, static_cast<std::size_t>(point_id), static_cast<std::size_t>(j));
+                  points, static_cast<std::size_t>(point_id), static_cast<std::size_t>(j));
             } else {
-              return metric(coords_i, dev_points[j]);
+              return metric(coords_i, points[j]);
             }
           }();
           assert(distance >= TData{0});
@@ -203,7 +201,7 @@ namespace clue::detail {
                                                          base_vec,
                                                          search_box,
                                                          tiles,
-                                                         dev_points,
+                                                         points,
                                                          coords_i,
                                                          rho_i,
                                                          delta_i,
@@ -227,26 +225,25 @@ namespace clue::detail {
       requires(alpaka::Dim<TAcc>::value == 1 &&
                std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  internal::TilesView<Ndim, TData> dev_tiles,
-                                  PointsView<Ndim, TPointsData> dev_points,
+                                  internal::TilesView<Ndim, TData> tiles,
+                                  PointsView<Ndim, TPointsData> points,
                                   TData outlier_distance,
                                   TData seeding_distance,
                                   TData min_density,
                                   DistanceMetric metric,
-                                  std::size_t* seed_candidates,
-                                  int32_t n_points) const {
-      for (auto i : alpaka::uniformElements(acc, n_points)) {
+                                  std::size_t* seed_candidates) const {
+      for (auto i : alpaka::uniformElements(acc, points.size())) {
         auto delta_i = std::numeric_limits<TData>::max();
         int nh_i = -1;
-        auto coords_i = dev_points[i];
-        auto rho_i = dev_points.rho()[i];
+        auto coords_i = points[i];
+        auto rho_i = points.rho()[i];
         const auto density_uncertainty =
-            dev_points.has_uncertainty() ? dev_points.density_uncertainty()[i] : TData{1.};
+            points.has_uncertainty() ? points.density_uncertainty()[i] : TData{1.};
         const auto effective_min_density = min_density * density_uncertainty;
 
         clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
-          const auto sigma_i = dev_points.has_sigma(dim) ? dev_points.sigma(dim)[i] : TData{0};
+          const auto sigma_i = points.has_sigma(dim) ? points.sigma(dim)[i] : TData{0};
           const auto box_radius =
               math::max(outlier_distance, outlier_distance * sigma_i * math::sqrt(TData{2}));
           searchbox_extremes[dim] =
@@ -254,14 +251,14 @@ namespace clue::detail {
         }
 
         clue::SearchBoxBins<Ndim> searchbox_bins;
-        dev_tiles.searchBox(searchbox_extremes, searchbox_bins);
+        tiles.searchBox(searchbox_extremes, searchbox_bins);
 
         std::array<int32_t, Ndim> base_vec{};
         for_recursion_nearest_higher<TAcc, Ndim, Ndim>(acc,
                                                        base_vec,
                                                        searchbox_bins,
-                                                       dev_tiles,
-                                                       dev_points,
+                                                       tiles,
+                                                       points,
                                                        coords_i,
                                                        rho_i,
                                                        delta_i,
@@ -273,7 +270,7 @@ namespace clue::detail {
                                                        i);
 
         assert(nh_i == -1 || delta_i <= outlier_distance);
-        dev_points.nearest_higher()[i] = nh_i;
+        points.nearest_higher()[i] = nh_i;
         if (nh_i == -1) {
           alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
         }
@@ -286,22 +283,21 @@ namespace clue::detail {
       requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
-                                  PointsView<Ndim, TData> dev_points,
-                                  TData min_density,
-                                  int32_t n_points) const {
-      for (auto i : alpaka::uniformElements(acc, n_points)) {
-        dev_points.cluster_index()[i] = -1;
-        const auto nh = dev_points.nearest_higher()[i];
-        const auto rho_i = dev_points.rho()[i];
+                                  PointsView<Ndim, TData> points,
+                                  TData min_density) const {
+      for (auto i : alpaka::uniformElements(acc, points.size())) {
+        points.cluster_index()[i] = -1;
+        const auto nh = points.nearest_higher()[i];
+        const auto rho_i = points.rho()[i];
         const auto density_uncertainty =
-            dev_points.has_uncertainty() ? dev_points.density_uncertainty()[i] : TData{1.};
+            points.has_uncertainty() ? points.density_uncertainty()[i] : TData{1.};
         const auto is_seed = (nh == -1) && (rho_i >= min_density * density_uncertainty);
 
         if (is_seed) {
-          dev_points.is_seed()[i] = 1;
+          points.is_seed()[i] = 1;
           seeds.push_back(acc, i);
         } else {
-          dev_points.is_seed()[i] = 0;
+          points.is_seed()[i] = 0;
         }
       }
     }
@@ -311,27 +307,25 @@ namespace clue::detail {
     template <typename TAcc, std::size_t Ndim, std::floating_point TData>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
-                                  PointsView<Ndim, TData> dev_points) const {
+                                  PointsView<Ndim, TData> points) const {
       for (auto cls_idx : alpaka::uniformElements(acc, seeds.size())) {
-        dev_points.cluster_index()[seeds[cls_idx]] = static_cast<int>(cls_idx);
+        points.cluster_index()[seeds[cls_idx]] = static_cast<int>(cls_idx);
       }
     }
   };
 
   struct KernelAssignClusters {
     template <typename TAcc, std::size_t Ndim, std::floating_point TData>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  PointsView<Ndim, TData> dev_points,
-                                  int32_t n_points) const {
-      for (auto idx : alpaka::uniformElements(acc, n_points)) {
-        if (dev_points.is_seed()[idx] || dev_points.nearest_higher()[idx] == -1)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, PointsView<Ndim, TData> points) const {
+      for (auto idx : alpaka::uniformElements(acc, points.size())) {
+        if (points.is_seed()[idx] || points.nearest_higher()[idx] == -1)
           continue;
 
         auto current = idx;
-        while (!dev_points.is_seed()[current] && dev_points.nearest_higher()[current] != -1)
-          current = dev_points.nearest_higher()[current];
+        while (!points.is_seed()[current] && points.nearest_higher()[current] != -1)
+          current = points.nearest_higher()[current];
 
-        dev_points.cluster_index()[idx] = dev_points.cluster_index()[current];
+        points.cluster_index()[idx] = points.cluster_index()[current];
       }
     }
   };
@@ -349,20 +343,18 @@ namespace clue::detail {
   inline void computeLocalDensity(TQueue& queue,
                                   const WorkDiv& work_division,
                                   internal::TilesView<Ndim, TData>& tiles,
-                                  PointsView<Ndim, TPointsData>& dev_points,
+                                  PointsView<Ndim, TPointsData>& points,
                                   KernelType&& kernel,
                                   TData density_radius,
-                                  const DistanceMetric& metric,
-                                  int32_t size) {
+                                  const DistanceMetric& metric) {
     alpaka::exec<TAcc>(queue,
                        work_division,
                        KernelCalculateLocalDensity{},
                        tiles,
-                       dev_points,
+                       points,
                        std::forward<KernelType>(kernel),
                        density_radius,
-                       metric,
-                       size);
+                       metric);
   }
 
   template <concepts::accelerator TAcc,
@@ -376,26 +368,24 @@ namespace clue::detail {
   inline void computeNearestHighers(TQueue& queue,
                                     const WorkDiv& work_division,
                                     internal::TilesView<Ndim, TData>& tiles,
-                                    PointsView<Ndim, TPointsData>& dev_points,
+                                    PointsView<Ndim, TPointsData>& points,
                                     TData outlier_distance,
                                     TData seeding_distance,
                                     TData min_density,
                                     const DistanceMetric& metric,
-                                    std::size_t& seed_candidates,
-                                    int32_t size) {
+                                    std::size_t& seed_candidates) {
     auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
     alpaka::memset(queue, d_seed_candidates, 0u);
     alpaka::exec<TAcc>(queue,
                        work_division,
                        KernelCalculateNearestHigher{},
                        tiles,
-                       dev_points,
+                       points,
                        outlier_distance,
                        seeding_distance,
                        min_density,
                        metric,
-                       d_seed_candidates.data(),
-                       size);
+                       d_seed_candidates.data());
     alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
     alpaka::wait(queue);
   }
@@ -408,11 +398,10 @@ namespace clue::detail {
   inline void findClusterSeeds(TQueue& queue,
                                const WorkDiv& work_division,
                                clue::internal::SeedArray<>& seeds,
-                               PointsView<Ndim, TData>& dev_points,
-                               TData min_density,
-                               int32_t size) {
+                               PointsView<Ndim, TData>& points,
+                               TData min_density) {
     alpaka::exec<TAcc>(
-        queue, work_division, KernelFindClusters{}, seeds.view(), dev_points, min_density, size);
+        queue, work_division, KernelFindClusters{}, seeds.view(), points, min_density);
   }
 
   template <concepts::accelerator TAcc,
@@ -422,13 +411,12 @@ namespace clue::detail {
   inline void assignPointsToClusters(TQueue& queue,
                                      std::size_t block_size,
                                      clue::internal::SeedArray<>& seeds,
-                                     PointsView<Ndim, TData> dev_points,
-                                     int32_t n_points) {
+                                     PointsView<Ndim, TData> points) {
     const auto nseeds = seeds.size(queue);
     if (nseeds == 0) {
       alpaka::fill(queue,
                    clue::make_device_view(
-                       alpaka::getDev(queue), dev_points.cluster_index().data(), dev_points.size()),
+                       alpaka::getDev(queue), points.cluster_index().data(), points.size()),
                    -1);
       return;
     }
@@ -438,14 +426,11 @@ namespace clue::detail {
                        clue::make_workdiv<TAcc>(seed_grid, block_size),
                        KernelAssignSeedIndices{},
                        seeds.view(),
-                       dev_points);
+                       points);
 
-    const Idx point_grid = nostd::ceil_div(n_points, block_size);
-    alpaka::exec<TAcc>(queue,
-                       clue::make_workdiv<TAcc>(point_grid, block_size),
-                       KernelAssignClusters{},
-                       dev_points,
-                       n_points);
+    const Idx point_grid = nostd::ceil_div(points.size(), block_size);
+    alpaka::exec<TAcc>(
+        queue, clue::make_workdiv<TAcc>(point_grid, block_size), KernelAssignClusters{}, points);
   }
 
 }  // namespace clue::detail
