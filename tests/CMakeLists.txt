@@ -57,11 +57,15 @@ endif()
 
 find_package(fmt 10.2.1)
 if(NOT fmt_FOUND)
+  set(FMT_OS OFF)
   FetchContent_Declare(
     fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
     GIT_TAG 10.2.1)
   FetchContent_MakeAvailable(fmt)
+  if(APPLE)
+    target_compile_definitions(fmt PUBLIC FMT_CONSTEVAL=)
+  endif()
 endif()
 
 add_subdirectory(cpu)
