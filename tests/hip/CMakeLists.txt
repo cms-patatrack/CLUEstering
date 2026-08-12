@@ -1,6 +1,12 @@
 enable_language(HIP)
 find_package(HIP)
 
+# Without a physical GPU, CMake/hipcc may not have a device to pick a default
+# architecture from; fall back to a fixed one for compile-only CI runs.
+if(NOT AMD_GPU_PRESENT AND NOT CMAKE_HIP_ARCHITECTURES)
+  set(CMAKE_HIP_ARCHITECTURES gfx90a)
+endif()
+
 file(GLOB sources ${CMAKE_SOURCE_DIR}/tests/*.cpp)
 foreach(src IN LISTS sources)
   set_source_files_properties(${src} PROPERTIES LANGUAGE HIP)

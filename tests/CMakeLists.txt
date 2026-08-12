@@ -72,6 +72,15 @@ add_subdirectory(cpu)
 
 include(CheckLanguage)
 
+# Lets CI configure and build the CUDA/HIP test targets on runners that have the
+# compiler but no physical device (e.g. to catch nvcc/hipcc-specific compile
+# errors without needing self-hosted GPU hardware). Off by default, so local/CI
+# configurations without a GPU keep silently skipping these targets as before.
+option(
+  CLUESTERING_CI
+  "Configure CUDA/HIP test targets even without a detected GPU (compile-only)"
+  OFF)
+
 execute_process(
   COMMAND nvidia-smi --query-gpu=name --format=csv,noheader
   OUTPUT_VARIABLE GPU_LIST
@@ -85,7 +94,7 @@ else()
 endif()
 
 check_language(CUDA)
-if(CMAKE_CUDA_COMPILER AND NVIDIA_GPU_PRESENT)
+if(CMAKE_CUDA_COMPILER AND (NVIDIA_GPU_PRESENT OR CLUESTERING_CI))
   add_subdirectory(cuda)
 endif()
 
@@ -102,7 +111,7 @@ else()
 endif()
 
 check_language(HIP)
-if(CMAKE_HIP_COMPILER AND AMD_GPU_PRESENT)
+if(CMAKE_HIP_COMPILER AND (AMD_GPU_PRESENT OR CLUESTERING_CI))
   add_subdirectory(hip)
 endif()
 
