@@ -18,16 +18,10 @@ namespace clue {
   }
 
   template <std::floating_point TData>
-  template <typename TAcc>
-  inline ALPAKA_FN_HOST_ACC auto FlatKernel<TData>::operator()(const TAcc&,
-                                                               value_type /*dist_ij*/,
+  inline ALPAKA_FN_HOST_ACC auto FlatKernel<TData>::operator()(value_type /*dist_ij*/,
                                                                int point_id,
                                                                int j) const {
-    if (point_id == j) {
-      return value_type{1};
-    } else {
-      return m_flat;
-    }
+    return (point_id == j) ? value_type{1} : m_flat;
   }
 
   template <std::floating_point TData>
@@ -39,16 +33,12 @@ namespace clue {
   }
 
   template <std::floating_point TData>
-  template <typename TAcc>
-  inline ALPAKA_FN_HOST_ACC auto GaussianKernel<TData>::operator()(const TAcc&,
-                                                                   value_type dist_ij,
+  inline ALPAKA_FN_HOST_ACC auto GaussianKernel<TData>::operator()(value_type dist_ij,
                                                                    int point_id,
                                                                    int j) const {
-    if (point_id == j) {
-      return value_type{1};
-    } else {
-      return m_gaus_amplitude * math::exp(-dist_ij * dist_ij / (2 * m_gaus_std * m_gaus_std));
-    }
+    return (point_id == j)
+               ? value_type{1}
+               : m_gaus_amplitude * math::exp(-dist_ij * dist_ij / (2 * m_gaus_std * m_gaus_std));
   }
 
   template <std::floating_point TData>
@@ -60,16 +50,10 @@ namespace clue {
   }
 
   template <std::floating_point TData>
-  template <typename TAcc>
-  inline ALPAKA_FN_HOST_ACC auto ExponentialKernel<TData>::operator()(const TAcc&,
-                                                                      value_type dist_ij,
+  inline ALPAKA_FN_HOST_ACC auto ExponentialKernel<TData>::operator()(value_type dist_ij,
                                                                       int point_id,
                                                                       int j) const {
-    if (point_id == j) {
-      return value_type{1};
-    } else {
-      return (m_exp_amplitude * math::exp(-m_exp_avg * dist_ij));
-    }
+    return (point_id == j) ? value_type{1} : (m_exp_amplitude * math::exp(-m_exp_avg * dist_ij));
   }
 
 }  // namespace clue
