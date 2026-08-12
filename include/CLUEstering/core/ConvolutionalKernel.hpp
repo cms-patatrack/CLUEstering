@@ -31,16 +31,11 @@ namespace clue {
 
     /// @brief Computes the kernel value between two points
     ///
-    /// @param acc The accelerator to use for the computation
     /// @param dist_ij The distance between the two points
     /// @param point_id The index of the first point
     /// @param j The index of the second point
     /// @return The computed kernel value
-    template <typename TAcc>
-    ALPAKA_FN_HOST_ACC auto operator()(const TAcc& acc,
-                                       value_type dist_ij,
-                                       int point_id,
-                                       int j) const;
+    ALPAKA_FN_HOST_ACC auto operator()(value_type dist_ij, int point_id, int j) const;
   };
 
   /// @brief The GaussianKernel class implements a Gaussian kernel for convolution.
@@ -65,16 +60,11 @@ namespace clue {
 
     /// @brief Computes the kernel value between two points
     ///
-    /// @param acc The accelerator to use for the computation
     /// @param dist_ij The distance between the two points
     /// @param point_id The index of the first point
     /// @param j The index of the second point
     /// @return The computed kernel value
-    template <typename TAcc>
-    ALPAKA_FN_HOST_ACC auto operator()(const TAcc& acc,
-                                       value_type dist_ij,
-                                       int point_id,
-                                       int j) const;
+    ALPAKA_FN_HOST_ACC auto operator()(value_type dist_ij, int point_id, int j) const;
   };
 
   /// @brief The ExponentialKernel class implements an exponential kernel for convolution.
@@ -99,16 +89,11 @@ namespace clue {
 
     /// @brief Computes the kernel value between two points
     ///
-    /// @param acc The accelerator to use for the computation
     /// @param dist_ij The distance between the two points
     /// @param point_id The index of the first point
     /// @param j The index of the second point
     /// @return The computed kernel value
-    template <typename TAcc>
-    ALPAKA_FN_HOST_ACC auto operator()(const TAcc& acc,
-                                       value_type dist_ij,
-                                       int point_id,
-                                       int j) const;
+    ALPAKA_FN_HOST_ACC auto operator()(value_type dist_ij, int point_id, int j) const;
   };
 
   namespace concepts {
@@ -117,11 +102,10 @@ namespace clue {
     template <typename TKernel>
     concept convolutional_kernel =
         requires(TKernel&& kernel,
-                 const internal::Acc& acc,
                  typename std::remove_cvref_t<TKernel>::value_type distance,
                  int point_i,
                  int point_j) {
-          { kernel(acc, distance, point_i, point_j) };
+          { kernel(distance, point_i, point_j) };
         };
 
   }  // namespace concepts

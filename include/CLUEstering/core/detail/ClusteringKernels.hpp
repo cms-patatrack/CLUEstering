@@ -61,7 +61,7 @@ namespace clue::detail {
         }();
         assert(distance >= TData{0});
 
-        auto k = kernel(acc, distance, point_id, j);
+        auto k = kernel(distance, point_id, j);
         assert(k >= TData{0});
         rho_i += static_cast<int>(distance <= density_radius) * k * points.weights()[j];
       }
