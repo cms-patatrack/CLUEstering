@@ -165,13 +165,18 @@ namespace clue::detail {
 
       const auto effective_distance = (rho_i >= min_density) ? seeding_distance : outlier_distance;
 
+      auto tag = [&points](std::integral auto idx) -> std::size_t {
+        return (points.has_tags()) ? points.tags()[idx] : static_cast<std::size_t>(idx);
+      };
+
+      auto point_tag = tag(point_id);
       for (auto tile_it = 0u; tile_it < tile_size; ++tile_it) {
         const auto j = tiles[tile_idx][tile_it];
         assert(j >= 0 && j < points.size());
         auto rho_j = points.rho()[j];
         bool found_higher_in_tile = (rho_j > rho_i);
-        found_higher_in_tile =
-            found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
+        found_higher_in_tile = found_higher_in_tile ||
+                               ((rho_j == rho_i) && (rho_j > TData{0}) && (tag(j) > point_tag));
 
         if (found_higher_in_tile) {
           const auto distance = [&]() -> TData {
