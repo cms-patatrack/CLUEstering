@@ -1,0 +1,82 @@
+name: GPU compile check (CUDA/HIP)
+
+# Compiles (but does not run) the CUDA and HIP test targets on plain
+# GitHub-hosted runners, with no physical GPU involved. This exists to catch
+# nvcc/hipcc-specific compile errors (e.g. frontend quirks that GCC/Clang
+# tolerate but nvcc/hipcc don't) that test-nvidia-gpu.yml/test-amd-gpu.yml
+# would normally catch, but which depend on self-hosted GPU runners that may
+# be unavailable. CLUESTERING_CI forces CMake to configure the CUDA/HIP test
+# targets even though no device is detected (see tests/CMakeLists.txt).
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: &cpp-paths
+      - "include/**"
+      - "**/CMakeLists.txt"
+      - "**/*.cmake"
+      - "cmake/**"
+  pull_request:
+    branches: [ "main" ]
+    paths: *cpp-paths
+
+jobs:
+  cuda:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Install CUDA toolkit
+        uses: Jimver/cuda-toolkit@v0.2.19
+        with:
+          cuda: '12.4.0'
+          method: local
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libboost-dev libboost-atomic-dev
+
+      - name: Configure and build (compile-only)
+        run: |
+          cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DCLUESTERING_CI=ON
+          cmake --build build --parallel 2 --target \
+            cuda_test_clustering cuda_test_batched_clustering \
+            cuda_test_mahalanobis cuda_test_convolutional_kernels
+
+  hip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      # ROCm's apt repo layout/supported codenames change across releases;
+      # if this step starts failing, check https://rocm.docs.amd.com for the
+      # currently documented Ubuntu install instructions.
+      - name: Install ROCm/HIP toolkit
+        run: |
+          sudo mkdir -p /etc/apt/keyrings
+          wget -qO - https://repo.radeon.com/rocm/rocm.gpg.key \
+            | gpg --dearmor | sudo tee /etc/apt/keyrings/rocm.gpg > /dev/null
+          echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/latest $(lsb_release -cs) main" \
+            | sudo tee /etc/apt/sources.list.d/rocm.list
+          # Ubuntu's own universe repo ships older packages that collide with
+          # ROCm's (e.g. rocminfo); pin repo.radeon.com above the default
+          # priority so apt resolves dependencies from it instead.
+          printf 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600\n' \
+            | sudo tee /etc/apt/preferences.d/rocm-pin-600
+          sudo apt-get update
+          sudo apt-get install -y hip-dev rocm-hip-libraries rocthrust-dev libboost-dev libboost-atomic-dev
+
+      - name: Configure and build (compile-only)
+        run: |
+          export PATH=/opt/rocm/bin:$PATH
+          cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DCLUESTERING_CI=ON
+          cmake --build build --parallel 2 --target \
+            hip_test_clustering hip_test_batched_clustering \
+            hip_test_mahalanobis hip_test_convolutional_kernels
