@@ -31,10 +31,8 @@ namespace clue {
   }
 
   template <std::floating_point TData>
-  inline GaussianKernel<TData>::GaussianKernel(value_type gaus_avg,
-                                               value_type gaus_std,
-                                               value_type gaus_amplitude)
-      : m_gaus_avg{gaus_avg}, m_gaus_std{gaus_std}, m_gaus_amplitude{gaus_amplitude} {
+  inline GaussianKernel<TData>::GaussianKernel(value_type gaus_std, value_type gaus_amplitude)
+      : m_gaus_std{gaus_std}, m_gaus_amplitude{gaus_amplitude} {
     if (gaus_std <= value_type{0} || gaus_amplitude <= value_type{0}) {
       throw std::invalid_argument("Gaussian kernel parameters must be positive.");
     }
@@ -49,8 +47,7 @@ namespace clue {
     if (point_id == j) {
       return value_type{1};
     } else {
-      return m_gaus_amplitude * math::exp(-(dist_ij - m_gaus_avg) * (dist_ij - m_gaus_avg) /
-                                          (2 * m_gaus_std * m_gaus_std));
+      return m_gaus_amplitude * math::exp(-dist_ij * dist_ij / (2 * m_gaus_std * m_gaus_std));
     }
   }
 
