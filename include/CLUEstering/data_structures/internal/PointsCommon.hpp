@@ -65,20 +65,6 @@ namespace clue {
         return static_cast<const TPoints&>(*this).m_clustered;
       }
 
-      /// @brief Sets the per-point coordinate sigma for all dimensions at once
-      ///
-      /// @param uncertainties One contiguous range per dimension, in dimension order
-      template <std::ranges::contiguous_range... Containers>
-        requires(sizeof...(Containers) == TPoints::Ndim_)
-      ALPAKA_FN_HOST void set_sigmas(Containers&&... uncertainties) {
-        auto containers_tuple = std::forward_as_tuple(std::forward<Containers>(uncertainties)...);
-        meta::apply<TPoints::Ndim_>([&]<std::size_t Dim>() {
-          auto& c = std::get<Dim>(containers_tuple);
-          static_cast<TPoints*>(this)->set_sigma(
-              Dim, std::span<typename TPoints::element_type>(c.data(), c.size()));
-        });
-      }
-
       static void mark_clustered(TPoints& points) { points.m_clustered = true; }
 
       static auto& uncertainty_buffer(TPoints& points)
