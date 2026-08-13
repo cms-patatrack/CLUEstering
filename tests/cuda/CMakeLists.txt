@@ -6,6 +6,14 @@ if(NOT DEFINED CMAKE_CUDA_STANDARD)
   set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 endif()
 
+# "native" needs a physical GPU to query; fall back to a fixed architecture for
+# compile-only CI runs where none is present.
+if(NVIDIA_GPU_PRESENT)
+  set(CLUE_CUDA_ARCHITECTURES native)
+else()
+  set(CLUE_CUDA_ARCHITECTURES 75)
+endif()
+
 file(GLOB sources ${CMAKE_SOURCE_DIR}/tests/*.cpp)
 
 foreach(src IN LISTS sources)
@@ -25,8 +33,9 @@ foreach(source ${sources})
     ${target} PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED
                       TEST_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
   target_compile_options(${target} PRIVATE --expt-relaxed-constexpr)
-  set_target_properties(${target} PROPERTIES CUDA_SEPARABLE_COMPILATION ON
-                                             CUDA_ARCHITECTURES native)
+  set_target_properties(
+    ${target} PROPERTIES CUDA_SEPARABLE_COMPILATION ON
+                         CUDA_ARCHITECTURES ${CLUE_CUDA_ARCHITECTURES})
   set_target_properties(
     ${target}
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/cuda
