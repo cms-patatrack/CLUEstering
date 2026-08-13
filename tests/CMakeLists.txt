@@ -40,10 +40,17 @@ include(FetchContent)
 
 find_package(alpaka 2.1.0)
 if(NOT alpaka_FOUND)
+  set(_clue_build_testing ${BUILD_TESTING})
+  set(BUILD_TESTING
+      OFF
+      CACHE BOOL "" FORCE)
   FetchContent_Declare(
     alpaka
     URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.1.0.tar.gz)
   FetchContent_MakeAvailable(alpaka)
+  set(BUILD_TESTING
+      ${_clue_build_testing}
+      CACHE BOOL "" FORCE)
 endif()
 
 find_package(doctest 2.4.12)
