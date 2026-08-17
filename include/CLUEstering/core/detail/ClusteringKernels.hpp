@@ -177,7 +177,6 @@ namespace clue::detail {
         const auto tag_j = tag(j);
         assert(j >= 0 && j < points.size());
         auto rho_j = points.rho()[j];
-        // const auto tag_nh = (nh_i != -1) ? tag(nh_i) : std::size_t{0};
         bool found_higher_in_tile = (rho_j > rho_i);
         found_higher_in_tile =
             found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) && (tag_j > point_tag));
