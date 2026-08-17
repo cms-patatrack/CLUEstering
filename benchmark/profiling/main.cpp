@@ -50,18 +50,25 @@ void run_one(clue::Queue& queue, const std::string& input_file, const std::strin
 }
 
 int main(int argc, char* argv[]) {
-  auto tag{std::string(argv[1])};        
-  auto data_dir{std::string(argv[2])};   
+  auto tag{std::string(argv[1])};
+  auto input_path{std::string(argv[2])};
 
   std::vector<std::string> datasets;
-  for (const auto& entry : std::filesystem::directory_iterator(data_dir)) {
-    if (entry.path().extension() == ".csv") {
-      datasets.push_back(entry.path().string());
+  if (std::filesystem::is_directory(input_path)) {
+    for (const auto& entry : std::filesystem::directory_iterator(input_path)) {
+      if (entry.path().extension() == ".csv") {
+        datasets.push_back(entry.path().string());
+      }
     }
+    std::sort(datasets.begin(), datasets.end());
+  } else if (std::filesystem::is_regular_file(input_path)) {
+    datasets.push_back(input_path);
+  } else {
+    std::fprintf(stderr, "error: %s is not a valid file or directory\n", input_path.c_str());
+    return 1;
   }
-  std::sort(datasets.begin(), datasets.end());
 
-  std::printf("found %zu datasets in %s\n", datasets.size(), data_dir.c_str());
+  std::printf("found %zu dataset(s)\n", datasets.size());
 
   const auto device = clue::get_device(0u);
   clue::Queue queue(device);

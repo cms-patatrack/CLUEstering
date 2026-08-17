@@ -72,6 +72,13 @@ namespace clue {
     }
   }
 
+    template <std::size_t Ndim, std::floating_point DataType>
+  void Clusterer<Ndim, DataType>::setSpectralGrid(value_type freq_max,
+                                                   int n_grid) {
+    m_freq_max = freq_max;
+    m_n_grid = n_grid;
+  }
+
   template <std::size_t Ndim, std::floating_point DataType>
   void Clusterer<Ndim, DataType>::setParameters(value_type density_radius,
                                                 value_type min_density,
@@ -272,7 +279,7 @@ namespace clue {
 
       /// tile method
 
-   /* alpaka::exec<internal::Acc>(queue,
+   /*alpaka::exec<internal::Acc>(queue,
                                 work_division,
                                 detail::KernelCalculateLocalDensity{},
                                 m_tiles->view(),
@@ -284,13 +291,15 @@ namespace clue {
 
 
       // spectral
-   detail::computeLocalDensity<internal::Acc>(queue,
+    detail::computeLocalDensity<internal::Acc>(queue,
                                                block_size,
                                                dev_points.view(),
                                                kernel,
                                                InputType{3.0},
-                                               256,
+                                               1024,
                                                n_points);
+
+     
                                               
    }
     auto seed_candidates = std::size_t{0};

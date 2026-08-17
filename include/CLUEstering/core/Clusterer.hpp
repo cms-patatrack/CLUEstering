@@ -46,6 +46,8 @@ namespace clue {
     value_type m_outlier_distance;
     int m_pointsPerTile;  // average number of points found in a tile
     std::array<uint8_t, Ndim> m_wrappedCoordinates;
+    value_type m_freq_max = value_type{3};   
+    int m_n_grid = 256;                     
 
     std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
     std::optional<internal::SeedArray<>> m_seeds;
@@ -124,6 +126,10 @@ namespace clue {
               std::optional<value_type> outlier_distance = std::nullopt,
               std::optional<value_type> seeding_distance = std::nullopt,
               int pPBin = 128);
+
+
+
+    void setSpectralGrid(value_type freq_max, int n_grid);
 
     /// @brief Set the parameters for the clustering algorithm
     ///

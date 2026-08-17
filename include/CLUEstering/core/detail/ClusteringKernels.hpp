@@ -169,7 +169,7 @@ namespace clue::detail {
     }
   };
 
-  struct KernelFourrierTransform {
+  /*struct KernelFourrierTransform {
     template <typename TAcc, std::size_t Ndim,
               std::floating_point TData,
               std::floating_point TPointsData = TData>
@@ -201,6 +201,40 @@ namespace clue::detail {
         c_imag[idx] = imag / n_samples;
       }
     }
+  }; */
+
+  struct KernelHartleyTransform {
+    template <typename TAcc, std::size_t Ndim,
+              std::floating_point TData,
+              std::floating_point TPointsData = TData>
+      requires(alpaka::Dim<TAcc>::value == 1 && Ndim == 2)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  const TData* meshgrid,
+                                  TData* c_hartley,
+                                  PointsView<Ndim, TPointsData> dev_points,
+                                  int n_samples,
+                                  int n_grid) const {
+      for (auto idx : alpaka::uniformElements(acc, n_grid * n_grid)) {
+        auto hartley = TData{};
+
+        for (auto n = 0; n < n_samples; ++n) {
+          const auto x = dev_points[n][0];
+          const auto y = dev_points[n][1];
+          const auto k0 = meshgrid[idx];
+          const auto k1 = meshgrid[idx + n_grid * n_grid];
+          const auto theta = k0 * x + k1 * y;
+          const auto weight = dev_points.weights()[n];
+
+          
+          const auto cas = alpaka::math::cos(acc, theta)
+                          + alpaka::math::sin(acc, theta);
+
+          hartley += weight * cas;
+        }
+
+        c_hartley[idx] = hartley / n_samples;
+      }
+    }
   };
 
   /*struct KernelMultByGaussian {
@@ -224,7 +258,7 @@ namespace clue::detail {
         rho_hat_flat_imag[idx] = c_imag[idx] * g_hat_flat[idx];
       }
     }
-  };*/
+  };
 
     struct KernelMultByFreqResponse {
     template <typename TAcc,
@@ -273,7 +307,52 @@ namespace clue::detail {
         dev_points.rho()[idx] = prefactor * real_sum  * static_cast<TData>(n_samples);
       }
     }
-  };
+  }; */
+
+  struct KernelMultByFreqResponse {
+    template <typename TAcc,
+              std::floating_point TData,
+              concepts::convolutional_kernel KernelType>
+      requires(alpaka::Dim<TAcc>::value == 1)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  TData* g_hat_flat,
+                                  TData* rho_hat_flat_hartley,
+                                  TData* meshgrid,
+                                  TData* c_hartley,
+                                  int n_grid,
+                                  const KernelType& kernel) const {
+      for (auto idx : alpaka::uniformElements(acc, n_grid * n_grid)) {
+        TData k[2] = {meshgrid[idx], meshgrid[idx + n_grid * n_grid]};
+        g_hat_flat[idx] = kernel.freq_eval(acc, k);
+        rho_hat_flat_hartley[idx] = c_hartley[idx] * g_hat_flat[idx];
+      }
+    }
+};
+
+struct KernelInverseHartleyTransform {
+    template <typename TAcc, std::size_t Ndim,
+              std::floating_point TData,
+              std::floating_point TPointsData = TData>
+      requires(alpaka::Dim<TAcc>::value == 1 && Ndim == 2)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  PointsView<Ndim, TPointsData> dev_points,
+                                  const TData* meshgrid,
+                                  TData* rho_hat_flat_hartley,
+                                  TData prefactor,
+                                  int n_samples,
+                                  int n_grid) const {
+      for (auto idx : alpaka::uniformElements(acc, n_samples)) {
+        auto sum = TData{};
+        for (auto i = 0; i < n_grid * n_grid; ++i) {
+          auto theta =
+              meshgrid[i] * dev_points[idx][0] + meshgrid[i + n_grid * n_grid] * dev_points[idx][1];
+          const auto cas = alpaka::math::cos(acc, theta) + alpaka::math::sin(acc, theta);
+          sum += rho_hat_flat_hartley[i] * cas;
+        }
+        dev_points.rho()[idx] = prefactor * sum * static_cast<TData>(n_samples);
+      }
+    }
+};
 
 
   template <typename TAcc,
@@ -583,7 +662,7 @@ namespace clue::detail {
   } */
 
 
-  template <concepts::accelerator TAcc,
+  /* template <concepts::accelerator TAcc,
             concepts::queue TQueue,
             std::size_t Ndim,
             std::floating_point TData,
@@ -655,6 +734,78 @@ namespace clue::detail {
                        d_meshgrid.data(),
                        d_rho_hat_flat_real.data(),
                        d_rho_hat_flat_imag.data(),
+                       prefactor,
+                       n_points,
+                       n_grid);
+    alpaka::wait(queue);
+  } */
+
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TData,
+            concepts::convolutional_kernel KernelType>
+    requires(alpaka::Dim<TAcc>::value == 1)
+  inline void computeLocalDensity(TQueue& queue,
+                                  std::size_t block_size,
+                                  PointsView<Ndim, TData>& dev_points,
+                                  const KernelType& kernel,
+                                  TData freq_max,
+                                  int32_t n_grid,
+                                  int32_t n_points) {
+    auto d_k_grid = clue::make_device_buffer<TData[]>(queue, n_grid);
+    auto d_meshgrid = clue::make_device_buffer<TData[]>(queue, 2 * n_grid * n_grid);
+    auto d_c_hartley = clue::make_device_buffer<TData[]>(queue, n_grid * n_grid);
+    auto d_rho_hat_flat_hartley = clue::make_device_buffer<TData[]>(queue, n_grid * n_grid);
+    auto d_g_hat_flat = clue::make_device_buffer<TData[]>(queue, n_grid * n_grid);
+
+    const auto wd_grid = clue::make_workdiv<TAcc>(nostd::ceil_div(n_grid, block_size), block_size);
+    const auto wd_mesh =
+        clue::make_workdiv<TAcc>(nostd::ceil_div(n_grid * n_grid, block_size), block_size);
+    const auto wd_pts = clue::make_workdiv<TAcc>(nostd::ceil_div(n_points, block_size), block_size);
+
+    auto step = TData{2} * freq_max / static_cast<TData>(n_grid);
+    auto prefactor = step * step / (TData{4} * static_cast<TData>(M_PI * M_PI));
+
+    alpaka::exec<TAcc>(
+        queue, wd_grid, KernelCreateFreqGrid{}, d_k_grid.data(), freq_max, step, n_grid);
+
+    alpaka::wait(queue);
+
+    alpaka::exec<TAcc>(
+        queue, wd_mesh, KernelCreateMeshGrid{}, d_meshgrid.data(), d_k_grid.data(), n_grid);
+
+    alpaka::wait(queue);
+
+    alpaka::exec<TAcc>(queue,
+                    wd_pts,
+                    KernelHartleyTransform{},
+                    d_meshgrid.data(),
+                    d_c_hartley.data(),
+                    dev_points,
+                    n_points,
+                    n_grid);
+
+    alpaka::wait(queue);
+
+    alpaka::exec<TAcc>(queue,
+                       wd_mesh,
+                       KernelMultByFreqResponse{},
+                       d_g_hat_flat.data(),
+                       d_rho_hat_flat_hartley.data(),
+                       d_meshgrid.data(),
+                       d_c_hartley.data(),
+                       n_grid,
+                       kernel);
+
+    alpaka::wait(queue);
+
+    alpaka::exec<TAcc>(queue,
+                       wd_pts,
+                       KernelInverseHartleyTransform{},
+                       dev_points,
+                       d_meshgrid.data(),
+                       d_rho_hat_flat_hartley.data(),
                        prefactor,
                        n_points,
                        n_grid);
