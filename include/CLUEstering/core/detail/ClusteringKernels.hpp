@@ -177,10 +177,10 @@ namespace clue::detail {
         const auto tag_j = tag(j);
         assert(j >= 0 && j < points.size());
         auto rho_j = points.rho()[j];
-        const auto tag_nh = (nh_i != -1) ? tag(nh_i) : std::size_t{0};
+        // const auto tag_nh = (nh_i != -1) ? tag(nh_i) : std::size_t{0};
         bool found_higher_in_tile = (rho_j > rho_i);
-        found_higher_in_tile = found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) &&
-                                                        (tag_j > point_tag) && (tag_j > tag_nh));
+        found_higher_in_tile =
+            found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) && (tag_j > point_tag));
 
         if (found_higher_in_tile) {
           const auto distance = [&]() -> TData {
@@ -193,7 +193,11 @@ namespace clue::detail {
           }();
           assert(distance >= TData{0});
 
-          if (distance <= effective_distance && distance < delta_i) {
+          if (distance <= effective_distance &&
+              ((distance < delta_i) ||
+               ((distance == delta_i) && (nh_i >= 0) &&
+                ((rho_j > points.rho()[nh_i]) ||
+                 ((rho_j == points.rho()[nh_i]) && (tag_j > tag(nh_i))))))) {
             delta_i = distance;
             nh_i = j;
           }
