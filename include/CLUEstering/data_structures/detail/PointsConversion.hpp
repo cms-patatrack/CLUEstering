@@ -98,6 +98,15 @@ namespace clue {
         d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
       }
     });
+    if (h_points.view().has_tags()) {
+      using PType = std::remove_cvref_t<decltype(d_points)>;
+      auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
+      tbuf = make_device_buffer<std::size_t[]>(queue, h_points.size());
+      alpaka::memcpy(queue,
+                     make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
+                     make_host_view(h_points.view().m_tags, h_points.size()));
+      d_points.view().m_tags = tbuf->data();
+    }
     alpaka::wait(queue);
   }
 
@@ -137,6 +146,15 @@ namespace clue {
         d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
       }
     });
+    if (h_points.view().has_tags()) {
+      using PType = std::remove_cvref_t<decltype(d_points)>;
+      auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
+      tbuf = make_device_buffer<std::size_t[]>(queue, h_points.size());
+      alpaka::memcpy(queue,
+                     make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
+                     make_host_view(h_points.view().m_tags, h_points.size()));
+      d_points.view().m_tags = tbuf->data();
+    }
     alpaka::wait(queue);
 
     return d_points;
@@ -182,6 +200,15 @@ namespace clue {
         d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
       }
     });
+    if (h_points.view().has_tags()) {
+      using PType = std::remove_cvref_t<decltype(d_points)>;
+      auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
+      tbuf = make_device_buffer<std::size_t[]>(queue, h_points.size());
+      alpaka::memcpy(queue,
+                     make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
+                     make_host_view(h_points.view().m_tags, h_points.size()));
+      d_points.view().m_tags = tbuf->data();
+    }
   }
 
 }  // namespace clue

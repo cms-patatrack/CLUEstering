@@ -322,6 +322,55 @@ TEST_CASE("Test coordinate getter throwing conditions") {
   }
 }
 
+TEST_CASE("Test point tags") {
+  auto queue = clue::get_queue(0u);
+  const uint32_t size = 1000;
+
+  std::vector<std::size_t> h_tags(size);
+  // reverse order, so the tags are distinct from the array index they replace
+  std::iota(h_tags.rbegin(), h_tags.rend(), 0u);
+
+  auto read_back_tags = [&](clue::PointsDevice<2>& d_points) {
+    std::vector<std::size_t> readback(size);
+    alpaka::memcpy(
+        queue,
+        clue::make_host_view(readback.data(), size),
+        clue::make_device_view(alpaka::getDev(queue), d_points.view().tags().data(), size));
+    alpaka::wait(queue);
+    return readback;
+  };
+
+  SUBCASE("Tags are unset by default") {
+    clue::PointsDevice<2> d_points(queue, size);
+    CHECK_FALSE(d_points.view().has_tags());
+  }
+
+  SUBCASE("Set directly on device points") {
+    clue::PointsDevice<2> d_points(queue, size);
+
+    auto d_tags = clue::make_device_buffer<std::size_t[]>(queue, size);
+    alpaka::memcpy(queue, d_tags, clue::make_host_view(h_tags.data(), size));
+    alpaka::wait(queue);
+
+    d_points.set_tags(std::span<std::size_t>{d_tags.data(), size});
+
+    CHECK(d_points.view().has_tags());
+    CHECK(std::ranges::equal(read_back_tags(d_points), h_tags));
+  }
+
+  SUBCASE("Tags propagate through copyToDevice") {
+    clue::PointsHost<2> h_points(queue, size);
+    h_points.set_tags(h_tags);
+
+    clue::PointsDevice<2> d_points(queue, size);
+    clue::copyToDevice(queue, d_points, h_points);
+    alpaka::wait(queue);
+
+    CHECK(d_points.view().has_tags());
+    CHECK(std::ranges::equal(read_back_tags(d_points), h_tags));
+  }
+}
+
 TEST_CASE("Test n_cluster getter") {
   auto queue = clue::get_queue(0u);
 

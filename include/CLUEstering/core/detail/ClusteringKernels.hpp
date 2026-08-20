@@ -21,6 +21,8 @@
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
+#include <limits>
+#include <type_traits>
 
 namespace clue::detail {
 
@@ -165,13 +167,19 @@ namespace clue::detail {
 
       const auto effective_distance = (rho_i >= min_density) ? seeding_distance : outlier_distance;
 
+      auto tag = [&points](std::integral auto idx) -> std::size_t {
+        return (points.has_tags()) ? points.tags()[idx] : static_cast<std::size_t>(idx);
+      };
+
+      auto point_tag = tag(point_id);
       for (auto tile_it = 0u; tile_it < tile_size; ++tile_it) {
         const auto j = tiles[tile_idx][tile_it];
+        const auto tag_j = tag(j);
         assert(j >= 0 && j < points.size());
         auto rho_j = points.rho()[j];
         bool found_higher_in_tile = (rho_j > rho_i);
         found_higher_in_tile =
-            found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) && (j > point_id));
+            found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) && (tag_j > point_tag));
 
         if (found_higher_in_tile) {
           const auto distance = [&]() -> TData {
@@ -184,7 +192,11 @@ namespace clue::detail {
           }();
           assert(distance >= TData{0});
 
-          if (distance <= effective_distance && distance < delta_i) {
+          if (distance <= effective_distance &&
+              ((distance < delta_i) ||
+               ((distance == delta_i) && (nh_i >= 0) &&
+                ((rho_j > points.rho()[nh_i]) ||
+                 ((rho_j == points.rho()[nh_i]) && (tag_j > tag(nh_i))))))) {
             delta_i = distance;
             nh_i = j;
           }

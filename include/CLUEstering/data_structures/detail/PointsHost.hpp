@@ -167,4 +167,12 @@ namespace clue {
     m_view.m_sigmas[dim] = uncertainty.data();
   }
 
+  template <std::size_t Ndim, std::floating_point TData>
+  inline void PointsHost<Ndim, TData>::set_tags(std::span<std::size_t> tags) {
+    if (tags.size() != static_cast<size_t>(m_size)) {
+      throw std::invalid_argument("Size of tags does not match the number of points");
+    }
+    m_view.m_tags = tags.data();
+  }
+
 }  // namespace clue

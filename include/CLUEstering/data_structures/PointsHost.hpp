@@ -235,6 +235,14 @@ namespace clue {
       });
     }
 
+    /// @brief Sets a persistent identifier for each point, independent of its position in the array
+    ///
+    /// @param tags A span containing one identifier per point
+    /// @note Used as a deterministic tie-breaker in place of the raw array index, for cases where
+    /// the order of the points is not guaranteed to be stable (e.g. when produced by an upstream
+    /// parallel/concurrent stage)
+    void set_tags(std::span<std::size_t> tags);
+
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;
 

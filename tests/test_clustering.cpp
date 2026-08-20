@@ -477,3 +477,91 @@ TEST_CASE("Test non-default local density uncertainty") {
     }
   }
 }
+
+TEST_CASE("Test non-default point tags") {
+  std::mt19937 gen;
+  std::normal_distribution<float> dis(0., .3);
+
+  const auto size = 1000u;
+  const auto dc = .2f, rhoc = 1.f, outlier = .2f;
+  auto queue = clue::get_queue(0u);
+  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  auto input = clue::make_host_buffer<float[]>(queue, 3 * size);
+  auto output = clue::make_host_buffer<int[]>(queue, size);
+  std::generate(input.data(), input.data() + 2 * size, [&] { return dis(gen); });
+  std::fill(input.data() + 2 * size, input.data() + 3 * size, 1.f);
+  clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
+
+  std::vector<std::size_t> tags(size);
+  std::iota(tags.rbegin(), tags.rend(), 0u);
+
+  SUBCASE("Test interface for host points") {
+    h_points.set_tags(tags);
+    algo.make_clusters(queue, h_points);
+    CHECK(true);
+  }
+  SUBCASE("Test interface for device points") {
+    auto d_points = clue::PointsDevice<2>(queue, size);
+    clue::copyToDevice(queue, d_points, h_points);
+
+    auto d_tags = clue::make_device_buffer<std::size_t[]>(queue, size);
+    alpaka::memcpy(queue, d_tags, clue::make_host_view(tags.data(), size));
+    alpaka::wait(queue);
+
+    d_points.set_tags(std::span<std::size_t>{d_tags.data(), size});
+    algo.make_clusters(queue, d_points);
+    CHECK(true);
+  }
+}
+
+TEST_CASE("Point tags override the index-based tie-break for nearest higher") {
+  auto queue = clue::get_queue(0u);
+  const uint32_t size = 2;
+  const float dc{1.f}, rhoc{0.f}, outlier{1.f};
+  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+
+  std::vector<float> input{0.f, 0.f, 0.f, 0.f, 1.f, 1.f};  // x0,x1 | y0,y1 | w0,w1
+  std::vector<int> output(size);
+
+  auto read_back = [&](clue::PointsDevice<2>& d_points) {
+    std::vector<int32_t> nearest_higher(size);
+    std::vector<int32_t> is_seed(size);
+    alpaka::memcpy(queue,
+                   clue::make_host_view(nearest_higher.data(), size),
+                   clue::make_device_view(
+                       alpaka::getDev(queue), d_points.view().nearest_higher().data(), size));
+    alpaka::memcpy(
+        queue,
+        clue::make_host_view(is_seed.data(), size),
+        clue::make_device_view(alpaka::getDev(queue), d_points.view().is_seed().data(), size));
+    alpaka::wait(queue);
+    return std::make_pair(nearest_higher, is_seed);
+  };
+
+  SUBCASE("Without tags, the tie-break falls back to the raw array index") {
+    clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
+    clue::PointsDevice<2> d_points(queue, size);
+    algo.make_clusters(queue, h_points, d_points);
+
+    auto [nearest_higher, is_seed] = read_back(d_points);
+    CHECK(nearest_higher[0] == 1);
+    CHECK(nearest_higher[1] == -1);
+    CHECK(is_seed[0] == 0);
+    CHECK(is_seed[1] == 1);
+  }
+
+  SUBCASE("With tags, the tie-break follows the tag order instead") {
+    clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
+    std::vector<std::size_t> tags{100, 1};  // reverse of the array order
+    h_points.set_tags(tags);
+
+    clue::PointsDevice<2> d_points(queue, size);
+    algo.make_clusters(queue, h_points, d_points);
+
+    auto [nearest_higher, is_seed] = read_back(d_points);
+    CHECK(nearest_higher[1] == 0);
+    CHECK(nearest_higher[0] == -1);
+    CHECK(is_seed[1] == 0);
+    CHECK(is_seed[0] == 1);
+  }
+}

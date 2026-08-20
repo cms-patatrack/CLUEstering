@@ -508,6 +508,29 @@ TEST_CASE("Test coordinate getter throwing conditions") {
   }
 }
 
+TEST_CASE("Test point tags") {
+  auto queue = clue::get_queue(0u);
+  const uint32_t size = 1000;
+  clue::PointsHost<2> points(queue, size);
+
+  SUBCASE("Tags are unset by default") { CHECK_FALSE(points.view().has_tags()); }
+
+  SUBCASE("Set and retrieve tags") {
+    std::vector<std::size_t> tags(size);
+    // reverse order, so the tags are distinct from the array index they replace
+    std::iota(tags.rbegin(), tags.rend(), 0u);
+    points.set_tags(tags);
+
+    CHECK(points.view().has_tags());
+    CHECK(std::ranges::equal(points.view().tags(), tags));
+  }
+
+  SUBCASE("Setting tags with the wrong size throws") {
+    std::vector<std::size_t> tags(size - 1);
+    CHECK_THROWS(points.set_tags(tags));
+  }
+}
+
 TEST_CASE("Test cluster properties accessors") {
   auto queue = clue::get_queue(0u);
 

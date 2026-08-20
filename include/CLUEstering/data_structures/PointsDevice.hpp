@@ -41,6 +41,7 @@ namespace clue {
     device_buffer<TDev, std::byte[]> m_buffer;
     std::optional<device_buffer<TDev, value_type[]>> m_uncertainty_buffer;
     std::array<std::optional<device_buffer<TDev, value_type[]>>, Ndim> m_sigma_buffers;
+    std::optional<device_buffer<TDev, std::size_t[]>> m_tags_buffer;
     PointsView<Ndim, element_type> m_view;
     std::optional<std::size_t> m_nclusters;
     std::int32_t m_size;
@@ -195,6 +196,14 @@ namespace clue {
         set_sigma(Dim, std::span<element_type>(c.data(), c.size()));
       });
     }
+
+    /// @brief Sets a persistent identifier for each point, independent of its position in the array
+    ///
+    /// @param tags A span containing one identifier per point
+    /// @note Used as a deterministic tie-breaker in place of the raw array index, for cases where
+    /// the order of the points is not guaranteed to be stable (e.g. when produced by an upstream
+    /// parallel/concurrent stage)
+    void set_tags(std::span<std::size_t> tags);
 
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;

@@ -80,6 +80,13 @@ namespace clue {
         return points.m_sigma_buffers;
       }
 
+      /// @brief Returns the device buffer owning the tags array
+      static auto& tags_buffer(TPoints& points)
+        requires requires { points.m_tags_buffer; }
+      {
+        return points.m_tags_buffer;
+      }
+
       ALPAKA_FN_HOST const auto& view() const { return static_cast<const TPoints*>(this)->m_view; }
       ALPAKA_FN_HOST auto& view() { return static_cast<TPoints*>(this)->m_view; }
     };
@@ -99,6 +106,7 @@ namespace clue {
     std::int32_t* m_nearest_higher;
     std::array<element_type*, Ndim> m_sigmas;
     element_type* m_density_uncertainty;
+    std::size_t* m_tags;
     std::int32_t m_n;
 
     ALPAKA_FN_HOST_ACC auto coords() const {
@@ -192,6 +200,14 @@ namespace clue {
              "The sigma array for this dimension has not been allocated yet");
       return std::span<element_type>(m_sigmas[dim], m_n);
     }
+
+    ALPAKA_FN_HOST_ACC auto tags() const {
+      assert(m_tags != nullptr &&
+             "The tags array has not been allocated yet, so it cannot be accessed");
+      return std::span<const std::size_t>(m_tags, m_n);
+    }
+
+    ALPAKA_FN_HOST_ACC auto has_tags() const { return m_tags != nullptr; }
 
     ALPAKA_FN_HOST_ACC auto size() const { return m_n; }
 
