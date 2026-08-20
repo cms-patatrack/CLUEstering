@@ -8,16 +8,11 @@
 
 #include "../Run.hpp"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/functional.h>
-#include <pybind11/numpy.h>
-
-namespace py = pybind11;
+#include <nanobind/nanobind.h>
 
 namespace alpaka_omp2_async {
 
-  PYBIND11_MODULE(CLUE_CPU_OMP, m) {
+  NB_MODULE(CLUE_CPU_OMP, m) {
     m.doc() = "Binding of the CLUE algorithm running on CPU with OpenMP";
 
     m.def("listDevices",

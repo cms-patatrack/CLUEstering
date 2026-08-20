@@ -42,7 +42,7 @@ jobs:
     - uses: actions/checkout@v7
       with:
         ref: ${{ inputs.head_sha }}
-        submodules: true
+        submodules: recursive
         fetch-depth: 0
 
     - name: Mark workspace as safe for git
@@ -127,7 +127,7 @@ jobs:
     steps:
     - uses: actions/checkout@v7
       with:
-        submodules: true
+        submodules: recursive
 
     - name: Install dependencies
       run: |

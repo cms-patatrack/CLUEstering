@@ -13,12 +13,13 @@
 #include <span>
 #include <vector>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/functional.h>
-#include <pybind11/numpy.h>
+#include <nanobind/nanobind.h>
+#include <nanobind/ndarray.h>
+#include <nanobind/stl/optional.h>
+#include <nanobind/stl/string.h>
+#include <nanobind/stl/vector.h>
 
-namespace py = pybind11;
+namespace nb = nanobind;
 
 template <std::floating_point TInput, std::size_t Ndim, clue::concepts::convolutional_kernel Kernel>
 void run(TInput dc,
@@ -49,7 +50,7 @@ void run(TInput dc,
 
 namespace ALPAKA_BACKEND {
 
-  void listDevices(const std::string& backend) {
+  inline void listDevices(const std::string& backend) {
     const char tab = '\t';
     const std::vector<Device> devices = alpaka::getDevs(clue::Platform{});
     if (devices.empty()) {
@@ -70,25 +71,22 @@ namespace ALPAKA_BACKEND {
                TInput dm,
                TInput seed_dc,
                std::vector<uint8_t> wrapped,
-               py::array_t<TInput> data,
-               py::array_t<int> results,
+               nb::ndarray<TInput, nb::numpy> data,
+               nb::ndarray<int, nb::numpy> results,
                const Kernel<TInput>& kernel,
                int Ndim,
-               std::optional<py::array_t<uint32_t>> batch_sample_sizes,
+               std::optional<nb::ndarray<uint32_t, nb::numpy>> batch_sample_sizes,
                int32_t n_points,
                std::size_t device_id,
                const clue::internal::MetricDescriptor<TInput>& metric_desc) {
-    auto rData = data.request();
-    auto* pData = static_cast<TInput*>(rData.ptr);
-    auto rResults = results.request();
-    auto* pResults = static_cast<int*>(rResults.ptr);
+    auto* pData = data.data();
+    auto* pResults = results.data();
 
     std::optional<std::span<uint32_t>> batch_sample_sizes_span;
 
     if (batch_sample_sizes.has_value()) [[unlikely]] {
-      auto rBatchSizes = batch_sample_sizes->request();
-      auto* pBatchSizes = static_cast<uint32_t*>(rBatchSizes.ptr);
-      batch_sample_sizes_span = std::span<uint32_t>(pBatchSizes, rBatchSizes.size);
+      auto* pBatchSizes = batch_sample_sizes->data();
+      batch_sample_sizes_span = std::span<uint32_t>(pBatchSizes, batch_sample_sizes->size());
     } else [[likely]] {
       batch_sample_sizes_span = std::nullopt;
     }

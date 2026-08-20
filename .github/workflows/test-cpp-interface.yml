@@ -93,7 +93,7 @@ jobs:
 
     - uses: actions/checkout@v7
       with:
-        submodules: true
+        submodules: recursive
 
     - name: Export GitHub Actions cache environment variables
       if: matrix.os == 'windows-latest'

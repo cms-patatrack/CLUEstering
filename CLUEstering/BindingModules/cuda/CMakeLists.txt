@@ -8,20 +8,14 @@ if(NOT DEFINED CMAKE_CUDA_STANDARD)
 endif()
 
 set_source_files_properties(binding_gpu_cuda.cpp PROPERTIES LANGUAGE CUDA)
-pybind11_add_module(CLUE_GPU_CUDA NO_EXTRAS SHARED binding_gpu_cuda.cpp)
+nanobind_add_module(CLUE_GPU_CUDA NB_STATIC binding_gpu_cuda.cpp)
 target_include_directories(CLUE_GPU_CUDA
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_link_libraries(CLUE_GPU_CUDA PRIVATE alpaka::alpaka Boost::atomic)
 target_compile_definitions(CLUE_GPU_CUDA PRIVATE ALPAKA_ACC_GPU_CUDA_ENABLED)
 target_compile_options(CLUE_GPU_CUDA PRIVATE --expt-relaxed-constexpr)
-target_precompile_headers(
-  CLUE_GPU_CUDA
-  PRIVATE
-  <alpaka/alpaka.hpp>
-  <pybind11/pybind11.h>
-  <pybind11/numpy.h>
-  <pybind11/stl.h>
-  <pybind11/functional.h>)
+target_precompile_headers(CLUE_GPU_CUDA PRIVATE <alpaka/alpaka.hpp>
+                          <nanobind/nanobind.h> <nanobind/ndarray.h>)
 set_target_properties(
   CLUE_GPU_CUDA
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY

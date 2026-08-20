@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v7
       with:
-        submodules: true
+        submodules: recursive
 
     - name: Cache apt packages
       uses: actions/cache@v6

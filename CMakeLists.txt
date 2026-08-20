@@ -8,7 +8,8 @@ project(
 option(BUILD_PYTHON "Build the Python bindings" OFF)
 
 if(BUILD_PYTHON)
-  add_subdirectory(extern/pybind11)
+  find_package(Python 3.8 REQUIRED COMPONENTS Interpreter Development.Module)
+  add_subdirectory(extern/nanobind EXCLUDE_FROM_ALL)
   add_subdirectory(CLUEstering/BindingModules)
 endif()
 

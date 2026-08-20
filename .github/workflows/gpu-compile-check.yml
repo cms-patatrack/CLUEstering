@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          submodules: true
+          submodules: recursive
 
       - name: Install CUDA toolkit
         uses: Jimver/cuda-toolkit@v0.2.36
@@ -53,7 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          submodules: true
+          submodules: recursive
 
       # ROCm's apt repo layout/supported codenames change across releases;
       # if this step starts failing, check https://rocm.docs.amd.com for the
