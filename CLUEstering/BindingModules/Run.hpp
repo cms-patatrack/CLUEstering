@@ -118,23 +118,23 @@ namespace ALPAKA_BACKEND {
       [[unlikely]] case (4):
         dispatch.template operator()<4>();
         return;
-      [[unlikely]] case (5):
-        dispatch.template operator()<5>();
-        return;
-      [[unlikely]] case (6):
-        dispatch.template operator()<6>();
-        return;
-      [[unlikely]] case (7):
-        dispatch.template operator()<7>();
-        return;
-      [[unlikely]] case (8):
-        dispatch.template operator()<8>();
-        return;
-      [[unlikely]] case (9):
-        dispatch.template operator()<9>();
-        return;
-      [[unlikely]] case (10):
-        dispatch.template operator()<10>();
+        // [[unlikely]] case (5):
+        //   dispatch.template operator()<5>();
+        //   return;
+        // [[unlikely]] case (6):
+        //   dispatch.template operator()<6>();
+        //   return;
+        // [[unlikely]] case (7):
+        //   dispatch.template operator()<7>();
+        //   return;
+        // [[unlikely]] case (8):
+        //   dispatch.template operator()<8>();
+        //   return;
+        // [[unlikely]] case (9):
+        //   dispatch.template operator()<9>();
+        //   return;
+        // [[unlikely]] case (10):
+        //   dispatch.template operator()<10>();
         return;
       [[unlikely]] default:
         std::cout << "This library only works up to 10 dimensions\n";
