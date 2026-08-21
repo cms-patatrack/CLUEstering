@@ -326,12 +326,12 @@ TEST_CASE("Test point tags") {
   auto queue = clue::get_queue(0u);
   const uint32_t size = 1000;
 
-  std::vector<std::size_t> h_tags(size);
+  std::vector<std::uint32_t> h_tags(size);
   // reverse order, so the tags are distinct from the array index they replace
   std::iota(h_tags.rbegin(), h_tags.rend(), 0u);
 
   auto read_back_tags = [&](clue::PointsDevice<2>& d_points) {
-    std::vector<std::size_t> readback(size);
+    std::vector<std::uint32_t> readback(size);
     alpaka::memcpy(
         queue,
         clue::make_host_view(readback.data(), size),
@@ -348,11 +348,11 @@ TEST_CASE("Test point tags") {
   SUBCASE("Set directly on device points") {
     clue::PointsDevice<2> d_points(queue, size);
 
-    auto d_tags = clue::make_device_buffer<std::size_t[]>(queue, size);
+    auto d_tags = clue::make_device_buffer<std::uint32_t[]>(queue, size);
     alpaka::memcpy(queue, d_tags, clue::make_host_view(h_tags.data(), size));
     alpaka::wait(queue);
 
-    d_points.set_tags(std::span<std::size_t>{d_tags.data(), size});
+    d_points.set_tags(std::span<std::uint32_t>{d_tags.data(), size});
 
     CHECK(d_points.view().has_tags());
     CHECK(std::ranges::equal(read_back_tags(d_points), h_tags));

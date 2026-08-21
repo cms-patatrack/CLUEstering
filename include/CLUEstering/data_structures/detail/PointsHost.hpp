@@ -168,7 +168,7 @@ namespace clue {
   }
 
   template <std::size_t Ndim, std::floating_point TData>
-  inline void PointsHost<Ndim, TData>::set_tags(std::span<std::size_t> tags) {
+  inline void PointsHost<Ndim, TData>::set_tags(std::span<std::uint32_t> tags) {
     if (tags.size() != static_cast<size_t>(m_size)) {
       throw std::invalid_argument("Size of tags does not match the number of points");
     }
