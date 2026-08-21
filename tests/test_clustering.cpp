@@ -492,7 +492,7 @@ TEST_CASE("Test non-default point tags") {
   std::fill(input.data() + 2 * size, input.data() + 3 * size, 1.f);
   clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
 
-  std::vector<std::size_t> tags(size);
+  std::vector<std::uint32_t> tags(size);
   std::iota(tags.rbegin(), tags.rend(), 0u);
 
   SUBCASE("Test interface for host points") {
@@ -504,11 +504,11 @@ TEST_CASE("Test non-default point tags") {
     auto d_points = clue::PointsDevice<2>(queue, size);
     clue::copyToDevice(queue, d_points, h_points);
 
-    auto d_tags = clue::make_device_buffer<std::size_t[]>(queue, size);
+    auto d_tags = clue::make_device_buffer<std::uint32_t[]>(queue, size);
     alpaka::memcpy(queue, d_tags, clue::make_host_view(tags.data(), size));
     alpaka::wait(queue);
 
-    d_points.set_tags(std::span<std::size_t>{d_tags.data(), size});
+    d_points.set_tags(std::span<std::uint32_t>{d_tags.data(), size});
     algo.make_clusters(queue, d_points);
     CHECK(true);
   }
@@ -552,7 +552,7 @@ TEST_CASE("Point tags override the index-based tie-break for nearest higher") {
 
   SUBCASE("With tags, the tie-break follows the tag order instead") {
     clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
-    std::vector<std::size_t> tags{100, 1};  // reverse of the array order
+    std::vector<std::uint32_t> tags{100, 1};  // reverse of the array order
     h_points.set_tags(tags);
 
     clue::PointsDevice<2> d_points(queue, size);

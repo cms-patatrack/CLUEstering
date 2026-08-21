@@ -106,7 +106,7 @@ namespace clue {
     std::int32_t* m_nearest_higher;
     std::array<element_type*, Ndim> m_sigmas;
     element_type* m_density_uncertainty;
-    std::size_t* m_tags;
+    std::uint32_t* m_tags;
     std::int32_t m_n;
 
     ALPAKA_FN_HOST_ACC auto coords() const {
@@ -204,7 +204,7 @@ namespace clue {
     ALPAKA_FN_HOST_ACC auto tags() const {
       assert(m_tags != nullptr &&
              "The tags array has not been allocated yet, so it cannot be accessed");
-      return std::span<const std::size_t>(m_tags, m_n);
+      return std::span<const std::uint32_t>(m_tags, m_n);
     }
 
     ALPAKA_FN_HOST_ACC auto has_tags() const { return m_tags != nullptr; }

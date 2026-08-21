@@ -241,7 +241,7 @@ namespace clue {
     /// @note Used as a deterministic tie-breaker in place of the raw array index, for cases where
     /// the order of the points is not guaranteed to be stable (e.g. when produced by an upstream
     /// parallel/concurrent stage)
-    void set_tags(std::span<std::size_t> tags);
+    void set_tags(std::span<std::uint32_t> tags);
 
   private:
     inline static constexpr std::size_t Ndim_ = Ndim;

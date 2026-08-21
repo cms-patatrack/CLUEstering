@@ -140,7 +140,7 @@ namespace clue {
   }
 
   template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  inline void PointsDevice<Ndim, TData, TDev>::set_tags(std::span<std::size_t> tags) {
+  inline void PointsDevice<Ndim, TData, TDev>::set_tags(std::span<std::uint32_t> tags) {
     assert(tags.size() == static_cast<size_t>(m_size) &&
            "The size of the tags array must match the number of points");
     m_view.m_tags = tags.data();

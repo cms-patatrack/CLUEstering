@@ -516,7 +516,7 @@ TEST_CASE("Test point tags") {
   SUBCASE("Tags are unset by default") { CHECK_FALSE(points.view().has_tags()); }
 
   SUBCASE("Set and retrieve tags") {
-    std::vector<std::size_t> tags(size);
+    std::vector<std::uint32_t> tags(size);
     // reverse order, so the tags are distinct from the array index they replace
     std::iota(tags.rbegin(), tags.rend(), 0u);
     points.set_tags(tags);
@@ -526,7 +526,7 @@ TEST_CASE("Test point tags") {
   }
 
   SUBCASE("Setting tags with the wrong size throws") {
-    std::vector<std::size_t> tags(size - 1);
+    std::vector<std::uint32_t> tags(size - 1);
     CHECK_THROWS(points.set_tags(tags));
   }
 }
