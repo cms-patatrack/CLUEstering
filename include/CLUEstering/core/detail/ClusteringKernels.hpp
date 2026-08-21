@@ -225,7 +225,7 @@ namespace clue::detail {
           const auto y = dev_points[n][1];
           const auto theta = k0 * x + k1 * y;
           const auto weight = dev_points.weights()[n];
-          const auto cas = math::sqrt2 * alpaka::math::sin(acc, theta - math::pi_4);
+          const auto cas = clue::math::sqrt(TData{2}) * alpaka::math::sin(acc, theta + TData{M_PI} / TData{4});
           hartley += weight * cas;
         }
 
@@ -343,7 +343,7 @@ struct KernelInverseHartleyTransform {
         for (auto i = 0; i < n_grid * n_grid; ++i) {
           auto theta =
               meshgrid[i] * dev_points[idx][0] + meshgrid[i + n_grid * n_grid] * dev_points[idx][1];
-          const auto cas = math::sqrt2 * alpaka::math::sin(acc, theta - math::pi_4);
+          const auto cas = clue::math::sqrt(TData{2}) * alpaka::math::sin(acc, theta + TData{M_PI} / TData{4});
           sum += rho_hat_flat_hartley[i] * cas;
         }
         dev_points.rho()[idx] = prefactor * sum * TData(n_samples);

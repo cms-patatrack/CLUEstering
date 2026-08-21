@@ -296,7 +296,7 @@ namespace clue {
                                                dev_points.view(),
                                                kernel,
                                                InputType{3.0},
-                                               1024,
+                                               2048,
                                                n_points);
 
      
