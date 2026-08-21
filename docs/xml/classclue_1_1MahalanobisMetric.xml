@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classclue_1_1MahalanobisMetric" kind="class" language="C++" prot="public">
+    <compoundname>clue::MahalanobisMetric</compoundname>
+    <includes refid="DistanceMetrics_8hpp" local="no">DistanceMetrics.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+      <param>
+        <type>std::floating_point</type>
+        <declname>TData</declname>
+        <defname>TData</defname>
+        <defval>float</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classclue_1_1MahalanobisMetric_1ad0edc92cad56cb17b67f896b5af80125" prot="public" static="no">
+        <type>std::remove_cv_t&lt; std::remove_reference_t&lt; TData &gt; &gt;</type>
+        <definition>using clue::MahalanobisMetric&lt; Ndim, TData &gt;::value_type = std::remove_cv_t&lt;std::remove_reference_t&lt;TData&gt;&gt;</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>clue::MahalanobisMetric::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="66" column="5" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1MahalanobisMetric_1a7a1f27c09d190dc4050d6bdc113933f2" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr clue::MahalanobisMetric&lt; Ndim, TData &gt;::MahalanobisMetric</definition>
+        <argsstring>()=default</argsstring>
+        <name>MahalanobisMetric</name>
+        <qualifiedname>clue::MahalanobisMetric::MahalanobisMetric</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="68" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1MahalanobisMetric_1afaacf913ff3c1a1ffdde52796532e307" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ALPAKA_FN_HOST_ACC constexpr auto</type>
+        <definition>ALPAKA_FN_HOST_ACC constexpr auto clue::MahalanobisMetric&lt; Ndim, TData &gt;::operator()</definition>
+        <argsstring>(PointsView&lt; Ndim, TData &gt; points, std::size_t i, std::size_t j) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>clue::MahalanobisMetric::operator()</qualifiedname>
+        <param>
+          <type>PointsView&lt; Ndim, TData &gt;</type>
+          <declname>points</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>j</declname>
+        </param>
+        <briefdescription>
+<para>Compute the Mahalanobis distance between points i and j. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The PointsView holding coordinates and sigma arrays </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index of the first point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>j</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index of the second point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Mahalanobis distance between the two points </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="76" column="46" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="76" bodyend="86"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Mahalanobis distance metric with per-point coordinate uncertainties. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Computes a normalised distance between two points using the per-point sigma values stored in the PointsView. For each dimension the contribution is <computeroutput>(x_i - x_j)^2 / (sigma_i^2 + sigma_j^2)</computeroutput>, which is the correct combination for two independent Gaussian uncertainties.</para>
+<para><simplesect kind="note"><para>Requires that sigma values have been set for every dimension via <computeroutput>set_sigma</computeroutput> or <computeroutput>set_sigmas</computeroutput> before clustering.</para>
+</simplesect>
+<parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of dimensions </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Floating-point type for coordinates and sigma values </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="64" column="3" bodyfile="include/CLUEstering/core/DistanceMetrics.hpp" bodystart="64" bodyend="87"/>
+    <listofallmembers>
+      <member refid="classclue_1_1MahalanobisMetric_1a7a1f27c09d190dc4050d6bdc113933f2" prot="public" virt="non-virtual"><scope>clue::MahalanobisMetric</scope><name>MahalanobisMetric</name></member>
+      <member refid="classclue_1_1MahalanobisMetric_1afaacf913ff3c1a1ffdde52796532e307" prot="public" virt="non-virtual"><scope>clue::MahalanobisMetric</scope><name>operator()</name></member>
+      <member refid="classclue_1_1MahalanobisMetric_1ad0edc92cad56cb17b67f896b5af80125" prot="public" virt="non-virtual"><scope>clue::MahalanobisMetric</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
