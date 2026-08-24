@@ -54,8 +54,8 @@ inline FlatKernel<TData, Ndim>::FlatKernel(value_type flat)
     }
     /// 
     k_norm = math::sqrt(k_norm);
-    return m_flat * prefactor * math::pow(density_radius * k_norm, - value_type(Ndim) / value_type{2}) * math::cyl_bessel_j(value_type(Ndim) / value_type{2}, density_radius * k_norm);
-    
+   // return m_flat * prefactor * math::pow(density_radius * k_norm, - value_type(Ndim) / value_type{2}) * math::cyl_bessel_j(value_type(Ndim) / value_type{2}, density_radius * k_norm);
+    return m_flat * prefactor * math::bessel_power_series(value_type(Ndim) / value_type{2}, density_radius * k_norm);
   }
 
   template <std::floating_point TData, std::size_t Ndim>

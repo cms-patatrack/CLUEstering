@@ -34,12 +34,7 @@ namespace clue::math {
 
 
     template <typename TData>
-    ALPAKA_FN_ACC inline TData cyl_bessel_j_impl(TData nu, TData x) {
-      if (x == static_cast<TData>(0)) {
-        return (nu == static_cast<TData>(0)) ? static_cast<TData>(1) : static_cast<TData>(0);
-      }
-
-      const TData half_x = static_cast<TData>(0.5) * x;
+    ALPAKA_FN_ACC inline TData bessel_power_series_impl(TData nu, TData x) {
       const TData x2 = x * x;
       const TData x4 = x2 * x2;
       const TData x6 = x4 * x2;
@@ -59,15 +54,16 @@ namespace clue::math {
       const TData gamma_nu1 = gamma(nu1);
       const TData decay = std::exp(-x2 / (static_cast<TData>(4) * nu1));
 
-      return std::pow(half_x, nu) * p_nu / gamma_nu1 * decay;
+      
+      return std::pow(static_cast<TData>(2), -nu) * p_nu/ gamma_nu1 * decay;
     }
 
   }
 
 
 template <typename TData>
-ALPAKA_FN_ACC inline double cyl_bessel_j(TData n, TData x) {
-    return detail::cyl_bessel_j_impl<double>(n, x);
+ALPAKA_FN_ACC inline double bessel_power_series(TData n, TData x) {
+    return detail::bessel_power_series_impl<double>(n, x);
 }
 
 }
