@@ -4,6 +4,21 @@
 
 #pragma once
 
+#if not defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED) and  \
+    not defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED) and \
+    not defined(ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED) and  \
+    not defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_ACC_GPU_HIP_ENABLED)
+#if defined(__CUDACC__) and not defined(ALPAKA_HOST_ONLY)
+#define ALPAKA_ACC_GPU_CUDA_ENABLED
+#elif defined(__HIPCC__) and not defined(ALPAKA_HOST_ONLY)
+#define ALPAKA_ACC_GPU_HIP_ENABLED
+#elif defined(_OPENMP)
+#define ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
+#else
+#define ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
+#endif
+#endif
+
 #include "CLUEstering/core/Clusterer.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
