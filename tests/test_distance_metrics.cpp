@@ -1,5 +1,7 @@
 
 #include "CLUEstering/CLUEstering.hpp"
+
+#include <array>
 #include <cmath>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN

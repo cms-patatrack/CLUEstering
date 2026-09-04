@@ -1,0 +1,17 @@
+[
+  { "include": ["@\"CLUEstering/.*/detail/.*\\.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/core/Clusterer.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/core/ConvolutionalKernel.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/data_structures/PointsHost.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/data_structures/PointsDevice.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/data_structures/PointsConversion.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/data_structures/PointsFactory.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/utils/read_csv.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/utils/cluster_centroid.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/utils/get_clusters.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/utils/get_device.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/utils/get_queue.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/utils/scores.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["\"CLUEstering/utils/to_dot.hpp\"", "private", "\"CLUEstering/CLUEstering.hpp\"", "public"] },
+  { "include": ["@<alpaka/.*>", "private", "<alpaka/alpaka.hpp>", "public"] }
+]
