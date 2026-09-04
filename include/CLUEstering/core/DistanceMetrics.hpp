@@ -65,7 +65,7 @@ namespace clue {
   public:
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
 
-    ALPAKA_FN_HOST_ACC constexpr MahalanobisMetric() = default;
+    constexpr MahalanobisMetric() = default;
 
     /// @brief Compute the Mahalanobis distance between points i and j
     ///
@@ -98,7 +98,7 @@ namespace clue {
     /// @brief Default constructor
     ///
     /// @return EuclideanMetric object
-    ALPAKA_FN_HOST_ACC constexpr EuclideanMetric() = default;
+    constexpr EuclideanMetric() = default;
 
     /// @brief Compute the Euclidean distance between two points
     ///
@@ -231,7 +231,7 @@ namespace clue {
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
 
     /// @brief Default constructor
-    ALPAKA_FN_HOST_ACC constexpr ManhattanMetric() = default;
+    constexpr ManhattanMetric() = default;
 
     /// @brief Compute the Manhattan distance between two points
     ///
@@ -256,7 +256,7 @@ namespace clue {
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
 
     /// @brief Default constructor
-    ALPAKA_FN_HOST_ACC constexpr ChebyshevMetric() = default;
+    constexpr ChebyshevMetric() = default;
 
     /// @brief Compute the Chebyshev distance between two points
     ///
