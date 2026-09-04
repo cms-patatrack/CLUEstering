@@ -124,7 +124,7 @@ The data can be provided in many different formats, including numpy arrays, pand
 
 To cite this software directly, please use the following BibTeX entry:
 ```bibtex
-@software{balducci_2026_20270711,
+@software{balducci_clueestering,
   author       = {Balducci, Simone and
                   Pantaleo, Felice and
                   Perego, Aurora and
@@ -132,11 +132,8 @@ To cite this software directly, please use the following BibTeX entry:
                   Rovere, Marco and
                   Giacomini, Francesco},
   title        = {CLUEstering},
-  month        = may,
-  year         = 2026,
   publisher    = {Zenodo},
-  version      = {2.11.0},
-  doi          = {10.5281/zenodo.20270711},
-  url          = {https://doi.org/10.5281/zenodo.20270711},
+  doi          = {10.5281/zenodo.20270689},
+  url          = {https://doi.org/10.5281/zenodo.20270689},
 }
 ```
