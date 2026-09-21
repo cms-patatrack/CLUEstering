@@ -38,19 +38,31 @@ find_package(Boost REQUIRED COMPONENTS atomic)
 
 include(FetchContent)
 
-find_package(alpaka 2.1.0)
-if(NOT alpaka_FOUND)
+set(_clue_alpaka_submodule ${CMAKE_CURRENT_SOURCE_DIR}/../extern/alpaka)
+if(EXISTS ${_clue_alpaka_submodule}/CMakeLists.txt)
   set(_clue_build_testing ${BUILD_TESTING})
   set(BUILD_TESTING
       OFF
       CACHE BOOL "" FORCE)
-  FetchContent_Declare(
-    alpaka
-    URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.1.0.tar.gz)
-  FetchContent_MakeAvailable(alpaka)
+  add_subdirectory(${_clue_alpaka_submodule} ${CMAKE_CURRENT_BINARY_DIR}/alpaka)
   set(BUILD_TESTING
       ${_clue_build_testing}
       CACHE BOOL "" FORCE)
+else()
+  find_package(alpaka 2.1.0)
+  if(NOT alpaka_FOUND)
+    set(_clue_build_testing ${BUILD_TESTING})
+    set(BUILD_TESTING
+        OFF
+        CACHE BOOL "" FORCE)
+    FetchContent_Declare(
+      alpaka
+      URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.1.0.tar.gz)
+    FetchContent_MakeAvailable(alpaka)
+    set(BUILD_TESTING
+        ${_clue_build_testing}
+        CACHE BOOL "" FORCE)
+  endif()
 endif()
 
 find_package(doctest 2.4.12)
