@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="conceptclue_1_1concepts_1_1distance__metric" kind="concept">
+    <compoundname>clue::concepts::distance_metric</compoundname>
+    <includes refid="DistanceMetrics_8hpp" local="no">DistanceMetrics.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename TMetric</type>
+      </param>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;typename TMetric, std::size_t Ndim&gt;
+concept <ref refid="conceptclue_1_1concepts_1_1distance__metric" kindref="compound">clue::concepts::distance_metric</ref> = 
+        detail::point_distance_metric&lt;TMetric, Ndim&gt; || detail::view_distance_metric&lt;TMetric, Ndim&gt;</initializer>
+    <conceptparts>
+      <codepart line="43">    <programlisting>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>TMetric,<sp/>std::</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Ndim&gt;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">concept<sp/></highlight><highlight class="normal">distance_metric<sp/>=</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>detail::point_distance_metric&lt;TMetric,<sp/>Ndim&gt;<sp/>||<sp/>detail::view_distance_metric&lt;TMetric,<sp/>Ndim&gt;</highlight></codeline>
+    </programlisting>
+</codepart>
+    </conceptparts>
+    <briefdescription>
+<para>Concept for distance metrics accepted by the clusterer. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Satisfied by either a point-wise metric (taking two coordinate arrays) or a view-wise metric (taking a PointsView and two point indices). </para>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/DistanceMetrics.hpp" line="43" column="5"/>
+  </compounddef>
+</doxygen>
