@@ -4,3 +4,6 @@
 [submodule "extern/nanobind"]
 	path = extern/nanobind
 	url = git@github.com:wjakob/nanobind.git
+[submodule "extern/alpaka"]
+	path = extern/alpaka
+	url = https://github.com/alpaka-group/alpaka.git
