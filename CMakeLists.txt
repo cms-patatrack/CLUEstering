@@ -5,6 +5,13 @@ project(
   LANGUAGES CXX
   VERSION 2.12.0)
 
+find_program(IWYU_PATH NAMES include-what-you-use iwyu)
+if(IWYU_PATH)
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
+      ${IWYU_PATH} -Xiwyu
+      --mapping_file=${CMAKE_CURRENT_SOURCE_DIR}/cmake/iwyu.imp)
+endif()
+
 option(BUILD_PYTHON "Build the Python bindings" OFF)
 
 if(BUILD_PYTHON)

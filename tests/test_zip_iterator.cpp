@@ -2,7 +2,10 @@
 #include "CLUEstering/internal/nostd/zip_iterator.hpp"
 
 #include <algorithm>
+#include <cstddef>
 #include <numeric>
+#include <tuple>
+#include <type_traits>
 #include <vector>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN

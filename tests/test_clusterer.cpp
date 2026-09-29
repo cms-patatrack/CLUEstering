@@ -1,11 +1,9 @@
 
 #include "CLUEstering/CLUEstering.hpp"
-#include "CLUEstering/utils/validation.hpp"
 
-#include <cmath>
-#include <ranges>
-#include <span>
-#include <vector>
+#include <alpaka/alpaka.hpp>
+#include <optional>
+#include <string>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>

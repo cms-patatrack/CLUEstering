@@ -2,9 +2,14 @@
 #include "CLUEstering/CLUEstering.hpp"
 
 #include <algorithm>
+#include <array>
+#include <cstddef>
+#include <cstdint>
 #include <numeric>
+#include <optional>
 #include <ranges>
 #include <span>
+#include <string>
 #include <vector>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN

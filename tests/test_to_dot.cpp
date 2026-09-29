@@ -1,9 +1,12 @@
 
 #include "CLUEstering/CLUEstering.hpp"
 
+#include <cctype>
 #include <filesystem>
 #include <fstream>
+#include <optional>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
