@@ -277,9 +277,6 @@ namespace clue {
                                                  m_min_density,
                                                  metric,
                                                  seed_candidates);
-#if CLUE_TILE_COUNTERS_ACTIVE
-    detail::counters::report(m_tiles->view(), dev_points.view());
-#endif
     detail::setup_seeds(queue, m_seeds, seed_candidates);
     detail::findClusterSeeds<internal::Acc>(
         queue, work_division, m_seeds.value(), dev_points.view(), m_min_density);
@@ -338,9 +335,6 @@ namespace clue {
                                                           d_event_offsets,
                                                           max_event_size,
                                                           block_size);
-#if CLUE_TILE_COUNTERS_ACTIVE
-    detail::counters::dump("batched", dev_points.view());
-#endif
     detail::setup_seeds(queue, m_seeds, seed_candidates);
     m_event_associations = clue::internal::SeedArray<>(queue, seed_candidates);
 

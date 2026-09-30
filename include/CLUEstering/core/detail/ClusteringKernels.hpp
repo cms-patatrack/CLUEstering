@@ -3,7 +3,6 @@
 
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
-#include "CLUEstering/core/detail/TileCounters.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/data_structures/internal/DeviceVector.hpp"
@@ -50,9 +49,6 @@ namespace clue::detail {
     if constexpr (N_ == 0) {
       auto tile_idx = tiles.getGlobalBinByBin(base_vec, event);
       auto tile_size = tiles[tile_idx].size();
-      CLUE_COUNT(density, tiles, 1);
-      CLUE_COUNT(density, candidates, tile_size);
-      CLUE_COUNT(density, distances, tile_size);
 
       for (auto tile_it = 0u; tile_it < tile_size; ++tile_it) {
         auto j = tiles[tile_idx][tile_it];
@@ -168,8 +164,6 @@ namespace clue::detail {
     if constexpr (N_ == 0) {
       auto tile_idx = tiles.getGlobalBinByBin(base_vec, event);
       auto tile_size = tiles[tile_idx].size();
-      CLUE_COUNT(nearest_higher, tiles, 1);
-      CLUE_COUNT(nearest_higher, candidates, tile_size);
 
       const auto effective_distance = (rho_i >= min_density) ? seeding_distance : outlier_distance;
 
@@ -188,7 +182,6 @@ namespace clue::detail {
             found_higher_in_tile || ((rho_j == rho_i) && (rho_j > TData{0}) && (tag_j > point_tag));
 
         if (found_higher_in_tile) {
-          CLUE_COUNT(nearest_higher, distances, 1);
           const auto distance = [&]() -> TData {
             if constexpr (concepts::detail::view_distance_metric<DistanceMetric, Ndim>) {
               return metric(

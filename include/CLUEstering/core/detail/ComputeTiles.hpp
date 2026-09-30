@@ -14,8 +14,6 @@
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
-#include <cstdlib>
-#include <cstring>
 #include <limits>
 #include <numeric>
 
@@ -94,29 +92,6 @@ namespace clue::detail {
     auto edge = static_cast<double>(tile_edge);
     std::array<double, Ndim> nperdim{};
     double ntiles;
-#ifdef CLUE_TILE_COUNTERS
-    // Development-only: CLUE_TILES_LEGACY ("all", or the number of dimensions it applies to)
-    // reproduces the grid of CLUEstering 2.12.0, 128 points per tile on average and the same
-    // number of tiles along every dimension, through the new indexing code, to separate the
-    // effect of the grid from that of the code.
-    const char* legacy = std::getenv("CLUE_TILES_LEGACY");
-    if (legacy != nullptr and
-        (std::strcmp(legacy, "all") == 0 or std::atoi(legacy) == static_cast<int>(Ndim))) {
-      const auto legacy_tiles = (npoints + 127) / 128;
-      double n = 1.;
-      while (std::pow(n, static_cast<double>(Ndim)) < static_cast<double>(legacy_tiles))
-        n += 1.;
-      nperdim.fill(n);
-      ntiles = std::pow(n, static_cast<double>(Ndim));
-      internal::TileGrid<Ndim, TData> grid;
-      grid.ntiles = static_cast<int32_t>(ntiles);
-      for (auto dim = 0u; dim != Ndim; ++dim) {
-        grid.nperdim[dim] = static_cast<int32_t>(n);
-        grid.tilesizes[dim] = min_max.range(dim) / static_cast<TData>(n);
-      }
-      return grid;
-    }
-#endif
     while (true) {
       ntiles = 1.;
       for (auto dim = 0u; dim != Ndim; ++dim) {
