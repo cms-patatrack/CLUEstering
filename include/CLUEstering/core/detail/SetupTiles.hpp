@@ -30,16 +30,13 @@ namespace clue::detail {
     const auto grid = detail::compute_tile_grid(*min_max.data(), tile_edge, npoints, batch_size);
 
     if (!tiles.has_value()) {
-      tiles = std::make_optional<internal::Tiles<Ndim, TData, TDev>>(queue, npoints, grid, batch_size);
+      tiles =
+          std::make_optional<internal::Tiles<Ndim, TData, TDev>>(queue, npoints, grid, batch_size);
     }
-    // check if tiles are large enough for current data
-    // before: compared keys to ntiles. I think extents is
-    // ntiles * batch_size so we should compae to that
-    // In CMSSW, we produce new tiles every event i think so 
-    // it didnt matter, but now with extents it does i think
-    // ALSO: this resets the extents so it is the 
-    // last requested size, not the buffer capacity. Not a correctness
-    // bug but will cause more initialises than needed
+    // check if tiles are large enough for current data. The keys hold ntiles for every event in
+    // the batch, so compare against ntiles * batch_size.
+    // Note: reset() sets extents() to the requested size rather than the allocated capacity, so a
+    // later larger input re-initialises even when the buffers would fit.
     if ((tiles->extents().values < static_cast<std::size_t>(npoints)) or
         (tiles->extents().keys < static_cast<std::size_t>(grid.ntiles) * batch_size)) {
       tiles->initialize(queue, npoints, grid, batch_size);

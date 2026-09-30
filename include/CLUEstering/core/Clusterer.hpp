@@ -45,7 +45,7 @@ namespace clue {
     value_type m_min_density;
     value_type m_outlier_distance;
     std::array<uint8_t, Ndim> m_wrappedCoordinates;
-    // allows a dpecified tile size to be used, if desired
+    // tile edge set through setTileSize, 0 means it is derived from the radii
     value_type m_tile_size;
 
     std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;

@@ -21,21 +21,23 @@ namespace clue::detail {
 
   /// @brief An upper bound on the number of tiles per point
   ///
-  /// At most set 4 * number of points tiles. Avoids creating lots of empty tiles if points are sparse
-  /// in comparison to the tile edge computed from search radii. 
-  /// TODO: tune to see optimal parameter for this
+  /// Avoids creating lots of empty tiles when the points are sparse compared to the tile edge
+  /// computed from the search radii.
+  /// TODO: tune this value
   inline constexpr std::size_t max_tiles_per_point = 4;
 
   /// @brief Tile edge derived from the clustering radii
   ///
-  /// The search box is +- radius along every coordinate, so the same edge is used along every
-  /// dimension. 
-  /// If dr <= od <= 4*dr, then edge is dr and the density searc spans 3 tiles per dimension,
-  /// nearest-higher searches 9 tiles, at most
-  /// If dr < 4*dr, then nearest-higher spans 9 tiles per dimension, and density at most 3
-  /// else: both span 3
-  /// This assume tiles of exactly this edge. compute_tile_grid rounds the number of tiles up, 
-  /// which makes the tiles slightly shorter and can add one tile per dimension
+  /// The search box is +-radius along every coordinate, so the same edge is used along every
+  /// dimension. With dr the density radius and od the outlier distance, per dimension:
+  /// - dr <= od <= 4*dr: the edge is dr, the density search spans 3 tiles and the
+  ///   nearest-higher search at most 9
+  /// - od > 4*dr: the edge is od/4, the nearest-higher search spans 9 tiles and the density
+  ///   search at most 3
+  /// - od < dr: the edge is od, the nearest-higher search spans 3 tiles and the density search
+  ///   grows with dr/od
+  /// These counts assume tiles of exactly this edge. compute_tile_grid rounds the number of tiles
+  /// up, which makes the tiles slightly shorter and can add one tile per dimension.
   template <std::floating_point TData>
   constexpr TData tile_edge(TData density_radius, TData outlier_distance) {
     return std::min(std::max(density_radius, outlier_distance / TData{4}), outlier_distance);
@@ -76,7 +78,6 @@ namespace clue::detail {
   /// @brief Compute the tile grid for the given extents
   ///
   /// Along each dimension the number of tiles is the extent divided by the tile edge, rounded up.
-  /// (rounded up means the above 3 and 9 tiles per dim are approximates, can be 4 or 10)
   /// If the total number of tiles over the batch exceeds `max_tiles_per_point` per point, the
   /// edge is enlarged uniformly until it does not.
   template <std::size_t Ndim, std::floating_point TData>
@@ -85,9 +86,8 @@ namespace clue::detail {
       TData tile_edge,
       std::size_t npoints,
       std::size_t batch_size) {
-
-    const auto max_tiles = 
-      static_cast<double>(std::max(max_tiles_per_point * npoints, std::size_t{1})) / batch_size;
+    const auto max_tiles =
+        static_cast<double>(std::max(max_tiles_per_point * npoints, std::size_t{1})) / batch_size;
 
     auto edge = static_cast<double>(tile_edge);
     std::array<double, Ndim> nperdim{};
@@ -108,10 +108,9 @@ namespace clue::detail {
     for (auto dim = 0u; dim != Ndim; ++dim) {
       grid.nperdim[dim] = static_cast<int32_t>(nperdim[dim]);
       const auto range = min_max.range(dim);
-      // A dimension with 0 variance gets a single tile of any positive size, so that every coordinate
-      // falls in bin 0.
-      grid.tilesizes[dim] =
-          range > TData{0} ? range / static_cast<TData>(nperdim[dim]) : TData{1};
+      // A dimension with zero extent gets a single tile of any positive size, so that every
+      // coordinate falls in bin 0
+      grid.tilesizes[dim] = range > TData{0} ? range / static_cast<TData>(nperdim[dim]) : TData{1};
     }
     return grid;
   }
