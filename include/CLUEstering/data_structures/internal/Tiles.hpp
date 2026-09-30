@@ -11,6 +11,7 @@
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 
+#include <array>
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
@@ -18,29 +19,32 @@
 
 namespace clue::internal {
 
+  /// @brief Grid of tiles: number of tiles and tile size along each dimension
+  template <std::size_t Ndim, std::floating_point TData>
+  struct TileGrid {
+    std::array<int32_t, Ndim> nperdim;
+    std::array<TData, Ndim> tilesizes;
+    int32_t ntiles;
+  };
+
   template <std::size_t Ndim, std::floating_point TData, clue::concepts::device TDev>
   class Tiles {
   public:
     using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
 
     template <clue::concepts::queue TQueue>
-    Tiles(TQueue& queue, int32_t n_points, int32_t n_tiles, std::size_t batch_size = 1)
-        : m_assoc{AssociationMap<TDev>(n_points, n_tiles * batch_size, queue)},
+    Tiles(TQueue& queue,
+          int32_t n_points,
+          const TileGrid<Ndim, value_type>& grid,
+          std::size_t batch_size = 1)
+        : m_assoc{AssociationMap<TDev>(n_points, grid.ntiles * batch_size, queue)},
           m_minmax{make_device_buffer<CoordinateExtremes<Ndim, value_type>>(queue)},
           m_tilesizes{make_device_buffer<value_type[Ndim]>(queue)},
           m_wrapped{make_device_buffer<uint8_t[Ndim]>(queue)},
-          m_ntiles{n_tiles},
-          m_nperdim{static_cast<int32_t>(std::pow(n_tiles, 1. / Ndim))},
+          m_ntiles{grid.ntiles},
           m_batch_size{batch_size},
           m_view{} {
-      m_view.indexes = m_assoc.indexes().data();
-      m_view.offsets = m_assoc.offsets().data();
-      m_view.minmax = m_minmax.data();
-      m_view.tilesizes = m_tilesizes.data();
-      m_view.wrapping = m_wrapped.data();
-      m_view.npoints = n_points;
-      m_view.ntiles = m_ntiles;
-      m_view.nperdim = m_nperdim;
+      setView(n_points, grid);
     }
 
     const auto& view() const { return m_view; }
@@ -49,41 +53,21 @@ namespace clue::internal {
     template <clue::concepts::queue TQueue>
     ALPAKA_FN_HOST void initialize(TQueue& queue,
                                    int32_t npoints,
-                                   int32_t ntiles,
-                                   int32_t nperdim,
+                                   const TileGrid<Ndim, value_type>& grid,
                                    std::size_t batch_size = 1) {
-      m_assoc.initialize(npoints, ntiles * batch_size, queue);
-      m_ntiles = ntiles;
-      m_nperdim = nperdim;
+      m_assoc.initialize(npoints, grid.ntiles * batch_size, queue);
+      m_ntiles = grid.ntiles;
       m_batch_size = batch_size;
-
-      m_view.indexes = m_assoc.indexes().data();
-      m_view.offsets = m_assoc.offsets().data();
-      m_view.minmax = m_minmax.data();
-      m_view.tilesizes = m_tilesizes.data();
-      m_view.wrapping = m_wrapped.data();
-      m_view.npoints = npoints;
-      m_view.ntiles = ntiles;
-      m_view.nperdim = nperdim;
+      setView(npoints, grid);
     }
 
     ALPAKA_FN_HOST void reset(int32_t npoints,
-                              int32_t ntiles,
-                              int32_t nperdim,
+                              const TileGrid<Ndim, value_type>& grid,
                               std::size_t batch_size = 1) {
-      m_assoc.reset(npoints, ntiles * batch_size);
-
-      m_ntiles = ntiles;
-      m_nperdim = nperdim;
+      m_assoc.reset(npoints, grid.ntiles * batch_size);
+      m_ntiles = grid.ntiles;
       m_batch_size = batch_size;
-      m_view.indexes = m_assoc.indexes().data();
-      m_view.offsets = m_assoc.offsets().data();
-      m_view.minmax = m_minmax.data();
-      m_view.tilesizes = m_tilesizes.data();
-      m_view.wrapping = m_wrapped.data();
-      m_view.npoints = npoints;
-      m_view.ntiles = ntiles;
-      m_view.nperdim = nperdim;
+      setView(npoints, grid);
     }
 
     template <typename T>
@@ -145,17 +129,33 @@ namespace clue::internal {
 
     ALPAKA_FN_HOST inline constexpr auto size() const { return m_ntiles; }
 
-    ALPAKA_FN_HOST inline constexpr auto nPerDim() const { return m_nperdim; }
+    ALPAKA_FN_HOST inline constexpr const auto& nPerDim() const { return m_view.nperdim; }
 
     ALPAKA_FN_HOST inline constexpr auto extents() const { return m_assoc.extents(); }
 
   private:
+    ALPAKA_FN_HOST void setView(int32_t npoints, const TileGrid<Ndim, value_type>& grid) {
+      m_view.indexes = m_assoc.indexes().data();
+      m_view.offsets = m_assoc.offsets().data();
+      m_view.minmax = m_minmax.data();
+      m_view.tilesizes = m_tilesizes.data();
+      m_view.wrapping = m_wrapped.data();
+      m_view.npoints = npoints;
+      m_view.ntiles = grid.ntiles;
+      // row-major: the last dimension varies fastest
+      int32_t stride = 1;
+      for (auto dim = Ndim; dim-- > 0;) {
+        m_view.nperdim[dim] = grid.nperdim[dim];
+        m_view.strides[dim] = stride;
+        stride *= grid.nperdim[dim];
+      }
+    }
+
     AssociationMap<TDev> m_assoc;
     device_buffer<TDev, CoordinateExtremes<Ndim, value_type>> m_minmax;
     device_buffer<TDev, value_type[Ndim]> m_tilesizes;
     device_buffer<TDev, uint8_t[Ndim]> m_wrapped;
     int32_t m_ntiles;
-    int32_t m_nperdim;
     std::size_t m_batch_size;
     TilesView<Ndim, value_type> m_view;
   };

@@ -24,7 +24,8 @@ namespace clue::internal {
     uint8_t* wrapping;
     int32_t npoints;
     int32_t ntiles;
-    int32_t nperdim;
+    int32_t nperdim[Ndim];
+    int32_t strides[Ndim];
 
     ALPAKA_FN_ACC inline constexpr const auto* minMax() const { return minmax; }
     ALPAKA_FN_ACC inline constexpr auto* minMax() { return minmax; }
@@ -45,7 +46,7 @@ namespace clue::internal {
       }
 
       // Address the cases of underflow and overflow
-      coord_bin = math::min(coord_bin, nperdim - 1);
+      coord_bin = math::min(coord_bin, nperdim[dim] - 1);
       coord_bin = math::max(coord_bin, 0);
 
       return coord_bin;
@@ -54,11 +55,9 @@ namespace clue::internal {
     ALPAKA_FN_ACC inline constexpr int getGlobalBin(const TData* coords,
                                                     std::size_t event = 0) const {
       int global_bin = 0;
-      for (auto dim = 0u; dim != Ndim - 1; ++dim) {
-        global_bin +=
-            math::pow(static_cast<TData>(nperdim), Ndim - dim - 1) * getBin(coords[dim], dim);
+      for (auto dim = 0u; dim != Ndim; ++dim) {
+        global_bin += getBin(coords[dim], dim) * strides[dim];
       }
-      global_bin += getBin(coords[Ndim - 1], Ndim - 1);
       global_bin += event * ntiles;
       return global_bin;
     }
@@ -67,8 +66,8 @@ namespace clue::internal {
                                                          std::size_t event = 0) const {
       int32_t globalBin = 0;
       for (auto dim = 0u; dim != Ndim; ++dim) {
-        auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim) : Bins[dim];
-        globalBin += math::pow(static_cast<TData>(nperdim), Ndim - dim - 1) * bin_i;
+        auto bin_i = wrapping[dim] ? (Bins[dim] % nperdim[dim]) : Bins[dim];
+        globalBin += bin_i * strides[dim];
       }
       globalBin += event * ntiles;
       return globalBin;
@@ -80,7 +79,7 @@ namespace clue::internal {
         auto infBin = getBin(searchbox_extremes[dim][0], dim);
         auto supBin = getBin(searchbox_extremes[dim][1], dim);
         if (wrapping[dim] and infBin > supBin)
-          supBin += nperdim;
+          supBin += nperdim[dim];
 
         searchbox_bins[dim] = nostd::make_array(infBin, supBin);
       }

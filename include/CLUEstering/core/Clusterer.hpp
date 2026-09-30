@@ -45,16 +45,23 @@ namespace clue {
     value_type m_min_density;
     value_type m_outlier_distance;
     std::array<uint8_t, Ndim> m_wrappedCoordinates;
+    // allows a dpecified tile size to be used, if desired
+    value_type m_tile_size;
 
     std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
     std::optional<internal::SeedArray<>> m_seeds;
     std::optional<internal::DeviceVector<>> m_event_associations;
 
+    value_type tileEdge() const {
+      return m_tile_size > value_type{0} ? m_tile_size
+                                         : detail::tile_edge(m_density_radius, m_outlier_distance);
+    }
+
     template <std::floating_point InputType>
     void setup(Queue& queue,
                const clue::PointsHost<Ndim, InputType>& h_points,
                clue::PointsDevice<Ndim, value_type>& dev_points) {
-      detail::setup_tiles(queue, h_points, m_tiles, 128, m_wrappedCoordinates);
+      detail::setup_tiles(queue, h_points, m_tiles, tileEdge(), m_wrappedCoordinates);
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
@@ -63,7 +70,7 @@ namespace clue {
                      const clue::PointsHost<Ndim, InputType>& h_points,
                      clue::PointsDevice<Ndim, value_type>& dev_points,
                      std::size_t batch_size) {
-      detail::setup_tiles(queue, h_points, m_tiles, 128, m_wrappedCoordinates, batch_size);
+      detail::setup_tiles(queue, h_points, m_tiles, tileEdge(), m_wrappedCoordinates, batch_size);
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
@@ -71,7 +78,7 @@ namespace clue {
     void setup_batch(Queue& queue,
                      clue::PointsDevice<Ndim, InputType>& dev_points,
                      std::size_t batch_size) {
-      detail::setup_tiles(queue, dev_points, m_tiles, 128, m_wrappedCoordinates, batch_size);
+      detail::setup_tiles(queue, dev_points, m_tiles, tileEdge(), m_wrappedCoordinates, batch_size);
     }
 
     template <
@@ -126,6 +133,12 @@ namespace clue {
                        value_type min_density,
                        std::optional<value_type> outlier_distance = std::nullopt,
                        std::optional<value_type> seeding_distance = std::nullopt);
+
+    /// @brief Set the size of the tiles used by the neighbour search
+    ///
+    /// @param tile_size Edge of the tiles along every coordinate. 0, the default, derives it
+    /// from the density radius and the outlier distance.
+    void setTileSize(value_type tile_size);
 
     /// @brief Construct the clusters from host points
     ///
