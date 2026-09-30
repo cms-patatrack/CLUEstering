@@ -24,8 +24,8 @@ namespace clue::internal {
     uint8_t* wrapping;
     int32_t npoints;
     int32_t ntiles;
-    int32_t nperdim[Ndim];
-    int32_t strides[Ndim];
+    std::array<int32_t, Ndim> nperdim;
+    std::array<int32_t, Ndim> strides;
 
     ALPAKA_FN_ACC inline constexpr const auto* minMax() const { return minmax; }
     ALPAKA_FN_ACC inline constexpr auto* minMax() { return minmax; }

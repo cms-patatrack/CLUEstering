@@ -38,8 +38,7 @@ namespace clue {
         m_seeding_distance{seeding_distance.value_or(density_radius)},
         m_min_density{min_density},
         m_outlier_distance{outlier_distance.value_or(density_radius)},
-        m_wrappedCoordinates{},
-        m_tile_size{} {
+        m_wrappedCoordinates{} {
     if (m_density_radius <= static_cast<value_type>(0.) ||
         m_min_density < static_cast<value_type>(0.) ||
         m_outlier_distance <= static_cast<value_type>(0.) ||
@@ -59,8 +58,7 @@ namespace clue {
         m_seeding_distance{seeding_distance.value_or(density_radius)},
         m_min_density{min_density},
         m_outlier_distance{outlier_distance.value_or(density_radius)},
-        m_wrappedCoordinates{},
-        m_tile_size{} {
+        m_wrappedCoordinates{} {
     if (m_density_radius <= static_cast<value_type>(0.) ||
         m_min_density < static_cast<value_type>(0.) ||
         m_outlier_distance <= static_cast<value_type>(0.) ||
@@ -87,14 +85,6 @@ namespace clue {
       throw std::invalid_argument(
           "Invalid clustering parameters. The parameters must be positive.");
     }
-  }
-
-  template <std::size_t Ndim, std::floating_point DataType>
-  void Clusterer<Ndim, DataType>::setTileSize(value_type tile_size) {
-    if (tile_size < static_cast<value_type>(0.)) {
-      throw std::invalid_argument("Invalid tile size. The tile size must not be negative.");
-    }
-    m_tile_size = tile_size;
   }
 
   template <std::size_t Ndim, std::floating_point DataType>
@@ -155,7 +145,11 @@ namespace clue {
       clue::PointsDevice<Ndim, InputType>& dev_points,
       const DistanceMetric& metric,
       const Kernel& kernel) {
-    detail::setup_tiles(queue, dev_points, m_tiles, tileEdge(), m_wrappedCoordinates);
+    detail::setup_tiles(queue,
+                        dev_points,
+                        m_tiles,
+                        detail::tile_edge(m_density_radius, m_outlier_distance),
+                        m_wrappedCoordinates);
     make_clusters_impl(dev_points, metric, kernel, queue);
     alpaka::wait(queue);
   }

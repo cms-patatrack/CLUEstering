@@ -39,7 +39,7 @@ namespace clue::detail {
   /// These counts assume tiles of exactly this edge. compute_tile_grid rounds the number of tiles
   /// up, which makes the tiles slightly shorter and can add one tile per dimension.
   template <std::floating_point TData>
-  constexpr TData tile_edge(TData density_radius, TData outlier_distance) {
+  constexpr auto tile_edge(TData density_radius, TData outlier_distance) {
     return std::min(std::max(density_radius, outlier_distance / TData{4}), outlier_distance);
   }
 

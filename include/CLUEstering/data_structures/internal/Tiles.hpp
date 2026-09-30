@@ -10,6 +10,7 @@
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/meta/apply.hpp"
 
 #include <array>
 #include <concepts>
@@ -142,13 +143,14 @@ namespace clue::internal {
       m_view.wrapping = m_wrapped.data();
       m_view.npoints = npoints;
       m_view.ntiles = grid.ntiles;
+      m_view.nperdim = grid.nperdim;
       // row-major: the last dimension varies fastest
       int32_t stride = 1;
-      for (auto dim = Ndim; dim-- > 0;) {
-        m_view.nperdim[dim] = grid.nperdim[dim];
+      meta::apply<Ndim>([&]<std::size_t Id>() {
+        constexpr auto dim = Ndim - 1 - Id;
         m_view.strides[dim] = stride;
         stride *= grid.nperdim[dim];
-      }
+      });
     }
 
     AssociationMap<TDev> m_assoc;
