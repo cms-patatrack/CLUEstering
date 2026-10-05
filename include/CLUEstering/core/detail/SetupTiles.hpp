@@ -22,12 +22,12 @@ namespace clue::detail {
   void setup_tiles_from_extents(
       TQueue& queue,
       int32_t npoints,
-      const clue::host_buffer<internal::CoordinateExtremes<Ndim, TData>>& min_max,
+      const internal::CoordinateExtremes<Ndim, TData>& min_max,
       std::optional<internal::Tiles<Ndim, TData, TDev>>& tiles,
       TData tile_edge,
       const std::array<uint8_t, Ndim>& wrapped_coordinates,
       std::size_t batch_size) {
-    const auto grid = detail::compute_tile_grid(*min_max.data(), tile_edge, npoints, batch_size);
+    const auto grid = detail::compute_tile_grid(min_max, tile_edge, npoints, batch_size);
 
     if (!tiles.has_value()) {
       tiles =
@@ -47,7 +47,7 @@ namespace clue::detail {
     auto tile_sizes = clue::make_host_buffer<TData[Ndim]>(queue);
     std::copy(grid.tilesizes.begin(), grid.tilesizes.end(), tile_sizes.data());
 
-    alpaka::memcpy(queue, tiles->minMax(), min_max);
+    alpaka::memcpy(queue, tiles->minMax(), clue::make_host_view(min_max));
     alpaka::memcpy(queue, tiles->tileSize(), tile_sizes);
     alpaka::memcpy(queue, tiles->wrapped(), clue::make_host_view(wrapped_coordinates.data(), Ndim));
     alpaka::wait(queue);
@@ -67,7 +67,7 @@ namespace clue::detail {
         clue::make_host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(queue);
     detail::compute_extents(min_max.data(), points);
     setup_tiles_from_extents(
-        queue, points.size(), min_max, tiles, tile_edge, wrapped_coordinates, batch_size);
+        queue, points.size(), *min_max.data(), tiles, tile_edge, wrapped_coordinates, batch_size);
   }
 
   template <concepts::queue TQueue,
@@ -84,7 +84,7 @@ namespace clue::detail {
         clue::make_host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(queue);
     detail::compute_extents(min_max.data(), points);
     setup_tiles_from_extents(
-        queue, points.size(), min_max, tiles, tile_edge, wrapped_coordinates, batch_size);
+        queue, points.size(), *min_max.data(), tiles, tile_edge, wrapped_coordinates, batch_size);
   }
 
 }  // namespace clue::detail
