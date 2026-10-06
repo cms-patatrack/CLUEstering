@@ -54,7 +54,11 @@ namespace clue {
     void setup(Queue& queue,
                const clue::PointsHost<Ndim, InputType>& h_points,
                clue::PointsDevice<Ndim, value_type>& dev_points) {
-      detail::setup_tiles(queue, h_points, m_tiles, 128, m_wrappedCoordinates);
+      detail::setup_tiles(queue,
+                          h_points,
+                          m_tiles,
+                          detail::tile_edge(m_density_radius, m_outlier_distance),
+                          m_wrappedCoordinates);
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
@@ -63,7 +67,12 @@ namespace clue {
                      const clue::PointsHost<Ndim, InputType>& h_points,
                      clue::PointsDevice<Ndim, value_type>& dev_points,
                      std::size_t batch_size) {
-      detail::setup_tiles(queue, h_points, m_tiles, 128, m_wrappedCoordinates, batch_size);
+      detail::setup_tiles(queue,
+                          h_points,
+                          m_tiles,
+                          detail::tile_edge(m_density_radius, m_outlier_distance),
+                          m_wrappedCoordinates,
+                          batch_size);
       clue::copyToDevice(queue, dev_points, h_points);
     }
 
@@ -71,7 +80,12 @@ namespace clue {
     void setup_batch(Queue& queue,
                      clue::PointsDevice<Ndim, InputType>& dev_points,
                      std::size_t batch_size) {
-      detail::setup_tiles(queue, dev_points, m_tiles, 128, m_wrappedCoordinates, batch_size);
+      detail::setup_tiles(queue,
+                          dev_points,
+                          m_tiles,
+                          detail::tile_edge(m_density_radius, m_outlier_distance),
+                          m_wrappedCoordinates,
+                          batch_size);
     }
 
     template <

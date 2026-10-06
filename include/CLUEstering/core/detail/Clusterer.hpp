@@ -145,7 +145,11 @@ namespace clue {
       clue::PointsDevice<Ndim, InputType>& dev_points,
       const DistanceMetric& metric,
       const Kernel& kernel) {
-    detail::setup_tiles(queue, dev_points, m_tiles, 128, m_wrappedCoordinates);
+    detail::setup_tiles(queue,
+                        dev_points,
+                        m_tiles,
+                        detail::tile_edge(m_density_radius, m_outlier_distance),
+                        m_wrappedCoordinates);
     make_clusters_impl(dev_points, metric, kernel, queue);
     alpaka::wait(queue);
   }
