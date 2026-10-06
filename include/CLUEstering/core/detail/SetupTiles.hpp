@@ -19,14 +19,13 @@ namespace clue::detail {
             std::size_t Ndim,
             std::floating_point TData,
             concepts::device TDev = decltype(alpaka::getDev(std::declval<TQueue>()))>
-  void setup_tiles_from_extents(
-      TQueue& queue,
-      int32_t npoints,
-      const internal::CoordinateExtremes<Ndim, TData>& min_max,
-      std::optional<internal::Tiles<Ndim, TData, TDev>>& tiles,
-      TData tile_edge,
-      const std::array<uint8_t, Ndim>& wrapped_coordinates,
-      std::size_t batch_size) {
+  void setup_tiles_from_extents(TQueue& queue,
+                                int32_t npoints,
+                                const internal::CoordinateExtremes<Ndim, TData>& min_max,
+                                std::optional<internal::Tiles<Ndim, TData, TDev>>& tiles,
+                                TData tile_edge,
+                                const std::array<uint8_t, Ndim>& wrapped_coordinates,
+                                std::size_t batch_size) {
     const auto grid = detail::compute_tile_grid(min_max, tile_edge, npoints, batch_size);
 
     if (!tiles.has_value()) {
