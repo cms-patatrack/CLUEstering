@@ -69,6 +69,12 @@
 	  "affiliation": "Yale University",
 	  "orcid": "0009-0009-7181-9439",
       "type": "Other"
+	},
+	{
+	  "name": "Marriott-Clarke, Max",
+	  "affiliation": "CERN, Imperial College London",
+	  "orcid": "0009-0007-9809-3354",
+      "type": "Other"
 	}
   ],
   "access_right": "open",
