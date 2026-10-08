@@ -10,6 +10,8 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
+option(CLUE_NATIVE_ARCH "Enable native architecture optimizations" ON)
+
 if(MSVC)
   string(APPEND CMAKE_CXX_FLAGS_DEBUG " /DCLUE_DEBUG /W4 /WX")
   string(APPEND CMAKE_CXX_FLAGS " /O2 /bigobj")
@@ -19,11 +21,11 @@ else()
     CMAKE_CXX_FLAGS_DEBUG
     " -DCLUE_DEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Wpedantic -Werror"
   )
-  string(
-    APPEND
-    CMAKE_CXX_FLAGS
-    " -O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize -march=native"
-  )
+  string(APPEND CMAKE_CXX_FLAGS
+         " -O2 -funroll-loops -funsafe-math-optimizations -ftree-vectorize")
+  if(CLUE_NATIVE_ARCH)
+    string(APPEND CMAKE_CXX_FLAGS " -march=native")
+  endif()
 endif()
 
 find_package(Boost 1.75.0 REQUIRED COMPONENTS atomic)
