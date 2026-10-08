@@ -148,7 +148,7 @@ namespace alpaka_tbb_async {
 #endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
 
 #ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
-namespace alpaka_omp2_async {
+namespace alpaka_omp2_sync {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformCpu;
@@ -162,12 +162,12 @@ namespace alpaka_omp2_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_omp2_async
+}  // namespace alpaka_omp2_sync
 
 #endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
 
 #ifdef ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
-namespace alpaka_threads_async {
+namespace alpaka_threads_sync {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformCpu;
@@ -181,7 +181,7 @@ namespace alpaka_threads_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_threads_async
+}  // namespace alpaka_threads_sync
 
 #endif  // ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
 
@@ -199,9 +199,9 @@ namespace alpaka_threads_async {
 #elif defined(ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 #define ALPAKA_BACKEND alpaka_tbb_async
 #elif defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
-#define ALPAKA_BACKEND alpaka_omp2_async
+#define ALPAKA_BACKEND alpaka_omp2_sync
 #elif defined(ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED)
-#define ALPAKA_BACKEND alpaka_threads_async
+#define ALPAKA_BACKEND alpaka_threads_sync
 #elif defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 #define ALPAKA_BACKEND alpaka_serial_sync
 #endif
