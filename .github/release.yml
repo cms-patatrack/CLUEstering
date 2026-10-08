@@ -1,0 +1,45 @@
+# Configuration for GitHub's automatically generated release notes.
+# Each PR ends up in the first category whose labels it matches.
+changelog:
+  exclude:
+    labels:
+      - release
+      - duplicate
+      - wontfix
+      - skip-changelog
+  categories:
+    - title: Breaking changes
+      labels:
+        - breaking
+    - title: New features
+      labels:
+        - feature
+    - title: Bug fixes
+      labels:
+        - fix
+        - bug
+    - title: Performance
+      labels:
+        - performance
+    - title: Refactoring
+      labels:
+        - refactor
+    - title: Documentation
+      labels:
+        - documentation
+    - title: Dependencies
+      labels:
+        - dependencies
+        - github_actions
+    - title: Build system
+      labels:
+        - build
+    - title: Maintenance
+      labels:
+        - chore
+        - ci
+        - testing
+        - benchmarks
+    - title: Other changes
+      labels:
+        - "*"
