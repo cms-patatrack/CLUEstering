@@ -1,4 +1,4 @@
-name: Run exaple with Conan
+name: Run example with Conan
 
 on:
   push:

@@ -21,7 +21,7 @@ Dependencies
 
 CLUEstering requires:
 
-- **Alpaka** version 1.2.0  
+- **Alpaka** version 2.2.0  
 - **C++20 compiler**  
 - **Boost** version 1.78.0 or later  
 
