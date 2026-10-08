@@ -1,0 +1,40 @@
+# Configuration for actions/labeler (v5+ syntax).
+# Labels are assigned based on the PR head branch prefix and on the touched paths.
+
+feature:
+  - head-branch: ['^feature/', '^feat/']
+
+fix:
+  - head-branch: ['^fix/', '^bugfix/']
+
+performance:
+  - head-branch: ['^perf/']
+
+refactor:
+  - head-branch: ['^refactor/']
+
+documentation:
+  - head-branch: ['^docs/', '^doc/']
+
+build:
+  - head-branch: ['^build/']
+
+chore:
+  - head-branch: ['^chore/']
+
+release:
+  - head-branch: ['^release/']
+
+ci:
+  - head-branch: ['^ci/']
+  - changed-files:
+      - any-glob-to-any-file: ['.github/**']
+
+testing:
+  - head-branch: ['^test/']
+  - changed-files:
+      - any-glob-to-any-file: ['tests/**']
+
+benchmarks:
+  - changed-files:
+      - any-glob-to-any-file: ['benchmark/**']
