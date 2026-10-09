@@ -250,7 +250,8 @@ namespace clue::detail {
             std::size_t Ndim,
             std::floating_point TData,
             concepts::distance_metric<Ndim> DistanceMetric,
-            std::floating_point TPointsData = TData>
+            std::floating_point TPointsData = TData,
+            concepts::allocator TAllocator = DefaultAllocator>
     requires(alpaka::Dim<TAcc>::value == 2 &&
              std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
   inline void computeNearestHighersBatched(TQueue& queue,
@@ -263,8 +264,9 @@ namespace clue::detail {
                                            std::size_t& seed_candidates,
                                            const auto& event_offsets,
                                            std::size_t max_event_size,
-                                           std::size_t block_size) {
-    auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
+                                           std::size_t block_size,
+                                           const TAllocator& allocator = TAllocator{}) {
+    auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue, allocator);
     alpaka::memset(queue, d_seed_candidates, 0u);
 
     const auto blocks_per_event = nostd::ceil_div(max_event_size, block_size);
@@ -288,11 +290,14 @@ namespace clue::detail {
     alpaka::wait(queue);
   }
 
-  template <concepts::accelerator TAcc, concepts::queue TQueue>
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            concepts::allocator TAllocator = DefaultAllocator>
     requires(alpaka::Dim<TAcc>::value == 1)
   inline void reorderSeedsBatchWise(TQueue& queue,
                                     clue::internal::SeedArray<>& seeds,
-                                    clue::internal::SeedArray<>& batch_association) {
+                                    clue::internal::SeedArray<>& batch_association,
+                                    const TAllocator& allocator = TAllocator{}) {
     const auto num_seeds = seeds.size(queue);
     if (num_seeds == 0)
       return;
@@ -300,13 +305,14 @@ namespace clue::detail {
     auto batches_to_seeds = clue::internal::make_associator(
         queue,
         std::span<const int32_t>{batch_association.data(), num_seeds},
-        static_cast<int32_t>(num_seeds));
+        static_cast<int32_t>(num_seeds),
+        allocator);
 
     auto extracted = batches_to_seeds.extract();
     auto* batches_to_seeds_indexes = extracted.values.data();
 
-    auto seeds_reordered = clue::internal::SeedArray<>(queue, num_seeds);
-    auto batches_reordered = clue::internal::SeedArray<>(queue, num_seeds);
+    auto seeds_reordered = clue::internal::SeedArray<>(queue, num_seeds, allocator);
+    auto batches_reordered = clue::internal::SeedArray<>(queue, num_seeds, allocator);
 
     const auto block_size = 512;
     const auto grid_size = clue::divide_up_by(num_seeds, block_size);

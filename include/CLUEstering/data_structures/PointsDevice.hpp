@@ -52,8 +52,9 @@ namespace clue {
     ///
     /// @param queue The queue to use for the device operations
     /// @param n_points The number of points to allocate
-    template <concepts::queue TQueue>
-    PointsDevice(TQueue& queue, std::int32_t n_points);
+    /// @param allocator The allocator to use for the device buffer
+    template <concepts::queue TQueue, concepts::allocator TAllocator = DefaultAllocator>
+    PointsDevice(TQueue& queue, std::int32_t n_points, const TAllocator& allocator = TAllocator{});
 
     /// @brief Construct a PointsDevice object with a pre-allocated buffer
     ///

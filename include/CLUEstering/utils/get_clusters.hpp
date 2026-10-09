@@ -30,10 +30,16 @@ namespace clue {
   /// @tparam Ndim The number of dimensions of the points
   /// @tparam TData The data type for the point coordinates and weights
   /// @param points The points for which to get the clusters
+  /// @param allocator The allocator to use for the device buffers of the map
   /// @return An AssociationMap where each key is a cluster index and the associated values
   /// are the indices of the points belonging to that cluster
-  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData = float>
-  inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim, TData>& points);
+  template <concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TData = float,
+            concepts::allocator TAllocator = DefaultAllocator>
+  inline auto get_clusters(TQueue& queue,
+                           const PointsDevice<Ndim, TData>& points,
+                           const TAllocator& allocator = TAllocator{});
 
 }  // namespace clue
 
