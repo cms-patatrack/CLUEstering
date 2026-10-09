@@ -49,7 +49,7 @@ if(EXISTS ${_clue_alpaka_submodule}/CMakeLists.txt)
       ${_clue_build_testing}
       CACHE BOOL "" FORCE)
 else()
-  find_package(alpaka 2.1.0)
+  find_package(alpaka 2.2.0)
   if(NOT alpaka_FOUND)
     set(_clue_build_testing ${BUILD_TESTING})
     set(BUILD_TESTING
@@ -57,7 +57,7 @@ else()
         CACHE BOOL "" FORCE)
     FetchContent_Declare(
       alpaka
-      URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.1.0.tar.gz)
+      URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.2.0.tar.gz)
     FetchContent_MakeAvailable(alpaka)
     set(BUILD_TESTING
         ${_clue_build_testing}
