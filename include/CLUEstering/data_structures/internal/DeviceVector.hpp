@@ -58,10 +58,11 @@ namespace clue::internal {
     DeviceVectorView m_view;
 
   public:
-    template <clue::concepts::queue TQueue>
-    DeviceVector(TQueue& queue, std::size_t size)
-        : m_buffer{clue::make_device_buffer<int32_t[]>(queue, size)},
-          m_dsize{clue::make_device_buffer<std::size_t>(queue)},
+    template <clue::concepts::queue TQueue,
+              clue::concepts::allocator TAllocator = clue::DefaultAllocator>
+    DeviceVector(TQueue& queue, std::size_t size, const TAllocator& allocator = TAllocator{})
+        : m_buffer{clue::make_device_buffer<int32_t[]>(queue, size, allocator)},
+          m_dsize{clue::make_device_buffer<std::size_t>(queue, allocator)},
           m_size{std::nullopt},
           m_capacity{size},
           m_view{m_buffer.data(), m_dsize.data(), m_capacity} {

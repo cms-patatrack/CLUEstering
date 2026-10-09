@@ -374,7 +374,8 @@ namespace clue::detail {
             std::size_t Ndim,
             std::floating_point TData,
             concepts::distance_metric<Ndim> DistanceMetric,
-            std::floating_point TPointsData = TData>
+            std::floating_point TPointsData = TData,
+            concepts::allocator TAllocator = DefaultAllocator>
     requires(alpaka::Dim<TAcc>::value == 1 &&
              std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
   inline void computeNearestHighers(TQueue& queue,
@@ -385,8 +386,9 @@ namespace clue::detail {
                                     TData seeding_distance,
                                     TData min_density,
                                     const DistanceMetric& metric,
-                                    std::size_t& seed_candidates) {
-    auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
+                                    std::size_t& seed_candidates,
+                                    const TAllocator& allocator = TAllocator{}) {
+    auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue, allocator);
     alpaka::memset(queue, d_seed_candidates, 0u);
     alpaka::exec<TAcc>(queue,
                        work_division,

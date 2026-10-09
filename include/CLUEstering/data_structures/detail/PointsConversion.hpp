@@ -62,10 +62,12 @@ namespace clue {
             std::size_t Ndim,
             std::floating_point TDeviceInput,
             concepts::device TDev,
-            std::floating_point THostInput>
+            std::floating_point THostInput,
+            concepts::allocator TAllocator>
   inline void copyToDevice(TQueue& queue,
                            PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
-                           const PointsHost<Ndim, THostInput>& h_points) {
+                           const PointsHost<Ndim, THostInput>& h_points,
+                           const TAllocator& allocator) {
     meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
       alpaka::memcpy(
           queue,
@@ -80,7 +82,7 @@ namespace clue {
       using dev_value_t = std::remove_cv_t<TDeviceInput>;
       using PType = std::remove_cvref_t<decltype(d_points)>;
       auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
-      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size(), allocator);
       alpaka::memcpy(queue,
                      make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
                      make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
@@ -91,7 +93,7 @@ namespace clue {
         using dev_value_t = std::remove_cv_t<TDeviceInput>;
         using PType = std::remove_cvref_t<decltype(d_points)>;
         auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
-        cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+        cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size(), allocator);
         alpaka::memcpy(queue,
                        make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
                        make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
@@ -101,7 +103,7 @@ namespace clue {
     if (h_points.view().has_tags()) {
       using PType = std::remove_cvref_t<decltype(d_points)>;
       auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
-      tbuf = make_device_buffer<std::uint32_t[]>(queue, h_points.size());
+      tbuf = make_device_buffer<std::uint32_t[]>(queue, h_points.size(), allocator);
       alpaka::memcpy(queue,
                      make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
                      make_host_view(h_points.view().m_tags, h_points.size()));
@@ -110,9 +112,15 @@ namespace clue {
     alpaka::wait(queue);
   }
 
-  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
-  inline auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TInput>& h_points) {
-    PointsDevice<Ndim, std::remove_cv_t<TInput>, TDev> d_points(queue, h_points.size());
+  template <concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TInput,
+            concepts::device TDev,
+            concepts::allocator TAllocator>
+  inline auto copyToDevice(TQueue& queue,
+                           const PointsHost<Ndim, TInput>& h_points,
+                           const TAllocator& allocator) {
+    PointsDevice<Ndim, std::remove_cv_t<TInput>, TDev> d_points(queue, h_points.size(), allocator);
 
     meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
       alpaka::memcpy(
@@ -128,7 +136,7 @@ namespace clue {
       using dev_value_t = std::remove_cv_t<TInput>;
       using PType = std::remove_cvref_t<decltype(d_points)>;
       auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
-      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size(), allocator);
       alpaka::memcpy(queue,
                      make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
                      make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
@@ -139,7 +147,7 @@ namespace clue {
         using dev_value_t = std::remove_cv_t<TInput>;
         using PType = std::remove_cvref_t<decltype(d_points)>;
         auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
-        cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+        cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size(), allocator);
         alpaka::memcpy(queue,
                        make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
                        make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
@@ -149,7 +157,7 @@ namespace clue {
     if (h_points.view().has_tags()) {
       using PType = std::remove_cvref_t<decltype(d_points)>;
       auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
-      tbuf = make_device_buffer<std::uint32_t[]>(queue, h_points.size());
+      tbuf = make_device_buffer<std::uint32_t[]>(queue, h_points.size(), allocator);
       alpaka::memcpy(queue,
                      make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
                      make_host_view(h_points.view().m_tags, h_points.size()));
@@ -164,10 +172,12 @@ namespace clue {
             std::size_t Ndim,
             std::floating_point TDeviceInput,
             concepts::device TDev,
-            std::floating_point THostInput>
+            std::floating_point THostInput,
+            concepts::allocator TAllocator>
   inline void copyToDeviceAsync(TQueue& queue,
                                 PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
-                                const PointsHost<Ndim, THostInput>& h_points) {
+                                const PointsHost<Ndim, THostInput>& h_points,
+                                const TAllocator& allocator) {
     meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
       alpaka::memcpy(
           queue,
@@ -182,7 +192,7 @@ namespace clue {
       using dev_value_t = std::remove_cv_t<TDeviceInput>;
       using PType = std::remove_cvref_t<decltype(d_points)>;
       auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
-      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size(), allocator);
       alpaka::memcpy(queue,
                      make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
                      make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
@@ -193,7 +203,7 @@ namespace clue {
         using dev_value_t = std::remove_cv_t<TDeviceInput>;
         using PType = std::remove_cvref_t<decltype(d_points)>;
         auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
-        cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+        cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size(), allocator);
         alpaka::memcpy(queue,
                        make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
                        make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
@@ -203,7 +213,7 @@ namespace clue {
     if (h_points.view().has_tags()) {
       using PType = std::remove_cvref_t<decltype(d_points)>;
       auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
-      tbuf = make_device_buffer<std::size_t[]>(queue, h_points.size());
+      tbuf = make_device_buffer<std::size_t[]>(queue, h_points.size(), allocator);
       alpaka::memcpy(queue,
                      make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
                      make_host_view(h_points.view().m_tags, h_points.size()));

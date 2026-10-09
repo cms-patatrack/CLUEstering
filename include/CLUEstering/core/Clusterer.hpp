@@ -16,6 +16,7 @@
 #include "CLUEstering/data_structures/internal/DeviceVector.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
+#include "CLUEstering/internal/alpaka/default_allocator.hpp"
 
 #include <array>
 #include <concepts>
@@ -34,7 +35,11 @@ namespace clue {
   /// @tparam Ndim The number of dimensions of the points to cluster
   /// @tparam DataType The data type for the point coordinates and weights, which must be a
   /// floating-point type. By default, it is set to `float`.
-  template <std::size_t Ndim, std::floating_point DataType = float>
+  /// @tparam AllocatorType The allocator used for the internal device buffers. By default,
+  /// the buffers are allocated directly through alpaka.
+  template <std::size_t Ndim,
+            std::floating_point DataType = float,
+            concepts::allocator AllocatorType = DefaultAllocator>
   class Clusterer {
   public:
     using value_type = std::remove_cv_t<std::remove_reference_t<DataType>>;
@@ -45,6 +50,8 @@ namespace clue {
     value_type m_min_density;
     value_type m_outlier_distance;
     std::array<uint8_t, Ndim> m_wrappedCoordinates;
+
+    AllocatorType m_allocator;
 
     std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
     std::optional<internal::SeedArray<>> m_seeds;
@@ -58,8 +65,9 @@ namespace clue {
                           h_points,
                           m_tiles,
                           detail::tile_edge(m_density_radius, m_outlier_distance),
-                          m_wrappedCoordinates);
-      clue::copyToDevice(queue, dev_points, h_points);
+                          m_wrappedCoordinates,
+                          m_allocator);
+      clue::copyToDevice(queue, dev_points, h_points, m_allocator);
     }
 
     template <std::floating_point InputType>
@@ -72,8 +80,9 @@ namespace clue {
                           m_tiles,
                           detail::tile_edge(m_density_radius, m_outlier_distance),
                           m_wrappedCoordinates,
-                          batch_size);
-      clue::copyToDevice(queue, dev_points, h_points);
+                          batch_size,
+                          m_allocator);
+      clue::copyToDevice(queue, dev_points, h_points, m_allocator);
     }
 
     template <std::floating_point InputType>
@@ -85,7 +94,8 @@ namespace clue {
                           m_tiles,
                           detail::tile_edge(m_density_radius, m_outlier_distance),
                           m_wrappedCoordinates,
-                          batch_size);
+                          batch_size,
+                          m_allocator);
     }
 
     template <
@@ -116,7 +126,8 @@ namespace clue {
     Clusterer(value_type density_radius,
               value_type min_density,
               std::optional<value_type> outlier_distance = std::nullopt,
-              std::optional<value_type> seeding_distance = std::nullopt);
+              std::optional<value_type> seeding_distance = std::nullopt)
+      requires std::default_initializable<AllocatorType>;
     /// @brief Constuct a Clusterer object
     ///
     /// @param queue The queue to use for the device operations
@@ -125,6 +136,33 @@ namespace clue {
     /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
     /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
     Clusterer(Queue& queue,
+              value_type density_radius,
+              value_type min_density,
+              std::optional<value_type> outlier_distance = std::nullopt,
+              std::optional<value_type> seeding_distance = std::nullopt)
+      requires std::default_initializable<AllocatorType>;
+    /// @brief Constuct a Clusterer object
+    ///
+    /// @param allocator The allocator to use for the internal device buffers
+    /// @param density_radius Distance threshold for clustering.
+    /// @param min_density Density threshold for clustering
+    /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
+    /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
+    Clusterer(AllocatorType allocator,
+              value_type density_radius,
+              value_type min_density,
+              std::optional<value_type> outlier_distance = std::nullopt,
+              std::optional<value_type> seeding_distance = std::nullopt);
+    /// @brief Constuct a Clusterer object
+    ///
+    /// @param queue The queue to use for the device operations
+    /// @param allocator The allocator to use for the internal device buffers
+    /// @param density_radius Distance threshold for clustering.
+    /// @param min_density Density threshold for clustering
+    /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
+    /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
+    Clusterer(Queue& queue,
+              AllocatorType allocator,
               value_type density_radius,
               value_type min_density,
               std::optional<value_type> outlier_distance = std::nullopt,
