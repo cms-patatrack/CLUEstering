@@ -185,8 +185,7 @@ namespace clue {
       return alpaka::allocAsyncBuf<T, Idx>(queue, Scalar{}, std::move(allocator));
     }
     if constexpr (allocator_policy<alpaka::Dev<TQueue>> == AllocatorPolicy::Synchronous) {
-      return alpaka::allocBuf<T, Idx>(
-          alpaka::getDev(queue), Scalar{}, std::move(allocator));
+      return alpaka::allocBuf<T, Idx>(alpaka::getDev(queue), Scalar{}, std::move(allocator));
     }
   }
 
