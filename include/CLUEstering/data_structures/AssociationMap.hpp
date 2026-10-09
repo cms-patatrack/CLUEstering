@@ -9,6 +9,7 @@
 #include "CLUEstering/data_structures/AssociationMapView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/buffer.hpp"
+#include "CLUEstering/internal/alpaka/default_allocator.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <concepts>
@@ -23,8 +24,12 @@ namespace internal {
   template <std::size_t Ndim, std::floating_point TData, clue::concepts::device TDev>
   class Tiles;
 
-  template <clue::concepts::queue TQueue>
-  auto make_associator(TQueue& queue, std::span<const int32_t> associations, int32_t elements);
+  template <clue::concepts::queue TQueue,
+            clue::concepts::allocator TAllocator = clue::DefaultAllocator>
+  auto make_associator(TQueue& queue,
+                       std::span<const int32_t> associations,
+                       int32_t elements,
+                       const TAllocator& allocator = TAllocator{});
   auto make_associator(std::span<const int32_t> associations, int32_t elements)
       -> AssociationMap<alpaka::DevCpu>;
 }  // namespace internal
@@ -68,8 +73,12 @@ public:
   /// @param nelements The number of elements to allocate
   /// @param nbins The number of bins to allocate
   /// @param queue The queue to use for the allocation
-  template <concepts::queue TQueue>
-  AssociationMap(size_type nelements, size_type nbins, TQueue& queue);
+  /// @param allocator The allocator to use for the device buffers
+  template <concepts::queue TQueue, concepts::allocator TAllocator = DefaultAllocator>
+  AssociationMap(size_type nelements,
+                 size_type nbins,
+                 TQueue& queue,
+                 const TAllocator& allocator = TAllocator{});
 
   /// @brief Return the number of bins in the map
   ///
@@ -193,23 +202,41 @@ private:
 
   ALPAKA_FN_HOST void initialize(size_type nelements, size_type nbins)
     requires std::same_as<TDev, alpaka::DevCpu>;
-  template <concepts::queue TQueue>
-  ALPAKA_FN_HOST void initialize(size_type nelements, size_type nbins, TQueue& queue);
+  template <concepts::queue TQueue, concepts::allocator TAllocator = DefaultAllocator>
+  ALPAKA_FN_HOST void initialize(size_type nelements,
+                                 size_type nbins,
+                                 TQueue& queue,
+                                 const TAllocator& allocator = TAllocator{});
 
   ALPAKA_FN_HOST void reset(size_type nelements, size_type nbins);
 
-  template <concepts::accelerator TAcc, typename TFunc, concepts::queue TQueue>
-  ALPAKA_FN_HOST void fill(size_type size, TFunc func, TQueue& queue);
+  template <concepts::accelerator TAcc,
+            typename TFunc,
+            concepts::queue TQueue,
+            concepts::allocator TAllocator = DefaultAllocator>
+  ALPAKA_FN_HOST void fill(size_type size,
+                           TFunc func,
+                           TQueue& queue,
+                           const TAllocator& allocator = TAllocator{});
   ALPAKA_FN_HOST void fill(std::span<const key_type> associations)
     requires std::same_as<TDev, alpaka::DevCpu>;
-  template <concepts::accelerator TAcc, concepts::queue TQueue>
-  ALPAKA_FN_HOST void fill(size_type, std::span<const key_type> associations, TQueue& queue);
-  template <concepts::accelerator TAcc, concepts::queue TQueue, typename TFunc>
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            concepts::allocator TAllocator = DefaultAllocator>
+  ALPAKA_FN_HOST void fill(size_type,
+                           std::span<const key_type> associations,
+                           TQueue& queue,
+                           const TAllocator& allocator = TAllocator{});
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            typename TFunc,
+            concepts::allocator TAllocator = DefaultAllocator>
   ALPAKA_FN_HOST void fill_batch(TQueue& queue,
                                  size_type size,
                                  TFunc func,
                                  const auto& event_offsets,
-                                 std::size_t max_event_size);
+                                 std::size_t max_event_size,
+                                 const TAllocator& allocator = TAllocator{});
 
   ALPAKA_FN_HOST const auto& indexes() const;
   ALPAKA_FN_HOST auto& indexes();
@@ -221,8 +248,11 @@ private:
   template <std::size_t Ndim, std::floating_point TData, concepts::device _TDev>
   friend class internal::Tiles;
 
-  template <concepts::queue _TQueue>
-  friend auto clue::internal::make_associator(_TQueue&, std::span<const int32_t>, int32_t);
+  template <concepts::queue _TQueue, concepts::allocator _TAllocator>
+  friend auto clue::internal::make_associator(_TQueue&,
+                                              std::span<const int32_t>,
+                                              int32_t,
+                                              const _TAllocator&);
   friend auto clue::internal::make_associator(std::span<const int32_t>, int32_t)
       -> AssociationMap<alpaka::DevCpu>;
 #endif

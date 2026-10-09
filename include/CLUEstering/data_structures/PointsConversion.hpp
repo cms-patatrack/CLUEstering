@@ -8,6 +8,7 @@
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include "CLUEstering/internal/alpaka/default_allocator.hpp"
 #include <alpaka/alpaka.hpp>
 
 CLUE_NAMESPACE_BEGIN
@@ -79,14 +80,17 @@ void copyToHostAsync(TQueue& queue,
 /// @param d_points The empty points allocated on the device
 /// @param h_points The points allocated on the host, containing the points' coordinates
 /// and weights
+/// @param allocator The allocator to use for the device buffers
 template <concepts::queue TQueue,
           std::size_t Ndim,
           std::floating_point TDeviceInput,
           concepts::device TDev,
-          std::floating_point THostInput>
+          std::floating_point THostInput,
+          concepts::allocator TAllocator = DefaultAllocator>
 void copyToDevice(TQueue& queue,
                   PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
-                  const PointsHost<Ndim, THostInput>& h_points);
+                  const PointsHost<Ndim, THostInput>& h_points,
+                  const TAllocator& allocator = TAllocator{});
 
 /// @brief Copies the coordinates and weights of the points from the host to the device
 ///
@@ -98,8 +102,15 @@ void copyToDevice(TQueue& queue,
 /// @param d_points The empty points allocated on the device
 /// @param h_points The points allocated on the host, containing the points' coordinates
 /// and weights
-template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
-auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TInput>& h_points);
+/// @param allocator The allocator to use for the device buffers
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point TInput,
+          concepts::device TDev,
+          concepts::allocator TAllocator = DefaultAllocator>
+auto copyToDevice(TQueue& queue,
+                  const PointsHost<Ndim, TInput>& h_points,
+                  const TAllocator& allocator = TAllocator{});
 
 /// @brief Copies the coordinates and weights of the points from the host to the device
 ///
@@ -112,6 +123,7 @@ auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TInput>& h_points);
 /// @param d_points The empty points allocated on the device
 /// @param h_points The points allocated on the host, containing the points' coordinates
 /// and weights
+/// @param allocator The allocator to use for the device buffers
 ///
 /// @note This function is asynchronous and does not block the host thread.
 /// The user must ensure that the host points remain valid until the copy operation is complete.
@@ -119,10 +131,12 @@ template <concepts::queue TQueue,
           std::size_t Ndim,
           std::floating_point TDeviceInput,
           concepts::device TDev,
-          std::floating_point THostInput>
+          std::floating_point THostInput,
+          concepts::allocator TAllocator = DefaultAllocator>
 void copyToDeviceAsync(TQueue& queue,
                        PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
-                       const PointsHost<Ndim, THostInput>& h_points);
+                       const PointsHost<Ndim, THostInput>& h_points,
+                       const TAllocator& allocator = TAllocator{});
 
 CLUE_NAMESPACE_END
 

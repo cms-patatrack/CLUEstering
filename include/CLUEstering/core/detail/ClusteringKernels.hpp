@@ -13,6 +13,7 @@
 #include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include "CLUEstering/internal/alpaka/default_allocator.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/nostd/ceil_div.hpp"
 #include "CLUEstering/internal/math/math.hpp"
@@ -377,7 +378,8 @@ namespace detail {
             std::size_t Ndim,
             std::floating_point TData,
             concepts::distance_metric<Ndim> DistanceMetric,
-            std::floating_point TPointsData = TData>
+            std::floating_point TPointsData = TData,
+            concepts::allocator TAllocator = DefaultAllocator>
     requires(alpaka::Dim<TAcc>::value == 1 &&
              std::same_as<std::remove_cv_t<TPointsData>, std::remove_cv_t<TData>>)
   inline void computeNearestHighers(TQueue& queue,
@@ -388,8 +390,9 @@ namespace detail {
                                     TData seeding_distance,
                                     TData min_density,
                                     const DistanceMetric& metric,
-                                    std::size_t& seed_candidates) {
-    auto d_seed_candidates = alpaka::allocAsyncBuf<std::size_t>(queue, Scalar{});
+                                    std::size_t& seed_candidates,
+                                    const TAllocator& allocator = TAllocator{}) {
+    auto d_seed_candidates = internal::alloc_device_buffer<std::size_t>(queue, Scalar{}, allocator);
     alpaka::memset(queue, d_seed_candidates, 0u);
     alpaka::exec<TAcc>(queue,
                        work_division,

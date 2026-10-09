@@ -13,10 +13,11 @@
 CLUE_NAMESPACE_BEGIN
 namespace internal {
 
-  template <clue::concepts::queue TQueue>
+  template <clue::concepts::queue TQueue, clue::concepts::allocator TAllocator>
   inline auto make_associator(TQueue& queue,
                               std::span<const int32_t> associations,
-                              int32_t elements) {
+                              int32_t elements,
+                              const TAllocator& allocator) {
     const auto bins = clue::internal::algorithm::reduce(queue,
                                                         associations.begin(),
                                                         associations.end(),
@@ -25,8 +26,8 @@ namespace internal {
                       1;
     alpaka::wait(queue);
 
-    clue::AssociationMap<decltype(alpaka::getDev(queue))> map(elements, bins, queue);
-    map.template fill<clue::internal::Acc>(elements, associations, queue);
+    clue::AssociationMap<decltype(alpaka::getDev(queue))> map(elements, bins, queue, allocator);
+    map.template fill<clue::internal::Acc>(elements, associations, queue, allocator);
     alpaka::wait(queue);
     return map;
   }
