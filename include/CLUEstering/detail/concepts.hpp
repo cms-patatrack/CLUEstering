@@ -4,7 +4,8 @@
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include <alpaka/alpaka.hpp>
 
-namespace clue::inline CLUE_BACKEND::concepts {
+CLUE_NAMESPACE_BEGIN
+namespace concepts {
 
   template <typename T>
   concept queue = alpaka::concepts::Queue<T>;
@@ -27,4 +28,5 @@ namespace clue::inline CLUE_BACKEND::concepts {
     requires sizeof(T) <= 8;
   };
 
-}  // namespace clue::inline CLUE_BACKEND::concepts
+}  // namespace concepts
+CLUE_NAMESPACE_END

@@ -12,7 +12,8 @@
 #include <cstdint>
 #include <span>
 
-namespace clue::inline CLUE_BACKEND::internal {
+CLUE_NAMESPACE_BEGIN
+namespace internal {
 
   class DeviceVectorView {
     int32_t* m_data;
@@ -97,4 +98,5 @@ namespace clue::inline CLUE_BACKEND::internal {
     }
   };
 
-}  // namespace clue::inline CLUE_BACKEND::internal
+}  // namespace internal
+CLUE_NAMESPACE_END

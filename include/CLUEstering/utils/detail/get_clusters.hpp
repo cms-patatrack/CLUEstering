@@ -14,39 +14,39 @@
 #include <cstddef>
 #include <span>
 
-namespace clue::inline CLUE_BACKEND {
-  namespace detail {
+CLUE_NAMESPACE_BEGIN
+namespace detail {
 
-    template <typename T>
-    struct non_negative {
-      ALPAKA_FN_HOST_ACC constexpr auto operator()(T value) const { return value > -1; }
-    };
+  template <typename T>
+  struct non_negative {
+    ALPAKA_FN_HOST_ACC constexpr auto operator()(T value) const { return value > -1; }
+  };
 
-    inline auto get_clusters(std::span<const int> cluster_ids) {
-      auto clustered_points = std::ranges::count_if(cluster_ids, non_negative<int>{});
-      return internal::make_associator(cluster_ids, static_cast<int>(clustered_points));
-    }
-
-    template <concepts::queue TQueue>
-    inline auto get_clusters(TQueue& queue, std::span<const int> cluster_ids) {
-      auto clustered_points = internal::algorithm::count_if(
-          queue, cluster_ids.begin(), cluster_ids.end(), non_negative<int>{});
-      alpaka::wait(queue);
-      return internal::make_associator(queue, cluster_ids, clustered_points);
-    }
-
-  }  // namespace detail
-
-  template <std::size_t Ndim, std::floating_point TData>
-  inline auto get_clusters(const PointsHost<Ndim, TData>& points) {
-    assert(points.clustered());
-    return detail::get_clusters(points.clusterIndexes());
+  inline auto get_clusters(std::span<const int> cluster_ids) {
+    auto clustered_points = std::ranges::count_if(cluster_ids, non_negative<int>{});
+    return internal::make_associator(cluster_ids, static_cast<int>(clustered_points));
   }
 
-  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData>
-  inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim, TData>& points) {
-    assert(points.clustered());
-    return detail::get_clusters(queue, points.clusterIndexes());
+  template <concepts::queue TQueue>
+  inline auto get_clusters(TQueue& queue, std::span<const int> cluster_ids) {
+    auto clustered_points = internal::algorithm::count_if(
+        queue, cluster_ids.begin(), cluster_ids.end(), non_negative<int>{});
+    alpaka::wait(queue);
+    return internal::make_associator(queue, cluster_ids, clustered_points);
   }
 
-}  // namespace clue::inline CLUE_BACKEND
+}  // namespace detail
+
+template <std::size_t Ndim, std::floating_point TData>
+inline auto get_clusters(const PointsHost<Ndim, TData>& points) {
+  assert(points.clustered());
+  return detail::get_clusters(points.clusterIndexes());
+}
+
+template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData>
+inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim, TData>& points) {
+  assert(points.clustered());
+  return detail::get_clusters(queue, points.clusterIndexes());
+}
+
+CLUE_NAMESPACE_END

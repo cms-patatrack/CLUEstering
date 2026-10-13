@@ -9,7 +9,8 @@
 #include <stdexcept>
 #include <tuple>
 
-namespace clue::inline CLUE_BACKEND::soa::device {
+CLUE_NAMESPACE_BEGIN
+namespace soa::device {
 
   template <std::size_t Ndim, std::floating_point TValue>
   inline auto computeSoASize(std::int32_t n_points) {
@@ -169,4 +170,5 @@ namespace clue::inline CLUE_BACKEND::soa::device {
     view.m_n = n_points;
   }
 
-}  // namespace clue::inline CLUE_BACKEND::soa::device
+}  // namespace soa::device
+CLUE_NAMESPACE_END

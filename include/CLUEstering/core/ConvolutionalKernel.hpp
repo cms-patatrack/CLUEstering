@@ -99,22 +99,22 @@ namespace clue {
 
 }  // namespace clue
 
-namespace clue::inline CLUE_BACKEND {
+CLUE_NAMESPACE_BEGIN
 
-  namespace concepts {
+namespace concepts {
 
-    /// @brief Concept describing a convolutional kernel
-    template <typename TKernel>
-    concept convolutional_kernel =
-        requires(TKernel&& kernel,
-                 typename std::remove_cvref_t<TKernel>::value_type distance,
-                 int point_i,
-                 int point_j) {
-          { kernel(distance, point_i, point_j) };
-        };
+  /// @brief Concept describing a convolutional kernel
+  template <typename TKernel>
+  concept convolutional_kernel =
+      requires(TKernel&& kernel,
+               typename std::remove_cvref_t<TKernel>::value_type distance,
+               int point_i,
+               int point_j) {
+        { kernel(distance, point_i, point_j) };
+      };
 
-  }  // namespace concepts
+}  // namespace concepts
 
-}  // namespace clue::inline CLUE_BACKEND
+CLUE_NAMESPACE_END
 
 #include "CLUEstering/core/detail/ConvolutionalKernel.hpp"

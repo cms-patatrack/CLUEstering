@@ -18,7 +18,8 @@
 #include <cstdint>
 #include <alpaka/alpaka.hpp>
 
-namespace clue::inline CLUE_BACKEND::internal {
+CLUE_NAMESPACE_BEGIN
+namespace internal {
 
   /// @brief Grid of tiles: number of tiles and tile size along each dimension
   template <std::size_t Ndim, std::floating_point TData>
@@ -162,4 +163,5 @@ namespace clue::inline CLUE_BACKEND::internal {
     TilesView<Ndim, value_type> m_view;
   };
 
-}  // namespace clue::inline CLUE_BACKEND::internal
+}  // namespace internal
+CLUE_NAMESPACE_END

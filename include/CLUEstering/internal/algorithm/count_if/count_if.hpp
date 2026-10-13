@@ -19,7 +19,8 @@
 #include <algorithm>
 #endif
 
-namespace clue::inline CLUE_BACKEND::internal::algorithm {
+CLUE_NAMESPACE_BEGIN
+namespace internal::algorithm {
 
   template <typename InputIterator, typename Predicate>
   ALPAKA_FN_HOST inline constexpr auto count_if(InputIterator first,
@@ -71,4 +72,5 @@ namespace clue::inline CLUE_BACKEND::internal::algorithm {
 #endif
   }
 
-}  // namespace clue::inline CLUE_BACKEND::internal::algorithm
+}  // namespace internal::algorithm
+CLUE_NAMESPACE_END

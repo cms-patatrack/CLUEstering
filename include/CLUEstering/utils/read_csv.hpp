@@ -12,30 +12,30 @@
 #include <cstddef>
 #include <string>
 
-namespace clue::inline CLUE_BACKEND {
+CLUE_NAMESPACE_BEGIN
 
-  /// @brief Read points from a CSV file into a PointsHost object
-  ///
-  /// @tparam NDim The number of dimensions of the points
-  /// @tparam TData The data type for the point coordinates and weights
-  /// @tparam TQueue The type of the queue to use for reading the file
-  /// @param queue The queue to use for reading the file
-  /// @param file_path The path to the CSV file to read
-  /// @return A PointsHost object containing the points read from the file
-  template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
-  inline clue::PointsHost<NDim, TData> read_csv(TQueue& queue, const std::string& file_path);
+/// @brief Read points from a CSV file into a PointsHost object
+///
+/// @tparam NDim The number of dimensions of the points
+/// @tparam TData The data type for the point coordinates and weights
+/// @tparam TQueue The type of the queue to use for reading the file
+/// @param queue The queue to use for reading the file
+/// @param file_path The path to the CSV file to read
+/// @return A PointsHost object containing the points read from the file
+template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
+inline clue::PointsHost<NDim, TData> read_csv(TQueue& queue, const std::string& file_path);
 
-  /// @brief Read output points from a CSV file into a PointsHost object
-  ///
-  /// @tparam NDim The number of dimensions of the points
-  /// @tparam TData The data type for the point coordinates and weights
-  /// @tparam TQueue The type of the queue to use for reading the file
-  /// @param queue The queue to use for reading the file
-  /// @param file_path The path to the CSV file to read
-  /// @return A PointsHost object containing the output points read from the file
-  template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
-  inline clue::PointsHost<NDim, TData> read_output(TQueue& queue, const std::string& file_path);
+/// @brief Read output points from a CSV file into a PointsHost object
+///
+/// @tparam NDim The number of dimensions of the points
+/// @tparam TData The data type for the point coordinates and weights
+/// @tparam TQueue The type of the queue to use for reading the file
+/// @param queue The queue to use for reading the file
+/// @param file_path The path to the CSV file to read
+/// @return A PointsHost object containing the output points read from the file
+template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
+inline clue::PointsHost<NDim, TData> read_output(TQueue& queue, const std::string& file_path);
 
-}  // namespace clue::inline CLUE_BACKEND
+CLUE_NAMESPACE_END
 
 #include "CLUEstering/utils/detail/read_csv.hpp"

@@ -25,7 +25,8 @@
 #include <limits>
 #include <type_traits>
 
-namespace clue::inline CLUE_BACKEND::detail {
+CLUE_NAMESPACE_BEGIN
+namespace detail {
 
   template <typename TAcc,
             std::size_t Ndim,
@@ -446,4 +447,5 @@ namespace clue::inline CLUE_BACKEND::detail {
         queue, clue::make_workdiv<TAcc>(point_grid, block_size), KernelAssignClusters{}, points);
   }
 
-}  // namespace clue::inline CLUE_BACKEND::detail
+}  // namespace detail
+CLUE_NAMESPACE_END

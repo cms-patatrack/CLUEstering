@@ -15,7 +15,8 @@
 #include <stdfloat>
 #endif
 
-namespace clue::inline CLUE_BACKEND::math {
+CLUE_NAMESPACE_BEGIN
+namespace math {
 
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float sqrt(float x) {
 #if defined(CUDA_DEVICE_FN)
@@ -63,4 +64,5 @@ namespace clue::inline CLUE_BACKEND::math {
   }
 #endif
 
-}  // namespace clue::inline CLUE_BACKEND::math
+}  // namespace math
+CLUE_NAMESPACE_END

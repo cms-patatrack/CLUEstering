@@ -14,7 +14,8 @@
 #include <cstdint>
 #include <optional>
 
-namespace clue::inline CLUE_BACKEND::detail {
+CLUE_NAMESPACE_BEGIN
+namespace detail {
 
   template <concepts::queue TQueue,
             std::size_t Ndim,
@@ -87,4 +88,5 @@ namespace clue::inline CLUE_BACKEND::detail {
         queue, points.size(), *min_max.data(), tiles, tile_edge, wrapped_coordinates, batch_size);
   }
 
-}  // namespace clue::inline CLUE_BACKEND::detail
+}  // namespace detail
+CLUE_NAMESPACE_END

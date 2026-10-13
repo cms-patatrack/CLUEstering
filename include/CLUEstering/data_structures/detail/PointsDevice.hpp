@@ -22,129 +22,126 @@
 #include <span>
 #include <tuple>
 
-namespace clue::inline CLUE_BACKEND {
+CLUE_NAMESPACE_BEGIN
 
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  template <concepts::queue TQueue>
-  inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue, int32_t n_points)
-      : m_buffer{make_device_buffer<std::byte[]>(
-            queue, soa::device::computeSoASize<Ndim, value_type>(n_points))},
-        m_view{},
-        m_size{n_points} {
-    soa::device::partitionSoAView(m_view, m_buffer.data(), n_points);
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+template <concepts::queue TQueue>
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue, int32_t n_points)
+    : m_buffer{make_device_buffer<std::byte[]>(
+          queue, soa::device::computeSoASize<Ndim, value_type>(n_points))},
+      m_view{},
+      m_size{n_points} {
+  soa::device::partitionSoAView(m_view, m_buffer.data(), n_points);
+}
+
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+template <concepts::queue TQueue>
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
+                                                     int32_t n_points,
+                                                     std::span<std::byte> buffer)
+    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+      m_view{},
+      m_size{n_points} {
+  soa::device::partitionSoAView(m_view, m_buffer.data(), buffer.data(), n_points);
+}
+
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+template <concepts::queue TQueue>
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
+                                                     int32_t n_points,
+                                                     std::span<element_type> input,
+                                                     std::span<int> output)
+    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+      m_view{},
+      m_size{n_points} {
+  soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, input, output);
+}
+
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+template <concepts::queue TQueue>
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
+                                                     int32_t n_points,
+                                                     std::span<element_type> coordinates,
+                                                     std::span<element_type> weights,
+                                                     std::span<int> output)
+    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+      m_view{},
+      m_size{n_points} {
+  soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, coordinates, weights, output);
+}
+
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+template <concepts::queue TQueue>
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
+                                                     int32_t n_points,
+                                                     element_type* input,
+                                                     int* output)
+    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+      m_view{},
+      m_size{n_points} {
+  soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, input, output);
+}
+
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+template <concepts::queue TQueue>
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(
+    TQueue& queue, int32_t n_points, element_type* coordinates, element_type* weights, int* output)
+    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+      m_view{},
+      m_size{n_points} {
+  soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, coordinates, weights, output);
+}
+
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+template <concepts::queue TQueue, concepts::pointer... TBuffers>
+  requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
+                                                     int32_t n_points,
+                                                     TBuffers... buffers)
+    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+      m_view{},
+      m_size{n_points} {
+  soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, buffers...);
+}
+
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+ALPAKA_FN_HOST inline const auto& PointsDevice<Ndim, TData, TDev>::n_clusters() {
+  assert(m_clustered &&
+         "The points have to be clustered before the cluster properties can be accessed");
+  if (!m_nclusters.has_value()) {
+    auto cluster_ids = this->clusterIndexes();
+    m_nclusters = internal::algorithm::reduce(cluster_ids.begin(),
+                                              cluster_ids.end(),
+                                              std::numeric_limits<int32_t>::lowest(),
+                                              clue::nostd::maximum<int32_t>{}) +
+                  1;
   }
 
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  template <concepts::queue TQueue>
-  inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
-                                                       int32_t n_points,
-                                                       std::span<std::byte> buffer)
-      : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
-        m_view{},
-        m_size{n_points} {
-    soa::device::partitionSoAView(m_view, m_buffer.data(), buffer.data(), n_points);
-  }
+  return m_nclusters.value();
+}
 
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  template <concepts::queue TQueue>
-  inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
-                                                       int32_t n_points,
-                                                       std::span<element_type> input,
-                                                       std::span<int> output)
-      : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
-        m_view{},
-        m_size{n_points} {
-    soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, input, output);
-  }
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+inline void PointsDevice<Ndim, TData, TDev>::set_density_uncertainty(
+    std::span<const element_type> density_uncertainty) {
+  assert(density_uncertainty.size() == static_cast<size_t>(m_size) &&
+         "The size of the density uncertainty array must match the number of points");
+  m_view.m_density_uncertainty = density_uncertainty.data();
+}
 
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  template <concepts::queue TQueue>
-  inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
-                                                       int32_t n_points,
-                                                       std::span<element_type> coordinates,
-                                                       std::span<element_type> weights,
-                                                       std::span<int> output)
-      : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
-        m_view{},
-        m_size{n_points} {
-    soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, coordinates, weights, output);
-  }
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+inline void PointsDevice<Ndim, TData, TDev>::set_sigma(std::size_t dim,
+                                                       std::span<const element_type> uncertainty) {
+  assert(dim < Ndim && "Dimension out of range in set_sigma");
+  assert(uncertainty.size() == static_cast<size_t>(m_size) &&
+         "The size of the coordinate uncertainty array must match the number of points");
+  m_view.m_sigmas[dim] = uncertainty.data();
+}
 
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  template <concepts::queue TQueue>
-  inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
-                                                       int32_t n_points,
-                                                       element_type* input,
-                                                       int* output)
-      : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
-        m_view{},
-        m_size{n_points} {
-    soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, input, output);
-  }
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+inline void PointsDevice<Ndim, TData, TDev>::set_tags(std::span<const std::uint32_t> tags) {
+  assert(tags.size() == static_cast<size_t>(m_size) &&
+         "The size of the tags array must match the number of points");
+  m_view.m_tags = tags.data();
+}
 
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  template <concepts::queue TQueue>
-  inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
-                                                       int32_t n_points,
-                                                       element_type* coordinates,
-                                                       element_type* weights,
-                                                       int* output)
-      : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
-        m_view{},
-        m_size{n_points} {
-    soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, coordinates, weights, output);
-  }
-
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  template <concepts::queue TQueue, concepts::pointer... TBuffers>
-    requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
-  inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
-                                                       int32_t n_points,
-                                                       TBuffers... buffers)
-      : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
-        m_view{},
-        m_size{n_points} {
-    soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, buffers...);
-  }
-
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  ALPAKA_FN_HOST inline const auto& PointsDevice<Ndim, TData, TDev>::n_clusters() {
-    assert(m_clustered &&
-           "The points have to be clustered before the cluster properties can be accessed");
-    if (!m_nclusters.has_value()) {
-      auto cluster_ids = this->clusterIndexes();
-      m_nclusters = internal::algorithm::reduce(cluster_ids.begin(),
-                                                cluster_ids.end(),
-                                                std::numeric_limits<int32_t>::lowest(),
-                                                clue::nostd::maximum<int32_t>{}) +
-                    1;
-    }
-
-    return m_nclusters.value();
-  }
-
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  inline void PointsDevice<Ndim, TData, TDev>::set_density_uncertainty(
-      std::span<const element_type> density_uncertainty) {
-    assert(density_uncertainty.size() == static_cast<size_t>(m_size) &&
-           "The size of the density uncertainty array must match the number of points");
-    m_view.m_density_uncertainty = density_uncertainty.data();
-  }
-
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  inline void PointsDevice<Ndim, TData, TDev>::set_sigma(
-      std::size_t dim, std::span<const element_type> uncertainty) {
-    assert(dim < Ndim && "Dimension out of range in set_sigma");
-    assert(uncertainty.size() == static_cast<size_t>(m_size) &&
-           "The size of the coordinate uncertainty array must match the number of points");
-    m_view.m_sigmas[dim] = uncertainty.data();
-  }
-
-  template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-  inline void PointsDevice<Ndim, TData, TDev>::set_tags(std::span<const std::uint32_t> tags) {
-    assert(tags.size() == static_cast<size_t>(m_size) &&
-           "The size of the tags array must match the number of points");
-    m_view.m_tags = tags.data();
-  }
-
-}  // namespace clue::inline CLUE_BACKEND
+CLUE_NAMESPACE_END

@@ -7,7 +7,8 @@
 #include <type_traits>
 #include <utility>
 
-namespace clue::inline CLUE_BACKEND::meta {
+CLUE_NAMESPACE_BEGIN
+namespace meta {
 
   template <std::size_t N,
             typename F,
@@ -19,4 +20,5 @@ namespace clue::inline CLUE_BACKEND::meta {
     }(std::make_index_sequence<N>{});
   }
 
-}  // namespace clue::inline CLUE_BACKEND::meta
+}  // namespace meta
+CLUE_NAMESPACE_END
