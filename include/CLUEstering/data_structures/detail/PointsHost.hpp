@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/ClusterProperties.hpp"
 #include "CLUEstering/data_structures/detail/HostViewPartition.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
@@ -19,7 +20,7 @@
 #include <span>
 #include <tuple>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <std::size_t Ndim, std::floating_point TData>
   template <concepts::queue TQueue>
@@ -177,4 +178,4 @@ namespace clue {
     m_view.m_tags = tags.data();
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
@@ -11,7 +12,7 @@
 #include <cstdint>
 #include <span>
 
-namespace clue::internal {
+namespace clue::inline CLUE_BACKEND::internal {
 
   class DeviceVectorView {
     int32_t* m_data;
@@ -96,4 +97,4 @@ namespace clue::internal {
     }
   };
 
-}  // namespace clue::internal
+}  // namespace clue::inline CLUE_BACKEND::internal

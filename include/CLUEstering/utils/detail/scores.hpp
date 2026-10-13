@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include <algorithm>
@@ -14,7 +15,7 @@
 #include <ranges>
 #include <vector>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   namespace detail {
 
@@ -99,4 +100,4 @@ namespace clue {
     return std::reduce(scores.begin(), scores.end(), TData{0}) / static_cast<TData>(scores.size());
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

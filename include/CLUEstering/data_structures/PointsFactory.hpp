@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
 #include <concepts>
@@ -11,7 +12,7 @@
 #include <ranges>
 #include <span>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief Factory function to create a clustered points data structure from raw pointers
   /// @param queue The queue to use for memory allocation
@@ -91,6 +92,6 @@ namespace clue {
     requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
   auto make_clustered_points(const DeviceType& device, TBuffers&&... buffers);
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/data_structures/detail/PointsFactory.hpp"

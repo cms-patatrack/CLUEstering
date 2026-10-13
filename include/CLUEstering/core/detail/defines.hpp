@@ -3,7 +3,7 @@
 
 #include "CLUEstering/internal/alpaka/config.hpp"
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   using Platform = ALPAKA_BACKEND::Platform;
   using Device = ALPAKA_BACKEND::Device;
@@ -18,4 +18,4 @@ namespace clue {
 
   }  // namespace internal
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

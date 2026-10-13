@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/detail/DeviceViewPartition.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
@@ -21,7 +22,7 @@
 #include <span>
 #include <tuple>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   template <concepts::queue TQueue>
@@ -146,4 +147,4 @@ namespace clue {
     m_view.m_tags = tags.data();
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

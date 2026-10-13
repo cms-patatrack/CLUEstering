@@ -1,9 +1,10 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <alpaka/alpaka.hpp>
 
-namespace clue::concepts {
+namespace clue::inline CLUE_BACKEND::concepts {
 
   template <typename T>
   concept queue = alpaka::concepts::Queue<T>;
@@ -26,4 +27,4 @@ namespace clue::concepts {
     requires sizeof(T) <= 8;
   };
 
-}  // namespace clue::concepts
+}  // namespace clue::inline CLUE_BACKEND::concepts

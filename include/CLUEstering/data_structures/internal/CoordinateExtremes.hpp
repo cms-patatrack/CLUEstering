@@ -1,11 +1,12 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <array>
 #include <cassert>
 #include <alpaka/alpaka.hpp>
 
-namespace clue::internal {
+namespace clue::inline CLUE_BACKEND::internal {
 
   template <std::size_t Ndim, typename TData = float>
   class CoordinateExtremes {
@@ -39,4 +40,4 @@ namespace clue::internal {
     ALPAKA_FN_HOST_ACC auto range(int i) const { return max(i) - min(i); }
   };
 
-}  // namespace clue::internal
+}  // namespace clue::inline CLUE_BACKEND::internal

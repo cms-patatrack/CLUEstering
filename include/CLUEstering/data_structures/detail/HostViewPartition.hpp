@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <concepts>
@@ -8,7 +9,7 @@
 #include <stdexcept>
 #include <tuple>
 
-namespace clue::soa::host {
+namespace clue::inline CLUE_BACKEND::soa::host {
 
   // No need to allocate temporary buffers on the host
   template <std::size_t Ndim, std::floating_point TValue>
@@ -108,4 +109,4 @@ namespace clue::soa::host {
     view.m_n = n_points;
   }
 
-}  // namespace clue::soa::host
+}  // namespace clue::inline CLUE_BACKEND::soa::host

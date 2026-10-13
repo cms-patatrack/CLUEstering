@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/math/defines.hpp"
 #include <concepts>
 #include <alpaka/alpaka.hpp>
@@ -14,7 +15,7 @@
 #include <stdfloat>
 #endif
 
-namespace clue::math {
+namespace clue::inline CLUE_BACKEND::math {
 
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline float exp(float x) {
 #if defined(CUDA_DEVICE_FN)
@@ -62,4 +63,4 @@ namespace clue::math {
   }
 #endif
 
-}  // namespace clue::math
+}  // namespace clue::inline CLUE_BACKEND::math

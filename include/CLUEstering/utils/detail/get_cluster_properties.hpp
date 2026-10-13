@@ -1,11 +1,12 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <limits>
 #include <numeric>
 #include <span>
 
-namespace clue::detail {
+namespace clue::inline CLUE_BACKEND::detail {
 
   inline auto compute_nclusters(std::span<const int> cluster_indexes) {
     return std::reduce(cluster_indexes.begin(),
@@ -15,4 +16,4 @@ namespace clue::detail {
            1;
   }
 
-}  // namespace clue::detail
+}  // namespace clue::inline CLUE_BACKEND::detail

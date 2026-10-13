@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
 #include <alpaka/alpaka.hpp>
@@ -18,7 +19,7 @@
 #include <algorithm>
 #endif
 
-namespace clue::internal::algorithm {
+namespace clue::inline CLUE_BACKEND::internal::algorithm {
 
   template <typename InputIterator>
   ALPAKA_FN_HOST inline constexpr typename std::iterator_traits<InputIterator>::value_type reduce(
@@ -161,4 +162,4 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-}  // namespace clue::internal::algorithm
+}  // namespace clue::inline CLUE_BACKEND::internal::algorithm

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/utils/read_csv.hpp"
@@ -14,7 +15,7 @@
 #include <stdexcept>
 #include <type_traits>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   namespace detail {
 
@@ -103,4 +104,4 @@ namespace clue {
     return points;
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

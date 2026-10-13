@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
@@ -11,7 +12,7 @@
 #include <cstddef>
 #include <string>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief Read points from a CSV file into a PointsHost object
   ///
@@ -35,6 +36,6 @@ namespace clue {
   template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
   inline clue::PointsHost<NDim, TData> read_output(TQueue& queue, const std::string& file_path);
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/utils/detail/read_csv.hpp"

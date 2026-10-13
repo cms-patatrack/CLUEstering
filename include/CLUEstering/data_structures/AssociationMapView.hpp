@@ -5,11 +5,12 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include <span>
 #include <alpaka/alpaka.hpp>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <concepts::device TDev>
   class AssociationMap;
@@ -75,4 +76,4 @@ namespace clue {
     }
   };
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

@@ -1,12 +1,13 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <cstddef>
 #include <type_traits>
 #include <utility>
 #include <alpaka/alpaka.hpp>
 
-namespace clue::meta {
+namespace clue::inline CLUE_BACKEND::meta {
 
   template <std::size_t N, typename F>
     requires std::is_invocable_r_v<void, F()>
@@ -16,4 +17,4 @@ namespace clue::meta {
     }(std::make_index_sequence<N>{});
   }
 
-}  // namespace clue::meta
+}  // namespace clue::inline CLUE_BACKEND::meta

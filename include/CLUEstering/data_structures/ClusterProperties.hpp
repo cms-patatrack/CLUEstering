@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/utils/detail/get_clusters.hpp"
 #include <cstddef>
@@ -12,7 +13,7 @@
 #include <ranges>
 #include <vector>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <std::size_t Ndim, std::floating_point TData>
   class PointsHost;
@@ -55,4 +56,4 @@ namespace clue {
 #endif
   };
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

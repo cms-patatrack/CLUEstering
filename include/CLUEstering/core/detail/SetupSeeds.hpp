@@ -1,12 +1,13 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include <cstddef>
 #include <optional>
 
-namespace clue::detail {
+namespace clue::inline CLUE_BACKEND::detail {
 
   template <concepts::queue TQueue,
             concepts::device TDev = decltype(alpaka::getDev(std::declval<TQueue>()))>
@@ -21,4 +22,4 @@ namespace clue::detail {
     alpaka::wait(queue);
   }
 
-}  // namespace clue::detail
+}  // namespace clue::inline CLUE_BACKEND::detail

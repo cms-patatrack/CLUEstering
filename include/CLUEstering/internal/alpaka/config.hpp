@@ -188,20 +188,35 @@ namespace alpaka_threads_sync {
 // Set ALPAKA_BACKEND to the highest-priority enabled backend exactly once.
 // Alpaka always enables ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED alongside every
 // other CPU backend, so using a single elif chain avoids redefinition warnings.
+// CLUE_BACKEND names the inline namespace (clue::inline CLUE_BACKEND) that every
+// CLUEstering header opens, so translation units built for different backends get
+// distinct symbol names and can be linked into one program without ODR clashes.
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
 #define ALPAKA_BACKEND alpaka_cuda_async
+#define CLUE_BACKEND cuda
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
 #define ALPAKA_BACKEND alpaka_rocm_async
+#define CLUE_BACKEND hip
 #elif defined(ALPAKA_ACC_SYCL_ENABLED) && defined(ALPAKA_SYCL_ONEAPI_GPU)
 #define ALPAKA_BACKEND alpaka_sycl_gpu
+#define CLUE_BACKEND sycl_gpu
 #elif defined(ALPAKA_ACC_SYCL_ENABLED) && defined(ALPAKA_SYCL_ONEAPI_CPU)
 #define ALPAKA_BACKEND alpaka_sycl_cpu
+#define CLUE_BACKEND sycl_cpu
 #elif defined(ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 #define ALPAKA_BACKEND alpaka_tbb_async
+#define CLUE_BACKEND tbb
 #elif defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
 #define ALPAKA_BACKEND alpaka_omp2_sync
+#define CLUE_BACKEND omp2
 #elif defined(ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED)
 #define ALPAKA_BACKEND alpaka_threads_sync
+#define CLUE_BACKEND threads
 #elif defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 #define ALPAKA_BACKEND alpaka_serial_sync
+#define CLUE_BACKEND serial
+#endif
+
+#ifndef CLUE_BACKEND
+#error "CLUEstering: no alpaka backend enabled, define one ALPAKA_ACC_* macro"
 #endif

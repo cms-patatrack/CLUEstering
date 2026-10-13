@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
@@ -13,7 +14,7 @@
 #include <cstdint>
 #include <optional>
 
-namespace clue::detail {
+namespace clue::inline CLUE_BACKEND::detail {
 
   template <concepts::queue TQueue,
             std::size_t Ndim,
@@ -86,4 +87,4 @@ namespace clue::detail {
         queue, points.size(), *min_max.data(), tiles, tile_edge, wrapped_coordinates, batch_size);
   }
 
-}  // namespace clue::detail
+}  // namespace clue::inline CLUE_BACKEND::detail

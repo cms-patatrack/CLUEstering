@@ -10,7 +10,7 @@
 #include "CLUEstering/internal/alpaka/get_device_index.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   // returns the alpaka accelerator platform
   template <concepts::platform TPlatform>
@@ -51,4 +51,4 @@ namespace clue {
     return devices;
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

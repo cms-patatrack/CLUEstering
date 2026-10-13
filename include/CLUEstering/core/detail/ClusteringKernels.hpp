@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
@@ -24,7 +25,7 @@
 #include <limits>
 #include <type_traits>
 
-namespace clue::detail {
+namespace clue::inline CLUE_BACKEND::detail {
 
   template <typename TAcc,
             std::size_t Ndim,
@@ -445,4 +446,4 @@ namespace clue::detail {
         queue, clue::make_workdiv<TAcc>(point_grid, block_size), KernelAssignClusters{}, points);
   }
 
-}  // namespace clue::detail
+}  // namespace clue::inline CLUE_BACKEND::detail

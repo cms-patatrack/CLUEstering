@@ -1,10 +1,11 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/AlpakaCore/alpakaConfig.hpp"
 #include "CLUEstering/AlpakaCore/alpakaDevices.hpp"
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <typename TPlatform>
   alpaka::Dev<TPlatform> const& chooseDevice(edm::StreamID id) {
@@ -18,4 +19,4 @@ namespace clue {
     return devices[id % devices.size()];
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

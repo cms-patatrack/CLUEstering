@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
@@ -17,7 +18,7 @@
 #include <limits>
 #include <numeric>
 
-namespace clue::detail {
+namespace clue::inline CLUE_BACKEND::detail {
 
   /// @brief An upper bound on the number of tiles per point
   ///
@@ -115,4 +116,4 @@ namespace clue::detail {
     return grid;
   }
 
-}  // namespace clue::detail
+}  // namespace clue::inline CLUE_BACKEND::detail

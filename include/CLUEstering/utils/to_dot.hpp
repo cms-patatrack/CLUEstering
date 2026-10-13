@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
@@ -11,7 +12,7 @@
 #include <cstddef>
 #include <string>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief Export clustering results to a DOT format file
   ///
@@ -31,6 +32,6 @@ namespace clue {
                      const PointsDevice<Ndim, TData, TDev>& points,
                      const std::string& file_path = "clusters.dot");
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/utils/detail/to_dot.hpp"

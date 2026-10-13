@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/AssociationMapView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
@@ -13,7 +14,7 @@
 #include <span>
 #include <stdexcept>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   namespace detail {
 
@@ -479,4 +480,4 @@ namespace clue {
     alpaka::wait(queue);
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

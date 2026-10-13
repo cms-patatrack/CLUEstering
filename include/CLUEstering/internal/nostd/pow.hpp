@@ -1,11 +1,12 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
 
-namespace clue::nostd {
+namespace clue::inline CLUE_BACKEND::nostd {
 
   template <std::integral T>
   constexpr T pow(T base, std::size_t exp) {
@@ -16,4 +17,4 @@ namespace clue::nostd {
     return result;
   }
 
-}  // namespace clue::nostd
+}  // namespace clue::inline CLUE_BACKEND::nostd

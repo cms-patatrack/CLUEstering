@@ -12,7 +12,7 @@
 
 using namespace alpaka_common;
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   // Trait describing whether or not the accelerator expects the threads-per-block and elements-per-thread to be swapped
   template <concepts::accelerator TAcc>
@@ -226,4 +226,4 @@ namespace clue {
         acc, maxNumberOfElements, elementIdxShift, dimIndex);
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

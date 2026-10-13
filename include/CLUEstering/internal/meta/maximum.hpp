@@ -1,10 +1,11 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <algorithm>
 #include <cstddef>
 
-namespace clue::meta {
+namespace clue::inline CLUE_BACKEND::meta {
 
   template <std::size_t N,
             typename F,
@@ -18,4 +19,4 @@ namespace clue::meta {
     return max;
   }
 
-}  // namespace clue::meta
+}  // namespace clue::inline CLUE_BACKEND::meta

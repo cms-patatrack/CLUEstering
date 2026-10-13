@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/detail/concepts.hpp"
@@ -9,7 +10,7 @@
 #include <limits>
 #include <span>
 
-namespace clue::internal {
+namespace clue::inline CLUE_BACKEND::internal {
 
   template <clue::concepts::queue TQueue>
   inline auto make_associator(TQueue& queue,
@@ -42,4 +43,4 @@ namespace clue::internal {
     return map;
   }
 
-}  // namespace clue::internal
+}  // namespace clue::inline CLUE_BACKEND::internal

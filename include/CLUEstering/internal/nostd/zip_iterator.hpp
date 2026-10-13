@@ -1,12 +1,13 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <concepts>
 #include <tuple>
 #include <iterator>
 #include <type_traits>
 
-namespace clue::nostd {
+namespace clue::inline CLUE_BACKEND::nostd {
 
   template <typename... Iterators>
   class zip_iterator {
@@ -124,4 +125,4 @@ namespace clue::nostd {
 
   auto zip_view();
 
-}  // namespace clue::nostd
+}  // namespace clue::inline CLUE_BACKEND::nostd

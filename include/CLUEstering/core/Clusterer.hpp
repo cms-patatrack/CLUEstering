@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
@@ -25,7 +26,7 @@
 #include <span>
 #include <type_traits>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief The Clusterer class is the interface for running the clustering algorithm.
   /// It provides methods to set up the clustering parameters, initializes the internal buffers
@@ -325,6 +326,6 @@ namespace clue {
                                                  clue::PointsDevice<Ndim, InputType>& d_points);
   };
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/core/detail/Clusterer.hpp"

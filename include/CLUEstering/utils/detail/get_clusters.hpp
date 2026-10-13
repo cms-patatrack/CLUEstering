@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/MakeAssociator.hpp"
@@ -13,7 +14,7 @@
 #include <cstddef>
 #include <span>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
   namespace detail {
 
     template <typename T>
@@ -48,4 +49,4 @@ namespace clue {
     return detail::get_clusters(queue, points.clusterIndexes());
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

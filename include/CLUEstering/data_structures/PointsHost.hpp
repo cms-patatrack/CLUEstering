@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/ClusterProperties.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/detail/concepts.hpp"
@@ -18,7 +19,7 @@
 #include <span>
 #include <alpaka/alpaka.hpp>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief The PointsHost class is a data structure that manages points in host memory.
   /// It provides methods to allocate, access, and manipulate points in host memory.
@@ -256,7 +257,7 @@ namespace clue {
   template <std::size_t Ndim, std::floating_point TData = float>
   using ConstPointsHost = PointsHost<Ndim, std::add_const_t<TData>>;
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/data_structures/detail/PointsHost.hpp"
 #include "CLUEstering/data_structures/detail/Point.hpp"

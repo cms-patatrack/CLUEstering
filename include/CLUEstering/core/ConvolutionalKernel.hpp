@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include <alpaka/alpaka.hpp>
 #include <concepts>
@@ -96,6 +97,10 @@ namespace clue {
     ALPAKA_FN_HOST_ACC auto operator()(value_type dist_ij, int point_id, int j) const;
   };
 
+}  // namespace clue
+
+namespace clue::inline CLUE_BACKEND {
+
   namespace concepts {
 
     /// @brief Concept describing a convolutional kernel
@@ -110,6 +115,6 @@ namespace clue {
 
   }  // namespace concepts
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/core/detail/ConvolutionalKernel.hpp"

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
@@ -13,7 +14,7 @@
 #include <alpaka/alpaka.hpp>
 #include <span>
 
-namespace clue::internal {
+namespace clue::inline CLUE_BACKEND::internal {
 
   template <std::size_t Ndim, std::floating_point TData>
   struct TilesView {
@@ -115,4 +116,4 @@ namespace clue::internal {
     }
   };
 
-}  // namespace clue::internal
+}  // namespace clue::inline CLUE_BACKEND::internal

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/PointsFactory.hpp"
@@ -16,7 +17,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   namespace detail {
 
@@ -143,4 +144,4 @@ namespace clue {
     return make_clustered_points<Ndim>(queue, std::forward<TBuffers>(buffers)...);
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

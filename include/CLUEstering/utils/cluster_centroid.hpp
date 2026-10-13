@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include <array>
 #include <cstddef>
@@ -11,7 +12,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief Type alias for a centroid in Ndim dimensions
   ///
@@ -69,6 +70,6 @@ namespace clue {
   inline Centroids<Ndim, ValueType> weighted_cluster_centroids(
       const clue::PointsHost<Ndim, ValueType>& points);
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/utils/detail/cluster_centroid.hpp"

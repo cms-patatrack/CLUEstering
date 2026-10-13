@@ -4,13 +4,14 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include <concepts>
 #include <cstddef>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief Construct a map associating clusters to points
   /// This overload works on host points and returns a map allocated on the host.
@@ -35,6 +36,6 @@ namespace clue {
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData = float>
   inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim, TData>& points);
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/utils/detail/get_clusters.hpp"

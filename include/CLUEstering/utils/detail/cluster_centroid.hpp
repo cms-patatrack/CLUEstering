@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/internal/nostd/zip_iterator.hpp"
 #include "CLUEstering/utils/cluster_centroid.hpp"
@@ -11,7 +12,7 @@
 #include <cstddef>
 #include <numeric>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <std::size_t Ndim, std::floating_point ValueType>
   inline Centroid<Ndim, ValueType> cluster_centroid(const clue::PointsHost<Ndim, ValueType>& points,
@@ -142,4 +143,4 @@ namespace clue {
     return centroids;
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

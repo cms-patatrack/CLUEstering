@@ -10,7 +10,7 @@
 #include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   namespace internal::concepts {
 
@@ -202,4 +202,4 @@ namespace clue {
         data, device, Vec1D{std::extent_v<T>});
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

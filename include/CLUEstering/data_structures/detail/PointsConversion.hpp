@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
@@ -11,7 +12,7 @@
 #include <concepts>
 #include <cstddef>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <concepts::queue TQueue,
             std::size_t Ndim,
@@ -211,4 +212,4 @@ namespace clue {
     }
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

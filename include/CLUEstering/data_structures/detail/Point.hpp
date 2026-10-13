@@ -1,10 +1,11 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <cstddef>
 #include "CLUEstering/data_structures/PointsHost.hpp"
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <std::size_t Ndim, std::floating_point TData>
   inline PointsHost<Ndim, TData>::Point::Point(const std::array<value_type, Ndim>& coordinates,
@@ -26,4 +27,4 @@ namespace clue {
     return m_clusterIndex;
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

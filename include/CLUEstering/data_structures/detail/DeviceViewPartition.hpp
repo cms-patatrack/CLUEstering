@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <concepts>
@@ -8,7 +9,7 @@
 #include <stdexcept>
 #include <tuple>
 
-namespace clue::soa::device {
+namespace clue::inline CLUE_BACKEND::soa::device {
 
   template <std::size_t Ndim, std::floating_point TValue>
   inline auto computeSoASize(std::int32_t n_points) {
@@ -168,4 +169,4 @@ namespace clue::soa::device {
     view.m_n = n_points;
   }
 
-}  // namespace clue::soa::device
+}  // namespace clue::inline CLUE_BACKEND::soa::device

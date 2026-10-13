@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
@@ -23,7 +24,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace clue::detail {
+namespace clue::inline CLUE_BACKEND::detail {
 
   struct KernelCalculateLocalDensityBatched {
     template <typename TAcc,
@@ -363,4 +364,4 @@ namespace clue::detail {
                        max_event_size);
   }
 
-}  // namespace clue::detail
+}  // namespace clue::inline CLUE_BACKEND::detail

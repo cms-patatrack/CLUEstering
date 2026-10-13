@@ -4,10 +4,11 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include <alpaka/alpaka.hpp>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief Get the alpaka device corresponding to a given index
   ///
@@ -17,4 +18,4 @@ namespace clue {
     return alpaka::getDevByIdx(clue::Platform{}, device_id);
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

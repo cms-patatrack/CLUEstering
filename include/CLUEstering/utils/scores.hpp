@@ -4,10 +4,11 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include <concepts>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief Compute the silhouette score for a specific point in the dataset.
   ///
@@ -32,6 +33,6 @@ namespace clue {
   template <std::size_t Ndim, std::floating_point TData = float>
   auto silhouette(const clue::PointsHost<Ndim, TData>& points);
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/utils/detail/scores.hpp"

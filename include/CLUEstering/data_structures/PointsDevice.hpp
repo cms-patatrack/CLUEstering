@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/detail/concepts.hpp"
@@ -17,7 +18,7 @@
 #include <span>
 #include <alpaka/alpaka.hpp>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <std::size_t Ndim, std::floating_point TData>
   class PointsHost;
@@ -218,6 +219,6 @@ namespace clue {
   template <std::size_t Ndim, std::floating_point TData = float>
   using ConstPointsDevice = PointsDevice<Ndim, std::add_const_t<TData>>;
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/data_structures/detail/PointsDevice.hpp"

@@ -4,12 +4,13 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include <alpaka/alpaka.hpp>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief Copies the results of the clustering from the device points to
   /// the host points
@@ -123,6 +124,6 @@ namespace clue {
                          PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
                          const PointsHost<Ndim, THostInput>& h_points);
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/data_structures/detail/PointsConversion.hpp"

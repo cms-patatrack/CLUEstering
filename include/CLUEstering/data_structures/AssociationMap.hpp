@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/AssociationMapView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
@@ -13,7 +14,7 @@
 #include <concepts>
 #include <span>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <concepts::device TDev>
   class AssociationMap;
@@ -229,6 +230,6 @@ namespace clue {
 
   using AssociationMapHost = AssociationMap<alpaka::DevCpu>;
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
 
 #include "CLUEstering/data_structures/detail/AssociationMap.hpp"

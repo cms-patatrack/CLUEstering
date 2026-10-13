@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/memory.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/detail/make_array.hpp"
@@ -16,7 +17,7 @@
 #include <span>
 #include <type_traits>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   namespace internal {
 
@@ -217,4 +218,4 @@ namespace clue {
   template <std::size_t Ndim>
   int32_t computeAlignSoASize(int32_t n_points);
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

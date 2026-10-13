@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
@@ -16,7 +17,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData, concepts::device TDev>
   inline void to_dot(TQueue& queue,
@@ -108,4 +109,4 @@ namespace clue {
     file << "}\n";
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

@@ -1,7 +1,9 @@
 
 #pragma once
 
-namespace clue::nostd {
+#include "CLUEstering/internal/alpaka/config.hpp"
+
+namespace clue::inline CLUE_BACKEND::nostd {
 
   template <typename T>
   struct maximum {
@@ -10,4 +12,4 @@ namespace clue::nostd {
     }
   };
 
-}  // namespace clue::nostd
+}  // namespace clue::inline CLUE_BACKEND::nostd

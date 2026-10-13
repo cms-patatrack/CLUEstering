@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
 #include <alpaka/alpaka.hpp>
@@ -19,7 +20,7 @@
 #include <algorithm>
 #endif
 
-namespace clue::internal::algorithm {
+namespace clue::inline CLUE_BACKEND::internal::algorithm {
 
   template <typename RandomAccessIterator>
   ALPAKA_FN_HOST inline constexpr void sort(RandomAccessIterator first, RandomAccessIterator last) {
@@ -115,4 +116,4 @@ namespace clue::internal::algorithm {
 #endif
   }
 
-}  // namespace clue::internal::algorithm
+}  // namespace clue::inline CLUE_BACKEND::internal::algorithm

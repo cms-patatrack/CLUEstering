@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/math/defines.hpp"
 #include <alpaka/alpaka.hpp>
@@ -14,7 +15,7 @@
 #include <stdfloat>
 #endif
 
-namespace clue::math {
+namespace clue::inline CLUE_BACKEND::math {
 
   template <clue::concepts::Numeric T>
   ALPAKA_FN_ACC MATH_FN_CONSTEXPR inline T max(const T& a, const T& b) {
@@ -59,4 +60,4 @@ namespace clue::math {
   }
 #endif
 
-}  // namespace clue::math
+}  // namespace clue::inline CLUE_BACKEND::math

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/internal/MakeAssociator.hpp"
 #include "CLUEstering/utils/detail/get_clusters.hpp"
@@ -10,7 +11,7 @@
 #include <span>
 #include <vector>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <std::size_t Ndim, std::floating_point TData = float>
   inline bool validate_results(PointsHost<Ndim, TData>& results, PointsHost<Ndim, TData>& truth) {
@@ -25,4 +26,4 @@ namespace clue {
     return compare_nclusters && compare_clusters_size;
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

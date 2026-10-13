@@ -1,11 +1,12 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <array>
 #include <cassert>
 #include <cstdint>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <std::size_t Ndim, typename T>
   class SearchBox {
@@ -31,4 +32,4 @@ namespace clue {
   template <std::size_t Ndim>
   using SearchBoxBins = SearchBox<Ndim, int32_t>;
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

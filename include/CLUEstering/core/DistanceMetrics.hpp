@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/internal/meta/accumulate.hpp"
 #include "CLUEstering/internal/meta/maximum.hpp"
@@ -13,7 +14,7 @@
 #include <concepts>
 #include <cstddef>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   namespace concepts {
 
@@ -370,4 +371,4 @@ namespace clue {
 
   }  // namespace metrics
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

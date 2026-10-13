@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/Clusterer.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
@@ -27,7 +28,7 @@
 #include <span>
 #include <stdexcept>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   template <std::size_t Ndim, std::floating_point DataType>
   Clusterer<Ndim, DataType>::Clusterer(value_type density_radius,
@@ -352,4 +353,4 @@ namespace clue {
         dev_points);
   }
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

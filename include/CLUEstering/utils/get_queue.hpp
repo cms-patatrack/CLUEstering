@@ -4,12 +4,13 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include <concepts>
 #include <alpaka/alpaka.hpp>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   /// @brief Get an alpaka queue created from a device correspoding to a given index
   ///
@@ -48,4 +49,4 @@ namespace clue {
   inline auto get_queue(hipStream_t& stream) { return clue::Queue(stream); }
 #endif
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND

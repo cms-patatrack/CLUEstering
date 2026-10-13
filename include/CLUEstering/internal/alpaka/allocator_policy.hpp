@@ -1,9 +1,10 @@
 
 #pragma once
 
+#include "CLUEstering/internal/alpaka/config.hpp"
 #include <alpaka/alpaka.hpp>
 
-namespace clue {
+namespace clue::inline CLUE_BACKEND {
 
   // Which memory allocator to use
   //   - Synchronous:   (device and host) cudaMalloc/hipMalloc and cudaMallocHost/hipMallocHost
@@ -48,4 +49,4 @@ namespace clue {
       AllocatorPolicy::Synchronous;
 #endif
 
-}  // namespace clue
+}  // namespace clue::inline CLUE_BACKEND
