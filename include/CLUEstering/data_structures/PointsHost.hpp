@@ -19,245 +19,242 @@
 #include <span>
 #include <alpaka/alpaka.hpp>
 
-namespace clue::inline CLUE_BACKEND {
+CLUE_NAMESPACE_BEGIN
 
-  /// @brief The PointsHost class is a data structure that manages points in host memory.
-  /// It provides methods to allocate, access, and manipulate points in host memory.
-  ///
-  /// @tparam Ndim The number of dimensions of the points to manage
-  /// @tparam TData The data type for the point coordinates and weights
-  template <std::size_t Ndim, std::floating_point TData = float>
-  class PointsHost : public internal::points_interface<PointsHost<Ndim, TData>> {
+/// @brief The PointsHost class is a data structure that manages points in host memory.
+/// It provides methods to allocate, access, and manipulate points in host memory.
+///
+/// @tparam Ndim The number of dimensions of the points to manage
+/// @tparam TData The data type for the point coordinates and weights
+template <std::size_t Ndim, std::floating_point TData = float>
+class PointsHost : public internal::points_interface<PointsHost<Ndim, TData>> {
+public:
+  static_assert(std::is_same_v<TData, std::remove_reference_t<TData>>,
+                "Points' data must be a non-reference type");
+
+  using element_type = TData;
+  using value_type = std::remove_cv_t<TData>;
+
+private:
+  std::optional<host_buffer<std::byte[]>> m_buffer;
+  PointsView<Ndim, element_type> m_view;
+  std::optional<ClusterProperties> m_clusterProperties;
+  std::optional<std::size_t> m_nclusters;
+  std::int32_t m_size;
+  bool m_clustered = false;
+
+public:
+  class Point {
+    std::array<value_type, Ndim> m_coordinates;
+    value_type m_weight;
+    int m_clusterIndex;
+
   public:
-    static_assert(std::is_same_v<TData, std::remove_reference_t<TData>>,
-                  "Points' data must be a non-reference type");
+    Point(const std::array<value_type, Ndim>& coordinates, value_type weight, int cluster_index);
+    auto operator[](size_t dim) const;
 
-    using element_type = TData;
-    using value_type = std::remove_cv_t<TData>;
-
-  private:
-    std::optional<host_buffer<std::byte[]>> m_buffer;
-    PointsView<Ndim, element_type> m_view;
-    std::optional<ClusterProperties> m_clusterProperties;
-    std::optional<std::size_t> m_nclusters;
-    std::int32_t m_size;
-    bool m_clustered = false;
-
-  public:
-    class Point {
-      std::array<value_type, Ndim> m_coordinates;
-      value_type m_weight;
-      int m_clusterIndex;
-
-    public:
-      Point(const std::array<value_type, Ndim>& coordinates, value_type weight, int cluster_index);
-      auto operator[](size_t dim) const;
-
-      auto weight() const;
-      auto cluster_index() const;
-    };
-
-    /// @brief Constructs a container for the points allocated on the host
-    ///
-    /// @param queue The queue to use for memory allocation
-    /// @param n_points The number of points to allocate
-    template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, int32_t n_points);
-
-    /// @brief Constructs a container for the points allocated on the host using a pre-allocated buffers
-    ///
-    /// @param queue The queue to use for memory allocation
-    /// @param n_points The number of points
-    /// @param buffer The pre-allocated buffer to use for the points data
-    template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, int32_t n_points, std::span<std::byte> buffer);
-
-    /// @brief Constructs a container for the points allocated on the host using interleaved data
-    ///
-    /// @param queue The queue to use for memory allocation
-    /// @param n_points The number of points
-    /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
-    /// @param output_buffer The pre-allocated buffer to store the cluster indexes
-    /// @note The input buffer must contain the coordinates and weights in an SoA format
-    template <concepts::queue TQueue>
-    PointsHost(TQueue& queue,
-               int32_t n_points,
-               std::span<element_type> input,
-               std::span<int> output);
-
-    /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
-    ///
-    /// @param queue The queue to use for memory allocation
-    /// @param n_points The number of points
-    /// @param coordinates The pre-allocated buffer containing the coordinates
-    /// @param weights The pre-allocated buffer containing the weights
-    /// @param output The pre-allocated buffer to store the cluster indexes
-    /// @note The coordinates buffer must have a size of n_points * Ndim
-    template <concepts::queue TQueue>
-    PointsHost(TQueue& queue,
-               int32_t n_points,
-               std::span<element_type> coordinates,
-               std::span<element_type> weights,
-               std::span<int> output);
-
-    /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
-    ///
-    /// @param queue The queue to use for memory allocation
-    /// @param n_points The number of points
-    /// @param buffers The pre-allocated buffers to use for the points data
-    template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
-      requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
-    PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers);
-
-    /// @brief Constructs a container for the points allocated on the host using interleaved data
-    ///
-    /// @param queue The queue to use for memory allocation
-    /// @param n_points The number of points
-    /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
-    /// @param output_buffer The pre-allocated buffer to store the cluster indexes
-    /// @note The input buffer must contain the coordinates and weights in an SoA format
-    template <concepts::queue TQueue>
-    PointsHost(TQueue& queue, int32_t n_points, element_type* input, int* output);
-
-    /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
-    ///
-    /// @param queue The queue to use for memory allocation
-    /// @param n_points The number of points
-    /// @param coordinates The pre-allocated buffer containing the coordinates
-    /// @param weights The pre-allocated buffer containing the weights
-    /// @param output The pre-allocated buffer to store the cluster indexes
-    /// @note The coordinates buffer must have a size of n_points * Ndim
-    template <concepts::queue TQueue>
-    PointsHost(TQueue& queue,
-               int32_t n_points,
-               element_type* coordinates,
-               element_type* weights,
-               int* output);
-
-    /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
-    ///
-    /// @param queue The queue to use for memory allocation
-    /// @param n_points The number of points
-    /// @param buffers The pre-allocated buffers to use for the points data
-    template <concepts::queue TQueue, concepts::pointer... TBuffers>
-      requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
-    PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers);
-
-    PointsHost(const PointsHost&) = delete;
-    PointsHost& operator=(const PointsHost&) = delete;
-    PointsHost(PointsHost&&) = default;
-    PointsHost& operator=(PointsHost&&) = default;
-    ~PointsHost() = default;
-
-#ifdef CLUE_BUILD_DOXYGEN
-    /// @brief Returns the number of points
-    /// @return The number of points
-    ALPAKA_FN_HOST auto size() const;
-    /// @brief Returns the coordinates of the points for a specific dimension as a const span
-    /// @param dim The dimension for which to get the coordinates
-    /// @return A const span of the coordinates for the specified dimension
-    ALPAKA_FN_HOST auto coords(size_t dim) const;
-    /// @brief Returns the coordinates of the points for a specific dimension as a span
-    /// @param dim The dimension for which to get the coordinates
-    /// @return A span of the coordinates for the specified dimension
-    ALPAKA_FN_HOST auto coords(size_t dim);
-    /// @brief Returns the weights of the points as a const span
-    /// @return A const span of the weights of the points
-    ALPAKA_FN_HOST auto weights() const;
-    /// @brief Returns the weights of the points as a span
-    /// @return A span of the weights of the points
-    ALPAKA_FN_HOST auto weights();
-    /// @brief Returns the cluster indexes of the points as a const span
-    /// @return A const span of the cluster indexes of the points
-    ALPAKA_FN_HOST auto clusterIndexes() const;
-    /// @brief Returns the cluster indexes of the points as a span
-    /// @return A span of the cluster indexes of the points
-    ALPAKA_FN_HOST auto clusterIndexes();
-    /// @brief Indicates whether the points have been clustered
-    /// @return True if the points have been clustered, false otherwise
-    ALPAKA_FN_HOST auto clustered() const;
-    /// @brief Returns the view of the points
-    /// @return A const reference to the PointsView structure containing the points data
-    ALPAKA_FN_HOST const auto& view() const;
-    /// @brief Returns the view of the points
-    /// @return A reference to the PointsView structure containing the points data
-    ALPAKA_FN_HOST auto& view();
-#endif
-
-    /// @brief Returns the Point object at the specified index
-    ///
-    /// @param idx The index of the point to retrieve
-    /// @return The Point object at the specified index
-    Point operator[](std::size_t idx) const;
-
-    /// @brief Teturns the cluster properties of the points
-    ///
-    /// @return The number of clusters reconstructed
-    /// @note This value is lazily evaluated and cached upon the first call
-    const auto& n_clusters();
-    /// @brief Returns the associator mapping clusters to their associated points
-    ///
-    /// @return An AssociationMapHost mapping clusters to points
-    /// @note This object is lazily evaluated and cached upon the first call
-    const auto& clusters();
-    /// @brief Returns a vector containing the sizes of each cluster
-    ///
-    /// @return A vector of containing the sizes of each cluster
-    /// @note This vector is lazily evaluated and cached upon the first call
-    const auto& cluster_sizes();
-    /// @brief Returns the ClusterProperties object containing the properties of the clusters
-    ///
-    /// @return The ClusterProperties object
-    /// @note This object is lazily evaluated and cached upon the first call
-    const auto& cluster_properties();
-
-    /// @brief Sets the uncertainty on the local density estimation for each point
-    ///
-    /// @param density_uncertainty A span containing the uncertainty values for each point
-    /// @note The uncertainty gets multiplied to the `min_density` parameter
-    void set_density_uncertainty(std::span<const element_type> density_uncertainty);
-
-    /// @brief Sets the per-point coordinate sigma for the given dimension
-    ///
-    /// @param dim The dimension index (must be less than Ndim)
-    /// @param uncertainty A span of sigma values, one per point
-    void set_sigma(std::size_t dim, std::span<const element_type> uncertainty);
-
-    /// @brief Sets the per-point coordinate sigma for all dimensions at once
-    ///
-    /// @param uncertainties One contiguous range per dimension, in dimension order
-    template <std::ranges::contiguous_range... Containers>
-      requires(sizeof...(Containers) == Ndim)
-    void set_sigmas(Containers&&... uncertainties) {
-      auto containers_tuple = std::forward_as_tuple(std::forward<Containers>(uncertainties)...);
-      meta::apply<Ndim>([&]<std::size_t Dim>() {
-        auto& c = std::get<Dim>(containers_tuple);
-        set_sigma(Dim, std::span<const element_type>(c.data(), c.size()));
-      });
-    }
-
-    /// @brief Sets a persistent identifier for each point, independent of its position in the array
-    ///
-    /// @param tags A span containing one identifier per point
-    /// @note Used as a deterministic tie-breaker in place of the raw array index, for cases where
-    /// the order of the points is not guaranteed to be stable (e.g. when produced by an upstream
-    /// parallel/concurrent stage)
-    void set_tags(std::span<const std::uint32_t> tags);
-
-  private:
-    inline static constexpr std::size_t Ndim_ = Ndim;
-
-    void mark_clustered() { m_clustered = true; }
-
-#ifndef CLUE_BUILD_DOXYGEN
-    friend struct internal::points_interface<PointsHost<Ndim, TData>>;
-#endif
+    auto weight() const;
+    auto cluster_index() const;
   };
 
-  template <std::size_t Ndim, std::floating_point TData = float>
-  using ConstPointsHost = PointsHost<Ndim, std::add_const_t<TData>>;
+  /// @brief Constructs a container for the points allocated on the host
+  ///
+  /// @param queue The queue to use for memory allocation
+  /// @param n_points The number of points to allocate
+  template <concepts::queue TQueue>
+  PointsHost(TQueue& queue, int32_t n_points);
 
-}  // namespace clue::inline CLUE_BACKEND
+  /// @brief Constructs a container for the points allocated on the host using a pre-allocated buffers
+  ///
+  /// @param queue The queue to use for memory allocation
+  /// @param n_points The number of points
+  /// @param buffer The pre-allocated buffer to use for the points data
+  template <concepts::queue TQueue>
+  PointsHost(TQueue& queue, int32_t n_points, std::span<std::byte> buffer);
+
+  /// @brief Constructs a container for the points allocated on the host using interleaved data
+  ///
+  /// @param queue The queue to use for memory allocation
+  /// @param n_points The number of points
+  /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
+  /// @param output_buffer The pre-allocated buffer to store the cluster indexes
+  /// @note The input buffer must contain the coordinates and weights in an SoA format
+  template <concepts::queue TQueue>
+  PointsHost(TQueue& queue, int32_t n_points, std::span<element_type> input, std::span<int> output);
+
+  /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
+  ///
+  /// @param queue The queue to use for memory allocation
+  /// @param n_points The number of points
+  /// @param coordinates The pre-allocated buffer containing the coordinates
+  /// @param weights The pre-allocated buffer containing the weights
+  /// @param output The pre-allocated buffer to store the cluster indexes
+  /// @note The coordinates buffer must have a size of n_points * Ndim
+  template <concepts::queue TQueue>
+  PointsHost(TQueue& queue,
+             int32_t n_points,
+             std::span<element_type> coordinates,
+             std::span<element_type> weights,
+             std::span<int> output);
+
+  /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
+  ///
+  /// @param queue The queue to use for memory allocation
+  /// @param n_points The number of points
+  /// @param buffers The pre-allocated buffers to use for the points data
+  template <concepts::queue TQueue, std::ranges::contiguous_range... TBuffers>
+    requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
+  PointsHost(TQueue& queue, int32_t n_points, TBuffers&&... buffers);
+
+  /// @brief Constructs a container for the points allocated on the host using interleaved data
+  ///
+  /// @param queue The queue to use for memory allocation
+  /// @param n_points The number of points
+  /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
+  /// @param output_buffer The pre-allocated buffer to store the cluster indexes
+  /// @note The input buffer must contain the coordinates and weights in an SoA format
+  template <concepts::queue TQueue>
+  PointsHost(TQueue& queue, int32_t n_points, element_type* input, int* output);
+
+  /// @brief Constructs a container for the points allocated on the host using separate coordinate and weight buffers
+  ///
+  /// @param queue The queue to use for memory allocation
+  /// @param n_points The number of points
+  /// @param coordinates The pre-allocated buffer containing the coordinates
+  /// @param weights The pre-allocated buffer containing the weights
+  /// @param output The pre-allocated buffer to store the cluster indexes
+  /// @note The coordinates buffer must have a size of n_points * Ndim
+  template <concepts::queue TQueue>
+  PointsHost(TQueue& queue,
+             int32_t n_points,
+             element_type* coordinates,
+             element_type* weights,
+             int* output);
+
+  /// @brief Constructs a container for the points allocated on the host using multiple pre-allocated buffers
+  ///
+  /// @param queue The queue to use for memory allocation
+  /// @param n_points The number of points
+  /// @param buffers The pre-allocated buffers to use for the points data
+  template <concepts::queue TQueue, concepts::pointer... TBuffers>
+    requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
+  PointsHost(TQueue& queue, int32_t n_points, TBuffers... buffers);
+
+  PointsHost(const PointsHost&) = delete;
+  PointsHost& operator=(const PointsHost&) = delete;
+  PointsHost(PointsHost&&) = default;
+  PointsHost& operator=(PointsHost&&) = default;
+  ~PointsHost() = default;
+
+#ifdef CLUE_BUILD_DOXYGEN
+  /// @brief Returns the number of points
+  /// @return The number of points
+  ALPAKA_FN_HOST auto size() const;
+  /// @brief Returns the coordinates of the points for a specific dimension as a const span
+  /// @param dim The dimension for which to get the coordinates
+  /// @return A const span of the coordinates for the specified dimension
+  ALPAKA_FN_HOST auto coords(size_t dim) const;
+  /// @brief Returns the coordinates of the points for a specific dimension as a span
+  /// @param dim The dimension for which to get the coordinates
+  /// @return A span of the coordinates for the specified dimension
+  ALPAKA_FN_HOST auto coords(size_t dim);
+  /// @brief Returns the weights of the points as a const span
+  /// @return A const span of the weights of the points
+  ALPAKA_FN_HOST auto weights() const;
+  /// @brief Returns the weights of the points as a span
+  /// @return A span of the weights of the points
+  ALPAKA_FN_HOST auto weights();
+  /// @brief Returns the cluster indexes of the points as a const span
+  /// @return A const span of the cluster indexes of the points
+  ALPAKA_FN_HOST auto clusterIndexes() const;
+  /// @brief Returns the cluster indexes of the points as a span
+  /// @return A span of the cluster indexes of the points
+  ALPAKA_FN_HOST auto clusterIndexes();
+  /// @brief Indicates whether the points have been clustered
+  /// @return True if the points have been clustered, false otherwise
+  ALPAKA_FN_HOST auto clustered() const;
+  /// @brief Returns the view of the points
+  /// @return A const reference to the PointsView structure containing the points data
+  ALPAKA_FN_HOST const auto& view() const;
+  /// @brief Returns the view of the points
+  /// @return A reference to the PointsView structure containing the points data
+  ALPAKA_FN_HOST auto& view();
+#endif
+
+  /// @brief Returns the Point object at the specified index
+  ///
+  /// @param idx The index of the point to retrieve
+  /// @return The Point object at the specified index
+  Point operator[](std::size_t idx) const;
+
+  /// @brief Teturns the cluster properties of the points
+  ///
+  /// @return The number of clusters reconstructed
+  /// @note This value is lazily evaluated and cached upon the first call
+  const auto& n_clusters();
+  /// @brief Returns the associator mapping clusters to their associated points
+  ///
+  /// @return An AssociationMapHost mapping clusters to points
+  /// @note This object is lazily evaluated and cached upon the first call
+  const auto& clusters();
+  /// @brief Returns a vector containing the sizes of each cluster
+  ///
+  /// @return A vector of containing the sizes of each cluster
+  /// @note This vector is lazily evaluated and cached upon the first call
+  const auto& cluster_sizes();
+  /// @brief Returns the ClusterProperties object containing the properties of the clusters
+  ///
+  /// @return The ClusterProperties object
+  /// @note This object is lazily evaluated and cached upon the first call
+  const auto& cluster_properties();
+
+  /// @brief Sets the uncertainty on the local density estimation for each point
+  ///
+  /// @param density_uncertainty A span containing the uncertainty values for each point
+  /// @note The uncertainty gets multiplied to the `min_density` parameter
+  void set_density_uncertainty(std::span<const element_type> density_uncertainty);
+
+  /// @brief Sets the per-point coordinate sigma for the given dimension
+  ///
+  /// @param dim The dimension index (must be less than Ndim)
+  /// @param uncertainty A span of sigma values, one per point
+  void set_sigma(std::size_t dim, std::span<const element_type> uncertainty);
+
+  /// @brief Sets the per-point coordinate sigma for all dimensions at once
+  ///
+  /// @param uncertainties One contiguous range per dimension, in dimension order
+  template <std::ranges::contiguous_range... Containers>
+    requires(sizeof...(Containers) == Ndim)
+  void set_sigmas(Containers&&... uncertainties) {
+    auto containers_tuple = std::forward_as_tuple(std::forward<Containers>(uncertainties)...);
+    meta::apply<Ndim>([&]<std::size_t Dim>() {
+      auto& c = std::get<Dim>(containers_tuple);
+      set_sigma(Dim, std::span<const element_type>(c.data(), c.size()));
+    });
+  }
+
+  /// @brief Sets a persistent identifier for each point, independent of its position in the array
+  ///
+  /// @param tags A span containing one identifier per point
+  /// @note Used as a deterministic tie-breaker in place of the raw array index, for cases where
+  /// the order of the points is not guaranteed to be stable (e.g. when produced by an upstream
+  /// parallel/concurrent stage)
+  void set_tags(std::span<const std::uint32_t> tags);
+
+private:
+  inline static constexpr std::size_t Ndim_ = Ndim;
+
+  void mark_clustered() { m_clustered = true; }
+
+#ifndef CLUE_BUILD_DOXYGEN
+  friend struct internal::points_interface<PointsHost<Ndim, TData>>;
+#endif
+};
+
+template <std::size_t Ndim, std::floating_point TData = float>
+using ConstPointsHost = PointsHost<Ndim, std::add_const_t<TData>>;
+
+CLUE_NAMESPACE_END
 
 #include "CLUEstering/data_structures/detail/PointsHost.hpp"
 #include "CLUEstering/data_structures/detail/Point.hpp"

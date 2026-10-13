@@ -7,7 +7,8 @@
 #include <cstddef>
 #include <optional>
 
-namespace clue::inline CLUE_BACKEND::detail {
+CLUE_NAMESPACE_BEGIN
+namespace detail {
 
   template <concepts::queue TQueue,
             concepts::device TDev = decltype(alpaka::getDev(std::declval<TQueue>()))>
@@ -22,4 +23,5 @@ namespace clue::inline CLUE_BACKEND::detail {
     alpaka::wait(queue);
   }
 
-}  // namespace clue::inline CLUE_BACKEND::detail
+}  // namespace detail
+CLUE_NAMESPACE_END

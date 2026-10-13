@@ -3,7 +3,8 @@
 
 #include "CLUEstering/internal/alpaka/config.hpp"
 
-namespace clue::inline CLUE_BACKEND::nostd {
+CLUE_NAMESPACE_BEGIN
+namespace nostd {
 
   template <typename T>
   struct minimum {
@@ -12,4 +13,5 @@ namespace clue::inline CLUE_BACKEND::nostd {
     }
   };
 
-}  // namespace clue::inline CLUE_BACKEND::nostd
+}  // namespace nostd
+CLUE_NAMESPACE_END

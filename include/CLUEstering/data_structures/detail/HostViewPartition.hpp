@@ -9,7 +9,8 @@
 #include <stdexcept>
 #include <tuple>
 
-namespace clue::inline CLUE_BACKEND::soa::host {
+CLUE_NAMESPACE_BEGIN
+namespace soa::host {
 
   // No need to allocate temporary buffers on the host
   template <std::size_t Ndim, std::floating_point TValue>
@@ -109,4 +110,5 @@ namespace clue::inline CLUE_BACKEND::soa::host {
     view.m_n = n_points;
   }
 
-}  // namespace clue::inline CLUE_BACKEND::soa::host
+}  // namespace soa::host
+CLUE_NAMESPACE_END

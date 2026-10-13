@@ -7,7 +7,8 @@
 #include <iterator>
 #include <type_traits>
 
-namespace clue::inline CLUE_BACKEND::nostd {
+CLUE_NAMESPACE_BEGIN
+namespace nostd {
 
   template <typename... Iterators>
   class zip_iterator {
@@ -125,4 +126,5 @@ namespace clue::inline CLUE_BACKEND::nostd {
 
   auto zip_view();
 
-}  // namespace clue::inline CLUE_BACKEND::nostd
+}  // namespace nostd
+CLUE_NAMESPACE_END

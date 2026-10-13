@@ -6,7 +6,8 @@
 #include <array>
 #include <type_traits>
 
-namespace clue::inline CLUE_BACKEND::nostd {
+CLUE_NAMESPACE_BEGIN
+namespace nostd {
 
   template <typename... Tn>
   inline constexpr auto make_array(Tn&&... args) {
@@ -20,4 +21,5 @@ namespace clue::inline CLUE_BACKEND::nostd {
     return arr;
   }
 
-}  // namespace clue::inline CLUE_BACKEND::nostd
+}  // namespace nostd
+CLUE_NAMESPACE_END

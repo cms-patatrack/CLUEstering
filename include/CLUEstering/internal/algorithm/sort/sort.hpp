@@ -20,7 +20,8 @@
 #include <algorithm>
 #endif
 
-namespace clue::inline CLUE_BACKEND::internal::algorithm {
+CLUE_NAMESPACE_BEGIN
+namespace internal::algorithm {
 
   template <typename RandomAccessIterator>
   ALPAKA_FN_HOST inline constexpr void sort(RandomAccessIterator first, RandomAccessIterator last) {
@@ -116,4 +117,5 @@ namespace clue::inline CLUE_BACKEND::internal::algorithm {
 #endif
   }
 
-}  // namespace clue::inline CLUE_BACKEND::internal::algorithm
+}  // namespace internal::algorithm
+CLUE_NAMESPACE_END

@@ -12,204 +12,201 @@
 #include <concepts>
 #include <cstddef>
 
-namespace clue::inline CLUE_BACKEND {
+CLUE_NAMESPACE_BEGIN
 
-  template <concepts::queue TQueue,
-            std::size_t Ndim,
-            std::floating_point THostInput,
-            std::floating_point TDeviceInput,
-            concepts::device TDev>
-  inline void copyToHost(TQueue& queue,
-                         PointsHost<Ndim, THostInput>& h_points,
-                         const PointsDevice<Ndim, TDeviceInput, TDev>& d_points) {
-    alpaka::memcpy(
-        queue,
-        make_host_view(h_points.view().m_cluster_index, h_points.size()),
-        make_device_view(alpaka::getDev(queue), d_points.view().m_cluster_index, h_points.size()));
-    internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
-    alpaka::wait(queue);
-  }
-
-  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
-  inline auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TInput, TDev>& d_points) {
-    PointsHost<Ndim, std::remove_cv_t<TInput>> h_points(queue, d_points.size());
-
-    alpaka::memcpy(
-        queue,
-        make_host_view(h_points.view().m_cluster_index, h_points.size()),
-        make_device_view(alpaka::getDev(queue), d_points.view().m_cluster_index, h_points.size()));
-    internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
-    alpaka::wait(queue);
-
-    return h_points;
-  }
-
-  template <concepts::queue TQueue,
-            std::size_t Ndim,
-            std::floating_point THostInput,
-            std::floating_point TDeviceInput,
-            concepts::device TDev>
-  void copyToHostAsync(TQueue& queue,
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point THostInput,
+          std::floating_point TDeviceInput,
+          concepts::device TDev>
+inline void copyToHost(TQueue& queue,
                        PointsHost<Ndim, THostInput>& h_points,
                        const PointsDevice<Ndim, TDeviceInput, TDev>& d_points) {
-    alpaka::memcpy(
-        queue,
-        make_host_view(h_points.view().m_cluster_index, h_points.size()),
-        make_device_view(alpaka::getDev(queue), d_points.view().m_cluster_index, h_points.size()));
-    internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
-  }
+  alpaka::memcpy(
+      queue,
+      make_host_view(h_points.view().m_cluster_index, h_points.size()),
+      make_device_view(alpaka::getDev(queue), d_points.view().m_cluster_index, h_points.size()));
+  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
+  alpaka::wait(queue);
+}
 
-  template <concepts::queue TQueue,
-            std::size_t Ndim,
-            std::floating_point TDeviceInput,
-            concepts::device TDev,
-            std::floating_point THostInput>
-  inline void copyToDevice(TQueue& queue,
-                           PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
-                           const PointsHost<Ndim, THostInput>& h_points) {
-    meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
-      alpaka::memcpy(
-          queue,
-          make_device_view(alpaka::getDev(queue), d_points.view().m_coords[Dim], h_points.size()),
-          make_host_view(h_points.view().m_coords[Dim], h_points.size()));
-    });
+template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
+inline auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TInput, TDev>& d_points) {
+  PointsHost<Ndim, std::remove_cv_t<TInput>> h_points(queue, d_points.size());
+
+  alpaka::memcpy(
+      queue,
+      make_host_view(h_points.view().m_cluster_index, h_points.size()),
+      make_device_view(alpaka::getDev(queue), d_points.view().m_cluster_index, h_points.size()));
+  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
+  alpaka::wait(queue);
+
+  return h_points;
+}
+
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point THostInput,
+          std::floating_point TDeviceInput,
+          concepts::device TDev>
+void copyToHostAsync(TQueue& queue,
+                     PointsHost<Ndim, THostInput>& h_points,
+                     const PointsDevice<Ndim, TDeviceInput, TDev>& d_points) {
+  alpaka::memcpy(
+      queue,
+      make_host_view(h_points.view().m_cluster_index, h_points.size()),
+      make_device_view(alpaka::getDev(queue), d_points.view().m_cluster_index, h_points.size()));
+  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
+}
+
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point TDeviceInput,
+          concepts::device TDev,
+          std::floating_point THostInput>
+inline void copyToDevice(TQueue& queue,
+                         PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
+                         const PointsHost<Ndim, THostInput>& h_points) {
+  meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
     alpaka::memcpy(
         queue,
-        make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
-        make_host_view(h_points.view().m_weight, h_points.size()));
-    if (h_points.view().has_uncertainty()) {
+        make_device_view(alpaka::getDev(queue), d_points.view().m_coords[Dim], h_points.size()),
+        make_host_view(h_points.view().m_coords[Dim], h_points.size()));
+  });
+  alpaka::memcpy(queue,
+                 make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
+                 make_host_view(h_points.view().m_weight, h_points.size()));
+  if (h_points.view().has_uncertainty()) {
+    using dev_value_t = std::remove_cv_t<TDeviceInput>;
+    using PType = std::remove_cvref_t<decltype(d_points)>;
+    auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
+    ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+    alpaka::memcpy(queue,
+                   make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
+                   make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
+    d_points.view().m_density_uncertainty = ubuf->data();
+  }
+  meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
+    if (h_points.view().has_sigma(Dim)) {
       using dev_value_t = std::remove_cv_t<TDeviceInput>;
       using PType = std::remove_cvref_t<decltype(d_points)>;
-      auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
-      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+      auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
+      cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
       alpaka::memcpy(queue,
-                     make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
-                     make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
-      d_points.view().m_density_uncertainty = ubuf->data();
+                     make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
+                     make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
+      d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
     }
-    meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
-      if (h_points.view().has_sigma(Dim)) {
-        using dev_value_t = std::remove_cv_t<TDeviceInput>;
-        using PType = std::remove_cvref_t<decltype(d_points)>;
-        auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
-        cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
-        alpaka::memcpy(queue,
-                       make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
-                       make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
-        d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
-      }
-    });
-    if (h_points.view().has_tags()) {
-      using PType = std::remove_cvref_t<decltype(d_points)>;
-      auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
-      tbuf = make_device_buffer<std::uint32_t[]>(queue, h_points.size());
-      alpaka::memcpy(queue,
-                     make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
-                     make_host_view(h_points.view().m_tags, h_points.size()));
-      d_points.view().m_tags = tbuf->data();
-    }
-    alpaka::wait(queue);
+  });
+  if (h_points.view().has_tags()) {
+    using PType = std::remove_cvref_t<decltype(d_points)>;
+    auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
+    tbuf = make_device_buffer<std::uint32_t[]>(queue, h_points.size());
+    alpaka::memcpy(queue,
+                   make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
+                   make_host_view(h_points.view().m_tags, h_points.size()));
+    d_points.view().m_tags = tbuf->data();
   }
+  alpaka::wait(queue);
+}
 
-  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
-  inline auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TInput>& h_points) {
-    PointsDevice<Ndim, std::remove_cv_t<TInput>, TDev> d_points(queue, h_points.size());
+template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
+inline auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TInput>& h_points) {
+  PointsDevice<Ndim, std::remove_cv_t<TInput>, TDev> d_points(queue, h_points.size());
 
-    meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
-      alpaka::memcpy(
-          queue,
-          make_device_view(alpaka::getDev(queue), d_points.view().m_coords[Dim], h_points.size()),
-          make_host_view(h_points.view().m_coords[Dim], h_points.size()));
-    });
+  meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
     alpaka::memcpy(
         queue,
-        make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
-        make_host_view(h_points.view().m_weight, h_points.size()));
-    if (h_points.view().has_uncertainty()) {
+        make_device_view(alpaka::getDev(queue), d_points.view().m_coords[Dim], h_points.size()),
+        make_host_view(h_points.view().m_coords[Dim], h_points.size()));
+  });
+  alpaka::memcpy(queue,
+                 make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
+                 make_host_view(h_points.view().m_weight, h_points.size()));
+  if (h_points.view().has_uncertainty()) {
+    using dev_value_t = std::remove_cv_t<TInput>;
+    using PType = std::remove_cvref_t<decltype(d_points)>;
+    auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
+    ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+    alpaka::memcpy(queue,
+                   make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
+                   make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
+    d_points.view().m_density_uncertainty = ubuf->data();
+  }
+  meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
+    if (h_points.view().has_sigma(Dim)) {
       using dev_value_t = std::remove_cv_t<TInput>;
       using PType = std::remove_cvref_t<decltype(d_points)>;
-      auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
-      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+      auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
+      cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
       alpaka::memcpy(queue,
-                     make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
-                     make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
-      d_points.view().m_density_uncertainty = ubuf->data();
+                     make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
+                     make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
+      d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
     }
-    meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
-      if (h_points.view().has_sigma(Dim)) {
-        using dev_value_t = std::remove_cv_t<TInput>;
-        using PType = std::remove_cvref_t<decltype(d_points)>;
-        auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
-        cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
-        alpaka::memcpy(queue,
-                       make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
-                       make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
-        d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
-      }
-    });
-    if (h_points.view().has_tags()) {
-      using PType = std::remove_cvref_t<decltype(d_points)>;
-      auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
-      tbuf = make_device_buffer<std::uint32_t[]>(queue, h_points.size());
-      alpaka::memcpy(queue,
-                     make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
-                     make_host_view(h_points.view().m_tags, h_points.size()));
-      d_points.view().m_tags = tbuf->data();
-    }
-    alpaka::wait(queue);
-
-    return d_points;
+  });
+  if (h_points.view().has_tags()) {
+    using PType = std::remove_cvref_t<decltype(d_points)>;
+    auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
+    tbuf = make_device_buffer<std::uint32_t[]>(queue, h_points.size());
+    alpaka::memcpy(queue,
+                   make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
+                   make_host_view(h_points.view().m_tags, h_points.size()));
+    d_points.view().m_tags = tbuf->data();
   }
+  alpaka::wait(queue);
 
-  template <concepts::queue TQueue,
-            std::size_t Ndim,
-            std::floating_point TDeviceInput,
-            concepts::device TDev,
-            std::floating_point THostInput>
-  inline void copyToDeviceAsync(TQueue& queue,
-                                PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
-                                const PointsHost<Ndim, THostInput>& h_points) {
-    meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
-      alpaka::memcpy(
-          queue,
-          make_device_view(alpaka::getDev(queue), d_points.view().m_coords[Dim], h_points.size()),
-          make_host_view(h_points.view().m_coords[Dim], h_points.size()));
-    });
+  return d_points;
+}
+
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point TDeviceInput,
+          concepts::device TDev,
+          std::floating_point THostInput>
+inline void copyToDeviceAsync(TQueue& queue,
+                              PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
+                              const PointsHost<Ndim, THostInput>& h_points) {
+  meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
     alpaka::memcpy(
         queue,
-        make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
-        make_host_view(h_points.view().m_weight, h_points.size()));
-    if (h_points.view().has_uncertainty()) {
+        make_device_view(alpaka::getDev(queue), d_points.view().m_coords[Dim], h_points.size()),
+        make_host_view(h_points.view().m_coords[Dim], h_points.size()));
+  });
+  alpaka::memcpy(queue,
+                 make_device_view(alpaka::getDev(queue), d_points.view().m_weight, h_points.size()),
+                 make_host_view(h_points.view().m_weight, h_points.size()));
+  if (h_points.view().has_uncertainty()) {
+    using dev_value_t = std::remove_cv_t<TDeviceInput>;
+    using PType = std::remove_cvref_t<decltype(d_points)>;
+    auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
+    ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+    alpaka::memcpy(queue,
+                   make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
+                   make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
+    d_points.view().m_density_uncertainty = ubuf->data();
+  }
+  meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
+    if (h_points.view().has_sigma(Dim)) {
       using dev_value_t = std::remove_cv_t<TDeviceInput>;
       using PType = std::remove_cvref_t<decltype(d_points)>;
-      auto& ubuf = internal::points_interface<PType>::uncertainty_buffer(d_points);
-      ubuf = make_device_buffer<dev_value_t[]>(queue, h_points.size());
+      auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
+      cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
       alpaka::memcpy(queue,
-                     make_device_view(alpaka::getDev(queue), ubuf->data(), h_points.size()),
-                     make_host_view(h_points.view().m_density_uncertainty, h_points.size()));
-      d_points.view().m_density_uncertainty = ubuf->data();
+                     make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
+                     make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
+      d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
     }
-    meta::apply<Ndim>([&]<std::size_t Dim>() -> void {
-      if (h_points.view().has_sigma(Dim)) {
-        using dev_value_t = std::remove_cv_t<TDeviceInput>;
-        using PType = std::remove_cvref_t<decltype(d_points)>;
-        auto& cbufs = internal::points_interface<PType>::sigma_buffers(d_points);
-        cbufs[Dim] = make_device_buffer<dev_value_t[]>(queue, h_points.size());
-        alpaka::memcpy(queue,
-                       make_device_view(alpaka::getDev(queue), cbufs[Dim]->data(), h_points.size()),
-                       make_host_view(h_points.view().m_sigmas[Dim], h_points.size()));
-        d_points.view().m_sigmas[Dim] = cbufs[Dim]->data();
-      }
-    });
-    if (h_points.view().has_tags()) {
-      using PType = std::remove_cvref_t<decltype(d_points)>;
-      auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
-      tbuf = make_device_buffer<std::size_t[]>(queue, h_points.size());
-      alpaka::memcpy(queue,
-                     make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
-                     make_host_view(h_points.view().m_tags, h_points.size()));
-      d_points.view().m_tags = tbuf->data();
-    }
+  });
+  if (h_points.view().has_tags()) {
+    using PType = std::remove_cvref_t<decltype(d_points)>;
+    auto& tbuf = internal::points_interface<PType>::tags_buffer(d_points);
+    tbuf = make_device_buffer<std::size_t[]>(queue, h_points.size());
+    alpaka::memcpy(queue,
+                   make_device_view(alpaka::getDev(queue), tbuf->data(), h_points.size()),
+                   make_host_view(h_points.view().m_tags, h_points.size()));
+    d_points.view().m_tags = tbuf->data();
   }
+}
 
-}  // namespace clue::inline CLUE_BACKEND
+CLUE_NAMESPACE_END

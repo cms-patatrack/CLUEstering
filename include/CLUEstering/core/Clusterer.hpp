@@ -26,306 +26,298 @@
 #include <span>
 #include <type_traits>
 
-namespace clue::inline CLUE_BACKEND {
+CLUE_NAMESPACE_BEGIN
 
-  /// @brief The Clusterer class is the interface for running the clustering algorithm.
-  /// It provides methods to set up the clustering parameters, initializes the internal buffers
-  /// and runs the clustering algorithm on host or device points.
+/// @brief The Clusterer class is the interface for running the clustering algorithm.
+/// It provides methods to set up the clustering parameters, initializes the internal buffers
+/// and runs the clustering algorithm on host or device points.
+///
+/// @tparam Ndim The number of dimensions of the points to cluster
+/// @tparam DataType The data type for the point coordinates and weights, which must be a
+/// floating-point type. By default, it is set to `float`.
+template <std::size_t Ndim, std::floating_point DataType = float>
+class Clusterer {
+public:
+  using value_type = std::remove_cv_t<std::remove_reference_t<DataType>>;
+
+private:
+  value_type m_density_radius;
+  value_type m_seeding_distance;
+  value_type m_min_density;
+  value_type m_outlier_distance;
+  std::array<uint8_t, Ndim> m_wrappedCoordinates;
+
+  std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
+  std::optional<internal::SeedArray<>> m_seeds;
+  std::optional<internal::DeviceVector<>> m_event_associations;
+
+  template <std::floating_point InputType>
+  void setup(Queue& queue,
+             const clue::PointsHost<Ndim, InputType>& h_points,
+             clue::PointsDevice<Ndim, value_type>& dev_points) {
+    detail::setup_tiles(queue,
+                        h_points,
+                        m_tiles,
+                        detail::tile_edge(m_density_radius, m_outlier_distance),
+                        m_wrappedCoordinates);
+    clue::copyToDevice(queue, dev_points, h_points);
+  }
+
+  template <std::floating_point InputType>
+  void setup_batch(Queue& queue,
+                   const clue::PointsHost<Ndim, InputType>& h_points,
+                   clue::PointsDevice<Ndim, value_type>& dev_points,
+                   std::size_t batch_size) {
+    detail::setup_tiles(queue,
+                        h_points,
+                        m_tiles,
+                        detail::tile_edge(m_density_radius, m_outlier_distance),
+                        m_wrappedCoordinates,
+                        batch_size);
+    clue::copyToDevice(queue, dev_points, h_points);
+  }
+
+  template <std::floating_point InputType>
+  void setup_batch(Queue& queue,
+                   clue::PointsDevice<Ndim, InputType>& dev_points,
+                   std::size_t batch_size) {
+    detail::setup_tiles(queue,
+                        dev_points,
+                        m_tiles,
+                        detail::tile_edge(m_density_radius, m_outlier_distance),
+                        m_wrappedCoordinates,
+                        batch_size);
+  }
+
+  template <std::floating_point InputType,
+            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
+  void make_clusters_impl(clue::PointsDevice<Ndim, InputType>& dev_points,
+                          const DistanceMetric& metric,
+                          const Kernel& kernel,
+                          Queue& queue);
+  template <std::floating_point InputType,
+            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
+  void make_clusters_batched(clue::PointsDevice<Ndim, InputType>& dev_points,
+                             std::span<const uint32_t> batch_item_sizes,
+                             const DistanceMetric& metric,
+                             const Kernel& kernel,
+                             Queue& queue);
+
+public:
+  /// @brief Constuct a Clusterer object
   ///
-  /// @tparam Ndim The number of dimensions of the points to cluster
-  /// @tparam DataType The data type for the point coordinates and weights, which must be a
-  /// floating-point type. By default, it is set to `float`.
-  template <std::size_t Ndim, std::floating_point DataType = float>
-  class Clusterer {
-  public:
-    using value_type = std::remove_cv_t<std::remove_reference_t<DataType>>;
+  /// @param density_radius Distance threshold for clustering.
+  /// @param min_density Density threshold for clustering
+  /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
+  /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
+  Clusterer(value_type density_radius,
+            value_type min_density,
+            std::optional<value_type> outlier_distance = std::nullopt,
+            std::optional<value_type> seeding_distance = std::nullopt);
+  /// @brief Constuct a Clusterer object
+  ///
+  /// @param queue The queue to use for the device operations
+  /// @param density_radius Distance threshold for clustering.
+  /// @param min_density Density threshold for clustering
+  /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
+  /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
+  Clusterer(Queue& queue,
+            value_type density_radius,
+            value_type min_density,
+            std::optional<value_type> outlier_distance = std::nullopt,
+            std::optional<value_type> seeding_distance = std::nullopt);
 
-  private:
-    value_type m_density_radius;
-    value_type m_seeding_distance;
-    value_type m_min_density;
-    value_type m_outlier_distance;
-    std::array<uint8_t, Ndim> m_wrappedCoordinates;
+  /// @brief Set the parameters for the clustering algorithm
+  ///
+  /// @param density_radius Distance threshold for clustering
+  /// @param min_density Density threshold for clustering
+  /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
+  /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
+  void setParameters(value_type density_radius,
+                     value_type min_density,
+                     std::optional<value_type> outlier_distance = std::nullopt,
+                     std::optional<value_type> seeding_distance = std::nullopt);
 
-    std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
-    std::optional<internal::SeedArray<>> m_seeds;
-    std::optional<internal::DeviceVector<>> m_event_associations;
-
-    template <std::floating_point InputType>
-    void setup(Queue& queue,
-               const clue::PointsHost<Ndim, InputType>& h_points,
-               clue::PointsDevice<Ndim, value_type>& dev_points) {
-      detail::setup_tiles(queue,
-                          h_points,
-                          m_tiles,
-                          detail::tile_edge(m_density_radius, m_outlier_distance),
-                          m_wrappedCoordinates);
-      clue::copyToDevice(queue, dev_points, h_points);
-    }
-
-    template <std::floating_point InputType>
-    void setup_batch(Queue& queue,
-                     const clue::PointsHost<Ndim, InputType>& h_points,
+  /// @brief Construct the clusters from host points
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @tparam Kernel The type of convolutional kernel to use
+  /// @tparam DistanceMetric The type of distance metric to use
+  /// @param queue The queue to use for the device operations
+  /// @param h_points Host points to cluster
+  /// @param metric The distance metric to use for clustering, default is EuclideanMetric
+  /// @param kernel The convolutional kernel to use for computing the local densities,
+  /// default is FlatKernel with height 0.5
+  template <std::floating_point InputType,
+            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
+  void make_clusters(Queue& queue,
+                     clue::PointsHost<Ndim, InputType>& h_points,
+                     const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
+                     const Kernel& kernel = FlatKernel<value_type>{.5f});
+  /// @brief Construct the clusters from host points
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @tparam Kernel The type of convolutional kernel to use
+  /// @tparam DistanceMetric The type of distance metric to use
+  /// @param h_points Host points to cluster
+  /// @param metric The distance metric to use for clustering, default is EuclideanMetric
+  /// @param kernel The convolutional kernel to use for computing the local densities,
+  /// default is FlatKernel with height 0.5
+  /// @note This method creates a temporary queue for the operations on the device
+  template <std::floating_point InputType,
+            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
+  void make_clusters(clue::PointsHost<Ndim, InputType>& h_points,
+                     const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
+                     const Kernel& kernel = FlatKernel<value_type>{.5f});
+  /// @brief Construct the clusters from host and device points
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @tparam Kernel The type of convolutional kernel to use
+  /// @tparam DistanceMetric The type of distance metric to use
+  /// @param queue The queue to use for the device operations
+  /// @param h_points Host points to cluster
+  /// @param dev_points Device points to cluster
+  /// @param metric The distance metric to use for clustering, default is EuclideanMetric
+  /// @param kernel The convolutional kernel to use for computing the local densities,
+  /// default is FlatKernel with height 0.5
+  template <std::floating_point InputType,
+            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
+  void make_clusters(Queue& queue,
+                     clue::PointsHost<Ndim, InputType>& h_points,
                      clue::PointsDevice<Ndim, value_type>& dev_points,
-                     std::size_t batch_size) {
-      detail::setup_tiles(queue,
-                          h_points,
-                          m_tiles,
-                          detail::tile_edge(m_density_radius, m_outlier_distance),
-                          m_wrappedCoordinates,
-                          batch_size);
-      clue::copyToDevice(queue, dev_points, h_points);
-    }
-
-    template <std::floating_point InputType>
-    void setup_batch(Queue& queue,
+                     const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
+                     const Kernel& kernel = FlatKernel<value_type>{.5f});
+  /// @brief Construct the clusters from device points
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @tparam Kernel The type of convolutional kernel to use
+  /// @tparam DistanceMetric The type of distance metric to use
+  /// @param queue The queue to use for the device operations
+  /// @param dev_points Device points to cluster
+  /// @param metric The distance metric to use for clustering, default is EuclideanMetric
+  /// @param kernel The convolutional kernel to use for computing the local densities,
+  /// default is FlatKernel with height 0.5
+  template <std::floating_point InputType,
+            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
+  void make_clusters(Queue& queue,
                      clue::PointsDevice<Ndim, InputType>& dev_points,
-                     std::size_t batch_size) {
-      detail::setup_tiles(queue,
-                          dev_points,
-                          m_tiles,
-                          detail::tile_edge(m_density_radius, m_outlier_distance),
-                          m_wrappedCoordinates,
-                          batch_size);
-    }
+                     const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
+                     const Kernel& kernel = FlatKernel<value_type>{.5f});
 
-    template <
-        std::floating_point InputType,
-        concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
-        concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-    void make_clusters_impl(clue::PointsDevice<Ndim, InputType>& dev_points,
-                            const DistanceMetric& metric,
-                            const Kernel& kernel,
-                            Queue& queue);
-    template <
-        std::floating_point InputType,
-        concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
-        concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-    void make_clusters_batched(clue::PointsDevice<Ndim, InputType>& dev_points,
-                               std::span<const uint32_t> batch_item_sizes,
-                               const DistanceMetric& metric,
-                               const Kernel& kernel,
-                               Queue& queue);
+  /// @brief Construct the clusters from batched host and device points
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @tparam Kernel The type of convolutional kernel to use
+  /// @tparam DistanceMetric The type of distance metric to use
+  /// @param queue The queue to use for the device operations
+  /// @param h_points Host points to cluster
+  /// @param dev_points Device points to cluster
+  /// @param batch_item_sizes Sizes of each batch item
+  /// @param metric The distance metric to use for clustering, default is EuclideanMetric
+  /// @param kernel The convolutional kernel to use for computing the local densities,
+  /// default is FlatKernel with height 0.5
+  /// @note The total size of h_points and dev_points must be equal to the sum of batch_item_sizes
+  template <std::floating_point InputType,
+            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
+  void make_clusters(Queue& queue,
+                     clue::PointsHost<Ndim, InputType>& h_points,
+                     clue::PointsDevice<Ndim, value_type>& dev_points,
+                     std::span<const uint32_t> batch_item_sizes,
+                     const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
+                     const Kernel& kernel = FlatKernel<value_type>{.5f});
 
-  public:
-    /// @brief Constuct a Clusterer object
-    ///
-    /// @param density_radius Distance threshold for clustering.
-    /// @param min_density Density threshold for clustering
-    /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
-    /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-    Clusterer(value_type density_radius,
-              value_type min_density,
-              std::optional<value_type> outlier_distance = std::nullopt,
-              std::optional<value_type> seeding_distance = std::nullopt);
-    /// @brief Constuct a Clusterer object
-    ///
-    /// @param queue The queue to use for the device operations
-    /// @param density_radius Distance threshold for clustering.
-    /// @param min_density Density threshold for clustering
-    /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
-    /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-    Clusterer(Queue& queue,
-              value_type density_radius,
-              value_type min_density,
-              std::optional<value_type> outlier_distance = std::nullopt,
-              std::optional<value_type> seeding_distance = std::nullopt);
+  /// @brief Construct the clusters from batched device points
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @tparam Kernel The type of convolutional kernel to use
+  /// @tparam DistanceMetric The type of distance metric to use
+  /// @param queue The queue to use for the device operations
+  /// @param dev_points Device points to cluster
+  /// @param batch_item_sizes Sizes of each batch item
+  /// @param metric The distance metric to use for clustering, default is EuclideanMetric
+  /// @param kernel The convolutional kernel to use for computing the local densities,
+  /// default is FlatKernel with height 0.5
+  /// @note The total size of h_points and dev_points must be equal to the sum of batch_item_sizes
+  template <std::floating_point InputType,
+            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
+  void make_clusters(Queue& queue,
+                     clue::PointsDevice<Ndim, InputType>& dev_points,
+                     std::span<const uint32_t> batch_item_sizes,
+                     const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
+                     const Kernel& kernel = FlatKernel<value_type>{.5f});
 
-    /// @brief Set the parameters for the clustering algorithm
-    ///
-    /// @param density_radius Distance threshold for clustering
-    /// @param min_density Density threshold for clustering
-    /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
-    /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-    void setParameters(value_type density_radius,
-                       value_type min_density,
-                       std::optional<value_type> outlier_distance = std::nullopt,
-                       std::optional<value_type> seeding_distance = std::nullopt);
+  /// @brief Specify which coordinates are periodic
+  ///
+  /// @param wrappedCoordinates Array of wrapped coordinates, where 1 means periodic and 0 means non-periodic
+  template <std::ranges::contiguous_range TRange>
+    requires std::integral<std::ranges::range_value_t<TRange>>
+  void setWrappedCoordinates(const TRange& wrapped_coordinates);
+  /// @brief Specify which coordinates are periodic
+  ///
+  /// @tparam TArgs Types of the wrapped coordinates, should be convertible to uint8_t
+  /// @param wrappedCoordinates Wrapped coordinates, where 1 means periodic and 0 means non-periodic
+  template <std::integral... TArgs>
+  void setWrappedCoordinates(TArgs... wrapped_coordinates);
 
-    /// @brief Construct the clusters from host points
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @tparam Kernel The type of convolutional kernel to use
-    /// @tparam DistanceMetric The type of distance metric to use
-    /// @param queue The queue to use for the device operations
-    /// @param h_points Host points to cluster
-    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities,
-    /// default is FlatKernel with height 0.5
-    template <
-        std::floating_point InputType,
-        concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
-        concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-    void make_clusters(Queue& queue,
-                       clue::PointsHost<Ndim, InputType>& h_points,
-                       const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f});
-    /// @brief Construct the clusters from host points
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @tparam Kernel The type of convolutional kernel to use
-    /// @tparam DistanceMetric The type of distance metric to use
-    /// @param h_points Host points to cluster
-    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities,
-    /// default is FlatKernel with height 0.5
-    /// @note This method creates a temporary queue for the operations on the device
-    template <
-        std::floating_point InputType,
-        concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
-        concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-    void make_clusters(clue::PointsHost<Ndim, InputType>& h_points,
-                       const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f});
-    /// @brief Construct the clusters from host and device points
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @tparam Kernel The type of convolutional kernel to use
-    /// @tparam DistanceMetric The type of distance metric to use
-    /// @param queue The queue to use for the device operations
-    /// @param h_points Host points to cluster
-    /// @param dev_points Device points to cluster
-    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities,
-    /// default is FlatKernel with height 0.5
-    template <
-        std::floating_point InputType,
-        concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
-        concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-    void make_clusters(Queue& queue,
-                       clue::PointsHost<Ndim, InputType>& h_points,
-                       clue::PointsDevice<Ndim, value_type>& dev_points,
-                       const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f});
-    /// @brief Construct the clusters from device points
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @tparam Kernel The type of convolutional kernel to use
-    /// @tparam DistanceMetric The type of distance metric to use
-    /// @param queue The queue to use for the device operations
-    /// @param dev_points Device points to cluster
-    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities,
-    /// default is FlatKernel with height 0.5
-    template <
-        std::floating_point InputType,
-        concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
-        concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-    void make_clusters(Queue& queue,
-                       clue::PointsDevice<Ndim, InputType>& dev_points,
-                       const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f});
+  /// @brief Get the list of seeds found in the last clustering run
+  ///
+  /// @return A span the the device array containing the seed indices
+  /// @note The values of this array are overwritten at each clustering run
+  std::span<const int32_t> getSeeds() const;
 
-    /// @brief Construct the clusters from batched host and device points
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @tparam Kernel The type of convolutional kernel to use
-    /// @tparam DistanceMetric The type of distance metric to use
-    /// @param queue The queue to use for the device operations
-    /// @param h_points Host points to cluster
-    /// @param dev_points Device points to cluster
-    /// @param batch_item_sizes Sizes of each batch item
-    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities,
-    /// default is FlatKernel with height 0.5
-    /// @note The total size of h_points and dev_points must be equal to the sum of batch_item_sizes
-    template <
-        std::floating_point InputType,
-        concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
-        concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-    void make_clusters(Queue& queue,
-                       clue::PointsHost<Ndim, InputType>& h_points,
-                       clue::PointsDevice<Ndim, value_type>& dev_points,
-                       std::span<const uint32_t> batch_item_sizes,
-                       const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f});
+  /// @brief Get the clusters from the host points
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @param h_points Host points
+  /// @return An associator mapping clusters and points
+  template <std::floating_point InputType>
+  AssociationMapHost getClusters(const clue::PointsHost<Ndim, InputType>& h_points);
+  /// @brief Get the clusters from the device points
+  /// This function returns an associator object mapping the clusters to the points they contain.
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @param d_points Device points
+  /// @return An associator mapping clusters and points
+  template <std::floating_point InputType>
+  AssociationMap<Device> getClusters(Queue& queue,
+                                     const clue::PointsDevice<Ndim, InputType>& d_points);
 
-    /// @brief Construct the clusters from batched device points
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @tparam Kernel The type of convolutional kernel to use
-    /// @tparam DistanceMetric The type of distance metric to use
-    /// @param queue The queue to use for the device operations
-    /// @param dev_points Device points to cluster
-    /// @param batch_item_sizes Sizes of each batch item
-    /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-    /// @param kernel The convolutional kernel to use for computing the local densities,
-    /// default is FlatKernel with height 0.5
-    /// @note The total size of h_points and dev_points must be equal to the sum of batch_item_sizes
-    template <
-        std::floating_point InputType,
-        concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
-        concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-    void make_clusters(Queue& queue,
-                       clue::PointsDevice<Ndim, InputType>& dev_points,
-                       std::span<const uint32_t> batch_item_sizes,
-                       const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                       const Kernel& kernel = FlatKernel<value_type>{.5f});
+  /// @brief Get the sample-to-cluster associations for batched clustering
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @param queue The queue to use for the device operations
+  /// @return A device buffer containing the event associations
+  template <std::floating_point InputType>
+  AssociationMapHost getSampleAssociations(Queue& queue,
+                                           clue::PointsHost<Ndim, InputType>& h_points);
+  /// @brief Get the sample-to-cluster associations for batched clustering
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @param queue The queue to use for the device operations
+  /// @return A device buffer containing the event associations
+  template <std::floating_point InputType>
+  AssociationMap<Device> getSampleAssociations(Queue& queue,
+                                               clue::PointsDevice<Ndim, InputType>& d_points);
+};
 
-    /// @brief Specify which coordinates are periodic
-    ///
-    /// @param wrappedCoordinates Array of wrapped coordinates, where 1 means periodic and 0 means non-periodic
-    template <std::ranges::contiguous_range TRange>
-      requires std::integral<std::ranges::range_value_t<TRange>>
-    void setWrappedCoordinates(const TRange& wrapped_coordinates);
-    /// @brief Specify which coordinates are periodic
-    ///
-    /// @tparam TArgs Types of the wrapped coordinates, should be convertible to uint8_t
-    /// @param wrappedCoordinates Wrapped coordinates, where 1 means periodic and 0 means non-periodic
-    template <std::integral... TArgs>
-    void setWrappedCoordinates(TArgs... wrapped_coordinates);
-
-    /// @brief Get the list of seeds found in the last clustering run
-    ///
-    /// @return A span the the device array containing the seed indices
-    /// @note The values of this array are overwritten at each clustering run
-    std::span<const int32_t> getSeeds() const;
-
-    /// @brief Get the clusters from the host points
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @param h_points Host points
-    /// @return An associator mapping clusters and points
-    template <std::floating_point InputType>
-    AssociationMapHost getClusters(const clue::PointsHost<Ndim, InputType>& h_points);
-    /// @brief Get the clusters from the device points
-    /// This function returns an associator object mapping the clusters to the points they contain.
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @param d_points Device points
-    /// @return An associator mapping clusters and points
-    template <std::floating_point InputType>
-    AssociationMap<Device> getClusters(Queue& queue,
-                                       const clue::PointsDevice<Ndim, InputType>& d_points);
-
-    /// @brief Get the sample-to-cluster associations for batched clustering
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @param queue The queue to use for the device operations
-    /// @return A device buffer containing the event associations
-    template <std::floating_point InputType>
-    AssociationMapHost getSampleAssociations(Queue& queue,
-                                             clue::PointsHost<Ndim, InputType>& h_points);
-    /// @brief Get the sample-to-cluster associations for batched clustering
-    ///
-    /// @tparam InputType The data type of the input points, which must be a floating-point type.
-    /// By default, it is set to `float`.
-    /// @param queue The queue to use for the device operations
-    /// @return A device buffer containing the event associations
-    template <std::floating_point InputType>
-    AssociationMap<Device> getSampleAssociations(Queue& queue,
-                                                 clue::PointsDevice<Ndim, InputType>& d_points);
-  };
-
-}  // namespace clue::inline CLUE_BACKEND
+CLUE_NAMESPACE_END
 
 #include "CLUEstering/core/detail/Clusterer.hpp"

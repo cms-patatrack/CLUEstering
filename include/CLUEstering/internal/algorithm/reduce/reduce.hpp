@@ -19,7 +19,8 @@
 #include <algorithm>
 #endif
 
-namespace clue::inline CLUE_BACKEND::internal::algorithm {
+CLUE_NAMESPACE_BEGIN
+namespace internal::algorithm {
 
   template <typename InputIterator>
   ALPAKA_FN_HOST inline constexpr typename std::iterator_traits<InputIterator>::value_type reduce(
@@ -162,4 +163,5 @@ namespace clue::inline CLUE_BACKEND::internal::algorithm {
 #endif
   }
 
-}  // namespace clue::inline CLUE_BACKEND::internal::algorithm
+}  // namespace internal::algorithm
+CLUE_NAMESPACE_END

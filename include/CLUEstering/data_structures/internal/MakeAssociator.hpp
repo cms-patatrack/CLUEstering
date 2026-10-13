@@ -10,7 +10,8 @@
 #include <limits>
 #include <span>
 
-namespace clue::inline CLUE_BACKEND::internal {
+CLUE_NAMESPACE_BEGIN
+namespace internal {
 
   template <clue::concepts::queue TQueue>
   inline auto make_associator(TQueue& queue,
@@ -43,4 +44,5 @@ namespace clue::inline CLUE_BACKEND::internal {
     return map;
   }
 
-}  // namespace clue::inline CLUE_BACKEND::internal
+}  // namespace internal
+CLUE_NAMESPACE_END

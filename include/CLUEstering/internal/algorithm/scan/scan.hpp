@@ -19,7 +19,8 @@
 #include <algorithm>
 #endif
 
-namespace clue::inline CLUE_BACKEND::internal::algorithm {
+CLUE_NAMESPACE_BEGIN
+namespace internal::algorithm {
 
   template <typename InputIterator, typename OutputIterator>
   ALPAKA_FN_HOST inline constexpr void inclusive_scan(InputIterator first,
@@ -299,4 +300,5 @@ namespace clue::inline CLUE_BACKEND::internal::algorithm {
 #endif
   }
 
-}  // namespace clue::inline CLUE_BACKEND::internal::algorithm
+}  // namespace internal::algorithm
+CLUE_NAMESPACE_END

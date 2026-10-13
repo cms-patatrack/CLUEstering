@@ -6,7 +6,8 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace clue::inline CLUE_BACKEND::nostd {
+CLUE_NAMESPACE_BEGIN
+namespace nostd {
 
   template <std::integral T>
   constexpr T pow(T base, std::size_t exp) {
@@ -17,4 +18,5 @@ namespace clue::inline CLUE_BACKEND::nostd {
     return result;
   }
 
-}  // namespace clue::inline CLUE_BACKEND::nostd
+}  // namespace nostd
+CLUE_NAMESPACE_END

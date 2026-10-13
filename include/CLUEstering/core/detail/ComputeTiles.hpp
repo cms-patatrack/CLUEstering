@@ -18,7 +18,8 @@
 #include <limits>
 #include <numeric>
 
-namespace clue::inline CLUE_BACKEND::detail {
+CLUE_NAMESPACE_BEGIN
+namespace detail {
 
   /// @brief An upper bound on the number of tiles per point
   ///
@@ -116,4 +117,5 @@ namespace clue::inline CLUE_BACKEND::detail {
     return grid;
   }
 
-}  // namespace clue::inline CLUE_BACKEND::detail
+}  // namespace detail
+CLUE_NAMESPACE_END

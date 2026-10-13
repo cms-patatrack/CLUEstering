@@ -14,7 +14,8 @@
 #include <alpaka/alpaka.hpp>
 #include <span>
 
-namespace clue::inline CLUE_BACKEND::internal {
+CLUE_NAMESPACE_BEGIN
+namespace internal {
 
   template <std::size_t Ndim, std::floating_point TData>
   struct TilesView {
@@ -116,4 +117,5 @@ namespace clue::inline CLUE_BACKEND::internal {
     }
   };
 
-}  // namespace clue::inline CLUE_BACKEND::internal
+}  // namespace internal
+CLUE_NAMESPACE_END

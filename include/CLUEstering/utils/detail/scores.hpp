@@ -15,89 +15,88 @@
 #include <ranges>
 #include <vector>
 
-namespace clue::inline CLUE_BACKEND {
+CLUE_NAMESPACE_BEGIN
 
-  namespace detail {
+namespace detail {
 
-    template <std::size_t Ndim, std::floating_point TData>
-    using Point = typename clue::PointsHost<Ndim, TData>::Point;
+  template <std::size_t Ndim, std::floating_point TData>
+  using Point = typename clue::PointsHost<Ndim, TData>::Point;
 
-    template <std::size_t Ndim, std::floating_point TData>
-    inline auto distance(const Point<Ndim, TData>& lhs, const Point<Ndim, TData>& rhs) {
-      auto dist = TData{0};
-      for (auto dim = 0u; dim < Ndim; ++dim) {
-        dist += (lhs[dim] - rhs[dim]) * (lhs[dim] - rhs[dim]);
-      }
-      return std::sqrt(dist);
+  template <std::size_t Ndim, std::floating_point TData>
+  inline auto distance(const Point<Ndim, TData>& lhs, const Point<Ndim, TData>& rhs) {
+    auto dist = TData{0};
+    for (auto dim = 0u; dim < Ndim; ++dim) {
+      dist += (lhs[dim] - rhs[dim]) * (lhs[dim] - rhs[dim]);
     }
-
-    template <std::size_t Ndim, std::floating_point TData>
-    inline auto silhouette(const clue::AssociationMapHost& clusters,
-                           const clue::PointsHost<Ndim, TData>& points,
-                           int point) {
-      auto a = TData{0};
-      std::vector<TData> b_values;
-      b_values.reserve(clusters.size() - 1);
-
-      a += std::accumulate(clusters.lower_bound(points[point].cluster_index()),
-                           clusters.upper_bound(points[point].cluster_index()),
-                           TData{0},
-                           [&](TData acc, int other_point) {
-                             if (other_point == point)
-                               return acc;
-                             return acc + detail::distance<Ndim, TData>(points[point],
-                                                                        points[other_point]);
-                           });
-      a /= static_cast<TData>(clusters.count(points[point].cluster_index()) - 1);
-      for (auto cluster_idx = 0; cluster_idx < static_cast<int32_t>(clusters.size());
-           ++cluster_idx) {
-        if (cluster_idx == points[point].cluster_index())
-          continue;
-        auto b = TData{0};
-        b += std::accumulate(clusters.lower_bound(cluster_idx),
-                             clusters.upper_bound(cluster_idx),
-                             TData{0},
-                             [&](TData acc, int other_point) {
-                               return acc + detail::distance<Ndim, TData>(points[point],
-                                                                          points[other_point]);
-                             });
-        b /= static_cast<TData>(clusters.count(cluster_idx));
-        b_values.push_back(b);
-      }
-      const auto b = std::reduce(b_values.begin(),
-                                 b_values.end(),
-                                 std::numeric_limits<TData>::max(),
-                                 [](auto acc, auto val) { return std::min(acc, val); });
-
-      return (b - a) / std::max(a, b);
-    }
-
-  }  // namespace detail
-
-  template <std::size_t Ndim>
-  inline auto silhouette(const clue::PointsHost<Ndim>& points, int point) {
-    const auto clusters = clue::get_clusters(points);
-
-    return detail::silhouette<Ndim>(clusters, points, point);
+    return std::sqrt(dist);
   }
 
   template <std::size_t Ndim, std::floating_point TData>
-  inline auto silhouette(const clue::PointsHost<Ndim, TData>& points) {
-    const auto clusters = clue::get_clusters(points);
-    std::vector<TData> scores;
-    auto valid_point = [&](int point) -> bool { return points[point].cluster_index() != -1; };
-    auto valid_cluster = [&](int point) -> bool {
-      return clusters.count(points[point].cluster_index()) >= 2;
-    };
-    auto compute_silhouette = [&](std::size_t point) -> TData {
-      return detail::silhouette(clusters, points, point);
-    };
-    std::ranges::copy(std::views::iota(0) | std::views::take(points.size()) |
-                          std::views::filter(valid_point) | std::views::filter(valid_cluster) |
-                          std::views::transform(compute_silhouette),
-                      std::back_inserter(scores));
+  inline auto silhouette(const clue::AssociationMapHost& clusters,
+                         const clue::PointsHost<Ndim, TData>& points,
+                         int point) {
+    auto a = TData{0};
+    std::vector<TData> b_values;
+    b_values.reserve(clusters.size() - 1);
 
-    return std::reduce(scores.begin(), scores.end(), TData{0}) / static_cast<TData>(scores.size());
+    a += std::accumulate(clusters.lower_bound(points[point].cluster_index()),
+                         clusters.upper_bound(points[point].cluster_index()),
+                         TData{0},
+                         [&](TData acc, int other_point) {
+                           if (other_point == point)
+                             return acc;
+                           return acc +
+                                  detail::distance<Ndim, TData>(points[point], points[other_point]);
+                         });
+    a /= static_cast<TData>(clusters.count(points[point].cluster_index()) - 1);
+    for (auto cluster_idx = 0; cluster_idx < static_cast<int32_t>(clusters.size()); ++cluster_idx) {
+      if (cluster_idx == points[point].cluster_index())
+        continue;
+      auto b = TData{0};
+      b += std::accumulate(clusters.lower_bound(cluster_idx),
+                           clusters.upper_bound(cluster_idx),
+                           TData{0},
+                           [&](TData acc, int other_point) {
+                             return acc + detail::distance<Ndim, TData>(points[point],
+                                                                        points[other_point]);
+                           });
+      b /= static_cast<TData>(clusters.count(cluster_idx));
+      b_values.push_back(b);
+    }
+    const auto b = std::reduce(b_values.begin(),
+                               b_values.end(),
+                               std::numeric_limits<TData>::max(),
+                               [](auto acc, auto val) { return std::min(acc, val); });
+
+    return (b - a) / std::max(a, b);
   }
 
-}  // namespace clue::inline CLUE_BACKEND
+}  // namespace detail
+
+template <std::size_t Ndim>
+inline auto silhouette(const clue::PointsHost<Ndim>& points, int point) {
+  const auto clusters = clue::get_clusters(points);
+
+  return detail::silhouette<Ndim>(clusters, points, point);
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline auto silhouette(const clue::PointsHost<Ndim, TData>& points) {
+  const auto clusters = clue::get_clusters(points);
+  std::vector<TData> scores;
+  auto valid_point = [&](int point) -> bool { return points[point].cluster_index() != -1; };
+  auto valid_cluster = [&](int point) -> bool {
+    return clusters.count(points[point].cluster_index()) >= 2;
+  };
+  auto compute_silhouette = [&](std::size_t point) -> TData {
+    return detail::silhouette(clusters, points, point);
+  };
+  std::ranges::copy(std::views::iota(0) | std::views::take(points.size()) |
+                        std::views::filter(valid_point) | std::views::filter(valid_cluster) |
+                        std::views::transform(compute_silhouette),
+                    std::back_inserter(scores));
+
+  return std::reduce(scores.begin(), scores.end(), TData{0}) / static_cast<TData>(scores.size());
+}
+
+CLUE_NAMESPACE_END

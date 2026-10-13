@@ -6,7 +6,8 @@
 #include <cassert>
 #include <alpaka/alpaka.hpp>
 
-namespace clue::inline CLUE_BACKEND::internal {
+CLUE_NAMESPACE_BEGIN
+namespace internal {
 
   template <std::size_t Ndim, typename TData = float>
   class CoordinateExtremes {
@@ -40,4 +41,5 @@ namespace clue::inline CLUE_BACKEND::internal {
     ALPAKA_FN_HOST_ACC auto range(int i) const { return max(i) - min(i); }
   };
 
-}  // namespace clue::inline CLUE_BACKEND::internal
+}  // namespace internal
+CLUE_NAMESPACE_END

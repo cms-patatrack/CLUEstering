@@ -188,35 +188,44 @@ namespace alpaka_threads_sync {
 // Set ALPAKA_BACKEND to the highest-priority enabled backend exactly once.
 // Alpaka always enables ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED alongside every
 // other CPU backend, so using a single elif chain avoids redefinition warnings.
-// CLUE_BACKEND names the inline namespace (clue::inline CLUE_BACKEND) that every
-// CLUEstering header opens, so translation units built for different backends get
-// distinct symbol names and can be linked into one program without ODR clashes.
+// CLUE_ABI_TAG names the backend-specific inline namespace opened by CLUE_NAMESPACE_BEGIN,
+// so translation units built for different backends get distinct symbol names and can be
+// linked into one program without ODR clashes.
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
 #define ALPAKA_BACKEND alpaka_cuda_async
-#define CLUE_BACKEND cuda
+#define CLUE_ABI_TAG backend_cuda
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
 #define ALPAKA_BACKEND alpaka_rocm_async
-#define CLUE_BACKEND hip
+#define CLUE_ABI_TAG backend_hip
 #elif defined(ALPAKA_ACC_SYCL_ENABLED) && defined(ALPAKA_SYCL_ONEAPI_GPU)
 #define ALPAKA_BACKEND alpaka_sycl_gpu
-#define CLUE_BACKEND sycl_gpu
+#define CLUE_ABI_TAG backend_sycl_gpu
 #elif defined(ALPAKA_ACC_SYCL_ENABLED) && defined(ALPAKA_SYCL_ONEAPI_CPU)
 #define ALPAKA_BACKEND alpaka_sycl_cpu
-#define CLUE_BACKEND sycl_cpu
+#define CLUE_ABI_TAG backend_sycl_cpu
 #elif defined(ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 #define ALPAKA_BACKEND alpaka_tbb_async
-#define CLUE_BACKEND tbb
+#define CLUE_ABI_TAG backend_tbb
 #elif defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
 #define ALPAKA_BACKEND alpaka_omp2_sync
-#define CLUE_BACKEND omp2
+#define CLUE_ABI_TAG backend_omp2
 #elif defined(ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED)
 #define ALPAKA_BACKEND alpaka_threads_sync
-#define CLUE_BACKEND threads
+#define CLUE_ABI_TAG backend_threads
 #elif defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 #define ALPAKA_BACKEND alpaka_serial_sync
-#define CLUE_BACKEND serial
+#define CLUE_ABI_TAG backend_serial
 #endif
 
-#ifndef CLUE_BACKEND
+#ifndef CLUE_ABI_TAG
 #error "CLUEstering: no alpaka backend enabled, define one ALPAKA_ACC_* macro"
 #endif
+
+// Open and close the CLUEstering namespace. All the code that depends on the backend must
+// be declared between these two macros, while users can keep referring to it as clue::
+#define CLUE_NAMESPACE_BEGIN \
+  namespace clue {           \
+    inline namespace CLUE_ABI_TAG {
+#define CLUE_NAMESPACE_END \
+  }                        \
+  }

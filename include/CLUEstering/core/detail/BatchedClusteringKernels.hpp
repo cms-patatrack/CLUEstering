@@ -24,7 +24,8 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace clue::inline CLUE_BACKEND::detail {
+CLUE_NAMESPACE_BEGIN
+namespace detail {
 
   struct KernelCalculateLocalDensityBatched {
     template <typename TAcc,
@@ -364,4 +365,5 @@ namespace clue::inline CLUE_BACKEND::detail {
                        max_event_size);
   }
 
-}  // namespace clue::inline CLUE_BACKEND::detail
+}  // namespace detail
+CLUE_NAMESPACE_END

@@ -8,14 +8,14 @@
 #include "CLUEstering/core/detail/defines.hpp"
 #include <alpaka/alpaka.hpp>
 
-namespace clue::inline CLUE_BACKEND {
+CLUE_NAMESPACE_BEGIN
 
-  /// @brief Get the alpaka device corresponding to a given index
-  ///
-  /// @param device_id The index of the device
-  /// @return The alpaka device corresponding to the given index
-  inline clue::Device get_device(uint32_t device_id) {
-    return alpaka::getDevByIdx(clue::Platform{}, device_id);
-  }
+/// @brief Get the alpaka device corresponding to a given index
+///
+/// @param device_id The index of the device
+/// @return The alpaka device corresponding to the given index
+inline clue::Device get_device(uint32_t device_id) {
+  return alpaka::getDevByIdx(clue::Platform{}, device_id);
+}
 
-}  // namespace clue::inline CLUE_BACKEND
+CLUE_NAMESPACE_END
