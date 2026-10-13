@@ -31,7 +31,7 @@ void run(TInput dc,
          const std::optional<std::span<uint32_t>>& batch_sample_sizes,
          int32_t n_points,
          const Kernel& kernel,
-         const clue::internal::MetricDescriptor<TInput>& metric_desc,
+         const clue::bindings::MetricDescriptor<TInput>& metric_desc,
          clue::Queue queue) {
   clue::Clusterer<Ndim, TInput> algo(queue, dc, rhoc, dm, seed_dc);
   algo.setWrappedCoordinates(std::move(wrapped));
@@ -78,7 +78,7 @@ namespace ALPAKA_BACKEND {
                std::optional<nb::ndarray<uint32_t, nb::numpy>> batch_sample_sizes,
                int32_t n_points,
                std::size_t device_id,
-               const clue::internal::MetricDescriptor<TInput>& metric_desc) {
+               const clue::bindings::MetricDescriptor<TInput>& metric_desc) {
     auto* pData = data.data();
     auto* pResults = results.data();
 

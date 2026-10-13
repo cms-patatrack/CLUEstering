@@ -10,7 +10,7 @@
 #include <concepts>
 #include <type_traits>
 
-namespace clue::inline CLUE_BACKEND {
+namespace clue {
 
   /// @brief The FlatKernel class implements a flat kernel for convolution.
   /// It returns a constant value for the kernel, regardless of the distance between points.
@@ -96,6 +96,10 @@ namespace clue::inline CLUE_BACKEND {
     /// @return The computed kernel value
     ALPAKA_FN_HOST_ACC auto operator()(value_type dist_ij, int point_id, int j) const;
   };
+
+}  // namespace clue
+
+namespace clue::inline CLUE_BACKEND {
 
   namespace concepts {
 

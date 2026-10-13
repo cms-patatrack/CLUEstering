@@ -18,7 +18,7 @@ NB_MODULE(CLUE_Convolutional_Kernels, m) {
   // ----- Distance metrics -----
   // MetricDescriptor<float> is an opaque handle; users obtain instances via the
   // factory functions below rather than constructing it directly.
-  using Descriptor = clue::internal::MetricDescriptor<float>;
+  using Descriptor = clue::bindings::MetricDescriptor<float>;
   using Tag = Descriptor::Tag;
 
   nb::class_<Descriptor>(m, "MetricDescriptor");
