@@ -45,6 +45,22 @@ if hip_found:   # pragma: no cover
     backends.append("gpu hip")
 
 
+_allowed_backends = ["cpu serial", "cpu tbb", "cpu openmp", "gpu cuda", "gpu hip"]
+
+
+def _validate_backend(backend: str) -> None:
+    """
+    Check that the backend name is one of the supported choices.
+
+    :param backend: Name of the backend to validate.
+    :type backend: str
+
+    :raises ValueError: If the backend is not valid.
+    """
+    if backend not in _allowed_backends:
+        raise ValueError(f"Invalid backend '{backend}'. Allowed choices are: {', '.join(_allowed_backends)}.")
+
+
 def is_tbb_available():
     """
     Check if the library is compiled with TBB support.
@@ -626,8 +642,11 @@ class clusterer:
         :param dimensions: Optional list of dimensions to consider. Defaults to None.
         :type dimensions: list[int] or None, optional
 
+        :raises ValueError: If the backend is not valid.
+
         :returns: None
         """
+        _validate_backend(backend)
         if dimensions is None:
             data = self.clust_data
         else:
@@ -664,8 +683,6 @@ class clusterer:
                 cluster_id_is_seed = gpu_hip.mainRun(*arguments)
             else:
                 print("HIP module not found. Please re-compile the library and try again.")
-        else:
-            raise ValueError(f"Invalid backend '{backend}'. Allowed choices are: cpu serial, cpu tbb, cpu openmp, gpu cuda, gpu hip.")
 
         finish = time.time_ns()
         cluster_ids = data.results
@@ -717,9 +734,11 @@ class clusterer:
         :return: Returns the clusterer object itself.
         :rtype: Clusterer
 
+        :raises ValueError: If the backend is not valid.
         :raises: Various exceptions if input data is invalid or clustering fails.
         """
 
+        _validate_backend(backend)
         self.read_data(data)
         self.run_clue(backend, batch_sample_sizes, device_id, verbose, dimensions)
         return self
@@ -752,9 +771,11 @@ class clusterer:
         :return: Array containing the cluster index for every point.
         :rtype: np.ndarray
 
+        :raises ValueError: If the backend is not valid.
         :raises: Various exceptions if input data is invalid or clustering fails.
         """
 
+        _validate_backend(backend)
         self.read_data(data)
         self.run_clue(backend, batch_sample_sizes, device_id, verbose, dimensions)
         return self.cluster_ids
