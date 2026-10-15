@@ -1,3 +1,7 @@
+"""
+Density based clustering algorithm developed at CERN.
+"""
+
 import sys
 from dataclasses import dataclass
 from glob import glob
