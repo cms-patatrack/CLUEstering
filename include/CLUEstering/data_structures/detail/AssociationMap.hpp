@@ -450,7 +450,7 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
                                 blocks_per_event);
 
   auto sizes_buffer = make_device_buffer<int32_t[]>(queue, m_extents.keys);
-  const auto workdiv = make_workdiv<TAcc>(size, blocksize);
+  const auto workdiv = make_workdiv<TAcc>(divide_up_by(size, blocksize), blocksize);
   alpaka::memset(queue, sizes_buffer, 0);
   alpaka::exec<TAcc>(queue,
                      workdiv,
