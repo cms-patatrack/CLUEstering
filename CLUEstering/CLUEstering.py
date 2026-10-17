@@ -61,6 +61,26 @@ def _validate_backend(backend: str) -> None:
         raise ValueError(f"Invalid backend '{backend}'. Allowed choices are: {', '.join(_allowed_backends)}.")
 
 
+def _check_backend_available(backend: str) -> None:
+    """
+    Check that the requested backend is compiled into the library.
+
+    :param backend: Name of the backend to check.
+    :type backend: str
+
+    :raises RuntimeError: If the backend is valid but the library was not compiled with support for it.
+    """
+    available = {"cpu serial": True,
+                 "cpu tbb": tbb_found,
+                 "cpu openmp": omp_found,
+                 "gpu cuda": cuda_found,
+                 "gpu hip": hip_found}
+    if not available[backend]:
+        raise RuntimeError(f"The '{backend}' backend is not available: the library was not compiled "
+                           f"with support for it. Compiled backends: {', '.join(backends)}. "
+                           "Please re-compile the library to enable it.")
+
+
 def is_tbb_available():
     """
     Check if the library is compiled with TBB support.
@@ -643,10 +663,12 @@ class clusterer:
         :type dimensions: list[int] or None, optional
 
         :raises ValueError: If the backend is not valid.
+        :raises RuntimeError: If the backend is valid but not compiled into the library.
 
         :returns: None
         """
         _validate_backend(backend)
+        _check_backend_available(backend)
         if dimensions is None:
             data = self.clust_data
         else:
@@ -664,25 +686,13 @@ class clusterer:
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(*arguments)
         elif backend == "cpu tbb":  # pragma: no cover
-            if tbb_found:   
-                cluster_id_is_seed = cpu_tbb.mainRun(*arguments)
-            else:
-                print("TBB module not found. Please re-compile the library and try again.")
+            cluster_id_is_seed = cpu_tbb.mainRun(*arguments)
         elif backend == "cpu openmp":   # pragma: no cover
-            if omp_found:   
-                cluster_id_is_seed = cpu_omp.mainRun(*arguments)
-            else:
-                print("OpenMP module not found. Please re-compile the library and try again.")
+            cluster_id_is_seed = cpu_omp.mainRun(*arguments)
         elif backend == "gpu cuda":     # pragma: no cover
-            if cuda_found:  
-                cluster_id_is_seed = gpu_cuda.mainRun(*arguments)
-            else:
-                print("CUDA module not found. Please re-compile the library and try again.")
+            cluster_id_is_seed = gpu_cuda.mainRun(*arguments)
         elif backend == "gpu hip":      # pragma: no cover
-            if hip_found:
-                cluster_id_is_seed = gpu_hip.mainRun(*arguments)
-            else:
-                print("HIP module not found. Please re-compile the library and try again.")
+            cluster_id_is_seed = gpu_hip.mainRun(*arguments)
 
         finish = time.time_ns()
         cluster_ids = data.results
