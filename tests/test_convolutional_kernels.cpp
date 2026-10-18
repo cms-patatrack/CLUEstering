@@ -1,5 +1,5 @@
 
-#include "CLUEstering/core/ConvolutionalKernel.hpp"
+#include "CLUEstering/CLUEstering.hpp"
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>

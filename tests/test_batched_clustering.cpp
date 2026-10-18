@@ -1,6 +1,13 @@
 
 #include "CLUEstering/CLUEstering.hpp"
-#include "CLUEstering/utils/detail/get_cluster_properties.hpp"
+
+#include <alpaka/alpaka.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <optional>
+#include <span>
+#include <string>
+#include <vector>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>

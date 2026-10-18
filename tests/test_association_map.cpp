@@ -1,14 +1,16 @@
 
 #if !defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && !defined(ALPAKA_ACC_GPU_HIP_ENABLED)
 
-#include "CLUEstering/core/detail/defines.hpp"
-#include "CLUEstering/data_structures/PointsHost.hpp"
+#include "CLUEstering/CLUEstering.hpp"
 #include "CLUEstering/data_structures/internal/MakeAssociator.hpp"
 
-#include <numeric>
+#include <algorithm>
+#include <alpaka/alpaka.hpp>
+#include <cstdint>
+#include <iterator>
 #include <ranges>
 #include <span>
-#include <vector>
+#include <utility>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
