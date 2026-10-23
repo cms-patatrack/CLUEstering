@@ -45,12 +45,13 @@ namespace detail {
       tiles->reset(npoints, grid, batch_size);
     }
 
-    auto tile_sizes = clue::make_host_buffer<TData[Ndim]>(queue);
+    auto tile_sizes = alpaka::allocMappedBuf<TData>(host, alpaka::PlatformCpu{}, Ndim);
     std::copy(grid.tilesizes.begin(), grid.tilesizes.end(), tile_sizes.data());
 
-    alpaka::memcpy(queue, tiles->minMax(), clue::make_host_view(min_max));
+    alpaka::memcpy(queue, tiles->minMax(), alpaka::createView(host, &min_max, Scalar{}));
     alpaka::memcpy(queue, tiles->tileSize(), tile_sizes);
-    alpaka::memcpy(queue, tiles->wrapped(), clue::make_host_view(wrapped_coordinates.data(), Ndim));
+    alpaka::memcpy(
+        queue, tiles->wrapped(), alpaka::createView(host, wrapped_coordinates.data(), Ndim));
     alpaka::wait(queue);
   }
 
@@ -65,7 +66,8 @@ namespace detail {
                    const std::array<uint8_t, Ndim>& wrapped_coordinates,
                    std::size_t batch_size = 1) {
     auto min_max =
-        clue::make_host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(queue);
+        alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
+            host, alpaka::PlatformCpu{}, Scalar{});
     detail::compute_extents(min_max.data(), points);
     setup_tiles_from_extents(
         queue, points.size(), *min_max.data(), tiles, tile_edge, wrapped_coordinates, batch_size);
@@ -82,7 +84,8 @@ namespace detail {
                    const std::array<uint8_t, Ndim>& wrapped_coordinates,
                    std::size_t batch_size = 1) {
     auto min_max =
-        clue::make_host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(queue);
+        alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
+            host, alpaka::PlatformCpu{}, Scalar{});
     detail::compute_extents(min_max.data(), points);
     setup_tiles_from_extents(
         queue, points.size(), *min_max.data(), tiles, tile_edge, wrapped_coordinates, batch_size);

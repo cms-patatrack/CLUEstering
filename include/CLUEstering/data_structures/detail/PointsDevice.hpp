@@ -27,7 +27,7 @@ CLUE_NAMESPACE_BEGIN
 template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
 template <concepts::queue TQueue>
 inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue, int32_t n_points)
-    : m_buffer{make_device_buffer<std::byte[]>(
+    : m_buffer{alpaka::allocAsyncBuf<std::byte>(
           queue, soa::device::computeSoASize<Ndim, value_type>(n_points))},
       m_view{},
       m_size{n_points} {
@@ -39,7 +39,7 @@ template <concepts::queue TQueue>
 inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
                                                      int32_t n_points,
                                                      std::span<std::byte> buffer)
-    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), buffer.data(), n_points);
@@ -51,7 +51,7 @@ inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
                                                      int32_t n_points,
                                                      std::span<element_type> input,
                                                      std::span<int> output)
-    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, input, output);
@@ -64,7 +64,7 @@ inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
                                                      std::span<element_type> coordinates,
                                                      std::span<element_type> weights,
                                                      std::span<int> output)
-    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, coordinates, weights, output);
@@ -76,7 +76,7 @@ inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
                                                      int32_t n_points,
                                                      element_type* input,
                                                      int* output)
-    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, input, output);
@@ -86,7 +86,7 @@ template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
 template <concepts::queue TQueue>
 inline PointsDevice<Ndim, TData, TDev>::PointsDevice(
     TQueue& queue, int32_t n_points, element_type* coordinates, element_type* weights, int* output)
-    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, coordinates, weights, output);
@@ -98,7 +98,7 @@ template <concepts::queue TQueue, concepts::pointer... TBuffers>
 inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
                                                      int32_t n_points,
                                                      TBuffers... buffers)
-    : m_buffer{make_device_buffer<std::byte[]>(queue, 3 * n_points * sizeof(value_type))},
+    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, buffers...);

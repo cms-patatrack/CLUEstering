@@ -18,7 +18,7 @@ TEST_CASE("Test binary association map") {
   clue::Queue queue(host);
 
   const int32_t size = 1000;
-  auto associations = clue::make_host_buffer<int32_t[]>(queue, size);
+  auto associations = alpaka::allocMappedBuf<int32_t>(clue::host, alpaka::PlatformCpu{}, size);
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
   auto map =
@@ -70,7 +70,7 @@ TEST_CASE("Test throwing conditions") {
   clue::Queue queue(host);
 
   const int32_t size = 1000;
-  auto associations = clue::make_host_buffer<int32_t[]>(queue, size);
+  auto associations = alpaka::allocMappedBuf<int32_t>(clue::host, alpaka::PlatformCpu{}, size);
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
 
@@ -124,7 +124,7 @@ TEST_CASE("Test throwing conditions") {
 TEST_CASE("Test binary AssociationMapHost") {
   const int32_t size = 1000;
 
-  auto associations = clue::make_host_buffer<int32_t[]>(size);
+  auto associations = alpaka::allocBuf<int32_t>(clue::host, size);
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
   auto map = clue::internal::make_associator(std::span<int32_t>(associations.data(), size), size);

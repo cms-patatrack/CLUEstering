@@ -40,9 +40,9 @@ namespace internal {
           const TileGrid<Ndim, value_type>& grid,
           std::size_t batch_size = 1)
         : m_assoc{AssociationMap<TDev>(n_points, grid.ntiles * batch_size, queue)},
-          m_minmax{make_device_buffer<CoordinateExtremes<Ndim, value_type>>(queue)},
-          m_tilesizes{make_device_buffer<value_type[Ndim]>(queue)},
-          m_wrapped{make_device_buffer<uint8_t[Ndim]>(queue)},
+          m_minmax{alpaka::allocAsyncBuf<CoordinateExtremes<Ndim, value_type>>(queue, Scalar{})},
+          m_tilesizes{alpaka::allocAsyncBuf<value_type>(queue, Ndim)},
+          m_wrapped{alpaka::allocAsyncBuf<uint8_t>(queue, Ndim)},
           m_ntiles{grid.ntiles},
           m_batch_size{batch_size},
           m_view{} {

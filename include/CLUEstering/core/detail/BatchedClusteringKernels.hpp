@@ -266,7 +266,7 @@ namespace detail {
                                            const auto& event_offsets,
                                            std::size_t max_event_size,
                                            std::size_t block_size) {
-    auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
+    auto d_seed_candidates = alpaka::allocAsyncBuf<std::size_t>(queue, Scalar{});
     alpaka::memset(queue, d_seed_candidates, 0u);
 
     const auto blocks_per_event = nostd::ceil_div(max_event_size, block_size);
@@ -286,7 +286,7 @@ namespace detail {
                        event_offsets.data(),
                        max_event_size,
                        blocks_per_event);
-    alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
+    alpaka::memcpy(queue, alpaka::createView(host, &seed_candidates, Scalar{}), d_seed_candidates);
     alpaka::wait(queue);
   }
 
@@ -324,15 +324,13 @@ namespace detail {
                        batches_reordered.view(),
                        num_seeds);
 
-    alpaka::memcpy(
-        queue,
-        clue::make_device_view(alpaka::getDev(queue), seeds.data(), num_seeds),
-        clue::make_device_view(alpaka::getDev(queue), seeds_reordered.data(), num_seeds));
+    alpaka::memcpy(queue,
+                   alpaka::createView(queue, seeds.data(), num_seeds),
+                   alpaka::createView(queue, seeds_reordered.data(), num_seeds));
 
-    alpaka::memcpy(
-        queue,
-        clue::make_device_view(alpaka::getDev(queue), batch_association.data(), num_seeds),
-        clue::make_device_view(alpaka::getDev(queue), batches_reordered.data(), num_seeds));
+    alpaka::memcpy(queue,
+                   alpaka::createView(queue, batch_association.data(), num_seeds),
+                   alpaka::createView(queue, batches_reordered.data(), num_seeds));
 
     alpaka::wait(queue);
   }

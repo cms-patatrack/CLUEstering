@@ -43,11 +43,11 @@ ALPAKA_FN_HOST bool compareDevicePoints(clue::Queue queue,
   clue::copyToDevice(queue, d_points, h_points);
 
   // define buffers for comparison
-  auto d_input = clue::make_device_buffer<float[]>(queue, (Ndim + 1) * size);
+  auto d_input = alpaka::allocAsyncBuf<float>(queue, (Ndim + 1) * size);
   alpaka::memcpy(
-      queue, d_input, clue::make_host_view(h_points.coords(0).data(), (Ndim + 1) * size));
+      queue, d_input, alpaka::createView(clue::host, h_points.coords(0).data(), (Ndim + 1) * size));
 
-  auto d_comparison_result = clue::make_device_buffer<int>(queue);
+  auto d_comparison_result = alpaka::allocAsyncBuf<int>(queue, clue::Scalar{});
   const auto blocksize = 512;
   const auto gridsize = clue::divide_up_by(size, blocksize);
   auto work_division = clue::make_workdiv<clue::internal::Acc>(gridsize, blocksize);
@@ -59,7 +59,8 @@ ALPAKA_FN_HOST bool compareDevicePoints(clue::Queue queue,
                                     size,
                                     d_comparison_result.data());
   int comparison = 1;
-  alpaka::memcpy(queue, clue::make_host_view<int>(comparison), d_comparison_result);
+  alpaka::memcpy(
+      queue, alpaka::createView(clue::host, &comparison, clue::Scalar{}), d_comparison_result);
   alpaka::wait(queue);
 
   return static_cast<bool>(comparison);
@@ -87,7 +88,7 @@ TEST_CASE("Test device points with external allocation of whole buffer") {
 
   const uint32_t size = 1000;
   const auto bytes = clue::soa::device::computeSoASize<2, float>(size);
-  auto buffer = clue::make_device_buffer<std::byte[]>(queue, bytes);
+  auto buffer = alpaka::allocAsyncBuf<std::byte>(queue, bytes);
 
   clue::PointsDevice<2> d_points(queue, size, std::span(buffer.data(), bytes));
 
@@ -105,8 +106,8 @@ TEST_CASE("Test device points with external allocation passing the two buffers a
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  auto input = clue::make_device_buffer<float[]>(queue, 3 * size);
-  auto output = clue::make_device_buffer<int[]>(queue, 2 * size);
+  auto input = alpaka::allocAsyncBuf<float>(queue, 3 * size);
+  auto output = alpaka::allocAsyncBuf<int>(queue, 2 * size);
 
   clue::PointsDevice<2> d_points(
       queue, size, std::span{input.data(), 3 * size}, std::span{output.data(), 2 * size});
@@ -124,8 +125,8 @@ TEST_CASE("Test device points with external allocation passing the two buffers a
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  auto input = clue::make_device_buffer<float[]>(queue, 3 * size);
-  auto output = clue::make_device_buffer<int[]>(queue, 2 * size);
+  auto input = alpaka::allocAsyncBuf<float>(queue, 3 * size);
+  auto output = alpaka::allocAsyncBuf<int>(queue, 2 * size);
 
   clue::PointsDevice<2> d_points(queue, size, input.data(), output.data());
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -142,9 +143,9 @@ TEST_CASE("Test device points with external allocation passing four buffers as s
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  auto coords = clue::make_device_buffer<float[]>(queue, 2 * size);
-  auto weights = clue::make_device_buffer<float[]>(queue, size);
-  auto cluster_ids = clue::make_device_buffer<int[]>(queue, size);
+  auto coords = alpaka::allocAsyncBuf<float>(queue, 2 * size);
+  auto weights = alpaka::allocAsyncBuf<float>(queue, size);
+  auto cluster_ids = alpaka::allocAsyncBuf<int>(queue, size);
 
   clue::PointsDevice<2> d_points(queue,
                                  size,
@@ -165,9 +166,9 @@ TEST_CASE("Test device points with external allocation passing four buffers as p
   clue::Queue queue(device);
 
   const uint32_t size = 1000;
-  auto coords = clue::make_device_buffer<float[]>(queue, 2 * size);
-  auto weights = clue::make_device_buffer<float[]>(queue, size);
-  auto cluster_ids = clue::make_device_buffer<int[]>(queue, size);
+  auto coords = alpaka::allocAsyncBuf<float>(queue, 2 * size);
+  auto weights = alpaka::allocAsyncBuf<float>(queue, size);
+  auto cluster_ids = alpaka::allocAsyncBuf<int>(queue, size);
 
   clue::PointsDevice<2> d_points(queue, size, coords.data(), weights.data(), cluster_ids.data());
   auto to_float = [](int i) -> float { return static_cast<float>(i); };
@@ -184,13 +185,13 @@ TEST_CASE("Test const device points") {
 
   const auto size = 1000u;
   SUBCASE("Two external buffers") {
-    auto h_input = clue::make_host_buffer<float[]>(queue, 3 * size);
-    auto h_output = clue::make_host_buffer<int[]>(queue, size);
+    auto h_input = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, 3 * size);
+    auto h_output = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
     std::iota(h_input.data(), h_input.data() + 3 * size, 0.f);
     std::fill(h_output.data(), h_output.data() + size, 1);
 
-    auto d_input = clue::make_device_buffer<float[]>(queue, 3 * size);
-    auto d_output = clue::make_device_buffer<int[]>(queue, size);
+    auto d_input = alpaka::allocAsyncBuf<float>(queue, 3 * size);
+    auto d_output = alpaka::allocAsyncBuf<int>(queue, size);
     alpaka::memcpy(queue, d_input, h_input);
     alpaka::memcpy(queue, d_output, h_output);
     alpaka::wait(queue);
@@ -202,16 +203,16 @@ TEST_CASE("Test const device points") {
     CHECK(true);
   }
   SUBCASE("Three external buffers") {
-    auto h_coords = clue::make_host_buffer<float[]>(queue, 2 * size);
-    auto h_weights = clue::make_host_buffer<float[]>(queue, size);
-    auto h_cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+    auto h_coords = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, 2 * size);
+    auto h_weights = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
+    auto h_cluster_ids = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
     std::iota(h_coords.data(), h_coords.data() + 2 * size, 0.f);
     std::fill(h_weights.data(), h_weights.data() + size, 1.f);
     std::fill(h_cluster_ids.data(), h_cluster_ids.data() + size, 1);
 
-    auto d_coords = clue::make_device_buffer<float[]>(queue, 2 * size);
-    auto d_weights = clue::make_device_buffer<float[]>(queue, size);
-    auto d_cluster_ids = clue::make_device_buffer<int[]>(queue, size);
+    auto d_coords = alpaka::allocAsyncBuf<float>(queue, 2 * size);
+    auto d_weights = alpaka::allocAsyncBuf<float>(queue, size);
+    auto d_cluster_ids = alpaka::allocAsyncBuf<int>(queue, size);
     alpaka::memcpy(queue, d_coords, h_coords);
     alpaka::memcpy(queue, d_weights, h_weights);
     alpaka::memcpy(queue, d_cluster_ids, h_cluster_ids);
@@ -228,19 +229,19 @@ TEST_CASE("Test const device points") {
     CHECK(true);
   }
   SUBCASE("Four external buffers") {
-    auto h_x0 = clue::make_host_buffer<float[]>(queue, size);
-    auto h_x1 = clue::make_host_buffer<float[]>(queue, size);
-    auto h_weights = clue::make_host_buffer<float[]>(queue, size);
-    auto h_cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+    auto h_x0 = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
+    auto h_x1 = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
+    auto h_weights = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
+    auto h_cluster_ids = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
     std::iota(h_x0.data(), h_x0.data() + size, 0.f);
     std::iota(h_x1.data(), h_x1.data() + size, 1000.f);
     std::fill(h_weights.data(), h_weights.data() + size, 1.f);
     std::fill(h_cluster_ids.data(), h_cluster_ids.data() + size, -1);
 
-    auto d_x0 = clue::make_device_buffer<float[]>(queue, size);
-    auto d_x1 = clue::make_device_buffer<float[]>(queue, size);
-    auto d_weights = clue::make_device_buffer<float[]>(queue, size);
-    auto d_cluster_ids = clue::make_device_buffer<int[]>(queue, size);
+    auto d_x0 = alpaka::allocAsyncBuf<float>(queue, size);
+    auto d_x1 = alpaka::allocAsyncBuf<float>(queue, size);
+    auto d_weights = alpaka::allocAsyncBuf<float>(queue, size);
+    auto d_cluster_ids = alpaka::allocAsyncBuf<int>(queue, size);
     alpaka::memcpy(queue, d_x0, h_x0);
     alpaka::memcpy(queue, d_x1, h_x1);
     alpaka::memcpy(queue, d_weights, h_weights);
@@ -273,8 +274,9 @@ TEST_CASE("Test extrema functions on device points column") {
   auto max_it =
       clue::internal::algorithm::max_element(d_points.weights().begin(), d_points.weights().end());
   auto max = 0.f;
-  alpaka::memcpy(
-      queue, clue::make_host_view(max), clue::make_device_view(alpaka::getDev(queue), *max_it));
+  alpaka::memcpy(queue,
+                 alpaka::createView(clue::host, &max, clue::Scalar{}),
+                 alpaka::createView(queue, &(*max_it), clue::Scalar{}));
   alpaka::wait(queue);
   CHECK(max == static_cast<float>(size - 1));
 }
@@ -332,10 +334,9 @@ TEST_CASE("Test point tags") {
 
   auto read_back_tags = [&](clue::PointsDevice<2>& d_points) {
     std::vector<std::uint32_t> readback(size);
-    alpaka::memcpy(
-        queue,
-        clue::make_host_view(readback.data(), size),
-        clue::make_device_view(alpaka::getDev(queue), d_points.view().tags().data(), size));
+    alpaka::memcpy(queue,
+                   alpaka::createView(clue::host, readback.data(), size),
+                   alpaka::createView(queue, d_points.view().tags().data(), size));
     alpaka::wait(queue);
     return readback;
   };
@@ -348,8 +349,8 @@ TEST_CASE("Test point tags") {
   SUBCASE("Set directly on device points") {
     clue::PointsDevice<2> d_points(queue, size);
 
-    auto d_tags = clue::make_device_buffer<std::uint32_t[]>(queue, size);
-    alpaka::memcpy(queue, d_tags, clue::make_host_view(h_tags.data(), size));
+    auto d_tags = alpaka::allocAsyncBuf<std::uint32_t>(queue, size);
+    alpaka::memcpy(queue, d_tags, alpaka::createView(clue::host, h_tags.data(), size));
     alpaka::wait(queue);
 
     d_points.set_tags(std::span<std::uint32_t>{d_tags.data(), size});

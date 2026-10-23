@@ -28,21 +28,20 @@ inline void to_dot(TQueue& queue,
   }
 
   const auto n_points = d_points.size();
-  const auto& dev = alpaka::getDev(queue);
 
-  auto h_cluster_index = make_host_buffer<int32_t[]>(queue, n_points);
-  auto h_nearest_higher = make_host_buffer<int32_t[]>(queue, n_points);
-  auto h_is_seed = make_host_buffer<int32_t[]>(queue, n_points);
+  auto h_cluster_index = alpaka::allocMappedBuf<int32_t>(host, alpaka::PlatformCpu{}, n_points);
+  auto h_nearest_higher = alpaka::allocMappedBuf<int32_t>(host, alpaka::PlatformCpu{}, n_points);
+  auto h_is_seed = alpaka::allocMappedBuf<int32_t>(host, alpaka::PlatformCpu{}, n_points);
 
   alpaka::memcpy(queue,
-                 make_host_view(h_cluster_index.data(), n_points),
-                 make_device_view(dev, d_points.view().m_cluster_index, n_points));
+                 alpaka::createView(host, h_cluster_index.data(), n_points),
+                 alpaka::createView(queue, d_points.view().m_cluster_index, n_points));
   alpaka::memcpy(queue,
-                 make_host_view(h_nearest_higher.data(), n_points),
-                 make_device_view(dev, d_points.view().m_nearest_higher, n_points));
+                 alpaka::createView(host, h_nearest_higher.data(), n_points),
+                 alpaka::createView(queue, d_points.view().m_nearest_higher, n_points));
   alpaka::memcpy(queue,
-                 make_host_view(h_is_seed.data(), n_points),
-                 make_device_view(dev, d_points.view().m_is_seed, n_points));
+                 alpaka::createView(host, h_is_seed.data(), n_points),
+                 alpaka::createView(queue, d_points.view().m_is_seed, n_points));
   alpaka::wait(queue);
 
   std::ofstream file(file_path);
