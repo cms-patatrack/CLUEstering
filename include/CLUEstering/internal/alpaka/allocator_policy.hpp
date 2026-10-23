@@ -24,11 +24,7 @@ constexpr inline AllocatorPolicy allocator_policy<alpaka::DevCpu> = AllocatorPol
 #if defined ALPAKA_ACC_GPU_CUDA_ENABLED
 template <>
 constexpr inline AllocatorPolicy allocator_policy<alpaka::DevCudaRt> =
-#if CUDA_VERSION >= 11020 && !defined ALPAKA_DISABLE_ASYNC_ALLOCATOR
     AllocatorPolicy::Asynchronous;
-#else
-    AllocatorPolicy::Synchronous;
-#endif
 #endif  // ALPAKA_ACC_GPU_CUDA_ENABLED
 
 #if defined ALPAKA_ACC_GPU_HIP_ENABLED
