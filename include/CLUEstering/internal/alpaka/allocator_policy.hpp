@@ -33,7 +33,7 @@ constexpr inline AllocatorPolicy allocator_policy<alpaka::DevCudaRt> =
 
 #if defined ALPAKA_ACC_GPU_HIP_ENABLED
 template <>
-constexpr inline AllocatorPolicy allocator_policy<alpaka::DevHipRt> = AllocatorPolicy::Synchronous;
+constexpr inline AllocatorPolicy allocator_policy<alpaka::DevHipRt> = AllocatorPolicy::Asynchronous;
 #endif  // ALPAKA_ACC_GPU_HIP_ENABLED
 
 #if defined ALPAKA_SYCL_ONEAPI_CPU
