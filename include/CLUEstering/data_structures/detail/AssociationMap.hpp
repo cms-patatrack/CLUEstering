@@ -2,15 +2,17 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/AssociationMapView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/algorithm/scan/scan.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <cassert>
+#include <cstdint>
 #include <span>
 #include <stdexcept>
 
@@ -86,8 +88,8 @@ namespace detail {
 template <concepts::device TDev>
 inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins)
   requires std::same_as<TDev, alpaka::DevCpu>
-    : m_indexes{make_host_buffer<mapped_type[]>(nelements)},
-      m_offsets{make_host_buffer<key_type[]>(nbins + 1)},
+    : m_indexes{alpaka::allocMappedBuf<mapped_type>(host, alpaka::PlatformCpu{}, nelements)},
+      m_offsets{alpaka::allocMappedBuf<key_type>(host, alpaka::PlatformCpu{}, nbins + 1)},
       m_view{},
       m_extents{nbins, nelements} {
   m_view.m_indexes = m_indexes.data();
@@ -100,8 +102,8 @@ inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins
 template <concepts::device TDev>
 template <concepts::queue TQueue>
 inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins, TQueue& queue)
-    : m_indexes{make_device_buffer<mapped_type[]>(queue, nelements)},
-      m_offsets{make_device_buffer<key_type[]>(queue, nbins + 1)},
+    : m_indexes{alpaka::allocAsyncBuf<mapped_type>(queue, nelements)},
+      m_offsets{alpaka::allocAsyncBuf<key_type>(queue, nbins + 1)},
       m_view{},
       m_extents{nbins, nelements} {
   m_view.m_indexes = m_indexes.data();
@@ -267,8 +269,8 @@ template <concepts::device TDev>
 inline ALPAKA_FN_HOST void AssociationMap<TDev>::initialize(size_type nelements, size_type nbins)
   requires std::same_as<TDev, alpaka::DevCpu>
 {
-  m_indexes = make_host_buffer<int32_t[]>(nelements);
-  m_offsets = make_host_buffer<int32_t[]>(nbins + 1);
+  m_indexes = alpaka::allocMappedBuf<int32_t>(host, alpaka::PlatformCpu{}, nelements);
+  m_offsets = alpaka::allocMappedBuf<int32_t>(host, alpaka::PlatformCpu{}, nbins + 1);
   m_extents = {nbins, nelements};
 
   m_view.m_indexes = m_indexes.data();
@@ -281,8 +283,8 @@ template <concepts::queue TQueue>
 inline ALPAKA_FN_HOST void AssociationMap<TDev>::initialize(size_type nelements,
                                                             size_type nbins,
                                                             TQueue& queue) {
-  m_indexes = make_device_buffer<int32_t[]>(queue, nelements);
-  m_offsets = make_device_buffer<int32_t[]>(queue, nbins + 1);
+  m_indexes = alpaka::allocAsyncBuf<int32_t>(queue, nelements);
+  m_offsets = alpaka::allocAsyncBuf<int32_t>(queue, nbins + 1);
   m_extents = {nbins, nelements};
 
   m_view.m_indexes = m_indexes.data();
@@ -321,7 +323,7 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size, TFunc func
   if (m_extents.keys == 0)
     return;
 
-  auto bin_buffer = make_device_buffer<int32_t[]>(queue, size);
+  auto bin_buffer = alpaka::allocAsyncBuf<int32_t>(queue, size);
 
   const auto blocksize = 512;
   const auto gridsize = divide_up_by(size, blocksize);
@@ -329,7 +331,7 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size, TFunc func
   alpaka::exec<TAcc>(
       queue, workdiv, detail::KernelComputeAssociations<TFunc>{}, size, bin_buffer.data(), func);
 
-  auto sizes_buffer = make_device_buffer<int32_t[]>(queue, m_extents.keys);
+  auto sizes_buffer = alpaka::allocAsyncBuf<int32_t>(queue, m_extents.keys);
   alpaka::memset(queue, sizes_buffer, 0);
   alpaka::exec<TAcc>(queue,
                      workdiv,
@@ -338,13 +340,12 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size, TFunc func
                      sizes_buffer.data(),
                      size);
 
-  auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_extents.keys + 1);
+  auto temp_offsets = alpaka::allocAsyncBuf<int32_t>(queue, m_extents.keys + 1);
   alpaka::memset(queue, temp_offsets, 0u, 1u);
   internal::algorithm::inclusive_scan(
       queue, sizes_buffer.data(), sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
-  alpaka::memcpy(queue,
-                 make_device_view(alpaka::getDev(queue), m_offsets.data(), m_extents.keys + 1),
-                 temp_offsets);
+  alpaka::memcpy(
+      queue, alpaka::createView(queue, m_offsets.data(), m_extents.keys + 1), temp_offsets);
   alpaka::exec<TAcc>(queue,
                      workdiv,
                      detail::KernelFillAssociator{},
@@ -394,7 +395,7 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type,
   const auto gridsize = divide_up_by(associations.size(), blocksize);
   const auto workdiv = make_workdiv<TAcc>(gridsize, blocksize);
 
-  auto sizes_buffer = make_device_buffer<key_type[]>(queue, m_extents.keys);
+  auto sizes_buffer = alpaka::allocAsyncBuf<key_type>(queue, m_extents.keys);
   alpaka::memset(queue, sizes_buffer, 0);
   alpaka::exec<TAcc>(queue,
                      workdiv,
@@ -403,15 +404,14 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type,
                      sizes_buffer.data(),
                      associations.size());
 
-  auto temp_offsets = make_device_buffer<key_type[]>(queue, m_extents.keys + 1);
+  auto temp_offsets = alpaka::allocAsyncBuf<key_type>(queue, m_extents.keys + 1);
   alpaka::memset(queue, temp_offsets, 0u, 1u);
 
   internal::algorithm::inclusive_scan(
       queue, sizes_buffer.data(), sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
 
-  alpaka::memcpy(queue,
-                 make_device_view(alpaka::getDev(queue), m_offsets.data(), m_extents.keys + 1),
-                 temp_offsets);
+  alpaka::memcpy(
+      queue, alpaka::createView(queue, m_offsets.data(), m_extents.keys + 1), temp_offsets);
   alpaka::exec<TAcc>(queue,
                      workdiv,
                      detail::KernelFillAssociator{},
@@ -433,7 +433,7 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
   if (m_extents.keys == 0 || m_extents.values == 0)
     return;
 
-  auto bin_buffer = make_device_buffer<int32_t[]>(queue, size);
+  auto bin_buffer = alpaka::allocAsyncBuf<int32_t>(queue, size);
 
   const auto blocksize = 256;
   const auto blocks_per_event = divide_up_by(max_event_size, blocksize);
@@ -449,7 +449,7 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
                                 max_event_size,
                                 blocks_per_event);
 
-  auto sizes_buffer = make_device_buffer<int32_t[]>(queue, m_extents.keys);
+  auto sizes_buffer = alpaka::allocAsyncBuf<int32_t>(queue, m_extents.keys);
   const auto workdiv = make_workdiv<TAcc>(divide_up_by(size, blocksize), blocksize);
   alpaka::memset(queue, sizes_buffer, 0);
   alpaka::exec<TAcc>(queue,
@@ -459,16 +459,15 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
                      sizes_buffer.data(),
                      size);
 
-  auto temp_offsets = make_device_buffer<int32_t[]>(queue, m_extents.keys + 1);
+  auto temp_offsets = alpaka::allocAsyncBuf<int32_t>(queue, m_extents.keys + 1);
   alpaka::memset(queue, temp_offsets, 0u, 1u);
   alpaka::wait(queue);
 
   internal::algorithm::inclusive_scan(
       sizes_buffer.data(), sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
 
-  alpaka::memcpy(queue,
-                 make_device_view(alpaka::getDev(queue), m_offsets.data(), m_extents.keys + 1),
-                 temp_offsets);
+  alpaka::memcpy(
+      queue, alpaka::createView(queue, m_offsets.data(), m_extents.keys + 1), temp_offsets);
   alpaka::exec<TAcc>(queue,
                      workdiv,
                      detail::KernelFillAssociator{},

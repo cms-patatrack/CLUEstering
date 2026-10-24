@@ -2,14 +2,16 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/utils/get_queue.hpp"
 #include <alpaka/alpaka.hpp>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <span>
 
 CLUE_NAMESPACE_BEGIN
@@ -62,8 +64,8 @@ namespace internal {
   public:
     template <clue::concepts::queue TQueue>
     DeviceVector(TQueue& queue, std::size_t size)
-        : m_buffer{clue::make_device_buffer<int32_t[]>(queue, size)},
-          m_dsize{clue::make_device_buffer<std::size_t>(queue)},
+        : m_buffer{alpaka::allocAsyncBuf<int32_t>(queue, size)},
+          m_dsize{alpaka::allocAsyncBuf<std::size_t>(queue, Scalar{})},
           m_size{std::nullopt},
           m_capacity{size},
           m_view{m_buffer.data(), m_dsize.data(), m_capacity} {
@@ -75,7 +77,7 @@ namespace internal {
     template <clue::concepts::queue TQueue>
     ALPAKA_FN_HOST auto size(TQueue& queue) const {
       std::size_t size;
-      alpaka::memcpy(queue, clue::make_host_view(size), m_dsize);
+      alpaka::memcpy(queue, alpaka::createView(host, &size, Scalar{}), m_dsize);
       alpaka::wait(queue);
       return size;
     }

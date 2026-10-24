@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
@@ -388,7 +389,7 @@ namespace detail {
                                     TData min_density,
                                     const DistanceMetric& metric,
                                     std::size_t& seed_candidates) {
-    auto d_seed_candidates = clue::make_device_buffer<std::size_t>(queue);
+    auto d_seed_candidates = alpaka::allocAsyncBuf<std::size_t>(queue, Scalar{});
     alpaka::memset(queue, d_seed_candidates, 0u);
     alpaka::exec<TAcc>(queue,
                        work_division,
@@ -400,7 +401,7 @@ namespace detail {
                        min_density,
                        metric,
                        d_seed_candidates.data());
-    alpaka::memcpy(queue, clue::make_host_view(seed_candidates), d_seed_candidates);
+    alpaka::memcpy(queue, alpaka::createView(host, &seed_candidates, Scalar{}), d_seed_candidates);
     alpaka::wait(queue);
   }
 
@@ -428,10 +429,8 @@ namespace detail {
                                      PointsView<Ndim, TData> points) {
     const auto nseeds = seeds.size(queue);
     if (nseeds == 0) {
-      alpaka::fill(queue,
-                   clue::make_device_view(
-                       alpaka::getDev(queue), points.cluster_index().data(), points.size()),
-                   -1);
+      alpaka::fill(
+          queue, alpaka::createView(queue, points.cluster_index().data(), points.size()), -1);
       return;
     }
 

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/core/Clusterer.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
@@ -220,11 +221,11 @@ template <std::size_t Ndim, std::floating_point DataType>
 template <std::floating_point InputType>
 inline AssociationMapHost Clusterer<Ndim, DataType>::getSampleAssociations(
     Queue& queue, clue::PointsHost<Ndim, InputType>& h_points) {
-  auto event_associations = make_host_buffer<std::int32_t[]>(h_points.n_clusters());
-  alpaka::memcpy(
-      queue,
-      event_associations,
-      make_device_view(alpaka::getDev(queue), m_event_associations->data(), h_points.n_clusters()));
+  auto event_associations =
+      alpaka::allocMappedBuf<std::int32_t>(host, alpaka::PlatformCpu{}, h_points.n_clusters());
+  alpaka::memcpy(queue,
+                 event_associations,
+                 alpaka::createView(queue, m_event_associations->data(), h_points.n_clusters()));
   alpaka::wait(queue);
   return internal::make_associator(
       std::span<const std::int32_t>{event_associations.data(), h_points.n_clusters()},
@@ -294,10 +295,11 @@ void Clusterer<Ndim, DataType>::make_clusters_batched(
   const auto max_event_size =
       std::reduce(batch_item_sizes.begin(), batch_item_sizes.end(), 0u, nostd::maximum<uint32_t>{});
 
-  auto event_offsets = clue::make_host_buffer<std::size_t[]>(batch_size + 1);
+  auto event_offsets =
+      alpaka::allocMappedBuf<std::size_t>(host, alpaka::PlatformCpu{}, batch_size + 1);
   event_offsets[0] = 0;
   std::inclusive_scan(batch_item_sizes.begin(), batch_item_sizes.end(), event_offsets.data() + 1);
-  auto d_event_offsets = clue::make_device_buffer<std::size_t[]>(queue, batch_size + 1);
+  auto d_event_offsets = alpaka::allocAsyncBuf<std::size_t>(queue, batch_size + 1);
   alpaka::memcpy(queue, d_event_offsets, event_offsets);
   alpaka::wait(queue);
 

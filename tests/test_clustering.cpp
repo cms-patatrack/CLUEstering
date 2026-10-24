@@ -280,8 +280,9 @@ TEST_CASE("Test clustering from constant host points") {
     const float dc{.2f}, rhoc{1.f}, outlier{.2f};
     clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
     SUBCASE("Two external buffers") {
-      auto input = clue::make_host_buffer<float[]>(queue, 3 * size);
-      auto output = clue::make_host_buffer<int[]>(queue, size);
+      auto input =
+          alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
+      auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(input.data(), input.data() + 3 * size, [&] { return dis(gen); });
 
       clue::ConstPointsHost<2> points_1(queue, size, input.data(), output.data());
@@ -293,9 +294,12 @@ TEST_CASE("Test clustering from constant host points") {
       CHECK(true);
     }
     SUBCASE("Three external buffers") {
-      auto coords = clue::make_host_buffer<float[]>(queue, 2 * size);
-      auto weights = clue::make_host_buffer<float[]>(queue, size);
-      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      auto coords =
+          alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 2 * size);
+      auto weights =
+          alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+      auto cluster_ids =
+          alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(coords.data(), coords.data() + 2 * size, [&] { return dis(gen); });
       std::fill(weights.data(), weights.data() + size, 1.f);
 
@@ -312,10 +316,12 @@ TEST_CASE("Test clustering from constant host points") {
       CHECK(true);
     }
     SUBCASE("Four external buffers") {
-      auto x0 = clue::make_host_buffer<float[]>(queue, size);
-      auto x1 = clue::make_host_buffer<float[]>(queue, size);
-      auto weights = clue::make_host_buffer<float[]>(queue, size);
-      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      auto x0 = alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+      auto x1 = alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+      auto weights =
+          alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+      auto cluster_ids =
+          alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(x0.data(), x0.data() + size, [&] { return dis(gen); });
       std::generate(x1.data(), x1.data() + size, [&] { return dis(gen); });
       std::fill(weights.data(), weights.data() + size, 1.f);
@@ -342,8 +348,9 @@ TEST_CASE("Test clustering from constant host points") {
     const auto dc{.2}, rhoc{1.}, outlier{.2};
     clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
     SUBCASE("Two external buffers") {
-      auto input = clue::make_host_buffer<double[]>(queue, 3 * size);
-      auto output = clue::make_host_buffer<int[]>(queue, size);
+      auto input =
+          alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), 3 * size);
+      auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(input.data(), input.data() + 3 * size, [&] { return dis(gen); });
 
       clue::ConstPointsHost<2, double> points_1(queue, size, input.data(), output.data());
@@ -355,9 +362,12 @@ TEST_CASE("Test clustering from constant host points") {
       CHECK(true);
     }
     SUBCASE("Three external buffers") {
-      auto coords = clue::make_host_buffer<double[]>(queue, 2 * size);
-      auto weights = clue::make_host_buffer<double[]>(queue, size);
-      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      auto coords =
+          alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), 2 * size);
+      auto weights =
+          alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), size);
+      auto cluster_ids =
+          alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(coords.data(), coords.data() + 2 * size, [&] { return dis(gen); });
       std::fill(weights.data(), weights.data() + size, 1.f);
 
@@ -374,10 +384,12 @@ TEST_CASE("Test clustering from constant host points") {
       CHECK(true);
     }
     SUBCASE("Four external buffers") {
-      auto x0 = clue::make_host_buffer<double[]>(queue, size);
-      auto x1 = clue::make_host_buffer<double[]>(queue, size);
-      auto weights = clue::make_host_buffer<double[]>(queue, size);
-      auto cluster_ids = clue::make_host_buffer<int[]>(queue, size);
+      auto x0 = alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), size);
+      auto x1 = alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), size);
+      auto weights =
+          alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), size);
+      auto cluster_ids =
+          alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(x0.data(), x0.data() + size, [&] { return dis(gen); });
       std::generate(x1.data(), x1.data() + size, [&] { return dis(gen); });
       std::fill(weights.data(), weights.data() + size, 1.f);
@@ -406,8 +418,9 @@ TEST_CASE("Test non-default local density uncertainty") {
   const auto dc = .2f, rhoc = 1.f, outlier = .2f;
   auto queue = clue::get_queue(0u);
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
-  auto input = clue::make_host_buffer<float[]>(queue, 3 * size);
-  auto output = clue::make_host_buffer<int[]>(queue, size);
+  auto input =
+      alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
+  auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
   std::generate(input.data(), input.data() + 3 * size, [&] { return dis(gen); });
   clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
 
@@ -440,9 +453,10 @@ TEST_CASE("Test non-default local density uncertainty") {
     SUBCASE("Clustering with default density uncertainty") {
       std::vector<float> density_uncertainty(size, 1.f);
 
-      auto d_density_uncertainty = clue::make_device_buffer<float[]>(queue, size);
-      alpaka::memcpy(
-          queue, d_density_uncertainty, clue::make_host_view(density_uncertainty.data(), size));
+      auto d_density_uncertainty = alpaka::allocAsyncBuf<float>(queue, size);
+      alpaka::memcpy(queue,
+                     d_density_uncertainty,
+                     alpaka::createView(clue::host, density_uncertainty.data(), size));
       alpaka::wait(queue);
 
       d_points.set_density_uncertainty(std::span<float>{d_density_uncertainty.data(), size});
@@ -452,9 +466,10 @@ TEST_CASE("Test non-default local density uncertainty") {
     SUBCASE("Clustering with non-default density uncertainty") {
       std::vector<float> density_uncertainty(size, 5.f);
 
-      auto d_density_uncertainty = clue::make_device_buffer<float[]>(queue, size);
-      alpaka::memcpy(
-          queue, d_density_uncertainty, clue::make_host_view(density_uncertainty.data(), size));
+      auto d_density_uncertainty = alpaka::allocAsyncBuf<float>(queue, size);
+      alpaka::memcpy(queue,
+                     d_density_uncertainty,
+                     alpaka::createView(clue::host, density_uncertainty.data(), size));
       alpaka::wait(queue);
 
       d_points.set_density_uncertainty(std::span<float>{d_density_uncertainty.data(), size});
@@ -466,9 +481,10 @@ TEST_CASE("Test non-default local density uncertainty") {
       std::generate(
           density_uncertainty.begin(), density_uncertainty.end(), [&] { return dis(gen) + 1.f; });
 
-      auto d_density_uncertainty = clue::make_device_buffer<float[]>(queue, size);
-      alpaka::memcpy(
-          queue, d_density_uncertainty, clue::make_host_view(density_uncertainty.data(), size));
+      auto d_density_uncertainty = alpaka::allocAsyncBuf<float>(queue, size);
+      alpaka::memcpy(queue,
+                     d_density_uncertainty,
+                     alpaka::createView(clue::host, density_uncertainty.data(), size));
       alpaka::wait(queue);
 
       d_points.set_density_uncertainty(std::span<float>{d_density_uncertainty.data(), size});
@@ -486,8 +502,9 @@ TEST_CASE("Test non-default point tags") {
   const auto dc = .2f, rhoc = 1.f, outlier = .2f;
   auto queue = clue::get_queue(0u);
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
-  auto input = clue::make_host_buffer<float[]>(queue, 3 * size);
-  auto output = clue::make_host_buffer<int[]>(queue, size);
+  auto input =
+      alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
+  auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
   std::generate(input.data(), input.data() + 2 * size, [&] { return dis(gen); });
   std::fill(input.data() + 2 * size, input.data() + 3 * size, 1.f);
   clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
@@ -504,8 +521,8 @@ TEST_CASE("Test non-default point tags") {
     auto d_points = clue::PointsDevice<2>(queue, size);
     clue::copyToDevice(queue, d_points, h_points);
 
-    auto d_tags = clue::make_device_buffer<std::uint32_t[]>(queue, size);
-    alpaka::memcpy(queue, d_tags, clue::make_host_view(tags.data(), size));
+    auto d_tags = alpaka::allocAsyncBuf<std::uint32_t>(queue, size);
+    alpaka::memcpy(queue, d_tags, alpaka::createView(clue::host, tags.data(), size));
     alpaka::wait(queue);
 
     d_points.set_tags(std::span<std::uint32_t>{d_tags.data(), size});
@@ -527,13 +544,11 @@ TEST_CASE("Point tags override the index-based tie-break for nearest higher") {
     std::vector<int32_t> nearest_higher(size);
     std::vector<int32_t> is_seed(size);
     alpaka::memcpy(queue,
-                   clue::make_host_view(nearest_higher.data(), size),
-                   clue::make_device_view(
-                       alpaka::getDev(queue), d_points.view().nearest_higher().data(), size));
-    alpaka::memcpy(
-        queue,
-        clue::make_host_view(is_seed.data(), size),
-        clue::make_device_view(alpaka::getDev(queue), d_points.view().is_seed().data(), size));
+                   alpaka::createView(clue::host, nearest_higher.data(), size),
+                   alpaka::createView(queue, d_points.view().nearest_higher().data(), size));
+    alpaka::memcpy(queue,
+                   alpaka::createView(clue::host, is_seed.data(), size),
+                   alpaka::createView(queue, d_points.view().is_seed().data(), size));
     alpaka::wait(queue);
     return std::make_pair(nearest_higher, is_seed);
   };

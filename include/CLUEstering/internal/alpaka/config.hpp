@@ -20,7 +20,7 @@ namespace alpaka_common {
   using Vec1D = Vec<Dim1D>;
   using Vec2D = Vec<Dim2D>;
   using Vec3D = Vec<Dim3D>;
-  using Scalar = Vec<Dim0D>;
+  using Scalar = alpaka::Vec<Dim0D, std::size_t>;
 
   template <typename TDim>
   using WorkDiv = alpaka::WorkDivMembers<TDim, Idx>;

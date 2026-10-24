@@ -2,11 +2,12 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/data_structures/ClusterProperties.hpp"
 #include "CLUEstering/data_structures/detail/HostViewPartition.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/utils/detail/get_cluster_properties.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/internal/meta/apply.hpp"
 
 #include <alpaka/alpaka.hpp>
@@ -25,8 +26,10 @@ CLUE_NAMESPACE_BEGIN
 template <std::size_t Ndim, std::floating_point TData>
 template <concepts::queue TQueue>
 inline PointsHost<Ndim, TData>::PointsHost(TQueue& queue, int32_t n_points)
-    : m_buffer{make_host_buffer<std::byte[]>(
-          queue, soa::host::computeSoASize<Ndim, value_type>(n_points))},
+    : m_buffer{
+          alpaka::allocMappedBuf<std::byte>(host,
+                                            platform<alpaka::Platform<alpaka::Dev<TQueue>>>(),
+                                            soa::host::computeSoASize<Ndim, value_type>(n_points))},
       m_view{},
       m_size{n_points} {
   soa::host::partitionSoAView(m_view, m_buffer->data(), n_points);
