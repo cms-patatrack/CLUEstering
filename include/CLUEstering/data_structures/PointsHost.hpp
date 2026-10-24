@@ -8,7 +8,7 @@
 #include "CLUEstering/data_structures/ClusterProperties.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 
 #include <concepts>
 #include <cstddef>

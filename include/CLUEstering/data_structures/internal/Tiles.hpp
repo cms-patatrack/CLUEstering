@@ -9,7 +9,7 @@
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/alpaka/config.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/internal/meta/apply.hpp"
 
 #include <array>

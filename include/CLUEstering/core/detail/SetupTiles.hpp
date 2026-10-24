@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
@@ -45,7 +46,8 @@ namespace detail {
       tiles->reset(npoints, grid, batch_size);
     }
 
-    auto tile_sizes = alpaka::allocMappedBuf<TData>(host, alpaka::PlatformCpu{}, Ndim);
+    auto tile_sizes = alpaka::allocMappedBuf<TData>(
+        host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Ndim);
     std::copy(grid.tilesizes.begin(), grid.tilesizes.end(), tile_sizes.data());
 
     alpaka::memcpy(queue, tiles->minMax(), alpaka::createView(host, &min_max, Scalar{}));
@@ -67,7 +69,7 @@ namespace detail {
                    std::size_t batch_size = 1) {
     auto min_max =
         alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
-            host, alpaka::PlatformCpu{}, Scalar{});
+            host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Scalar{});
     detail::compute_extents(min_max.data(), points);
     setup_tiles_from_extents(
         queue, points.size(), *min_max.data(), tiles, tile_edge, wrapped_coordinates, batch_size);
@@ -85,7 +87,7 @@ namespace detail {
                    std::size_t batch_size = 1) {
     auto min_max =
         alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
-            host, alpaka::PlatformCpu{}, Scalar{});
+            host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Scalar{});
     detail::compute_extents(min_max.data(), points);
     setup_tiles_from_extents(
         queue, points.size(), *min_max.data(), tiles, tile_edge, wrapped_coordinates, batch_size);

@@ -185,8 +185,9 @@ TEST_CASE("Test const device points") {
 
   const auto size = 1000u;
   SUBCASE("Two external buffers") {
-    auto h_input = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, 3 * size);
-    auto h_output = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+    auto h_input =
+        alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
+    auto h_output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
     std::iota(h_input.data(), h_input.data() + 3 * size, 0.f);
     std::fill(h_output.data(), h_output.data() + size, 1);
 
@@ -203,9 +204,12 @@ TEST_CASE("Test const device points") {
     CHECK(true);
   }
   SUBCASE("Three external buffers") {
-    auto h_coords = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, 2 * size);
-    auto h_weights = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
-    auto h_cluster_ids = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+    auto h_coords =
+        alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 2 * size);
+    auto h_weights =
+        alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+    auto h_cluster_ids =
+        alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
     std::iota(h_coords.data(), h_coords.data() + 2 * size, 0.f);
     std::fill(h_weights.data(), h_weights.data() + size, 1.f);
     std::fill(h_cluster_ids.data(), h_cluster_ids.data() + size, 1);
@@ -229,10 +233,12 @@ TEST_CASE("Test const device points") {
     CHECK(true);
   }
   SUBCASE("Four external buffers") {
-    auto h_x0 = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
-    auto h_x1 = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
-    auto h_weights = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
-    auto h_cluster_ids = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+    auto h_x0 = alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+    auto h_x1 = alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+    auto h_weights =
+        alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+    auto h_cluster_ids =
+        alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
     std::iota(h_x0.data(), h_x0.data() + size, 0.f);
     std::iota(h_x1.data(), h_x1.data() + size, 1000.f);
     std::fill(h_weights.data(), h_weights.data() + size, 1.f);

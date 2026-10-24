@@ -1,9 +1,8 @@
 
 #pragma once
 
-#include <type_traits>
-
 #include <alpaka/alpaka.hpp>
+#include <cstddef>
 
 #include "CLUEstering/internal/alpaka/config.hpp"
 

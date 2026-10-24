@@ -2,7 +2,7 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/internal/meta/apply.hpp"

@@ -7,7 +7,7 @@
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/algorithm/reduce/reduce.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/internal/meta/apply.hpp"
 #include "CLUEstering/internal/nostd/maximum.hpp"
 

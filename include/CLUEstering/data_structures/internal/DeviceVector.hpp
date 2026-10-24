@@ -2,9 +2,10 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/utils/get_queue.hpp"
 #include <alpaka/alpaka.hpp>
 #include <cassert>

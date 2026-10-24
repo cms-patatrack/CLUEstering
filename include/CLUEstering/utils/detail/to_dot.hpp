@@ -2,10 +2,11 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/utils/to_dot.hpp"
 
 #include <algorithm>
@@ -29,9 +30,12 @@ inline void to_dot(TQueue& queue,
 
   const auto n_points = d_points.size();
 
-  auto h_cluster_index = alpaka::allocMappedBuf<int32_t>(host, alpaka::PlatformCpu{}, n_points);
-  auto h_nearest_higher = alpaka::allocMappedBuf<int32_t>(host, alpaka::PlatformCpu{}, n_points);
-  auto h_is_seed = alpaka::allocMappedBuf<int32_t>(host, alpaka::PlatformCpu{}, n_points);
+  auto h_cluster_index = alpaka::allocMappedBuf<int32_t>(
+      host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), n_points);
+  auto h_nearest_higher = alpaka::allocMappedBuf<int32_t>(
+      host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), n_points);
+  auto h_is_seed = alpaka::allocMappedBuf<int32_t>(
+      host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), n_points);
 
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_cluster_index.data(), n_points),

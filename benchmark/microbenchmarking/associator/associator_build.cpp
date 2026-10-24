@@ -1,6 +1,6 @@
 
 #include "CLUEstering/data_structures/internal/MakeAssociator.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/CLUEstering.hpp"
 #include <benchmark/benchmark.h>
 #include <ranges>
@@ -24,7 +24,8 @@ static void BM_BuildBinaryAssociatorAlpaka(benchmark::State& state) {
     state.PauseTiming();
     auto queue = clue::get_queue(0u);
     const auto elements = state.range(0);
-    auto h_associations = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, elements);
+    auto h_associations =
+        alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), elements);
     std::ranges::transform(std::views::iota(0) | std::views::take(elements),
                            h_associations.data(),
                            [](auto x) -> int32_t { return x % 2 == 0; });

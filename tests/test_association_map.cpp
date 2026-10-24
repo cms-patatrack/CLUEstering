@@ -18,7 +18,8 @@ TEST_CASE("Test binary association map") {
   clue::Queue queue(host);
 
   const int32_t size = 1000;
-  auto associations = alpaka::allocMappedBuf<int32_t>(clue::host, alpaka::PlatformCpu{}, size);
+  auto associations =
+      alpaka::allocMappedBuf<int32_t>(clue::host, clue::platform<clue::Platform>(), size);
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
   auto map =
@@ -70,7 +71,8 @@ TEST_CASE("Test throwing conditions") {
   clue::Queue queue(host);
 
   const int32_t size = 1000;
-  auto associations = alpaka::allocMappedBuf<int32_t>(clue::host, alpaka::PlatformCpu{}, size);
+  auto associations =
+      alpaka::allocMappedBuf<int32_t>(clue::host, clue::platform<clue::Platform>(), size);
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
 

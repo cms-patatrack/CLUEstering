@@ -2,10 +2,11 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/AssociationMapView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/internal/alpaka/memory.hpp"
+#include "CLUEstering/internal/alpaka/buffer.hpp"
 #include "CLUEstering/internal/alpaka/work_division.hpp"
 #include "CLUEstering/internal/algorithm/scan/scan.hpp"
 

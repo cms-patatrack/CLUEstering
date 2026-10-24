@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/core/Clusterer.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"

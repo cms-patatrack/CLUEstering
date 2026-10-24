@@ -280,8 +280,9 @@ TEST_CASE("Test clustering from constant host points") {
     const float dc{.2f}, rhoc{1.f}, outlier{.2f};
     clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
     SUBCASE("Two external buffers") {
-      auto input = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, 3 * size);
-      auto output = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+      auto input =
+          alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
+      auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(input.data(), input.data() + 3 * size, [&] { return dis(gen); });
 
       clue::ConstPointsHost<2> points_1(queue, size, input.data(), output.data());
@@ -293,9 +294,12 @@ TEST_CASE("Test clustering from constant host points") {
       CHECK(true);
     }
     SUBCASE("Three external buffers") {
-      auto coords = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, 2 * size);
-      auto weights = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
-      auto cluster_ids = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+      auto coords =
+          alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 2 * size);
+      auto weights =
+          alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+      auto cluster_ids =
+          alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(coords.data(), coords.data() + 2 * size, [&] { return dis(gen); });
       std::fill(weights.data(), weights.data() + size, 1.f);
 
@@ -312,10 +316,12 @@ TEST_CASE("Test clustering from constant host points") {
       CHECK(true);
     }
     SUBCASE("Four external buffers") {
-      auto x0 = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
-      auto x1 = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
-      auto weights = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, size);
-      auto cluster_ids = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+      auto x0 = alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+      auto x1 = alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+      auto weights =
+          alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), size);
+      auto cluster_ids =
+          alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(x0.data(), x0.data() + size, [&] { return dis(gen); });
       std::generate(x1.data(), x1.data() + size, [&] { return dis(gen); });
       std::fill(weights.data(), weights.data() + size, 1.f);
@@ -342,8 +348,9 @@ TEST_CASE("Test clustering from constant host points") {
     const auto dc{.2}, rhoc{1.}, outlier{.2};
     clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
     SUBCASE("Two external buffers") {
-      auto input = alpaka::allocMappedBuf<double>(clue::host, alpaka::PlatformCpu{}, 3 * size);
-      auto output = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+      auto input =
+          alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), 3 * size);
+      auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(input.data(), input.data() + 3 * size, [&] { return dis(gen); });
 
       clue::ConstPointsHost<2, double> points_1(queue, size, input.data(), output.data());
@@ -355,9 +362,12 @@ TEST_CASE("Test clustering from constant host points") {
       CHECK(true);
     }
     SUBCASE("Three external buffers") {
-      auto coords = alpaka::allocMappedBuf<double>(clue::host, alpaka::PlatformCpu{}, 2 * size);
-      auto weights = alpaka::allocMappedBuf<double>(clue::host, alpaka::PlatformCpu{}, size);
-      auto cluster_ids = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+      auto coords =
+          alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), 2 * size);
+      auto weights =
+          alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), size);
+      auto cluster_ids =
+          alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(coords.data(), coords.data() + 2 * size, [&] { return dis(gen); });
       std::fill(weights.data(), weights.data() + size, 1.f);
 
@@ -374,10 +384,12 @@ TEST_CASE("Test clustering from constant host points") {
       CHECK(true);
     }
     SUBCASE("Four external buffers") {
-      auto x0 = alpaka::allocMappedBuf<double>(clue::host, alpaka::PlatformCpu{}, size);
-      auto x1 = alpaka::allocMappedBuf<double>(clue::host, alpaka::PlatformCpu{}, size);
-      auto weights = alpaka::allocMappedBuf<double>(clue::host, alpaka::PlatformCpu{}, size);
-      auto cluster_ids = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+      auto x0 = alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), size);
+      auto x1 = alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), size);
+      auto weights =
+          alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), size);
+      auto cluster_ids =
+          alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
       std::generate(x0.data(), x0.data() + size, [&] { return dis(gen); });
       std::generate(x1.data(), x1.data() + size, [&] { return dis(gen); });
       std::fill(weights.data(), weights.data() + size, 1.f);
@@ -406,8 +418,9 @@ TEST_CASE("Test non-default local density uncertainty") {
   const auto dc = .2f, rhoc = 1.f, outlier = .2f;
   auto queue = clue::get_queue(0u);
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
-  auto input = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, 3 * size);
-  auto output = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+  auto input =
+      alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
+  auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
   std::generate(input.data(), input.data() + 3 * size, [&] { return dis(gen); });
   clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
 
@@ -489,8 +502,9 @@ TEST_CASE("Test non-default point tags") {
   const auto dc = .2f, rhoc = 1.f, outlier = .2f;
   auto queue = clue::get_queue(0u);
   clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
-  auto input = alpaka::allocMappedBuf<float>(clue::host, alpaka::PlatformCpu{}, 3 * size);
-  auto output = alpaka::allocMappedBuf<int>(clue::host, alpaka::PlatformCpu{}, size);
+  auto input =
+      alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
+  auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
   std::generate(input.data(), input.data() + 2 * size, [&] { return dis(gen); });
   std::fill(input.data() + 2 * size, input.data() + 3 * size, 1.f);
   clue::PointsHost<2> h_points(queue, size, input.data(), output.data());
