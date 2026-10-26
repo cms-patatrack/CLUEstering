@@ -74,21 +74,22 @@ namespace internal {
 
     template <typename T>
       requires std::same_as<std::remove_cv_t<T>, TData>
-    struct GetGlobalBin {
-      PointsView<Ndim, T> pointsView;
-      TilesView<Ndim, TData> tilesView;
+    class GetGlobalBin {
+      PointsView<Ndim, T> m_pointsView;
+      TilesView<Ndim, TData> m_tilesView;
 
+    public:
       ALPAKA_FN_HOST_ACC GetGlobalBin(PointsView<Ndim, T> pointsView,
                                       TilesView<Ndim, TData> tilesView)
-          : pointsView(pointsView), tilesView(tilesView) {}
+          : m_pointsView(pointsView), m_tilesView(tilesView) {}
 
       ALPAKA_FN_ACC int32_t operator()(int32_t index, std::size_t event = 0) const {
         value_type coords[Ndim];
         for (auto dim = 0u; dim < Ndim; ++dim) {
-          coords[dim] = pointsView.coords()[dim][index];
+          coords[dim] = m_pointsView.coords()[dim][index];
         }
 
-        auto bin = tilesView.getGlobalBin(coords, event);
+        auto bin = m_tilesView.getGlobalBin(coords, event);
         return bin;
       }
     };
