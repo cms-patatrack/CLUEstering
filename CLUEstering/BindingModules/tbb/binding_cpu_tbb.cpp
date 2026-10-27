@@ -15,9 +15,7 @@ namespace clue::alpaka_tbb_async {
   NB_MODULE(CLUE_CPU_TBB, m) {
     m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
 
-    m.def("listDevices",
-          &listDevices,
-          "List the available devices for the TBB backend");
+    m.def("listDevices", &listDevices, "List the available devices for the TBB backend");
 
     m.def("mainRun", &mainRun<float, clue::FlatKernel>);
     m.def("mainRun", &mainRun<float, clue::ExponentialKernel>);

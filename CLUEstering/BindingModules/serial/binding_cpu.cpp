@@ -15,9 +15,7 @@ namespace clue::alpaka_serial_sync {
   NB_MODULE(CLUE_CPU_Serial, m) {
     m.doc() = "Binding of the CLUE algorithm running serially on CPU";
 
-    m.def("listDevices",
-          &listDevices,
-          "List the available devices for the CPU serial backend");
+    m.def("listDevices", &listDevices, "List the available devices for the CPU serial backend");
 
     m.def("mainRun", &mainRun<float, clue::FlatKernel>);
     m.def("mainRun", &mainRun<float, clue::ExponentialKernel>);
