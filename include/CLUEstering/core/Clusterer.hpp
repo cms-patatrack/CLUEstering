@@ -52,21 +52,17 @@ private:
   std::optional<internal::DeviceVector<>> m_event_associations;
 
   template <std::floating_point InputType>
-  void setup(Queue& queue,
-             const clue::PointsHost<Ndim, InputType>& h_points,
-             clue::PointsDevice<Ndim, value_type>& dev_points) {
+  void setup(Queue& queue, const clue::PointsHost<Ndim, InputType>& h_points) {
     detail::setup_tiles(queue,
                         h_points,
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
                         m_wrappedCoordinates);
-    clue::copyToDevice(queue, dev_points, h_points);
   }
 
   template <std::floating_point InputType>
   void setup_batch(Queue& queue,
                    const clue::PointsHost<Ndim, InputType>& h_points,
-                   clue::PointsDevice<Ndim, value_type>& dev_points,
                    std::size_t batch_size) {
     detail::setup_tiles(queue,
                         h_points,
@@ -74,7 +70,6 @@ private:
                         detail::tile_edge(m_density_radius, m_outlier_distance),
                         m_wrappedCoordinates,
                         batch_size);
-    clue::copyToDevice(queue, dev_points, h_points);
   }
 
   template <std::floating_point InputType>

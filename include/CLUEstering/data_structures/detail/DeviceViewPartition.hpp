@@ -58,8 +58,8 @@ namespace soa::device {
     view.m_weight = reinterpret_cast<value_type*>(buffer + Ndim * n_points * sizeof(value_type));
     view.m_cluster_index =
         reinterpret_cast<int*>(buffer + (Ndim + 1) * n_points * sizeof(value_type));
-    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(int));
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer);
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
@@ -79,8 +79,8 @@ namespace soa::device {
         [&]<std::size_t Dim>() { view.m_coords[Dim] = coordinates.data() + Dim * n_points; });
     view.m_weight = weights.data();
     view.m_cluster_index = output.data();
-    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer);
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
@@ -99,8 +99,8 @@ namespace soa::device {
         [&]<std::size_t Dim>() { view.m_coords[Dim] = input.data() + Dim * n_points; });
     view.m_weight = input.data() + Ndim * n_points;
     view.m_cluster_index = output.data();
-    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer);
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
@@ -121,8 +121,8 @@ namespace soa::device {
         [&]<std::size_t Dim>() { view.m_coords[Dim] = coordinates + Dim * n_points; });
     view.m_weight = weights;
     view.m_cluster_index = output;
-    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer);
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
@@ -140,8 +140,8 @@ namespace soa::device {
     meta::apply<Ndim>([&]<std::size_t Dim>() { view.m_coords[Dim] = input + Dim * n_points; });
     view.m_weight = input + Ndim * n_points;
     view.m_cluster_index = output;
-    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer);
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
@@ -161,8 +161,8 @@ namespace soa::device {
         [&]<std::size_t Dim>() { view.m_coords[Dim] = std::get<Dim>(buffers_tuple); });
     view.m_weight = std::get<Ndim>(buffers_tuple);
     view.m_cluster_index = std::get<Ndim + 1>(buffers_tuple);
-    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer);
-    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer + n_points * sizeof(value_type));
+    view.m_rho = reinterpret_cast<value_type*>(alloc_buffer);
+    view.m_is_seed = reinterpret_cast<int*>(alloc_buffer + n_points * sizeof(value_type));
     view.m_nearest_higher =
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);

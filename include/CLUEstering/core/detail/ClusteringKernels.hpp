@@ -299,7 +299,7 @@ namespace detail {
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   clue::internal::SeedArrayView seeds,
                                   PointsView<Ndim, TData> points,
-                                  TData min_density) const {
+                                  std::remove_cv_t<TData> min_density) const {
       for (auto i : alpaka::uniformElements(acc, points.size())) {
         points.cluster_index()[i] = -1;
         const auto nh = points.nearest_higher()[i];
@@ -414,7 +414,7 @@ namespace detail {
                                const WorkDiv& work_division,
                                clue::internal::SeedArray<>& seeds,
                                PointsView<Ndim, TData>& points,
-                               TData min_density) {
+                               std::remove_cv_t<TData> min_density) {
     alpaka::exec<TAcc>(
         queue, work_division, KernelFindClusters{}, seeds.view(), points, min_density);
   }
