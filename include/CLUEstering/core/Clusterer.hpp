@@ -164,12 +164,17 @@ public:
   /// @param kernel The convolutional kernel to use for computing the local densities,
   /// default is FlatKernel with height 0.5
   /// @note This method creates a temporary queue for the operations on the device
+  /// @deprecated Use the overload taking a queue instead. This overload will be removed after
+  /// the next release.
   template <std::floating_point InputType,
             concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
             concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-  void make_clusters(clue::PointsHost<Ndim, InputType>& h_points,
-                     const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                     const Kernel& kernel = FlatKernel<value_type>{.5f});
+  [[deprecated(
+      "Use make_clusters(queue, h_points, ...) instead; this overload will be removed after the "
+      "next release")]] void
+  make_clusters(clue::PointsHost<Ndim, InputType>& h_points,
+                const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
+                const Kernel& kernel = FlatKernel<value_type>{.5f});
   /// @brief Construct the clusters from host and device points
   ///
   /// @tparam InputType The data type of the input points, which must be a floating-point type.

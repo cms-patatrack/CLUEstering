@@ -29,7 +29,12 @@ TEST_CASE("Test make_cluster interfaces") {
   }
 
   SUBCASE("Run clustering without passing the queue and device points") {
+// TODO: remove this subcase, together with the pragmas, once the deprecated overload of
+// make_clusters without the queue is removed
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     algo.make_clusters(h_points);
+#pragma GCC diagnostic pop
 
     CHECK(clue::silhouette(h_points) >= 0.9f);
   }
