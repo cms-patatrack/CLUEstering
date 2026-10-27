@@ -10,6 +10,7 @@
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
+#include "CLUEstering/core/detail/SetupPoints.hpp"
 #include "CLUEstering/core/detail/SetupSeeds.hpp"
 #include "CLUEstering/core/detail/SetupTiles.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
@@ -94,11 +95,11 @@ inline void Clusterer<Ndim, DataType>::make_clusters(Queue& queue,
                                                      clue::PointsHost<Ndim, InputType>& h_points,
                                                      const DistanceMetric& metric,
                                                      const Kernel& kernel) {
-  auto d_points = clue::PointsDevice<Ndim, value_type>(queue, h_points.size());
+  auto d_points = detail::make_device_points(queue, h_points);
 
-  setup(queue, h_points, d_points);
+  setup(queue, h_points);
   make_clusters_impl(d_points, metric, kernel, queue);
-  clue::copyToHost(queue, h_points, d_points);
+  detail::sync_results(queue, h_points, d_points);
   internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
   alpaka::wait(queue);
 }
@@ -111,11 +112,11 @@ inline void Clusterer<Ndim, DataType>::make_clusters(clue::PointsHost<Ndim, Inpu
                                                      const Kernel& kernel) {
   auto device = alpaka::getDevByIdx(Platform{}, 0u);
   Queue queue(device);
-  auto d_points = clue::PointsDevice<Ndim, value_type>(queue, h_points.size());
+  auto d_points = detail::make_device_points(queue, h_points);
 
-  setup(queue, h_points, d_points);
+  setup(queue, h_points);
   make_clusters_impl(d_points, metric, kernel, queue);
-  clue::copyToHost(queue, h_points, d_points);
+  detail::sync_results(queue, h_points, d_points);
   internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
   alpaka::wait(queue);
 }
@@ -129,7 +130,8 @@ inline void Clusterer<Ndim, DataType>::make_clusters(
     clue::PointsDevice<Ndim, value_type>& dev_points,
     const DistanceMetric& metric,
     const Kernel& kernel) {
-  setup(queue, h_points, dev_points);
+  setup(queue, h_points);
+  clue::copyToDevice(queue, dev_points, h_points);
   make_clusters_impl(dev_points, metric, kernel, queue);
   clue::copyToHost(queue, h_points, dev_points);
   internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
@@ -164,7 +166,8 @@ inline void Clusterer<Ndim, DataType>::make_clusters(
     const DistanceMetric& metric,
     const Kernel& kernel) {
   const auto batch_size = batch_item_sizes.size();
-  setup_batch(queue, h_points, dev_points, batch_size);
+  setup_batch(queue, h_points, batch_size);
+  clue::copyToDevice(queue, dev_points, h_points);
   make_clusters_batched(dev_points, batch_item_sizes, metric, kernel, queue);
   clue::copyToHost(queue, h_points, dev_points);
 }
