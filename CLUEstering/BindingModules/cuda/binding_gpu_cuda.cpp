@@ -16,15 +16,15 @@ namespace clue::alpaka_cuda_async {
     m.doc() = "Binding of the CLUE algorithm running on CUDA GPUs";
 
     m.def("listDevices",
-          &alpaka_cuda_async::listDevices,
+          &listDevices,
           "List the available devices for the CUDA backend");
 
-    m.def("mainRun", &alpaka_cuda_async::mainRun<float, clue::FlatKernel>);
-    m.def("mainRun", &alpaka_cuda_async::mainRun<float, clue::ExponentialKernel>);
-    m.def("mainRun", &alpaka_cuda_async::mainRun<float, clue::GaussianKernel>);
+    m.def("mainRun", &mainRun<float, clue::FlatKernel>);
+    m.def("mainRun", &mainRun<float, clue::ExponentialKernel>);
+    m.def("mainRun", &mainRun<float, clue::GaussianKernel>);
 
-    m.def("mainRun", &alpaka_cuda_async::mainRun<double, clue::FlatKernel>);
-    m.def("mainRun", &alpaka_cuda_async::mainRun<double, clue::ExponentialKernel>);
-    m.def("mainRun", &alpaka_cuda_async::mainRun<double, clue::GaussianKernel>);
+    m.def("mainRun", &mainRun<double, clue::FlatKernel>);
+    m.def("mainRun", &mainRun<double, clue::ExponentialKernel>);
+    m.def("mainRun", &mainRun<double, clue::GaussianKernel>);
   }
 };  // namespace clue::alpaka_cuda_async

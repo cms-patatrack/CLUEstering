@@ -16,15 +16,15 @@ namespace clue::alpaka_omp2_sync {
     m.doc() = "Binding of the CLUE algorithm running on CPU with OpenMP";
 
     m.def("listDevices",
-          &alpaka_omp2_sync::listDevices,
+          &listDevices,
           "List the available devices for the OpenMP backend");
 
-    m.def("mainRun", &alpaka_omp2_sync::mainRun<float, clue::FlatKernel>);
-    m.def("mainRun", &alpaka_omp2_sync::mainRun<float, clue::ExponentialKernel>);
-    m.def("mainRun", &alpaka_omp2_sync::mainRun<float, clue::GaussianKernel>);
+    m.def("mainRun", &mainRun<float, clue::FlatKernel>);
+    m.def("mainRun", &mainRun<float, clue::ExponentialKernel>);
+    m.def("mainRun", &mainRun<float, clue::GaussianKernel>);
 
-    m.def("mainRun", &alpaka_omp2_sync::mainRun<double, clue::FlatKernel>);
-    m.def("mainRun", &alpaka_omp2_sync::mainRun<double, clue::ExponentialKernel>);
-    m.def("mainRun", &alpaka_omp2_sync::mainRun<double, clue::GaussianKernel>);
+    m.def("mainRun", &mainRun<double, clue::FlatKernel>);
+    m.def("mainRun", &mainRun<double, clue::ExponentialKernel>);
+    m.def("mainRun", &mainRun<double, clue::GaussianKernel>);
   }
 };  // namespace clue::alpaka_omp2_sync
