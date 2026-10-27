@@ -10,7 +10,7 @@
 
 #include <nanobind/nanobind.h>
 
-namespace alpaka_rocm_async {
+namespace clue::alpaka_rocm_async {
 
   NB_MODULE(CLUE_GPU_HIP, m) {
     m.doc() = "Binding of the CLUE algorithm running on AMD GPUs";
@@ -27,4 +27,4 @@ namespace alpaka_rocm_async {
     m.def("mainRun", &alpaka_rocm_async::mainRun<double, clue::ExponentialKernel>);
     m.def("mainRun", &alpaka_rocm_async::mainRun<double, clue::GaussianKernel>);
   }
-};  // namespace alpaka_rocm_async
+};  // namespace clue::alpaka_rocm_async

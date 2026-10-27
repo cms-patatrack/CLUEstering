@@ -10,9 +10,9 @@
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 
-using namespace alpaka_common;
-
 CLUE_NAMESPACE_BEGIN
+
+using namespace alpaka_common;
 
 // Trait describing whether or not the accelerator expects the threads-per-block and elements-per-thread to be swapped
 template <concepts::accelerator TAcc>

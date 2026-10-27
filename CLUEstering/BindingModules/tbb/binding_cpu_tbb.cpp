@@ -10,7 +10,7 @@
 
 #include <nanobind/nanobind.h>
 
-namespace alpaka_tbb_async {
+namespace clue::alpaka_tbb_async {
 
   NB_MODULE(CLUE_CPU_TBB, m) {
     m.doc() = "Binding of the CLUE algorithm running on CPU with TBB";
@@ -27,4 +27,4 @@ namespace alpaka_tbb_async {
     m.def("mainRun", &alpaka_tbb_async::mainRun<double, clue::ExponentialKernel>);
     m.def("mainRun", &alpaka_tbb_async::mainRun<double, clue::GaussianKernel>);
   }
-};  // namespace alpaka_tbb_async
+};  // namespace clue::alpaka_tbb_async

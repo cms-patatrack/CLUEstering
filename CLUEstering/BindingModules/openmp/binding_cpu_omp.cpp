@@ -10,7 +10,7 @@
 
 #include <nanobind/nanobind.h>
 
-namespace alpaka_omp2_sync {
+namespace clue::alpaka_omp2_sync {
 
   NB_MODULE(CLUE_CPU_OMP, m) {
     m.doc() = "Binding of the CLUE algorithm running on CPU with OpenMP";
@@ -27,4 +27,4 @@ namespace alpaka_omp2_sync {
     m.def("mainRun", &alpaka_omp2_sync::mainRun<double, clue::ExponentialKernel>);
     m.def("mainRun", &alpaka_omp2_sync::mainRun<double, clue::GaussianKernel>);
   }
-};  // namespace alpaka_omp2_sync
+};  // namespace clue::alpaka_omp2_sync

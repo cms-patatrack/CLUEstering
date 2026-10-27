@@ -10,7 +10,7 @@
 
 #include <nanobind/nanobind.h>
 
-namespace alpaka_cuda_async {
+namespace clue::alpaka_cuda_async {
 
   NB_MODULE(CLUE_GPU_CUDA, m) {
     m.doc() = "Binding of the CLUE algorithm running on CUDA GPUs";
@@ -27,4 +27,4 @@ namespace alpaka_cuda_async {
     m.def("mainRun", &alpaka_cuda_async::mainRun<double, clue::ExponentialKernel>);
     m.def("mainRun", &alpaka_cuda_async::mainRun<double, clue::GaussianKernel>);
   }
-};  // namespace alpaka_cuda_async
+};  // namespace clue::alpaka_cuda_async

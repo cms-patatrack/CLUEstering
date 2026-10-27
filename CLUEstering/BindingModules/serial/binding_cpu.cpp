@@ -10,7 +10,7 @@
 
 #include <nanobind/nanobind.h>
 
-namespace alpaka_serial_sync {
+namespace clue::alpaka_serial_sync {
 
   NB_MODULE(CLUE_CPU_Serial, m) {
     m.doc() = "Binding of the CLUE algorithm running serially on CPU";
@@ -27,4 +27,4 @@ namespace alpaka_serial_sync {
     m.def("mainRun", &alpaka_serial_sync::mainRun<double, clue::ExponentialKernel>);
     m.def("mainRun", &alpaka_serial_sync::mainRun<double, clue::GaussianKernel>);
   }
-};  // namespace alpaka_serial_sync
+};  // namespace clue::alpaka_serial_sync
