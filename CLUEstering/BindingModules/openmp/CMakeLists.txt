@@ -6,7 +6,10 @@ target_compile_definitions(
   CLUE_CPU_OMP PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
 target_link_libraries(CLUE_CPU_OMP PRIVATE OpenMP::OpenMP_CXX)
 target_compile_options(CLUE_CPU_OMP PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/bigobj>)
-target_precompile_headers(CLUE_CPU_OMP REUSE_FROM CLUE_Convolutional_Kernels)
+# The PCH of CLUE_Convolutional_Kernels is built for the serial backend only, so it cannot
+# be reused here: the alpaka headers it contains don't define the accelerator of this backend
+target_precompile_headers(CLUE_CPU_OMP PRIVATE <alpaka/alpaka.hpp> <nanobind/nanobind.h>
+                          <nanobind/ndarray.h>)
 set_target_properties(
   CLUE_CPU_OMP
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY

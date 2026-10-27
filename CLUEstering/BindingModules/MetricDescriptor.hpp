@@ -26,13 +26,9 @@ namespace clue::bindings {
     std::vector<TData> params;  // empty means unit weights for weighted metrics
   };
 
-}  // namespace clue::bindings
-
-namespace clue::internal {
-
   template <std::size_t Ndim, std::floating_point TData, typename Callable>
-  void apply_metric(const bindings::MetricDescriptor<TData>& desc, Callable&& callable) {
-    using Tag = typename bindings::MetricDescriptor<TData>::Tag;
+  void apply_metric(const MetricDescriptor<TData>& desc, Callable&& callable) {
+    using Tag = typename MetricDescriptor<TData>::Tag;
 
     switch (desc.tag) {
       case Tag::WeightedEuclidean: {
@@ -84,4 +80,4 @@ namespace clue::internal {
     }
   }
 
-}  // namespace clue::internal
+}  // namespace clue::bindings

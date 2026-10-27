@@ -39,7 +39,7 @@ void run(TInput dc,
   clue::PointsHost<Ndim, TInput> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
   clue::PointsDevice<Ndim, TInput> d_points(queue, n_points);
 
-  clue::internal::apply_metric<Ndim>(metric_desc, [&](auto&& metric) {
+  clue::bindings::apply_metric<Ndim>(metric_desc, [&](auto&& metric) {
     if (batch_sample_sizes.has_value()) [[unlikely]] {
       algo.make_clusters(queue, h_points, d_points, batch_sample_sizes.value(), metric, kernel);
     } else [[likely]] {
