@@ -88,7 +88,7 @@ namespace detail {
     auto min_max =
         alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
             host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Scalar{});
-    detail::compute_extents(min_max.data(), points);
+    detail::compute_extents(queue, min_max.data(), points);
     setup_tiles_from_extents(
         queue, points.size(), *min_max.data(), tiles, tile_edge, wrapped_coordinates, batch_size);
   }

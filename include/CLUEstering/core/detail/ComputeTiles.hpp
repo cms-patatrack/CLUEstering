@@ -9,6 +9,7 @@
 #include "CLUEstering/internal/algorithm/algorithm.hpp"
 #include "CLUEstering/internal/nostd/maximum.hpp"
 #include "CLUEstering/internal/nostd/minimum.hpp"
+#include "CLUEstering/detail/concepts.hpp"
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -61,16 +62,19 @@ namespace detail {
     }
   }
 
-  template <std::size_t Ndim, std::floating_point TInput>
-  void compute_extents(internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>* min_max,
+  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput>
+  void compute_extents(TQueue& queue,
+                       internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>* min_max,
                        const clue::PointsDevice<Ndim, TInput>& dev_points) {
     for (auto dim = 0u; dim != Ndim; ++dim) {
       auto coords = dev_points.coords(dim);
-      min_max->max(dim) = clue::internal::algorithm::reduce(coords.begin(),
+      min_max->max(dim) = clue::internal::algorithm::reduce(queue,
+                                                            coords.begin(),
                                                             coords.end(),
                                                             std::numeric_limits<TInput>::lowest(),
                                                             clue::nostd::maximum<TInput>{});
-      min_max->min(dim) = clue::internal::algorithm::reduce(coords.begin(),
+      min_max->min(dim) = clue::internal::algorithm::reduce(queue,
+                                                            coords.begin(),
                                                             coords.end(),
                                                             std::numeric_limits<TInput>::max(),
                                                             clue::nostd::minimum<TInput>{});
