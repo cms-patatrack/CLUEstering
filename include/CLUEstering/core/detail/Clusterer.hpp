@@ -177,6 +177,25 @@ template <std::floating_point InputType,
           concepts::convolutional_kernel Kernel,
           concepts::distance_metric<Ndim> DistanceMetric>
 inline void Clusterer<Ndim, DataType>::make_clusters(Queue& queue,
+                                                     clue::PointsHost<Ndim, InputType>& h_points,
+                                                     std::span<const uint32_t> batch_item_sizes,
+                                                     const DistanceMetric& metric,
+                                                     const Kernel& kernel) {
+  auto d_points = detail::make_device_points(queue, h_points);
+
+  const auto batch_size = batch_item_sizes.size();
+  setup_batch(queue, h_points, batch_size);
+  make_clusters_batched(d_points, batch_item_sizes, metric, kernel, queue);
+  detail::sync_results(queue, h_points, d_points);
+  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
+  alpaka::wait(queue);
+}
+
+template <std::size_t Ndim, std::floating_point DataType>
+template <std::floating_point InputType,
+          concepts::convolutional_kernel Kernel,
+          concepts::distance_metric<Ndim> DistanceMetric>
+inline void Clusterer<Ndim, DataType>::make_clusters(Queue& queue,
                                                      clue::PointsDevice<Ndim, InputType>& dev_points,
                                                      std::span<const uint32_t> batch_item_sizes,
                                                      const DistanceMetric& metric,

@@ -233,6 +233,28 @@ public:
                      const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
                      const Kernel& kernel = FlatKernel<value_type>{.5f});
 
+  /// @brief Construct the clusters from batched host points
+  ///
+  /// @tparam InputType The data type of the input points, which must be a floating-point type.
+  /// By default, it is set to `float`.
+  /// @tparam Kernel The type of convolutional kernel to use
+  /// @tparam DistanceMetric The type of distance metric to use
+  /// @param queue The queue to use for the device operations
+  /// @param h_points Host points to cluster
+  /// @param batch_item_sizes Sizes of each batch item
+  /// @param metric The distance metric to use for clustering, default is EuclideanMetric
+  /// @param kernel The convolutional kernel to use for computing the local densities,
+  /// default is FlatKernel with height 0.5
+  /// @note The total size of h_points must be equal to the sum of batch_item_sizes
+  template <std::floating_point InputType,
+            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
+            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
+  void make_clusters(Queue& queue,
+                     clue::PointsHost<Ndim, InputType>& h_points,
+                     std::span<const uint32_t> batch_item_sizes,
+                     const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
+                     const Kernel& kernel = FlatKernel<value_type>{.5f});
+
   /// @brief Construct the clusters from batched device points
   ///
   /// @tparam InputType The data type of the input points, which must be a floating-point type.
