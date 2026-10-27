@@ -3,7 +3,7 @@
 
 #include <alpaka/alpaka.hpp>
 
-namespace alpaka_common {
+namespace clue::alpaka_common {
 
   // common types and dimensions
   using Idx = uint32_t;
@@ -32,10 +32,10 @@ namespace alpaka_common {
   using DevHost = alpaka::DevCpu;
   using PlatformHost = alpaka::PlatformCpu;
 
-}  // namespace alpaka_common
+}  // namespace clue::alpaka_common
 
 #ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
-namespace alpaka_cuda_async {
+namespace clue::alpaka_cuda_async {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformCudaRt;
@@ -49,12 +49,12 @@ namespace alpaka_cuda_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_cuda_async
+}  // namespace clue::alpaka_cuda_async
 
 #endif  // ALPAKA_ACC_GPU_CUDA_ASYNC_BACKEND
 
 #ifdef ALPAKA_ACC_GPU_HIP_ENABLED
-namespace alpaka_rocm_async {
+namespace clue::alpaka_rocm_async {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformHipRt;
@@ -68,12 +68,12 @@ namespace alpaka_rocm_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_rocm_async
+}  // namespace clue::alpaka_rocm_async
 #endif
 
 #ifdef ALPAKA_ACC_SYCL_ENABLED
 #ifdef ALPAKA_SYCL_ONEAPI_CPU
-namespace alpaka_sycl_cpu {
+namespace clue::alpaka_sycl_cpu {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformCpuSycl;
@@ -87,10 +87,10 @@ namespace alpaka_sycl_cpu {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_sycl_cpu
+}  // namespace clue::alpaka_sycl_cpu
 
 #elif ALPAKA_SYCL_ONEAPI_GPU
-namespace alpaka_sycl_gpu {
+namespace clue::alpaka_sycl_gpu {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformGpuSyclIntel;
@@ -104,13 +104,13 @@ namespace alpaka_sycl_gpu {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_sycl_gpu
+}  // namespace clue::alpaka_sycl_gpu
 
 #endif
 #endif
 
 #ifdef ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
-namespace alpaka_serial_sync {
+namespace clue::alpaka_serial_sync {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformCpu;
@@ -124,12 +124,12 @@ namespace alpaka_serial_sync {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_serial_sync
+}  // namespace clue::alpaka_serial_sync
 
 #endif  // ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED
 
 #ifdef ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
-namespace alpaka_tbb_async {
+namespace clue::alpaka_tbb_async {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformCpu;
@@ -143,12 +143,12 @@ namespace alpaka_tbb_async {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_tbb_async
+}  // namespace clue::alpaka_tbb_async
 
 #endif  // ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED
 
 #ifdef ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
-namespace alpaka_omp2_sync {
+namespace clue::alpaka_omp2_sync {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformCpu;
@@ -162,12 +162,12 @@ namespace alpaka_omp2_sync {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_omp2_sync
+}  // namespace clue::alpaka_omp2_sync
 
 #endif  // ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED
 
 #ifdef ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
-namespace alpaka_threads_sync {
+namespace clue::alpaka_threads_sync {
   using namespace alpaka_common;
 
   using Platform = alpaka::PlatformCpu;
@@ -181,7 +181,7 @@ namespace alpaka_threads_sync {
   using Acc2D = Acc<Dim2D>;
   using Acc3D = Acc<Dim3D>;
 
-}  // namespace alpaka_threads_sync
+}  // namespace clue::alpaka_threads_sync
 
 #endif  // ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED
 
@@ -192,28 +192,28 @@ namespace alpaka_threads_sync {
 // so translation units built for different backends get distinct symbol names and can be
 // linked into one program without ODR clashes.
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
-#define ALPAKA_BACKEND alpaka_cuda_async
+#define ALPAKA_BACKEND clue::alpaka_cuda_async
 #define CLUE_ABI_TAG backend_cuda
 #elif defined(ALPAKA_ACC_GPU_HIP_ENABLED)
-#define ALPAKA_BACKEND alpaka_rocm_async
+#define ALPAKA_BACKEND clue::alpaka_rocm_async
 #define CLUE_ABI_TAG backend_hip
 #elif defined(ALPAKA_ACC_SYCL_ENABLED) && defined(ALPAKA_SYCL_ONEAPI_GPU)
-#define ALPAKA_BACKEND alpaka_sycl_gpu
+#define ALPAKA_BACKEND clue::alpaka_sycl_gpu
 #define CLUE_ABI_TAG backend_sycl_gpu
 #elif defined(ALPAKA_ACC_SYCL_ENABLED) && defined(ALPAKA_SYCL_ONEAPI_CPU)
-#define ALPAKA_BACKEND alpaka_sycl_cpu
+#define ALPAKA_BACKEND clue::alpaka_sycl_cpu
 #define CLUE_ABI_TAG backend_sycl_cpu
 #elif defined(ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
-#define ALPAKA_BACKEND alpaka_tbb_async
+#define ALPAKA_BACKEND clue::alpaka_tbb_async
 #define CLUE_ABI_TAG backend_tbb
 #elif defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
-#define ALPAKA_BACKEND alpaka_omp2_sync
+#define ALPAKA_BACKEND clue::alpaka_omp2_sync
 #define CLUE_ABI_TAG backend_omp2
 #elif defined(ALPAKA_ACC_CPU_B_SEQ_T_THREADS_ENABLED)
-#define ALPAKA_BACKEND alpaka_threads_sync
+#define ALPAKA_BACKEND clue::alpaka_threads_sync
 #define CLUE_ABI_TAG backend_threads
 #elif defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
-#define ALPAKA_BACKEND alpaka_serial_sync
+#define ALPAKA_BACKEND clue::alpaka_serial_sync
 #define CLUE_ABI_TAG backend_serial
 #endif
 

@@ -20,8 +20,8 @@ constexpr auto dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
 using Event = clue::PointsHost<NDIM>;
 
 auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int nClusters) {
-  const auto cpuDev = alpaka::getDevByIdx(alpaka::Platform<alpaka_serial_sync::Acc1D>{}, 0u);
-  alpaka_serial_sync::Queue genQueue(cpuDev);
+  const auto cpuDev = alpaka::getDevByIdx(alpaka::Platform<clue::alpaka_serial_sync::Acc1D>{}, 0u);
+  clue::alpaka_serial_sync::Queue genQueue(cpuDev);
 
   std::vector<Event> events;
   events.reserve(nEvents);
