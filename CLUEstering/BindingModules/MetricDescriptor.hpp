@@ -28,7 +28,8 @@ namespace clue::bindings {
 
 }  // namespace clue::bindings
 
-namespace clue::internal {
+CLUE_NAMESPACE_BEGIN
+namespace internal {
 
   template <std::size_t Ndim, std::floating_point TData, typename Callable>
   void apply_metric(const bindings::MetricDescriptor<TData>& desc, Callable&& callable) {
@@ -84,4 +85,5 @@ namespace clue::internal {
     }
   }
 
-}  // namespace clue::internal
+}  // namespace internal
+CLUE_NAMESPACE_END
