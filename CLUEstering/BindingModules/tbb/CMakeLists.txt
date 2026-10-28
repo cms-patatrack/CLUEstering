@@ -5,7 +5,8 @@ target_compile_definitions(
   CLUE_CPU_TBB PRIVATE ALPAKA_HOST_ONLY ALPAKA_ACC_CPU_B_TBB_T_SEQ_ENABLED)
 target_link_libraries(CLUE_CPU_TBB PRIVATE alpaka::alpaka Boost::atomic
                                            TBB::tbb)
-target_precompile_headers(CLUE_CPU_TBB REUSE_FROM CLUE_Convolutional_Kernels)
+target_precompile_headers(CLUE_CPU_TBB PRIVATE <alpaka/alpaka.hpp>
+                          <nanobind/nanobind.h> <nanobind/ndarray.h>)
 set_target_properties(
   CLUE_CPU_TBB
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY
