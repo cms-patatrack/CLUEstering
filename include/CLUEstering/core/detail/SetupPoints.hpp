@@ -6,6 +6,7 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include "CLUEstering/internal/alpaka/default_allocator.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <concepts>
@@ -17,9 +18,16 @@ CLUE_NAMESPACE_BEGIN
 
 namespace detail {
 
-  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput>
+  // On CPU the device points alias the host memory, so nothing is allocated for the coordinates
+  // and the allocator is not used
+  template <concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TInput,
+            concepts::allocator TAllocator = DefaultAllocator>
     requires std::same_as<alpaka::Dev<TQueue>, alpaka::DevCpu>
-  inline auto make_device_points(TQueue& queue, PointsHost<Ndim, TInput>& points) {
+  inline auto make_device_points(TQueue& queue,
+                                 PointsHost<Ndim, TInput>& points,
+                                 const TAllocator& /* allocator */ = TAllocator{}) {
     using PointsDev = PointsDevice<Ndim, TInput, alpaka::DevCpu>;
 
     auto& view = points.view();
@@ -37,14 +45,19 @@ namespace detail {
     return dev_points;
   }
 
-  template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput>
+  template <concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TInput,
+            concepts::allocator TAllocator = DefaultAllocator>
     requires(!std::same_as<alpaka::Dev<TQueue>, alpaka::DevCpu>)
-  inline auto make_device_points(TQueue& queue, PointsHost<Ndim, TInput>& points) {
+  inline auto make_device_points(TQueue& queue,
+                                 PointsHost<Ndim, TInput>& points,
+                                 const TAllocator& allocator = TAllocator{}) {
     using value_type = std::remove_cv_t<TInput>;
     using PointsDev = PointsDevice<Ndim, value_type, alpaka::Dev<TQueue>>;
 
-    PointsDev dev_points(queue, points.size());
-    copyToDevice(queue, dev_points, points);
+    PointsDev dev_points(queue, points.size(), allocator);
+    copyToDevice(queue, dev_points, points, allocator);
 
     return dev_points;
   }

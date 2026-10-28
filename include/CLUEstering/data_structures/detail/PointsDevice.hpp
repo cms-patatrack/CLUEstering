@@ -25,10 +25,12 @@
 CLUE_NAMESPACE_BEGIN
 
 template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-template <concepts::queue TQueue>
-inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue, int32_t n_points)
-    : m_buffer{alpaka::allocAsyncBuf<std::byte>(
-          queue, soa::device::computeSoASize<Ndim, value_type>(n_points))},
+template <concepts::queue TQueue, concepts::allocator TAllocator>
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
+                                                     int32_t n_points,
+                                                     const TAllocator& allocator)
+    : m_buffer{internal::alloc_device_buffer<std::byte>(
+          queue, soa::device::computeSoASize<Ndim, value_type>(n_points), allocator)},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points);

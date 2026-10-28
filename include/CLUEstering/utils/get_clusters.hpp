@@ -8,6 +8,7 @@
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/detail/concepts.hpp"
+#include "CLUEstering/internal/alpaka/default_allocator.hpp"
 #include <concepts>
 #include <cstddef>
 
@@ -31,10 +32,16 @@ inline auto get_clusters(const PointsHost<Ndim, TData>& points);
 /// @tparam Ndim The number of dimensions of the points
 /// @tparam TData The data type for the point coordinates and weights
 /// @param points The points for which to get the clusters
+/// @param allocator The allocator to use for the device buffers of the map
 /// @return An AssociationMap where each key is a cluster index and the associated values
 /// are the indices of the points belonging to that cluster
-template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TData = float>
-inline auto get_clusters(TQueue& queue, const PointsDevice<Ndim, TData>& points);
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point TData = float,
+          concepts::allocator TAllocator = DefaultAllocator>
+inline auto get_clusters(TQueue& queue,
+                         const PointsDevice<Ndim, TData>& points,
+                         const TAllocator& allocator = TAllocator{});
 
 CLUE_NAMESPACE_END
 

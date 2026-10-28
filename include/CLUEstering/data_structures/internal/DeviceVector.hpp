@@ -6,6 +6,7 @@
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/alpaka/buffer.hpp"
+#include "CLUEstering/internal/alpaka/default_allocator.hpp"
 #include "CLUEstering/utils/get_queue.hpp"
 #include <alpaka/alpaka.hpp>
 #include <cassert>
@@ -62,10 +63,11 @@ namespace internal {
     DeviceVectorView m_view;
 
   public:
-    template <clue::concepts::queue TQueue>
-    DeviceVector(TQueue& queue, std::size_t size)
-        : m_buffer{alpaka::allocAsyncBuf<int32_t>(queue, size)},
-          m_dsize{alpaka::allocAsyncBuf<std::size_t>(queue, Scalar{})},
+    template <clue::concepts::queue TQueue,
+              clue::concepts::allocator TAllocator = clue::DefaultAllocator>
+    DeviceVector(TQueue& queue, std::size_t size, const TAllocator& allocator = TAllocator{})
+        : m_buffer{alloc_device_buffer<int32_t>(queue, size, allocator)},
+          m_dsize{alloc_device_buffer<std::size_t>(queue, Scalar{}, allocator)},
           m_size{std::nullopt},
           m_capacity{size},
           m_view{m_buffer.data(), m_dsize.data(), m_capacity} {
