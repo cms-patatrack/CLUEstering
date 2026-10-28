@@ -6,6 +6,7 @@
 #include "CLUEstering/detail/concepts.hpp"
 
 #include <alpaka/alpaka.hpp>
+#include <type_traits>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/sort.h>
@@ -37,7 +38,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename RandomAccessIterator>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void sort(ExecutionPolicy&& policy,
                                             RandomAccessIterator first,
                                             RandomAccessIterator last) {
@@ -68,7 +69,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename RandomAccessIterator, typename Compare>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr void sort(ExecutionPolicy&& policy,
                                             RandomAccessIterator first,
                                             RandomAccessIterator last,

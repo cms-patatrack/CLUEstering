@@ -5,6 +5,7 @@
 #include "CLUEstering/detail/concepts.hpp"
 
 #include <alpaka/alpaka.hpp>
+#include <type_traits>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/extrema.h>
@@ -37,7 +38,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr ForwardIterator min_element(ExecutionPolicy&& policy,
                                                               ForwardIterator first,
                                                               ForwardIterator last) {
@@ -68,7 +69,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryPredicate>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr ForwardIterator min_element(ExecutionPolicy&& policy,
                                                               ForwardIterator first,
                                                               ForwardIterator last,
@@ -99,7 +100,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr ForwardIterator max_element(ExecutionPolicy&& policy,
                                                               ForwardIterator first,
                                                               ForwardIterator last) {
@@ -130,7 +131,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryPredicate>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr ForwardIterator max_element(ExecutionPolicy&& policy,
                                                               ForwardIterator first,
                                                               ForwardIterator last,
@@ -161,7 +162,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
       ExecutionPolicy&& policy, ForwardIterator first, ForwardIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -190,7 +191,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename BinaryPredicate>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr std::pair<ForwardIterator, ForwardIterator> minmax_element(
       ExecutionPolicy&& policy, ForwardIterator first, ForwardIterator last, BinaryPredicate comp) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)

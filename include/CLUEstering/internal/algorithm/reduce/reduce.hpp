@@ -5,6 +5,7 @@
 #include "CLUEstering/detail/concepts.hpp"
 
 #include <alpaka/alpaka.hpp>
+#include <type_traits>
 
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
 #include <thrust/reduce.h>
@@ -37,7 +38,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr typename std::iterator_traits<ForwardIterator>::value_type reduce(
       ExecutionPolicy&& policy, ForwardIterator first, ForwardIterator last) {
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) and not defined(ALPAKA_HOST_ONLY)
@@ -65,7 +66,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr T reduce(ExecutionPolicy&& policy,
                                            ForwardIterator first,
                                            ForwardIterator last,
@@ -98,7 +99,7 @@ namespace internal::algorithm {
   }
 
   template <typename ExecutionPolicy, typename ForwardIterator, typename T, typename BinaryOperation>
-    requires(!alpaka::isQueue<std::remove_cvref_t<ExecutionPolicy>>)
+    requires(!alpaka::concepts::Queue<std::remove_cvref_t<ExecutionPolicy>>)
   ALPAKA_FN_HOST inline constexpr T reduce(ExecutionPolicy&& policy,
                                            ForwardIterator first,
                                            ForwardIterator last,
