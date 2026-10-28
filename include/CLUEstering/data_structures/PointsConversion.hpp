@@ -80,17 +80,37 @@ void copyToHostAsync(TQueue& queue,
 /// @param d_points The empty points allocated on the device
 /// @param h_points The points allocated on the host, containing the points' coordinates
 /// and weights
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point TDeviceInput,
+          concepts::device TDev,
+          std::floating_point THostInput>
+void copyToDevice(TQueue& queue,
+                  PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
+                  const PointsHost<Ndim, THostInput>& h_points);
+/// @brief Copies the coordinates and weights of the points from the host to the device
+///
+/// @tparam TQueue The type of the queue for the device operations
+/// @tparam Ndim The number of dimensions of the points
+/// @tparam TDeviceInput The type of the input coordinates and weights for the device points
+/// @tparam TDev The type of device that the points are allocated on
+/// @tparam THostInput The type of the input coordinates and weights for the host points
+/// @tparam TAllocator The type of the allocator for the device buffers
+/// @param queue The queue used for the device operations
+/// @param d_points The empty points allocated on the device
+/// @param h_points The points allocated on the host, containing the points' coordinates
+/// and weights
 /// @param allocator The allocator to use for the device buffers
 template <concepts::queue TQueue,
           std::size_t Ndim,
           std::floating_point TDeviceInput,
           concepts::device TDev,
           std::floating_point THostInput,
-          concepts::allocator TAllocator = DefaultAllocator>
+          concepts::allocator TAllocator>
 void copyToDevice(TQueue& queue,
                   PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
                   const PointsHost<Ndim, THostInput>& h_points,
-                  const TAllocator& allocator = TAllocator{});
+                  const TAllocator& allocator);
 
 /// @brief Copies the coordinates and weights of the points from the host to the device
 ///
@@ -102,15 +122,27 @@ void copyToDevice(TQueue& queue,
 /// @param d_points The empty points allocated on the device
 /// @param h_points The points allocated on the host, containing the points' coordinates
 /// and weights
+template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
+auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TInput>& h_points);
+/// @brief Copies the coordinates and weights of the points from the host to the device
+///
+/// @tparam TQueue The type of the queue for the device operations
+/// @tparam Ndim The number of dimensions of the points
+/// @tparam TInput The type of the input coordinates and weights for the host points
+/// @tparam TDev The type of device that the points are allocated on
+/// @tparam TAllocator The type of the allocator for the device buffers
+/// @param queue The queue used for the device operations
+/// @param h_points The points allocated on the host, containing the points' coordinates
+/// and weights
 /// @param allocator The allocator to use for the device buffers
 template <concepts::queue TQueue,
           std::size_t Ndim,
           std::floating_point TInput,
           concepts::device TDev,
-          concepts::allocator TAllocator = DefaultAllocator>
+          concepts::allocator TAllocator>
 auto copyToDevice(TQueue& queue,
                   const PointsHost<Ndim, TInput>& h_points,
-                  const TAllocator& allocator = TAllocator{});
+                  const TAllocator& allocator);
 
 /// @brief Copies the coordinates and weights of the points from the host to the device
 ///
@@ -119,6 +151,29 @@ auto copyToDevice(TQueue& queue,
 /// @tparam TDeviceInput The type of the input coordinates and weights for the device points
 /// @tparam TDev The type of device that the points are allocated on
 /// @tparam THostInput The type of the input coordinates and weights for the host points
+/// @param queue The queue used for the device operations
+/// @param d_points The empty points allocated on the device
+/// @param h_points The points allocated on the host, containing the points' coordinates
+/// and weights
+///
+/// @note This function is asynchronous and does not block the host thread.
+/// The user must ensure that the host points remain valid until the copy operation is complete.
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point TDeviceInput,
+          concepts::device TDev,
+          std::floating_point THostInput>
+void copyToDeviceAsync(TQueue& queue,
+                       PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
+                       const PointsHost<Ndim, THostInput>& h_points);
+/// @brief Copies the coordinates and weights of the points from the host to the device
+///
+/// @tparam TQueue The type of the queue for the device operations
+/// @tparam Ndim The number of dimensions of the points
+/// @tparam TDeviceInput The type of the input coordinates and weights for the device points
+/// @tparam TDev The type of device that the points are allocated on
+/// @tparam THostInput The type of the input coordinates and weights for the host points
+/// @tparam TAllocator The type of the allocator for the device buffers
 /// @param queue The queue used for the device operations
 /// @param d_points The empty points allocated on the device
 /// @param h_points The points allocated on the host, containing the points' coordinates
@@ -132,11 +187,11 @@ template <concepts::queue TQueue,
           std::floating_point TDeviceInput,
           concepts::device TDev,
           std::floating_point THostInput,
-          concepts::allocator TAllocator = DefaultAllocator>
+          concepts::allocator TAllocator>
 void copyToDeviceAsync(TQueue& queue,
                        PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
                        const PointsHost<Ndim, THostInput>& h_points,
-                       const TAllocator& allocator = TAllocator{});
+                       const TAllocator& allocator);
 
 CLUE_NAMESPACE_END
 

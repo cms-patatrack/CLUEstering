@@ -62,6 +62,17 @@ template <concepts::queue TQueue,
           std::size_t Ndim,
           std::floating_point TDeviceInput,
           concepts::device TDev,
+          std::floating_point THostInput>
+inline void copyToDevice(TQueue& queue,
+                         PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
+                         const PointsHost<Ndim, THostInput>& h_points) {
+  copyToDevice(queue, d_points, h_points, DefaultAllocator{});
+}
+
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point TDeviceInput,
+          concepts::device TDev,
           std::floating_point THostInput,
           concepts::allocator TAllocator>
 inline void copyToDevice(TQueue& queue,
@@ -112,6 +123,11 @@ inline void copyToDevice(TQueue& queue,
     d_points.view().m_tags = tbuf->data();
   }
   alpaka::wait(queue);
+}
+
+template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
+inline auto copyToDevice(TQueue& queue, const PointsHost<Ndim, TInput>& h_points) {
+  return copyToDevice<TQueue, Ndim, TInput, TDev>(queue, h_points, DefaultAllocator{});
 }
 
 template <concepts::queue TQueue,
@@ -170,6 +186,17 @@ inline auto copyToDevice(TQueue& queue,
   alpaka::wait(queue);
 
   return d_points;
+}
+
+template <concepts::queue TQueue,
+          std::size_t Ndim,
+          std::floating_point TDeviceInput,
+          concepts::device TDev,
+          std::floating_point THostInput>
+inline void copyToDeviceAsync(TQueue& queue,
+                              PointsDevice<Ndim, TDeviceInput, TDev>& d_points,
+                              const PointsHost<Ndim, THostInput>& h_points) {
+  copyToDeviceAsync(queue, d_points, h_points, DefaultAllocator{});
 }
 
 template <concepts::queue TQueue,
