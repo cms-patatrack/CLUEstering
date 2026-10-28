@@ -136,7 +136,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       working-directory: ${{ github.workspace }}
       run: |
-        cmake -S . -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:CMAKE_TOOLCHAIN_FILE" -DVCPKG_TARGET_TRIPLET=x64-windows -DVCPKG_MANIFEST_DIR="${{ github.workspace }}"
+        cmake -S . -B build -DBUILD_PYTHON=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$env:CMAKE_TOOLCHAIN_FILE" -DVCPKG_TARGET_TRIPLET=x64-windows -DVCPKG_MANIFEST_DIR="${{ github.workspace }}" -DPython_EXECUTABLE="$(python -c 'import sys; print(sys.executable)')"
         cmake --build build --parallel --config Release
 
     - name: Run tests of the Python library
