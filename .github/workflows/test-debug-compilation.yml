@@ -1,4 +1,4 @@
-name: Test debug compilation to check presence of warnings
+name: Test pedantic compilation in debug mode
 
 on:
   push:
@@ -38,6 +38,6 @@ jobs:
     - name: Compile the tests in debug mode
       working-directory: ${{ github.workspace }}/tests
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror"
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror" -DBUILD_TESTING=ON
         cmake --build build --parallel
 
