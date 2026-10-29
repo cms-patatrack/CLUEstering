@@ -8,7 +8,7 @@
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/algorithm/reduce/reduce.hpp"
 #include "CLUEstering/internal/alpaka/buffer.hpp"
-#include "CLUEstering/internal/meta/apply.hpp"
+#include "CLUEstering/internal/alpaka/default_allocator.hpp"
 #include "CLUEstering/internal/nostd/maximum.hpp"
 
 #include <alpaka/alpaka.hpp>
@@ -18,11 +18,24 @@
 #include <cstdint>
 #include <limits>
 #include <optional>
-#include <ranges>
 #include <span>
 #include <tuple>
+#include <utility>
 
 CLUE_NAMESPACE_BEGIN
+
+namespace internal {
+
+  template <std::size_t Ndim, std::floating_point TElement, typename TTuple, std::size_t... Ids>
+  inline void partition_device_view(PointsView<Ndim, TElement>& view,
+                                    std::byte* alloc_buffer,
+                                    std::int32_t n_points,
+                                    const TTuple& buffers,
+                                    std::index_sequence<Ids...>) {
+    soa::device::partitionSoAView(view, alloc_buffer, n_points, std::get<Ids>(buffers)...);
+  }
+
+}  // namespace internal
 
 template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
 template <concepts::queue TQueue, concepts::allocator TAllocator>
@@ -37,58 +50,68 @@ inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
 }
 
 template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-template <concepts::queue TQueue>
+template <concepts::queue TQueue, concepts::allocator TAllocator>
 inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
                                                      int32_t n_points,
-                                                     std::span<std::byte> buffer)
-    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
+                                                     std::span<std::byte> buffer,
+                                                     const TAllocator& allocator)
+    : m_buffer{internal::alloc_device_buffer<std::byte>(
+          queue, 3 * n_points * sizeof(value_type), allocator)},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), buffer.data(), n_points);
 }
 
 template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-template <concepts::queue TQueue>
+template <concepts::queue TQueue, concepts::allocator TAllocator>
 inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
                                                      int32_t n_points,
                                                      std::span<element_type> input,
-                                                     std::span<int> output)
-    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
+                                                     std::span<int> output,
+                                                     const TAllocator& allocator)
+    : m_buffer{internal::alloc_device_buffer<std::byte>(
+          queue, 3 * n_points * sizeof(value_type), allocator)},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, input, output);
 }
 
 template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-template <concepts::queue TQueue>
+template <concepts::queue TQueue, concepts::allocator TAllocator>
 inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
                                                      int32_t n_points,
                                                      std::span<element_type> coordinates,
                                                      std::span<element_type> weights,
-                                                     std::span<int> output)
-    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
+                                                     std::span<int> output,
+                                                     const TAllocator& allocator)
+    : m_buffer{internal::alloc_device_buffer<std::byte>(
+          queue, 3 * n_points * sizeof(value_type), allocator)},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, coordinates, weights, output);
 }
 
 template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-template <concepts::queue TQueue>
-inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
-                                                     int32_t n_points,
-                                                     element_type* input,
-                                                     int* output)
-    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
+template <concepts::queue TQueue, concepts::allocator TAllocator>
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(
+    TQueue& queue, int32_t n_points, element_type* input, int* output, const TAllocator& allocator)
+    : m_buffer{internal::alloc_device_buffer<std::byte>(
+          queue, 3 * n_points * sizeof(value_type), allocator)},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, input, output);
 }
 
 template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
-template <concepts::queue TQueue>
-inline PointsDevice<Ndim, TData, TDev>::PointsDevice(
-    TQueue& queue, int32_t n_points, element_type* coordinates, element_type* weights, int* output)
-    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
+template <concepts::queue TQueue, concepts::allocator TAllocator>
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
+                                                     int32_t n_points,
+                                                     element_type* coordinates,
+                                                     element_type* weights,
+                                                     int* output,
+                                                     const TAllocator& allocator)
+    : m_buffer{internal::alloc_device_buffer<std::byte>(
+          queue, 3 * n_points * sizeof(value_type), allocator)},
       m_view{},
       m_size{n_points} {
   soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, coordinates, weights, output);
@@ -100,10 +123,26 @@ template <concepts::queue TQueue, concepts::pointer... TBuffers>
 inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
                                                      int32_t n_points,
                                                      TBuffers... buffers)
-    : m_buffer{alpaka::allocAsyncBuf<std::byte>(queue, 3 * n_points * sizeof(value_type))},
+    : PointsDevice(queue, n_points, buffers..., DefaultAllocator{}) {}
+
+template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
+template <concepts::queue TQueue, typename... TArgs>
+  requires(sizeof...(TArgs) == Ndim + 3 and Ndim > 1 and
+           internal::buffers_then_allocator<Ndim + 2, TArgs...>())
+inline PointsDevice<Ndim, TData, TDev>::PointsDevice(TQueue& queue,
+                                                     int32_t n_points,
+                                                     TArgs&&... args)
+    : m_buffer{internal::alloc_device_buffer<std::byte>(
+          queue,
+          3 * n_points * sizeof(value_type),
+          std::get<Ndim + 2>(std::forward_as_tuple(args...)))},
       m_view{},
       m_size{n_points} {
-  soa::device::partitionSoAView(m_view, m_buffer.data(), n_points, buffers...);
+  internal::partition_device_view(m_view,
+                                  m_buffer.data(),
+                                  n_points,
+                                  std::forward_as_tuple(args...),
+                                  std::make_index_sequence<Ndim + 2>{});
 }
 
 template <std::size_t Ndim, std::floating_point TData, concepts::device TDev>
