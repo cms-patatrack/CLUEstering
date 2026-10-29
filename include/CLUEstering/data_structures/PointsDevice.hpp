@@ -17,12 +17,30 @@
 #include <optional>
 #include <ranges>
 #include <span>
+#include <tuple>
+#include <type_traits>
+#include <utility>
 #include <alpaka/alpaka.hpp>
 
 CLUE_NAMESPACE_BEGIN
 
 template <std::size_t Ndim, std::floating_point TData>
 class PointsHost;
+
+namespace internal {
+
+  // Checks that the first NBuffers arguments are pointers and that the last one is an allocator
+  template <std::size_t NBuffers, typename... TArgs>
+    requires(sizeof...(TArgs) == NBuffers + 1)
+  consteval bool buffers_then_allocator() {
+    using Args = std::tuple<std::remove_cvref_t<TArgs>...>;
+    return []<std::size_t... Ids>(std::index_sequence<Ids...>) {
+      return (concepts::pointer<std::tuple_element_t<Ids, Args>> && ...);
+    }(std::make_index_sequence<NBuffers>{}) &&
+           concepts::allocator<std::tuple_element_t<NBuffers, Args>>;
+  }
+
+}  // namespace internal
 
 /// @brief The PointsDevice class is a data structure that manages points on a device.
 /// It provides methods to allocate, access, and manipulate points in device memory.
@@ -54,79 +72,114 @@ public:
   ///
   /// @param queue The queue to use for the device operations
   /// @param n_points The number of points to allocate
-  /// @param allocator The allocator to use for the device buffer
+  /// @param allocator The allocator to use for the device buffers
   template <concepts::queue TQueue, concepts::allocator TAllocator = DefaultAllocator>
   PointsDevice(TQueue& queue, std::int32_t n_points, const TAllocator& allocator = TAllocator{});
 
   /// @brief Construct a PointsDevice object with a pre-allocated buffer
   ///
   /// @param queue The queue to use for the device operations
-  /// @param n_points The number of points to allocate
+  /// @param n_points The number of points
   /// @param buffer The buffer to use for the points
-  template <concepts::queue TQueue>
-  PointsDevice(TQueue& queue, std::int32_t n_points, std::span<std::byte> buffer);
+  /// @param allocator The allocator to use for the internal buffers of the algorithm. The
+  /// buffers provided by the user are not allocated through it
+  template <concepts::queue TQueue, concepts::allocator TAllocator = DefaultAllocator>
+  PointsDevice(TQueue& queue,
+               std::int32_t n_points,
+               std::span<std::byte> buffer,
+               const TAllocator& allocator = TAllocator{});
 
   /// @brief Constructs a container for the points allocated on the device using interleaved data
   ///
-  /// @param queue The queue to use for memory allocation
+  /// @param queue The queue to use for the device operations
   /// @param n_points The number of points
-  /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
-  /// @param output_buffer The pre-allocated buffer to store the cluster indexes
+  /// @param input The pre-allocated buffer containing interleaved coordinates and weights
+  /// @param output The pre-allocated buffer to store the cluster indexes
+  /// @param allocator The allocator to use for the internal buffers of the algorithm. The
+  /// buffers provided by the user are not allocated through it
   /// @note The input buffer must contain the coordinates and weights in an SoA format
-  template <concepts::queue TQueue>
+  template <concepts::queue TQueue, concepts::allocator TAllocator = DefaultAllocator>
   PointsDevice(TQueue& queue,
                std::int32_t n_points,
                std::span<element_type> input,
-               std::span<int> output);
+               std::span<int> output,
+               const TAllocator& allocator = TAllocator{});
 
-  /// @brief Constructs a container for the points allocated on the device using separate coordinate and weight buffers
+  /// @brief Constructs a container for the points allocated on the device using separate
+  /// coordinate and weight buffers
   ///
-  /// @param queue The queue to use for memory allocation
+  /// @param queue The queue to use for the device operations
   /// @param n_points The number of points
   /// @param coordinates The pre-allocated buffer containing the coordinates
   /// @param weights The pre-allocated buffer containing the weights
   /// @param output The pre-allocated buffer to store the cluster indexes
+  /// @param allocator The allocator to use for the internal buffers of the algorithm. The
+  /// buffers provided by the user are not allocated through it
   /// @note The coordinates buffer must have a size of n_points * Ndim
-  template <concepts::queue TQueue>
+  template <concepts::queue TQueue, concepts::allocator TAllocator = DefaultAllocator>
   PointsDevice(TQueue& queue,
                std::int32_t n_points,
                std::span<element_type> coordinates,
                std::span<element_type> weights,
-               std::span<int> output);
+               std::span<int> output,
+               const TAllocator& allocator = TAllocator{});
 
   /// @brief Constructs a container for the points allocated on the device using interleaved data
   ///
-  /// @param queue The queue to use for memory allocation
+  /// @param queue The queue to use for the device operations
   /// @param n_points The number of points
-  /// @param input_buffer The pre-allocated buffer containing interleaved coordinates and weights
-  /// @param output_buffer The pre-allocated buffer to store the cluster indexes
+  /// @param input The pre-allocated buffer containing interleaved coordinates and weights
+  /// @param output The pre-allocated buffer to store the cluster indexes
+  /// @param allocator The allocator to use for the internal buffers of the algorithm. The
+  /// buffers provided by the user are not allocated through it
   /// @note The input buffer must contain the coordinates and weights in an SoA format
-  template <concepts::queue TQueue>
-  PointsDevice(TQueue& queue, std::int32_t n_points, element_type* input, int* output);
+  template <concepts::queue TQueue, concepts::allocator TAllocator = DefaultAllocator>
+  PointsDevice(TQueue& queue,
+               std::int32_t n_points,
+               element_type* input,
+               int* output,
+               const TAllocator& allocator = TAllocator{});
 
-  /// @brief Constructs a container for the points allocated on the device using separate coordinate and weight buffers
+  /// @brief Constructs a container for the points allocated on the device using separate
+  /// coordinate and weight buffers
   ///
-  /// @param queue The queue to use for memory allocation
+  /// @param queue The queue to use for the device operations
   /// @param n_points The number of points
   /// @param coordinates The pre-allocated buffer containing the coordinates
   /// @param weights The pre-allocated buffer containing the weights
   /// @param output The pre-allocated buffer to store the cluster indexes
+  /// @param allocator The allocator to use for the internal buffers of the algorithm. The
+  /// buffers provided by the user are not allocated through it
   /// @note The coordinates buffer must have a size of n_points * Ndim
-  template <concepts::queue TQueue>
+  template <concepts::queue TQueue, concepts::allocator TAllocator = DefaultAllocator>
   PointsDevice(TQueue& queue,
                std::int32_t n_points,
                element_type* coordinates,
                element_type* weights,
-               int* output);
+               int* output,
+               const TAllocator& allocator = TAllocator{});
 
-  /// @brief Construct a PointsDevice object with a pre-allocated buffer
+  /// @brief Construct a PointsDevice object from separate pre-allocated buffers
   ///
   /// @param queue The queue to use for the device operations
-  /// @param n_points The number of points to allocate
-  /// @param buffers The buffers to use for the points
+  /// @param n_points The number of points
+  /// @param buffers The Ndim coordinate buffers, followed by the weights and the cluster indexes
   template <concepts::queue TQueue, concepts::pointer... TBuffers>
     requires(sizeof...(TBuffers) == Ndim + 2 and Ndim > 1)
   PointsDevice(TQueue& queue, std::int32_t n_points, TBuffers... buffers);
+
+  /// @overload
+  /// @brief Construct a PointsDevice object from separate pre-allocated buffers
+  ///
+  /// @param queue The queue to use for the device operations
+  /// @param n_points The number of points
+  /// @param args The Ndim coordinate buffers, the weights and the cluster indexes, followed by
+  /// the allocator to use for the internal buffers of the algorithm. The buffers provided by
+  /// the user are not allocated through it
+  template <concepts::queue TQueue, typename... TArgs>
+    requires(sizeof...(TArgs) == Ndim + 3 and Ndim > 1 and
+             internal::buffers_then_allocator<Ndim + 2, TArgs...>())
+  PointsDevice(TQueue& queue, std::int32_t n_points, TArgs&&... args);
 
   PointsDevice(const PointsDevice&) = delete;
   PointsDevice& operator=(const PointsDevice&) = delete;
