@@ -19,7 +19,7 @@ namespace clue {
   template <std::floating_point TData = float>
   class FlatKernel {
   public:
-    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+    using value_type = std::remove_cvref_t<TData>;
 
   private:
     value_type m_flat;
@@ -46,7 +46,7 @@ namespace clue {
   template <std::floating_point TData = float>
   class GaussianKernel {
   public:
-    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+    using value_type = std::remove_cvref_t<TData>;
 
   private:
     value_type m_gaus_std;
@@ -75,7 +75,7 @@ namespace clue {
   template <std::floating_point TData = float>
   class ExponentialKernel {
   public:
-    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+    using value_type = std::remove_cvref_t<TData>;
 
   private:
     value_type m_exp_avg;

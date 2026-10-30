@@ -4,7 +4,10 @@
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include <array>
 #include <cassert>
+#include <concepts>
+#include <cstddef>
 #include <cstdint>
+#include <type_traits>
 
 CLUE_NAMESPACE_BEGIN
 
@@ -27,7 +30,7 @@ private:
 };
 
 template <std::size_t Ndim, std::floating_point TData = float>
-using SearchBoxExtremes = SearchBox<Ndim, std::remove_cv_t<std::remove_reference_t<TData>>>;
+using SearchBoxExtremes = SearchBox<Ndim, std::remove_cvref_t<TData>>;
 
 template <std::size_t Ndim>
 using SearchBoxBins = SearchBox<Ndim, int32_t>;

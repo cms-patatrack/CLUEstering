@@ -13,6 +13,7 @@
 #include <array>
 #include <concepts>
 #include <cstddef>
+#include <type_traits>
 
 CLUE_NAMESPACE_BEGIN
 
@@ -64,7 +65,7 @@ using Point = std::array<TData, Ndim + 1>;
 template <std::size_t Ndim, std::floating_point TData = float>
 class MahalanobisMetric {
 public:
-  using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+  using value_type = std::remove_cvref_t<TData>;
 
   constexpr MahalanobisMetric() = default;
 
@@ -95,7 +96,7 @@ public:
 template <std::size_t Ndim, std::floating_point TData = float>
 class EuclideanMetric {
 public:
-  using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+  using value_type = std::remove_cvref_t<TData>;
   /// @brief Default constructor
   ///
   /// @return EuclideanMetric object
@@ -122,7 +123,7 @@ public:
 template <std::size_t Ndim, std::floating_point TData = float>
 class WeightedEuclideanMetric {
 public:
-  using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+  using value_type = std::remove_cvref_t<TData>;
 
 private:
   std::array<value_type, Ndim> m_weights;
@@ -175,7 +176,7 @@ public:
 template <std::size_t Ndim, std::floating_point TData = float>
 class PeriodicEuclideanMetric {
 public:
-  using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+  using value_type = std::remove_cvref_t<TData>;
 
 private:
   std::array<value_type, Ndim> m_periods;
@@ -229,7 +230,7 @@ public:
 template <std::size_t Ndim, std::floating_point TData = float>
 class ManhattanMetric {
 public:
-  using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+  using value_type = std::remove_cvref_t<TData>;
 
   /// @brief Default constructor
   constexpr ManhattanMetric() = default;
@@ -254,7 +255,7 @@ public:
 template <std::size_t Ndim, std::floating_point TData = float>
 class ChebyshevMetric {
 public:
-  using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+  using value_type = std::remove_cvref_t<TData>;
 
   /// @brief Default constructor
   constexpr ChebyshevMetric() = default;
@@ -278,7 +279,7 @@ public:
 template <std::size_t Ndim, std::floating_point TData = float>
 class WeightedChebyshevMetric {
 public:
-  using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+  using value_type = std::remove_cvref_t<TData>;
 
 private:
   std::array<value_type, Ndim> m_weights;
