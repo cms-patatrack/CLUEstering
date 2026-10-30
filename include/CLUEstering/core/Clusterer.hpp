@@ -25,8 +25,10 @@
 #include <cstddef>
 #include <cstdint>
 #include <optional>
+#include <ranges>
 #include <span>
 #include <type_traits>
+#include <utility>
 
 CLUE_NAMESPACE_BEGIN
 
@@ -45,6 +47,7 @@ template <std::size_t Ndim,
 class Clusterer {
 public:
   using value_type = std::remove_cv_t<std::remove_reference_t<DataType>>;
+  using extremes_type = std::pair<value_type, value_type>[Ndim];
 
 private:
   value_type m_density_radius;
@@ -56,6 +59,7 @@ private:
   AllocatorType m_allocator;
 
   std::optional<host_buffer<internal::CoordinateExtremes<Ndim, value_type>>> m_extremes;
+  bool m_extremes_set = false;
   std::optional<host_buffer<value_type[Ndim]>> m_tile_size;
   std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
   std::optional<internal::SeedArray<>> m_seeds;
@@ -66,6 +70,7 @@ private:
     detail::setup_tiles(queue,
                         h_points,
                         m_extremes,
+                        !m_extremes_set,
                         m_tile_size,
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
@@ -81,6 +86,7 @@ private:
     detail::setup_tiles(queue,
                         h_points,
                         m_extremes,
+                        !m_extremes_set,
                         m_tile_size,
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
@@ -96,6 +102,7 @@ private:
     detail::setup_tiles(queue,
                         dev_points,
                         m_extremes,
+                        !m_extremes_set,
                         m_tile_size,
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
@@ -182,6 +189,20 @@ public:
                      value_type min_density,
                      std::optional<value_type> outlier_distance = std::nullopt,
                      std::optional<value_type> seeding_distance = std::nullopt);
+
+  /// @brief Set the extremes of the coordinates for the clustering space
+  ///
+  /// @tparam TRange A contiguous range of pairs of value_type representing the extremes of the coordinates for the clustering space
+  /// @param extremes The extremes of the coordinates for the clustering space
+  template <std::ranges::contiguous_range TRange>
+  void setExtremes(const TRange& extremes)
+    requires std::convertible_to<std::ranges::range_value_t<TRange>,
+                                 std::pair<value_type, value_type>>;
+
+  /// @brief Set the extremes of the coordinates for the clustering space
+  ///
+  /// @param extremes The extremes of the coordinates for the clustering space
+  void setExtremes(const extremes_type& extremes);
 
   /// @brief Construct the clusters from host points
   ///

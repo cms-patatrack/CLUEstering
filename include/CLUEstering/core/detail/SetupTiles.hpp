@@ -69,6 +69,7 @@ namespace detail {
       const PointsHost<Ndim, TInput>& points,
       std::optional<host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>>&
           extremes,
+      bool compute_extremes,
       std::optional<host_buffer<std::remove_cv_t<TInput>[Ndim]>>& tile_sizes,
       std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
       std::remove_cv_t<TInput> tile_edge,
@@ -84,7 +85,9 @@ namespace detail {
       tile_sizes = std::make_optional(
           alpaka::allocMappedBuf<std::remove_cv_t<TInput>>(host, platform<TQueue>(), Ndim));
     }
-    detail::compute_extents(extremes->data(), points);
+    if (compute_extremes)
+      detail::compute_extents(extremes->data(), points);
+
     setup_tiles_from_extents(queue,
                              points.size(),
                              *extremes->data(),
@@ -106,6 +109,7 @@ namespace detail {
       const PointsDevice<Ndim, TInput, TDev>& points,
       std::optional<host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>>&
           extremes,
+      bool compute_extremes,
       std::optional<host_buffer<std::remove_cv_t<TInput>[Ndim]>>& tile_sizes,
       std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
       std::remove_cv_t<TInput> tile_edge,
@@ -121,7 +125,10 @@ namespace detail {
       tile_sizes = std::make_optional(
           alpaka::allocMappedBuf<std::remove_cv_t<TInput>>(host, platform<TQueue>(), Ndim));
     }
-    detail::compute_extents(queue, extremes->data(), points);
+
+    if (compute_extremes)
+      detail::compute_extents(queue, extremes->data(), points);
+
     setup_tiles_from_extents(queue,
                              points.size(),
                              *extremes->data(),
