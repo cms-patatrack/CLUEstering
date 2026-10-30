@@ -21,6 +21,7 @@
 #include "CLUEstering/utils/get_clusters.hpp"
 
 #include <alpaka/alpaka.hpp>
+#include <algorithm>
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
@@ -29,6 +30,7 @@
 #include <ranges>
 #include <span>
 #include <stdexcept>
+#include <utility>
 
 CLUE_NAMESPACE_BEGIN
 
@@ -101,6 +103,41 @@ void Clusterer<Ndim, DataType, AllocatorType>::setParameters(
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
+template <std::ranges::contiguous_range TRange>
+void Clusterer<Ndim, DataType, AllocatorType>::setExtremes(const TRange& extremes)
+  requires std::convertible_to<std::ranges::range_value_t<TRange>, std::pair<value_type, value_type>>
+{
+  if (std::ranges::size(extremes) != Ndim) {
+    throw std::invalid_argument("The number of extremes must match the number of dimensions");
+  }
+  const auto* ranges = std::ranges::data(extremes);
+  for (auto dim = 0u; dim != Ndim; ++dim) {
+    const std::pair<value_type, value_type> range = ranges[dim];
+    if (!(range.first < range.second)) {
+      throw std::invalid_argument(
+          "The minimum of each coordinate must be smaller than its maximum");
+    }
+  }
+
+  if (!m_extremes.has_value()) {
+    m_extremes =
+        std::make_optional(alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, value_type>>(
+            host, platform<Platform>(), Scalar{}));
+  }
+  for (auto dim = 0u; dim != Ndim; ++dim) {
+    const std::pair<value_type, value_type> range = ranges[dim];
+    m_extremes->data()->min(dim) = range.first;
+    m_extremes->data()->max(dim) = range.second;
+  }
+  m_extremes_set = true;
+}
+
+template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
+void Clusterer<Ndim, DataType, AllocatorType>::setExtremes(const extremes_type& extremes) {
+  setExtremes(std::span{extremes});
+}
+
+template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 template <std::floating_point InputType,
           concepts::convolutional_kernel Kernel,
           concepts::distance_metric<Ndim> DistanceMetric>
@@ -164,6 +201,7 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
   detail::setup_tiles(queue,
                       dev_points,
                       m_extremes,
+                      !m_extremes_set,
                       m_tile_size,
                       m_tiles,
                       detail::tile_edge(m_density_radius, m_outlier_distance),
