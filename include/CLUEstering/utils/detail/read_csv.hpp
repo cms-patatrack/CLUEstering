@@ -43,7 +43,9 @@ inline clue::PointsHost<NDim, TData> read_csv(TQueue& queue, const std::string& 
 
   clue::PointsHost<NDim, TData> points(queue, n_points);
 
-  file = std::fstream(file_path);
+  file.clear();
+  file.seekg(0);
+
   // discard the header
   std::string buffer;
   getline(file, buffer);
@@ -77,7 +79,9 @@ inline clue::PointsHost<NDim, TData> read_output(TQueue& queue, const std::strin
   internal::points_interface<std::remove_cvref_t<decltype(points)>>::mark_clustered(points);
   auto& view = points.view();
 
-  file = std::fstream(file_path);
+  file.clear();
+  file.seekg(0);
+
   // discard the header
   std::string buffer;
   getline(file, buffer);
