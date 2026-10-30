@@ -120,13 +120,15 @@ namespace detail {
                                                  ? dev_points.density_uncertainty()[global_idx]
                                                  : TData{1.};
             const auto effective_min_density = min_density * density_uncertainty;
+            const auto effective_distance =
+                (rho_i >= effective_min_density) ? seeding_distance : outlier_distance;
 
             clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
             for (auto dim = 0u; dim != Ndim; ++dim) {
               const auto sigma_i =
                   dev_points.has_sigma(dim) ? dev_points.sigma(dim)[global_idx] : TData{0};
-              const auto box_radius =
-                  math::max(outlier_distance, outlier_distance * sigma_i * math::sqrt(TData{2}));
+              const auto box_radius = math::max(
+                  effective_distance, effective_distance * sigma_i * math::sqrt(TData{2}));
               searchbox_extremes[dim] =
                   clue::nostd::make_array(coords_i[dim] - box_radius, coords_i[dim] + box_radius);
             }
@@ -144,14 +146,12 @@ namespace detail {
                                                            rho_i,
                                                            delta_i,
                                                            nh_i,
-                                                           outlier_distance,
-                                                           seeding_distance,
-                                                           effective_min_density,
+                                                           effective_distance,
                                                            metric,
                                                            global_idx,
                                                            event);
 
-            assert(nh_i == -1 || delta_i <= outlier_distance);
+            assert(nh_i == -1 || delta_i <= effective_distance);
             dev_points.nearest_higher()[global_idx] = nh_i;
             if (nh_i == -1) {
               alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
