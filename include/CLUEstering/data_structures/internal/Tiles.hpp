@@ -18,6 +18,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <alpaka/alpaka.hpp>
+#include <type_traits>
 
 CLUE_NAMESPACE_BEGIN
 namespace internal {
@@ -33,7 +34,7 @@ namespace internal {
   template <std::size_t Ndim, std::floating_point TData, clue::concepts::device TDev>
   class Tiles {
   public:
-    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+    using value_type = std::remove_cvref_t<TData>;
 
     template <clue::concepts::queue TQueue,
               clue::concepts::allocator TAllocator = clue::DefaultAllocator>

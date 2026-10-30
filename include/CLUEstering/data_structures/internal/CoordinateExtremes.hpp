@@ -14,7 +14,7 @@ namespace internal {
   template <std::size_t Ndim, typename TData = float>
   class CoordinateExtremes {
   private:
-    using value_type = std::remove_cv_t<std::remove_reference_t<TData>>;
+    using value_type = std::remove_cvref_t<TData>;
 
     std::array<value_type, 2 * Ndim> m_data;
 

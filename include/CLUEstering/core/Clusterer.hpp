@@ -46,7 +46,7 @@ template <std::size_t Ndim,
           concepts::allocator AllocatorType = DefaultAllocator>
 class Clusterer {
 public:
-  using value_type = std::remove_cv_t<std::remove_reference_t<DataType>>;
+  using value_type = std::remove_cvref_t<DataType>;
   using extremes_type = std::pair<value_type, value_type>[Ndim];
 
 private:
