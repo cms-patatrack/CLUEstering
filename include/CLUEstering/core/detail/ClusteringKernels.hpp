@@ -159,17 +159,13 @@ namespace detail {
                                                   TData rho_i,
                                                   TData& delta_i,
                                                   int& nh_i,
-                                                  TData outlier_distance,
-                                                  TData seeding_distance,
-                                                  TData min_density,
+                                                  TData threshold_distance,
                                                   const DistanceMetric& metric,
                                                   int32_t point_id,
                                                   std::size_t event = 0) {
     if constexpr (N_ == 0) {
       auto tile_idx = tiles.getGlobalBinByBin(base_vec, event);
       auto tile_size = tiles[tile_idx].size();
-
-      const auto effective_distance = (rho_i >= min_density) ? seeding_distance : outlier_distance;
 
       auto tag = [&points](std::integral auto idx) -> std::size_t {
         return (points.has_tags()) ? points.tags()[idx] : static_cast<std::size_t>(idx);
@@ -196,7 +192,7 @@ namespace detail {
           }();
           assert(distance >= TData{0});
 
-          if (distance <= effective_distance &&
+          if (distance <= threshold_distance &&
               ((distance < delta_i) ||
                ((distance == delta_i) && (nh_i >= 0) &&
                 ((rho_j > points.rho()[nh_i]) ||
@@ -222,9 +218,7 @@ namespace detail {
                                                          rho_i,
                                                          delta_i,
                                                          nh_i,
-                                                         outlier_distance,
-                                                         seeding_distance,
-                                                         min_density,
+                                                         threshold_distance,
                                                          metric,
                                                          point_id,
                                                          event);
@@ -256,12 +250,14 @@ namespace detail {
         const auto density_uncertainty =
             points.has_uncertainty() ? points.density_uncertainty()[i] : TData{1.};
         const auto effective_min_density = min_density * density_uncertainty;
+        const auto effective_distance =
+            (rho_i >= effective_min_density) ? seeding_distance : outlier_distance;
 
         clue::SearchBoxExtremes<Ndim, TData> searchbox_extremes;
         for (auto dim = 0u; dim != Ndim; ++dim) {
           const auto sigma_i = points.has_sigma(dim) ? points.sigma(dim)[i] : TData{0};
           const auto box_radius =
-              math::max(outlier_distance, outlier_distance * sigma_i * math::sqrt(TData{2}));
+              math::max(effective_distance, effective_distance * sigma_i * math::sqrt(TData{2}));
           searchbox_extremes[dim] =
               clue::nostd::make_array(coords_i[dim] - box_radius, coords_i[dim] + box_radius);
         }
@@ -279,13 +275,11 @@ namespace detail {
                                                        rho_i,
                                                        delta_i,
                                                        nh_i,
-                                                       outlier_distance,
-                                                       seeding_distance,
-                                                       effective_min_density,
+                                                       effective_distance,
                                                        metric,
                                                        i);
 
-        assert(nh_i == -1 || delta_i <= outlier_distance);
+        assert(nh_i == -1 || delta_i <= effective_distance);
         points.nearest_higher()[i] = nh_i;
         if (nh_i == -1) {
           alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
