@@ -78,11 +78,11 @@ namespace detail {
     if (!extremes.has_value()) {
       extremes = std::make_optional(
           alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
-              host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Scalar{}));
+              host, platform<TQueue>(), Scalar{}));
     }
     if (!tile_sizes.has_value()) {
-      tile_sizes = std::make_optional(alpaka::allocMappedBuf<std::remove_cv_t<TInput>>(
-          host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Ndim));
+      tile_sizes = std::make_optional(
+          alpaka::allocMappedBuf<std::remove_cv_t<TInput>>(host, platform<TQueue>(), Ndim));
     }
     detail::compute_extents(extremes->data(), points);
     setup_tiles_from_extents(queue,
@@ -115,11 +115,11 @@ namespace detail {
     if (!extremes.has_value()) {
       extremes = std::make_optional(
           alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
-              host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Scalar{}));
+              host, platform<TQueue>(), Scalar{}));
     }
     if (!tile_sizes.has_value()) {
-      tile_sizes = std::make_optional(alpaka::allocMappedBuf<std::remove_cv_t<TInput>>(
-          host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Ndim));
+      tile_sizes = std::make_optional(
+          alpaka::allocMappedBuf<std::remove_cv_t<TInput>>(host, platform<TQueue>(), Ndim));
     }
     detail::compute_extents(queue, extremes->data(), points);
     setup_tiles_from_extents(queue,

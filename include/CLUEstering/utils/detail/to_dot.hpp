@@ -30,12 +30,9 @@ inline void to_dot(TQueue& queue,
 
   const auto n_points = d_points.size();
 
-  auto h_cluster_index = alpaka::allocMappedBuf<int32_t>(
-      host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), n_points);
-  auto h_nearest_higher = alpaka::allocMappedBuf<int32_t>(
-      host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), n_points);
-  auto h_is_seed = alpaka::allocMappedBuf<int32_t>(
-      host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), n_points);
+  auto h_cluster_index = alpaka::allocMappedBuf<int32_t>(host, platform<TQueue>(), n_points);
+  auto h_nearest_higher = alpaka::allocMappedBuf<int32_t>(host, platform<TQueue>(), n_points);
+  auto h_is_seed = alpaka::allocMappedBuf<int32_t>(host, platform<TQueue>(), n_points);
 
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_cluster_index.data(), n_points),

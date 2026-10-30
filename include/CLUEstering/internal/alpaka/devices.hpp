@@ -14,9 +14,16 @@ CLUE_NAMESPACE_BEGIN
 
 // returns the alpaka accelerator platform
 template <concepts::platform TPlatform>
-inline TPlatform const& platform() {
+inline auto const& platform() {
   // initialise the platform the first time that this function is called
   static const auto platform = TPlatform{};
+  return platform;
+}
+
+template <concepts::queue TQueue>
+inline auto const& platform() {
+  // initialise the platform the first time that this function is called
+  static const auto platform = alpaka::Platform<alpaka::Dev<TQueue>>{};
   return platform;
 }
 
