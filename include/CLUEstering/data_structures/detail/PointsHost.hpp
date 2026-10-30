@@ -27,9 +27,7 @@ template <std::size_t Ndim, std::floating_point TData>
 template <concepts::queue TQueue>
 inline PointsHost<Ndim, TData>::PointsHost(TQueue& /* queue */, int32_t n_points)
     : m_buffer{alpaka::allocMappedBuf<std::byte>(
-          host,
-          platform<alpaka::Platform<alpaka::Dev<TQueue>>>(),
-          soa::host::computeSoASize<Ndim, value_type>(n_points))},
+          host, platform<TQueue>(), soa::host::computeSoASize<Ndim, value_type>(n_points))},
       m_view{},
       m_size{n_points} {
   soa::host::partitionSoAView(m_view, m_buffer->data(), n_points);

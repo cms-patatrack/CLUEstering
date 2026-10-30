@@ -344,8 +344,7 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_batched(
   const auto max_event_size =
       std::reduce(batch_item_sizes.begin(), batch_item_sizes.end(), 0u, nostd::maximum<uint32_t>{});
 
-  auto event_offsets = alpaka::allocMappedBuf<std::size_t>(
-      host, platform<alpaka::Platform<alpaka::Dev<Queue>>>(), batch_size + 1);
+  auto event_offsets = alpaka::allocMappedBuf<std::size_t>(host, platform<Queue>(), batch_size + 1);
   event_offsets[0] = 0;
   std::inclusive_scan(batch_item_sizes.begin(), batch_item_sizes.end(), event_offsets.data() + 1);
   auto d_event_offsets =
