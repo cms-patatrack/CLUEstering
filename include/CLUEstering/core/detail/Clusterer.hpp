@@ -163,6 +163,8 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
     const Kernel& kernel) {
   detail::setup_tiles(queue,
                       dev_points,
+                      m_extremes,
+                      m_tile_size,
                       m_tiles,
                       detail::tile_edge(m_density_radius, m_outlier_distance),
                       m_wrappedCoordinates,

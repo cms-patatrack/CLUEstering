@@ -14,6 +14,7 @@
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/PointsConversion.hpp"
+#include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
 #include "CLUEstering/data_structures/internal/DeviceVector.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
@@ -54,6 +55,8 @@ private:
 
   AllocatorType m_allocator;
 
+  std::optional<host_buffer<internal::CoordinateExtremes<Ndim, value_type>>> m_extremes;
+  std::optional<host_buffer<value_type[Ndim]>> m_tile_size;
   std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
   std::optional<internal::SeedArray<>> m_seeds;
   std::optional<internal::DeviceVector<>> m_event_associations;
@@ -62,6 +65,8 @@ private:
   void setup(Queue& queue, const clue::PointsHost<Ndim, InputType>& h_points) {
     detail::setup_tiles(queue,
                         h_points,
+                        m_extremes,
+                        m_tile_size,
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
                         m_wrappedCoordinates,
@@ -75,6 +80,8 @@ private:
                    std::size_t batch_size) {
     detail::setup_tiles(queue,
                         h_points,
+                        m_extremes,
+                        m_tile_size,
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
                         m_wrappedCoordinates,
@@ -88,6 +95,8 @@ private:
                    std::size_t batch_size) {
     detail::setup_tiles(queue,
                         dev_points,
+                        m_extremes,
+                        m_tile_size,
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
                         m_wrappedCoordinates,

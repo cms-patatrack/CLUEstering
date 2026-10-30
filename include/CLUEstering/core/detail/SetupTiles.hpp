@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <optional>
+#include <type_traits>
 
 CLUE_NAMESPACE_BEGIN
 namespace detail {
@@ -26,13 +27,14 @@ namespace detail {
             concepts::allocator TAllocator = DefaultAllocator>
   void setup_tiles_from_extents(TQueue& queue,
                                 int32_t npoints,
-                                const internal::CoordinateExtremes<Ndim, TData>& min_max,
+                                const internal::CoordinateExtremes<Ndim, TData>& extremes,
+                                host_buffer<TData[Ndim]>& tile_sizes,
                                 std::optional<internal::Tiles<Ndim, TData, TDev>>& tiles,
                                 TData tile_edge,
                                 const std::array<uint8_t, Ndim>& wrapped_coordinates,
                                 std::size_t batch_size,
                                 const TAllocator& allocator = TAllocator{}) {
-    const auto grid = detail::compute_tile_grid(min_max, tile_edge, npoints, batch_size);
+    const auto grid = detail::compute_tile_grid(extremes, tile_edge, npoints, batch_size);
 
     if (!tiles.has_value()) {
       tiles = std::make_optional<internal::Tiles<Ndim, TData, TDev>>(
@@ -49,15 +51,12 @@ namespace detail {
       tiles->reset(npoints, grid, batch_size);
     }
 
-    auto tile_sizes = alpaka::allocMappedBuf<TData>(
-        host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Ndim);
     std::copy(grid.tilesizes.begin(), grid.tilesizes.end(), tile_sizes.data());
 
-    alpaka::memcpy(queue, tiles->minMax(), alpaka::createView(host, &min_max, Scalar{}));
+    alpaka::memcpy(queue, tiles->minMax(), alpaka::createView(host, &extremes, Scalar{}));
     alpaka::memcpy(queue, tiles->tileSize(), tile_sizes);
     alpaka::memcpy(
         queue, tiles->wrapped(), alpaka::createView(host, wrapped_coordinates.data(), Ndim));
-    alpaka::wait(queue);
   }
 
   template <concepts::queue TQueue,
@@ -65,20 +64,31 @@ namespace detail {
             std::floating_point TInput,
             concepts::device TDev = decltype(alpaka::getDev(std::declval<TQueue>())),
             concepts::allocator TAllocator = DefaultAllocator>
-  void setup_tiles(TQueue& queue,
-                   const PointsHost<Ndim, TInput>& points,
-                   std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
-                   std::remove_cv_t<TInput> tile_edge,
-                   const std::array<uint8_t, Ndim>& wrapped_coordinates,
-                   std::size_t batch_size = 1,
-                   const TAllocator& allocator = TAllocator{}) {
-    auto min_max =
-        alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
-            host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Scalar{});
-    detail::compute_extents(min_max.data(), points);
+  void setup_tiles(
+      TQueue& queue,
+      const PointsHost<Ndim, TInput>& points,
+      std::optional<host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>>&
+          extremes,
+      std::optional<host_buffer<std::remove_cv_t<TInput>[Ndim]>>& tile_sizes,
+      std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
+      std::remove_cv_t<TInput> tile_edge,
+      const std::array<uint8_t, Ndim>& wrapped_coordinates,
+      std::size_t batch_size = 1,
+      const TAllocator& allocator = TAllocator{}) {
+    if (!extremes.has_value()) {
+      extremes = std::make_optional(
+          alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
+              host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Scalar{}));
+    }
+    if (!tile_sizes.has_value()) {
+      tile_sizes = std::make_optional(alpaka::allocMappedBuf<std::remove_cv_t<TInput>>(
+          host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Ndim));
+    }
+    detail::compute_extents(extremes->data(), points);
     setup_tiles_from_extents(queue,
                              points.size(),
-                             *min_max.data(),
+                             *extremes->data(),
+                             *tile_sizes,
                              tiles,
                              tile_edge,
                              wrapped_coordinates,
@@ -91,20 +101,31 @@ namespace detail {
             std::floating_point TInput,
             concepts::device TDev = decltype(alpaka::getDev(std::declval<TQueue>())),
             concepts::allocator TAllocator = DefaultAllocator>
-  void setup_tiles(TQueue& queue,
-                   const PointsDevice<Ndim, TInput, TDev>& points,
-                   std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
-                   std::remove_cv_t<TInput> tile_edge,
-                   const std::array<uint8_t, Ndim>& wrapped_coordinates,
-                   std::size_t batch_size = 1,
-                   const TAllocator& allocator = TAllocator{}) {
-    auto min_max =
-        alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
-            host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Scalar{});
-    detail::compute_extents(queue, min_max.data(), points);
+  void setup_tiles(
+      TQueue& queue,
+      const PointsDevice<Ndim, TInput, TDev>& points,
+      std::optional<host_buffer<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>>&
+          extremes,
+      std::optional<host_buffer<std::remove_cv_t<TInput>[Ndim]>>& tile_sizes,
+      std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
+      std::remove_cv_t<TInput> tile_edge,
+      const std::array<uint8_t, Ndim>& wrapped_coordinates,
+      std::size_t batch_size = 1,
+      const TAllocator& allocator = TAllocator{}) {
+    if (!extremes.has_value()) {
+      extremes = std::make_optional(
+          alpaka::allocMappedBuf<internal::CoordinateExtremes<Ndim, std::remove_cv_t<TInput>>>(
+              host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Scalar{}));
+    }
+    if (!tile_sizes.has_value()) {
+      tile_sizes = std::make_optional(alpaka::allocMappedBuf<std::remove_cv_t<TInput>>(
+          host, platform<alpaka::Platform<alpaka::Dev<TQueue>>>(), Ndim));
+    }
+    detail::compute_extents(queue, extremes->data(), points);
     setup_tiles_from_extents(queue,
                              points.size(),
-                             *min_max.data(),
+                             *extremes->data(),
+                             *tile_sizes,
                              tiles,
                              tile_edge,
                              wrapped_coordinates,
