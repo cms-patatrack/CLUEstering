@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="classclue_1_1AllocatorInterface" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>clue::AllocatorInterface</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classclue_1_1AllocatorInterface_1adb526b36ec43c9074d9006ed89520fe1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual clue::AllocatorInterface::~AllocatorInterface</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AllocatorInterface</name>
+        <qualifiedname>clue::AllocatorInterface::~AllocatorInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/AllocatorInterface.hpp" line="10" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AllocatorInterface_1aae482a452b97ab91c027ed4f1745d41b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void *</type>
+        <definition>virtual void * clue::AllocatorInterface::allocate</definition>
+        <argsstring>(std::size_t size, std::size_t)=0</argsstring>
+        <name>allocate</name>
+        <qualifiedname>clue::AllocatorInterface::allocate</qualifiedname>
+        <param>
+          <type>std::size_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/AllocatorInterface.hpp" line="12" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classclue_1_1AllocatorInterface_1a8cd1a7abd8c7b84e2b4b6d281646faca" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void clue::AllocatorInterface::deallocate</definition>
+        <argsstring>(void *ptr)=0</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>clue::AllocatorInterface::deallocate</qualifiedname>
+        <param>
+          <type>void *</type>
+          <declname>ptr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/core/AllocatorInterface.hpp" line="13" column="18"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/core/AllocatorInterface.hpp" line="8" column="3" bodyfile="include/CLUEstering/core/AllocatorInterface.hpp" bodystart="8" bodyend="14"/>
+    <listofallmembers>
+      <member refid="classclue_1_1AllocatorInterface_1aae482a452b97ab91c027ed4f1745d41b" prot="public" virt="pure-virtual"><scope>clue::AllocatorInterface</scope><name>allocate</name></member>
+      <member refid="classclue_1_1AllocatorInterface_1a8cd1a7abd8c7b84e2b4b6d281646faca" prot="public" virt="pure-virtual"><scope>clue::AllocatorInterface</scope><name>deallocate</name></member>
+      <member refid="classclue_1_1AllocatorInterface_1adb526b36ec43c9074d9006ed89520fe1" prot="public" virt="virtual"><scope>clue::AllocatorInterface</scope><name>~AllocatorInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

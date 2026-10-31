@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="deprecated" kind="page">
+    <compoundname>deprecated</compoundname>
+    <title>Deprecated List</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><variablelist>
+<varlistentry><term>Member <ref refid="classclue_1_1Clusterer_1ac75faffb4f5bec2f290218b87ec8dc7d" kindref="member">clue::Clusterer&lt; Ndim, DataType, AllocatorType &gt;::make_clusters</ref>  (<ref refid="classclue_1_1PointsHost" kindref="compound">clue::PointsHost&lt; Ndim, InputType &gt;</ref> &amp;h_points, const DistanceMetric &amp;metric=<ref refid="classclue_1_1EuclideanMetric" kindref="compound">clue::EuclideanMetric&lt; Ndim, value_type &gt;</ref>{}, const Kernel &amp;kernel=<ref refid="classclue_1_1FlatKernel" kindref="compound">FlatKernel&lt; value_type &gt;</ref>{.5f})</term></varlistentry>
+<listitem><para><anchor id="deprecated_1_deprecated000001"/>Use the overload taking a queue instead. This overload will be removed after the next release. </para>
+</listitem>
+</variablelist>
+</para>
+    </detaileddescription>
+    <location file="deprecated"/>
+  </compounddef>
+</doxygen>

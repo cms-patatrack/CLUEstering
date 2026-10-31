@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="namespaceclue_1_1internal" kind="namespace" language="C++">
+    <compoundname>clue::internal</compoundname>
+    <innerclass refid="classclue_1_1internal_1_1Tiles" prot="public">clue::internal::Tiles</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="AssociationMap_8hpp_1aa564bd6de91d942f03e8ed79914dfe24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>clue::concepts::queue</type>
+            <declname>TQueue</declname>
+            <defname>TQueue</defname>
+          </param>
+          <param>
+            <type>clue::concepts::allocator</type>
+            <declname>TAllocator</declname>
+            <defname>TAllocator</defname>
+            <defval>clue::DefaultAllocator</defval>
+          </param>
+        </templateparamlist>
+        <type>auto</type>
+        <definition>auto clue::internal::make_associator</definition>
+        <argsstring>(TQueue &amp;queue, std::span&lt; const int32_t &gt; associations, int32_t elements, const TAllocator &amp;allocator=TAllocator{})</argsstring>
+        <name>make_associator</name>
+        <qualifiedname>clue::internal::make_associator</qualifiedname>
+        <param>
+          <type>TQueue &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>std::span&lt; const int32_t &gt;</type>
+          <declname>associations</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>elements</declname>
+        </param>
+        <param>
+          <type>const TAllocator &amp;</type>
+          <declname>allocator</declname>
+          <defval>TAllocator{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="29" column="8" declfile="include/CLUEstering/data_structures/AssociationMap.hpp" declline="29" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="AssociationMap_8hpp_1a69ab433e3e105cf699f4446624822631" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref>&lt; alpaka::DevCpu &gt;</type>
+        <definition>AssociationMap&lt; alpaka::DevCpu &gt; clue::internal::make_associator</definition>
+        <argsstring>(std::span&lt; const int32_t &gt; associations, int32_t elements)</argsstring>
+        <name>make_associator</name>
+        <qualifiedname>clue::internal::make_associator</qualifiedname>
+        <param>
+          <type>std::span&lt; const int32_t &gt;</type>
+          <declname>associations</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>elements</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="33" column="8" declfile="include/CLUEstering/data_structures/AssociationMap.hpp" declline="33" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="PointsDevice_8hpp_1a8e971eee709443e8fed2ee3536c57c92" prot="public" static="no" consteval="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>std::size_t</type>
+            <declname>NBuffers</declname>
+            <defname>NBuffers</defname>
+          </param>
+          <param>
+            <type>typename...</type>
+            <declname>TArgs</declname>
+            <defname>TArgs</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool clue::internal::buffers_then_allocator</definition>
+        <argsstring>()</argsstring>
+        <name>buffers_then_allocator</name>
+        <qualifiedname>clue::internal::buffers_then_allocator</qualifiedname>
+    <requiresclause>(sizeof...(TArgs) == NBuffers + 1)    </requiresclause>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/PointsDevice.hpp" line="35" column="18" bodyfile="include/CLUEstering/data_structures/PointsDevice.hpp" bodystart="35" bodyend="41"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/CLUEstering/data_structures/AssociationMap.hpp" line="22" column="1"/>
+  </compounddef>
+</doxygen>
