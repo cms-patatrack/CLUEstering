@@ -88,7 +88,7 @@ int main() {
   auto queue = clue::get_queue(0u);
 
   // Allocate the points on the host
-  clue::PointsHost<2> points = clue::read_csv<2>(queue, "data.csv");
+  clue::PointsHost<2> points = clue::read_csv<2, float>(queue, "data.csv");
 
   // Define the parameters for the clustering and construct the clusterer.
   const auto density_radius = 20.f, min_density = 10.f;
@@ -96,9 +96,9 @@ int main() {
 
   // Launch the clustering
   // The results will be stored in the `clue::PointsHost` object
-  clusterer.make_clusters(queue, points);
-  auto clusters_indexes = h_points.clusterIndexes();  // Get the cluster index for each points
-  auto clusters = h_points.clusters();                // Get the clusters-to-point associations
+  algo.make_clusters(queue, points);
+  auto clusters_indexes = points.clusterIndexes();  // Get the cluster indexes (labels)
+  auto clusters = points.clusters();                // Get the clusters-to-point associations
 }
 ```
 This example reads a set of 2D points from a CSV file, performs clustering using CLUE, and retrieves the cluster assignments for each point.
@@ -124,16 +124,14 @@ The data can be provided in many different formats, including numpy arrays, pand
 
 To cite this software directly, please use the following BibTeX entry:
 ```bibtex
-@software{balducci_clueestering,
-  author       = {Balducci, Simone and
-                  Pantaleo, Felice and
-                  Perego, Aurora and
-                  Redjeb, Wahid and
-                  Rovere, Marco and
-                  Giacomini, Francesco},
-  title        = {CLUEstering},
-  publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.20270689},
-  url          = {https://doi.org/10.5281/zenodo.20270689},
+@misc{CLUEstering,
+  title     = {{CLUEstering}},
+  author    = {Balducci, Simone and Pantaleo, Felice and Perego, Aurora and
+               Redjeb, Wahid and Rovere, Marco and Giacomini, Francesco},
+  publisher = {Zenodo},
+  year      = {2026},
+  doi       = {10.5281/zenodo.20270689},
+  url       = {https://doi.org/10.5281/zenodo.20270689},
+  note      = {Software}
 }
 ```
