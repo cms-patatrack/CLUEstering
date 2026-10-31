@@ -121,6 +121,27 @@ def is_hip_available():     # pragma: no cover
     return hip_found
 
 
+def _choose_default_backend() -> str:
+    """
+    Choose the default backend based on availability.
+
+    The order of preference is: GPU CUDA, GPU HIP, CPU TBB, CPU OpenMP, CPU Serial.
+
+    :returns: Name of the default backend.
+    :rtype: str
+    """
+    if cuda_found:
+        return "gpu cuda"
+    elif hip_found:
+        return "gpu hip"
+    elif tbb_found:
+        return "cpu tbb"
+    elif omp_found:
+        return "cpu openmp"
+    else:
+        return "cpu serial"
+
+
 def test_blobs(n_samples: int, n_dim: int, n_blobs: int = 4, mean: float = 0,
                sigma: float = 0.5, x_max: float = 30, y_max: float = 30) -> pd.DataFrame:
     """
@@ -643,7 +664,7 @@ class clusterer:
 
 
     def run_clue(self,
-                 backend: str = "cpu serial",
+                 backend: Union[str, None] = None,
                  batch_sample_sizes: Union[np.ndarray, None] = None,
                  device_id: int = 0,
                  verbose: bool = False,
@@ -651,7 +672,7 @@ class clusterer:
         """
         Execute the CLUE clustering algorithm.
 
-        :param backend: Backend to use for execution. Defaults to 'cpu serial'.
+        :param backend: Backend to use for execution. Defaults to the most efficient available backend if None.
         :type backend: str, optional
         :param batch_sample_sizes: Optional array specifying batch sizes for sampling. Defaults to None.
         ;type batch_sample_sizes: np.ndarray or None, optional
@@ -667,8 +688,14 @@ class clusterer:
 
         :returns: None
         """
+        if backend is None:
+            backend = _choose_default_backend()
+
         _validate_backend(backend)
         _check_backend_available(backend)
+        if verbose:
+            print(f'Running CLUEstering with backend: {backend}')
+
         if dimensions is None:
             data = self.clust_data
         else:
@@ -713,12 +740,12 @@ class clusterer:
                                              output_df)
         self._elapsed_time = (finish - start) / 1e6
         if verbose:
-            print(f'CLUE executed in {self._elapsed_time} ms')
+            print(f'CLUEstering executed in {self._elapsed_time} ms')
             print(f'Number of clusters found: {self.clust_prop.n_clusters}')
 
     def fit(self,
             data: Union[pd.DataFrame,str,dict,list,np.ndarray],
-            backend: str = "cpu serial",
+            backend: Union[str, None] = None,
             batch_sample_sizes: Union[np.ndarray, None] = None,
             device_id: int = 0,
             verbose: bool = False,
@@ -730,7 +757,7 @@ class clusterer:
                      a dictionary with coordinate keys and weight, or a list/array
                      containing coordinates and weights.
         :type data: Union[pd.DataFrame, str, dict, list, np.ndarray]
-        :param backend: Backend to use for the algorithm execution.
+        :param backend: Backend to use for execution. Defaults to the most efficient available backend if None.
         :type backend: str, optional
         :param batch_sample_sizes: Optional array specifying batch sizes for sampling. Defaults to None.
         :type batch_sample_sizes: np.ndarray or None, optional
@@ -748,6 +775,9 @@ class clusterer:
         :raises: Various exceptions if input data is invalid or clustering fails.
         """
 
+        if backend is None:
+            backend = _choose_default_backend()
+
         _validate_backend(backend)
         self.read_data(data)
         self.run_clue(backend, batch_sample_sizes, device_id, verbose, dimensions)
@@ -755,7 +785,7 @@ class clusterer:
 
     def fit_predict(self,
                     data: [],
-                    backend: str = "cpu serial",
+                    backend: Union[str, None] = None,
                     batch_sample_sizes: Union[np.ndarray, None] = None,
                     device_id: int = 0,
                     verbose: bool = False,
@@ -767,7 +797,7 @@ class clusterer:
                      a dictionary with coordinate keys and weight, or a list/array
                      containing coordinates and weights.
         :type data: Union[pd.DataFrame, str, dict, list, np.ndarray]
-        :param backend: Backend to use for the algorithm execution.
+        :param backend: Backend to use for execution. Defaults to the most efficient available backend if None.
         :type backend: str, optional
         :param batch_sample_sizes: Optional array specifying batch sizes for sampling. Defaults to None.
         :type batch_sample_sizes: np.ndarray or None, optional
@@ -784,6 +814,9 @@ class clusterer:
         :raises ValueError: If the backend is not valid.
         :raises: Various exceptions if input data is invalid or clustering fails.
         """
+
+        if backend is None:
+            backend = _choose_default_backend()
 
         _validate_backend(backend)
         self.read_data(data)

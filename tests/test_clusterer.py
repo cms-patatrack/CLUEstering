@@ -7,6 +7,7 @@ import sys
 import numpy as np
 import pandas as pd
 import pytest
+from sklearn.metrics import adjusted_rand_score
 from check_result import check_result
 sys.path.insert(1, '../CLUEstering/')
 import CLUEstering as clue
@@ -65,8 +66,10 @@ def test_clustering_methods(dataset):
     e = clue.clusterer(21., 10., 21.)
     cluster_ids = e.fit_predict(dataset)
 
-    assert (c.cluster_ids == d.cluster_ids).all()
-    assert (c.cluster_ids == cluster_ids).all()
+    assert adjusted_rand_score(c.cluster_ids, d.cluster_ids) == 1.0
+    assert adjusted_rand_score(c.cluster_ids, cluster_ids) == 1.0
+    assert ((c.cluster_ids == -1) == (d.cluster_ids == -1)).all()
+    assert ((c.cluster_ids == -1) == (cluster_ids == -1)).all()
     assert c.n_clusters == d.n_clusters
     assert c.n_clusters == e.n_clusters
 
