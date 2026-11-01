@@ -306,7 +306,7 @@ template <std::floating_point InputType>
 inline AssociationMapHost Clusterer<Ndim, DataType, AllocatorType>::getSampleAssociations(
     Queue& queue, clue::PointsHost<Ndim, InputType>& h_points) {
   auto event_associations =
-      alpaka::allocMappedBuf<std::int32_t>(host, alpaka::PlatformCpu{}, h_points.n_clusters());
+      alpaka::allocMappedBuf<std::int32_t>(host, platform<Queue>(), h_points.n_clusters());
   alpaka::memcpy(queue,
                  event_associations,
                  alpaka::createView(queue, m_event_associations->data(), h_points.n_clusters()));
