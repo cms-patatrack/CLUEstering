@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <optional>
 #include <ranges>
+#include <stdexcept>
 #include <span>
 #include <type_traits>
 #include <utility>
@@ -83,6 +84,9 @@ private:
   void setup_batch(Queue& queue,
                    const clue::PointsHost<Ndim, InputType>& h_points,
                    std::size_t batch_size) {
+    if (batch_size == 0) {
+      throw std::invalid_argument("Invalid batch selected: the batch size must be greater than 0");
+    }
     detail::setup_tiles(queue,
                         h_points,
                         m_extremes,
@@ -99,6 +103,9 @@ private:
   void setup_batch(Queue& queue,
                    clue::PointsDevice<Ndim, InputType>& dev_points,
                    std::size_t batch_size) {
+    if (batch_size == 0) {
+      throw std::invalid_argument("Invalid batch selected: the batch size must be greater than 0");
+    }
     detail::setup_tiles(queue,
                         dev_points,
                         m_extremes,
