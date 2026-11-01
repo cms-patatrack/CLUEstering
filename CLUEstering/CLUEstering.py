@@ -2,9 +2,10 @@
 Density based clustering algorithm developed at CERN.
 """
 
+import importlib
 import sys
+import warnings
 from dataclasses import dataclass
-from glob import glob
 import random as rnd
 from math import sqrt
 import time
@@ -14,7 +15,7 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
-from os.path import dirname, exists, join
+from os.path import dirname, join
 path = dirname(__file__)
 sys.path.insert(1, join(path, 'lib'))
 import CLUE_Convolutional_Kernels as clue_kernels
@@ -26,22 +27,47 @@ ManhattanMetric = clue_kernels.ManhattanMetric
 ChebyshevMetric = clue_kernels.ChebyshevMetric
 PeriodicEuclideanMetric = clue_kernels.PeriodicEuclideanMetric
 
+
+def _import_backend(module_name: str):
+    """
+    Import the Python module of a backend, if it was compiled.
+
+    A module that was not compiled is skipped silently. A module that exists but cannot be
+    loaded (e.g. because of a missing shared library, such as the CUDA runtime) is skipped
+    with a warning, so that the user knows why the backend is not available.
+
+    :param module_name: Name of the backend module.
+    :type module_name: str
+
+    :returns: The imported module, or None if it is not available.
+    """
+    try:
+        return importlib.import_module(module_name)
+    except ImportError as e:
+        if isinstance(e, ModuleNotFoundError) and e.name == module_name:
+            return None
+        warnings.warn(f"The backend module '{module_name}' was found but could not be "  # pragma: no cover
+                      f"imported: {e}. The backend will not be available.",
+                      RuntimeWarning, stacklevel=2)
+        return None  # pragma: no cover
+
+
 backends = ["cpu serial"]
-omp_found = bool((glob(join(path, 'lib/CLUE_CPU_OMP*.so'))))
+cpu_omp = _import_backend("CLUE_CPU_OMP")
+omp_found = cpu_omp is not None
 if omp_found:
-    import CLUE_CPU_OMP as cpu_omp
     backends.append("cpu openmp")
-tbb_found = bool((glob(join(path, 'lib/CLUE_CPU_TBB*.so'))))
+cpu_tbb = _import_backend("CLUE_CPU_TBB")
+tbb_found = cpu_tbb is not None
 if tbb_found:  # pragma: no cover
-    import CLUE_CPU_TBB as cpu_tbb
     backends.append("cpu tbb")
-cuda_found = bool((glob(join(path, 'lib/CLUE_GPU_CUDA*.so'))))
+gpu_cuda = _import_backend("CLUE_GPU_CUDA")
+cuda_found = gpu_cuda is not None
 if cuda_found:  # pragma: no cover
-    import CLUE_GPU_CUDA as gpu_cuda
     backends.append("gpu cuda")
-hip_found = bool((glob(join(path, 'lib/CLUE_GPU_HIP*.so'))))
-if hip_found:   # pragma: no cover
-    import CLUE_GPU_HIP as gpu_hip
+gpu_hip = _import_backend("CLUE_GPU_HIP")
+hip_found = gpu_hip is not None
+if hip_found:  # pragma: no cover
     backends.append("gpu hip")
 
 
