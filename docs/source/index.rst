@@ -8,6 +8,8 @@ CLUEstering Documentation
    dependencies.rst
    installation.rst
    getting-started.rst
+   batched-clustering.rst
+   external-allocators.rst
    cpp/index.rst
    python/index.rst
 
