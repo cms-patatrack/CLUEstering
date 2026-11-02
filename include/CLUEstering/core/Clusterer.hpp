@@ -153,11 +153,13 @@ public:
   /// @param min_density Density threshold for clustering
   /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
   /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-  Clusterer(Queue& queue,
-            value_type density_radius,
-            value_type min_density,
-            std::optional<value_type> outlier_distance = std::nullopt,
-            std::optional<value_type> seeding_distance = std::nullopt)
+  [[deprecated(
+      "This constructor is deprecated and will be removed in future releases. Use the one without "
+      "the queue instead.")]] Clusterer(Queue& queue,
+                                        value_type density_radius,
+                                        value_type min_density,
+                                        std::optional<value_type> outlier_distance = std::nullopt,
+                                        std::optional<value_type> seeding_distance = std::nullopt)
     requires std::default_initializable<AllocatorType>;
   /// @brief Constuct a Clusterer object
   ///
@@ -179,12 +181,14 @@ public:
   /// @param min_density Density threshold for clustering
   /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
   /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-  Clusterer(Queue& queue,
-            AllocatorType allocator,
-            value_type density_radius,
-            value_type min_density,
-            std::optional<value_type> outlier_distance = std::nullopt,
-            std::optional<value_type> seeding_distance = std::nullopt);
+  [[deprecated(
+      "This constructor is deprecated and will be removed in future releases. Use the one without "
+      "the queue instead.")]] Clusterer(Queue& queue,
+                                        AllocatorType allocator,
+                                        value_type density_radius,
+                                        value_type min_density,
+                                        std::optional<value_type> outlier_distance = std::nullopt,
+                                        std::optional<value_type> seeding_distance = std::nullopt);
 
   /// @brief Set the parameters for the clustering algorithm
   ///
