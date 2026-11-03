@@ -18,7 +18,7 @@ static void BM_clustering(benchmark::State& state) {
     const auto dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
     state.ResumeTiming();
 
-    clue::Clusterer<Ndim> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<Ndim> algo(dc, rhoc, outlier);
     algo.make_clusters(queue, h_points, d_points);
   }
 }

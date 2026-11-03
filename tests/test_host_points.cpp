@@ -543,7 +543,7 @@ TEST_CASE("Test cluster properties accessors") {
   clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, "../../../data/data_32768.csv");
 
   const auto dc{1.3f}, rhoc{10.f}, outlier{1.3f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
   algo.make_clusters(queue, h_points);
 
   SUBCASE("Test get number of clusters") {

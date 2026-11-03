@@ -21,12 +21,12 @@ TEST_CASE("Test clustering with user-defined extremes") {
   // the cluster labels depend on the order of execution on parallel backends,
   // so the results are compared through the number of clusters
   clue::PointsHost<2> h_points_default = clue::read_csv<2, float>(queue, test_file_path);
-  clue::Clusterer<2> algo_default(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo_default(dc, rhoc, outlier);
   algo_default.make_clusters(queue, h_points_default);
   const auto n_clusters_default = h_points_default.n_clusters();
 
   clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
 
   SUBCASE("Extremes passed as a braced list") {
     algo.setExtremes({{-100.f, 100.f}, {-100.f, 100.f}});
@@ -104,11 +104,11 @@ TEST_CASE("Test clustering with user-defined extremes in double precision") {
   const auto dc{1.3}, rhoc{10.}, outlier{1.3};
 
   clue::PointsHost<2, double> h_points_default = clue::read_csv<2, double>(queue, test_file_path);
-  clue::Clusterer<2, double> algo_default(queue, dc, rhoc, outlier);
+  clue::Clusterer<2, double> algo_default(dc, rhoc, outlier);
   algo_default.make_clusters(queue, h_points_default);
 
   clue::PointsHost<2, double> h_points = clue::read_csv<2, double>(queue, test_file_path);
-  clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2, double> algo(dc, rhoc, outlier);
   algo.setExtremes({{-100., 100.}, {-100., 100.}});
   algo.make_clusters(queue, h_points);
 
@@ -124,7 +124,7 @@ TEST_CASE("Test batched clustering with user-defined extremes") {
   clue::PointsDevice<2> d_points(queue, h_points.size());
 
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
   algo.setExtremes({{-100.f, 100.f}, {-100.f, 100.f}});
 
   std::vector<uint32_t> event_sizes(10, 1024);
@@ -142,7 +142,7 @@ TEST_CASE("Test clustering with user-defined extremes on periodic coordinates") 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/opposite_angles.csv";
   clue::PointsHost<2> points = clue::read_csv<2, float>(queue, test_file_path);
   const float dc{.2f}, rhoc{5.f}, outlier{.2f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
 
   // the extremes of the periodic coordinate define its exact period
   constexpr auto pi = std::numbers::pi_v<float>;

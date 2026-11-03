@@ -20,7 +20,7 @@ TEST_CASE("Test make_cluster interfaces") {
   clue::PointsDevice<2> d_points(queue, n_points);
 
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
 
   SUBCASE("Run clustering without passing device points") {
     algo.make_clusters(queue, h_points);
@@ -49,13 +49,6 @@ TEST_CASE("Test make_cluster interfaces") {
 }
 
 TEST_CASE("Test Clusterer constructors with invalid parameters") {
-  SUBCASE("Constructor without queue") {
-    CHECK_THROWS(clue::Clusterer<2>(-1.f, 10.f));
-    CHECK_THROWS(clue::Clusterer<2>(1.f, -10.f));
-  }
-  SUBCASE("Constructor with queue") {
-    auto queue = clue::get_queue(0u);
-    CHECK_THROWS(clue::Clusterer<2>(queue, -1.f, 10.f));
-    CHECK_THROWS(clue::Clusterer<2>(queue, 1.f, -10.f));
-  }
+  CHECK_THROWS(clue::Clusterer<2>(-1.f, 10.f));
+  CHECK_THROWS(clue::Clusterer<2>(1.f, -10.f));
 }

@@ -385,7 +385,7 @@ TEST_CASE("Test n_cluster getter") {
   clue::PointsDevice<2> d_points(queue, h_points.size());
 
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
   algo.make_clusters(queue, h_points, d_points);
 
   SUBCASE("Check the number of clusters") {

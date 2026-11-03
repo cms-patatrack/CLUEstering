@@ -22,7 +22,7 @@ TEST_CASE("Test computation of cluster centroid") {
   clue::PointsDevice<2> d_points(queue, n_points);
 
   const float dc{21.f}, rhoc{10.f}, outlier{21.f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
 
   algo.make_clusters(queue, h_points, d_points);
 
@@ -52,7 +52,7 @@ TEST_CASE("Test computation of all cluster centroids") {
   clue::PointsDevice<2> d_points(queue, n_points);
 
   const float dc{21.f}, rhoc{10.f}, outlier{21.f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
 
   algo.make_clusters(queue, h_points, d_points);
   auto centroids = clue::cluster_centroids(h_points);
@@ -70,7 +70,7 @@ TEST_CASE("Test computation of all weighted cluster centroids") {
   clue::PointsDevice<2> d_points(queue, n_points);
 
   const float dc{21.f}, rhoc{10.f}, outlier{21.f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
 
   algo.make_clusters(queue, h_points, d_points);
   auto centroids = clue::weighted_cluster_centroids(h_points);

@@ -22,7 +22,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     clue::Queue queue(device);
 
     const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
 
     for (auto i = range.first; i < range.second; ++i) {
       const auto test_file_path =
@@ -41,7 +41,7 @@ TEST_CASE("Test clustering on benchmarking datasets") {
     clue::Queue queue(device);
 
     const auto dc{1.5}, rhoc{10.}, outlier{1.5};
-    clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2, double> algo(dc, rhoc, outlier);
 
     for (auto i = range.first; i < range.second; ++i) {
       const auto test_file_path =
@@ -68,7 +68,7 @@ TEST_CASE("Test clustering on aniso dataset") {
     clue::PointsDevice<2> d_points(queue, n_points);
 
     const float dc{25.f}, rhoc{5.f}, outlier{23.f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
     // TODO: use a better metric for anisotropic data
@@ -85,7 +85,7 @@ TEST_CASE("Test clustering on aniso dataset") {
     clue::PointsDevice<2, double> d_points(queue, n_points);
 
     const auto dc{25.}, rhoc{5.}, outlier{23.};
-    clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2, double> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
     // TODO: use a better metric for anisotropic data
@@ -105,7 +105,7 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
     clue::PointsDevice<2> d_points(queue, n_points);
 
     const float dc{20.f}, rhoc{10.f}, outlier{20.f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
 
@@ -121,7 +121,7 @@ TEST_CASE("Test clustering on sissa 1000 dataset") {
     clue::PointsDevice<2, double> d_points(queue, n_points);
 
     const auto dc{20.}, rhoc{10.}, outlier{20.};
-    clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2, double> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
 
@@ -140,7 +140,7 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
     clue::PointsDevice<2> d_points(queue, n_points);
 
     const float dc{20.f}, rhoc{10.f}, outlier{20.f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
 
@@ -156,7 +156,7 @@ TEST_CASE("Test clustering on sissa 4000 dataset") {
     clue::PointsDevice<2, double> d_points(queue, n_points);
 
     const auto dc{20.}, rhoc{10.}, outlier{20.};
-    clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2, double> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
 
@@ -175,7 +175,7 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
     clue::PointsDevice<2> d_points(queue, n_points);
 
     const float dc{4.f}, rhoc{2.5f}, outlier{4.f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
 
@@ -191,7 +191,7 @@ TEST_CASE("Test clustering on toy detector 1000 dataset") {
     clue::PointsDevice<2, double> d_points(queue, n_points);
 
     const auto dc{4.}, rhoc{2.5}, outlier{4.};
-    clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2, double> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
 
@@ -210,7 +210,7 @@ TEST_CASE("Test clustering on blob dataset") {
     clue::PointsDevice<3> d_points(queue, n_points);
 
     const float dc{1.f}, rhoc{5.f}, outlier{2.f};
-    clue::Clusterer<3> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<3> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
 
@@ -226,7 +226,7 @@ TEST_CASE("Test clustering on blob dataset") {
     clue::PointsDevice<3, double> d_points(queue, n_points);
 
     const auto dc{1.}, rhoc{5.}, outlier{2.};
-    clue::Clusterer<3, double> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<3, double> algo(dc, rhoc, outlier);
 
     algo.make_clusters(queue, h_points, d_points);
 
@@ -242,7 +242,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
     const auto test_file_path = std::string(TEST_DATA_DIR) + "/opposite_angles.csv";
     clue::PointsHost<2> points = clue::read_csv<2, float>(queue, test_file_path);
     const float dc{.2f}, rhoc{5.f}, outlier{.2f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
 
     algo.setWrappedCoordinates(0, 1);
     algo.make_clusters(queue,
@@ -258,7 +258,7 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
     const auto test_file_path = std::string(TEST_DATA_DIR) + "/opposite_angles.csv";
     clue::PointsHost<2, double> points = clue::read_csv<2, double>(queue, test_file_path);
     const auto dc{.2}, rhoc{5.}, outlier{.2};
-    clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2, double> algo(dc, rhoc, outlier);
 
     algo.setWrappedCoordinates(0, 1);
     algo.make_clusters(queue,
@@ -278,7 +278,7 @@ TEST_CASE("Test clustering from constant host points") {
 
     const auto size = 1000u;
     const float dc{.2f}, rhoc{1.f}, outlier{.2f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
     SUBCASE("Two external buffers") {
       auto input =
           alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
@@ -346,7 +346,7 @@ TEST_CASE("Test clustering from constant host points") {
 
     const auto size = 1000u;
     const auto dc{.2}, rhoc{1.}, outlier{.2};
-    clue::Clusterer<2, double> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2, double> algo(dc, rhoc, outlier);
     SUBCASE("Two external buffers") {
       auto input =
           alpaka::allocMappedBuf<double>(clue::host, clue::platform<clue::Platform>(), 3 * size);
@@ -417,7 +417,7 @@ TEST_CASE("Test non-default local density uncertainty") {
   const auto size = 1000u;
   const auto dc = .2f, rhoc = 1.f, outlier = .2f;
   auto queue = clue::get_queue(0u);
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
   auto input =
       alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
   auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
@@ -501,7 +501,7 @@ TEST_CASE("Test non-default point tags") {
   const auto size = 1000u;
   const auto dc = .2f, rhoc = 1.f, outlier = .2f;
   auto queue = clue::get_queue(0u);
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
   auto input =
       alpaka::allocMappedBuf<float>(clue::host, clue::platform<clue::Platform>(), 3 * size);
   auto output = alpaka::allocMappedBuf<int>(clue::host, clue::platform<clue::Platform>(), size);
@@ -535,7 +535,7 @@ TEST_CASE("Point tags override the index-based tie-break for nearest higher") {
   auto queue = clue::get_queue(0u);
   const uint32_t size = 2;
   const float dc{1.f}, rhoc{0.f}, outlier{1.f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
 
   std::vector<float> input{0.f, 0.f, 0.f, 0.f, 1.f, 1.f};  // x0,x1 | y0,y1 | w0,w1
   std::vector<int> output(size);

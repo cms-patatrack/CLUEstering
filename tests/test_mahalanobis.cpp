@@ -13,7 +13,7 @@ TEST_CASE("MahalanobisMetric: sigma controls cluster merging") {
 
   const float density_radius = 1.f;
   const float min_density = 0.3f;
-  clue::Clusterer<1> algo(queue, density_radius, min_density);
+  clue::Clusterer<1> algo(density_radius, min_density);
 
   const std::vector<float> coords = {2.f, 4.f};
   const std::vector<float> weights = {1.f, 1.f};

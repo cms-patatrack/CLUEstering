@@ -24,7 +24,7 @@ static void BM_SingleEvents(benchmark::State& state) {
 
   for (auto _ : state) {
     for (auto& h_points : host_points) {
-      clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+      clue::Clusterer<2> algo(dc, rhoc, outlier);
       algo.make_clusters(queue, h_points, d_points);
     }
   }
@@ -41,7 +41,7 @@ static void BM_Batched(benchmark::State& state) {
   std::vector<std::size_t> batch_event_sizes(1000, n_points / 1000);
 
   for (auto _ : state) {
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
     algo.make_clusters(queue, h_points, d_points, batch_event_sizes);
   }
 }
