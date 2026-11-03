@@ -53,6 +53,9 @@ def _import_backend(module_name: str):
 
 
 backends = ["cpu serial"]
+# Reasons why a compiled backend is not usable. Backends missing from this dictionary but not
+# available were not compiled.
+_unavailable_reasons = {}
 cpu_omp = _import_backend("CLUE_CPU_OMP")
 omp_found = cpu_omp is not None
 if omp_found:
@@ -64,11 +67,21 @@ if tbb_found:  # pragma: no cover
 gpu_cuda = _import_backend("CLUE_GPU_CUDA")
 cuda_found = gpu_cuda is not None
 if cuda_found:  # pragma: no cover
-    backends.append("gpu cuda")
+    if gpu_cuda._deviceCount() == 0:
+        cuda_found = False
+        _unavailable_reasons["gpu cuda"] = "the library was compiled with support for it, " \
+                                            "but no CUDA device was found"
+    else:
+        backends.append("gpu cuda")
 gpu_hip = _import_backend("CLUE_GPU_HIP")
 hip_found = gpu_hip is not None
 if hip_found:  # pragma: no cover
-    backends.append("gpu hip")
+    if gpu_hip._deviceCount() == 0:
+        hip_found = False
+        _unavailable_reasons["gpu hip"] = "the library was compiled with support for it, " \
+                                           "but no HIP device was found"
+    else:
+        backends.append("gpu hip")
 
 
 _allowed_backends = ["cpu serial", "cpu tbb", "cpu openmp", "gpu cuda", "gpu hip"]
@@ -94,7 +107,8 @@ def _check_backend_available(backend: str) -> None:
     :param backend: Name of the backend to check.
     :type backend: str
 
-    :raises RuntimeError: If the backend is valid but the library was not compiled with support for it.
+    :raises RuntimeError: If the backend is valid but it is not available, either because the
+                          library was not compiled with support for it or because no device was found.
     """
     available = {"cpu serial": True,
                  "cpu tbb": tbb_found,
@@ -102,9 +116,13 @@ def _check_backend_available(backend: str) -> None:
                  "gpu cuda": cuda_found,
                  "gpu hip": hip_found}
     if not available[backend]:
-        raise RuntimeError(f"The '{backend}' backend is not available: the library was not compiled "
-                           f"with support for it. Compiled backends: {', '.join(backends)}. "
-                           "Please re-compile the library to enable it.")
+        if backend in _unavailable_reasons:
+            reason = f"{_unavailable_reasons[backend]}."
+        else:
+            reason = "the library was not compiled with support for it. " \
+                     "Please re-compile the library to enable it."
+        raise RuntimeError(f"The '{backend}' backend is not available: {reason} "
+                           f"Available backends: {', '.join(backends)}.")
 
 
 def is_tbb_available():
@@ -641,9 +659,9 @@ class clusterer:
                 cpu_tbb.listDevices('cpu tbb')
             if omp_found:
                 cpu_omp.listDevices('cpu openmp')
-            if cuda_found:  # pragma: no cover
+            if gpu_cuda is not None:  # pragma: no cover
                 gpu_cuda.listDevices('gpu cuda')
-            if hip_found:   # pragma: no cover
+            if gpu_hip is not None:   # pragma: no cover
                 gpu_hip.listDevices('gpu hip')
         elif backend == "cpu serial":
             cpu_serial.listDevices(backend)
@@ -658,12 +676,14 @@ class clusterer:
             else:
                 print("OpenMP module not found. Please re-compile the library and try again.")
         elif backend == "gpu cuda":     # pragma: no cover
-            if cuda_found:
+            # use the module instead of cuda_found, so that a compiled backend without
+            # devices reports that no device was found
+            if gpu_cuda is not None:
                 gpu_cuda.listDevices(backend)
             else:
                 print("CUDA module not found. Please re-compile the library and try again.")
         elif backend == "gpu hip":      # pragma: no cover
-            if hip_found:
+            if gpu_hip is not None:
                 gpu_hip.listDevices(backend)
             else:
                 print("HIP module not found. Please re-compile the library and try again.")
