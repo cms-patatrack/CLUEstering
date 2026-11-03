@@ -45,6 +45,34 @@ def test_fit_predict_backend_not_compiled(monkeypatch):
         c.fit_predict(data, backend="gpu cuda")
 
 
+def test_backend_not_compiled_message(monkeypatch):
+    '''
+    Test that the error for a backend that was not compiled suggests re-compiling the library
+    '''
+    c = clue.clusterer(0.4, 5, 0.4)
+    c.read_data(data)
+    monkeypatch.setattr(clue, 'cuda_found', False)
+    monkeypatch.setattr(clue, '_unavailable_reasons', {})
+    with pytest.raises(RuntimeError, match="not compiled with support"):
+        c.run_clue(backend="gpu cuda")
+
+
+def test_backend_without_devices_message(monkeypatch):
+    '''
+    Test that the error for a backend that was compiled but has no devices says so,
+    instead of suggesting to re-compile the library
+    '''
+    c = clue.clusterer(0.4, 5, 0.4)
+    c.read_data(data)
+    monkeypatch.setattr(clue, 'cuda_found', False)
+    monkeypatch.setattr(clue, '_unavailable_reasons',
+                        {"gpu cuda": "the library was compiled with support for it, "
+                                     "but no CUDA device was found"})
+    with pytest.raises(RuntimeError, match="no CUDA device was found") as excinfo:
+        c.run_clue(backend="gpu cuda")
+    assert "re-compile" not in str(excinfo.value)
+
+
 def test_list_devices_still_prints_for_uncompiled_backend(capsys):
     '''
     Test that list_devices keeps printing an informative message
