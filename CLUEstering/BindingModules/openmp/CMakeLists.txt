@@ -12,7 +12,8 @@ set_target_properties(
   CLUE_CPU_OMP
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY
              ${CMAKE_CURRENT_BINARY_DIR}/../../../lib/CLUEstering/lib/)
-install(TARGETS CLUE_CPU_OMP LIBRARY DESTINATION CLUEstering/lib)
+install(TARGETS CLUE_CPU_OMP LIBRARY DESTINATION CLUEstering/lib
+                                     COMPONENT python)
 # copy shared library for local testing
 add_custom_command(
   TARGET CLUE_CPU_OMP

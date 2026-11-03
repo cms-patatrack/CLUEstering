@@ -20,6 +20,8 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Operating System :: Unix",
   "Operating System :: MacOS :: MacOS X",
 ]
@@ -28,6 +30,10 @@ classifiers = [
 cmake.args = ["-DBUILD_PYTHON=ON"]
 cmake.build-type = "Release"
 wheel.packages = ["CLUEstering"]
+# only install the Python modules: the C++ headers and the CMake config files are not needed
+install.components = ["python"]
+# the sources of the bindings are already compiled into the modules
+wheel.exclude = ["CLUEstering/BindingModules/**"]
 sdist.exclude = [
   "benchmark",
   "data",
@@ -50,6 +56,25 @@ sdist.exclude = [
   ".zenodo.json",
   ".env",
 ]
+
+[tool.cibuildwheel]
+# free-threaded builds would need a dedicated nanobind module (FREE_THREADED)
+skip = ["*-musllinux_*", "cp3*t-*"]
+test-requires = ["pytest"]
+test-command = "python {project}/scripts/test_wheel.py {project} -- -x"
+# the wheels are distributed, so don't optimize for the build machine
+config-settings = { "cmake.define.CLUE_NATIVE_ARCH" = "OFF" }
+
+[tool.cibuildwheel.linux]
+archs = ["native"]
+manylinux-x86_64-image = "manylinux_2_34"
+manylinux-aarch64-image = "manylinux_2_34"
+before-all = "dnf install -y boost-devel"
+# AppleClang has no OpenMP, so only require it on Linux
+test-command = "python {project}/scripts/test_wheel.py {project} --require-backend 'cpu openmp' -- -x"
+
+[tool.cibuildwheel.macos]
+before-all = "brew install boost"
 
 [tool.autopep8]
 max_line_length = 108
