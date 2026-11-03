@@ -21,7 +21,8 @@ set_target_properties(
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY
              ${CMAKE_CURRENT_BINARY_DIR}/../../../lib/CLUEstering/lib/
              CUDA_ARCHITECTURES native)
-install(TARGETS CLUE_GPU_CUDA LIBRARY DESTINATION CLUEstering/lib COMPONENT python)
+install(TARGETS CLUE_GPU_CUDA LIBRARY DESTINATION CLUEstering/lib
+                                      COMPONENT python)
 # copy shared library for local testing
 add_custom_command(
   TARGET CLUE_GPU_CUDA
