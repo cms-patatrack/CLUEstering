@@ -16,7 +16,7 @@ TEST_CASE("Test batched clustering with fixed batch size") {
     clue::PointsDevice<2> d_points(queue, n_points);
 
     const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
     const std::size_t batch_size = 1024;
 
     std::vector<uint32_t> event_sizes(10, batch_size);
@@ -40,7 +40,7 @@ TEST_CASE("Test batched clustering with fixed batch size") {
         clue::read_csv<2, float>(queue, "../../../data/batched_data_1024.csv");
 
     const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
     const std::size_t batch_size = 1024;
 
     std::vector<uint32_t> event_sizes(10, batch_size);
@@ -68,7 +68,7 @@ TEST_CASE("Test batched clustering with fixed batch size") {
     alpaka::wait(queue);
 
     const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
-    clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+    clue::Clusterer<2> algo(dc, rhoc, outlier);
     const std::size_t batch_size = 1024;
 
     std::vector<uint32_t> event_sizes(10, batch_size);

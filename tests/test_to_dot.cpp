@@ -19,7 +19,7 @@ TEST_CASE("Test to_dot export") {
   clue::PointsDevice<2> d_points(queue, n_points);
 
   const float dc{1.5f}, rhoc{10.f}, outlier{1.5f};
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
   algo.make_clusters(queue, h_points, d_points);
 
   const std::string dot_file_path = "test_clusters.dot";

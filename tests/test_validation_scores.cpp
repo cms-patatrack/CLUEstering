@@ -9,7 +9,7 @@ TEST_CASE("Test validation scores on toy detector dataset") {
 
   const auto test_file_path = std::string(TEST_DATA_DIR) + "/toyDetector_1000.csv";
   clue::PointsHost<2> points = clue::read_csv<2, float>(queue, test_file_path);
-  clue::Clusterer<2> clusterer(queue, 4.f, 2.5f, 4.f);
+  clue::Clusterer<2> clusterer(4.f, 2.5f, 4.f);
   clusterer.make_clusters(queue, points);
 
   SUBCASE("Test computation of silhouette score on all points singularly") {

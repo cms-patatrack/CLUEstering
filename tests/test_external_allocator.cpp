@@ -50,7 +50,7 @@ TEST_CASE("Test clustering with the cub caching allocator") {
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
 
   clue::PointsHost<2> h_points_default = clue::read_csv<2, float>(queue, test_file_path);
-  clue::Clusterer<2> algo_default(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo_default(dc, rhoc, outlier);
   algo_default.make_clusters(queue, h_points_default);
   alpaka::wait(queue);
   const auto n_clusters_default =
@@ -61,7 +61,7 @@ TEST_CASE("Test clustering with the cub caching allocator") {
 
   SUBCASE("Results match the default allocator") {
     clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
-    clue::Clusterer<2, float, AllocatorWrapper> algo(queue, allocator, dc, rhoc, outlier);
+    clue::Clusterer<2, float, AllocatorWrapper> algo(allocator, dc, rhoc, outlier);
     algo.make_clusters(queue, h_points);
     alpaka::wait(queue);
 
@@ -71,7 +71,7 @@ TEST_CASE("Test clustering with the cub caching allocator") {
   SUBCASE("Results match the default allocator using device points") {
     clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
     clue::PointsDevice<2> d_points(queue, h_points.size(), allocator);
-    clue::Clusterer<2, float, AllocatorWrapper> algo(queue, allocator, dc, rhoc, outlier);
+    clue::Clusterer<2, float, AllocatorWrapper> algo(allocator, dc, rhoc, outlier);
     algo.make_clusters(queue, h_points, d_points);
     alpaka::wait(queue);
 
@@ -81,7 +81,7 @@ TEST_CASE("Test clustering with the cub caching allocator") {
   SUBCASE("Internal buffers are allocated through the cub allocator") {
     {
       clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
-      clue::Clusterer<2, float, AllocatorWrapper> algo(queue, allocator, dc, rhoc, outlier);
+      clue::Clusterer<2, float, AllocatorWrapper> algo(allocator, dc, rhoc, outlier);
       algo.make_clusters(queue, h_points);
       alpaka::wait(queue);
 
@@ -99,7 +99,7 @@ TEST_CASE("Test clustering with the cub caching allocator") {
   SUBCASE("Cached memory is reused by a new clusterer") {
     {
       clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
-      clue::Clusterer<2, float, AllocatorWrapper> algo(queue, allocator, dc, rhoc, outlier);
+      clue::Clusterer<2, float, AllocatorWrapper> algo(allocator, dc, rhoc, outlier);
       algo.make_clusters(queue, h_points);
       alpaka::wait(queue);
     }
@@ -108,7 +108,7 @@ TEST_CASE("Test clustering with the cub caching allocator") {
 
     {
       clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
-      clue::Clusterer<2, float, AllocatorWrapper> algo(queue, allocator, dc, rhoc, outlier);
+      clue::Clusterer<2, float, AllocatorWrapper> algo(allocator, dc, rhoc, outlier);
       algo.make_clusters(queue, h_points);
       alpaka::wait(queue);
 
@@ -135,7 +135,7 @@ TEST_CASE("Test batched clustering with the cub caching allocator") {
   clue::PointsDevice<2> d_points(queue, h_points.size(), allocator);
 
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
-  clue::Clusterer<2, float, AllocatorWrapper> algo(queue, allocator, dc, rhoc, outlier);
+  clue::Clusterer<2, float, AllocatorWrapper> algo(allocator, dc, rhoc, outlier);
 
   std::vector<uint32_t> event_sizes(10, 1024);
   algo.make_clusters(queue, h_points, d_points, event_sizes);
@@ -194,7 +194,7 @@ TEST_CASE("Test clustering with an external allocator") {
   const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
 
   clue::PointsHost<2> h_points_default = clue::read_csv<2, float>(queue, test_file_path);
-  clue::Clusterer<2> algo_default(queue, dc, rhoc, outlier);
+  clue::Clusterer<2> algo_default(dc, rhoc, outlier);
   algo_default.make_clusters(queue, h_points_default);
   const auto n_clusters_default =
       clue::detail::compute_nclusters(h_points_default.clusterIndexes());
@@ -204,7 +204,7 @@ TEST_CASE("Test clustering with an external allocator") {
   SUBCASE("Results match the default allocator") {
     {
       clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
-      clue::Clusterer<2, float, CountingAllocator> algo(queue, allocator, dc, rhoc, outlier);
+      clue::Clusterer<2, float, CountingAllocator> algo(allocator, dc, rhoc, outlier);
       algo.make_clusters(queue, h_points);
 
       CHECK(clue::detail::compute_nclusters(h_points.clusterIndexes()) == n_clusters_default);
@@ -221,7 +221,7 @@ TEST_CASE("Test clustering with an external allocator") {
     {
       clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, test_file_path);
       clue::PointsDevice<2> d_points(queue, h_points.size(), allocator);
-      clue::Clusterer<2, float, CountingAllocator> algo(queue, allocator, dc, rhoc, outlier);
+      clue::Clusterer<2, float, CountingAllocator> algo(allocator, dc, rhoc, outlier);
       algo.make_clusters(queue, h_points, d_points);
 
       CHECK(clue::detail::compute_nclusters(h_points.clusterIndexes()) == n_clusters_default);
@@ -247,7 +247,7 @@ TEST_CASE("Test batched clustering with an external allocator") {
         clue::read_csv<2, float>(queue, std::string(TEST_DATA_DIR) + "/batched_data_1024.csv");
 
     const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
-    clue::Clusterer<2, float, CountingAllocator> algo(queue, allocator, dc, rhoc, outlier);
+    clue::Clusterer<2, float, CountingAllocator> algo(allocator, dc, rhoc, outlier);
 
     std::vector<uint32_t> event_sizes(10, 1024);
     algo.make_clusters(queue, h_points, event_sizes);
