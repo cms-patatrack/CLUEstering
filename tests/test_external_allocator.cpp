@@ -19,7 +19,7 @@ namespace {
   struct AllocatorWrapper {
     cub::CachingDeviceAllocator* allocator;
 
-    void* allocate(std::size_t bytes, [[maybe_unused]] std::size_t align) {
+    void* allocate(std::size_t bytes, std::size_t /* align */) {
       void* ptr = nullptr;
       if (allocator->DeviceAllocate(&ptr, bytes) != cudaSuccess)
         throw std::runtime_error("DeviceAllocate failed");
@@ -170,7 +170,7 @@ namespace {
     static constexpr std::size_t alignment = 64;
     std::shared_ptr<AllocationCounter> counter = std::make_shared<AllocationCounter>();
 
-    void* allocate(std::size_t bytes, [[maybe_unused]] std::size_t align) {
+    void* allocate(std::size_t bytes, std::size_t /* align */) {
       ++counter->live;
       ++counter->total;
       return ::operator new(std::max(bytes, std::size_t{1}), std::align_val_t{alignment});

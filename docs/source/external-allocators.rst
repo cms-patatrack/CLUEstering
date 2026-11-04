@@ -31,7 +31,7 @@ Taking the ``cub::CachingAllocator`` as an example, the wrapper can be implement
   struct AllocatorWrapper {
     cub::CachingDeviceAllocator* allocator;
 
-    void* allocate(std::size_t bytes, [[maybe_unused]] std::size_t align) {
+    void* allocate(std::size_t bytes, std::size_t /* align */) {
       void* ptr = nullptr;
       if (allocator->DeviceAllocate(&ptr, bytes) != cudaSuccess)
         throw std::runtime_error("DeviceAllocate failed");
