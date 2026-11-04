@@ -34,12 +34,10 @@ Additional dependencies depending on the chosen backend:
 - **HIP backend**: ROCm 6.0 or later  
 - **SYCL backends**: oneAPI 2024.2 or later  
 
-When installing CLUEstering as a Python library, shared libraries for each supported backend are automatically compiled. For building, the following tools are also required:
+The precompiled Python wheels need none of the above. When the Python library is built from source, the modules for the backends found on the system are compiled automatically. Besides the dependencies above, this requires:
 
-- **CMake** 3.16.0 or later  
-- **setuptools** 42 or later  
-- **wheel**  
-- **pathlib**  
+- **CMake** 3.16.0 or later
+- **scikit-build-core** 0.9 or later, which pip installs automatically
 
 Additionally, the following Python libraries are required for backend functionality:
 

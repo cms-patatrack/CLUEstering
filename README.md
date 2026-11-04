@@ -50,8 +50,28 @@ please look at the subsetion below.
 ### From PyPi
 CLUEstering is available on the PyPi repository, and can be easily installed with:
 ```shell
-pip install -v CLUEstering
+pip install CLUEstering
 ```
+On Linux (x86_64 and aarch64) this installs a precompiled wheel, which includes the serial and OpenMP CPU backends.
+On the other platforms pip downloads the source distribution and compiles it, as described below.
+
+#### GPU backends
+The precompiled wheels don't include the CUDA and HIP backends.
+To use them, CLUEstering has to be compiled on the machine where it will run, by forcing pip to build it from source:
+```shell
+pip install -v --no-binary CLUEstering CLUEstering
+```
+The CUDA backend is compiled if `nvcc` is found (in `PATH` or through the `CUDACXX` environment variable)
+and the HIP backend if the ROCm compiler is found (in `PATH` or through `HIPCXX`).
+The CUDA backend is compiled for the GPU architecture of the machine where the build runs, so it must be run on a machine with
+the target GPU.
+The TBB backend is also compiled only when building from source, if TBB is found.
+You can check which backends are available with:
+```shell
+python -c "import CLUEstering; print(CLUEstering.backends)"
+```
+If CLUEstering is already installed from a wheel, add `--force-reinstall` to replace it.
+
 ### From source
 CLUEstering can also be compiled and installed from source. To do so, first clone the repository
 recursively or download one of the release tarballs from [archive](https://github.com/cms-patatrack/CLUEstering/releases).  
