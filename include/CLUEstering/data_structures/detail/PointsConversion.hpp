@@ -27,8 +27,8 @@ inline void copyToHost(TQueue& queue,
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_points.view().m_cluster_index, h_points.size()),
                  alpaka::createView(queue, d_points.view().m_cluster_index, h_points.size()));
-  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
   alpaka::wait(queue);
+  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
 }
 
 template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
@@ -38,8 +38,8 @@ inline auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TInput, TDev>& d_
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_points.view().m_cluster_index, h_points.size()),
                  alpaka::createView(queue, d_points.view().m_cluster_index, h_points.size()));
-  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
   alpaka::wait(queue);
+  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
 
   return h_points;
 }
