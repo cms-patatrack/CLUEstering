@@ -23,7 +23,6 @@ namespace detail {
     } else {
       seeds->reset(queue);
     }
-    alpaka::wait(queue);
   }
 
 }  // namespace detail
