@@ -476,10 +476,9 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
 
   auto temp_offsets = internal::alloc_device_buffer<int32_t>(queue, m_extents.keys + 1, allocator);
   alpaka::memset(queue, temp_offsets, 0u, 1u);
-  alpaka::wait(queue);
 
   internal::algorithm::inclusive_scan(
-      sizes_buffer.data(), sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
+      queue, sizes_buffer.data(), sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
 
   alpaka::memcpy(
       queue, alpaka::createView(queue, m_offsets.data(), m_extents.keys + 1), temp_offsets);
