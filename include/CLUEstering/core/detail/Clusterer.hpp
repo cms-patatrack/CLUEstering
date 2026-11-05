@@ -151,8 +151,6 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
   setup(queue, h_points);
   make_clusters_impl(d_points, metric, kernel, queue);
   detail::sync_results(queue, h_points, d_points);
-  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
-  alpaka::wait(queue);
 }
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 template <std::floating_point InputType,
@@ -169,8 +167,6 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
   setup(queue, h_points);
   make_clusters_impl(d_points, metric, kernel, queue);
   detail::sync_results(queue, h_points, d_points);
-  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
-  alpaka::wait(queue);
 }
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 template <std::floating_point InputType,
@@ -186,8 +182,6 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
   clue::copyToDevice(queue, dev_points, h_points, m_allocator);
   make_clusters_impl(dev_points, metric, kernel, queue);
   clue::copyToHost(queue, h_points, dev_points);
-  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
-  alpaka::wait(queue);
 }
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 template <std::floating_point InputType,
@@ -209,7 +203,6 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
                       1,
                       m_allocator);
   make_clusters_impl(dev_points, metric, kernel, queue);
-  alpaka::wait(queue);
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
@@ -246,8 +239,6 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
   setup_batch(queue, h_points, batch_size);
   make_clusters_batched(d_points, batch_item_sizes, metric, kernel, queue);
   detail::sync_results(queue, h_points, d_points);
-  internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
-  alpaka::wait(queue);
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
