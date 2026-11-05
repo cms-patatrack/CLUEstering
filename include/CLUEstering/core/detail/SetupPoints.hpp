@@ -67,7 +67,7 @@ namespace detail {
   inline void sync_results(TQueue& /* queue */,
                            TPointsHost& h_points,
                            const TPointsDevice& /* d_points */) {
-	internal::points_interface<std::remove_cvref_t<TPointsHost>>::mark_clustered(h_points);
+    internal::points_interface<std::remove_cvref_t<TPointsHost>>::mark_clustered(h_points);
   }
 
   template <concepts::queue TQueue, typename TPointsHost, typename TPointsDevice>
