@@ -64,10 +64,10 @@ namespace internal {
   public:
     template <clue::concepts::queue TQueue,
               clue::concepts::allocator TAllocator = clue::DefaultAllocator>
-    DeviceVector(TQueue& queue, std::size_t size, const TAllocator& allocator = TAllocator{})
-        : m_buffer{alloc_device_buffer<int32_t>(queue, size, allocator)},
+    DeviceVector(TQueue& queue, std::size_t capacity, const TAllocator& allocator = TAllocator{})
+        : m_buffer{alloc_device_buffer<int32_t>(queue, capacity, allocator)},
           m_dsize{alloc_device_buffer<std::size_t>(queue, Scalar{}, allocator)},
-          m_capacity{size},
+          m_capacity{capacity},
           m_view{m_buffer.data(), m_dsize.data(), m_capacity} {
       alpaka::memset(queue, m_dsize, 0u);
     }
