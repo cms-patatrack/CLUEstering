@@ -65,7 +65,9 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfig.cmake"
               "${CMAKE_CURRENT_BINARY_DIR}/CLUEsteringConfigVersion.cmake"
         DESTINATION lib/cmake/CLUEstering)
 
-if(BUILD_TESTING)
+# build the tests only when CLUEstering is the main project, not when it is
+# included with add_subdirectory or FetchContent
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
   option(COVERAGE "Enable code coverage" OFF)
   enable_testing()
   add_subdirectory(tests)
