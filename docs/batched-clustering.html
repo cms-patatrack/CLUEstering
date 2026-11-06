@@ -1,0 +1,1200 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="getting-started.html">
+      
+      
+        <link rel="next" href="external-allocators.html">
+      
+      
+      <link rel="icon" href="">
+    
+    
+      
+        <title>Batched Clustering - CLUEstering 2.14.0 documentation</title>
+      
+    
+    
+      
+        
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+        <link rel="stylesheet" type="text/css" href="_static/sphinx_immaterial_theme.cf2c65c97ee1b6f01.min.css?v=0a68cab4" />
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#preparing-the-input" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="CLUEstering 2.14.0 documentation" class="md-header__button md-logo" aria-label="CLUEstering 2.14.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CLUEstering 2.14.0 documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Batched Clustering
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="CLUEstering 2.14.0 documentation" class="md-nav__button md-logo" aria-label="CLUEstering 2.14.0 documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+    </a>
+    CLUEstering 2.14.0 documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Introduction to CLUEstering</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dependencies.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Supported Backends and Dependencies</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="installation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>How to Install</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Getting Started</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <span>Batched Clustering</span>
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Batched Clustering</span>
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preparing-the-input" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Preparing the input</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-c-interface" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Using the C++ interface</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using the C++ interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reading-the-results" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Reading the results</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-python-interface" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Using the Python interface</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Performance considerations</span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="external-allocators.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Using external allocators</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="cpp/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>C++ API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            <span>C++ API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/points_host.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Host</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/points_device.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Device</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/points_conversion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Points Conversions</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/distance_metrics.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Distance metrics</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/convolutional_kernel.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Convolutional Kernels</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/association_map.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association map</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/association_map_view.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Association<wbr>Map<wbr>View</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/cluster_properties.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster properties</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/get_clusters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusters associations</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/cluster_centroid.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cluster centroids</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/read_csv.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>File reading</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/alpaka_utils.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Alpaka utilities</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cpp/scores.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Validation scores</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="python/index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    <span>Python API Reference</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Python API Reference</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="python/clusterer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Clusterer</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preparing-the-input" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Preparing the input</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-c-interface" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Using the C++ interface</span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using the C++ interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reading-the-results" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Reading the results</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-python-interface" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Using the Python interface</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-considerations" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Performance considerations</span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1 id="batched-clustering">Batched Clustering<a class="headerlink" href="#batched-clustering" title="Link to this heading">¶</a></h1>
+<p>Many applications need to cluster a large number of small, independent datasets with the same
+parameters: the events of a particle physics experiment, the frames of a video, the images of a
+dataset. Clustering them one at a time is inefficient, especially on GPUs, because each dataset is
+too small to fill the device and the cost of launching the kernels and allocating the buffers is
+paid once per dataset.</p>
+<p>Batched clustering solves this problem by running the clustering on all the datasets, called <em>batch items</em>,
+with a single call. The points of all the batch items are stored in the same points container, and
+the clusterer is told how many points belong to each item. Each batch item is clustered
+independently: points belonging to different items are never neighbours of each other, so the
+result is the same as clustering each item separately.</p>
+<h2 id="preparing-the-input">Preparing the input<a class="headerlink" href="#preparing-the-input" title="Link to this heading">¶</a></h2>
+<p>The input of a batched clustering is:</p>
+<ul class="simple">
+<li><p>a single points container (<code class="docutils literal notranslate"><span class="pre">clue::PointsHost</span></code> and/or <code class="docutils literal notranslate"><span class="pre">clue::PointsDevice</span></code> in C++, a single
+dataset in Python) containing the points of all the batch items;</p></li>
+<li><p>an array of unsigned 32-bit integers with the number of points in each batch item.</p></li>
+</ul>
+<p>The points of each batch item must be stored <strong>contiguously</strong> and in the same order as the sizes
+array: the first <code class="docutils literal notranslate"><span class="pre">sizes[0]</span></code> points belong to the first item, the following <code class="docutils literal notranslate"><span class="pre">sizes[1]</span></code> points to
+the second, and so on. The sum of the sizes must be equal to the total number of points.</p>
+<p>For example, three events with 4, 2 and 3 points are laid out as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><code><span class="n">point</span> <span class="n">index</span><span class="p">:</span>  <span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">2</span>  <span class="mi">3</span> <span class="o">|</span> <span class="mi">4</span>  <span class="mi">5</span> <span class="o">|</span> <span class="mi">6</span>  <span class="mi">7</span>  <span class="mi">8</span>
+<span class="n">batch</span> <span class="n">item</span><span class="p">:</span>   <span class="mi">0</span>  <span class="mi">0</span>  <span class="mi">0</span>  <span class="mi">0</span> <span class="o">|</span> <span class="mi">1</span>  <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span>  <span class="mi">2</span>  <span class="mi">2</span>
+
+<span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+</div>
+<p>All the batch items are clustered with the same parameters (density radius, minimum density,
+outlier distance, seeding distance, kernel and metric). The tiles are built from the coordinate
+extremes of the whole input, so batch items covering very different regions of space are supported,
+but they share the same tile grid.</p>
+<h2 id="using-the-c-interface">Using the C++ interface<a class="headerlink" href="#using-the-c-interface" title="Link to this heading">¶</a></h2>
+<p>The batched overloads of <code class="docutils literal notranslate"><span class="pre">clue::Clusterer::make_clusters</span></code> take the sizes of the batch items as a
+<code class="docutils literal notranslate"><span class="pre">std::span&lt;const</span> <span class="pre">uint32_t&gt;</span></code> after the points. As for the non-batched version, the points can be
+passed on the host, on the device, or both:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;CLUEstering/CLUEstering.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clue</span><span class="o">::</span><span class="n">get_queue</span><span class="p">(</span><span class="mi">0u</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// The points of all the batch items, stored contiguously</span>
+<span class="w">    </span><span class="n">clue</span><span class="o">::</span><span class="n">PointsHost</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">h_points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clue</span><span class="o">::</span><span class="n">read_csv</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;batched-data.csv&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">clue</span><span class="o">::</span><span class="n">PointsDevice</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d_points</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">h_points</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+<span class="w">    </span><span class="c1">// Number of points in each batch item. The sum must be equal to h_points.size()</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">batch_sizes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="mi">512</span><span class="p">,</span><span class="w"> </span><span class="mi">2048</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">density_radius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.3f</span><span class="p">,</span><span class="w"> </span><span class="n">min_density</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.f</span><span class="p">;</span>
+<span class="w">    </span><span class="n">clue</span><span class="o">::</span><span class="n">Clusterer</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">algo</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">density_radius</span><span class="p">,</span><span class="w"> </span><span class="n">min_density</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Cluster all the batch items with a single call</span>
+<span class="w">    </span><span class="n">algo</span><span class="p">.</span><span class="n">make_clusters</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">h_points</span><span class="p">,</span><span class="w"> </span><span class="n">d_points</span><span class="p">,</span><span class="w"> </span><span class="n">batch_sizes</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Cluster index of each point</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">cluster_indexes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h_points</span><span class="p">.</span><span class="n">clusterIndexes</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// Map from each batch item to the clusters it contains</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">batch_to_clusters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">algo</span><span class="p">.</span><span class="n">getSampleAssociations</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">h_points</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>The available overloads are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">make_clusters(queue,</span> <span class="pre">h_points,</span> <span class="pre">d_points,</span> <span class="pre">sizes)</span></code>: the data is copied from the host to the
+device, clustered, and the results are copied back to the host;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make_clusters(queue,</span> <span class="pre">h_points,</span> <span class="pre">sizes)</span></code>: as above, but the device buffers are allocated
+internally;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make_clusters(queue,</span> <span class="pre">d_points,</span> <span class="pre">sizes)</span></code>: the data is already on the device and the results
+are left there. This is the right choice when the points are produced by a previous step running
+on the device.</p></li>
+</ul>
+<p>All of them accept a distance metric and a convolutional kernel as optional arguments, exactly like
+the non-batched <code class="docutils literal notranslate"><span class="pre">make_clusters</span></code>.</p>
+<h3 id="reading-the-results">Reading the results<a class="headerlink" href="#reading-the-results" title="Link to this heading">¶</a></h3>
+<p>The cluster indexes are <strong>global</strong>: they are unique across the whole batch, not restarted for each
+batch item. The clusters are numbered by batch item, so all the clusters of the first item come
+before those of the second, and so on. Outliers have cluster index <code class="docutils literal notranslate"><span class="pre">-1</span></code>, as usual.</p>
+<p><code class="docutils literal notranslate"><span class="pre">clue::Clusterer::getSampleAssociations</span></code> returns an <code class="docutils literal notranslate"><span class="pre">AssociationMap</span></code> whose keys are the batch
+items and whose values are the indexes of the clusters they contain. It can be used to iterate over
+the clusters of a single item:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">batch_to_clusters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">algo</span><span class="p">.</span><span class="n">getSampleAssociations</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="n">h_points</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">batch_to_clusters</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"> </span><span class="o">++</span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">cluster</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">batch_to_clusters</span><span class="p">[</span><span class="n">item</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// `cluster` is the global index of a cluster of batch item `item`</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<p>The overload taking <code class="docutils literal notranslate"><span class="pre">clue::PointsDevice</span></code> returns an <code class="docutils literal notranslate"><span class="pre">AssociationMap</span></code> allocated on the device.
+<code class="docutils literal notranslate"><span class="pre">clue::get_clusters</span></code> works as for the non-batched case and returns the map from each cluster to
+its points, using the global cluster indexes.</p>
+<div class="note admonition">
+<p class="admonition-title">Note</p>
+<p>The sample associations are stored in the clusterer and are overwritten by the next call to
+<code class="docutils literal notranslate"><span class="pre">make_clusters</span></code>.</p>
+</div>
+<h2 id="using-the-python-interface">Using the Python interface<a class="headerlink" href="#using-the-python-interface" title="Link to this heading">¶</a></h2>
+<p>In Python the sizes of the batch items are passed to <code class="docutils literal notranslate"><span class="pre">run_clue</span></code>, <code class="docutils literal notranslate"><span class="pre">fit</span></code> or <code class="docutils literal notranslate"><span class="pre">fit_predict</span></code>
+through the <code class="docutils literal notranslate"><span class="pre">batch_sample_sizes</span></code> argument, as a NumPy array of <code class="docutils literal notranslate"><span class="pre">uint32</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">CLUEstering</span> <span class="k">as</span> <span class="nn">clue</span>
+
+<span class="c1"># data contains the points of all the batch items, stored contiguously</span>
+<span class="n">batch_sizes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">2048</span><span class="p">,</span> <span class="mi">700</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">clue</span><span class="o">.</span><span class="n">clusterer</span><span class="p">(</span><span class="mf">1.3</span><span class="p">,</span> <span class="mf">10.</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">run_clue</span><span class="p">(</span><span class="n">batch_sample_sizes</span><span class="o">=</span><span class="n">batch_sizes</span><span class="p">)</span>
+
+<span class="n">labels</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">cluster_ids</span>
+</code></pre></div>
+</div>
+<p>As in C++, the labels are global over the whole batch. The batch item of each point can be
+recovered from the sizes, for example to compute the number of clusters of each item:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="n">batch_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">batch_sizes</span><span class="p">)),</span> <span class="n">batch_sizes</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">batch_sizes</span><span class="p">)):</span>
+    <span class="n">item_labels</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">batch_ids</span> <span class="o">==</span> <span class="n">item</span><span class="p">]</span>
+    <span class="n">n_clusters</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">item_labels</span><span class="p">[</span><span class="n">item_labels</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+</code></pre></div>
+</div>
+<h2 id="performance-considerations">Performance considerations<a class="headerlink" href="#performance-considerations" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Batching is most effective when the batch items are small compared to the size of the device.
+For a single large dataset the non-batched <code class="docutils literal notranslate"><span class="pre">make_clusters</span></code> is just as fast.</p></li>
+<li><p>The kernels distribute the work over a two-dimensional grid of <em>batch items</em> × <em>points of the
+largest item</em>. When the sizes are very different, the threads assigned to the smaller items are
+idle, so batches of items with similar sizes use the device more efficiently.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Clusterer</span></code> reuses its internal buffers between calls, so when processing a stream of batches
+it is convenient to construct it once and call <code class="docutils literal notranslate"><span class="pre">make_clusters</span></code> repeatedly.</p></li>
+<li><p>On parallel backends the order in which clusters are found is not deterministic. The numbering of
+the clusters within a batch item can therefore change from run to run, while the clusters
+themselves and their grouping by batch item do not.</p></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2025, Simone Balducci, Felice Pantaleo, Wahid Redjeb, Marco Rovere, Aurora Perego, Francesco Giacomini.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    8.2.3.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.top", "toc.follow", "search.share", "header.autohide"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+    
+  </body>
+</html>
