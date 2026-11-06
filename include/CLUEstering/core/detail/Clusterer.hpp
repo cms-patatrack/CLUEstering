@@ -318,6 +318,12 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
 
   detail::computeLocalDensity<internal::Acc>(
       queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_density_radius, metric);
+
+  if (!m_nclusters.has_value()) {
+	m_nclusters.emplace(internal::alloc_device_buffer<std::size_t>(queue, Scalar{}, m_allocator));
+  }
+  alpaka::memset(queue, *m_nclusters, 0u);
+
   detail::computeNearestHighers<internal::Acc>(queue,
                                                work_division,
                                                m_tiles->view(),
@@ -325,16 +331,9 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
                                                m_outlier_distance,
                                                m_seeding_distance,
                                                m_min_density,
-                                               metric);
-
-  if (!m_nclusters.has_value()) {
-	m_nclusters.emplace(internal::alloc_device_buffer<std::size_t>(queue, Scalar{}, m_allocator));
-  }
-  alpaka::memset(queue, *m_nclusters, 0u);
+                                               metric,
+											   m_nclusters->data());
   
-  detail::findClusterSeeds<internal::Acc>(
-      queue, work_division, dev_points.view(), m_min_density, m_nclusters->data());
-
   detail::assignPointsToClusters<internal::Acc>(
       queue, block_size, dev_points.view());
 
