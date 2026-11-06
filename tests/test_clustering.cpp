@@ -2,6 +2,8 @@
 #include "CLUEstering/CLUEstering.hpp"
 #include "CLUEstering/utils/validation.hpp"
 
+#include <algorithm>
+#include <map>
 #include <numbers>
 #include <random>
 #include <ranges>
@@ -266,6 +268,99 @@ TEST_CASE("Test clustering on data with periodic coordinates") {
                        clue::metrics::PeriodicEuclidean<2, double>(
                            std::array<double, 2>{0., 2. * std::numbers::pi_v<double>}));
     CHECK(points.n_clusters() == 1);
+  }
+}
+
+namespace {
+  // Cluster points at eta 2 with the given phi values; phi is periodic with period 2 pi.
+  std::vector<int> cluster_phi(clue::Queue& queue,
+                               const std::vector<float>& eta,
+                               const std::vector<float>& phi,
+                               float dc) {
+    const auto n = static_cast<int32_t>(phi.size());
+    std::vector<float> input(3 * n);
+    std::vector<int> output(2 * n);
+    std::ranges::copy(eta, input.begin());
+    std::ranges::copy(phi, input.begin() + n);
+    std::fill(input.begin() + 2 * n, input.end(), 1.f);
+    clue::PointsHost<2> points(queue, n, std::span{input}, std::span{output});
+    clue::Clusterer<2> algo(queue, dc, .5f, 2.f * dc);
+    algo.setWrappedCoordinates(0, 1);
+    algo.make_clusters(
+        queue,
+        points,
+        clue::PeriodicEuclideanMetric<2, float>{0.f, 2.f * std::numbers::pi_v<float>});
+    const auto ids = points.clusterIndexes();
+    return std::vector<int>(ids.begin(), ids.end());
+  }
+
+  // Points in [-pi, pi)
+  float wrap_phi(float phi) {
+    constexpr auto pi = std::numbers::pi_v<float>;
+    return phi >= pi ? phi - 2.f * pi : phi;
+  }
+}  // namespace
+
+TEST_CASE("Test clustering of a narrow range of a periodic coordinate") {
+  auto queue = clue::get_queue(0u);
+  constexpr auto pi = std::numbers::pi_v<float>;
+  const std::vector<float> eta(6, 2.f);
+
+  // Six points 0.01 apart form one cluster at every phi offset, also across the seam
+  for (auto offset : {0.f, 1.f, -pi + .01f, pi - .025f}) {
+    std::vector<float> phi;
+    for (auto k = 0; k < 6; ++k)
+      phi.push_back(wrap_phi(offset + .01f * k));
+    const auto ids = cluster_phi(queue, eta, phi, .015f);
+    CHECK(ids[0] >= 0);
+    CHECK(std::ranges::all_of(ids, [&](int id) { return id == ids[0]; }));
+  }
+
+  // Two points across the seam are neighbours
+  const auto ids = cluster_phi(queue, {2.f, 2.f}, {pi - .005f, -pi + .005f}, .015f);
+  CHECK(ids[0] >= 0);
+  CHECK(ids[0] == ids[1]);
+}
+
+TEST_CASE("Test that a rotation of a periodic coordinate does not change the clusters") {
+  auto queue = clue::get_queue(0u);
+  constexpr auto pi = std::numbers::pi_v<float>;
+  std::mt19937 gen(12345);
+  std::uniform_real_distribution<float> width(.05f, 1.5f), uniform(0.f, 1.f);
+
+  for (auto trial = 0; trial < 50; ++trial) {
+    const auto n = 20 + static_cast<int>(200 * uniform(gen));
+    const auto w = width(gen);
+    std::vector<float> eta(n), dphi(n);
+    for (auto i = 0; i < n; ++i) {
+      eta[i] = 2.f + .3f * uniform(gen);
+      dphi[i] = w * uniform(gen);
+    }
+    std::vector<int> reference;
+    for (auto offset : {1.f, 0.f, -pi, pi - .5f * w, -.5f * w}) {
+      std::vector<float> phi(n);
+      for (auto i = 0; i < n; ++i)
+        phi[i] = wrap_phi(offset + dphi[i]);
+      const auto ids = cluster_phi(queue, eta, phi, .03f);
+      if (reference.empty()) {
+        reference = ids;
+        continue;
+      }
+      // Same partition: a one-to-one map between the cluster ids, outliers to outliers
+      std::map<int, int> forward, backward;
+      auto same = true;
+      for (auto i = 0; i < n; ++i) {
+        if ((reference[i] < 0) != (ids[i] < 0)) {
+          same = false;
+          break;
+        }
+        if (reference[i] < 0)
+          continue;
+        same = same and forward.emplace(reference[i], ids[i]).first->second == ids[i] and
+               backward.emplace(ids[i], reference[i]).first->second == reference[i];
+      }
+      CHECK(same);
+    }
   }
 }
 

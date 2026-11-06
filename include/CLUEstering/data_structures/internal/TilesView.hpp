@@ -78,6 +78,12 @@ namespace internal {
     ALPAKA_FN_ACC inline void searchBox(const SearchBoxExtremes<Ndim, TData>& searchbox_extremes,
                                         SearchBoxBins<Ndim>& searchbox_bins) {
       for (auto dim = 0u; dim != Ndim; ++dim) {
+        // A wrapped box that can touch every tile searches each tile once
+        if (wrapping[dim] and searchbox_extremes[dim][1] - searchbox_extremes[dim][0] >=
+                                  (nperdim[dim] - 1) * tilesizes[dim]) {
+          searchbox_bins[dim] = nostd::make_array(0, nperdim[dim] - 1);
+          continue;
+        }
         auto infBin = getBin(searchbox_extremes[dim][0], dim);
         auto supBin = getBin(searchbox_extremes[dim][1], dim);
         if (wrapping[dim] and infBin > supBin)
@@ -94,23 +100,25 @@ namespace internal {
       return std::span<int32_t>{buf_ptr, static_cast<std::size_t>(size)};
     }
 
+    // The extremes of a wrapped coordinate are [0, period). The result is in that interval.
     ALPAKA_FN_ACC inline constexpr auto normalizeCoordinate(TData coord, int dim) const {
-      const auto range = minmax->range(dim);
-      auto remainder = coord - static_cast<int>(coord / range) * range;
-      if (remainder >= minmax->max(dim))
-        remainder -= range;
-      else if (remainder < minmax->min(dim))
-        remainder += range;
-      return remainder;
+      const auto period = minmax->range(dim);
+      auto wrapped = coord - math::floor(coord / period) * period;
+      if (wrapped >= period)
+        wrapped -= period;
+      return wrapped;
     }
 
     ALPAKA_FN_ACC inline auto distance(const std::array<TData, Ndim + 1>& coord_i,
                                        const std::array<TData, Ndim + 1>& coord_j) const {
       std::array<TData, Ndim> distance_vector;
       for (auto dim = 0u; dim != Ndim; ++dim) {
-        if (wrapping[dim])
-          distance_vector[dim] = math::fabs(normalizeCoordinate(coord_i[dim] - coord_j[dim], dim));
-        else
+        if (wrapping[dim]) {
+          const auto period = minmax->range(dim);
+          const auto diff = coord_i[dim] - coord_j[dim];
+          distance_vector[dim] =
+              math::fabs(diff - math::floor(diff / period + TData{0.5}) * period);
+        } else
           distance_vector[dim] = math::fabs(coord_i[dim] - coord_j[dim]);
       }
       return distance_vector;

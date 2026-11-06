@@ -169,7 +169,8 @@ public:
 /// where one or more coordinates are defined in a periodic domain. The distance is then computed
 /// by treating the coordinates as euclidean..
 ///  This metric expects a period for each dimension, where a period equal to 0 means that the coordinate
-///  is not periodic. The periodic coordinates are expected to be defined in the range [0, period).
+///  is not periodic. The periodic coordinates can be in any interval of one period, for example
+///  [-pi, pi) or [0, 2 pi).
 ///
 /// @tparam Ndim Number of dimensions
 /// @tparam TData Data type for the coordinates
@@ -211,10 +212,16 @@ public:
   /// @param lhs First point
   /// @param rhs Second point
   /// @return Periodic Euclidean distance between the two points
+  /// @brief The period of each dimension, 0 for a dimension that is not periodic
+  ALPAKA_FN_HOST_ACC constexpr inline const auto& periods() const { return m_periods; }
+
   ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim, value_type>& lhs,
                                                       const Point<Ndim, value_type>& rhs) const {
     const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
-      const auto diff = math::fabs(lhs[Dim] - rhs[Dim]);
+      auto diff = math::fabs(lhs[Dim] - rhs[Dim]);
+      // Coordinates of a periodic dimension can be in any interval of one period
+      if (m_periods[Dim] > value_type{0})
+        diff -= math::floor(diff / m_periods[Dim]) * m_periods[Dim];
       const auto periodic_diff = math::min(diff, m_periods[Dim] - diff);
       return periodic_diff * periodic_diff;
     });

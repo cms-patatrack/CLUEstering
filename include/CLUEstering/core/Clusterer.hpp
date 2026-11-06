@@ -67,7 +67,9 @@ private:
   std::optional<internal::DeviceVector<>> m_event_associations;
 
   template <std::floating_point InputType>
-  void setup(Queue& queue, const clue::PointsHost<Ndim, InputType>& h_points) {
+  void setup(Queue& queue,
+             const clue::PointsHost<Ndim, InputType>& h_points,
+             const std::array<value_type, Ndim>& periods) {
     detail::setup_tiles(queue,
                         h_points,
                         m_extremes,
@@ -76,6 +78,7 @@ private:
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
                         m_wrappedCoordinates,
+                        periods,
                         1,
                         m_allocator);
   }
@@ -83,7 +86,8 @@ private:
   template <std::floating_point InputType>
   void setup_batch(Queue& queue,
                    const clue::PointsHost<Ndim, InputType>& h_points,
-                   std::size_t batch_size) {
+                   std::size_t batch_size,
+                   const std::array<value_type, Ndim>& periods) {
     if (batch_size == 0) {
       throw std::invalid_argument("Invalid batch selected: the batch size must be greater than 0");
     }
@@ -95,6 +99,7 @@ private:
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
                         m_wrappedCoordinates,
+                        periods,
                         batch_size,
                         m_allocator);
   }
@@ -102,7 +107,8 @@ private:
   template <std::floating_point InputType>
   void setup_batch(Queue& queue,
                    clue::PointsDevice<Ndim, InputType>& dev_points,
-                   std::size_t batch_size) {
+                   std::size_t batch_size,
+                   const std::array<value_type, Ndim>& periods) {
     if (batch_size == 0) {
       throw std::invalid_argument("Invalid batch selected: the batch size must be greater than 0");
     }
@@ -114,6 +120,7 @@ private:
                         m_tiles,
                         detail::tile_edge(m_density_radius, m_outlier_distance),
                         m_wrappedCoordinates,
+                        periods,
                         batch_size,
                         m_allocator);
   }
@@ -365,6 +372,9 @@ public:
   /// @brief Specify which coordinates are periodic
   ///
   /// @param wrappedCoordinates Array of wrapped coordinates, where 1 means periodic and 0 means non-periodic
+  /// @note The period of a wrapped coordinate comes from the metric, for example
+  /// PeriodicEuclideanMetric. make_clusters throws std::invalid_argument when the metric gives no
+  /// positive period for a wrapped coordinate.
   template <std::ranges::contiguous_range TRange>
     requires std::integral<std::ranges::range_value_t<TRange>>
   void setWrappedCoordinates(const TRange& wrapped_coordinates);

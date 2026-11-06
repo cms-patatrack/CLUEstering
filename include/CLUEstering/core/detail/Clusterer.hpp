@@ -148,7 +148,7 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
     const Kernel& kernel) {
   auto d_points = detail::make_device_points(queue, h_points, m_allocator);
 
-  setup(queue, h_points);
+  setup(queue, h_points, detail::tile_periods<Ndim, value_type>(m_wrappedCoordinates, metric));
   make_clusters_impl(d_points, metric, kernel, queue);
   detail::sync_results(queue, h_points, d_points);
 }
@@ -164,7 +164,7 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
   Queue queue(device);
   auto d_points = detail::make_device_points(queue, h_points, m_allocator);
 
-  setup(queue, h_points);
+  setup(queue, h_points, detail::tile_periods<Ndim, value_type>(m_wrappedCoordinates, metric));
   make_clusters_impl(d_points, metric, kernel, queue);
   detail::sync_results(queue, h_points, d_points);
 }
@@ -178,7 +178,7 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
     clue::PointsDevice<Ndim, value_type>& dev_points,
     const DistanceMetric& metric,
     const Kernel& kernel) {
-  setup(queue, h_points);
+  setup(queue, h_points, detail::tile_periods<Ndim, value_type>(m_wrappedCoordinates, metric));
   clue::copyToDevice(queue, dev_points, h_points, m_allocator);
   make_clusters_impl(dev_points, metric, kernel, queue);
   clue::copyToHost(queue, h_points, dev_points);
@@ -200,6 +200,7 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
                       m_tiles,
                       detail::tile_edge(m_density_radius, m_outlier_distance),
                       m_wrappedCoordinates,
+                      detail::tile_periods<Ndim, value_type>(m_wrappedCoordinates, metric),
                       1,
                       m_allocator);
   make_clusters_impl(dev_points, metric, kernel, queue);
@@ -217,7 +218,10 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
     const DistanceMetric& metric,
     const Kernel& kernel) {
   const auto batch_size = batch_item_sizes.size();
-  setup_batch(queue, h_points, batch_size);
+  setup_batch(queue,
+              h_points,
+              batch_size,
+              detail::tile_periods<Ndim, value_type>(m_wrappedCoordinates, metric));
   clue::copyToDevice(queue, dev_points, h_points, m_allocator);
   make_clusters_batched(dev_points, batch_item_sizes, metric, kernel, queue);
   clue::copyToHost(queue, h_points, dev_points);
@@ -236,7 +240,10 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
   auto d_points = detail::make_device_points(queue, h_points, m_allocator);
 
   const auto batch_size = batch_item_sizes.size();
-  setup_batch(queue, h_points, batch_size);
+  setup_batch(queue,
+              h_points,
+              batch_size,
+              detail::tile_periods<Ndim, value_type>(m_wrappedCoordinates, metric));
   make_clusters_batched(d_points, batch_item_sizes, metric, kernel, queue);
   detail::sync_results(queue, h_points, d_points);
 }
@@ -252,7 +259,10 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
     const DistanceMetric& metric,
     const Kernel& kernel) {
   const auto batch_size = batch_item_sizes.size();
-  setup_batch(queue, dev_points, batch_size);
+  setup_batch(queue,
+              dev_points,
+              batch_size,
+              detail::tile_periods<Ndim, value_type>(m_wrappedCoordinates, metric));
   make_clusters_batched(dev_points, batch_item_sizes, metric, kernel, queue);
 }
 
