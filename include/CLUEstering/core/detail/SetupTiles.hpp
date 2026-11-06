@@ -15,10 +15,32 @@
 #include <cstddef>
 #include <cstdint>
 #include <optional>
+#include <stdexcept>
 #include <type_traits>
 
 CLUE_NAMESPACE_BEGIN
 namespace detail {
+
+  /// @brief Period of each wrapped coordinate for the tiles, 0 for a coordinate that does not wrap
+  ///
+  /// The period comes from the metric, which must have periods(), as PeriodicEuclideanMetric.
+  /// A wrapped coordinate without a positive period throws std::invalid_argument.
+  template <std::size_t Ndim, std::floating_point TData, typename TMetric>
+  std::array<TData, Ndim> tile_periods(const std::array<uint8_t, Ndim>& wrapped_coordinates,
+                                       const TMetric& metric) {
+    std::array<TData, Ndim> periods{};
+    for (auto dim = 0u; dim != Ndim; ++dim) {
+      if (not wrapped_coordinates[dim])
+        continue;
+      if constexpr (requires { metric.periods(); })
+        periods[dim] = metric.periods()[dim] > TData{0} ? metric.periods()[dim] : TData{0};
+      if (periods[dim] == TData{0})
+        throw std::invalid_argument(
+            "A wrapped coordinate needs a metric with a positive period for it, such as "
+            "PeriodicEuclideanMetric.");
+    }
+    return periods;
+  }
 
   template <concepts::queue TQueue,
             std::size_t Ndim,
@@ -27,13 +49,21 @@ namespace detail {
             concepts::allocator TAllocator = DefaultAllocator>
   void setup_tiles_from_extents(TQueue& queue,
                                 int32_t npoints,
-                                const internal::CoordinateExtremes<Ndim, TData>& extremes,
+                                internal::CoordinateExtremes<Ndim, TData>& extremes,
                                 host_buffer<TData[Ndim]>& tile_sizes,
                                 std::optional<internal::Tiles<Ndim, TData, TDev>>& tiles,
                                 TData tile_edge,
                                 const std::array<uint8_t, Ndim>& wrapped_coordinates,
+                                const std::array<TData, Ndim>& periods,
                                 std::size_t batch_size,
                                 const TAllocator& allocator = TAllocator{}) {
+    // The tiles of a wrapped coordinate cover one period, [0, period)
+    for (auto dim = 0u; dim != Ndim; ++dim) {
+      if (wrapped_coordinates[dim]) {
+        extremes.min(dim) = TData{0};
+        extremes.max(dim) = periods[dim];
+      }
+    }
     const auto grid = detail::compute_tile_grid(extremes, tile_edge, npoints, batch_size);
 
     if (!tiles.has_value()) {
@@ -74,6 +104,7 @@ namespace detail {
       std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
       std::remove_cv_t<TInput> tile_edge,
       const std::array<uint8_t, Ndim>& wrapped_coordinates,
+      const std::array<std::remove_cv_t<TInput>, Ndim>& periods,
       std::size_t batch_size = 1,
       const TAllocator& allocator = TAllocator{}) {
     if (!extremes.has_value()) {
@@ -95,6 +126,7 @@ namespace detail {
                              tiles,
                              tile_edge,
                              wrapped_coordinates,
+                             periods,
                              batch_size,
                              allocator);
   }
@@ -114,6 +146,7 @@ namespace detail {
       std::optional<internal::Tiles<Ndim, std::remove_cv_t<TInput>, TDev>>& tiles,
       std::remove_cv_t<TInput> tile_edge,
       const std::array<uint8_t, Ndim>& wrapped_coordinates,
+      const std::array<std::remove_cv_t<TInput>, Ndim>& periods,
       std::size_t batch_size = 1,
       const TAllocator& allocator = TAllocator{}) {
     if (!extremes.has_value()) {
@@ -136,6 +169,7 @@ namespace detail {
                              tiles,
                              tile_edge,
                              wrapped_coordinates,
+                             periods,
                              batch_size,
                              allocator);
   }

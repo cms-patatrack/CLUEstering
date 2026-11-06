@@ -2,6 +2,7 @@
 #pragma once
 
 #include "fabs/fabs.hpp"
+#include "floor/floor.hpp"
 #include "exp/exp.hpp"
 #include "max/max.hpp"
 #include "min/min.hpp"
