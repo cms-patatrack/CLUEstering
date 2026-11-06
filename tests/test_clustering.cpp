@@ -7,6 +7,7 @@
 #include <numbers>
 #include <random>
 #include <ranges>
+#include <stdexcept>
 
 #include <fmt/format.h>
 
@@ -320,6 +321,41 @@ TEST_CASE("Test clustering of a narrow range of a periodic coordinate") {
   const auto ids = cluster_phi(queue, {2.f, 2.f}, {pi - .005f, -pi + .005f}, .015f);
   CHECK(ids[0] >= 0);
   CHECK(ids[0] == ids[1]);
+}
+
+TEST_CASE("Test a search box that covers the whole period of a periodic coordinate") {
+  auto queue = clue::get_queue(0u);
+  constexpr auto pi = std::numbers::pi_v<float>;
+
+  // With dc above pi every pair of points is within dc in phi, so the points form one cluster
+  const auto n = 40;
+  const std::vector<float> eta(n, 2.f);
+  std::vector<float> phi(n);
+  for (auto i = 0; i < n; ++i)
+    phi[i] = -pi + 2.f * pi * static_cast<float>(i) / n;
+  const auto ids = cluster_phi(queue, eta, phi, 4.f);
+  CHECK(ids[0] >= 0);
+  CHECK(std::ranges::all_of(ids, [&](int id) { return id == ids[0]; }));
+}
+
+TEST_CASE("Test a periodic coordinate just below the start of the period") {
+  auto queue = clue::get_queue(0u);
+
+  // -1e-7 wraps to 2 pi in single precision: the point goes to the first tile and clusters with its neighbours
+  const auto ids = cluster_phi(queue, {2.f, 2.f, 2.f}, {-1e-7f, .005f, .01f}, .015f);
+  CHECK(ids[0] >= 0);
+  CHECK(ids[0] == ids[1]);
+  CHECK(ids[1] == ids[2]);
+}
+
+TEST_CASE("Test that a wrapped coordinate needs a metric with a period") {
+  auto queue = clue::get_queue(0u);
+  std::vector<float> input{2.f, 2.f, 0.f, .01f, 1.f, 1.f};
+  std::vector<int> output(4);
+  clue::PointsHost<2> points(queue, 2, std::span{input}, std::span{output});
+  clue::Clusterer<2> algo(.015f, .5f, .03f);
+  algo.setWrappedCoordinates(0, 1);
+  CHECK_THROWS_AS(algo.make_clusters(queue, points), std::invalid_argument);
 }
 
 TEST_CASE("Test that a rotation of a periodic coordinate does not change the clusters") {

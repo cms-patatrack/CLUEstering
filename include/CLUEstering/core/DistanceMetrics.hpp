@@ -207,14 +207,14 @@ public:
   ALPAKA_FN_HOST_ACC constexpr PeriodicEuclideanMetric(TValues... periods)
       : m_periods{periods...} {}
 
+  /// @brief The period of each dimension, 0 for a dimension that is not periodic
+  ALPAKA_FN_HOST_ACC constexpr inline const auto& periods() const { return m_periods; }
+
   /// @brief Compute the Periodic Euclidean distance between two points
   ///
   /// @param lhs First point
   /// @param rhs Second point
   /// @return Periodic Euclidean distance between the two points
-  /// @brief The period of each dimension, 0 for a dimension that is not periodic
-  ALPAKA_FN_HOST_ACC constexpr inline const auto& periods() const { return m_periods; }
-
   ALPAKA_FN_HOST_ACC constexpr inline auto operator()(const Point<Ndim, value_type>& lhs,
                                                       const Point<Ndim, value_type>& rhs) const {
     const auto distance2 = meta::accumulate<Ndim>([&]<std::size_t Dim>() {
