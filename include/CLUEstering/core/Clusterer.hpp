@@ -64,6 +64,7 @@ private:
   std::optional<host_buffer<value_type[Ndim]>> m_tile_size;
   std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
   std::optional<internal::SeedArray<>> m_seeds;
+  std::optional<clue::device_buffer<Device, std::size_t>> m_nclusters;
   std::optional<internal::DeviceVector<>> m_event_associations;
 
   template <std::floating_point InputType>

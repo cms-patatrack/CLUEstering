@@ -248,7 +248,7 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::setWrappedCoordinates(
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 inline std::span<const int32_t> Clusterer<Ndim, DataType, AllocatorType>::getSeeds() const {
   if (!m_seeds.has_value()) {
-    throw std::runtime_error("Seeds are not available. Please run make_clusters first.");
+    throw std::runtime_error("Seeds are not available. Please run make_clusters in batched mode first.");
   }
   return static_cast<std::span<const int32_t>>(*m_seeds);
 }
@@ -318,7 +318,6 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
 
   detail::computeLocalDensity<internal::Acc>(
       queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_density_radius, metric);
-  auto seed_candidates = std::size_t{0};
   detail::computeNearestHighers<internal::Acc>(queue,
                                                work_division,
                                                m_tiles->view(),
@@ -326,15 +325,18 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
                                                m_outlier_distance,
                                                m_seeding_distance,
                                                m_min_density,
-                                               metric,
-                                               seed_candidates,
-                                               m_allocator);
-  detail::setup_seeds(queue, m_seeds, seed_candidates, m_allocator);
+                                               metric);
+
+  if (!m_nclusters.has_value()) {
+	m_nclusters.emplace(internal::alloc_device_buffer<std::size_t>(queue, Scalar{}, m_allocator));
+  }
+  alpaka::memset(queue, *m_nclusters, 0u);
+  
   detail::findClusterSeeds<internal::Acc>(
-      queue, work_division, m_seeds.value(), dev_points.view(), m_min_density);
+      queue, work_division, dev_points.view(), m_min_density, m_nclusters->data());
 
   detail::assignPointsToClusters<internal::Acc>(
-      queue, block_size, m_seeds.value(), dev_points.view());
+      queue, block_size, dev_points.view());
 
   alpaka::wait(queue);
   internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(dev_points);
