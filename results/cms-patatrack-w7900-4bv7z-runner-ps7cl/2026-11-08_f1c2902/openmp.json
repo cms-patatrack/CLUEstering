@@ -1,0 +1,182 @@
+{
+  "context": {
+    "date": "2026-11-08T17:02:44+01:00",
+    "host_name": "cms-patatrack-w7900-4bv7z-runner-ps7cl-workflow",
+    "executable": "./build/openmp.out",
+    "num_cpus": 256,
+    "mhz_per_cpu": 3718,
+    "cpu_scaling_enabled": true,
+    "caches": [
+      {
+        "type": "Data",
+        "level": 1,
+        "size": 32768,
+        "num_sharing": 2
+      },
+      {
+        "type": "Instruction",
+        "level": 1,
+        "size": 32768,
+        "num_sharing": 2
+      },
+      {
+        "type": "Unified",
+        "level": 2,
+        "size": 1048576,
+        "num_sharing": 2
+      },
+      {
+        "type": "Unified",
+        "level": 3,
+        "size": 33554432,
+        "num_sharing": 16
+      }
+    ],
+    "load_avg": [2.51,3.67,4.33],
+    "library_version": "1.8.5",
+    "library_build_type": "release",
+    "json_schema_version": 1
+  },
+  "benchmarks": [
+    {
+      "name": "BM_clustering<2>/1024",
+      "family_index": 0,
+      "per_family_instance_index": 0,
+      "run_name": "BM_clustering<2>/1024",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 11,
+      "real_time": 6.3511420432901509e+07,
+      "cpu_time": 6.3194788727272741e+07,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_clustering<2>/2048",
+      "family_index": 0,
+      "per_family_instance_index": 1,
+      "run_name": "BM_clustering<2>/2048",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 2017,
+      "real_time": 3.4488059367234673e+05,
+      "cpu_time": 3.4249194794248714e+05,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_clustering<2>/4096",
+      "family_index": 0,
+      "per_family_instance_index": 2,
+      "run_name": "BM_clustering<2>/4096",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 1083,
+      "real_time": 6.4853152164730174e+05,
+      "cpu_time": 6.4362775069251191e+05,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_clustering<2>/8192",
+      "family_index": 0,
+      "per_family_instance_index": 3,
+      "run_name": "BM_clustering<2>/8192",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 549,
+      "real_time": 1.2677012107679402e+06,
+      "cpu_time": 1.2608924954462587e+06,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_clustering<2>/16384",
+      "family_index": 0,
+      "per_family_instance_index": 4,
+      "run_name": "BM_clustering<2>/16384",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 195,
+      "real_time": 3.6082872052271012e+06,
+      "cpu_time": 3.5901666717948755e+06,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_clustering<2>/32768",
+      "family_index": 0,
+      "per_family_instance_index": 5,
+      "run_name": "BM_clustering<2>/32768",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 66,
+      "real_time": 1.0654505084720299e+07,
+      "cpu_time": 1.0601528999999948e+07,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_clustering<2>/65536",
+      "family_index": 0,
+      "per_family_instance_index": 6,
+      "run_name": "BM_clustering<2>/65536",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 16,
+      "real_time": 7.7448320749681443e+07,
+      "cpu_time": 7.6821071750000030e+07,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_clustering<2>/131072",
+      "family_index": 0,
+      "per_family_instance_index": 7,
+      "run_name": "BM_clustering<2>/131072",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 5,
+      "real_time": 1.7627277299761772e+08,
+      "cpu_time": 1.4903909199999976e+08,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_clustering<2>/262144",
+      "family_index": 0,
+      "per_family_instance_index": 8,
+      "run_name": "BM_clustering<2>/262144",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 2,
+      "real_time": 5.2472181752091277e+08,
+      "cpu_time": 4.8704027799999851e+08,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_clustering<2>/524288",
+      "family_index": 0,
+      "per_family_instance_index": 9,
+      "run_name": "BM_clustering<2>/524288",
+      "run_type": "iteration",
+      "repetitions": 1,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 1,
+      "real_time": 1.9381138921016827e+09,
+      "cpu_time": 1.8073446580000000e+09,
+      "time_unit": "ns"
+    }
+  ]
+}
