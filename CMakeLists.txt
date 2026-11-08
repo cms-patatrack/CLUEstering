@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16.0)
 project(
   CLUEstering
   LANGUAGES CXX
-  VERSION 2.14.1)
+  VERSION 2.14.2)
 
 option(BUILD_PYTHON "Build the Python bindings" OFF)
 
