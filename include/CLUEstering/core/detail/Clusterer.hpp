@@ -386,7 +386,7 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_batched(
   auto event_offsets = alpaka::allocMappedBuf<std::size_t>(host, platform<Queue>(), batch_size + 1);
   event_offsets[0] = 0;
   std::inclusive_scan(batch_item_sizes.begin(), batch_item_sizes.end(), event_offsets.data() + 1);
-  if (event_offsets[batch_size] != dev_points.size()) {
+  if (event_offsets[batch_size] != static_cast<std::size_t>(dev_points.size())) {
     throw std::invalid_argument(
         "The sum of the elements in the batches must be equal to the total number of points");
   }
