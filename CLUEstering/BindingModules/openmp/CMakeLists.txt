@@ -1,4 +1,4 @@
-nanobind_add_module(CLUE_CPU_OMP NB_STATIC binding_cpu_omp.cpp)
+nanobind_add_module(CLUE_CPU_OMP NB_STATIC NOMINSIZE binding_cpu_omp.cpp)
 target_include_directories(CLUE_CPU_OMP
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_link_libraries(CLUE_CPU_OMP PRIVATE alpaka::alpaka Boost::atomic)

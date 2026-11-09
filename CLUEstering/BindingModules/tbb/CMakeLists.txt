@@ -1,4 +1,4 @@
-nanobind_add_module(CLUE_CPU_TBB NB_STATIC binding_cpu_tbb.cpp)
+nanobind_add_module(CLUE_CPU_TBB NB_STATIC NOMINSIZE binding_cpu_tbb.cpp)
 target_include_directories(CLUE_CPU_TBB
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_compile_definitions(
