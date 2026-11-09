@@ -281,6 +281,9 @@ namespace detail {
 
         assert(nh_i == -1 || delta_i <= effective_distance);
         points.nearest_higher()[i] = nh_i;
+        if (points.has_delta()) {
+          points.delta()[i] = (nh_i == -1) ? std::numeric_limits<TData>::infinity() : delta_i;
+        }
         if (nh_i == -1) {
           alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
         }

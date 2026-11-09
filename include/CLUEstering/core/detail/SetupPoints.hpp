@@ -41,6 +41,12 @@ namespace detail {
     dev_points.view().m_sigmas = view.m_sigmas;
     dev_points.view().m_density_uncertainty = view.m_density_uncertainty;
     dev_points.view().m_tags = view.m_tags;
+    // If requested, the clustering details are written directly in the host buffers
+    if (points.has_details()) {
+      dev_points.view().m_rho = view.m_rho;
+      dev_points.view().m_delta = view.m_delta;
+      dev_points.view().m_nearest_higher = view.m_nearest_higher;
+    }
 
     return dev_points;
   }

@@ -42,6 +42,7 @@ namespace soa::device {
         buffer + n_points * ((Ndim + 2) * sizeof(value_type) + 2 * sizeof(int)));
     view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
+    view.m_delta = nullptr;
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -64,6 +65,7 @@ namespace soa::device {
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
+    view.m_delta = nullptr;
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -85,6 +87,7 @@ namespace soa::device {
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
+    view.m_delta = nullptr;
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -105,6 +108,7 @@ namespace soa::device {
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
+    view.m_delta = nullptr;
     view.m_n = n_points;
   }
 
@@ -127,6 +131,7 @@ namespace soa::device {
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
+    view.m_delta = nullptr;
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement>
@@ -146,6 +151,7 @@ namespace soa::device {
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
+    view.m_delta = nullptr;
     view.m_n = n_points;
   }
   template <std::size_t Ndim, std::floating_point TElement, concepts::pointer... TBuffers>
@@ -167,6 +173,7 @@ namespace soa::device {
         reinterpret_cast<int*>(alloc_buffer + n_points * (sizeof(value_type) + sizeof(int)));
     view.m_sigmas.fill(nullptr);
     view.m_density_uncertainty = nullptr;
+    view.m_delta = nullptr;
     view.m_n = n_points;
   }
 

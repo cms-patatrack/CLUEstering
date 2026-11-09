@@ -86,6 +86,13 @@ namespace internal {
       return points.m_tags_buffer;
     }
 
+    /// @brief Returns the device buffer owning the delta array
+    static auto& delta_buffer(TPoints& points)
+      requires requires { points.m_delta_buffer; }
+    {
+      return points.m_delta_buffer;
+    }
+
     ALPAKA_FN_HOST const auto& view() const { return static_cast<const TPoints*>(this)->m_view; }
     ALPAKA_FN_HOST auto& view() { return static_cast<TPoints*>(this)->m_view; }
   };
@@ -103,6 +110,7 @@ struct PointsView {
   std::int32_t* m_is_seed;
   value_type* m_rho;
   std::int32_t* m_nearest_higher;
+  value_type* m_delta;
   std::array<const element_type*, Ndim> m_sigmas;
   const element_type* m_density_uncertainty;
   const std::uint32_t* m_tags;
@@ -169,6 +177,20 @@ struct PointsView {
     assert(m_nearest_higher != nullptr &&
            "The nearest_higher array has not been allocated yet, so it cannot be accessed");
     return std::span<std::int32_t>(m_nearest_higher, m_n);
+  }
+
+  /// @brief Returns whether the distance to the nearest higher is stored for each point
+  ALPAKA_FN_HOST_ACC auto has_delta() const { return m_delta != nullptr; }
+
+  ALPAKA_FN_HOST_ACC auto delta() const {
+    assert(m_delta != nullptr &&
+           "The delta array has not been allocated yet, so it cannot be accessed");
+    return std::span<const value_type>(m_delta, m_n);
+  }
+  ALPAKA_FN_HOST_ACC auto delta() {
+    assert(m_delta != nullptr &&
+           "The delta array has not been allocated yet, so it cannot be accessed");
+    return std::span<value_type>(m_delta, m_n);
   }
 
   ALPAKA_FN_HOST_ACC auto has_uncertainty() const { return m_density_uncertainty != nullptr; }

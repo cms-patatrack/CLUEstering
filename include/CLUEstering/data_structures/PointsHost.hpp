@@ -5,6 +5,7 @@
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"
+#include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/ClusterProperties.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/detail/concepts.hpp"
@@ -38,6 +39,9 @@ public:
 private:
   std::optional<host_buffer<std::byte[]>> m_buffer;
   PointsView<Ndim, element_type> m_view;
+  std::optional<host_buffer<value_type[]>> m_density;
+  std::optional<host_buffer<value_type[]>> m_delta;
+  std::optional<host_buffer<std::int32_t[]>> m_nearest_higher;
   std::optional<ClusterProperties> m_clusterProperties;
   std::optional<std::size_t> m_nclusters;
   std::int32_t m_size;
@@ -207,6 +211,38 @@ public:
   /// @return The ClusterProperties object
   /// @note This object is lazily evaluated and cached upon the first call
   const auto& cluster_properties();
+
+  /// @brief Requests that the local density, the distance to the nearest higher and the nearest
+  /// higher of each point are stored after clustering
+  ///
+  /// @note This function must be called before clustering. The buffers are allocated only when
+  /// it is called, so the clustering does not have any memory or performance overhead otherwise.
+  /// The values can then be accessed with `rho()`, `delta()` and `nearest_higher()`
+  void store_details();
+  /// @brief Returns whether the clustering details are stored for the points
+  ///
+  /// @return True if `store_details` has been called, false otherwise
+  bool has_details() const;
+
+  /// @brief Returns the local density of each point
+  ///
+  /// @return A const span of the local densities
+  /// @note `store_details` must be called before clustering for this to be available
+  auto rho() const;
+  /// @brief Returns the distance of each point to its nearest higher
+  ///
+  /// @return A const span of the distances
+  /// @note `store_details` must be called before clustering for this to be available.
+  /// Points without a nearest higher within the search distance (seeds and outliers) have
+  /// an infinite delta
+  auto delta() const;
+  /// @brief Returns the index of the nearest higher of each point
+  ///
+  /// @return A const span of the nearest higher indexes
+  /// @note `store_details` must be called before clustering for this to be available.
+  /// Points without a nearest higher within the search distance (seeds and outliers) have
+  /// a nearest higher equal to -1
+  auto nearest_higher() const;
 
   /// @brief Sets the uncertainty on the local density estimation for each point
   ///

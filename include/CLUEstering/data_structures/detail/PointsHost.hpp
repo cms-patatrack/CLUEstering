@@ -20,6 +20,7 @@
 #include <ranges>
 #include <span>
 #include <tuple>
+#include <utility>
 
 CLUE_NAMESPACE_BEGIN
 
@@ -156,6 +157,48 @@ inline const auto& PointsHost<Ndim, TData>::cluster_properties() {
     m_clusterProperties = ClusterProperties{this->clusterIndexes()};
 
   return m_clusterProperties.value();
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline void PointsHost<Ndim, TData>::store_details() {
+  if (has_details())
+    return;
+
+  const auto n_points = static_cast<std::size_t>(m_size);
+  m_density = alpaka::allocMappedBuf<value_type>(host, platform<Platform>(), n_points);
+  m_delta = alpaka::allocMappedBuf<value_type>(host, platform<Platform>(), n_points);
+  m_nearest_higher = alpaka::allocMappedBuf<std::int32_t>(host, platform<Platform>(), n_points);
+  m_view.m_rho = m_density->data();
+  m_view.m_delta = m_delta->data();
+  m_view.m_nearest_higher = m_nearest_higher->data();
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline bool PointsHost<Ndim, TData>::has_details() const {
+  return m_density.has_value();
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline auto PointsHost<Ndim, TData>::rho() const {
+  assert(m_clustered && "The points have to be clustered before the densities can be accessed");
+  assert(has_details() && "store_details must be called before clustering to access rho");
+  return std::as_const(m_view).rho();
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline auto PointsHost<Ndim, TData>::delta() const {
+  assert(m_clustered && "The points have to be clustered before the deltas can be accessed");
+  assert(has_details() && "store_details must be called before clustering to access delta");
+  return std::as_const(m_view).delta();
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline auto PointsHost<Ndim, TData>::nearest_higher() const {
+  assert(m_clustered &&
+         "The points have to be clustered before the nearest highers can be accessed");
+  assert(has_details() &&
+         "store_details must be called before clustering to access nearest_higher");
+  return std::as_const(m_view).nearest_higher();
 }
 
 template <std::size_t Ndim, std::floating_point TData>
