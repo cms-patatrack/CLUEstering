@@ -153,6 +153,10 @@ namespace detail {
 
             assert(nh_i == -1 || delta_i <= effective_distance);
             dev_points.nearest_higher()[global_idx] = nh_i;
+            if (dev_points.has_delta()) {
+              dev_points.delta()[global_idx] =
+                  (nh_i == -1) ? std::numeric_limits<TData>::infinity() : delta_i;
+            }
             if (nh_i == -1) {
               alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
             }
