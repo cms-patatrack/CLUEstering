@@ -40,7 +40,7 @@ FetchContent_MakeAvailable(alpaka)
 file(MAKE_DIRECTORY ../lib)
 
 # Convolutional Kernels
-nanobind_add_module(CLUE_Convolutional_Kernels NB_STATIC
+nanobind_add_module(CLUE_Convolutional_Kernels NB_STATIC NOMINSIZE
                     ${CMAKE_CURRENT_SOURCE_DIR}/binding_kernels.cpp)
 target_include_directories(CLUE_Convolutional_Kernels
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../include)

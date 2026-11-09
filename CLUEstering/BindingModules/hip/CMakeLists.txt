@@ -5,7 +5,7 @@ find_package(hip)
 
 set(hip_BASE "${hip_INCLUDE_DIRS}/..")
 set(CMAKE_CXX_COMPILER "${hip_BASE}/bin/hipcc")
-nanobind_add_module(CLUE_GPU_HIP NB_STATIC binding_gpu_hip.cpp)
+nanobind_add_module(CLUE_GPU_HIP NB_STATIC NOMINSIZE binding_gpu_hip.cpp)
 target_include_directories(CLUE_GPU_HIP
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../../include)
 target_link_libraries(CLUE_GPU_HIP PRIVATE alpaka::alpaka Boost::atomic)
