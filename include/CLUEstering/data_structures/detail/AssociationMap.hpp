@@ -67,16 +67,16 @@ namespace detail {
     template <typename TAcc>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   int32_t* indexes,
-                                  const int32_t* bin_buffer,
+                                  const int32_t* point_bin_map,
                                   int32_t* temp_offsets,
-                                  [[maybe_unused]] std::size_t nkeys,
-                                  std::size_t size) const {
-      for (auto i : alpaka::uniformElements(acc, size)) {
-        const auto binId = bin_buffer[i];
+                                  [[maybe_unused]] std::size_t nbins,
+                                  std::size_t npoints) const {
+      for (auto i : alpaka::uniformElements(acc, npoints)) {
+        const auto binId = point_bin_map[i];
         if (binId >= 0) {
-          assert(static_cast<std::size_t>(binId) < nkeys);
+          assert(static_cast<std::size_t>(binId) < nbins);
           auto prev = alpaka::atomicAdd(acc, &temp_offsets[binId], 1);
-          assert(static_cast<std::size_t>(prev) < size);
+          assert(static_cast<std::size_t>(prev) < npoints);
           indexes[prev] = i;
         }
       }
@@ -326,29 +326,29 @@ template <concepts::accelerator TAcc,
           typename TFunc,
           concepts::queue TQueue,
           concepts::allocator TAllocator>
-ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size,
+ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type npoints,
                                                       TFunc func,
                                                       TQueue& queue,
                                                       const TAllocator& allocator) {
   if (m_extents.keys == 0)
     return;
 
-  auto bin_buffer = internal::alloc_device_buffer<int32_t>(queue, size, allocator);
+  auto point_bin_map = internal::alloc_device_buffer<int32_t>(queue, npoints, allocator);
 
   const auto blocksize = 512;
-  const auto gridsize = divide_up_by(size, blocksize);
+  const auto gridsize = divide_up_by(npoints, blocksize);
   const auto workdiv = make_workdiv<TAcc>(gridsize, blocksize);
   alpaka::exec<TAcc>(
-      queue, workdiv, detail::KernelComputeAssociations<TFunc>{}, size, bin_buffer.data(), func);
+      queue, workdiv, detail::KernelComputeAssociations<TFunc>{}, npoints, point_bin_map.data(), func);
 
   auto sizes_buffer = internal::alloc_device_buffer<int32_t>(queue, m_extents.keys, allocator);
   alpaka::memset(queue, sizes_buffer, 0);
   alpaka::exec<TAcc>(queue,
                      workdiv,
                      detail::KernelComputeAssociationSizes{},
-                     bin_buffer.data(),
+                     point_bin_map.data(),
                      sizes_buffer.data(),
-                     size);
+                     npoints);
 
   auto temp_offsets = internal::alloc_device_buffer<int32_t>(queue, m_extents.keys + 1, allocator);
   alpaka::memset(queue, temp_offsets, 0u, 1u);
@@ -360,10 +360,10 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size,
                      workdiv,
                      detail::KernelFillAssociator{},
                      m_indexes.data(),
-                     bin_buffer.data(),
+                     point_bin_map.data(),
                      temp_offsets.data(),
                      m_extents.keys,
-                     size);
+                     npoints);
 }
 
 template <concepts::device TDev>
@@ -438,7 +438,7 @@ template <concepts::accelerator TAcc,
           typename TFunc,
           concepts::allocator TAllocator>
 ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
-                                                            size_type size,
+                                                            size_type npoints,
                                                             TFunc func,
                                                             const auto& event_offsets,
                                                             std::size_t max_event_size,
@@ -446,7 +446,7 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
   if (m_extents.keys == 0 || m_extents.values == 0)
     return;
 
-  auto bin_buffer = internal::alloc_device_buffer<int32_t>(queue, size, allocator);
+  auto point_bin_map = internal::alloc_device_buffer<int32_t>(queue, npoints, allocator);
 
   const auto blocksize = 256;
   const auto blocks_per_event = divide_up_by(max_event_size, blocksize);
@@ -456,27 +456,27 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
   alpaka::exec<internal::Acc2D>(queue,
                                 batch_workdiv,
                                 detail::KernelComputeAssociations<TFunc>{},
-                                bin_buffer.data(),
+                                point_bin_map.data(),
                                 func,
                                 event_offsets.data(),
                                 max_event_size,
                                 blocks_per_event);
 
-  auto sizes_buffer = internal::alloc_device_buffer<int32_t>(queue, m_extents.keys, allocator);
-  const auto workdiv = make_workdiv<TAcc>(divide_up_by(size, blocksize), blocksize);
-  alpaka::memset(queue, sizes_buffer, 0);
+  auto bin_sizes_buffer = internal::alloc_device_buffer<int32_t>(queue, m_extents.keys, allocator);
+  const auto workdiv = make_workdiv<TAcc>(divide_up_by(npoints, blocksize), blocksize);
+  alpaka::memset(queue, bin_sizes_buffer, 0);
   alpaka::exec<TAcc>(queue,
                      workdiv,
                      detail::KernelComputeAssociationSizes{},
-                     bin_buffer.data(),
-                     sizes_buffer.data(),
-                     size);
+                     point_bin_map.data(),
+                     bin_sizes_buffer.data(),
+                     npoints);
 
   auto temp_offsets = internal::alloc_device_buffer<int32_t>(queue, m_extents.keys + 1, allocator);
   alpaka::memset(queue, temp_offsets, 0u, 1u);
 
   internal::algorithm::inclusive_scan(
-      queue, sizes_buffer.data(), sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
+      queue, bin_sizes_buffer.data(), bin_sizes_buffer.data() + m_extents.keys, temp_offsets.data() + 1);
 
   alpaka::memcpy(
       queue, alpaka::createView(queue, m_offsets.data(), m_extents.keys + 1), temp_offsets);
@@ -484,10 +484,10 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill_batch(TQueue& queue,
                      workdiv,
                      detail::KernelFillAssociator{},
                      m_indexes.data(),
-                     bin_buffer.data(),
+                     point_bin_map.data(),
                      temp_offsets.data(),
                      m_extents.keys,
-                     size);
+                     npoints);
   alpaka::wait(queue);
 }
 
