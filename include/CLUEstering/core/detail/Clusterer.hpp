@@ -55,31 +55,10 @@ Clusterer<Ndim, DataType, AllocatorType>::Clusterer(AllocatorType allocator,
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
-inline Clusterer<Ndim, DataType, AllocatorType>::Clusterer(
-    Queue&,
-    AllocatorType allocator,
-    value_type density_radius,
-    value_type min_density,
-    std::optional<value_type> outlier_distance,
-    std::optional<value_type> seeding_distance)
-    : Clusterer(
-          std::move(allocator), density_radius, min_density, outlier_distance, seeding_distance) {}
-
-template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 Clusterer<Ndim, DataType, AllocatorType>::Clusterer(value_type density_radius,
                                                     value_type min_density,
                                                     std::optional<value_type> outlier_distance,
                                                     std::optional<value_type> seeding_distance)
-  requires std::default_initializable<AllocatorType>
-    : Clusterer(AllocatorType{}, density_radius, min_density, outlier_distance, seeding_distance) {}
-
-template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
-inline Clusterer<Ndim, DataType, AllocatorType>::Clusterer(
-    Queue&,
-    value_type density_radius,
-    value_type min_density,
-    std::optional<value_type> outlier_distance,
-    std::optional<value_type> seeding_distance)
   requires std::default_initializable<AllocatorType>
     : Clusterer(AllocatorType{}, density_radius, min_density, outlier_distance, seeding_distance) {}
 
@@ -152,22 +131,7 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
   make_clusters_impl(d_points, metric, kernel, queue);
   detail::sync_results(queue, h_points, d_points);
 }
-template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
-template <std::floating_point InputType,
-          concepts::convolutional_kernel Kernel,
-          concepts::distance_metric<Ndim> DistanceMetric>
-inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
-    clue::PointsHost<Ndim, InputType>& h_points,
-    const DistanceMetric& metric,
-    const Kernel& kernel) {
-  auto device = alpaka::getDevByIdx(Platform{}, 0u);
-  Queue queue(device);
-  auto d_points = detail::make_device_points(queue, h_points, m_allocator);
 
-  setup(queue, h_points, detail::tile_periods<Ndim, value_type>(m_wrappedCoordinates, metric));
-  make_clusters_impl(d_points, metric, kernel, queue);
-  detail::sync_results(queue, h_points, d_points);
-}
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 template <std::floating_point InputType,
           concepts::convolutional_kernel Kernel,
@@ -183,6 +147,7 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::make_clusters(
   make_clusters_impl(dev_points, metric, kernel, queue);
   clue::copyToHost(queue, h_points, dev_points);
 }
+
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 template <std::floating_point InputType,
           concepts::convolutional_kernel Kernel,
