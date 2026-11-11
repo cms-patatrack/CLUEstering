@@ -396,8 +396,7 @@ ALPAKA_FN_HOST void AssociationMap<TDev>::fill(std::span<const key_type> associa
 
 template <concepts::device TDev>
 template <concepts::accelerator TAcc, concepts::queue TQueue, concepts::allocator TAllocator>
-ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type,
-                                                      std::span<const key_type> associations,
+ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(std::span<const key_type> associations,
                                                       TQueue& queue,
                                                       const TAllocator& allocator) {
   if (m_extents.keys == 0 || m_extents.values == 0)
