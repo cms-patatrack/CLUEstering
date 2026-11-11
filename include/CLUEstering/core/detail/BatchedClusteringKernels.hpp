@@ -312,8 +312,7 @@ namespace detail {
         static_cast<int32_t>(num_seeds),
         allocator);
 
-    auto extracted = batches_to_seeds.extract();
-    auto* batches_to_seeds_indexes = extracted.values.data();
+    auto* batches_to_seeds_indexes = batches_to_seeds.indexes().data();
 
     auto seeds_reordered = clue::internal::SeedArray<>(queue, num_seeds, allocator);
     auto batches_reordered = clue::internal::SeedArray<>(queue, num_seeds, allocator);

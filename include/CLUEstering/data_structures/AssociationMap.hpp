@@ -223,8 +223,7 @@ private:
   template <concepts::accelerator TAcc,
             concepts::queue TQueue,
             concepts::allocator TAllocator = DefaultAllocator>
-  ALPAKA_FN_HOST void fill(size_type,
-                           std::span<const key_type> associations,
+  ALPAKA_FN_HOST void fill(std::span<const key_type> associations,
                            TQueue& queue,
                            const TAllocator& allocator = TAllocator{});
   template <concepts::accelerator TAcc,
