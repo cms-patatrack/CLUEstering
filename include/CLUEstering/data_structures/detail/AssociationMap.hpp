@@ -96,7 +96,7 @@ inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins
   m_view.m_offsets = m_offsets.data();
   m_view.m_extents = {nbins, nelements};
 
-  std::memset(m_offsets.data(), 0, (nbins) * sizeof(key_type));
+  std::memset(m_offsets.data(), 0, (nbins + 1) * sizeof(key_type));
 }
 
 template <concepts::device TDev>
