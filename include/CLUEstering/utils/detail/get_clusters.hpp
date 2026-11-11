@@ -8,7 +8,6 @@
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/internal/algorithm/count_if/count_if.hpp"
 #include "CLUEstering/utils/get_clusters.hpp"
-#include <algorithm>
 #include <cassert>
 #include <concepts>
 #include <cstddef>
@@ -17,24 +16,15 @@
 CLUE_NAMESPACE_BEGIN
 namespace detail {
 
-  template <typename T>
-  struct non_negative {
-    ALPAKA_FN_HOST_ACC constexpr auto operator()(T value) const { return value > -1; }
-  };
-
   inline auto get_clusters(std::span<const int> cluster_ids) {
-    auto clustered_points = std::ranges::count_if(cluster_ids, non_negative<int>{});
-    return internal::make_associator(cluster_ids, static_cast<int>(clustered_points));
+    return internal::make_associator(cluster_ids);
   }
 
   template <concepts::queue TQueue, concepts::allocator TAllocator>
   inline auto get_clusters(TQueue& queue,
                            std::span<const int> cluster_ids,
                            const TAllocator& allocator) {
-    auto clustered_points = internal::algorithm::count_if(
-        queue, cluster_ids.begin(), cluster_ids.end(), non_negative<int>{});
-    alpaka::wait(queue);
-    return internal::make_associator(queue, cluster_ids, clustered_points, allocator);
+    return internal::make_associator(queue, cluster_ids, allocator);
   }
 
 }  // namespace detail

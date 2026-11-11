@@ -303,8 +303,7 @@ inline AssociationMapHost Clusterer<Ndim, DataType, AllocatorType>::getSampleAss
                  alpaka::createView(queue, m_event_associations->data(), h_points.n_clusters()));
   alpaka::wait(queue);
   return internal::make_associator(
-      std::span<const std::int32_t>{event_associations.data(), h_points.n_clusters()},
-      h_points.n_clusters());
+      std::span<const std::int32_t>{event_associations.data(), h_points.n_clusters()});
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
@@ -314,7 +313,6 @@ inline AssociationMap<Device> Clusterer<Ndim, DataType, AllocatorType>::getSampl
   return internal::make_associator(
       queue,
       std::span<const std::int32_t>{m_event_associations->data(), d_points.n_clusters()},
-      d_points.n_clusters(),
       m_allocator);
 }
 
