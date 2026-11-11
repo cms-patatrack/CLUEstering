@@ -1,5 +1,5 @@
 [requires]
-cluestering/2.9.0
+cluestering/2.14.2
 
 [generators]
 CMakeDeps
