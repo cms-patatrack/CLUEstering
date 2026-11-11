@@ -15,7 +15,7 @@ static void BM_BuildBinaryAssociatorCPU(benchmark::State& state) {
                            [](auto x) -> int32_t { return x % 2 == 0; });
     state.ResumeTiming();
 
-    volatile auto associator = clue::internal::make_associator(associations, elements);
+    volatile auto associator = clue::internal::make_associator(associations);
   }
 }
 
@@ -34,7 +34,7 @@ static void BM_BuildBinaryAssociatorAlpaka(benchmark::State& state) {
     state.ResumeTiming();
 
     volatile auto associator = clue::internal::make_associator(
-        queue, std::span{d_associations.data(), static_cast<std::size_t>(elements)}, elements);
+        queue, std::span{d_associations.data(), static_cast<std::size_t>(elements)});
   }
 }
 
