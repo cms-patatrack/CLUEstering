@@ -6,12 +6,13 @@ int main() {
   auto queue = clue::get_queue(0u);
 
   // Allocate the points on the host and device.
-  clue::PointsHost<2> h_points = clue::read_csv<2>(queue, "../../data/sissa_1000.csv");
-  clue::PointsDevice<2> d_points(queue, h_points.size());
+  clue::PointsHost<2, float> h_points =
+      clue::read_csv<2, float>(queue, "../../data/sissa_1000.csv");
+  clue::PointsDevice<2, float> d_points(queue, h_points.size());
 
   // Define the parameters for the clustering and construct the clusterer.
   const float dc = 20.f, rhoc = 10.f, outlier = 20.f;
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  clue::Clusterer<2, float> algo(dc, rhoc, outlier);
 
   // Launch the clustering
   // The results will be stored in the `clue::PointsHost` object
