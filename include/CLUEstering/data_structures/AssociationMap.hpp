@@ -28,9 +28,8 @@ namespace internal {
             clue::concepts::allocator TAllocator = clue::DefaultAllocator>
   auto make_associator(TQueue& queue,
                        std::span<const int32_t> associations,
-                       int32_t elements,
                        const TAllocator& allocator = TAllocator{});
-  auto make_associator(std::span<const int32_t> associations, int32_t elements)
+  auto make_associator(std::span<const int32_t> associations)
       -> AssociationMap<alpaka::DevCpu>;
 }  // namespace internal
 
@@ -223,8 +222,7 @@ private:
   template <concepts::accelerator TAcc,
             concepts::queue TQueue,
             concepts::allocator TAllocator = DefaultAllocator>
-  ALPAKA_FN_HOST void fill(size_type,
-                           std::span<const key_type> associations,
+  ALPAKA_FN_HOST void fill(std::span<const key_type> associations,
                            TQueue& queue,
                            const TAllocator& allocator = TAllocator{});
   template <concepts::accelerator TAcc,
@@ -251,9 +249,8 @@ private:
   template <concepts::queue _TQueue, concepts::allocator _TAllocator>
   friend auto clue::internal::make_associator(_TQueue&,
                                               std::span<const int32_t>,
-                                              int32_t,
                                               const _TAllocator&);
-  friend auto clue::internal::make_associator(std::span<const int32_t>, int32_t)
+  friend auto clue::internal::make_associator(std::span<const int32_t>)
       -> AssociationMap<alpaka::DevCpu>;
 #endif
 };

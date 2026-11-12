@@ -96,7 +96,7 @@ inline AssociationMap<TDev>::AssociationMap(size_type nelements, size_type nbins
   m_view.m_offsets = m_offsets.data();
   m_view.m_extents = {nbins, nelements};
 
-  std::memset(m_offsets.data(), 0, (nbins) * sizeof(key_type));
+  std::memset(m_offsets.data(), 0, (nbins + 1) * sizeof(key_type));
 }
 
 template <concepts::device TDev>
@@ -364,7 +364,6 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size,
                      temp_offsets.data(),
                      m_extents.keys,
                      size);
-  alpaka::wait(queue);
 }
 
 template <concepts::device TDev>
@@ -396,8 +395,7 @@ ALPAKA_FN_HOST void AssociationMap<TDev>::fill(std::span<const key_type> associa
 
 template <concepts::device TDev>
 template <concepts::accelerator TAcc, concepts::queue TQueue, concepts::allocator TAllocator>
-ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type,
-                                                      std::span<const key_type> associations,
+ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(std::span<const key_type> associations,
                                                       TQueue& queue,
                                                       const TAllocator& allocator) {
   if (m_extents.keys == 0 || m_extents.values == 0)
