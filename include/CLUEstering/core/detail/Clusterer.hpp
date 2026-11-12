@@ -255,6 +255,46 @@ inline std::span<const int32_t> Clusterer<Ndim, DataType, AllocatorType>::getSee
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 template <std::floating_point InputType>
+inline auto Clusterer<Ndim, DataType, AllocatorType>::getSeeds(
+    Queue& queue, clue::PointsDevice<Ndim, InputType>& d_points) {
+  if (!d_points.clustered()) {
+    throw std::runtime_error("Seeds are not available. Please run make_clusters first.");
+  }
+  constexpr std::size_t block_size = 256;
+
+  const auto nclusters = static_cast<std::size_t>(d_points.n_clusters());
+  auto seeds = internal::alloc_device_buffer<int32_t>(queue, nclusters, m_allocator);
+  if (nclusters > 0) {
+    detail::collectSeeds<internal::Acc>(queue, block_size, d_points.view(), seeds.data());
+  }
+  return seeds;
+}
+
+template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
+template <std::floating_point InputType>
+inline std::vector<int32_t> Clusterer<Ndim, DataType, AllocatorType>::getSeeds(
+    const clue::PointsHost<Ndim, InputType>& h_points) {
+  if (!h_points.clustered()) {
+    throw std::runtime_error("Seeds are not available. Please run make_clusters first.");
+  }
+  if (!h_points.has_seed_flags()) {
+    throw std::runtime_error(
+        "Seeds are not available. The host points must be filled with copyToHost after clustering.");
+  }
+  const auto cluster_index = h_points.clusterIndexes();
+  const auto seed_flags = h_points.seed_flags();
+  const auto nclusters = detail::compute_nclusters(cluster_index);
+  std::vector<int32_t> seeds(static_cast<std::size_t>(nclusters > 0 ? nclusters : 0), -1);
+  for (std::size_t i = 0; i < cluster_index.size(); ++i) {
+    if (seed_flags[i] != 0 && cluster_index[i] >= 0) {
+      seeds[cluster_index[i]] = static_cast<int32_t>(i);
+    }
+  }
+  return seeds;
+}
+
+template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
+template <std::floating_point InputType>
 inline AssociationMapHost Clusterer<Ndim, DataType, AllocatorType>::getClusters(
     const clue::PointsHost<Ndim, InputType>& h_points) {
   return clue::get_clusters(h_points);
