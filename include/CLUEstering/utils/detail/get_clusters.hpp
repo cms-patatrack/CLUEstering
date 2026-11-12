@@ -33,7 +33,6 @@ namespace detail {
                            const TAllocator& allocator) {
     auto clustered_points = internal::algorithm::count_if(
         queue, cluster_ids.begin(), cluster_ids.end(), non_negative<int>{});
-    alpaka::wait(queue);
     return internal::make_associator(queue, cluster_ids, clustered_points, allocator);
   }
 
