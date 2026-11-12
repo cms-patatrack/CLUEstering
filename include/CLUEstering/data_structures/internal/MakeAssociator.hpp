@@ -33,7 +33,6 @@ namespace internal {
 														 std::numeric_limits<int32_t>::lowest(),
 														 clue::nostd::maximum<int32_t>{}) +
 	  1;
-    alpaka::wait(queue);
 
     clue::AssociationMap<decltype(alpaka::getDev(queue))> map(nelements, nbins, queue, allocator);
     map.template fill<clue::internal::Acc>(associations, queue, allocator);
