@@ -315,6 +315,20 @@ namespace detail {
     }
   };
 
+  struct KernelCollectSeeds {
+    template <typename TAcc, std::size_t Ndim, std::floating_point TData>
+      requires(alpaka::Dim<TAcc>::value == 1)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  PointsView<Ndim, TData> points,
+                                  int32_t* seeds) const {
+      for (auto i : alpaka::uniformElements(acc, points.size())) {
+        if (points.is_seed()[i]) {
+          seeds[points.cluster_index()[i]] = static_cast<int32_t>(i);
+        }
+      }
+    }
+  };
+
   using WorkDiv = clue::WorkDiv<clue::Dim1D>;
 
   template <concepts::accelerator TAcc,
@@ -382,6 +396,20 @@ namespace detail {
     const Idx point_grid = nostd::ceil_div(points.size(), block_size);
     alpaka::exec<TAcc>(
         queue, clue::make_workdiv<TAcc>(point_grid, block_size), KernelAssignClusters{}, points);
+  }
+
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TData>
+    requires(alpaka::Dim<TAcc>::value == 1)
+  inline void collectSeeds(TQueue& queue,
+                           std::size_t block_size,
+                           PointsView<Ndim, TData> points,
+                           int32_t* seeds) {
+    const Idx grid_size = nostd::ceil_div(points.size(), block_size);
+    alpaka::exec<TAcc>(
+        queue, clue::make_workdiv<TAcc>(grid_size, block_size), KernelCollectSeeds{}, points, seeds);
   }
 
 }  // namespace detail

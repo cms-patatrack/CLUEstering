@@ -85,6 +85,27 @@ namespace internal {
     copy(h_view.m_nearest_higher, d_view.m_nearest_higher);
   }
 
+  // Enqueues the copy of the seed flags from the device to the host, if the host points
+  // requested them
+  template <concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point THostInput,
+            std::floating_point TDeviceInput,
+            concepts::device TDev>
+  inline void copy_seeds_to_host(TQueue& queue,
+                                 PointsHost<Ndim, THostInput>& h_points,
+                                 const PointsDevice<Ndim, TDeviceInput, TDev>& d_points) {
+    if (!h_points.has_seeds())
+      return;
+
+    auto* dst = h_points.view().m_is_seed;
+    const auto* src = d_points.view().m_is_seed;
+    const auto n_points = h_points.size();
+    if (dst != src)
+      alpaka::memcpy(
+          queue, alpaka::createView(host, dst, n_points), alpaka::createView(queue, src, n_points));
+  }
+
 }  // namespace internal
 
 template <concepts::queue TQueue,
@@ -99,7 +120,9 @@ inline void copyToHost(TQueue& queue,
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_points.view().m_cluster_index, h_points.size()),
                  alpaka::createView(queue, d_points.view().m_cluster_index, h_points.size()));
+
   internal::copy_details_to_host(queue, h_points, d_points);
+  internal::copy_seeds_to_host(queue, h_points, d_points);
   alpaka::wait(queue);
   internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
 }
@@ -113,6 +136,7 @@ inline auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TInput, TDev>& d_
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_points.view().m_cluster_index, h_points.size()),
                  alpaka::createView(queue, d_points.view().m_cluster_index, h_points.size()));
+
   internal::copy_details_to_host(queue, h_points, d_points);
   alpaka::wait(queue);
   internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
@@ -132,7 +156,9 @@ void copyToHostAsync(TQueue& queue,
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_points.view().m_cluster_index, h_points.size()),
                  alpaka::createView(queue, d_points.view().m_cluster_index, h_points.size()));
+
   internal::copy_details_to_host(queue, h_points, d_points);
+  internal::copy_seeds_to_host(queue, h_points, d_points);
   internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::mark_clustered(h_points);
 }
 

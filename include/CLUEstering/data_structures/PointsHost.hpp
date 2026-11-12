@@ -18,6 +18,7 @@
 #include <ranges>
 #include <string>
 #include <span>
+#include <vector>
 #include <alpaka/alpaka.hpp>
 
 CLUE_NAMESPACE_BEGIN
@@ -42,6 +43,7 @@ private:
   std::optional<host_buffer<value_type[]>> m_density;
   std::optional<host_buffer<value_type[]>> m_delta;
   std::optional<host_buffer<std::int32_t[]>> m_nearest_higher;
+  std::optional<host_buffer<std::int32_t[]>> m_seed_flags;
   std::optional<ClusterProperties> m_clusterProperties;
   std::optional<std::size_t> m_nclusters;
   std::int32_t m_size;
@@ -276,6 +278,24 @@ public:
   /// the order of the points is not guaranteed to be stable (e.g. when produced by an upstream
   /// parallel/concurrent stage)
   void set_tags(std::span<const std::uint32_t> tags);
+
+  /// @brief Requests that the seed flags of the points are stored after clustering
+  ///
+  /// @note This function must be called before clustering. The buffer is allocated only when it
+  /// is called, so the clustering does not have any overhead otherwise. The seeds are then
+  /// available on the host after clustering, and can be retrieved with `Clusterer::getSeeds`
+  /// or `seed_flags()`. When running on the CPU the flags are written in place, without any copy
+  void store_seeds();
+  /// @brief Returns whether the seed flags are stored for the points
+  ///
+  /// @return True if `store_seeds` has been called, false otherwise
+  bool has_seeds() const;
+
+  /// @brief Returns the seed flags of the points
+  ///
+  /// @return A span with one flag per point, non-zero for the points that are cluster seeds
+  /// @throws std::runtime_error if `store_seeds` was not called before clustering
+  std::span<const std::int32_t> seed_flags() const;
 
 private:
   inline static constexpr std::size_t Ndim_ = Ndim;

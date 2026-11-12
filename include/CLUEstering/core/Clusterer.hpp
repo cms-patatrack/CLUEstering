@@ -32,6 +32,7 @@
 #include <span>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 CLUE_NAMESPACE_BEGIN
 
@@ -353,6 +354,7 @@ public:
   ///
   /// @return A span the the device array containing the seed indices
   /// @note The values of this array are overwritten at each clustering run
+  [[deprecated("Use the overloads of getSeeds taking the points as argument")]]
   std::span<const int32_t> getSeeds() const;
 
   /// @brief Get a read-only description of the spatial grid built in the last clustering run
@@ -362,6 +364,23 @@ public:
   /// @note The cells refer to the internal buffers, which are overwritten at each
   /// clustering run
   SpatialGrid<Ndim, value_type, Device> getSpatialGrid() const;
+
+  /// @brief Get the seeds of the clusters found by the last clustering run on the device points
+  ///
+  /// @param queue The queue used for the computation
+  /// @param d_points The clustered device points
+  /// @return A device buffer of size n_clusters(), where element c is the index of the seed of cluster c
+  /// @note The operation is asynchronous with respect to the queue
+  template <std::floating_point InputType>
+  auto getSeeds(Queue& queue, clue::PointsDevice<Ndim, InputType>& d_points);
+
+  /// @brief Get the seeds of the clusters from the host points
+  ///
+  /// @param h_points The clustered host points. `store_seeds()` must have been called on them before clustering
+  /// @return A vector of size n_clusters, where element c is the index of the seed of cluster c
+  /// @throws std::runtime_error if the points are not clustered or `store_seeds()` was not called
+  template <std::floating_point InputType>
+  std::vector<int32_t> getSeeds(const clue::PointsHost<Ndim, InputType>& h_points);
 
   /// @brief Get the clusters from the host points
   ///

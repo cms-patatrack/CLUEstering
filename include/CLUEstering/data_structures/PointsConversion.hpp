@@ -41,8 +41,9 @@ void copyToHost(TQueue& queue,
 /// @tparam TInput The type of the input coordinates and weights for the device points
 /// @tparam TDev The type of device that the points are allocated on
 /// @param queue The queue used for the device operations
-/// @param h_points The points allocated on the host, where the clustering results will be saved
 /// @param d_points The points allocated on the device, where the clustering has been run
+/// @note The returned host points do not provide the seeds. Use `Clusterer::getSeeds(queue,
+/// d_points)` on the device points instead
 template <concepts::queue TQueue, std::size_t Ndim, std::floating_point TInput, concepts::device TDev>
 auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TInput, TDev>& d_points);
 

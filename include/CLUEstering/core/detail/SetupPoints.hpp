@@ -47,6 +47,10 @@ namespace detail {
       dev_points.view().m_delta = view.m_delta;
       dev_points.view().m_nearest_higher = view.m_nearest_higher;
     }
+    // If requested, the seed flags are written directly in the host buffer
+    if (points.has_seeds()) {
+      dev_points.view().m_is_seed = view.m_is_seed;
+    }
 
     return dev_points;
   }
