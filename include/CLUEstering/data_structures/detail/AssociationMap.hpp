@@ -364,7 +364,6 @@ ALPAKA_FN_HOST inline void AssociationMap<TDev>::fill(size_type size,
                      temp_offsets.data(),
                      m_extents.keys,
                      size);
-  alpaka::wait(queue);
 }
 
 template <concepts::device TDev>
