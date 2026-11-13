@@ -10,8 +10,8 @@ void compute_clusters(TQueue& queue, std::vector<int>& cluster_indexes) {
   clue::PointsDevice<2> d_points(queue, h_points.size());
 
   // Define the parameters for the clustering and construct the clusterer.
-  const float dc = 20.f, rhoc = 10.f, outlier = 20.f;
-  clue::Clusterer<2> algo(queue, dc, rhoc, outlier);
+  const auto dc = 20.f, rhoc = 10.f, outlier = 20.f;
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
 
   // Launch the clustering
   // The results will be stored in the `clue::PointsHost` object

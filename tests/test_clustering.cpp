@@ -285,7 +285,7 @@ namespace {
     std::ranges::copy(phi, input.begin() + n);
     std::fill(input.begin() + 2 * n, input.end(), 1.f);
     clue::PointsHost<2> points(queue, n, std::span{input}, std::span{output});
-    clue::Clusterer<2> algo(queue, dc, .5f, 2.f * dc);
+    clue::Clusterer<2> algo(dc, .5f, 2.f * dc);
     algo.setWrappedCoordinates(0, 1);
     algo.make_clusters(
         queue,

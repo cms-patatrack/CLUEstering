@@ -11,7 +11,7 @@ int main() {
   clue::PointsDevice<2, float> d_points(queue, h_points.size());
 
   // Define the parameters for the clustering and construct the clusterer.
-  const float dc = 20.f, rhoc = 10.f, outlier = 20.f;
+  const auto dc = 20.f, rhoc = 10.f, outlier = 20.f;
   clue::Clusterer<2, float> algo(dc, rhoc, outlier);
 
   // Launch the clustering
