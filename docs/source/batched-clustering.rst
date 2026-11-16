@@ -53,7 +53,9 @@ passed on the host, on the device, or both:
     int main() {
         auto queue = clue::get_queue(0u);
 
-        // The points of all the batch items, stored contiguously
+        // The points of all the batch items, concatenated in a single array: item i occupies the
+        // half-open range starting at the sum of the sizes of the previous items and containing
+        // batch_sizes[i] points
         clue::PointsHost<2> h_points = clue::read_csv<2, float>(queue, "batched-data.csv");
         clue::PointsDevice<2> d_points(queue, h_points.size());
 
@@ -127,7 +129,9 @@ through the ``batch_sample_sizes`` argument, as a NumPy array of ``uint32``:
     import numpy as np
     import CLUEstering as clue
 
-    # data contains the points of all the batch items, stored contiguously
+    # data contains the points of all the batch items, concatenated in a single array: item i
+    # occupies the half-open range starting at the sum of the sizes of the previous items and
+    # containing batch_sizes[i] points
     batch_sizes = np.array([1024, 512, 2048, 700], dtype=np.uint32)
 
     c = clue.clusterer(1.3, 10.)
