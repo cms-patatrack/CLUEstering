@@ -395,7 +395,6 @@ inline AssociationMap<Device> Clusterer<Ndim, DataType, AllocatorType>::getSampl
   }
   auto associations = internal::make_associator(
       queue, std::span<const std::int32_t>{cluster_to_event.data(), n_clusters}, m_allocator);
-  // the buffer must stay alive until the associator has consumed it
   alpaka::wait(queue);
   return associations;
 }
