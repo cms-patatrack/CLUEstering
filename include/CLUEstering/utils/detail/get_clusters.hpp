@@ -1,4 +1,4 @@
-g
+
 #pragma once
 
 #include "CLUEstering/internal/alpaka/config.hpp"

@@ -23,10 +23,10 @@ namespace internal {
   inline auto make_associator(TQueue& queue,
                               std::span<const int32_t> associations,
                               const TAllocator& allocator) {
-	auto nelements = std::ranges::count_if(queue,
-										   associations.begin(),
-										   associations.end(),
-										   non_negative<int32_t>{});
+	auto nelements = algorithm::count_if(queue,
+										 associations.begin(),
+										 associations.end(),
+										 non_negative<int32_t>{});
     const auto nbins = clue::internal::algorithm::reduce(queue,
 														 associations.begin(),
 														 associations.end(),
