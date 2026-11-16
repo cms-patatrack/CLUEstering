@@ -89,8 +89,10 @@ Reading the results
 ~~~~~~~~~~~~~~~~~~~
 
 The cluster indexes are **global**: they are unique across the whole batch, not restarted for each
-batch item. The clusters are numbered by batch item, so all the clusters of the first item come
-before those of the second, and so on. Outliers have cluster index ``-1``, as usual.
+batch item. They are **not** grouped by batch item and their order is not deterministic: the
+clusters of the first item are not guaranteed to come before those of the second. Use
+``getSampleAssociations`` to find out which batch item a cluster belongs to. Outliers have cluster
+index ``-1``, as usual.
 
 ``clue::Clusterer::getSampleAssociations`` returns an ``AssociationMap`` whose keys are the batch
 items and whose values are the indexes of the clusters they contain. It can be used to iterate over
@@ -111,8 +113,8 @@ its points, using the global cluster indexes.
 
 .. note::
 
-   The sample associations are stored in the clusterer and are overwritten by the next call to
-   ``make_clusters``.
+   The sample associations are computed on demand and refer to the last batched run of the
+   clusterer: they are invalidated by the next call to ``make_clusters``.
 
 Using the Python interface
 --------------------------
