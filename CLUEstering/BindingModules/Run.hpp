@@ -33,7 +33,7 @@ void run(TInput dc,
          const Kernel& kernel,
          const clue::bindings::MetricDescriptor<TInput>& metric_desc,
          clue::Queue queue) {
-  clue::Clusterer<Ndim, TInput> algo(queue, dc, rhoc, dm, seed_dc);
+  clue::Clusterer<Ndim, TInput> algo(dc, rhoc, dm, seed_dc);
   algo.setWrappedCoordinates(std::move(wrapped));
 
   clue::PointsHost<Ndim, TInput> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));

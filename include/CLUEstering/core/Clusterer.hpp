@@ -155,21 +155,6 @@ public:
     requires std::default_initializable<AllocatorType>;
   /// @brief Constuct a Clusterer object
   ///
-  /// @param queue The queue to use for the device operations
-  /// @param density_radius Distance threshold for clustering.
-  /// @param min_density Density threshold for clustering
-  /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
-  /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-  [[deprecated(
-      "This constructor is deprecated and will be removed in future releases. Use the one without "
-      "the queue instead.")]] Clusterer(Queue& queue,
-                                        value_type density_radius,
-                                        value_type min_density,
-                                        std::optional<value_type> outlier_distance = std::nullopt,
-                                        std::optional<value_type> seeding_distance = std::nullopt)
-    requires std::default_initializable<AllocatorType>;
-  /// @brief Constuct a Clusterer object
-  ///
   /// @param allocator The allocator to use for the internal device buffers
   /// @param density_radius Distance threshold for clustering.
   /// @param min_density Density threshold for clustering
@@ -180,22 +165,6 @@ public:
             value_type min_density,
             std::optional<value_type> outlier_distance = std::nullopt,
             std::optional<value_type> seeding_distance = std::nullopt);
-  /// @brief Constuct a Clusterer object
-  ///
-  /// @param queue The queue to use for the device operations
-  /// @param allocator The allocator to use for the internal device buffers
-  /// @param density_radius Distance threshold for clustering.
-  /// @param min_density Density threshold for clustering
-  /// @param outlier_distance Minimum distance between clusters. This parameter is optional and by default density_radius is used.
-  /// @param seeding_distance Distance threshold for seed points. This parameter is optional and by default dc is used.
-  [[deprecated(
-      "This constructor is deprecated and will be removed in future releases. Use the one without "
-      "the queue instead.")]] Clusterer(Queue& queue,
-                                        AllocatorType allocator,
-                                        value_type density_radius,
-                                        value_type min_density,
-                                        std::optional<value_type> outlier_distance = std::nullopt,
-                                        std::optional<value_type> seeding_distance = std::nullopt);
 
   /// @brief Set the parameters for the clustering algorithm
   ///
@@ -240,28 +209,6 @@ public:
                      clue::PointsHost<Ndim, InputType>& h_points,
                      const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
                      const Kernel& kernel = FlatKernel<value_type>{.5f});
-  /// @brief Construct the clusters from host points
-  ///
-  /// @tparam InputType The data type of the input points, which must be a floating-point type.
-  /// By default, it is set to `float`.
-  /// @tparam Kernel The type of convolutional kernel to use
-  /// @tparam DistanceMetric The type of distance metric to use
-  /// @param h_points Host points to cluster
-  /// @param metric The distance metric to use for clustering, default is EuclideanMetric
-  /// @param kernel The convolutional kernel to use for computing the local densities,
-  /// default is FlatKernel with height 0.5
-  /// @note This method creates a temporary queue for the operations on the device
-  /// @deprecated Use the overload taking a queue instead. This overload will be removed after
-  /// the next release.
-  template <std::floating_point InputType,
-            concepts::convolutional_kernel Kernel = FlatKernel<value_type>,
-            concepts::distance_metric<Ndim> DistanceMetric = clue::EuclideanMetric<Ndim, value_type>>
-  [[deprecated(
-      "Use make_clusters(queue, h_points, ...) instead; this overload will be removed after the "
-      "next release")]] void
-  make_clusters(clue::PointsHost<Ndim, InputType>& h_points,
-                const DistanceMetric& metric = clue::EuclideanMetric<Ndim, value_type>{},
-                const Kernel& kernel = FlatKernel<value_type>{.5f});
   /// @brief Construct the clusters from host and device points
   ///
   /// @tparam InputType The data type of the input points, which must be a floating-point type.
