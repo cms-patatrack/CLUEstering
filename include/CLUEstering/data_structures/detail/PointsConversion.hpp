@@ -99,9 +99,10 @@ inline void copyToHost(TQueue& queue,
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_points.view().m_cluster_index, h_points.size()),
                  alpaka::createView(queue, d_points.view().m_cluster_index, h_points.size()));
-  
-  auto seed_flags = internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::
-      seed_flags_buffer(h_points, static_cast<std::size_t>(h_points.size()));
+
+  auto seed_flags =
+      internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::seed_flags_buffer(
+          h_points, static_cast<std::size_t>(h_points.size()));
   alpaka::memcpy(queue,
                  alpaka::createView(host, seed_flags.data(), h_points.size()),
                  alpaka::createView(queue, d_points.view().m_is_seed, h_points.size()));
@@ -120,9 +121,10 @@ inline auto copyToHost(TQueue& queue, const PointsDevice<Ndim, TInput, TDev>& d_
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_points.view().m_cluster_index, h_points.size()),
                  alpaka::createView(queue, d_points.view().m_cluster_index, h_points.size()));
-  
-  auto seed_flags = internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::
-      seed_flags_buffer(h_points, static_cast<std::size_t>(h_points.size()));
+
+  auto seed_flags =
+      internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::seed_flags_buffer(
+          h_points, static_cast<std::size_t>(h_points.size()));
   alpaka::memcpy(queue,
                  alpaka::createView(host, seed_flags.data(), h_points.size()),
                  alpaka::createView(queue, d_points.view().m_is_seed, h_points.size()));
@@ -146,9 +148,10 @@ void copyToHostAsync(TQueue& queue,
   alpaka::memcpy(queue,
                  alpaka::createView(host, h_points.view().m_cluster_index, h_points.size()),
                  alpaka::createView(queue, d_points.view().m_cluster_index, h_points.size()));
-  
-  auto seed_flags = internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::
-      seed_flags_buffer(h_points, static_cast<std::size_t>(h_points.size()));
+
+  auto seed_flags =
+      internal::points_interface<std::remove_cvref_t<decltype(h_points)>>::seed_flags_buffer(
+          h_points, static_cast<std::size_t>(h_points.size()));
   alpaka::memcpy(queue,
                  alpaka::createView(host, seed_flags.data(), h_points.size()),
                  alpaka::createView(queue, d_points.view().m_is_seed, h_points.size()));

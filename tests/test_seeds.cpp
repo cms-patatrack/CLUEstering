@@ -23,12 +23,13 @@ namespace {
 
     Scenario(bool batched)
         : queue(clue::get_device(0u)),
-          h_points(clue::read_csv<2, float>(
-              queue,
-              batched ? std::string("../../../data/batched_data_1024.csv")
-                      : std::string(TEST_DATA_DIR) + "/data_1024.csv")),
+          h_points(clue::read_csv<2, float>(queue,
+                                            batched
+                                                ? std::string("../../../data/batched_data_1024.csv")
+                                                : std::string(TEST_DATA_DIR) + "/data_1024.csv")),
           d_points(queue, h_points.size()),
-          algo(batched ? clue::Clusterer<2>(1.3f, 10.f, 1.3f) : clue::Clusterer<2>(1.5f, 10.f, 1.5f)) {
+          algo(batched ? clue::Clusterer<2>(1.3f, 10.f, 1.3f)
+                       : clue::Clusterer<2>(1.5f, 10.f, 1.5f)) {
       if (batched) {
         event_sizes = std::vector<uint32_t>(10, 1024);
         algo.make_clusters(queue, h_points, d_points, event_sizes);
@@ -71,7 +72,8 @@ namespace {
     const auto nvalues = static_cast<std::size_t>(map.extents().values);
     std::vector<int32_t> offsets(nkeys + 1), indexes(nvalues);
     const auto containers = map.extract();
-    alpaka::memcpy(queue, alpaka::createView(clue::host, offsets.data(), offsets.size()), containers.keys);
+    alpaka::memcpy(
+        queue, alpaka::createView(clue::host, offsets.data(), offsets.size()), containers.keys);
     if (nvalues > 0) {
       alpaka::memcpy(
           queue, alpaka::createView(clue::host, indexes.data(), indexes.size()), containers.values);
@@ -142,8 +144,7 @@ TEST_CASE("Test the host getSeeds overload") {
   SUBCASE("Throws on points that never went through make_clusters") {
     clue::Queue queue(clue::get_device(0u));
     clue::Clusterer<2> algo(1.5f, 10.f, 1.5f);
-    auto h_points =
-        clue::read_csv<2, float>(queue, std::string(TEST_DATA_DIR) + "/data_1024.csv");
+    auto h_points = clue::read_csv<2, float>(queue, std::string(TEST_DATA_DIR) + "/data_1024.csv");
     CHECK_THROWS_AS(algo.getSeeds(h_points), std::runtime_error);
   }
   for (const bool batched : {false, true}) {
@@ -183,7 +184,8 @@ TEST_CASE("Test the cluster ids of the batched clustering") {
   }
 
   // each event has the same number of clusters as the truth
-  auto truth = clue::read_output<2, float>(s.queue, "../../../data/truth_files/data_1024_truth.csv");
+  auto truth =
+      clue::read_output<2, float>(s.queue, "../../../data/truth_files/data_1024_truth.csv");
   const auto truth_n_clusters =
       static_cast<std::size_t>(clue::detail::compute_nclusters(truth.clusterIndexes()));
   std::vector<std::size_t> clusters_per_event(n_events, 0);
