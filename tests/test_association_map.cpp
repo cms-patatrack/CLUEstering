@@ -22,8 +22,7 @@ TEST_CASE("Test binary association map") {
       alpaka::allocMappedBuf<int32_t>(clue::host, clue::platform<clue::Platform>(), size);
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
-  auto map =
-      clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), size));
+  auto map = clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), size));
 
   SUBCASE("Check size") { CHECK(map.size() == 2); }
   SUBCASE("Check extents") {
@@ -76,8 +75,7 @@ TEST_CASE("Test throwing conditions") {
   std::ranges::transform(
       std::views::iota(0, size), associations.data(), [](auto x) -> int32_t { return x % 2 == 0; });
 
-  auto map =
-      clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), size));
+  auto map = clue::internal::make_associator(queue, std::span<int32_t>(associations.data(), size));
   SUBCASE("Test count throwing conditions") {
     CHECK_THROWS(map.count(-1));
     CHECK_THROWS(map.count(2));

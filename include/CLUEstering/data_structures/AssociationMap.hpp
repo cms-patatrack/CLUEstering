@@ -29,8 +29,7 @@ namespace internal {
   auto make_associator(TQueue& queue,
                        std::span<const int32_t> associations,
                        const TAllocator& allocator = TAllocator{});
-  auto make_associator(std::span<const int32_t> associations)
-      -> AssociationMap<alpaka::DevCpu>;
+  auto make_associator(std::span<const int32_t> associations) -> AssociationMap<alpaka::DevCpu>;
 }  // namespace internal
 
 /// @brief The AssociationMap class is a data structure that maps keys to values.

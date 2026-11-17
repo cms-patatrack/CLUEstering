@@ -23,16 +23,14 @@ namespace internal {
   inline auto make_associator(TQueue& queue,
                               std::span<const int32_t> associations,
                               const TAllocator& allocator) {
-	auto nelements = algorithm::count_if(queue,
-										 associations.begin(),
-										 associations.end(),
-										 non_negative<int32_t>{});
+    auto nelements = algorithm::count_if(
+        queue, associations.begin(), associations.end(), non_negative<int32_t>{});
     const auto nbins = clue::internal::algorithm::reduce(queue,
-														 associations.begin(),
-														 associations.end(),
-														 std::numeric_limits<int32_t>::lowest(),
-														 clue::nostd::maximum<int32_t>{}) +
-	  1;
+                                                         associations.begin(),
+                                                         associations.end(),
+                                                         std::numeric_limits<int32_t>::lowest(),
+                                                         clue::nostd::maximum<int32_t>{}) +
+                       1;
 
     clue::AssociationMap<decltype(alpaka::getDev(queue))> map(nelements, nbins, queue, allocator);
     map.template fill<clue::internal::Acc>(associations, queue, allocator);
@@ -42,13 +40,13 @@ namespace internal {
 
   inline auto make_associator(std::span<const int32_t> associations)
       -> AssociationMap<alpaka::DevCpu> {
-	const auto nelements = std::ranges::count_if(associations, non_negative<int32_t>{});
+    const auto nelements = std::ranges::count_if(associations, non_negative<int32_t>{});
     const auto nbins = std::reduce(associations.begin(),
-								   associations.end(),
-								   std::numeric_limits<int32_t>::lowest(),
-								   clue::nostd::maximum<int32_t>{}) +
+                                   associations.end(),
+                                   std::numeric_limits<int32_t>::lowest(),
+                                   clue::nostd::maximum<int32_t>{}) +
 
-                      1;
+                       1;
     clue::AssociationMapHost map(nelements, nbins);
     map.fill(associations);
     return map;
