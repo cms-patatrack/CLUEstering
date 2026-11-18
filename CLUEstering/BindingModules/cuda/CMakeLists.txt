@@ -1,3 +1,11 @@
+# compile for the GPU of the build machine, unless the architectures are given
+# explicitly (e.g. for distributed packages). This must happen before
+# enable_language, which otherwise sets the compiler's default architecture.
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES AND NOT DEFINED ENV{CUDAARCHS})
+  set(CMAKE_CUDA_ARCHITECTURES
+      native
+      CACHE STRING "CUDA architectures to compile for")
+endif()
 enable_language(CUDA)
 set(CMAKE_CUDA_HOST_COMPILER ${CMAKE_CUDA_COMPILER})
 
@@ -19,8 +27,7 @@ target_precompile_headers(CLUE_GPU_CUDA PRIVATE <alpaka/alpaka.hpp>
 set_target_properties(
   CLUE_GPU_CUDA
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY
-             ${CMAKE_CURRENT_BINARY_DIR}/../../../lib/CLUEstering/lib/
-             CUDA_ARCHITECTURES native)
+             ${CMAKE_CURRENT_BINARY_DIR}/../../../lib/CLUEstering/lib/)
 install(TARGETS CLUE_GPU_CUDA LIBRARY DESTINATION CLUEstering/lib
                                       COMPONENT python)
 # copy shared library for local testing
