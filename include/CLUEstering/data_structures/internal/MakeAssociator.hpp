@@ -5,7 +5,7 @@
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/detail/concepts.hpp"
-#include "CLUEstering/internal/algorithm/reduce/reduce.hpp"
+#include "CLUEstering/internal/algorithm/algorithm.hpp"
 #include "CLUEstering/internal/nostd/maximum.hpp"
 #include <limits>
 #include <span>
