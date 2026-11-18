@@ -25,7 +25,7 @@ namespace backend {
     WorkerState(float dc, float rhoc, float outlier, int n_points)
         : device(alpaka::getDevByIdx(alpaka::Platform<Acc>{}, 0u)),
           queue(device),
-          clusterer(queue, dc, rhoc, outlier),
+          clusterer(dc, rhoc, outlier),
           d_points(queue, n_points) {}
   };
 
