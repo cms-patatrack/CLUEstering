@@ -19,6 +19,16 @@ constexpr auto dc = 1.5f, rhoc = 10.f, outlier = 1.5f;
 
 using Event = clue::PointsHost<NDIM>;
 
+EventView makeView(Event& event) {
+  EventView v;
+  for (auto dim = 0u; dim < NDIM; ++dim)
+    v.coords[dim] = event.coords(dim).data();
+  v.weights = event.weights().data();
+  v.clusterIndexes = event.view().cluster_index().data();
+  v.n_points = event.size();
+  return v;
+}
+
 auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int nClusters) {
   const auto cpuDev = alpaka::getDevByIdx(alpaka::Platform<clue::alpaka_serial_sync::Acc1D>{}, 0u);
   clue::alpaka_serial_sync::Queue genQueue(cpuDev);
@@ -29,6 +39,11 @@ auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int n
     events.emplace_back(clue::utils::generateRandomData<NDIM>(
         genQueue, nPoints, nClusters, std::make_pair(-100.f, 100.f), 1.f, 0.1f, i));
   }
+
+  std::vector<EventView> views;
+  views.reserve(nEvents);
+  for (auto& e : events)
+    views.push_back(makeView(e));
 
   std::vector<serial::WorkerState*> cpuWorkers(nCpuThreads);
   for (auto& w : cpuWorkers)
@@ -59,7 +74,7 @@ auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int n
           int id = eventCounter.fetch_add(1);
           if (id >= nEvents)
             return;
-          serial::processEvent(cpuWorkers[i], events[id]);
+          serial::processEvent(cpuWorkers[i], views[id]);
         }
       });
     });
@@ -76,7 +91,7 @@ auto runEvents(int nCpuThreads, int nGpuStreams, int nEvents, int nPoints, int n
           int id = eventCounter.fetch_add(1);
           if (id >= nEvents)
             return;
-          cuda::processEvent(gpuWorkers[i], events[id]);
+          cuda::processEvent(gpuWorkers[i], views[id]);
         }
       });
     });
