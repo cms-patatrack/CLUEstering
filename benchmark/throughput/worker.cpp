@@ -8,6 +8,8 @@
 
 #include <alpaka/alpaka.hpp>
 
+#include <tuple>
+
 namespace backend {
 
   using Acc = ALPAKA_BACKEND::Acc1D;
@@ -33,7 +35,13 @@ namespace backend {
 
   void destroyWorker(WorkerState* w) { delete w; }
 
-  void processEvent(WorkerState* w, clue::PointsHost<NDIM>& h_points) {
+  void processEvent(WorkerState* w, const EventView& event) {
+    auto h_points = ::std::apply(
+        [&](auto*... coords) {
+          return clue::PointsHost<NDIM>(
+              w->queue, event.n_points, coords..., event.weights, event.clusterIndexes);
+        },
+        event.coords);
     w->clusterer.make_clusters(w->queue, h_points, w->d_points);
     alpaka::wait(w->queue);
   }
