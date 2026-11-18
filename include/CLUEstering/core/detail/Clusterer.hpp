@@ -9,6 +9,7 @@
 #include "CLUEstering/core/detail/BatchedClusteringKernels.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
+#include "CLUEstering/core/detail/MergeClusters.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/core/detail/SetupPoints.hpp"
 #include "CLUEstering/core/detail/SetupSeeds.hpp"
@@ -79,6 +80,16 @@ void Clusterer<Ndim, DataType, AllocatorType>::setParameters(
       m_seeding_distance <= static_cast<value_type>(0.)) {
     throw std::invalid_argument("Invalid clustering parameters. The parameters must be positive.");
   }
+}
+
+template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
+void Clusterer<Ndim, DataType, AllocatorType>::setMergeThreshold(
+    std::optional<value_type> merge_threshold) {
+  if (merge_threshold.has_value() && !(*merge_threshold > static_cast<value_type>(0.) &&
+                                       *merge_threshold <= static_cast<value_type>(1.))) {
+    throw std::invalid_argument("Invalid merge threshold. It must be in the interval (0, 1].");
+  }
+  m_merge_threshold = merge_threshold;
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
@@ -328,6 +339,19 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
   detail::assignPointsToClusters<internal::Acc>(
       queue, block_size, m_seeds.value(), dev_points.view());
 
+  // optional step, skipped entirely when disabled so that the results of plain CLUE are unchanged
+  if (m_merge_threshold.has_value()) {
+    detail::mergeClusters<internal::Acc>(queue,
+                                         block_size,
+                                         m_tiles->view(),
+                                         dev_points.view(),
+                                         m_seeds.value(),
+                                         *m_merge_threshold,
+                                         m_density_radius,
+                                         metric,
+                                         m_allocator);
+  }
+
   alpaka::wait(queue);
   internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(dev_points);
 }
@@ -342,6 +366,11 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_batched(
     const DistanceMetric& metric,
     const Kernel& kernel,
     Queue& queue) {
+  if (m_merge_threshold.has_value()) {
+    // TODO: the saddle kernel and the union-find must be run per batch item
+    throw std::logic_error(
+        "The merging of the clusters is not supported yet for batched clustering");
+  }
   constexpr std::size_t block_size = 256;
   const auto batch_size = batch_item_sizes.size();
 
