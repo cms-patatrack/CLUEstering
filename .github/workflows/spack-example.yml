@@ -1,0 +1,57 @@
+name: Run example with Spack
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: &cpp-paths
+      - "include/**"
+      - "**/CMakeLists.txt"
+      - "**/*.cmake"
+      - "cmake/**"
+      - "examples/spack/**"
+  pull_request:
+    branches: [ "main" ]
+    paths: *cpp-paths
+
+jobs:
+  build-spack-example:
+
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Install build dependencies
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y libboost-dev
+
+    - name: Set up Spack
+      uses: spack/setup-spack@v3
+      with:
+        spack_ref: releases/v1.2
+        # the CLUEstering package is not yet in a tagged release of spack-packages
+        packages_ref: develop
+
+    - name: Use the system Boost and CMake
+      shell: spack-bash {0}
+      run: |
+        spack external find --not-buildable cmake
+        spack config add "packages:boost:externals:[{spec: boost@1.83.0, prefix: /usr}]"
+        spack config add "packages:boost:buildable:false"
+
+    - name: Install CLUEstering with Spack
+      shell: spack-bash {0}
+      working-directory: ${{ github.workspace }}/examples/spack
+      run: |
+        spack env activate .
+        spack install --fail-fast
+
+    - name: Compile and run example
+      shell: spack-bash {0}
+      working-directory: ${{ github.workspace }}/examples/spack
+      run: |
+        spack env activate .
+        cmake -B build -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED=ON -DCMAKE_BUILD_TYPE=Release
+        cmake --build build
+        ./build/serial.out

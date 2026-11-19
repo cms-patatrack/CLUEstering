@@ -1,0 +1,7 @@
+spack:
+  specs:
+  - cluestering@2.14.2
+  - alpaka@2.2.0
+  view: true
+  concretizer:
+    unify: true
