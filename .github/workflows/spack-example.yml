@@ -30,6 +30,8 @@ jobs:
       uses: spack/setup-spack@v3
       with:
         spack_ref: releases/v1.2
+        # absolute path, because the spack-bash shell resolves it from the working directory
+        spack_path: ${{ github.workspace }}/spack
         # the CLUEstering package is not yet in a tagged release of spack-packages
         packages_ref: develop
 
