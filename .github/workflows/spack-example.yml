@@ -37,8 +37,15 @@ jobs:
       shell: spack-bash {0}
       run: |
         spack external find --not-buildable cmake
-        spack config add "packages:boost:externals:[{spec: boost@1.83.0, prefix: /usr}]"
-        spack config add "packages:boost:buildable:false"
+        cat > "${RUNNER_TEMP}/boost.yaml" <<'EOF'
+        packages:
+          boost:
+            externals:
+            - spec: boost@1.83.0
+              prefix: /usr
+            buildable: false
+        EOF
+        spack config --scope site add -f "${RUNNER_TEMP}/boost.yaml"
 
     - name: Install CLUEstering with Spack
       shell: spack-bash {0}
