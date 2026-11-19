@@ -1326,3 +1326,10 @@ class clusterer:
             points_per_cluster,
             df_
         )
+
+
+# scikit-learn compatible estimator, defined in its own module
+try:
+    from ._estimator import CLUEstering
+except ImportError:
+    from _estimator import CLUEstering
