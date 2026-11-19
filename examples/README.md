@@ -56,6 +56,28 @@ The same backend flags listed in the `basic` table apply here.
 
 ---
 
+## `spack` — Spack package manager
+
+Identical to the `basic` example in behaviour, but CLUEstering and alpaka are installed through [Spack](https://spack.io/).
+The dependencies are declared in the Spack environment `spack.yaml`.
+
+```bash
+cd examples/spack
+
+# Install the dependencies declared in spack.yaml
+spack env activate .
+spack install
+
+# The environment view puts CLUEstering and alpaka in CMAKE_PREFIX_PATH
+cmake -B build -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED=ON
+cmake --build build
+./build/serial.out
+```
+
+The same backend flags listed in the `basic` table apply here.
+
+---
+
 ## `cuda_native` — Native CUDA stream
 
 Demonstrates how to wrap an existing `cudaStream_t` so that CLUEstering uses it directly, rather than creating its own internal stream.
