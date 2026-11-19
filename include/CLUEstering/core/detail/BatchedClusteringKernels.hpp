@@ -311,10 +311,7 @@ namespace detail {
       return;
 
     auto batches_to_seeds = clue::internal::make_associator(
-        queue,
-        std::span<const int32_t>{batch_association.data(), num_seeds},
-        static_cast<int32_t>(num_seeds),
-        allocator);
+        queue, std::span<const int32_t>{batch_association.data(), num_seeds}, allocator);
 
     auto extracted = batches_to_seeds.extract();
     auto* batches_to_seeds_indexes = extracted.values.data();
