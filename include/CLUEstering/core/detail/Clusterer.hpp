@@ -11,11 +11,9 @@
 #include "CLUEstering/core/detail/ComputeTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/core/detail/SetupPoints.hpp"
-#include "CLUEstering/core/detail/SetupSeeds.hpp"
 #include "CLUEstering/core/detail/SetupTiles.hpp"
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
-#include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/internal/nostd/ceil_div.hpp"
 #include "CLUEstering/utils/get_clusters.hpp"
@@ -247,10 +245,50 @@ inline void Clusterer<Ndim, DataType, AllocatorType>::setWrappedCoordinates(
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 inline std::span<const int32_t> Clusterer<Ndim, DataType, AllocatorType>::getSeeds() const {
-  if (!m_seeds.has_value()) {
+  throw std::runtime_error(
+      "getSeeds() is deprecated and no longer provides seeds: use getSeeds(queue, d_points) or "
+      "getSeeds(h_points).");
+}
+
+template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
+template <std::floating_point InputType>
+inline auto Clusterer<Ndim, DataType, AllocatorType>::getSeeds(
+    Queue& queue, clue::PointsDevice<Ndim, InputType>& d_points) {
+  if (!d_points.clustered()) {
     throw std::runtime_error("Seeds are not available. Please run make_clusters first.");
   }
-  return static_cast<std::span<const int32_t>>(*m_seeds);
+  constexpr std::size_t block_size = 256;
+
+  const auto nclusters = static_cast<std::size_t>(d_points.n_clusters());
+  auto seeds = internal::alloc_device_buffer<int32_t>(queue, nclusters, m_allocator);
+  if (nclusters > 0) {
+    detail::collectSeeds<internal::Acc>(queue, block_size, d_points.view(), seeds.data());
+  }
+  return seeds;
+}
+
+template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
+template <std::floating_point InputType>
+inline std::vector<int32_t> Clusterer<Ndim, DataType, AllocatorType>::getSeeds(
+    const clue::PointsHost<Ndim, InputType>& h_points) {
+  if (!h_points.clustered()) {
+    throw std::runtime_error("Seeds are not available. Please run make_clusters first.");
+  }
+  if (!h_points.has_seed_flags()) {
+    throw std::runtime_error(
+        "Seeds are not available. The host points must be filled with copyToHost after "
+        "clustering.");
+  }
+  const auto cluster_index = h_points.clusterIndexes();
+  const auto seed_flags = h_points.seed_flags();
+  const auto nclusters = detail::compute_nclusters(cluster_index);
+  std::vector<int32_t> seeds(static_cast<std::size_t>(nclusters > 0 ? nclusters : 0), -1);
+  for (std::size_t i = 0; i < cluster_index.size(); ++i) {
+    if (seed_flags[i] != 0 && cluster_index[i] >= 0) {
+      seeds[cluster_index[i]] = static_cast<int32_t>(i);
+    }
+  }
+  return seeds;
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
@@ -271,32 +309,74 @@ template <std::size_t Ndim, std::floating_point DataType, concepts::allocator Al
 template <std::floating_point InputType>
 inline AssociationMapHost Clusterer<Ndim, DataType, AllocatorType>::getSampleAssociations(
     Queue& queue, clue::PointsHost<Ndim, InputType>& h_points) {
-  if (!m_event_associations.has_value()) {
+  if (!h_points.clustered()) {
     throw std::runtime_error(
-        "Sample associations are not available: the last clustering run was not batched.");
+        "Sample associations are not available. Please run make_clusters first.");
   }
-  auto event_associations =
-      alpaka::allocMappedBuf<std::int32_t>(host, platform<Queue>(), h_points.n_clusters());
-  alpaka::memcpy(queue,
-                 event_associations,
-                 alpaka::createView(queue, m_event_associations->data(), h_points.n_clusters()));
+  if (!m_event_offsets.has_value()) {
+    throw std::runtime_error(
+        "Sample associations are not available. Please run make_clusters in batched mode first.");
+  }
+
+  std::vector<std::size_t> event_offsets(m_batch_size + 1);
+  alpaka::memcpy(
+      queue, alpaka::createView(host, event_offsets.data(), m_batch_size + 1), *m_event_offsets);
   alpaka::wait(queue);
+
+  const auto cluster_index = h_points.clusterIndexes();
+  const auto n_clusters = detail::compute_nclusters(cluster_index);
+  std::vector<std::int32_t> cluster_to_event(
+      static_cast<std::size_t>(n_clusters > 0 ? n_clusters : 0), 0);
+  for (std::size_t i = 0; i < cluster_index.size(); ++i) {
+    // all the points of a cluster belong to the same batch item
+    if (cluster_index[i] >= 0) {
+      // binary search of the event e such that event_offsets[e] <= i < event_offsets[e+1]
+      std::size_t lo = 0;
+      std::size_t hi = m_batch_size;
+      while (hi - lo > 1) {
+        const auto mid = lo + (hi - lo) / 2;
+        if (event_offsets[mid] <= i) {
+          lo = mid;
+        } else {
+          hi = mid;
+        }
+      }
+      cluster_to_event[cluster_index[i]] = static_cast<std::int32_t>(lo);
+    }
+  }
   return internal::make_associator(
-      std::span<const std::int32_t>{event_associations.data(), h_points.n_clusters()});
+      std::span<const std::int32_t>{cluster_to_event.data(), cluster_to_event.size()});
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 template <std::floating_point InputType>
 inline AssociationMap<Device> Clusterer<Ndim, DataType, AllocatorType>::getSampleAssociations(
     Queue& queue, clue::PointsDevice<Ndim, InputType>& d_points) {
-  if (!m_event_associations.has_value()) {
+  if (!d_points.clustered()) {
     throw std::runtime_error(
-        "Sample associations are not available: the last clustering run was not batched.");
+        "Sample associations are not available. Please run make_clusters first.");
   }
-  return internal::make_associator(
-      queue,
-      std::span<const std::int32_t>{m_event_associations->data(), d_points.n_clusters()},
-      m_allocator);
+  if (!m_event_offsets.has_value()) {
+    throw std::runtime_error(
+        "Sample associations are not available. Please run make_clusters in batched mode first.");
+  }
+  constexpr std::size_t block_size = 256;
+
+  const auto n_clusters = static_cast<std::size_t>(d_points.n_clusters());
+  auto cluster_to_event =
+      internal::alloc_device_buffer<std::int32_t>(queue, n_clusters, m_allocator);
+  if (n_clusters > 0) {
+    detail::eventOfSeeds<internal::Acc>(queue,
+                                        block_size,
+                                        d_points.view(),
+                                        m_event_offsets->data(),
+                                        m_batch_size,
+                                        cluster_to_event.data());
+  }
+  auto associations = internal::make_associator(
+      queue, std::span<const std::int32_t>{cluster_to_event.data(), n_clusters}, m_allocator);
+  alpaka::wait(queue);
+  return associations;
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
@@ -308,8 +388,6 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
     const DistanceMetric& metric,
     const Kernel& kernel,
     Queue& queue) {
-  m_event_associations.reset();  // reset in case the previous run was batched
-
   constexpr std::size_t block_size = 256;
   m_tiles->template fill<internal::Acc>(queue, dev_points, m_allocator);
 
@@ -318,7 +396,12 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
 
   detail::computeLocalDensity<internal::Acc>(
       queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_density_radius, metric);
-  auto seed_candidates = std::size_t{0};
+
+  if (!m_nclusters.has_value()) {
+    m_nclusters.emplace(internal::alloc_device_buffer<std::size_t>(queue, Scalar{}, m_allocator));
+  }
+  alpaka::memset(queue, *m_nclusters, 0u);
+
   detail::computeNearestHighers<internal::Acc>(queue,
                                                work_division,
                                                m_tiles->view(),
@@ -327,14 +410,9 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
                                                m_seeding_distance,
                                                m_min_density,
                                                metric,
-                                               seed_candidates,
-                                               m_allocator);
-  detail::setup_seeds(queue, m_seeds, seed_candidates, m_allocator);
-  detail::findClusterSeeds<internal::Acc>(
-      queue, work_division, m_seeds.value(), dev_points.view(), m_min_density);
+                                               m_nclusters->data());
 
-  detail::assignPointsToClusters<internal::Acc>(
-      queue, block_size, m_seeds.value(), dev_points.view());
+  detail::assignPointsToClusters<internal::Acc>(queue, block_size, dev_points.view());
 
   alpaka::wait(queue);
   internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(dev_points);
@@ -364,8 +442,10 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_batched(
         "The sum of the elements in the batches must be equal to the total number of points");
   }
 
-  auto d_event_offsets =
-      internal::alloc_device_buffer<std::size_t>(queue, batch_size + 1, m_allocator);
+  m_event_offsets.emplace(
+      internal::alloc_device_buffer<std::size_t>(queue, batch_size + 1, m_allocator));
+  m_batch_size = batch_size;
+  auto& d_event_offsets = *m_event_offsets;
   alpaka::memcpy(queue, d_event_offsets, event_offsets);
 
   m_tiles->template fill_batch<internal::Acc>(
@@ -380,7 +460,12 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_batched(
                                                       d_event_offsets,
                                                       max_event_size,
                                                       block_size);
-  auto seed_candidates = std::size_t{0};
+
+  if (!m_nclusters.has_value()) {
+    m_nclusters.emplace(internal::alloc_device_buffer<std::size_t>(queue, Scalar{}, m_allocator));
+  }
+  alpaka::memset(queue, *m_nclusters, 0u);
+
   detail::computeNearestHighersBatched<internal::Acc2D>(queue,
                                                         m_tiles->view(),
                                                         dev_points.view(),
@@ -388,28 +473,12 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_batched(
                                                         m_seeding_distance,
                                                         m_min_density,
                                                         metric,
-                                                        seed_candidates,
+                                                        m_nclusters->data(),
                                                         d_event_offsets,
                                                         max_event_size,
-                                                        block_size,
-                                                        m_allocator);
-  detail::setup_seeds(queue, m_seeds, seed_candidates, m_allocator);
-  m_event_associations = clue::internal::SeedArray<>(queue, seed_candidates, m_allocator);
+                                                        block_size);
 
-  detail::findClusterSeedsBatched<internal::Acc2D>(queue,
-                                                   m_seeds.value(),
-                                                   dev_points.view(),
-                                                   m_min_density,
-                                                   d_event_offsets,
-                                                   max_event_size,
-                                                   m_event_associations->view(),
-                                                   block_size);
-
-  detail::reorderSeedsBatchWise<internal::Acc>(
-      queue, m_seeds.value(), m_event_associations.value(), m_allocator);
-
-  detail::assignPointsToClusters<internal::Acc>(
-      queue, block_size, m_seeds.value(), dev_points.view());
+  detail::assignPointsToClusters<internal::Acc>(queue, block_size, dev_points.view());
 
   alpaka::wait(queue);
   internal::points_interface<std::remove_cvref_t<decltype(dev_points)>>::mark_clustered(dev_points);

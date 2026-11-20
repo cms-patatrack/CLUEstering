@@ -66,6 +66,14 @@ namespace internal {
 
     static void mark_clustered(TPoints& points) { points.m_clustered = true; }
 
+    /// @brief Allocates (or resizes) the host buffer holding the seed flags and returns it
+    static std::span<std::int32_t> seed_flags_buffer(TPoints& points, std::size_t n)
+      requires requires { points.m_seed_flags; }
+    {
+      points.m_seed_flags.emplace(n);
+      return std::span<std::int32_t>(points.m_seed_flags->data(), n);
+    }
+
     static auto& uncertainty_buffer(TPoints& points)
       requires requires { points.m_uncertainty_buffer; }
     {

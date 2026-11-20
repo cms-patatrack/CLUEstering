@@ -15,8 +15,6 @@
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/PointsConversion.hpp"
 #include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
-#include "CLUEstering/data_structures/internal/DeviceVector.hpp"
-#include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/Tiles.hpp"
 #include "CLUEstering/internal/alpaka/default_allocator.hpp"
 
@@ -30,6 +28,7 @@
 #include <span>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 CLUE_NAMESPACE_BEGIN
 
@@ -63,8 +62,9 @@ private:
   bool m_extremes_set = false;
   std::optional<host_buffer<value_type[Ndim]>> m_tile_size;
   std::optional<internal::Tiles<Ndim, value_type, clue::Device>> m_tiles;
-  std::optional<internal::SeedArray<>> m_seeds;
-  std::optional<internal::DeviceVector<>> m_event_associations;
+  std::optional<clue::device_buffer<Device, std::size_t>> m_nclusters;
+  std::optional<clue::device_buffer<Device, std::size_t[]>> m_event_offsets;
+  std::size_t m_batch_size = 0;
 
   template <std::floating_point InputType>
   void setup(Queue& queue,
@@ -332,11 +332,28 @@ public:
   template <std::integral... TArgs>
   void setWrappedCoordinates(TArgs... wrapped_coordinates);
 
-  /// @brief Get the list of seeds found in the last clustering run
+  /// @brief Deprecated, no longer provides the seeds
   ///
-  /// @return A span the the device array containing the seed indices
-  /// @note The values of this array are overwritten at each clustering run
+  /// @throws std::runtime_error Always: the seeds are not stored anymore. Use
+  /// getSeeds(queue, d_points) or getSeeds(h_points) instead.
+  [[deprecated("Use the overloads of getSeeds taking the points as argument")]]
   std::span<const int32_t> getSeeds() const;
+
+  /// @brief Get the seeds of the clusters found by the last clustering run on the device points
+  ///
+  /// @param queue The queue used for the computation
+  /// @param d_points The clustered device points
+  /// @return A device buffer of size n_clusters(), where element c is the index of the seed of cluster c
+  /// @note The operation is asynchronous with respect to the queue
+  template <std::floating_point InputType>
+  auto getSeeds(Queue& queue, clue::PointsDevice<Ndim, InputType>& d_points);
+
+  /// @brief Get the seeds of the clusters from the host points
+  ///
+  /// @param h_points The clustered host points, which must have been filled by one of the copyToHost functions
+  /// @return A vector of size n_clusters, where element c is the index of the seed of cluster c
+  template <std::floating_point InputType>
+  std::vector<int32_t> getSeeds(const clue::PointsHost<Ndim, InputType>& h_points);
 
   /// @brief Get the clusters from the host points
   ///
@@ -362,8 +379,10 @@ public:
   /// @tparam InputType The data type of the input points, which must be a floating-point type.
   /// By default, it is set to `float`.
   /// @param queue The queue to use for the device operations
-  /// @return A device buffer containing the event associations
-  /// @throws std::runtime_error If the last clustering run was not batched
+  /// @param h_points The clustered host points
+  /// @return An associator in a host buffer mapping each batch item to the clusters it contains
+  /// @note The result refers to the last batched run of this Clusterer
+  /// @throws std::runtime_error If the points are not clustered or if no batched clustering was run
   template <std::floating_point InputType>
   AssociationMapHost getSampleAssociations(Queue& queue,
                                            clue::PointsHost<Ndim, InputType>& h_points);
@@ -372,8 +391,10 @@ public:
   /// @tparam InputType The data type of the input points, which must be a floating-point type.
   /// By default, it is set to `float`.
   /// @param queue The queue to use for the device operations
-  /// @return A device buffer containing the event associations
-  /// @throws std::runtime_error If the last clustering run was not batched
+  /// @param d_points The clustered device points
+  /// @return An associator in a device buffer mapping each batch item to the clusters it contains
+  /// @note The result refers to the last batched run of this Clusterer
+  /// @throws std::runtime_error If the points are not clustered or if no batched clustering was run
   template <std::floating_point InputType>
   AssociationMap<Device> getSampleAssociations(Queue& queue,
                                                clue::PointsDevice<Ndim, InputType>& d_points);

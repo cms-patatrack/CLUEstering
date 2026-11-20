@@ -7,9 +7,7 @@
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
-#include "CLUEstering/data_structures/internal/DeviceVector.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
-#include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/detail/make_array.hpp"
 #include "CLUEstering/detail/concepts.hpp"
@@ -241,7 +239,7 @@ namespace detail {
                                   TData seeding_distance,
                                   TData min_density,
                                   DistanceMetric metric,
-                                  std::size_t* seed_candidates) const {
+                                  std::size_t* nclusters) const {
       for (auto i : alpaka::uniformElements(acc, points.size())) {
         auto delta_i = std::numeric_limits<TData>::max();
         int nh_i = -1;
@@ -284,45 +282,18 @@ namespace detail {
         if (points.has_delta()) {
           points.delta()[i] = (nh_i == -1) ? std::numeric_limits<TData>::infinity() : delta_i;
         }
-        if (nh_i == -1) {
-          alpaka::atomicAdd(acc, seed_candidates, std::size_t{1});
-        }
-      }
-    }
-  };
 
-  struct KernelFindClusters {
-    template <typename TAcc, std::size_t Ndim, std::floating_point TData>
-      requires(alpaka::Dim<TAcc>::value == 1)
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  clue::internal::SeedArrayView seeds,
-                                  PointsView<Ndim, TData> points,
-                                  std::remove_cv_t<TData> min_density) const {
-      for (auto i : alpaka::uniformElements(acc, points.size())) {
-        points.cluster_index()[i] = -1;
-        const auto nh = points.nearest_higher()[i];
-        const auto rho_i = points.rho()[i];
-        const auto density_uncertainty =
-            points.has_uncertainty() ? points.density_uncertainty()[i] : TData{1.};
-        const auto is_seed = (nh == -1) && (rho_i >= min_density * density_uncertainty);
+        const auto is_seed = (nh_i == -1) && (rho_i >= effective_min_density);
 
         if (is_seed) {
           points.is_seed()[i] = 1;
-          seeds.push_back(acc, i);
+          auto slot = alpaka::atomicAdd(
+              acc, nclusters, std::size_t{1});  // guarantees seed indices from 0 to Nseeds-1.
+          points.cluster_index()[i] = static_cast<int>(slot);
         } else {
           points.is_seed()[i] = 0;
+          points.cluster_index()[i] = -1;
         }
-      }
-    }
-  };
-
-  struct KernelAssignSeedIndices {
-    template <typename TAcc, std::size_t Ndim, std::floating_point TData>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  clue::internal::SeedArrayView seeds,
-                                  PointsView<Ndim, TData> points) const {
-      for (auto cls_idx : alpaka::uniformElements(acc, seeds.size())) {
-        points.cluster_index()[seeds[cls_idx]] = static_cast<int>(cls_idx);
       }
     }
   };
@@ -339,6 +310,20 @@ namespace detail {
           current = points.nearest_higher()[current];
 
         points.cluster_index()[idx] = points.cluster_index()[current];
+      }
+    }
+  };
+
+  struct KernelCollectSeeds {
+    template <typename TAcc, std::size_t Ndim, std::floating_point TData>
+      requires(alpaka::Dim<TAcc>::value == 1)
+    ALPAKA_FN_ACC void operator()(const TAcc& acc,
+                                  PointsView<Ndim, TData> points,
+                                  int32_t* seeds) const {
+      for (auto i : alpaka::uniformElements(acc, points.size())) {
+        if (points.is_seed()[i]) {
+          seeds[points.cluster_index()[i]] = static_cast<int32_t>(i);
+        }
       }
     }
   };
@@ -387,10 +372,7 @@ namespace detail {
                                     TData seeding_distance,
                                     TData min_density,
                                     const DistanceMetric& metric,
-                                    std::size_t& seed_candidates,
-                                    const TAllocator& allocator = TAllocator{}) {
-    auto d_seed_candidates = internal::alloc_device_buffer<std::size_t>(queue, Scalar{}, allocator);
-    alpaka::memset(queue, d_seed_candidates, 0u);
+                                    std::size_t* d_nclusters) {
     alpaka::exec<TAcc>(queue,
                        work_division,
                        KernelCalculateNearestHigher{},
@@ -400,23 +382,7 @@ namespace detail {
                        seeding_distance,
                        min_density,
                        metric,
-                       d_seed_candidates.data());
-    alpaka::memcpy(queue, alpaka::createView(host, &seed_candidates, Scalar{}), d_seed_candidates);
-    alpaka::wait(queue);
-  }
-
-  template <concepts::accelerator TAcc,
-            concepts::queue TQueue,
-            std::size_t Ndim,
-            std::floating_point TData>
-    requires(alpaka::Dim<TAcc>::value == 1)
-  inline void findClusterSeeds(TQueue& queue,
-                               const WorkDiv& work_division,
-                               clue::internal::SeedArray<>& seeds,
-                               PointsView<Ndim, TData>& points,
-                               std::remove_cv_t<TData> min_density) {
-    alpaka::exec<TAcc>(
-        queue, work_division, KernelFindClusters{}, seeds.view(), points, min_density);
+                       d_nclusters);
   }
 
   template <concepts::accelerator TAcc,
@@ -425,25 +391,24 @@ namespace detail {
             std::floating_point TData>
   inline void assignPointsToClusters(TQueue& queue,
                                      std::size_t block_size,
-                                     clue::internal::SeedArray<>& seeds,
                                      PointsView<Ndim, TData> points) {
-    const auto nseeds = seeds.size(queue);
-    if (nseeds == 0) {
-      alpaka::fill(
-          queue, alpaka::createView(queue, points.cluster_index().data(), points.size()), -1);
-      return;
-    }
-
-    const Idx seed_grid = nostd::ceil_div(nseeds, block_size);
-    alpaka::exec<TAcc>(queue,
-                       clue::make_workdiv<TAcc>(seed_grid, block_size),
-                       KernelAssignSeedIndices{},
-                       seeds.view(),
-                       points);
-
     const Idx point_grid = nostd::ceil_div(points.size(), block_size);
     alpaka::exec<TAcc>(
         queue, clue::make_workdiv<TAcc>(point_grid, block_size), KernelAssignClusters{}, points);
+  }
+
+  template <concepts::accelerator TAcc,
+            concepts::queue TQueue,
+            std::size_t Ndim,
+            std::floating_point TData>
+    requires(alpaka::Dim<TAcc>::value == 1)
+  inline void collectSeeds(TQueue& queue,
+                           std::size_t block_size,
+                           PointsView<Ndim, TData> points,
+                           int32_t* seeds) {
+    const Idx grid_size = nostd::ceil_div(points.size(), block_size);
+    alpaka::exec<TAcc>(
+        queue, clue::make_workdiv<TAcc>(grid_size, block_size), KernelCollectSeeds{}, points, seeds);
   }
 
 }  // namespace detail

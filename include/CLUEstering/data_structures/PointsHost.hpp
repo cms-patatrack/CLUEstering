@@ -18,6 +18,7 @@
 #include <ranges>
 #include <string>
 #include <span>
+#include <vector>
 #include <alpaka/alpaka.hpp>
 
 CLUE_NAMESPACE_BEGIN
@@ -44,6 +45,7 @@ private:
   std::optional<host_buffer<std::int32_t[]>> m_nearest_higher;
   std::optional<ClusterProperties> m_clusterProperties;
   std::optional<std::size_t> m_nclusters;
+  std::optional<std::vector<std::int32_t>> m_seed_flags;
   std::int32_t m_size;
   bool m_clustered = false;
 
@@ -276,6 +278,17 @@ public:
   /// the order of the points is not guaranteed to be stable (e.g. when produced by an upstream
   /// parallel/concurrent stage)
   void set_tags(std::span<const std::uint32_t> tags);
+
+  /// @brief Indicates whether the seed flags are available
+  ///
+  /// @return True if the points were filled from clustered device points, false otherwise
+  bool has_seed_flags() const;
+
+  /// @brief Returns the seed flags of the points
+  ///
+  /// @return A span with one flag per point, non-zero for the points that are cluster seeds
+  /// @throws std::runtime_error if the seed flags are not available
+  std::span<const std::int32_t> seed_flags() const;
 
 private:
   inline static constexpr std::size_t Ndim_ = Ndim;

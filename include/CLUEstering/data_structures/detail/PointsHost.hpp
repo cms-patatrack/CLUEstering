@@ -19,6 +19,7 @@
 #include <optional>
 #include <ranges>
 #include <span>
+#include <stdexcept>
 #include <tuple>
 #include <utility>
 
@@ -115,6 +116,19 @@ inline PointsHost<Ndim, TData>::Point PointsHost<Ndim, TData>::operator[](std::s
     coords[dim] = m_view.coords()[dim][idx];
   }
   return Point(coords, m_view.weights()[idx], m_view.cluster_index()[idx]);
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline bool PointsHost<Ndim, TData>::has_seed_flags() const {
+  return m_seed_flags.has_value();
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline std::span<const std::int32_t> PointsHost<Ndim, TData>::seed_flags() const {
+  if (!m_seed_flags.has_value()) {
+    throw std::runtime_error("The seed flags are not available in this PointsHost object.");
+  }
+  return std::span<const std::int32_t>(m_seed_flags->data(), m_seed_flags->size());
 }
 
 template <std::size_t Ndim, std::floating_point TData>
