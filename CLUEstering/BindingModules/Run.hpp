@@ -32,9 +32,11 @@ void run(TInput dc,
          int32_t n_points,
          const Kernel& kernel,
          const clue::bindings::MetricDescriptor<TInput>& metric_desc,
+         std::optional<TInput> merge_threshold,
          clue::Queue queue) {
   clue::Clusterer<Ndim, TInput> algo(dc, rhoc, dm, seed_dc);
   algo.setWrappedCoordinates(std::move(wrapped));
+  algo.setMergeThreshold(merge_threshold);
 
   clue::PointsHost<Ndim, TInput> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
   clue::PointsDevice<Ndim, TInput> d_points(queue, n_points);
@@ -78,7 +80,8 @@ namespace ALPAKA_BACKEND {
                std::optional<nb::ndarray<uint32_t, nb::numpy>> batch_sample_sizes,
                int32_t n_points,
                std::size_t device_id,
-               const clue::bindings::MetricDescriptor<TInput>& metric_desc) {
+               const clue::bindings::MetricDescriptor<TInput>& metric_desc,
+               std::optional<TInput> merge_threshold) {
     auto* pData = data.data();
     auto* pResults = results.data();
 
@@ -103,6 +106,7 @@ namespace ALPAKA_BACKEND {
                                      n_points,
                                      kernel,
                                      metric_desc,
+                                     merge_threshold,
                                      queue);
     };
     switch (Ndim) {

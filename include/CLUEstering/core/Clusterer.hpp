@@ -8,6 +8,7 @@
 #include "CLUEstering/core/DistanceMetrics.hpp"
 #include "CLUEstering/core/ConvolutionalKernel.hpp"
 #include "CLUEstering/core/detail/ClusteringKernels.hpp"
+#include "CLUEstering/core/detail/MergeClusters.hpp"
 #include "CLUEstering/core/detail/SetupTiles.hpp"
 #include "CLUEstering/core/detail/defines.hpp"
 #include "CLUEstering/data_structures/AssociationMap.hpp"
@@ -55,6 +56,7 @@ private:
   value_type m_seeding_distance;
   value_type m_min_density;
   value_type m_outlier_distance;
+  std::optional<value_type> m_merge_threshold;
   std::array<uint8_t, Ndim> m_wrappedCoordinates;
 
   AllocatorType m_allocator;
@@ -176,6 +178,19 @@ public:
                      value_type min_density,
                      std::optional<value_type> outlier_distance = std::nullopt,
                      std::optional<value_type> seeding_distance = std::nullopt);
+
+  /// @brief Enable or disable the merging of the clusters separated by a shallow density valley
+  ///
+  /// After the clustering, two neighbouring clusters a and b are merged when
+  /// saddle(a, b) >= merge_threshold * min(peak_a, peak_b), where peak_c is the density of the
+  /// seed of c and saddle(a, b) is the highest density at which a and b touch, i.e. the maximum
+  /// of min(rho_i, rho_j) over the pairs of points i in a, j in b closer than density_radius.
+  /// Lower values merge more. The merging is disabled by default.
+  ///
+  /// @param merge_threshold A value in (0, 1], or std::nullopt to disable the merging
+  /// @note With the merging disabled the results are identical to the plain CLUE algorithm.
+  /// @note The merging is not supported yet for batched clustering.
+  void setMergeThreshold(std::optional<value_type> merge_threshold);
 
   /// @brief Set the extremes of the coordinates for the clustering space
   ///
