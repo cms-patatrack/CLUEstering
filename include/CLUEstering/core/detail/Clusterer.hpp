@@ -308,7 +308,7 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
     const DistanceMetric& metric,
     const Kernel& kernel,
     Queue& queue) {
-  m_event_associations.reset();   // reset in case the previous run was batched
+  m_event_associations.reset();  // reset in case the previous run was batched
 
   constexpr std::size_t block_size = 256;
   m_tiles->template fill<internal::Acc>(queue, dev_points, m_allocator);
