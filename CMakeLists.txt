@@ -6,10 +6,21 @@ project(
   VERSION 2.14.2)
 
 option(BUILD_PYTHON "Build the Python bindings" OFF)
+option(CLUE_USE_SYSTEM_NANOBIND
+       "Use an installed nanobind instead of the bundled submodule" OFF)
 
 if(BUILD_PYTHON)
   find_package(Python 3.9 REQUIRED COMPONENTS Interpreter Development.Module)
-  add_subdirectory(extern/nanobind EXCLUDE_FROM_ALL)
+  if(CLUE_USE_SYSTEM_NANOBIND)
+    # nanobind installed as a Python package ships its CMake config
+    execute_process(
+      COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      OUTPUT_VARIABLE nanobind_ROOT)
+    find_package(nanobind CONFIG REQUIRED)
+  else()
+    add_subdirectory(extern/nanobind EXCLUDE_FROM_ALL)
+  endif()
   add_subdirectory(CLUEstering/BindingModules)
 endif()
 

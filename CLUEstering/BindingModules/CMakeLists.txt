@@ -30,11 +30,17 @@ endif()
 
 find_package(Boost 1.75.0 REQUIRED COMPONENTS atomic)
 
-include(FetchContent)
-FetchContent_Declare(
-  alpaka
-  URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.2.0.tar.gz)
-FetchContent_MakeAvailable(alpaka)
+option(CLUE_USE_SYSTEM_ALPAKA
+       "Use an installed alpaka instead of downloading it" OFF)
+if(CLUE_USE_SYSTEM_ALPAKA)
+  find_package(alpaka 2.2.0 REQUIRED)
+else()
+  include(FetchContent)
+  FetchContent_Declare(
+    alpaka
+    URL https://github.com/alpaka-group/alpaka/archive/refs/tags/2.2.0.tar.gz)
+  FetchContent_MakeAvailable(alpaka)
+endif()
 
 # create lib directory in CLUEstering folder
 file(MAKE_DIRECTORY ../lib)

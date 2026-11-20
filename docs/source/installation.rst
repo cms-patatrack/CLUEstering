@@ -263,8 +263,10 @@ the machine where it will run, by forcing pip to build it from source:
 
 The backends are compiled depending on what is found on the system:
 
-- **CUDA**: if ``nvcc`` is found, in ``PATH`` or through the ``CUDACXX`` environment variable. The module is compiled
-  for the GPU architecture of the machine where the build runs, so it must be run on a machine with the target GPU.
+- **CUDA**: if ``nvcc`` is found, in ``PATH`` or through the ``CUDACXX`` environment variable. By default the module
+  is compiled for the GPU architecture of the machine where the build runs, so it must be run on a machine with the
+  target GPU. Other architectures can be selected with the ``CUDAARCHS`` environment variable or the
+  ``CMAKE_CUDA_ARCHITECTURES`` CMake variable (see below), e.g. ``CUDAARCHS="75;86"``.
 - **HIP**: if the ROCm compiler is found, in ``PATH`` or through the ``HIPCXX`` environment variable.
 - **TBB**: if TBB is found.
 
@@ -287,3 +289,14 @@ The Python interface can also be compiled and installed from a clone of the repo
     pip install -v .
 
 This compiles all the backends supported on the system, as described above.
+
+The build can be configured by passing CMake options to pip, for instance
+``pip install -v . -C cmake.define.CLUE_USE_SYSTEM_NANOBIND=ON``:
+
+- ``CLUE_NATIVE_ARCH`` (default ``ON``): optimize the CPU code for the machine where the build runs
+  (``-march=native``). Turn it off to build packages meant for other machines.
+- ``CMAKE_CUDA_ARCHITECTURES`` (default ``native``): the CUDA architectures to compile for.
+- ``CLUE_USE_SYSTEM_NANOBIND`` (default ``OFF``): use the nanobind installed in the Python environment instead of
+  the bundled submodule. pip builds in an isolated environment by default, so this needs ``--no-build-isolation``.
+- ``CLUE_USE_SYSTEM_ALPAKA`` (default ``OFF``): use an installed alpaka (a 2.x version, 2.2.0 or newer, found
+  with ``find_package``) instead of downloading it during the build.
