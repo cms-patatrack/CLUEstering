@@ -87,3 +87,30 @@ TEST_CASE("Test batched clustering with fixed batch size") {
     CHECK(sample_cluster_associations.size() == 10);
   }
 }
+
+TEST_CASE("Test sample associations after a non-batched run") {
+  const auto device = clue::get_device(0u);
+  clue::Queue queue(device);
+
+  clue::PointsHost<2> h_points =
+      clue::read_csv<2, float>(queue, "../../../data/batched_data_1024.csv");
+  clue::PointsDevice<2> d_points(queue, h_points.size());
+
+  const float dc{1.3f}, rhoc{10.f}, outlier{1.3f};
+  clue::Clusterer<2> algo(dc, rhoc, outlier);
+
+  SUBCASE("No batched run") {
+    algo.make_clusters(queue, h_points, d_points);
+    CHECK_THROWS_AS(algo.getSampleAssociations(queue, h_points), std::runtime_error);
+    CHECK_THROWS_AS(algo.getSampleAssociations(queue, d_points), std::runtime_error);
+  }
+  SUBCASE("Non-batched run after a batched one") {
+    std::vector<uint32_t> event_sizes(10, 1024);
+    algo.make_clusters(queue, h_points, d_points, event_sizes);
+    CHECK(algo.getSampleAssociations(queue, h_points).size() == 10);
+
+    algo.make_clusters(queue, h_points, d_points);
+    CHECK_THROWS_AS(algo.getSampleAssociations(queue, h_points), std::runtime_error);
+    CHECK_THROWS_AS(algo.getSampleAssociations(queue, d_points), std::runtime_error);
+  }
+}

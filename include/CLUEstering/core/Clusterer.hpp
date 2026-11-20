@@ -363,6 +363,7 @@ public:
   /// By default, it is set to `float`.
   /// @param queue The queue to use for the device operations
   /// @return A device buffer containing the event associations
+  /// @throws std::runtime_error If the last clustering run was not batched
   template <std::floating_point InputType>
   AssociationMapHost getSampleAssociations(Queue& queue,
                                            clue::PointsHost<Ndim, InputType>& h_points);
@@ -372,6 +373,7 @@ public:
   /// By default, it is set to `float`.
   /// @param queue The queue to use for the device operations
   /// @return A device buffer containing the event associations
+  /// @throws std::runtime_error If the last clustering run was not batched
   template <std::floating_point InputType>
   AssociationMap<Device> getSampleAssociations(Queue& queue,
                                                clue::PointsDevice<Ndim, InputType>& d_points);
