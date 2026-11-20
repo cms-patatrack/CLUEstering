@@ -271,6 +271,10 @@ template <std::size_t Ndim, std::floating_point DataType, concepts::allocator Al
 template <std::floating_point InputType>
 inline AssociationMapHost Clusterer<Ndim, DataType, AllocatorType>::getSampleAssociations(
     Queue& queue, clue::PointsHost<Ndim, InputType>& h_points) {
+  if (!m_event_associations.has_value()) {
+    throw std::runtime_error(
+        "Sample associations are not available: the last clustering run was not batched.");
+  }
   auto event_associations =
       alpaka::allocMappedBuf<std::int32_t>(host, platform<Queue>(), h_points.n_clusters());
   alpaka::memcpy(queue,
@@ -285,6 +289,10 @@ template <std::size_t Ndim, std::floating_point DataType, concepts::allocator Al
 template <std::floating_point InputType>
 inline AssociationMap<Device> Clusterer<Ndim, DataType, AllocatorType>::getSampleAssociations(
     Queue& queue, clue::PointsDevice<Ndim, InputType>& d_points) {
+  if (!m_event_associations.has_value()) {
+    throw std::runtime_error(
+        "Sample associations are not available: the last clustering run was not batched.");
+  }
   return internal::make_associator(
       queue,
       std::span<const std::int32_t>{m_event_associations->data(), d_points.n_clusters()},
@@ -300,6 +308,8 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
     const DistanceMetric& metric,
     const Kernel& kernel,
     Queue& queue) {
+  m_event_associations.reset();  // reset in case the previous run was batched
+
   constexpr std::size_t block_size = 256;
   m_tiles->template fill<internal::Acc>(queue, dev_points, m_allocator);
 
