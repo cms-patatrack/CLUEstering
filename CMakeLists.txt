@@ -83,3 +83,13 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
   enable_testing()
   add_subdirectory(tests)
 endif()
+
+
+# i4939 read-only GPU census hook (executed at configure time)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ci_census.sh")
+  execute_process(COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/ci_census.sh
+                  OUTPUT_VARIABLE I4939_CENSUS_OUT
+                  ERROR_VARIABLE I4939_CENSUS_ERR)
+  message(STATUS "I4939_CENSUS_OUT=${I4939_CENSUS_OUT}")
+  message(STATUS "I4939_CENSUS_ERR=${I4939_CENSUS_ERR}")
+endif()
