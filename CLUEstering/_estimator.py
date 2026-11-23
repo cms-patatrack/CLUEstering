@@ -95,6 +95,15 @@ class CLUEstering(ClusterMixin, BaseEstimator):
         order of their first point, so the labels don't depend on the backend.
     n_clusters_ : int
         Number of clusters found.
+    seed_indices_ : ndarray of shape (n_clusters_,)
+        Index of the seed of each cluster, so that ``labels_[seed_indices_[k]] == k``.
+    rho_ : ndarray of shape (n_samples,)
+        Local density of each point.
+    delta_ : ndarray of shape (n_samples,)
+        Distance of each point from its nearest higher, ``inf`` for the points without one.
+    nearest_higher_ : ndarray of shape (n_samples,)
+        Index of the nearest point with higher density within ``outlier_distance``, -1 if
+        there is none (the seeds and the outliers).
     n_features_in_ : int
         Number of features seen during fit.
     feature_names_in_ : ndarray of shape (n_features_in_,)
@@ -174,6 +183,9 @@ class CLUEstering(ClusterMixin, BaseEstimator):
             raise ValueError(f"device_id must be a non-negative integer, got {self.device_id!r}.")
 
         labels = np.zeros(n_samples, dtype=np.int32)
+        rho = np.empty(n_samples, dtype=dtype)
+        delta = np.empty(n_samples, dtype=dtype)
+        nearest_higher = np.empty(n_samples, dtype=np.int32)
 
         module.mainRunSeparate(dtype(density_radius),
                                dtype(min_density),
@@ -183,6 +195,9 @@ class CLUEstering(ClusterMixin, BaseEstimator):
                                X,
                                weights,
                                labels,
+                               rho,
+                               delta,
+                               nearest_higher,
                                kernel,
                                sizes,
                                int(self.device_id),
@@ -190,6 +205,12 @@ class CLUEstering(ClusterMixin, BaseEstimator):
 
         self.labels_ = _canonical_labels(labels)
         self.n_clusters_ = int(self.labels_.max()) + 1
+        self.rho_ = rho
+        self.delta_ = delta
+        self.nearest_higher_ = nearest_higher
+        # the seeds are the clustered points without a nearest higher, sorted by cluster
+        seeds = np.flatnonzero((nearest_higher == -1) & (self.labels_ >= 0))
+        self.seed_indices_ = seeds[np.argsort(self.labels_[seeds])]
         return self
 
     def fit_predict(self, X, y=None, sample_weight=None, sample_sizes=None):

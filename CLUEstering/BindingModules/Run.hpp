@@ -3,6 +3,7 @@
 
 #include "CLUEstering/CLUEstering.hpp"
 #include "MetricDescriptor.hpp"
+#include <algorithm>
 #include <concepts>
 #include <cstddef>
 #include <cstdint>
@@ -132,8 +133,10 @@ namespace ALPAKA_BACKEND {
   }
 
   // Same as mainRun, with the coordinates and the weights in separate arrays, used directly as
-  // the host points without copies. The coordinates have shape (n_points, Ndim) and must be
-  // Fortran-contiguous, which is the structure of arrays layout of PointsHost.
+  // the host points without copies. It also returns the density, the distance to the nearest
+  // higher (+inf for the points without one) and the nearest higher of each point. The
+  // coordinates have shape (n_points, Ndim) and must be Fortran-contiguous, which is the structure
+  // of arrays layout of PointsHost.
   template <std::floating_point TInput, template <typename T> typename Kernel>
     requires clue::concepts::convolutional_kernel<Kernel<TInput>>
   void mainRunSeparate(TInput dc,
@@ -144,15 +147,19 @@ namespace ALPAKA_BACKEND {
                        nb::ndarray<TInput, nb::numpy, nb::ndim<2>, nb::f_contig> coordinates,
                        nb::ndarray<TInput, nb::numpy, nb::ndim<1>, nb::c_contig> weights,
                        nb::ndarray<int, nb::numpy, nb::ndim<1>, nb::c_contig> results,
+                       nb::ndarray<TInput, nb::numpy, nb::ndim<1>, nb::c_contig> rho,
+                       nb::ndarray<TInput, nb::numpy, nb::ndim<1>, nb::c_contig> delta,
+                       nb::ndarray<int, nb::numpy, nb::ndim<1>, nb::c_contig> nearest_higher,
                        const Kernel<TInput>& kernel,
                        std::optional<nb::ndarray<uint32_t, nb::numpy>> batch_sample_sizes,
                        std::size_t device_id,
                        const clue::bindings::MetricDescriptor<TInput>& metric_desc) {
     const auto n_points = coordinates.shape(0);
     const auto ndim = static_cast<int>(coordinates.shape(1));
-    if (weights.shape(0) != n_points || results.shape(0) != n_points) {
+    if (weights.shape(0) != n_points || results.shape(0) != n_points || rho.shape(0) != n_points ||
+        delta.shape(0) != n_points || nearest_higher.shape(0) != n_points) {
       throw std::invalid_argument(
-          "The coordinates, the weights and the results must have the same number of points");
+          "The coordinates, the weights and the outputs must have the same number of points");
     }
     const auto batch_sample_sizes_span = as_span(batch_sample_sizes);
 
@@ -160,6 +167,7 @@ namespace ALPAKA_BACKEND {
     const auto supported = dispatch_ndim(ndim, [&]<std::size_t N>() {
       clue::PointsHost<N, TInput> h_points(
           queue, static_cast<int32_t>(n_points), coordinates.data(), weights.data(), results.data());
+      h_points.store_details();
       run<TInput, N, Kernel<TInput>>(dc,
                                      rhoc,
                                      dm,
@@ -170,6 +178,10 @@ namespace ALPAKA_BACKEND {
                                      kernel,
                                      metric_desc,
                                      queue);
+      // TODO: let store_details use the output arrays directly, to avoid these copies
+      std::ranges::copy(h_points.rho(), rho.data());
+      std::ranges::copy(h_points.delta(), delta.data());
+      std::ranges::copy(h_points.nearest_higher(), nearest_higher.data());
     });
     if (!supported) [[unlikely]] {
       throw std::invalid_argument("The Python interface only supports up to 4 dimensions");
@@ -177,7 +189,7 @@ namespace ALPAKA_BACKEND {
   }
 
   // Registers mainRunSeparate for the kernels. Only float is registered, because the kernels and
-  // the metrics are bound only for float. The results are written in place, so they must not be
+  // the metrics are bound only for float. The outputs are written in place, so they must not be
   // converted, which would write them into a temporary copy.
   inline void defMainRunSeparate(nb::module_& m) {
     auto def = [&]<typename TInput, template <typename T> typename Kernel>() {
@@ -191,6 +203,9 @@ namespace ALPAKA_BACKEND {
             nb::arg("coordinates"),
             nb::arg("weights"),
             nb::arg("results").noconvert(),
+            nb::arg("rho").noconvert(),
+            nb::arg("delta").noconvert(),
+            nb::arg("nearest_higher").noconvert(),
             nb::arg("kernel"),
             nb::arg("batch_sample_sizes").none(),
             nb::arg("device_id"),

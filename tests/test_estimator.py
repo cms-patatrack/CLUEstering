@@ -118,3 +118,45 @@ def test_input_layouts(sissa, order, dtype):
     labels = clue.CLUEstering(20., 10., backend="cpu serial").fit_predict(
         np.asarray(X, dtype=dtype, order=order), sample_weight=weights.astype(dtype))
     np.testing.assert_array_equal(labels, reference)
+
+
+@pytest.mark.parametrize("batched", [False, True])
+def test_details(sissa, batched):
+    X, weights = sissa
+    size = X.shape[0]
+    sample_sizes = None
+    if batched:
+        X, weights = np.vstack([X, X]), np.concatenate([weights, weights])
+        sample_sizes = [size, size]
+    est = clue.CLUEstering(20., 10., backend="cpu serial")
+    est.fit(X, sample_weight=weights, sample_sizes=sample_sizes)
+    n = X.shape[0]
+    assert est.rho_.shape == est.delta_.shape == est.nearest_higher_.shape == (n,)
+
+    # one seed per cluster, without a nearest higher
+    np.testing.assert_array_equal(est.labels_[est.seed_indices_], np.arange(est.n_clusters_))
+    assert np.all(est.nearest_higher_[est.seed_indices_] == -1)
+
+    # delta is infinite exactly for the points without a nearest higher
+    no_nh = est.nearest_higher_ == -1
+    assert np.all(np.isinf(est.delta_[no_nh]))
+    assert np.all(est.delta_[~no_nh] <= est.get_params()["density_radius"])
+
+    # the nearest higher has a higher density and belongs to the same cluster
+    i = np.flatnonzero(~no_nh)
+    nh = est.nearest_higher_[i]
+    assert np.all(est.rho_[nh] >= est.rho_[i])
+    np.testing.assert_array_equal(est.labels_[nh], est.labels_[i])
+
+    if batched:
+        # the nearest highers do not cross the samples
+        assert np.all((i < size) == (nh < size))
+
+
+def test_details_independent_of_backend(sissa):
+    X, weights = sissa
+    reference = clue.CLUEstering(20., 10., backend="cpu serial").fit(X, sample_weight=weights)
+    for backend in clue.backends:
+        est = clue.CLUEstering(20., 10., backend=backend).fit(X, sample_weight=weights)
+        np.testing.assert_allclose(est.rho_, reference.rho_, rtol=1e-5)
+        np.testing.assert_array_equal(est.seed_indices_, reference.seed_indices_)
