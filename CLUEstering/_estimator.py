@@ -129,10 +129,13 @@ class CLUEstering(ClusterMixin, BaseEstimator):
         """
         Cluster the points of X.
 
-        :param X: Coordinates of the points.
+        :param X: Coordinates of the points. The clustering runs in single precision: a float32
+            array in Fortran order (``np.asfortranarray``) is used without copies, otherwise it
+            is converted with one copy.
         :type X: array-like of shape (n_samples, n_features)
         :param y: Ignored, present for API consistency.
         :param sample_weight: Weight of each point. If None, all the points have weight 1.
+            A contiguous float32 array is used without copies.
         :type sample_weight: array-like of shape (n_samples,) or None
         :param sample_sizes: Sizes of independent samples stored one after the other in X,
             which are clustered separately in a single call (batched clustering). If None,
@@ -142,7 +145,10 @@ class CLUEstering(ClusterMixin, BaseEstimator):
         :returns: The fitted estimator.
         :rtype: CLUEstering
         """
-        X = validate_data(self, X, dtype=[np.float32, np.float64], ensure_min_samples=1)
+        # The bindings use the coordinates in place as a structure of arrays, which is the Fortran
+        # order of X, so a float32 Fortran-ordered X is not copied. The kernels and the metrics are
+        # bound only for float, so the clustering runs in single precision.
+        X = validate_data(self, X, dtype=np.float32, order="F", ensure_min_samples=1)
         n_samples, n_features = X.shape
         dtype = X.dtype.type
         weights = self._check_sample_weight(sample_weight, n_samples, dtype)
@@ -167,25 +173,20 @@ class CLUEstering(ClusterMixin, BaseEstimator):
         if not isinstance(self.device_id, Integral) or self.device_id < 0:
             raise ValueError(f"device_id must be a non-negative integer, got {self.device_id!r}.")
 
-        # the bindings take the coordinates as a structure of arrays, with the weights last
-        coords = np.empty((n_features + 1, n_samples), dtype=dtype)
-        coords[:-1] = X.T
-        coords[-1] = weights
         labels = np.zeros(n_samples, dtype=np.int32)
 
-        module.mainRun(dtype(density_radius),
-                       dtype(min_density),
-                       dtype(outlier_distance),
-                       dtype(seeding_distance),
-                       wrapped,
-                       coords,
-                       labels,
-                       kernel,
-                       n_features,
-                       sizes,
-                       n_samples,
-                       int(self.device_id),
-                       metric)
+        module.mainRunSeparate(dtype(density_radius),
+                               dtype(min_density),
+                               dtype(outlier_distance),
+                               dtype(seeding_distance),
+                               wrapped,
+                               X,
+                               weights,
+                               labels,
+                               kernel,
+                               sizes,
+                               int(self.device_id),
+                               metric)
 
         self.labels_ = _canonical_labels(labels)
         self.n_clusters_ = int(self.labels_.max()) + 1
@@ -282,7 +283,8 @@ class CLUEstering(ClusterMixin, BaseEstimator):
             raise ValueError("sample_weight must contain finite non-negative values.")
         if not np.any(weights):
             raise ValueError("sample_weight must not be all zero.")
-        return weights
+        # no copy if the weights are already contiguous and of the same type as X
+        return np.ascontiguousarray(weights)
 
     @staticmethod
     def _check_sample_sizes(sample_sizes, n_samples):

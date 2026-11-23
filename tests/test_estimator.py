@@ -108,3 +108,13 @@ def test_invalid_params(sissa, params, message):
 def test_too_many_features():
     with pytest.raises(ValueError, match="up to 4 features"):
         clue.CLUEstering(backend="cpu serial").fit(np.zeros((5, 5)))
+
+
+@pytest.mark.parametrize("order", ["C", "F"])
+@pytest.mark.parametrize("dtype", [np.float32, np.float64])
+def test_input_layouts(sissa, order, dtype):
+    X, weights = sissa
+    reference = clue.CLUEstering(20., 10., backend="cpu serial").fit_predict(X, sample_weight=weights)
+    labels = clue.CLUEstering(20., 10., backend="cpu serial").fit_predict(
+        np.asarray(X, dtype=dtype, order=order), sample_weight=weights.astype(dtype))
+    np.testing.assert_array_equal(labels, reference)
