@@ -1333,3 +1333,9 @@ try:
     from ._estimator import CLUEstering
 except ImportError:
     from _estimator import CLUEstering
+
+# plots of the results of the estimator, defined in their own module
+try:
+    from ._plotting import plot_decision_graph
+except ImportError:
+    from _plotting import plot_decision_graph

@@ -4,5 +4,6 @@ from CLUEstering.CLUEstering import backends
 # note: this shadows the submodule CLUEstering.CLUEstering as a package attribute, until the
 # implementation moves to private modules
 from CLUEstering.CLUEstering import CLUEstering
+from CLUEstering.CLUEstering import plot_decision_graph
 
 __version__ = "2.14.2"
