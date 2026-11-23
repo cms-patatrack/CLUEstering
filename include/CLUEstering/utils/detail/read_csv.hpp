@@ -7,9 +7,10 @@
 #include "CLUEstering/utils/read_csv.hpp"
 
 #include <algorithm>
+#include <cctype>
+#include <cstdint>
 #include <cstddef>
 #include <fstream>
-#include <iterator>
 #include <sstream>
 #include <string>
 #include <stdexcept>
@@ -30,6 +31,28 @@ namespace detail {
     }
   }
 
+  inline bool is_blank(const std::string& line) {
+    return std::ranges::all_of(line, [](unsigned char c) { return std::isspace(c); });
+  }
+
+  inline std::size_t count_rows(std::ifstream& file, const std::string& file_path) {
+    std::string line;
+    std::getline(file, line);
+    std::size_t n_rows = 0;
+    while (std::getline(file, line)) {
+      if (!is_blank(line)) {
+        ++n_rows;
+      }
+    }
+    if (n_rows == 0) {
+      throw std::runtime_error("The file does not contain any point: " + file_path);
+    }
+    file.clear();
+    file.seekg(0);
+    std::getline(file, line);
+    return n_rows;
+  }
+
 }  // namespace detail
 
 template <std::size_t NDim, std::floating_point TData, concepts::queue TQueue>
@@ -38,19 +61,16 @@ inline clue::PointsHost<NDim, TData> read_csv(TQueue& queue, const std::string& 
   if (!file.is_open()) {
     throw std::runtime_error("Could not open file: " + file_path);
   }
-  auto n_points =
-      std::count(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') - 1;
+  const auto n_points = detail::count_rows(file, file_path);
 
-  clue::PointsHost<NDim, TData> points(queue, n_points);
+  clue::PointsHost<NDim, TData> points(queue, static_cast<int32_t>(n_points));
 
-  file.clear();
-  file.seekg(0);
-
-  // discard the header
   std::string buffer;
-  getline(file, buffer);
   auto point_id = 0;
   while (getline(file, buffer)) {
+    if (detail::is_blank(buffer)) {
+      continue;
+    }
     std::stringstream buffer_stream(buffer);
     std::string value;
 
@@ -73,20 +93,17 @@ inline clue::PointsHost<NDim, TData> read_output(TQueue& queue, const std::strin
   if (!file.is_open()) {
     throw std::runtime_error("Could not open file: " + file_path);
   }
-  auto n_points =
-      std::count(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n') - 1;
-  clue::PointsHost<NDim, TData> points(queue, n_points);
+  const auto n_points = detail::count_rows(file, file_path);
+  clue::PointsHost<NDim, TData> points(queue, static_cast<int32_t>(n_points));
   internal::points_interface<std::remove_cvref_t<decltype(points)>>::mark_clustered(points);
   auto& view = points.view();
 
-  file.clear();
-  file.seekg(0);
-
-  // discard the header
   std::string buffer;
-  getline(file, buffer);
   auto point_id = 0;
   while (getline(file, buffer)) {
+    if (detail::is_blank(buffer)) {
+      continue;
+    }
     std::stringstream buffer_stream(buffer);
     std::string value;
 
