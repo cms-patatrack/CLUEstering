@@ -27,5 +27,7 @@ namespace clue::alpaka_cuda_async {
     m.def("mainRun", &mainRun<double, clue::FlatKernel>);
     m.def("mainRun", &mainRun<double, clue::ExponentialKernel>);
     m.def("mainRun", &mainRun<double, clue::GaussianKernel>);
+
+    defMainRunSeparate(m);
   }
 };  // namespace clue::alpaka_cuda_async

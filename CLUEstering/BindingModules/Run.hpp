@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <iostream>
 #include <optional>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <span>
@@ -27,17 +28,15 @@ void run(TInput dc,
          TInput dm,
          TInput seed_dc,
          std::vector<uint8_t>&& wrapped,
-         std::tuple<TInput*, int*>&& pData,
+         clue::PointsHost<Ndim, TInput>& h_points,
          const std::optional<std::span<uint32_t>>& batch_sample_sizes,
-         int32_t n_points,
          const Kernel& kernel,
          const clue::bindings::MetricDescriptor<TInput>& metric_desc,
-         clue::Queue queue) {
+         clue::Queue& queue) {
   clue::Clusterer<Ndim, TInput> algo(dc, rhoc, dm, seed_dc);
   algo.setWrappedCoordinates(std::move(wrapped));
 
-  clue::PointsHost<Ndim, TInput> h_points(queue, n_points, std::get<0>(pData), std::get<1>(pData));
-  clue::PointsDevice<Ndim, TInput> d_points(queue, n_points);
+  clue::PointsDevice<Ndim, TInput> d_points(queue, h_points.size());
 
   clue::internal::apply_metric<Ndim>(metric_desc, [&](auto&& metric) {
     if (batch_sample_sizes.has_value()) [[unlikely]] {
@@ -46,6 +45,36 @@ void run(TInput dc,
       algo.make_clusters(queue, h_points, d_points, metric, kernel);
     }
   });
+}
+
+// Calls f.template operator()<N>() with N equal to ndim, for the dimensions compiled in the
+// bindings. Returns false if ndim is not supported.
+template <typename F>
+bool dispatch_ndim(int ndim, F&& f) {
+  switch (ndim) {
+    [[unlikely]] case (1):
+      f.template operator()<1>();
+      return true;
+    [[likely]] case (2):
+      f.template operator()<2>();
+      return true;
+    [[likely]] case (3):
+      f.template operator()<3>();
+      return true;
+    [[unlikely]] case (4):
+      f.template operator()<4>();
+      return true;
+    [[unlikely]] default:
+      return false;
+  }
+}
+
+inline std::optional<std::span<uint32_t>> as_span(
+    std::optional<nb::ndarray<uint32_t, nb::numpy>>& batch_sample_sizes) {
+  if (batch_sample_sizes.has_value()) [[unlikely]] {
+    return std::span<uint32_t>(batch_sample_sizes->data(), batch_sample_sizes->size());
+  }
+  return std::nullopt;
 }
 
 namespace ALPAKA_BACKEND {
@@ -81,46 +110,95 @@ namespace ALPAKA_BACKEND {
                const clue::bindings::MetricDescriptor<TInput>& metric_desc) {
     auto* pData = data.data();
     auto* pResults = results.data();
-
-    std::optional<std::span<uint32_t>> batch_sample_sizes_span;
-
-    if (batch_sample_sizes.has_value()) [[unlikely]] {
-      auto* pBatchSizes = batch_sample_sizes->data();
-      batch_sample_sizes_span = std::span<uint32_t>(pBatchSizes, batch_sample_sizes->size());
-    } else [[likely]] {
-      batch_sample_sizes_span = std::nullopt;
-    }
+    const auto batch_sample_sizes_span = as_span(batch_sample_sizes);
 
     auto queue = clue::get_queue(device_id);
-    auto dispatch = [&]<std::size_t N>() {
+    const auto supported = dispatch_ndim(Ndim, [&]<std::size_t N>() {
+      clue::PointsHost<N, TInput> h_points(queue, n_points, pData, pResults);
       run<TInput, N, Kernel<TInput>>(dc,
                                      rhoc,
                                      dm,
                                      seed_dc,
                                      std::move(wrapped),
-                                     std::make_tuple(pData, pResults),
+                                     h_points,
                                      batch_sample_sizes_span,
-                                     n_points,
                                      kernel,
                                      metric_desc,
                                      queue);
-    };
-    switch (Ndim) {
-      [[unlikely]] case (1):
-        dispatch.template operator()<1>();
-        return;
-      [[likely]] case (2):
-        dispatch.template operator()<2>();
-        return;
-      [[likely]] case (3):
-        dispatch.template operator()<3>();
-        return;
-      [[unlikely]] case (4):
-        dispatch.template operator()<4>();
-        return;
-      [[unlikely]] default:
-        std::cout << "The Python interface only supports up to 4 dimensions\n";
+    });
+    if (!supported) [[unlikely]] {
+      std::cout << "The Python interface only supports up to 4 dimensions\n";
     }
+  }
+
+  // Same as mainRun, with the coordinates and the weights in separate arrays, used directly as
+  // the host points without copies. The coordinates have shape (n_points, Ndim) and must be
+  // Fortran-contiguous, which is the structure of arrays layout of PointsHost.
+  template <std::floating_point TInput, template <typename T> typename Kernel>
+    requires clue::concepts::convolutional_kernel<Kernel<TInput>>
+  void mainRunSeparate(TInput dc,
+                       TInput rhoc,
+                       TInput dm,
+                       TInput seed_dc,
+                       std::vector<uint8_t> wrapped,
+                       nb::ndarray<TInput, nb::numpy, nb::ndim<2>, nb::f_contig> coordinates,
+                       nb::ndarray<TInput, nb::numpy, nb::ndim<1>, nb::c_contig> weights,
+                       nb::ndarray<int, nb::numpy, nb::ndim<1>, nb::c_contig> results,
+                       const Kernel<TInput>& kernel,
+                       std::optional<nb::ndarray<uint32_t, nb::numpy>> batch_sample_sizes,
+                       std::size_t device_id,
+                       const clue::bindings::MetricDescriptor<TInput>& metric_desc) {
+    const auto n_points = coordinates.shape(0);
+    const auto ndim = static_cast<int>(coordinates.shape(1));
+    if (weights.shape(0) != n_points || results.shape(0) != n_points) {
+      throw std::invalid_argument(
+          "The coordinates, the weights and the results must have the same number of points");
+    }
+    const auto batch_sample_sizes_span = as_span(batch_sample_sizes);
+
+    auto queue = clue::get_queue(device_id);
+    const auto supported = dispatch_ndim(ndim, [&]<std::size_t N>() {
+      clue::PointsHost<N, TInput> h_points(
+          queue, static_cast<int32_t>(n_points), coordinates.data(), weights.data(), results.data());
+      run<TInput, N, Kernel<TInput>>(dc,
+                                     rhoc,
+                                     dm,
+                                     seed_dc,
+                                     std::move(wrapped),
+                                     h_points,
+                                     batch_sample_sizes_span,
+                                     kernel,
+                                     metric_desc,
+                                     queue);
+    });
+    if (!supported) [[unlikely]] {
+      throw std::invalid_argument("The Python interface only supports up to 4 dimensions");
+    }
+  }
+
+  // Registers mainRunSeparate for the kernels. Only float is registered, because the kernels and
+  // the metrics are bound only for float. The results are written in place, so they must not be
+  // converted, which would write them into a temporary copy.
+  inline void defMainRunSeparate(nb::module_& m) {
+    auto def = [&]<typename TInput, template <typename T> typename Kernel>() {
+      m.def("mainRunSeparate",
+            &mainRunSeparate<TInput, Kernel>,
+            nb::arg("dc"),
+            nb::arg("rhoc"),
+            nb::arg("dm"),
+            nb::arg("seed_dc"),
+            nb::arg("wrapped"),
+            nb::arg("coordinates"),
+            nb::arg("weights"),
+            nb::arg("results").noconvert(),
+            nb::arg("kernel"),
+            nb::arg("batch_sample_sizes").none(),
+            nb::arg("device_id"),
+            nb::arg("metric"));
+    };
+    def.template operator()<float, clue::FlatKernel>();
+    def.template operator()<float, clue::ExponentialKernel>();
+    def.template operator()<float, clue::GaussianKernel>();
   }
 
 }  // namespace ALPAKA_BACKEND
