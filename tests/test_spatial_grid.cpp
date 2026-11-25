@@ -121,14 +121,16 @@ TEST_CASE("Test spatial grid of a single run") {
 
   // Every point is in exactly one cell, the one given by the exported geometry
   std::vector<int32_t> seen(n_points, 0);
+  std::vector<int32_t> misplaced;
   for (auto cell = 0u; cell + 1 < host_cells.keys.size(); ++cell) {
     for (auto i = host_cells.keys[cell]; i != host_cells.keys[cell + 1]; ++i) {
       const auto point = host_cells.values[i];
       ++seen[point];
-      INFO("point ", point, " in cell ", cell);
-      CHECK(can_be_in_cell(h_points, grid, point, 0, static_cast<int32_t>(cell)));
+      if (!can_be_in_cell(h_points, grid, point, 0, static_cast<int32_t>(cell)))
+        misplaced.push_back(point);
     }
   }
+  CHECK(misplaced == std::vector<int32_t>{});
   CHECK(std::ranges::all_of(seen, [](auto count) { return count == 1; }));
 }
 
@@ -199,12 +201,14 @@ TEST_CASE("Test spatial grid of a batched run") {
   CHECK(grid.cells.extents().values == static_cast<std::size_t>(n_points));
 
   const auto host_cells = copy_to_host(queue, grid);
+  std::vector<int32_t> misplaced;
   for (auto cell = 0u; cell + 1 < host_cells.keys.size(); ++cell) {
     for (auto i = host_cells.keys[cell]; i != host_cells.keys[cell + 1]; ++i) {
       const auto point = host_cells.values[i];
       const auto event = static_cast<std::size_t>(point) / event_size;
-      INFO("point ", point, " in cell ", cell);
-      CHECK(can_be_in_cell(h_points, grid, point, event, static_cast<int32_t>(cell)));
+      if (!can_be_in_cell(h_points, grid, point, event, static_cast<int32_t>(cell)))
+        misplaced.push_back(point);
     }
   }
+  CHECK(misplaced == std::vector<int32_t>{});
 }
