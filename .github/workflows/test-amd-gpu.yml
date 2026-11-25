@@ -33,5 +33,5 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: |
           cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release
-          cmake --build build --parallel -v
+          cmake --build build --parallel $(getconf _NPROCESSORS_ONLN) -v
           ctest --test-dir build --output-on-failure
