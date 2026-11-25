@@ -2,8 +2,10 @@
 #include "CLUEstering/CLUEstering.hpp"
 
 #include <cmath>
+#include <fstream>
 #include <ranges>
 #include <span>
+#include <string>
 #include <vector>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
@@ -149,8 +151,71 @@ TEST_CASE("Test I/O with non-existent file") {
     auto queue = clue::get_queue(0u);
 
     const std::string invalid_file_path = "non_existent_file.csv";
-    auto invalid_call = [&] { clue::read_csv<2, float>(queue, invalid_file_path); };
+    auto invalid_call = [&] { clue::read_output<2, float>(queue, invalid_file_path); };
 
     CHECK_THROWS_AS(invalid_call(), std::runtime_error);
+  }
+}
+
+namespace {
+
+  // Writes the content to a file in the current directory and returns its path
+  std::string write_file(const std::string& name, const std::string& content) {
+    std::ofstream file(name, std::ios::binary);
+    file << content;
+    return name;
+  }
+
+}  // namespace
+
+TEST_CASE("Test read_csv with different file endings") {
+  auto queue = clue::get_queue(0u);
+
+  const std::string header = "x0,x1,weight\n";
+  const std::string rows = "1.,2.,3.\n4.,5.,6.\n7.,8.,9.";
+  const auto check = [](const clue::PointsHost<2>& points) {
+    REQUIRE(points.size() == 3);
+    CHECK(points.coords(0)[2] == 7.f);
+    CHECK(points.coords(1)[2] == 8.f);
+    CHECK(points.weights()[2] == 9.f);
+  };
+
+  SUBCASE("Trailing newline") {
+    check(clue::read_csv<2, float>(queue, write_file("newline.csv", header + rows + "\n")));
+  }
+  SUBCASE("No trailing newline") {
+    check(clue::read_csv<2, float>(queue, write_file("no_newline.csv", header + rows)));
+  }
+  SUBCASE("Blank lines at the end") {
+    check(
+        clue::read_csv<2, float>(queue, write_file("blank_lines.csv", header + rows + "\n\n \n")));
+  }
+  SUBCASE("Windows line endings") {
+    std::string content = header + rows + "\n";
+    for (auto pos = content.find('\n'); pos != std::string::npos;
+         pos = content.find('\n', pos + 2)) {
+      content.insert(pos, "\r");
+    }
+    check(clue::read_csv<2, float>(queue, write_file("crlf.csv", content)));
+  }
+  SUBCASE("Only the header") {
+    for (const auto& ending : {"", "\n", "\n\n"}) {
+      const auto path = write_file("header.csv", std::string{"x0,x1,weight"} + ending);
+      auto invalid_call = [&] { clue::read_csv<2, float>(queue, path); };
+      CHECK_THROWS_AS(invalid_call(), std::runtime_error);
+    }
+  }
+}
+
+TEST_CASE("Test read_output with different file endings") {
+  auto queue = clue::get_queue(0u);
+
+  const std::string content = "x0,x1,weight,cluster_ids\n1.,2.,3.,0\n4.,5.,6.,-1";
+  for (const auto& ending : {std::string{}, std::string{"\n"}, std::string{"\n\n"}}) {
+    auto points = clue::read_output<2, float>(queue, write_file("output.csv", content + ending));
+    REQUIRE(points.size() == 2);
+    CHECK(points.weights()[1] == 6.f);
+    CHECK(points.clusterIndexes()[0] == 0);
+    CHECK(points.clusterIndexes()[1] == -1);
   }
 }
