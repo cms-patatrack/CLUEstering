@@ -15,28 +15,45 @@
 
 namespace {
 
-  // Bin of a coordinate, computed as documented in SpatialGrid
+  // Distance from a cell edge, in units of the cell size, below which the rounding of the
+  // binning can put a point in either of the two adjacent cells
+  constexpr double edge_tolerance = 1e-3;
+
+  // Whether a coordinate can be in the given bin, computed as documented in SpatialGrid.
+  // A coordinate within rounding error of a cell edge is accepted in both adjacent cells.
   template <typename TData>
-  int32_t expected_bin(TData coord, TData min, TData cell_size, int32_t n_bins) {
-    auto bin = static_cast<int32_t>((coord - min) / cell_size);
-    return std::clamp(bin, 0, n_bins - 1);
+  bool can_be_in_bin(TData coord, TData min, TData cell_size, int32_t n_bins, int32_t bin) {
+    const auto position = (static_cast<double>(coord) - min) / cell_size;
+    const auto clamp = [n_bins](double b) {
+      return std::clamp(static_cast<int32_t>(std::floor(b)), 0, n_bins - 1);
+    };
+    return bin == clamp(position) || bin == clamp(position - edge_tolerance) ||
+           bin == clamp(position + edge_tolerance);
   }
 
-  // Row-major global bin, the last dimension varies fastest
+  // Whether a point can be in the given global cell. The global index is row-major, with the
+  // last dimension varying fastest, and the cells of each batch item follow the previous ones.
   template <std::size_t Ndim, typename TData, typename TDev>
-  int32_t expected_global_bin(const clue::PointsHost<Ndim, float>& points,
-                              const clue::SpatialGrid<Ndim, TData, TDev>& grid,
-                              int32_t point,
-                              std::size_t event) {
-    int32_t global_bin = 0;
-    int32_t stride = 1;
+  bool can_be_in_cell(const clue::PointsHost<Ndim, float>& points,
+                      const clue::SpatialGrid<Ndim, TData, TDev>& grid,
+                      int32_t point,
+                      std::size_t event,
+                      int32_t cell) {
+    int32_t cells_per_event = 1;
+    for (auto n : grid.n_cells)
+      cells_per_event *= n;
+    if (cell / cells_per_event != static_cast<int32_t>(event))
+      return false;
+
+    auto local_cell = cell % cells_per_event;
     for (int dim = Ndim - 1; dim >= 0; --dim) {
-      const auto bin = expected_bin(
-          points.coords(dim)[point], grid.min[dim], grid.cell_size[dim], grid.n_cells[dim]);
-      global_bin += bin * stride;
-      stride *= grid.n_cells[dim];
+      const auto bin = local_cell % grid.n_cells[dim];
+      local_cell /= grid.n_cells[dim];
+      if (!can_be_in_bin(
+              points.coords(dim)[point], grid.min[dim], grid.cell_size[dim], grid.n_cells[dim], bin))
+        return false;
     }
-    return global_bin + static_cast<int32_t>(event) * stride;
+    return true;
   }
 
   template <typename TDev>
@@ -108,7 +125,8 @@ TEST_CASE("Test spatial grid of a single run") {
     for (auto i = host_cells.keys[cell]; i != host_cells.keys[cell + 1]; ++i) {
       const auto point = host_cells.values[i];
       ++seen[point];
-      CHECK(expected_global_bin(h_points, grid, point, 0) == static_cast<int32_t>(cell));
+      INFO("point ", point, " in cell ", cell);
+      CHECK(can_be_in_cell(h_points, grid, point, 0, static_cast<int32_t>(cell)));
     }
   }
   CHECK(std::ranges::all_of(seen, [](auto count) { return count == 1; }));
@@ -185,7 +203,8 @@ TEST_CASE("Test spatial grid of a batched run") {
     for (auto i = host_cells.keys[cell]; i != host_cells.keys[cell + 1]; ++i) {
       const auto point = host_cells.values[i];
       const auto event = static_cast<std::size_t>(point) / event_size;
-      CHECK(expected_global_bin(h_points, grid, point, event) == static_cast<int32_t>(cell));
+      INFO("point ", point, " in cell ", cell);
+      CHECK(can_be_in_cell(h_points, grid, point, event, static_cast<int32_t>(cell)));
     }
   }
 }

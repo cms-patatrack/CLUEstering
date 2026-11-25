@@ -27,6 +27,9 @@ CLUE_NAMESPACE_BEGIN
 ///   clamped to `[0, n_cells[d] - 1]`, so points outside the range fall in the border cells.
 /// - a periodic dimension covers one period, `[0, period)`, and its coordinates are wrapped into
 ///   that interval before binning.
+/// - a point within rounding error of a cell edge can be in either of the two adjacent cells,
+///   depending on how the compiler evaluates the division. Code that bins points again with this
+///   geometry must not expect to reproduce the cells of such points exactly.
 /// - the global cell index is row-major: the last dimension varies fastest.
 /// - in a batched run the grid is the same for all the batch items and the keys are concatenated,
 ///   so the cells of item `e` have global indexes from `e * total` to `(e + 1) * total - 1`,
