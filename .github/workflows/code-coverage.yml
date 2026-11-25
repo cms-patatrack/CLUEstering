@@ -52,7 +52,7 @@ jobs:
       - name: Compile C++ tests
         working-directory: ${{github.workspace}}
         run: |
-          cmake -B build -DBUILD_TESTING=ON -DCOVERAGE=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel
+          cmake -B build -DBUILD_TESTING=ON -DCOVERAGE=ON -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel $(getconf _NPROCESSORS_ONLN)
 
       - name: Measure coverage of C++ tests
         working-directory: ${{github.workspace}}
@@ -70,7 +70,7 @@ jobs:
         working-directory: ${{github.workspace}}
         run: |
           rm -rf build
-          cmake -B build -DBUILD_PYTHON=ON && cmake --build build --parallel
+          cmake -B build -DBUILD_PYTHON=ON && cmake --build build --parallel $(getconf _NPROCESSORS_ONLN)
 
       - name: Measure coverage of Python tests
         working-directory: ${{github.workspace}}/tests

@@ -58,7 +58,7 @@ jobs:
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build --parallel
+        cmake --build build --parallel $(getconf _NPROCESSORS_ONLN)
         ./build/serial.out --benchmark_format=json --benchmark_out=serial-pr.json
         ./build/openmp.out --benchmark_format=json --benchmark_out=openmp-pr.json
         ./build/hip.out --benchmark_format=json --benchmark_out=hip-pr.json
@@ -84,7 +84,7 @@ jobs:
         git submodule update --init --recursive
         cd benchmark/dataset_size
         cmake -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build --parallel
+        cmake --build build --parallel $(getconf _NPROCESSORS_ONLN)
         ./build/serial.out --benchmark_format=json --benchmark_out=serial-baseline.json
         ./build/openmp.out --benchmark_format=json --benchmark_out=openmp-baseline.json
         ./build/hip.out --benchmark_format=json --benchmark_out=hip-baseline.json
@@ -139,7 +139,7 @@ jobs:
       working-directory: ${{ github.workspace }}/benchmark/dataset_size
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
-        cmake --build build --parallel
+        cmake --build build --parallel $(getconf _NPROCESSORS_ONLN)
         ./build/serial.out --benchmark_format=json --benchmark_out=serial.json
         ./build/openmp.out --benchmark_format=json --benchmark_out=openmp.json
         ./build/hip.out --benchmark_format=json --benchmark_out=hip.json

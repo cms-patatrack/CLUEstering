@@ -44,7 +44,7 @@ jobs:
       - name: Build Python modules
         run: |
           cmake -B build -DBUILD_PYTHON=ON
-          cmake --build build --parallel
+          cmake --build build --parallel $(getconf _NPROCESSORS_ONLN)
 
       - name: Build Documentation
         working-directory: ${{ github.workspace }}/docs

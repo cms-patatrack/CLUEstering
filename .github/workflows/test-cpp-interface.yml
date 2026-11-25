@@ -8,6 +8,7 @@ on:
       - "**/CMakeLists.txt"
       - "**/*.cmake"
       - "cmake/**"
+      - ".github/workflows/test-cpp-interface.yml"
   pull_request:
     branches: [ "main" ]
     paths: *cpp-paths
@@ -118,7 +119,7 @@ jobs:
       working-directory: ${{ github.workspace }}
       run: |
         cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release
-        cmake --build build --parallel
+        cmake --build build --parallel $(getconf _NPROCESSORS_ONLN)
         ctest --test-dir build --output-on-failure --parallel $(nproc)
 
     - name: Compile and run tests
@@ -127,7 +128,7 @@ jobs:
       run: |
         source /opt/rh/${{ matrix.compiler }}/enable
         cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release
-        cmake --build build --parallel
+        cmake --build build --parallel $(getconf _NPROCESSORS_ONLN)
         ctest --test-dir build --output-on-failure --parallel $(nproc)
 
     - name: Compile and run tests
