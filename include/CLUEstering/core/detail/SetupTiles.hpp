@@ -87,6 +87,7 @@ namespace detail {
     alpaka::memcpy(queue, tiles->tileSize(), tile_sizes);
     alpaka::memcpy(
         queue, tiles->wrapped(), alpaka::createView(host, wrapped_coordinates.data(), Ndim));
+    tiles->setHostGeometry(extremes, wrapped_coordinates);
   }
 
   template <concepts::queue TQueue,

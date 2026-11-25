@@ -4,6 +4,7 @@
 #include "CLUEstering/data_structures/AssociationMap.hpp"
 #include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
+#include "CLUEstering/data_structures/SpatialGrid.hpp"
 #include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/detail/make_array.hpp"
@@ -150,8 +151,33 @@ namespace internal {
 
     ALPAKA_FN_HOST inline constexpr auto extents() const { return m_assoc.extents(); }
 
+    /// @brief Keep a host copy of the extremes and periodic flags copied to the device
+    ALPAKA_FN_HOST void setHostGeometry(const CoordinateExtremes<Ndim, value_type>& extremes,
+                                        const std::array<uint8_t, Ndim>& wrapped) {
+      m_host_extremes = extremes;
+      m_host_wrapped = wrapped;
+    }
+
+    /// @brief Read-only description of the tiles as a spatial grid, from the host geometry
+    ALPAKA_FN_HOST auto spatialGrid() const {
+      SpatialGrid<Ndim, value_type, TDev> data{.cells = m_assoc,
+                                               .min = {},
+                                               .max = {},
+                                               .cell_size = m_grid.tilesizes,
+                                               .n_cells = m_grid.nperdim,
+                                               .periodic = {},
+                                               .batch_size = m_batch_size};
+      for (auto dim = 0u; dim != Ndim; ++dim) {
+        data.min[dim] = m_host_extremes.min(dim);
+        data.max[dim] = m_host_extremes.max(dim);
+        data.periodic[dim] = m_host_wrapped[dim] != 0;
+      }
+      return data;
+    }
+
   private:
     ALPAKA_FN_HOST void setView(int32_t npoints, const TileGrid<Ndim, value_type>& grid) {
+      m_grid = grid;
       m_view.indexes = m_assoc.indexes().data();
       m_view.offsets = m_assoc.offsets().data();
       m_view.minmax = m_minmax.data();
@@ -176,6 +202,9 @@ namespace internal {
     int32_t m_ntiles;
     std::size_t m_batch_size;
     TilesView<Ndim, value_type> m_view;
+    TileGrid<Ndim, value_type> m_grid{};
+    CoordinateExtremes<Ndim, value_type> m_host_extremes{};
+    std::array<uint8_t, Ndim> m_host_wrapped{};
   };
 
 }  // namespace internal

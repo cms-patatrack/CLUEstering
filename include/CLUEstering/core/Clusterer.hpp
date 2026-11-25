@@ -14,6 +14,7 @@
 #include "CLUEstering/data_structures/PointsHost.hpp"
 #include "CLUEstering/data_structures/PointsDevice.hpp"
 #include "CLUEstering/data_structures/PointsConversion.hpp"
+#include "CLUEstering/data_structures/SpatialGrid.hpp"
 #include "CLUEstering/data_structures/internal/CoordinateExtremes.hpp"
 #include "CLUEstering/data_structures/internal/DeviceVector.hpp"
 #include "CLUEstering/data_structures/internal/SeedArray.hpp"
@@ -337,6 +338,14 @@ public:
   /// @return A span the the device array containing the seed indices
   /// @note The values of this array are overwritten at each clustering run
   std::span<const int32_t> getSeeds() const;
+
+  /// @brief Get a read-only description of the spatial grid built in the last clustering run
+  ///
+  /// @return The cell-to-points associations and the geometry of the grid, see SpatialGrid
+  /// @throws std::runtime_error If make_clusters has not been run yet
+  /// @note The cells refer to the internal buffers, which are overwritten at each
+  /// clustering run
+  SpatialGrid<Ndim, value_type, Device> getSpatialGrid() const;
 
   /// @brief Get the clusters from the host points
   ///
