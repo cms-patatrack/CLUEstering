@@ -159,13 +159,15 @@ TEST_CASE("Test the merging on the moons dataset") {
   const auto plain = run("moons.csv", moons_params, std::nullopt);
   CHECK(count_clusters(plain.labels) > 2);
 
+  // the counts are collected and checked together, so that a failure shows the threshold
+  std::vector<std::size_t> n_clusters;
   for (const auto threshold : {.8f, .5f, .1f}) {
-    CAPTURE(threshold);
     const auto merged = run("moons.csv", moons_params, threshold);
-    CHECK(count_clusters(merged.labels) == 2);
+    n_clusters.push_back(count_clusters(merged.labels));
     CHECK(is_coarsening(plain.labels, merged.labels));
     check_labels(merged);
   }
+  CHECK(n_clusters == std::vector<std::size_t>{2, 2, 2});
 }
 
 TEST_CASE("Test the merging of pairs of blobs with valleys of different depth") {
