@@ -66,6 +66,13 @@ class CLUEstering(ClusterMixin, BaseEstimator):
     :param seeding_distance: Minimum distance from any denser point for a point to become a
         seed. If None, ``density_radius`` is used.
     :type seeding_distance: float or None
+    :param merge_threshold: If set, a value in (0, 1]. After the clustering, two neighbouring
+        clusters are merged when the density saddle between them is at least
+        ``merge_threshold`` times the lower of their peak densities, so lower values merge
+        more. The saddle is the highest density at which the two clusters touch within
+        ``density_radius``. If None, the clusters are not merged. Not supported with
+        ``sample_sizes``.
+    :type merge_threshold: float or None
     :param kernel: Convolutional kernel used for the local density: ``"flat"``,
         ``"exponential"`` or ``"gaussian"``.
     :type kernel: str
@@ -96,7 +103,8 @@ class CLUEstering(ClusterMixin, BaseEstimator):
     n_clusters_ : int
         Number of clusters found.
     seed_indices_ : ndarray of shape (n_clusters_,)
-        Index of the seed of each cluster, so that ``labels_[seed_indices_[k]] == k``.
+        Index of the seed of each cluster, so that ``labels_[seed_indices_[k]] == k``. With
+        ``merge_threshold``, it is the seed with the highest density among the merged ones.
     rho_ : ndarray of shape (n_samples,)
         Local density of each point.
     delta_ : ndarray of shape (n_samples,)
@@ -115,6 +123,7 @@ class CLUEstering(ClusterMixin, BaseEstimator):
                  min_density=1.0,
                  outlier_distance=None,
                  seeding_distance=None,
+                 merge_threshold=None,
                  kernel="flat",
                  kernel_params=None,
                  metric="euclidean",
@@ -126,6 +135,7 @@ class CLUEstering(ClusterMixin, BaseEstimator):
         self.min_density = min_density
         self.outlier_distance = outlier_distance
         self.seeding_distance = seeding_distance
+        self.merge_threshold = merge_threshold
         self.kernel = kernel
         self.kernel_params = kernel_params
         self.metric = metric
@@ -173,11 +183,14 @@ class CLUEstering(ClusterMixin, BaseEstimator):
         seeding_distance = self._check_positive(
             "seeding_distance",
             density_radius if self.seeding_distance is None else self.seeding_distance)
+        merge_threshold = self._check_merge_threshold()
 
         kernel = self._make_kernel()
         metric = self._make_metric(n_features)
         wrapped = self._check_wrapped(n_features)
         sizes = self._check_sample_sizes(sample_sizes, n_samples)
+        if merge_threshold is not None and sizes is not None:
+            raise ValueError("merge_threshold is not supported with sample_sizes.")
         module = self._get_backend_module()
         if not isinstance(self.device_id, Integral) or self.device_id < 0:
             raise ValueError(f"device_id must be a non-negative integer, got {self.device_id!r}.")
@@ -201,16 +214,15 @@ class CLUEstering(ClusterMixin, BaseEstimator):
                                kernel,
                                sizes,
                                int(self.device_id),
-                               metric)
+                               metric,
+                               None if merge_threshold is None else dtype(merge_threshold))
 
         self.labels_ = _canonical_labels(labels)
         self.n_clusters_ = int(self.labels_.max()) + 1
         self.rho_ = rho
         self.delta_ = delta
         self.nearest_higher_ = nearest_higher
-        # the seeds are the clustered points without a nearest higher, sorted by cluster
-        seeds = np.flatnonzero((nearest_higher == -1) & (self.labels_ >= 0))
-        self.seed_indices_ = seeds[np.argsort(self.labels_[seeds])]
+        self.seed_indices_ = _seed_indices(self.labels_, rho, nearest_higher)
         return self
 
     def fit_predict(self, X, y=None, sample_weight=None, sample_sizes=None):
@@ -244,6 +256,14 @@ class CLUEstering(ClusterMixin, BaseEstimator):
             bound = "positive" if strict else "non-negative"
             raise ValueError(f"{name} must be {bound}, got {value}.")
         return float(value)
+
+    def _check_merge_threshold(self):
+        if self.merge_threshold is None:
+            return None
+        threshold = self._check_positive("merge_threshold", self.merge_threshold)
+        if threshold > 1:
+            raise ValueError(f"merge_threshold must be in (0, 1], got {threshold}.")
+        return threshold
 
     def _make_kernel(self):
         if self.kernel not in _KERNELS:
@@ -324,6 +344,21 @@ class CLUEstering(ClusterMixin, BaseEstimator):
         _validate_backend(backend)
         _check_backend_available(backend)
         return _BACKEND_MODULES[backend]()
+
+
+def _seed_indices(labels, rho, nearest_higher):
+    """
+    Index of the seed of each cluster.
+
+    The seeds are the clustered points without a nearest higher. When the clusters are merged,
+    a cluster can contain several of them: its seed is the one with the highest density, which
+    is the peak of the merged cluster.
+    """
+    seeds = np.flatnonzero((nearest_higher == -1) & (labels >= 0))
+    # sort by cluster, then by decreasing density, and keep the first seed of each cluster
+    seeds = seeds[np.lexsort((-rho[seeds], labels[seeds]))]
+    _, first = np.unique(labels[seeds], return_index=True)
+    return seeds[first]
 
 
 def _canonical_labels(labels):

@@ -165,6 +165,11 @@ def is_hip_available():     # pragma: no cover
     return hip_found
 
 
+def _validate_merge_threshold(merge_threshold):
+    if merge_threshold is not None and not 0. < merge_threshold <= 1.:
+        raise ValueError("The merge threshold must be in the interval (0, 1], or None to disable the merging.")
+
+
 def _choose_default_backend() -> str:
     """
     Choose the default backend based on availability.
@@ -332,7 +337,10 @@ class clusterer:
     :type elapsed_time: float
     """
 
-    def __init__(self, density_radius: float, min_density: float, outlier_distance: Union[float, None] = None, seeding_distance: Union[float, None] = None):
+    def __init__(self, density_radius: float, min_density: float, outlier_distance: Union[float, None] = None, seeding_distance: Union[float, None] = None,
+                 merge_threshold: Union[float, None] = None):
+        _validate_merge_threshold(merge_threshold)
+        self._merge_threshold = merge_threshold
         self._density_radius = density_radius
         self._min_density = min_density
         self._outlier_distance = outlier_distance
@@ -360,7 +368,8 @@ class clusterer:
         self._elapsed_time = 0.
 
     def set_params(self, density_radius: float, min_density: float,
-                   outlier_distance: Union[float, None] = None, seeding_distance: Union[float, None] = None) -> None:
+                   outlier_distance: Union[float, None] = None, seeding_distance: Union[float, None] = None,
+                   merge_threshold: Union[float, None] = None) -> None:
         """
         Set parameters for the clustering algorithm.
 
@@ -372,7 +381,13 @@ class clusterer:
         :type outlier_distance: float or None
         :param seeding_distance: Seed search region. Defaults to density_radius if None.
         :type seeding_distance: float or None
+        :param merge_threshold: If set, value in (0, 1]: neighbouring clusters a, b are merged when
+            the density saddle between them is at least merge_threshold * min(peak_a, peak_b).
+            Lower values merge more. Disabled (plain CLUE) if None.
+        :type merge_threshold: float or None
         """
+        _validate_merge_threshold(merge_threshold)
+        self._merge_threshold = merge_threshold
         self._density_radius = density_radius
         self._min_density = min_density
         if outlier_distance is not None:
@@ -754,7 +769,7 @@ class clusterer:
         arguments = [self._density_radius, self._min_density, self._outlier_distance, self._seeding_distance,
                      self.wrapped, data.coords, data.results,
                      self._kernel, data.n_dim, batch_sample_sizes, data.n_points,
-                     device_id, self._metric]
+                     device_id, self._metric, self._merge_threshold]
         start = time.time_ns()
         if backend == "cpu serial":
             cluster_id_is_seed = cpu_serial.mainRun(*arguments)

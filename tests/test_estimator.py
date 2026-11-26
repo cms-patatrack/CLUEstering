@@ -25,7 +25,9 @@ def sissa():
 
 
 @parametrize_with_checks(
-    [clue.CLUEstering(density_radius=0.5, min_density=1.0, backend="cpu serial")],
+    [clue.CLUEstering(density_radius=0.5, min_density=1.0, backend="cpu serial"),
+     clue.CLUEstering(density_radius=0.5, min_density=1.0, merge_threshold=0.5,
+                      backend="cpu serial")],
     expected_failed_checks=lambda est: {
         # k copies of a point have the same density and compete as nearest highers, so they
         # are not equivalent to a single point with weight k. The check also uses 30 features.
@@ -160,3 +162,72 @@ def test_details_independent_of_backend(sissa):
         est = clue.CLUEstering(20., 10., backend=backend).fit(X, sample_weight=weights)
         np.testing.assert_allclose(est.rho_, reference.rho_, rtol=1e-5)
         np.testing.assert_array_equal(est.seed_indices_, reference.seed_indices_)
+
+
+def test_merge_disabled_by_default(sissa):
+    X, weights = sissa
+    plain = clue.CLUEstering(20., 10., backend="cpu serial").fit(X, sample_weight=weights)
+    est = clue.CLUEstering(20., 10., merge_threshold=None, backend="cpu serial")
+    est.fit(X, sample_weight=weights)
+    np.testing.assert_array_equal(est.labels_, plain.labels_)
+    np.testing.assert_array_equal(est.seed_indices_, plain.seed_indices_)
+
+
+@pytest.mark.parametrize("threshold", [1.0, 0.5, 0.1])
+def test_merge_coarsens_the_clusters(sissa, threshold):
+    X, weights = sissa
+    plain = clue.CLUEstering(20., 10., backend="cpu serial").fit(X, sample_weight=weights)
+    est = clue.CLUEstering(20., 10., merge_threshold=threshold, backend="cpu serial")
+    est.fit(X, sample_weight=weights)
+
+    # the outliers do not change, and each plain cluster ends up entirely in one merged cluster
+    np.testing.assert_array_equal(est.labels_ == -1, plain.labels_ == -1)
+    clustered = plain.labels_ >= 0
+    pairs = np.unique(np.stack([plain.labels_[clustered], est.labels_[clustered]]), axis=1)
+    assert pairs.shape[1] == plain.n_clusters_
+    assert est.n_clusters_ == np.unique(pairs[1]).size <= plain.n_clusters_
+
+    # one seed per merged cluster, the plain seed with the highest density
+    np.testing.assert_array_equal(est.labels_[est.seed_indices_], np.arange(est.n_clusters_))
+    assert np.all(est.nearest_higher_[est.seed_indices_] == -1)
+    for k, seed in enumerate(est.seed_indices_):
+        plain_seeds = plain.seed_indices_[est.labels_[plain.seed_indices_] == k]
+        assert est.rho_[seed] == est.rho_[plain_seeds].max()
+
+
+def test_lower_merge_threshold_merges_more(sissa):
+    X, weights = sissa
+    n_clusters = [clue.CLUEstering(20., 10., merge_threshold=threshold, backend="cpu serial")
+                  .fit(X, sample_weight=weights).n_clusters_
+                  for threshold in (1.0, 0.5, 0.1)]
+    assert n_clusters == sorted(n_clusters, reverse=True)
+    # the dataset has clusters separated by shallow valleys, so the test is not trivial
+    assert n_clusters[-1] < n_clusters[0]
+
+
+@pytest.mark.parametrize("backend", clue.backends)
+def test_merge_independent_of_backend(sissa, backend):
+    X, weights = sissa
+    reference = clue.CLUEstering(20., 10., merge_threshold=0.1, backend="cpu serial")
+    reference.fit(X, sample_weight=weights)
+    est = clue.CLUEstering(20., 10., merge_threshold=0.1, backend=backend)
+    est.fit(X, sample_weight=weights)
+    np.testing.assert_array_equal(est.labels_, reference.labels_)
+    np.testing.assert_array_equal(est.seed_indices_, reference.seed_indices_)
+
+
+@pytest.mark.parametrize("threshold, error", [(0., ValueError), (-0.5, ValueError),
+                                              (1.5, ValueError), ("0.5", TypeError)])
+def test_invalid_merge_threshold(sissa, threshold, error):
+    X, weights = sissa
+    with pytest.raises(error, match="merge_threshold"):
+        clue.CLUEstering(20., 10., merge_threshold=threshold).fit(X, sample_weight=weights)
+
+
+def test_merge_not_supported_with_sample_sizes(sissa):
+    X, weights = sissa
+    size = X.shape[0]
+    est = clue.CLUEstering(20., 10., merge_threshold=0.5, backend="cpu serial")
+    with pytest.raises(ValueError, match="sample_sizes"):
+        est.fit(np.vstack([X, X]), sample_weight=np.concatenate([weights, weights]),
+                sample_sizes=[size, size])
