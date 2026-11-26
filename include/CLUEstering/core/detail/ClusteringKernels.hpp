@@ -239,7 +239,7 @@ namespace detail {
                                   TData seeding_distance,
                                   TData min_density,
                                   DistanceMetric metric,
-								  std::size_t* nclusters) const {
+                                  std::size_t* nclusters) const {
       for (auto i : alpaka::uniformElements(acc, points.size())) {
         auto delta_i = std::numeric_limits<TData>::max();
         int nh_i = -1;
@@ -285,14 +285,15 @@ namespace detail {
 
         const auto is_seed = (nh_i == -1) && (rho_i >= effective_min_density);
 
-		if (is_seed) {
-		  points.is_seed()[i] = 1;
-		  auto slot = alpaka::atomicAdd(acc, nclusters, std::size_t{1}); // guarantees seed indices from 0 to Nseeds-1.
-		  points.cluster_index()[i] = static_cast<int>(slot);
-		} else {
-		  points.is_seed()[i] = 0;
-		  points.cluster_index()[i] = -1;
-		}
+        if (is_seed) {
+          points.is_seed()[i] = 1;
+          auto slot = alpaka::atomicAdd(
+              acc, nclusters, std::size_t{1});  // guarantees seed indices from 0 to Nseeds-1.
+          points.cluster_index()[i] = static_cast<int>(slot);
+        } else {
+          points.is_seed()[i] = 0;
+          points.cluster_index()[i] = -1;
+        }
       }
     }
   };
@@ -379,7 +380,7 @@ namespace detail {
                                     TData seeding_distance,
                                     TData min_density,
                                     const DistanceMetric& metric,
-									std::size_t* d_nclusters) {
+                                    std::size_t* d_nclusters) {
     alpaka::exec<TAcc>(queue,
                        work_division,
                        KernelCalculateNearestHigher{},
@@ -389,7 +390,7 @@ namespace detail {
                        seeding_distance,
                        min_density,
                        metric,
-					   d_nclusters);
+                       d_nclusters);
   }
 
   template <concepts::accelerator TAcc,

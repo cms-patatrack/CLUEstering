@@ -422,7 +422,7 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
       queue, work_division, m_tiles->view(), dev_points.view(), kernel, m_density_radius, metric);
 
   if (!m_nclusters.has_value()) {
-	m_nclusters.emplace(internal::alloc_device_buffer<std::size_t>(queue, Scalar{}, m_allocator));
+    m_nclusters.emplace(internal::alloc_device_buffer<std::size_t>(queue, Scalar{}, m_allocator));
   }
   alpaka::memset(queue, *m_nclusters, 0u);
 
@@ -434,10 +434,9 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
                                                m_seeding_distance,
                                                m_min_density,
                                                metric,
-											   m_nclusters->data());
-  
-  detail::assignPointsToClusters<internal::Acc>(
-      queue, block_size, dev_points.view());
+                                               m_nclusters->data());
+
+  detail::assignPointsToClusters<internal::Acc>(queue, block_size, dev_points.view());
 
   // optional step, skipped entirely when disabled so that the results of plain CLUE are unchanged
   if (m_merge_threshold.has_value()) {
