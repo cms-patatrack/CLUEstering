@@ -254,6 +254,15 @@ inline std::span<const int32_t> Clusterer<Ndim, DataType, AllocatorType>::getSee
 }
 
 template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
+inline SpatialGrid<Ndim, typename Clusterer<Ndim, DataType, AllocatorType>::value_type, Device>
+Clusterer<Ndim, DataType, AllocatorType>::getSpatialGrid() const {
+  if (!m_tiles.has_value()) {
+    throw std::runtime_error("The spatial grid is not available. Please run make_clusters first.");
+  }
+  return m_tiles->spatialGrid();
+}
+
+template <std::size_t Ndim, std::floating_point DataType, concepts::allocator AllocatorType>
 template <std::floating_point InputType>
 inline AssociationMapHost Clusterer<Ndim, DataType, AllocatorType>::getClusters(
     const clue::PointsHost<Ndim, InputType>& h_points) {
