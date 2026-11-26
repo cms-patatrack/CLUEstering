@@ -157,7 +157,8 @@ namespace ALPAKA_BACKEND {
                        const Kernel<TInput>& kernel,
                        std::optional<nb::ndarray<uint32_t, nb::numpy>> batch_sample_sizes,
                        std::size_t device_id,
-                       const clue::bindings::MetricDescriptor<TInput>& metric_desc) {
+                       const clue::bindings::MetricDescriptor<TInput>& metric_desc,
+                       std::optional<TInput> merge_threshold) {
     const auto n_points = coordinates.shape(0);
     const auto ndim = static_cast<int>(coordinates.shape(1));
     if (weights.shape(0) != n_points || results.shape(0) != n_points || rho.shape(0) != n_points ||
@@ -181,6 +182,7 @@ namespace ALPAKA_BACKEND {
                                      batch_sample_sizes_span,
                                      kernel,
                                      metric_desc,
+                                     merge_threshold,
                                      queue);
       // TODO: let store_details use the output arrays directly, to avoid these copies
       std::ranges::copy(h_points.rho(), rho.data());
@@ -213,7 +215,8 @@ namespace ALPAKA_BACKEND {
             nb::arg("kernel"),
             nb::arg("batch_sample_sizes").none(),
             nb::arg("device_id"),
-            nb::arg("metric"));
+            nb::arg("metric"),
+            nb::arg("merge_threshold").none());
     };
     def.template operator()<float, clue::FlatKernel>();
     def.template operator()<float, clue::ExponentialKernel>();
