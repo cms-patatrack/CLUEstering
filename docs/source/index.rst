@@ -9,6 +9,9 @@ CLUEstering Documentation
    installation.rst
    getting-started.rst
    batched-clustering.rst
+   decision-graph.rst
+   cluster-merging.rst
+   spatial-grid.rst
    external-allocators.rst
    cpp/index.rst
    python/index.rst
