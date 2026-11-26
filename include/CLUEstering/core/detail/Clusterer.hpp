@@ -445,7 +445,7 @@ void Clusterer<Ndim, DataType, AllocatorType>::make_clusters_impl(
                                          block_size,
                                          m_tiles->view(),
                                          dev_points.view(),
-                                         m_seeds.value(),
+                                         *m_nclusters,
                                          *m_merge_threshold,
                                          m_density_radius,
                                          metric,

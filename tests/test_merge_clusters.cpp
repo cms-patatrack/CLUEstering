@@ -8,6 +8,7 @@
 #include <set>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
@@ -212,4 +213,40 @@ TEST_CASE("Test the merging of many touching clusters") {
   CHECK(is_coarsening(plain.labels, full.labels));
   CHECK(is_coarsening(partial.labels, full.labels));
   check_labels(full);
+}
+
+TEST_CASE("Test the seeds after merging") {
+  const auto device = clue::get_device(0u);
+  clue::Queue queue(device);
+
+  // the seed flags are written in place in the host points by the host-only overload
+  const auto cluster = [&](std::optional<float> threshold) {
+    auto h_points = clue::read_csv<2, float>(queue, std::string(TEST_DATA_DIR) + "/moons.csv");
+    h_points.store_seeds();
+    clue::Clusterer<2> algo(moons_params.density_radius, moons_params.min_density);
+    algo.setMergeThreshold(threshold);
+    algo.make_clusters(queue, h_points);
+    alpaka::wait(queue);
+    auto seeds = algo.getSeeds(h_points);
+    return std::make_pair(std::move(h_points), std::move(seeds));
+  };
+
+  auto [h_plain, plain_seeds] = cluster(std::nullopt);
+  auto [h_points, seeds] = cluster(.5f);
+
+  const auto n_clusters = static_cast<std::size_t>(h_points.n_clusters());
+  CHECK(seeds.size() == n_clusters);
+  CHECK(h_plain.n_clusters() > h_points.n_clusters());
+  CHECK(plain_seeds.size() > seeds.size());
+
+  const auto labels = h_points.clusterIndexes();
+  for (auto c = 0u; c < seeds.size(); ++c)
+    CHECK(labels[seeds[c]] == static_cast<int32_t>(c));
+
+  const std::set<int32_t> distinct(seeds.begin(), seeds.end());
+  CHECK(distinct.size() == seeds.size());
+
+  const auto flags = h_points.seed_flags();
+  CHECK(static_cast<std::size_t>(std::ranges::count_if(flags, [](auto f) { return f != 0; })) ==
+        n_clusters);
 }

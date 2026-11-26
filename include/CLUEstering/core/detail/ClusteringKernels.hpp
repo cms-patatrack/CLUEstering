@@ -313,17 +313,25 @@ namespace detail {
     }
   };
 
+  // Calls f(cluster, point) for every seed point: cluster is the cluster id of the seed and point
+  // is the index of the seed point. The cluster ids of the seeds are distinct slots in
+  // [0, n_clusters), so concurrent writes indexed by cluster never conflict.
+  template <typename TAcc, std::size_t Ndim, std::floating_point TData, typename TFunc>
+  ALPAKA_FN_ACC void forEachSeed(const TAcc& acc, PointsView<Ndim, TData> points, TFunc&& f) {
+    for (auto i : alpaka::uniformElements(acc, points.size())) {
+      if (points.is_seed()[i]) {
+        f(points.cluster_index()[i], i);
+      }
+    }
+  }
+
   struct KernelCollectSeeds {
     template <typename TAcc, std::size_t Ndim, std::floating_point TData>
       requires(alpaka::Dim<TAcc>::value == 1)
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
                                   PointsView<Ndim, TData> points,
                                   int32_t* seeds) const {
-      for (auto i : alpaka::uniformElements(acc, points.size())) {
-        if (points.is_seed()[i]) {
-          seeds[points.cluster_index()[i]] = static_cast<int32_t>(i);
-        }
-      }
+      forEachSeed(acc, points, [&](auto c, auto i) { seeds[c] = static_cast<int32_t>(i); });
     }
   };
 
