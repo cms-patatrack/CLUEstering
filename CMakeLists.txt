@@ -28,7 +28,8 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.hpp.in
                ${CMAKE_CURRENT_BINARY_DIR}/CLUEstering/version.hpp @ONLY)
 
-set(CLUE_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/CLUEstering")
+# the header is included as "CLUEstering/version.hpp", as after the installation
+set(CLUE_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 
 # old alias, to be removed in future versions
 add_library(CLUEstering INTERFACE)
