@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.18.0" xml:lang="en-US">
+  <compounddef id="structclue_1_1SpatialGrid" kind="struct" language="C++" prot="public">
+    <compoundname>clue::SpatialGrid</compoundname>
+    <includes refid="SpatialGrid_8hpp" local="no">SpatialGrid.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>std::size_t</type>
+        <declname>Ndim</declname>
+        <defname>Ndim</defname>
+      </param>
+      <param>
+        <type>std::floating_point</type>
+        <declname>TData</declname>
+        <defname>TData</defname>
+      </param>
+      <param>
+        <type>concepts::device</type>
+        <declname>TDev</declname>
+        <defname>TDev</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structclue_1_1SpatialGrid_1a95e72e6cf8e83c86c186f9fb52d63090" prot="public" static="no" mutable="no">
+        <type>const <ref refid="classclue_1_1AssociationMap" kindref="compound">AssociationMap</ref>&lt; TDev &gt; &amp;</type>
+        <definition>const AssociationMap&lt;TDev&gt;&amp; clue::SpatialGrid&lt; Ndim, TData, TDev &gt;::cells</definition>
+        <argsstring></argsstring>
+        <name>cells</name>
+        <qualifiedname>clue::SpatialGrid::cells</qualifiedname>
+        <briefdescription>
+<para>Map from each global cell index to the indexes of the points it contains. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/SpatialGrid.hpp" line="51" column="24" bodyfile="include/CLUEstering/data_structures/SpatialGrid.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structclue_1_1SpatialGrid_1a4d62c9fa63a484c90e33eb8511068557" prot="public" static="no" mutable="no">
+        <type>std::array&lt; TData, Ndim &gt;</type>
+        <definition>std::array&lt;TData, Ndim&gt; clue::SpatialGrid&lt; Ndim, TData, TDev &gt;::min</definition>
+        <argsstring></argsstring>
+        <name>min</name>
+        <qualifiedname>clue::SpatialGrid::min</qualifiedname>
+        <briefdescription>
+<para>Lower edge of the grid along each dimension. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/SpatialGrid.hpp" line="53" column="14" bodyfile="include/CLUEstering/data_structures/SpatialGrid.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structclue_1_1SpatialGrid_1a1ea8466e06231919d691864001d06912" prot="public" static="no" mutable="no">
+        <type>std::array&lt; TData, Ndim &gt;</type>
+        <definition>std::array&lt;TData, Ndim&gt; clue::SpatialGrid&lt; Ndim, TData, TDev &gt;::max</definition>
+        <argsstring></argsstring>
+        <name>max</name>
+        <qualifiedname>clue::SpatialGrid::max</qualifiedname>
+        <briefdescription>
+<para>Upper edge of the grid along each dimension. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/SpatialGrid.hpp" line="55" column="14" bodyfile="include/CLUEstering/data_structures/SpatialGrid.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structclue_1_1SpatialGrid_1a469f81faaf1e73f625c990936d745854" prot="public" static="no" mutable="no">
+        <type>std::array&lt; TData, Ndim &gt;</type>
+        <definition>std::array&lt;TData, Ndim&gt; clue::SpatialGrid&lt; Ndim, TData, TDev &gt;::cell_size</definition>
+        <argsstring></argsstring>
+        <name>cell_size</name>
+        <qualifiedname>clue::SpatialGrid::cell_size</qualifiedname>
+        <briefdescription>
+<para>Size of the cells along each dimension. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/SpatialGrid.hpp" line="57" column="14" bodyfile="include/CLUEstering/data_structures/SpatialGrid.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structclue_1_1SpatialGrid_1ab6a4fef5b67f6cc0466f758a405f2c4d" prot="public" static="no" mutable="no">
+        <type>std::array&lt; std::int32_t, Ndim &gt;</type>
+        <definition>std::array&lt;std::int32_t, Ndim&gt; clue::SpatialGrid&lt; Ndim, TData, TDev &gt;::n_cells</definition>
+        <argsstring></argsstring>
+        <name>n_cells</name>
+        <qualifiedname>clue::SpatialGrid::n_cells</qualifiedname>
+        <briefdescription>
+<para>Number of cells along each dimension. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/SpatialGrid.hpp" line="59" column="14" bodyfile="include/CLUEstering/data_structures/SpatialGrid.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structclue_1_1SpatialGrid_1ad865d3905f46faed7e9222a6b3f7e3d3" prot="public" static="no" mutable="no">
+        <type>std::array&lt; bool, Ndim &gt;</type>
+        <definition>std::array&lt;bool, Ndim&gt; clue::SpatialGrid&lt; Ndim, TData, TDev &gt;::periodic</definition>
+        <argsstring></argsstring>
+        <name>periodic</name>
+        <qualifiedname>clue::SpatialGrid::periodic</qualifiedname>
+        <briefdescription>
+<para>Whether each dimension is periodic. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/SpatialGrid.hpp" line="61" column="14" bodyfile="include/CLUEstering/data_structures/SpatialGrid.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structclue_1_1SpatialGrid_1a58eb23cfe3593855b593f98f28d864c9" prot="public" static="no" mutable="no">
+        <type>std::size_t</type>
+        <definition>std::size_t clue::SpatialGrid&lt; Ndim, TData, TDev &gt;::batch_size</definition>
+        <argsstring></argsstring>
+        <name>batch_size</name>
+        <qualifiedname>clue::SpatialGrid::batch_size</qualifiedname>
+        <briefdescription>
+<para>Number of batch items in the last run, 1 for a run that is not batched. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/CLUEstering/data_structures/SpatialGrid.hpp" line="63" column="15" bodyfile="include/CLUEstering/data_structures/SpatialGrid.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Read-only description of the spatial grid built by the <ref refid="classclue_1_1Clusterer" kindref="compound">Clusterer</ref> in its last run. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The grid is regular over the clustering space. The cells map each grid cell to the points it contains, in CSR form: the points of cell <computeroutput>c</computeroutput> are the values in <computeroutput>[keys[c], keys[c + 1])</computeroutput>, and the values are the positions of the points in the input given to <computeroutput>make_clusters</computeroutput>.</para>
+<para>Geometry:<itemizedlist>
+<listitem><para>along dimension <computeroutput>d</computeroutput> the grid covers <computeroutput>[<ref refid="structclue_1_1SpatialGrid_1a4d62c9fa63a484c90e33eb8511068557" kindref="member">min</ref>[d], <ref refid="structclue_1_1SpatialGrid_1a1ea8466e06231919d691864001d06912" kindref="member">max</ref>[d])</computeroutput> with <computeroutput><ref refid="structclue_1_1SpatialGrid_1ab6a4fef5b67f6cc0466f758a405f2c4d" kindref="member">n_cells</ref>[d]</computeroutput> cells of size <computeroutput><ref refid="structclue_1_1SpatialGrid_1a469f81faaf1e73f625c990936d745854" kindref="member">cell_size</ref>[d]</computeroutput>. A point goes in cell <computeroutput>(coord - <ref refid="structclue_1_1SpatialGrid_1a4d62c9fa63a484c90e33eb8511068557" kindref="member">min</ref>[d]) / <ref refid="structclue_1_1SpatialGrid_1a469f81faaf1e73f625c990936d745854" kindref="member">cell_size</ref>[d]</computeroutput>, truncated and clamped to <computeroutput>[0, <ref refid="structclue_1_1SpatialGrid_1ab6a4fef5b67f6cc0466f758a405f2c4d" kindref="member">n_cells</ref>[d] - 1]</computeroutput>, so points outside the range fall in the border cells.</para>
+</listitem><listitem><para>a periodic dimension covers one period, <computeroutput>[0, period)</computeroutput>, and its coordinates are wrapped into that interval before binning.</para>
+</listitem><listitem><para>a point within rounding error of a cell edge can be in either of the two adjacent cells, depending on how the compiler evaluates the division. Code that bins points again with this geometry must not expect to reproduce the cells of such points exactly.</para>
+</listitem><listitem><para>the global cell index is row-major: the last dimension varies fastest.</para>
+</listitem><listitem><para>in a batched run the grid is the same for all the batch items and the keys are concatenated, so the cells of item <computeroutput>e</computeroutput> have global indexes from <computeroutput>e * total</computeroutput> to <computeroutput>(e + 1) * total - 1</computeroutput>, where <computeroutput>total</computeroutput> is the product of <computeroutput><ref refid="structclue_1_1SpatialGrid_1ab6a4fef5b67f6cc0466f758a405f2c4d" kindref="member">n_cells</ref></computeroutput>.</para>
+</listitem></itemizedlist>
+</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>Ndim</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of dimensions </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The floating-point type of the coordinates </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TDev</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The device holding the cell associations</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>The object refers to the buffers of the <ref refid="classclue_1_1Clusterer" kindref="compound">Clusterer</ref>, which are overwritten by the next <computeroutput>make_clusters</computeroutput> call and freed when the <ref refid="classclue_1_1Clusterer" kindref="compound">Clusterer</ref> is destroyed. </para>
+</simplesect>
+<simplesect kind="note"><para>The grid is filled asynchronously on the clustering queue. Copy it on that same queue, or wait for it first. </para>
+</simplesect>
+<simplesect kind="note"><para>Use <computeroutput>cells.extents()</computeroutput> for the number of keys and values: the underlying buffers can be larger than the data they hold. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>clue::AssociationMap&lt; TDev &gt;</label>
+        <link refid="classclue_1_1AssociationMap"/>
+      </node>
+      <node id="1">
+        <label>clue::SpatialGrid&lt; Ndim, TData, TDev &gt;</label>
+        <link refid="structclue_1_1SpatialGrid"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>cells</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/CLUEstering/data_structures/SpatialGrid.hpp" line="49" column="1" bodyfile="include/CLUEstering/data_structures/SpatialGrid.hpp" bodystart="49" bodyend="64"/>
+    <listofallmembers>
+      <member refid="structclue_1_1SpatialGrid_1a58eb23cfe3593855b593f98f28d864c9" prot="public" virt="non-virtual"><scope>clue::SpatialGrid</scope><name>batch_size</name></member>
+      <member refid="structclue_1_1SpatialGrid_1a469f81faaf1e73f625c990936d745854" prot="public" virt="non-virtual"><scope>clue::SpatialGrid</scope><name>cell_size</name></member>
+      <member refid="structclue_1_1SpatialGrid_1a95e72e6cf8e83c86c186f9fb52d63090" prot="public" virt="non-virtual"><scope>clue::SpatialGrid</scope><name>cells</name></member>
+      <member refid="structclue_1_1SpatialGrid_1a1ea8466e06231919d691864001d06912" prot="public" virt="non-virtual"><scope>clue::SpatialGrid</scope><name>max</name></member>
+      <member refid="structclue_1_1SpatialGrid_1a4d62c9fa63a484c90e33eb8511068557" prot="public" virt="non-virtual"><scope>clue::SpatialGrid</scope><name>min</name></member>
+      <member refid="structclue_1_1SpatialGrid_1ab6a4fef5b67f6cc0466f758a405f2c4d" prot="public" virt="non-virtual"><scope>clue::SpatialGrid</scope><name>n_cells</name></member>
+      <member refid="structclue_1_1SpatialGrid_1ad865d3905f46faed7e9222a6b3f7e3d3" prot="public" virt="non-virtual"><scope>clue::SpatialGrid</scope><name>periodic</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
