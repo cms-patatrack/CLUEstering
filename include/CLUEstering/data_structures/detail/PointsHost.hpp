@@ -19,6 +19,7 @@
 #include <optional>
 #include <ranges>
 #include <span>
+#include <stdexcept>
 #include <tuple>
 #include <utility>
 
@@ -115,6 +116,31 @@ inline PointsHost<Ndim, TData>::Point PointsHost<Ndim, TData>::operator[](std::s
     coords[dim] = m_view.coords()[dim][idx];
   }
   return Point(coords, m_view.weights()[idx], m_view.cluster_index()[idx]);
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline void PointsHost<Ndim, TData>::store_seeds() {
+  if (has_seeds())
+    return;
+
+  const auto n_points = static_cast<std::size_t>(m_size);
+  m_seed_flags = alpaka::allocMappedBuf<std::int32_t>(host, platform<Platform>(), n_points);
+  std::fill_n(m_seed_flags->data(), n_points, 0);
+  m_view.m_is_seed = m_seed_flags->data();
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline bool PointsHost<Ndim, TData>::has_seeds() const {
+  return m_seed_flags.has_value();
+}
+
+template <std::size_t Ndim, std::floating_point TData>
+inline std::span<const std::int32_t> PointsHost<Ndim, TData>::seed_flags() const {
+  if (!m_seed_flags.has_value()) {
+    throw std::runtime_error(
+        "The seed flags are not available. Call store_seeds before clustering.");
+  }
+  return std::span<const std::int32_t>(m_seed_flags->data(), static_cast<std::size_t>(m_size));
 }
 
 template <std::size_t Ndim, std::floating_point TData>

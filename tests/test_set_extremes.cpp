@@ -90,7 +90,6 @@ TEST_CASE("Test clustering with user-defined extremes") {
     algo.setExtremes({{-100.f, 100.f}, {-100.f, 100.f}});
     algo.make_clusters(queue, d_points);
     clue::copyToHost(queue, h_points, d_points);
-    alpaka::wait(queue);
 
     CHECK(h_points.n_clusters() == n_clusters_default);
   }

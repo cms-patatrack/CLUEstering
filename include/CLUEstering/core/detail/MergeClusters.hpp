@@ -19,9 +19,9 @@
 #include "CLUEstering/internal/alpaka/config.hpp"
 #include "CLUEstering/internal/alpaka/devices.hpp"
 #include "CLUEstering/core/DistanceMetrics.hpp"
+#include "CLUEstering/core/detail/ClusteringKernels.hpp"
 #include "CLUEstering/data_structures/internal/PointsCommon.hpp"
 #include "CLUEstering/data_structures/internal/SearchBox.hpp"
-#include "CLUEstering/data_structures/internal/SeedArray.hpp"
 #include "CLUEstering/data_structures/internal/TilesView.hpp"
 #include "CLUEstering/detail/concepts.hpp"
 #include "CLUEstering/detail/make_array.hpp"
@@ -236,14 +236,11 @@ namespace detail {
   struct KernelGatherPeaks {
     template <typename TAcc, std::size_t Ndim, std::floating_point TData>
     ALPAKA_FN_ACC void operator()(const TAcc& acc,
-                                  clue::internal::SeedArrayView seeds,
                                   PointsView<Ndim, TData> points,
                                   std::remove_cv_t<TData>* peaks) const {
-      // the seed of cluster c is seeds[c] (see KernelAssignSeedIndices) and has the maximum
-      // density of its cluster, because the nearest-higher chains are increasing in density
-      for (auto c : alpaka::uniformElements(acc, seeds.size())) {
-        peaks[c] = points.rho()[seeds[c]];
-      }
+      // the peak of cluster c is the density of its seed, which has the maximum density of its
+      // cluster because the nearest-higher chains are increasing in density
+      forEachSeed(acc, points, [&](auto c, auto i) { peaks[c] = points.rho()[i]; });
     }
   };
 
@@ -339,12 +336,14 @@ namespace detail {
                             std::size_t block_size,
                             internal::TilesView<Ndim, TData>& tiles,
                             PointsView<Ndim, TPointsData>& points,
-                            clue::internal::SeedArray<>& seeds,
+                            const auto& d_nclusters,
                             TData threshold,
                             TData density_radius,
                             const DistanceMetric& metric,
                             const TAllocator& allocator = TAllocator{}) {
-    const auto n_clusters = seeds.size(queue);
+    std::size_t n_clusters = 0;
+    alpaka::memcpy(queue, alpaka::createView(host, &n_clusters, Scalar{}), d_nclusters);
+    alpaka::wait(queue);
     if (n_clusters < 2)
       return;
 
@@ -352,9 +351,9 @@ namespace detail {
     auto d_peaks = internal::alloc_device_buffer<TData>(queue, n_clusters, allocator);
     alpaka::exec<TAcc>(
         queue,
-        clue::make_workdiv<TAcc>(nostd::ceil_div(n_clusters, block_size), block_size),
+        clue::make_workdiv<TAcc>(
+            nostd::ceil_div(static_cast<std::size_t>(points.size()), block_size), block_size),
         KernelGatherPeaks{},
-        seeds.view(),
         points,
         d_peaks.data());
     std::vector<TData> peaks(n_clusters);
@@ -417,8 +416,6 @@ namespace detail {
                        d_new_label.data(),
                        d_absorbed.data());
     alpaka::wait(queue);
-    // TODO: the SeedArray still contains the seeds of the absorbed clusters, so getSeeds()
-    // returns the peaks before the merge. Compact it here if getSeeds() must reflect the merge.
   }
 
 }  // namespace detail
