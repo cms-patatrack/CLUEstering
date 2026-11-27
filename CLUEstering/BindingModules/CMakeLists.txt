@@ -78,6 +78,21 @@ if(TBB_FOUND)
   add_subdirectory(tbb)
 endif()
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang" AND NOT DEFINED OpenMP_CXX_FLAGS)
+  execute_process(
+    COMMAND brew --prefix libomp
+    OUTPUT_VARIABLE _clue_libomp_prefix
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    RESULT_VARIABLE _clue_brew_result
+    ERROR_QUIET)
+  if(_clue_brew_result EQUAL 0 AND EXISTS
+                                   "${_clue_libomp_prefix}/lib/libomp.dylib")
+    set(OpenMP_CXX_FLAGS "-Xclang -fopenmp -I${_clue_libomp_prefix}/include")
+    set(OpenMP_CXX_LIB_NAMES omp)
+    set(OpenMP_omp_LIBRARY "${_clue_libomp_prefix}/lib/libomp.dylib")
+  endif()
+endif()
+
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
   add_subdirectory(openmp)

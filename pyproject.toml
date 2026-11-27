@@ -78,11 +78,15 @@ before-all = [
   "cmake --build /tmp/onetbb-build --parallel $(nproc)",
   "cmake --install /tmp/onetbb-build",
 ]
-# AppleClang has no OpenMP, so only require it on Linux
 test-command = "python {project}/scripts/test_wheel.py {project} --require-backend 'cpu openmp' --require-backend 'cpu tbb' -- -x"
 
 [tool.cibuildwheel.macos]
-before-all = "brew install boost"
+archs = ["native"]
+# OpenMP and TBB come from Homebrew, whose libraries are built for the macOS of
+# the runner, so the wheels can't target an older version. delocate bundles them
+before-all = "brew install boost libomp tbb"
+environment = { MACOSX_DEPLOYMENT_TARGET = "15.0" }
+test-command = "python {project}/scripts/test_wheel.py {project} --require-backend 'cpu openmp' --require-backend 'cpu tbb' -- -x"
 
 [tool.autopep8]
 max_line_length = 108

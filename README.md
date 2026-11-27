@@ -52,7 +52,8 @@ CLUEstering is available on the PyPi repository, and can be easily installed wit
 ```shell
 pip install CLUEstering
 ```
-On Linux (x86_64 and aarch64) this installs a precompiled wheel, which includes the serial and OpenMP CPU backends.
+On Linux (x86_64 and aarch64) and on macOS 15 or later (Apple Silicon and Intel) this installs a precompiled wheel,
+which includes the serial, OpenMP and TBB CPU backends.
 On the other platforms pip downloads the source distribution and compiles it, as described below.
 
 #### GPU backends
