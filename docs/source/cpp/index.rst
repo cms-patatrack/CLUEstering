@@ -12,6 +12,7 @@ C++ API Reference
    convolutional_kernel
    association_map
    association_map_view
+   spatial_grid
    cluster_properties
    get_clusters
    cluster_centroid

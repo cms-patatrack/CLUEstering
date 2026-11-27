@@ -103,5 +103,4 @@ The ``cells`` member refers to the internal buffers of the ``Clusterer``:
 - they are filled asynchronously on the queue used for the clustering, so they have to be read on
   the same queue, or after waiting for it.
 
-.. doxygenstruct:: clue::SpatialGrid
-   :members:
+The full description of the struct is in the :doc:`C++ API reference <cpp/spatial_grid>`.
