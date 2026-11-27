@@ -35,7 +35,7 @@ CLUEstering has two interfaces, which are distributed in different ways:
      - Package ``cluestering`` for Arch Linux
    * - :ref:`PyPI <python-pypi>`
      - Python
-     - Precompiled wheels for Linux with the serial and OpenMP backends
+     - Precompiled wheels for Linux and macOS with the serial, OpenMP and TBB backends
    * - :ref:`PyPI, built from source <python-gpu>`
      - Python
      - Required for the CUDA, HIP and TBB backends
@@ -245,7 +245,8 @@ To install a specific version:
 
     pip install CLUEstering==<version>
 
-On Linux (x86_64 and aarch64) pip installs a precompiled wheel, which includes the serial and OpenMP CPU backends.
+On Linux (x86_64 and aarch64) and on macOS 15 or later (Apple Silicon and Intel) pip installs a precompiled
+wheel, which includes the serial, OpenMP and TBB CPU backends.
 On the other platforms pip downloads the source distribution and compiles it, which requires the build
 dependencies listed in :doc:`dependencies`.
 
